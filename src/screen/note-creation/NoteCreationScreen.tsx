@@ -14,6 +14,7 @@ import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList
 import { NavigationScreenProp, NavigationParams } from 'react-navigation';
 import { NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
+import { Hat } from '../../component/hat/Hat';
 
 interface NoteCreationScreenProps {
     dispatch: (action: Action) => void,
@@ -46,6 +47,10 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
                         Записать
                     </Text>
                 </TouchableOpacity>
+                <Hat
+                    title={'Новая запись'}
+                    onBackPress={() => this.props.navigation.goBack()}
+                />
             </View>
         )
     }
@@ -88,6 +93,7 @@ const styles = StyleSheet.create({
     noteCreationView: {
         flex: 1,
         width: '100%',
+        minHeight: '100%',
 
         alignItems: 'center',
     },
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 16,
         color: '#666666',
-    }
+    },
 })
 
 export const NoteCreationScreenConnect = connect(
