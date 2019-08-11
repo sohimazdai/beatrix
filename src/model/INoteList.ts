@@ -1,8 +1,11 @@
 //определяем интерфейсы, все ожидаемые поля и их типы
 export interface INoteList {
-    [id: number]: INoteListNote[];
+    mappedNotes?: number[]
+    notes?: INotes;
+}
 
-    test: string
+export interface INotes {
+    [id: number]: INoteListNote[]
 }
 
 export interface INoteListNote {
@@ -12,8 +15,8 @@ export interface INoteListNote {
     breadUnits: number,
     insulin: number
 }
-
-// const notes { //пример
+//пример
+// const notes {
 //     19545454: {
 //         id: 19545454,
 //         date: 19545454, //дата на случай если мы решим изменить способ присваивания айдишника например на порядковый номер. Чтобы у нас ничег оне исчезло

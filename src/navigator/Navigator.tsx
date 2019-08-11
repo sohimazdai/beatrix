@@ -1,9 +1,11 @@
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { NoteListScreenConnect } from "../screen/diary/NoteListScreen";
+import { NoteListScreenConnect } from "../screen/note-list/NoteListScreen";
+import { NoteCreationScreenConnect } from "../screen/note-creation/NoteCreationScreen";
 
 const MainNavigator = createStackNavigator(
     {
-        DIARY: { screen: NoteListScreenConnect }
+        NoteList: { screen: NoteListScreenConnect },
+        NoteCreation: { screen: NoteCreationScreenConnect }
     }, {
         headerMode: 'none'
     }
