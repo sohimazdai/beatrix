@@ -1,15 +1,14 @@
 //определяем интерфейсы, все ожидаемые поля и их типы
 export interface INoteList {
     mappedNotes?: number[]
-    notes?: INotes;
+    notes?: INoteListNotes;
 }
 
-export interface INotes {
-    [id: number]: INoteListNote[]
+export interface INoteListNotes {
+    [id: number]: INoteListNote
 }
 
 export interface INoteListNote {
-    id: number, //тот же что и в индексе ассоциативного массива
     date: number, //время в милисекундах
     glucose: number,
     breadUnits: number,

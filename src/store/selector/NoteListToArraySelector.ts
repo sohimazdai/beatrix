@@ -1,9 +1,10 @@
-import { INoteList } from "../../model/INoteList";
+import { INoteList, INoteListNotes, INoteListNote } from "../../model/INoteList";
 
 export class NoteListToArraySelector {
-    static makeArraySortedByTime(noteList: INoteList) {
-        let result: string[] = Object.keys(noteList);
-        result = result.sort((a, b) => a > b ? parseInt(a) : parseInt(b))
-        return result;
+    static makeArraySortedByTime(note: INoteListNote, notes: INoteListNotes) {
+        const keys: string[] = Object.keys(notes);
+        keys.push(note.date.toString());
+        let result: number[] = keys.map(key => parseInt(key))
+        return result.sort((a, b) => b - a);
     }
 }

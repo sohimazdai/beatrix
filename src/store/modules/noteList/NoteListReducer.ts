@@ -9,12 +9,14 @@ export function noteListReducer(
 ) {
   switch (action.type) {
     case NoteListActionType.CHANGE_NOTE_BY_ID:
-      const mapped = NoteListToArraySelector.makeArraySortedByTime(noteList);
+      const mapped: number[] = noteList.notes ?
+        NoteListToArraySelector.makeArraySortedByTime(action.payload, noteList.notes) :
+        [action.payload.date];
       return {
         ...noteList,
         notes: {
           ...noteList.notes,
-          [action.payload.id]: action.payload
+          [action.payload.date]: action.payload
         },
         mappedNotes: mapped
       };
