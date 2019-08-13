@@ -7,7 +7,10 @@ import {
     TouchableOpacity,
     Slider,
     SliderComponent,
-    SliderBase
+    SliderBase,
+    DatePickerAndroid,
+    Platform,
+    DatePickerIOS
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -49,7 +52,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
     render() {
         return (
             <View style={styles.noteCreationView}>
-                {this.renderInputs()}
+                {this.renderInputBlock()}
                 {this.renderSaveButton()}
                 <Hat
                     title={'Новая запись'}
@@ -70,7 +73,22 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
         this.props.navigation.navigate('NoteList')
     }
 
-    renderInputs() {
+    onAndroidDatePickerPress = async () => {
+        try {
+            const { action, year, month, day } = await (DatePickerAndroid as any).open({
+                date: this.state.date,
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                this.setState({
+                    date: new Date(year, month, day)
+                })
+            }
+        } catch ({ code, message }) {
+            console.warn('NATIVE_ERROR_CATCHED: Cannot open date picker', message);
+        }
+    }
+
+    renderInputBlock() {
         const { glucoseInput, breadUnitsInput, insulinInput } = this.state
         const glucoseSliderValue = glucoseInput ?
             Math.floor(parseFloat(glucoseInput)) : 0;
@@ -81,6 +99,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
 
         return (
             <View style={styles.inputBlock}>
+                {this.renderDatePicker()}
                 <View style={styles.input}>
                     <NoteInput
                         placeholder={'Глюкоза'}
@@ -137,8 +156,27 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
                 </View>
             </View>
         )
+    }
 
-
+    renderDatePicker() {
+        if (Platform.OS === 'android') {
+            return <View>
+                <TouchableOpacity
+                    onPress={this.onAndroidDatePickerPress}
+                >
+                    <Text>
+                        {this.state.date.toString()}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        } else if(Platform.OS === 'ios') {
+            return <View>
+                <DatePickerIOS
+                    date={this.state.date}
+                    onDateChange={(date) => this.setState({date: date})}
+                />
+            </View>
+        }
     }
 
     renderSaveButton() {
@@ -164,8 +202,9 @@ const styles = StyleSheet.create({
     inputBlock: {
         width: '100%',
 
-        marginTop: 65,
-        paddingBottom: 15,
+        marginTop: 60,
+        padding: 31,
+        paddingBottom: 40,
 
         elevation: 2,
 
@@ -180,11 +219,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#E9E6DA",
     },
     input: {
-        padding: 15,
+        padding: 31,
     },
     slider: {
         width: 280,
-        paddingBottom: 10,
     },
     saveButton: {
         width: 150,
