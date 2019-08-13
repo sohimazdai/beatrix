@@ -41,6 +41,13 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
 
+        shadowOpacity: 1,
+        shadowRadius: 0,
+        shadowColor: 'black',
+        shadowOffset: { height: 10, width: 10 },
+
+        elevation: 3,
+
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
