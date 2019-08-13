@@ -12,16 +12,19 @@ interface HatProps {
 export function Hat(props: HatProps) {
     return (
         <View style={styles.hatView}>
-            {/* <TouchableOpacity
+            <View
                 style={styles.backArrow}
-                onPress={() => props.onBackPress}
-            > */}
-                <BackArrow style={styles.backArrow}/>
-            {/* </TouchableOpacity> */}
+            >
+                <TouchableOpacity
+                    onPress={() => props.onBackPress()}
+                >
+                    <BackArrow />
+                </TouchableOpacity>
+            </View>
             <Text style={styles.title}>
                 {props.title}
             </Text>
-        </View>
+        </View >
     )
 }
 
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
         left: 0,
 
         width: '100%',
-        maxHeight: 72,
+        height: 72,
 
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
@@ -46,10 +49,11 @@ const styles = StyleSheet.create({
     },
     backArrow: {
         position: 'absolute',
-        left: 34,
+        left: 24,
         top: 34,
     },
     title: {
+        paddingTop: 16,
         fontFamily: 'Roboto',
         fontSize: 18,
         color: '#666666'

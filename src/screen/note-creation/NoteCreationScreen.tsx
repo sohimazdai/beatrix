@@ -49,7 +49,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
                 </TouchableOpacity>
                 <Hat
                     title={'Новая запись'}
-                    onBackPress={() => this.props.navigation.goBack()}
+                    onBackPress={() => this.props.navigation.navigate('NoteList')}
                 />
             </View>
         )
