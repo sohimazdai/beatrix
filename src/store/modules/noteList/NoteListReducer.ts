@@ -6,19 +6,20 @@ import { NoteListToArraySelector } from "../../selector/NoteListToArraySelector"
 export function noteListReducer(
   noteList: INoteList = {},
   action: NoteListChangeNoteByIdAction
-) {
+): INoteList {
   switch (action.type) {
     case NoteListActionType.CHANGE_NOTE_BY_ID:
-      const mapped: number[] = noteList.notes ?
-        NoteListToArraySelector.makeArraySortedByTime(action.payload, noteList.notes) :
-        [action.payload.date];
+      const date = new Date(
+        new Date(action.payload.date).getFullYear(),
+        new Date(action.payload.date).getMonth(),
+        new Date(action.payload.date).getDate()
+      ).getTime();
       return {
         ...noteList,
-        notes: {
-          ...noteList.notes,
+        [date]: {
+          ...noteList[date],
           [action.payload.date]: action.payload
-        },
-        mappedNotes: mapped
+        }
       };
     default:
       return noteList;
