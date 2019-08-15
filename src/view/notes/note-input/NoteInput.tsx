@@ -22,7 +22,7 @@ export function NoteInput(props: Props) {
                 borderWidth: 2,
                 borderRadius: 5,
 
-                backgroundColor: '#FFF8F2',
+                backgroundColor: '#FFFFFF',
             }}
         />
     )

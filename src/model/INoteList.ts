@@ -1,14 +1,13 @@
 //определяем интерфейсы, все ожидаемые поля и их типы
 export interface INoteList {
-    mappedNotes?: number[]
-    notes?: INoteListNotes;
+    [id: number]: INoteListByDay
 }
 
-export interface INoteListNotes {
-    [id: number]: INoteListNote
+export interface INoteListByDay {
+    [id: number]: INoteListByDayNote
 }
 
-export interface INoteListNote {
+export interface INoteListByDayNote {
     date: number, //время в милисекундах
     glucose: number,
     breadUnits: number,

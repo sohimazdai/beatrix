@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { NoteInput } from '../../view/notes/note-input/NoteInput';
-import { INoteListNote } from '../../model/INoteList';
+import { INoteListByDayNote } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
 import { NavigationScreenProp, NavigationParams } from 'react-navigation';
 import { NavigationState } from 'react-navigation';
@@ -63,7 +63,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
     }
 
     createNote = () => {
-        let note: INoteListNote = {
+        let note: INoteListByDayNote = {
             date: this.state.date.getTime(),
             glucose: this.state.glucoseInput && parseFloat(this.state.glucoseInput) || 0,
             breadUnits: this.state.breadUnitsInput && parseFloat(this.state.breadUnitsInput) || 0,
@@ -84,7 +84,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
                 })
             }
         } catch ({ code, message }) {
-            console.warn('NATIVE_ERROR_CATCHED: Cannot open date picker', message);
+            console.warn('Cannot open date picker', message);
         }
     }
 
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
 
         alignItems: 'center',
-        backgroundColor: "#E9E6DA",
+        backgroundColor: "#FFF8F2",
     },
     input: {
         padding: 31,
