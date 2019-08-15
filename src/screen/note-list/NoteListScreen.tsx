@@ -25,17 +25,12 @@ interface NoteListScreenProps {
 interface FullProps extends NoteListScreenProps, NoteListScreenDispatchProps, NoteListScreenStateTProps { }
 
 class NoteListScreen extends React.Component<FullProps>{
-// <<<<<<< HEAD
-
     componentWillMount() {
         if (this.props.noteList && !this.props.noteList.mappedNotes) {
             this.props.navigation.navigate('NoteCreation')
         }
     }
-
-// =======
-// >>>>>>> 12ffa50cb1ed08c6cbec8fb6090c16c3a2ecedd5
-    render() {
+        render() {
         return (
             <View style={styles.screenView}>
                 {this.renderCards()}

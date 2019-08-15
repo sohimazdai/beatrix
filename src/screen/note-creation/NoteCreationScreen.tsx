@@ -195,14 +195,13 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         minHeight: '100%',
-
         alignItems: 'center',
         backgroundColor: "#4B5860",
     },
     inputBlock: {
         width: '100%',
-
-        marginTop: 60,
+        
+        marginTop: Platform.OS === 'ios' ? 0 :  60,
         padding: 31,
         paddingBottom: 40,
 
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF8F2",
     },
     input: {
-        padding: 31,
+        padding: Platform.OS === 'ios' ? 0 :  31,        
     },
     slider: {
         width: 280,

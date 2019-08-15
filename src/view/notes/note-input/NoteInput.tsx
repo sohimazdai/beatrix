@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Platform } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 interface Props {
@@ -11,7 +12,8 @@ export function NoteInput(props: Props) {
     return (
         <TextInput
             {...props}
-            keyboardType='numeric'
+            // thinking about a keyboardType
+            keyboardType= {'numeric'}
             style={{
                 width: 88,
                 height: 41,
