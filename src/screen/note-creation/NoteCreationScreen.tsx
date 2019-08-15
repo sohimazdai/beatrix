@@ -10,7 +10,7 @@ import {
     SliderBase,
     DatePickerAndroid,
     Platform,
-    DatePickerIOS
+    DatePickerIOS,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -69,8 +69,12 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
             breadUnits: this.state.breadUnitsInput && parseFloat(this.state.breadUnitsInput) || 0,
             insulin: this.state.insulinInput && parseFloat(this.state.insulinInput) || 0
         }
-        this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-        this.props.navigation.navigate('NoteList')
+        if (note.glucose || note.breadUnits || note.insulin) {
+            this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+            this.props.navigation.navigate('NoteList')
+        } else {
+            alert('Заполните хотя бы одно поле')
+        }
     }
 
     onAndroidDatePickerPress = async () => {
@@ -169,11 +173,11 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
                     </Text>
                 </TouchableOpacity>
             </View>
-        } else if(Platform.OS === 'ios') {
+        } else if (Platform.OS === 'ios') {
             return <View>
                 <DatePickerIOS
                     date={this.state.date}
-                    onDateChange={(date) => this.setState({date: date})}
+                    onDateChange={(date) => this.setState({ date: date })}
                 />
             </View>
         }
@@ -200,7 +204,7 @@ const styles = StyleSheet.create({
     },
     inputBlock: {
         width: '100%',
-        
+
         marginTop: Platform.OS === 'ios' ? 0 :  60,
         padding: 31,
         paddingBottom: 40,
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF8F2",
     },
     input: {
-        padding: Platform.OS === 'ios' ? 0 :  31,        
+        padding: Platform.OS === 'ios' ? 0 :  31,
     },
     slider: {
         width: 280,
