@@ -2,16 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { AppState } from '../../model/AppState';
-import { INoteList, INoteListByDay, INoteListByDayNote } from '../../model/INoteList';
+import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { Note } from '../../view/notes/note/Note';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
+import { NoteListSelector } from '../../store/selector/NoteListSelector';
 
 interface NoteListScreenStateTProps {
-    noteList: INoteList,
+    noteListByDay: INoteListByDay,
 }
 
 interface NoteListScreenDispatchProps {
@@ -25,12 +26,7 @@ interface NoteListScreenProps {
 interface FullProps extends NoteListScreenProps, NoteListScreenDispatchProps, NoteListScreenStateTProps { }
 
 class NoteListScreen extends React.Component<FullProps>{
-    componentWillMount() {
-        if (this.props.noteList && !this.props.noteList.mappedNotes) {
-            this.props.navigation.navigate('NoteCreation')
-        }
-    }
-        render() {
+    render() {
         return (
             <View style={styles.screenView}>
                 {this.renderCards()}
@@ -44,7 +40,7 @@ class NoteListScreen extends React.Component<FullProps>{
     }
 
     renderCards() {
-        const days = Object.keys(this.props.noteList).sort((a, b) => parseInt(b) - parseInt(a));
+        const days = Object.keys(this.props.noteListByDay).sort((a, b) => parseInt(b) - parseInt(a));
         return days.map(day => {
             return (
                 <View
@@ -52,7 +48,7 @@ class NoteListScreen extends React.Component<FullProps>{
                     style={styles.cardWrap}
                 >
                     {this.renderDate(parseInt(day))}
-                    {this.renderCard(this.props.noteList[day])}
+                    {this.renderCard(this.props.noteListByDay[day])}
                 </View>
             )
         })
@@ -87,7 +83,7 @@ class NoteListScreen extends React.Component<FullProps>{
                 <View style={styles.dayNotes}>
                     {this.renderCardHat()}
                     {notesIds.map(noteId => {
-                        const note: INoteListByDayNote = dayNotes[noteId]
+                        const note: INoteListNote = dayNotes[noteId]
                         return <Note
                             key={noteId}
                             note={note}
@@ -161,7 +157,7 @@ class NoteListScreen extends React.Component<FullProps>{
 
 export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps>(
     (state: AppState) => ({
-        noteList: state.noteList || {}
+        noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch })
 )(NoteListScreen)

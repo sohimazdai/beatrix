@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { NoteInput } from '../../view/notes/note-input/NoteInput';
-import { INoteListByDayNote } from '../../model/INoteList';
+import { INoteListNote } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
 import { NavigationScreenProp, NavigationParams } from 'react-navigation';
 import { NavigationState } from 'react-navigation';
@@ -63,7 +63,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
     }
 
     createNote = () => {
-        let note: INoteListByDayNote = {
+        let note: INoteListNote = {
             date: this.state.date.getTime(),
             glucose: this.state.glucoseInput && parseFloat(this.state.glucoseInput) || 0,
             breadUnits: this.state.breadUnitsInput && parseFloat(this.state.breadUnitsInput) || 0,
