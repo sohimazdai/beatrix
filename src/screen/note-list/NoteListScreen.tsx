@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { AppState } from '../../model/AppState';
@@ -24,6 +24,7 @@ interface NoteListScreenProps {
 interface FullProps extends NoteListScreenProps, NoteListScreenDispatchProps, NoteListScreenStateTProps { }
 
 class NoteListScreen extends React.Component<FullProps>{
+
     componentWillMount() {
         if (this.props.noteList && !this.props.noteList.mappedNotes) {
             this.props.navigation.navigate('NoteCreation')
