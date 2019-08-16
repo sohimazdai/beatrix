@@ -14,6 +14,7 @@ export function NoteInput(props: Props) {
             {...props}
             // thinking about a keyboardType
             keyboardType= {'numeric'}
+            returnKeyType={'done'}
             style={{
                 width: 88,
                 height: 41,

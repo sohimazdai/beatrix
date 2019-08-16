@@ -63,11 +63,16 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
     }
 
     createNote = () => {
+        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
+        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput ;
+        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
+        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
+
         let note: INoteListNote = {
             date: this.state.date.getTime(),
-            glucose: this.state.glucoseInput && parseFloat(this.state.glucoseInput) || 0,
-            breadUnits: this.state.breadUnitsInput && parseFloat(this.state.breadUnitsInput) || 0,
-            insulin: this.state.insulinInput && parseFloat(this.state.insulinInput) || 0
+            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
+            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
+            insulin: insulinInput && parseFloat(insulinInput) || 0
         }
         if (note.glucose || note.breadUnits || note.insulin) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
@@ -162,6 +167,15 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
         )
     }
 
+    onIOSDatePickerPress = () => {
+        // i will do it
+       <DatePickerIOS
+            date={this.state.date}
+            onDateChange={(date) => this.setState({ date: date })}
+        />
+
+    }
+
     renderDatePicker() {
         if (Platform.OS === 'android') {
             return <View>
@@ -174,11 +188,14 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
                 </TouchableOpacity>
             </View>
         } else if (Platform.OS === 'ios') {
-            return <View>
-                <DatePickerIOS
-                    date={this.state.date}
-                    onDateChange={(date) => this.setState({ date: date })}
-                />
+            return <View >
+                <TouchableOpacity
+                    onPress={this.onIOSDatePickerPress}
+                >
+                    <Text>
+                        {this.state.date.toString()}
+                    </Text>
+                </TouchableOpacity>
             </View>
         }
     }
@@ -204,17 +221,18 @@ const styles = StyleSheet.create({
     },
     inputBlock: {
         width: '100%',
-
-        marginTop: Platform.OS === 'ios' ? 0 :  60,
+        justifyContent:'center',
+        // marginTop: Platform.OS === 'ios' ? 0 :  60,
+        marginTop: 60,
         padding: 31,
         paddingBottom: 40,
 
-        elevation: 2,
+        // elevation: 2,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        // shadowOffset: { width: 10, height: 10 },
+        // shadowColor: '#000',
+        // shadowRadius: 5,
+        // shadowOpacity: 1,
 
         borderRadius: 25,
 
@@ -223,6 +241,7 @@ const styles = StyleSheet.create({
     },
     input: {
         padding: Platform.OS === 'ios' ? 0 :  31,
+        // padding: 31,
     },
     slider: {
         width: 280,
