@@ -42,12 +42,19 @@ interface NoteCreationScreenState {
     insulinInput: string
 }
 
-class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCreationScreenState>{
+interface IOSVisibilityDatePickerState {
+    visibilityIOSDatePicker: boolean
+}
+
+interface FullState extends NoteCreationScreenState, IOSVisibilityDatePickerState { }
+
+class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullState>{
     state = {
         date: new Date(),
         glucoseInput: "",
         breadUnitsInput: "",
-        insulinInput: ""
+        insulinInput: "",
+        visibilityIOSDatePicker: false,
     }
     render() {
         return (
@@ -168,12 +175,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
     }
 
     onIOSDatePickerPress = () => {
-        // i will do it
-       <DatePickerIOS
-            date={this.state.date}
-            onDateChange={(date) => this.setState({ date: date })}
-        />
-
+        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker})
     }
 
     renderDatePicker() {
@@ -189,13 +191,21 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, NoteCr
             </View>
         } else if (Platform.OS === 'ios') {
             return <View >
-                <TouchableOpacity
-                    onPress={this.onIOSDatePickerPress}
-                >
-                    <Text>
-                        {this.state.date.toString()}
-                    </Text>
-                </TouchableOpacity>
+                {
+                    this.state.visibilityIOSDatePicker === false ?
+                        <TouchableOpacity
+                            onPress={this.onIOSDatePickerPress}
+                        >
+                            <Text>
+                                {this.state.date.toString()}
+                            </Text> 
+                        </TouchableOpacity>
+                    : 
+                        <DatePickerIOS
+                            date={this.state.date}
+                            onDateChange={(date) => this.setState({ date: date })}
+                        />                
+                }
             </View>
         }
     }
@@ -221,27 +231,27 @@ const styles = StyleSheet.create({
     },
     inputBlock: {
         width: '100%',
+        height: Platform.OS === 'ios' ? 450 : 0,
         justifyContent:'center',
-        // marginTop: Platform.OS === 'ios' ? 0 :  60,
-        marginTop: 60,
+        marginTop: Platform.OS === 'ios' ? 30 :  60,
         padding: 31,
         paddingBottom: 40,
 
-        // elevation: 2,
+        elevation: 2,
 
-        // shadowOffset: { width: 10, height: 10 },
-        // shadowColor: '#000',
-        // shadowRadius: 5,
-        // shadowOpacity: 1,
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: '#000',
+        shadowRadius: 5,
+        shadowOpacity: 1,
 
         borderRadius: 25,
 
+        // with alignItems: 'center in IOS datepicker dont work(hide in interface)
         alignItems: 'center',
         backgroundColor: "#FFF8F2",
     },
     input: {
         padding: Platform.OS === 'ios' ? 0 :  31,
-        // padding: 31,
     },
     slider: {
         width: 280,
