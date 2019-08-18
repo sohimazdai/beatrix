@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollViewComponent, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { AppState } from '../../model/AppState';
 import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
@@ -10,6 +10,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
+import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
+import { shadowOptions } from '../../constant/shadowOptions';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -29,7 +31,10 @@ class NoteListScreen extends React.Component<FullProps>{
     render() {
         return (
             <View style={styles.screenView}>
-                {this.renderCards()}
+                <View style={styles.header} />
+                <ScrollView>
+                    {this.renderCards()}
+                </ScrollView>
                 <View style={styles.addNoteButtonView}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteCreation')}>
                         <AddNoteIcon />
@@ -85,13 +90,13 @@ class NoteListScreen extends React.Component<FullProps>{
                     {notesIds.map(noteId => {
                         const note: INoteListNote = dayNotes[noteId]
                         return <Note
-                                key={noteId}
-                                note={note}
+                            key={noteId}
+                            note={note}
                             onPress={() => { }}
                             onLongPress={() => this.props.navigation.navigate('NoteEdittor', {
-                             noteId: noteId   
+                                noteId: noteId
                             })}
-                            />
+                        />
                     })}
                 </View>
             </View>
@@ -165,21 +170,30 @@ export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteList
 )(NoteListScreen)
 
 const styles = StyleSheet.create({
+    fakeInput: {
+        height: 300,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     screenView: {
         flex: 1,
         width: '100%',
-
-        paddingTop: 20,
-
         backgroundColor: '#D6E5ED',
+    },
+    header: {
+        height: 25,
+        width: '100%',
     },
     cardWrap: {
         width: '100%',
 
+        marginBottom: 15,
+
         alignItems: 'center',
     },
     dateView: {
-        margin: 15,
+        marginBottom: 10,
 
         justifyContent: 'space-evenly',
         flexDirection: 'row',
@@ -258,5 +272,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         right: 20,
+
+        elevation: 4,
+        ...shadowOptions,
     },
 })

@@ -15,13 +15,14 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { NoteInput } from '../../view/notes/note-input/NoteInput';
-import { INoteListNote,INoteList } from '../../model/INoteList';
+import { INoteListNote, INoteList } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
 import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { Hat } from '../../component/hat/Hat';
 import * as lodash from "lodash"
 import { AppState } from '../../model/AppState';
+import { shadowOptions } from '../../constant/shadowOptions';
 
 
 const sliderOptions = {
@@ -32,20 +33,20 @@ const sliderOptions = {
 }
 
 
-interface NoteListScreenStateTProps {
+interface NoteEditingStateTProps {
     noteList: INoteList,
 }
 
-interface NoteListScreenDispatchProps {
+interface NoteEditingDispatchProps {
     dispatch: Dispatch<Action>
 }
 
-interface NoteListScreenProps {
+interface NoteEditingProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
 interface NoteEdittingScreenState {
-    date: Date 
+    date: Date
     glucoseInput: string
     breadUnitsInput: string
     insulinInput: string
@@ -55,16 +56,16 @@ interface IOSVisibilityDatePickerState {
     visibilityIOSDatePicker: boolean
 }
 
-interface FullProps extends NoteListScreenStateTProps,NoteListScreenDispatchProps,NoteListScreenProps { }
+interface FullProps extends NoteEditingStateTProps, NoteEditingDispatchProps, NoteEditingProps { }
 
 interface FullState extends NoteEdittingScreenState, IOSVisibilityDatePickerState { }
 
-class NoteEdittingScreen extends React.Component<FullProps,FullState>{
-    
-    noteId = this.props.navigation.getParam('noteId','currentId');
+class NoteEditingScreen extends React.Component<FullProps, FullState>{
+
+    noteId = this.props.navigation.getParam('noteId', 'currentId');
     currentNote = this.props.noteList[this.noteId];
 
-    state={
+    state = {
         date: new Date(this.currentNote.date),
         glucoseInput: this.currentNote.glucose.toString(),
         breadUnitsInput: this.currentNote.breadUnits.toString(),
@@ -75,25 +76,25 @@ class NoteEdittingScreen extends React.Component<FullProps,FullState>{
     render() {
         return (
             <View style={styles.noteEdittingView}>
-             {this.renderInputBlock()}
-             <View style={styles.noteButtons}>
-                {this.renderCancelButton()}
-                {this.renderChangeButton()}
-             </View>
-            <Hat 
-                title={'Редактировать запись'}
-                onBackPress={() => this.props.navigation.navigate('NoteList')}
-            />
+                {this.renderInputBlock()}
+                <View style={styles.noteButtons}>
+                    {this.renderCancelButton()}
+                    {this.renderChangeButton()}
+                </View>
+                <Hat
+                    title={'Редактировать запись'}
+                    onBackPress={() => this.props.navigation.navigate('NoteList')}
+                />
             </View>
         )
     }
 
     changeNote = () => {
         let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput ;
+        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
-        
+
         let note: INoteListNote = {
             date: this.state.date.getTime(),
             glucose: glucoseInput && parseFloat(glucoseInput) || 0,
@@ -194,7 +195,7 @@ class NoteEdittingScreen extends React.Component<FullProps,FullState>{
     }
 
     onIOSDatePickerPress = () => {
-        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker})
+        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker })
     }
 
     renderDatePicker() {
@@ -217,13 +218,13 @@ class NoteEdittingScreen extends React.Component<FullProps,FullState>{
                         >
                             <Text>
                                 {this.state.date.toString()}
-                            </Text> 
+                            </Text>
                         </TouchableOpacity>
-                    : 
+                        :
                         <DatePickerIOS
                             date={this.state.date}
                             onDateChange={(date) => this.setState({ date: date })}
-                        />                
+                        />
                 }
             </View>
         }
@@ -239,7 +240,7 @@ class NoteEdittingScreen extends React.Component<FullProps,FullState>{
         </View>
     }
 
-    renderCancelButton(){
+    renderCancelButton() {
         return <View style={styles.removeButton}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteList')}>
                 <Text style={styles.removeButtonText}>
@@ -250,33 +251,32 @@ class NoteEdittingScreen extends React.Component<FullProps,FullState>{
     }
 }
 
-export const NoteEdittingScreenConnect = connect<NoteListScreenStateTProps,NoteListScreenDispatchProps >(
-    (state:AppState) => ({noteList: state.noteList}),
+export const NoteEditingScreenConnect = connect<NoteEditingStateTProps, NoteEditingDispatchProps>(
+    (state: AppState) => ({ noteList: state.noteList }),
     (dispatch: Dispatch<Action>) => ({ dispatch })
-)(NoteEdittingScreen)
+)(NoteEditingScreen)
 
 const styles = StyleSheet.create({
     noteEdittingView: {
         flex: 1,
         width: '100%',
         minHeight: '100%',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#4B5860",
     },
     inputBlock: {
         width: '100%',
-        height: Platform.OS === 'ios' ? 450 : 0,
-        justifyContent:'center',
-        marginTop: Platform.OS === 'ios' ? 30 :  60,
+        // height: Platform.OS === 'ios' ? 450 : 0,
+        // marginTop: Platform.OS === 'ios' ? 30 : 60,
         padding: 31,
         paddingBottom: 40,
 
+        justifyContent: 'center',
+
         elevation: 2,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 25,
 
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF8F2",
     },
     input: {
-        padding: Platform.OS === 'ios' ? 0 :  31,
+        padding: Platform.OS === 'ios' ? 0 : 31,
     },
     slider: {
         width: 280,
@@ -297,10 +297,7 @@ const styles = StyleSheet.create({
         margin: 20,
 
         elevation: 2,
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 15,
         justifyContent: 'center',
@@ -323,10 +320,7 @@ const styles = StyleSheet.create({
         margin: 20,
 
         elevation: 2,
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 15,
         justifyContent: 'center',
@@ -340,4 +334,3 @@ const styles = StyleSheet.create({
         color: '#666666',
     }
 })
-

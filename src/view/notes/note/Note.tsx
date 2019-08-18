@@ -1,10 +1,9 @@
 import React from 'react';
-import { INoteListByDayNote } from '../../../model/INoteList';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { INoteListNote } from '../../../model/INoteList';
 
 interface Props {
-    note?: INoteListByDayNote
+    note?: INoteListNote
     onPress?: () => void
     onLongPress?: () => void
 }

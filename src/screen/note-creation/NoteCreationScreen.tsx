@@ -2,14 +2,12 @@ import React from 'react';
 import {
     View,
     Text,
-    TextInput,
     StyleSheet,
     TouchableOpacity,
     Slider,
-    SliderComponent,
-    SliderBase,
     DatePickerAndroid,
     Platform,
+    ScrollView,
     DatePickerIOS,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -20,13 +18,14 @@ import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList
 import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { Hat } from '../../component/hat/Hat';
-import * as lodash from "lodash"
+import * as lodash from "lodash";
+import { shadowOptions } from '../../constant/shadowOptions';
+import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
 
-const sliderOptions = {
-    maximumValue: 12,
-    minimumValue: 0,
-    step: 0.1,
-    minimumTrackTintColor: '#999999'
+enum InputType {
+    GLUCOSE = 'Глюкоза',
+    BREAD_UNITS = 'ХЕ',
+    INSULIN = 'Инсулин',
 }
 
 interface NoteCreationScreenProps {
@@ -50,16 +49,20 @@ interface FullState extends NoteCreationScreenState, IOSVisibilityDatePickerStat
 class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullState>{
     state = {
         date: new Date(),
-        glucoseInput: "",
-        breadUnitsInput: "",
-        insulinInput: "",
+        glucoseInput: "0.0",
+        breadUnitsInput: "0.0",
+        insulinInput: "0.0",
         visibilityIOSDatePicker: false,
     }
     render() {
         return (
             <View style={styles.noteCreationView}>
-                {this.renderInputBlock()}
-                {this.renderSaveButton()}
+                <ScrollView style={styles.scrollView}>
+                    <View style={styles.scrollViewContent}>
+                        {this.renderInputBlock()}
+                        {this.renderSaveButton()}
+                    </View>
+                </ScrollView>
                 <Hat
                     title={'Новая запись'}
                     onBackPress={() => this.props.navigation.navigate('NoteList')}
@@ -70,7 +73,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
 
     createNote = () => {
         let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput ;
+        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
 
@@ -99,7 +102,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                 })
             }
         } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
+            console.warn('Cannot open date android picker', message);
         }
     }
 
@@ -115,66 +118,79 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
         return (
             <View style={styles.inputBlock}>
                 {this.renderDatePicker()}
-                <View style={styles.input}>
-                    <NoteInput
-                        placeholder={'Глюкоза'}
+                <View style={styles.inputView}>
+                    <NoteInputWithSlider
+                        inputTitle={InputType.GLUCOSE}
                         value={this.state.glucoseInput}
-                        onChangeText={(text) => this.setState({ glucoseInput: text })}
-                    />
-                </View>
-                <View style={styles.slider}>
-                    <Slider
-                        value={glucoseSliderValue}
-                        onValueChange={lodash.debounce((value) =>
+                        maximumNum={'15'}
+                        onChangeText={(value) =>
+                            this.setState({ glucoseInput: value })
+                        }
+                        onNaturalSlide={lodash.debounce((value) =>
                             this.setState({
-                                glucoseInput: (Math.floor(value * 10) / 10).toString()
+                                glucoseInput: value + '.' + glucoseInput.split('.')[1]
                             }), 50
                         )}
-                        {...sliderOptions}
+                        onDecimalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                glucoseInput:
+                                    glucoseInput.split('.')[0] + '.' +
+                                    value.toString().split('.')[1]
+                            }), 50
+                        )}
                     />
                 </View>
-                <View style={styles.input}>
-                    <NoteInput
-                        placeholder={'ХЕ'}
+                <View style={styles.inputView}>
+                    <NoteInputWithSlider
+                        inputTitle={InputType.BREAD_UNITS}
                         value={this.state.breadUnitsInput}
-                        onChangeText={(text) => this.setState({ breadUnitsInput: text })}
-                    />
-                </View>
-                <View style={styles.slider}>
-                    <Slider
-                        value={breadUnitsSliderValue}
-                        onValueChange={lodash.debounce((value) =>
+                        maximumNum={'12'}
+                        onChangeText={(value) =>
+                            this.setState({ breadUnitsInput: value })
+                        }
+                        onNaturalSlide={lodash.debounce((value) =>
                             this.setState({
-                                breadUnitsInput: (Math.floor(value * 10) / 10).toString()
+                                breadUnitsInput: value + '.' + breadUnitsInput.split('.')[1]
                             }), 50
                         )}
-                        {...sliderOptions}
+                        onDecimalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                breadUnitsInput:
+                                    breadUnitsInput.split('.')[0] + '.' +
+                                    value.toString().split('.')[1]
+                            }), 50
+                        )}
                     />
                 </View>
-                <View style={styles.input}>
-                    <NoteInput
-                        placeholder={'Инсулин'}
+                <View style={styles.inputView}>
+                    <NoteInputWithSlider
+                        inputTitle={InputType.INSULIN}
                         value={this.state.insulinInput}
-                        onChangeText={(text) => this.setState({ insulinInput: text })}
-                    />
-                </View>
-                <View style={styles.slider}>
-                    <Slider
-                        value={insulinSliderValue}
-                        onValueChange={lodash.debounce((value) =>
+                        maximumNum={'15'}
+                        onChangeText={(value) =>
+                            this.setState({ insulinInput: value })
+                        }
+                        onNaturalSlide={lodash.debounce((value) =>
                             this.setState({
-                                insulinInput: (Math.floor(value * 10) / 10).toString()
+                                insulinInput: value + '.' + insulinInput.split('.')[1]
                             }), 50
                         )}
-                        {...sliderOptions}
+                        onDecimalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                insulinInput:
+                                    insulinInput.split('.')[0] + '.' +
+                                    value.toString().split('.')[1]
+                            }), 50
+                        )}
                     />
                 </View>
+
             </View>
         )
     }
 
     onIOSDatePickerPress = () => {
-        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker})
+        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker })
     }
 
     renderDatePicker() {
@@ -197,26 +213,30 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                         >
                             <Text>
                                 {this.state.date.toString()}
-                            </Text> 
+                            </Text>
                         </TouchableOpacity>
-                    : 
+                        :
                         <DatePickerIOS
                             date={this.state.date}
                             onDateChange={(date) => this.setState({ date: date })}
-                        />                
+                        />
                 }
             </View>
         }
     }
 
     renderSaveButton() {
-        return <View style={styles.saveButton}>
-            <TouchableOpacity onPress={this.createNote}>
-                <Text style={styles.saveButtonText}>
-                    Записать
-                </Text>
-            </TouchableOpacity>
-        </View>
+        return (
+            <View style={styles.saveButton}>
+                <TouchableOpacity
+                    style={styles.saveButtonTouchable}
+                    onPress={this.createNote}>
+                    <Text style={styles.saveButtonText}>
+                        Записать
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
 }
 
@@ -224,24 +244,41 @@ const styles = StyleSheet.create({
     noteCreationView: {
         flex: 1,
         width: '100%',
-        minHeight: '100%',
+        height: '100%',
+
+        paddingTop: 30,
+
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#4B5860",
     },
+
+    scrollView: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+    },
+
+    scrollViewContent: {
+        flex: 1,
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     inputBlock: {
         width: '100%',
-        height: Platform.OS === 'ios' ? 450 : 0,
-        justifyContent:'center',
-        marginTop: Platform.OS === 'ios' ? 30 :  60,
-        padding: 31,
-        paddingBottom: 40,
+        // height: Platform.OS === 'ios' ? 450 : 0,
+        justifyContent: 'center',
+        marginTop: 30,
+        paddingTop: 31,
+        paddingBottom: 15,
 
         elevation: 2,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 25,
 
@@ -249,29 +286,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#FFF8F2",
     },
-    input: {
-        padding: Platform.OS === 'ios' ? 0 :  31,
-    },
-    slider: {
-        width: 280,
+    inputView: {
+        flex: 1,
+        margin: 15,
+        marginRight: 10,
     },
     saveButton: {
         width: 150,
         height: 50,
 
-        margin: 20,
+        marginTop: 20,
 
         elevation: 2,
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 15,
-        justifyContent: 'center',
-
-        alignItems: 'center',
         backgroundColor: ThemeColor.LIGHT_RED,
+    },
+    saveButtonTouchable: {
+        width: 150,
+        height: 50,
+
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     saveButtonText: {
         fontFamily: 'Roboto',
