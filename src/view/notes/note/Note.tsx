@@ -15,8 +15,8 @@ export function Note(props: Props) {
     >
         <TouchableOpacity
             style={styles.touchableContainer}
-            onPress={() => props.onPress}
-            onLongPress={() => props.onLongPress}
+            onPress={props.onPress}
+            onLongPress={props.onLongPress}
         >
             <Text style={styles.text}>
                 {getTime(new Date(props.note.date))}

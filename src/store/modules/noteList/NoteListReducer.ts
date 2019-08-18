@@ -8,10 +8,20 @@ export function noteListReducer(
 ): INoteList {
   switch (action.type) {
     case NoteListActionType.CHANGE_NOTE_BY_ID:
-      return {
+      
+      if(noteList[action.payload.date] === action.payload.date){
+        return {
           ...noteList,
           [action.payload.date]: action.payload
+        }
+      } else {
+        return {
+            ...noteList,
+            [action.payload.date]: action.payload
+        }
       }
+
+      
     default:
       return noteList;
   }

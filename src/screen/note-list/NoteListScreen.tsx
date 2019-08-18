@@ -85,11 +85,13 @@ class NoteListScreen extends React.Component<FullProps>{
                     {notesIds.map(noteId => {
                         const note: INoteListNote = dayNotes[noteId]
                         return <Note
-                            key={noteId}
-                            note={note}
+                                key={noteId}
+                                note={note}
                             onPress={() => { }}
-                            onLongPress={() => { }}
-                        />
+                            onLongPress={() => this.props.navigation.navigate('NoteEdittor', {
+                             noteId: noteId   
+                            })}
+                            />
                     })}
                 </View>
             </View>

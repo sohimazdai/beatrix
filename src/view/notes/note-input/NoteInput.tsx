@@ -12,7 +12,6 @@ export function NoteInput(props: Props) {
     return (
         <TextInput
             {...props}
-            // thinking about a keyboardType
             keyboardType= {'numeric'}
             returnKeyType={'done'}
             style={{

@@ -15,12 +15,14 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { NoteInput } from '../../view/notes/note-input/NoteInput';
-import { INoteListNote } from '../../model/INoteList';
+import { INoteListNote,INoteList } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
 import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { Hat } from '../../component/hat/Hat';
 import * as lodash from "lodash"
+import { AppState } from '../../model/AppState';
+
 
 const sliderOptions = {
     maximumValue: 12,
@@ -29,13 +31,21 @@ const sliderOptions = {
     minimumTrackTintColor: '#999999'
 }
 
-interface NoteCreationScreenProps {
-    dispatch: (action: Action) => void,
+
+interface NoteListScreenStateTProps {
+    noteList: INoteList,
+}
+
+interface NoteListScreenDispatchProps {
+    dispatch: Dispatch<Action>
+}
+
+interface NoteListScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
-interface NoteCreationScreenState {
-    date: Date
+interface NoteEdittingScreenState {
+    date: Date 
     glucoseInput: string
     breadUnitsInput: string
     insulinInput: string
@@ -45,35 +55,45 @@ interface IOSVisibilityDatePickerState {
     visibilityIOSDatePicker: boolean
 }
 
-interface FullState extends NoteCreationScreenState, IOSVisibilityDatePickerState { }
+interface FullProps extends NoteListScreenStateTProps,NoteListScreenDispatchProps,NoteListScreenProps { }
 
-class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullState>{
-    state = {
-        date: new Date(),
-        glucoseInput: "",
-        breadUnitsInput: "",
-        insulinInput: "",
-        visibilityIOSDatePicker: false,
+interface FullState extends NoteEdittingScreenState, IOSVisibilityDatePickerState { }
+
+class NoteEdittingScreen extends React.Component<FullProps,FullState>{
+    
+    noteId = this.props.navigation.getParam('noteId','currentId');
+    currentNote = this.props.noteList[this.noteId];
+
+    state={
+        date: new Date(this.currentNote.date),
+        glucoseInput: this.currentNote.glucose.toString(),
+        breadUnitsInput: this.currentNote.breadUnits.toString(),
+        insulinInput: this.currentNote.insulin.toString(),
+        visibilityIOSDatePicker: false
     }
+
     render() {
         return (
-            <View style={styles.noteCreationView}>
-                {this.renderInputBlock()}
-                {this.renderSaveButton()}
-                <Hat
-                    title={'Новая запись'}
-                    onBackPress={() => this.props.navigation.navigate('NoteList')}
-                />
+            <View style={styles.noteEdittingView}>
+             {this.renderInputBlock()}
+             <View style={styles.noteButtons}>
+                {this.renderCancelButton()}
+                {this.renderChangeButton()}
+             </View>
+            <Hat 
+                title={'Редактировать запись'}
+                onBackPress={() => this.props.navigation.navigate('NoteList')}
+            />
             </View>
         )
     }
 
-    createNote = () => {
+    changeNote = () => {
         let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
         glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput ;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
-
+        
         let note: INoteListNote = {
             date: this.state.date.getTime(),
             glucose: glucoseInput && parseFloat(glucoseInput) || 0,
@@ -209,19 +229,34 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
         }
     }
 
-    renderSaveButton() {
-        return <View style={styles.saveButton}>
-            <TouchableOpacity onPress={this.createNote}>
-                <Text style={styles.saveButtonText}>
-                    Записать
+    renderChangeButton() {
+        return <View style={styles.changeButton}>
+            <TouchableOpacity onPress={this.changeNote}>
+                <Text style={styles.changeButtonText}>
+                    Изменить
+                </Text>
+            </TouchableOpacity>
+        </View>
+    }
+
+    renderCancelButton(){
+        return <View style={styles.removeButton}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteList')}>
+                <Text style={styles.removeButtonText}>
+                    Удалить
                 </Text>
             </TouchableOpacity>
         </View>
     }
 }
 
+export const NoteEdittingScreenConnect = connect<NoteListScreenStateTProps,NoteListScreenDispatchProps >(
+    (state:AppState) => ({noteList: state.noteList}),
+    (dispatch: Dispatch<Action>) => ({ dispatch })
+)(NoteEdittingScreen)
+
 const styles = StyleSheet.create({
-    noteCreationView: {
+    noteEdittingView: {
         flex: 1,
         width: '100%',
         minHeight: '100%',
@@ -246,7 +281,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
 
         // with alignItems: 'center in IOS datepicker dont work(hide in interface)
-        alignItems: 'center',
+        // alignItems: 'center',
         backgroundColor: "#FFF8F2",
     },
     input: {
@@ -255,7 +290,7 @@ const styles = StyleSheet.create({
     slider: {
         width: 280,
     },
-    saveButton: {
+    changeButton: {
         width: 150,
         height: 50,
 
@@ -271,16 +306,38 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
         alignItems: 'center',
-        backgroundColor: ThemeColor.LIGHT_RED,
+        backgroundColor: 'green',
     },
-    saveButtonText: {
+    noteButtons: {
+        flexDirection: 'row',
+    },
+    changeButtonText: {
         fontFamily: 'Roboto',
         fontSize: 16,
         color: '#666666',
     },
+    removeButton: {
+        width: 150,
+        height: 50,
+
+        margin: 20,
+
+        elevation: 2,
+        shadowOffset: { width: 10, height: 10 },
+        shadowColor: '#000',
+        shadowRadius: 5,
+        shadowOpacity: 1,
+
+        borderRadius: 15,
+        justifyContent: 'center',
+
+        alignItems: 'center',
+        backgroundColor: 'red',
+    },
+    removeButtonText: {
+        fontFamily: 'Roboto',
+        fontSize: 16,
+        color: '#666666',
+    }
 })
 
-export const NoteCreationScreenConnect = connect(
-    null,
-    (dispatch: Dispatch<Action>) => ({ dispatch })
-)(NoteCreationScreen)
