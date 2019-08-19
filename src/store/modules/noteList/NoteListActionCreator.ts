@@ -10,9 +10,9 @@ export function createNoteListChangeNoteByIdAction(note: INoteListNote): NoteLis
 }
 
 
-export function deleteNoteInNoteListById(note: INoteListNote): NoteListDeleteNoteByIdAction {
+export function deleteNoteInNoteListById(noteId: number): NoteListDeleteNoteByIdAction {
     return {
         type: NoteListActionType.DELETE_NOTE_BY_ID,
-        payload: note
+        payload: noteId
     }
 }

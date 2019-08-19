@@ -4,30 +4,23 @@ import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction } from "./No
 
 export function noteListReducer(
   noteList: INoteList = {},
-  action: NoteListChangeNoteByIdAction,
-  // action: NoteListDeleteNoteByIdAction
+  action: NoteListChangeNoteByIdAction | NoteListDeleteNoteByIdAction,
 ): INoteList {
   switch (action.type) {
     case NoteListActionType.CHANGE_NOTE_BY_ID: {
-
-        if(noteList[action.payload.date] === action.payload.date){
-          return {
-            ...noteList,
-            [action.payload.date]: action.payload
-          }
-        } else {
-          return {
-            ...noteList,
-            [action.payload.date]: action.payload
-          }
+        return {
+          ...noteList,
+          [action.payload.date]: action.payload
         }
     };
 
-    // case NoteListActionType.DELETE_NOTE_BY_ID: {
-
-      
-    //   return {}
-  // }
+    case NoteListActionType.DELETE_NOTE_BY_ID: {
+        const nextNoteList = {...noteList};
+        delete nextNoteList[action.payload];
+        return {
+          ...nextNoteList
+        }
+    }
 
     default:
       return noteList;

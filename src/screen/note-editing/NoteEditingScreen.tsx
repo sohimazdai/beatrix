@@ -78,7 +78,7 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
             <View style={styles.noteEdittingView}>
                 {this.renderInputBlock()}
                 <View style={styles.noteButtons}>
-                    {this.renderCancelButton()}
+                    {this.renderDeleteButton()}
                     {this.renderChangeButton()}
                 </View>
                 <Hat
@@ -107,6 +107,11 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         } else {
             alert('Заполните хотя бы одно поле')
         }
+    }
+
+    deleteNote = () => {
+        this.props.dispatch(deleteNoteInNoteListById(this.noteId));
+        this.props.navigation.navigate('NoteList')
     }
 
     onAndroidDatePickerPress = async () => {
@@ -240,9 +245,9 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         </View>
     }
 
-    renderCancelButton() {
+    renderDeleteButton() {
         return <View style={styles.removeButton}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteList')}>
+            <TouchableOpacity onPress={this.deleteNote}>
                 <Text style={styles.removeButtonText}>
                     Удалить
                 </Text>
