@@ -94,18 +94,29 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
-
+        
         let note: INoteListNote = {
             date: this.state.date.getTime(),
             glucose: glucoseInput && parseFloat(glucoseInput) || 0,
             breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
             insulin: insulinInput && parseFloat(insulinInput) || 0
         }
-        if (note.glucose || note.breadUnits || note.insulin) {
-            this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-            this.props.navigation.navigate('NoteList')
+        
+        if(note.date !== this.currentNote.date){
+            this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
+            if (note.glucose || note.breadUnits || note.insulin) {
+                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+                this.props.navigation.navigate('NoteList')
+            } else {
+                alert('Заполните хотя бы одно поле')
+            }    
         } else {
-            alert('Заполните хотя бы одно поле')
+            if (note.glucose || note.breadUnits || note.insulin) {
+                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+                this.props.navigation.navigate('NoteList')
+            } else {
+                alert('Заполните хотя бы одно поле')
+            }
         }
     }
 
@@ -286,7 +297,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
 
         // with alignItems: 'center in IOS datepicker dont work(hide in interface)
-        // alignItems: 'center',
+        alignItems: 'center',
         backgroundColor: "#FFF8F2",
     },
     input: {
