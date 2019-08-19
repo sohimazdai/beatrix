@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { NoteInput } from '../../view/notes/note-input/NoteInput';
 import { INoteListNote, INoteList } from '../../model/INoteList';
-import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
+import { createNoteListChangeNoteByIdAction, deleteNoteInNoteListById } from '../../store/modules/noteList/NoteListActionCreator';
 import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { Hat } from '../../component/hat/Hat';
