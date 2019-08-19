@@ -102,21 +102,18 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
             insulin: insulinInput && parseFloat(insulinInput) || 0
         }
         
-        if(note.date !== this.currentNote.date){
-            this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
-            if (note.glucose || note.breadUnits || note.insulin) {
+        if (note.glucose || note.breadUnits || note.insulin) {
+            if(note.date !== this.currentNote.date){
+                this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
                 this.props.dispatch(createNoteListChangeNoteByIdAction(note));
                 this.props.navigation.navigate('NoteList')
-            } else {
-                alert('Заполните хотя бы одно поле')
-            }    
-        } else {
-            if (note.glucose || note.breadUnits || note.insulin) {
-                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-                this.props.navigation.navigate('NoteList')
-            } else {
-                alert('Заполните хотя бы одно поле')
             }
+            else {
+                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+                this.props.navigation.navigate('NoteList')                
+            }
+        } else {
+            alert('Заполните хотя бы одно поле')
         }
     }
 
