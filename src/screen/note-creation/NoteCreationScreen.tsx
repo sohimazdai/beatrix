@@ -211,7 +211,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                         <TouchableOpacity
                             onPress={this.onIOSDatePickerPress}
                         >
-                            <Text>
+                            <Text style={styles.textInDatePickerIOS}>
                                 {this.state.date.toString()}
                             </Text>
                         </TouchableOpacity>
@@ -283,8 +283,13 @@ const styles = StyleSheet.create({
         borderRadius: 25,
 
         // with alignItems: 'center in IOS datepicker dont work(hide in interface)
-        alignItems: 'center',
+        // alignItems: 'stretch',
+        alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
         backgroundColor: "#FFF8F2",
+
+    },
+    textInDatePickerIOS: {
+        textAlign:'center',
     },
     inputView: {
         flex: 1,
