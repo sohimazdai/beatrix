@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
 
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
         backgroundColor: "#4B5860",
     },
 
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
         width: '100%',
         // height: Platform.OS === 'ios' ? 450 : 0,
         justifyContent: 'center',
-        marginTop: 30,
+        marginTop: Platform.OS === 'ios' ? 100 : 30, // in ios so will be in center screen,but if you will to change date will be BIG BULL SHIT
         paddingTop: 31,
         paddingBottom: 15,
 

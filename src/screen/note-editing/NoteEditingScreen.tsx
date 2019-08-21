@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
         width: '100%',
         // height: Platform.OS === 'ios' ? 450 : 0,
         justifyContent: 'center',
-        marginTop: 30,
+        marginTop: Platform.OS === 'ios' ? 100 : 30,
         paddingTop: 31,
         paddingBottom: 15,
 
