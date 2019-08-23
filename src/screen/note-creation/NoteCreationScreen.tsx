@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
-import { NoteInput } from '../../view/notes/note-input/NoteInput';
 import { INoteListNote } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
 import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-navigation';
@@ -21,6 +20,8 @@ import { Hat } from '../../component/hat/Hat';
 import * as lodash from "lodash";
 import { shadowOptions } from '../../constant/shadowOptions';
 import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
+import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
+import { ModalType } from '../../model/IModal';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -52,7 +53,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
         glucoseInput: "0.0",
         breadUnitsInput: "0.0",
         insulinInput: "0.0",
-        visibilityIOSDatePicker: false,
+        visibilityIOSDatePicker: false, // лучше называть були вот так: isIOSDatePickerVisible
     }
     render() {
         return (
@@ -87,7 +88,14 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
             this.props.navigation.navigate('NoteList')
         } else {
-            alert('Заполните хотя бы одно поле')
+            this.props.dispatch(createModalChangeAction({
+                type: ModalType.CONFIRM,
+                needToShow: true,
+                data: {
+                    questionText: 'Введите хотя бы один параметр',
+                    confirmButtonText: 'ОК',
+                },
+            }))
         }
     }
 
@@ -107,14 +115,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
     }
 
     renderInputBlock() {
-        const { glucoseInput, breadUnitsInput, insulinInput } = this.state
-        const glucoseSliderValue = glucoseInput ?
-            Math.floor(parseFloat(glucoseInput)) : 0;
-        const breadUnitsSliderValue = breadUnitsInput ?
-            parseFloat(breadUnitsInput) : 0;
-        const insulinSliderValue = insulinInput ?
-            parseFloat(insulinInput) : 0;
-
+        const { glucoseInput, breadUnitsInput, insulinInput } = this.state;
         return (
             <View style={styles.inputBlock}>
                 {this.renderDatePicker()}
@@ -248,9 +249,6 @@ const styles = StyleSheet.create({
 
         paddingTop: 30,
 
-        flexDirection: 'column',
-        justifyContent: 'center',
-        // alignItems: 'center',
         backgroundColor: "#4B5860",
     },
 
@@ -262,17 +260,19 @@ const styles = StyleSheet.create({
 
     scrollViewContent: {
         flex: 1,
+        width: '100%',
         height: '100%',
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
     },
 
     inputBlock: {
+        flex: 1,
         width: '100%',
-        // height: Platform.OS === 'ios' ? 450 : 0,
         justifyContent: 'center',
-        marginTop: Platform.OS === 'ios' ? 100 : 30, // in ios so will be in center screen,but if you will to change date will be BIG BULL SHIT
+        marginTop: 30, // in ios so will be in center screen,but if you will to change date will be BIG BULL SHIT
+        // let it be on top. Scroll view content are not centerable :(
+        marginVertical: 20,
         paddingTop: 31,
         paddingBottom: 15,
 
@@ -284,12 +284,12 @@ const styles = StyleSheet.create({
 
         // with alignItems: 'center in IOS datepicker dont work(hide in interface)
         // alignItems: 'stretch',
+        // Hide this logic when you will put ios date picker to <Modal>
         alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
         backgroundColor: "#FFF8F2",
-
     },
     textInDatePickerIOS: {
-        textAlign:'center',
+        textAlign: 'center',
     },
     inputView: {
         flex: 1,
@@ -297,10 +297,12 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     saveButton: {
+        flex: 1,
         width: 150,
         height: 50,
 
-        marginTop: 20,
+        // marginTop: 20,
+        marginVertical: 20,
 
         elevation: 2,
         ...shadowOptions,

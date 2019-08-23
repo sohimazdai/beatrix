@@ -1,10 +1,10 @@
 import React from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import { StyleSheet, Text, View } from 'react-native';
 import { AppNavigator } from './src/navigator/Navigator';
 import { Provider } from 'react-redux';
 import { appStore } from './src/store/appStore';
+import { ModalContentConnect } from './src/component/modal-content/ModalContent';
 
 export default class App extends React.Component {
   state = {
@@ -17,12 +17,13 @@ export default class App extends React.Component {
     });
     this.setState({appIsReady: true});
   }
-  
+
   render(){
     return (
-      this.state.appIsReady ? 
+      this.state.appIsReady ?
           <Provider store={appStore}>
             <AppNavigator />
+            <ModalContentConnect />
           </Provider>
       : <AppLoading />
     )
