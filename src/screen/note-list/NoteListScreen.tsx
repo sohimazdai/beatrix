@@ -81,7 +81,9 @@ class NoteListScreen extends React.Component<FullProps>{
     }
 
     renderCard(dayNotes: INoteListByDay) {
-        const notesIds = Object.keys(dayNotes).reverse()
+        const notesIds = Object.keys(dayNotes).sort((a, b) => {
+            return parseInt(a) > parseInt(b) ? -1 : 1;
+        })
         return (
             <View style={styles.dayNotesWrap}>
                 <View style={styles.dayNotes}>

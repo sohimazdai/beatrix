@@ -23,6 +23,7 @@ import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSl
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { ModalType } from '../../model/IModal';
 import { NoteDatePicker, NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
+import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -121,6 +122,10 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
                     <NoteDatePickerConnect
+                        date={this.state.date}
+                        onChange={(value) => this.setState({date: value})}
+                    />
+                    <NoteTimePickerConnect
                         date={this.state.date}
                         onChange={(value) => this.setState({date: value})}
                     />

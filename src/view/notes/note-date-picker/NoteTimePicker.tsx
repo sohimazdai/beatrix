@@ -1,14 +1,13 @@
 import React from 'react';
-import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet, TimePickerAndroid } from 'react-native';
 import { connect } from 'react-redux';
-import { AppState } from '../../../model/AppState';
 import { Action, Dispatch } from 'redux';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalPickerType } from '../../../model/IModal';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { CalendarIcon } from '../../../component/icon/CalendarIcon';
+import { ClocksIcon } from '../../../component/icon/ClocksIcon';
 
-export interface NoteDatePickerProps {
+export interface NoteTimePickerProps {
     date: Date
     onChange: (value) => void
 }
@@ -17,49 +16,54 @@ export interface DispatchToProps {
     dispatch: Dispatch<Action>
 }
 
-export interface FullProps extends DispatchToProps, NoteDatePickerProps { }
+export interface FullProps extends DispatchToProps, NoteTimePickerProps { }
 
-export class NoteDatePicker extends React.PureComponent<FullProps> {
+export class NoteTimePicker extends React.PureComponent<FullProps> {
     render() {
         const { date } = this.props;
-        const displayDate = date.getDate() > 10 ? date.getDate() : ('0' + date.getDate());
-        const displayMonth = (date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
-        const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
+        const displayHours = date.getHours() > 10 ? date.getHours() : ('0' + date.getHours());
+        const displayMinutes = date.getMinutes() > 10 ? date.getMinutes() : ('0' + date.getMinutes());
+
         return (
             <View style={styles.view}>
                 <TouchableOpacity
                     style={styles.touchable}
                     onPress={() => Platform.OS === 'android' ?
-                        this.displayAndroidDatePicker() :
-                        this.displayIOsDatePicker()
+                        this.displayAndroidTimePicker() :
+                        this.displayIOsTimePicker()
                     }
                 >
-                    <CalendarIcon />
+                    <ClocksIcon />
                     <Text style={styles.inputText}>
-                        {displayDate + '.' + displayMonth + '.' + displayYear}
+                        {displayHours + ':' + displayMinutes}
                     </Text>
                 </TouchableOpacity>
             </View >
         )
     }
-    private displayAndroidDatePicker = async () => {
+    private displayAndroidTimePicker = async () => {
         try {
-            const { action, year, month, day } = await (DatePickerAndroid as any).open(this.props.date);
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.props.onChange(new Date(year, month, day))
+            const { date } = this.props;
+            const { action, hour, minute } = await (TimePickerAndroid as any).open({
+                hour: this.props.date.getHours(),
+                minute: this.props.date.getMinutes(),
+                is24Hour: true,
+            });
+            if (action !== TimePickerAndroid.dismissedAction) {
+                this.props.onChange(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute))
             }
         } catch ({ code, message }) {
-            console.warn('Cannot open date android picker', message);
+            console.warn('Cannot open time picker', message);
         }
     }
 
-    private displayIOsDatePicker = () => {
+    private displayIOsTimePicker = () => {
         this.props.dispatch(createModalChangeAction({
             type: ModalType.IOS_DATE_PICKER,
             needToShow: true,
             data: {
                 date: this.props.date,
-                pickerType: IModalPickerType.DATE,
+                pickerType: IModalPickerType.TIME,
                 positiveButtonText: 'Обновить дату',
                 onPositiveClick: this.props.onChange,
             }
@@ -68,14 +72,14 @@ export class NoteDatePicker extends React.PureComponent<FullProps> {
 }
 
 
-export const NoteDatePickerConnect = connect<{}, DispatchToProps>(
+export const NoteTimePickerConnect = connect<{}, DispatchToProps>(
     () => ({}),
     (dispatch: Dispatch<Action>) => ({ dispatch })
-)(NoteDatePicker)
+)(NoteTimePicker)
 
 const styles = StyleSheet.create({
     view: {
-        width: 150,
+        width: 105,
         height: 31,
 
         borderWidth: 1,
