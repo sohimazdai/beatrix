@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
-import { NoteInput } from '../../view/notes/note-input/NoteInput';
 import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
 import { INoteListNote, INoteList } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction, deleteNoteInNoteListById } from '../../store/modules/noteList/NoteListActionCreator';
@@ -27,6 +26,8 @@ import { AppState } from '../../model/AppState';
 import { shadowOptions } from '../../constant/shadowOptions';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalConfirm } from '../../model/IModal';
+import { DeleteNoteIcon } from '../../component/icon/DeleteNoteIcon';
+import { ChangeNoteIcon } from '../../component/icon/ChangeNoteIcon';
 
 
 enum InputType {
@@ -92,6 +93,7 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
                 <Hat
                     title={'Редактировать запись'}
                     onBackPress={() => this.props.navigation.navigate('NoteList')}
+                    hatColor={ThemeColor.LIGHT_PINK_RED}
                 />
             </View>
         )
@@ -260,23 +262,31 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
     }
 
     renderChangeButton() {
-        return <View style={styles.changeButton}>
-            <TouchableOpacity onPress={this.changeNote}>
+        return (
+            <TouchableOpacity
+                style={styles.changeButton}
+                onPress={this.changeNote}
+            >
+                <ChangeNoteIcon />
                 <Text style={styles.changeButtonText}>
                     Изменить
                 </Text>
             </TouchableOpacity>
-        </View>
+        )
     }
 
     renderDeleteButton() {
-        return <View style={styles.removeButton}>
-            <TouchableOpacity onPress={this.onDeleteClick}>
+        return (
+            <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={this.onDeleteClick}
+            >
+                <DeleteNoteIcon />
                 <Text style={styles.removeButtonText}>
                     Удалить
                 </Text>
             </TouchableOpacity>
-        </View>
+        )
     }
 
     onDeleteClick = () => {
@@ -297,10 +307,8 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
     }
 
     deleteNote = () => {
-        return new Promise(() => {
-            this.props.dispatch(deleteNoteInNoteListById(this.noteId));
-            this.props.navigation.navigate('NoteList');
-        })
+        this.props.dispatch(deleteNoteInNoteListById(this.noteId));
+        this.props.navigation.navigate('NoteList');
     }
 }
 
@@ -366,54 +374,61 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     noteButtons: {
-        flexDirection: 'row',
+        flex: 1,
+
+        width: '90%',
+
         margin: 14,
+
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     changeButton: {
-        width: 150,
+        flex: 1,
+        width: 160,
         height: 50,
 
-        marginTop: 20,
+        marginLeft: 20,
+        paddingLeft: 10,
 
         elevation: 2,
         ...shadowOptions,
 
         borderRadius: 15,
-        backgroundColor: ThemeColor.LIGHT_RED,
-    },
-    changeButtonTouchable: {
-        width: 150,
-        height: 50,
-
+        backgroundColor: ThemeColor.LIGHT_BLUE,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
     changeButtonText: {
+        flex: 1,
+        marginLeft: 20,
         fontFamily: 'Roboto',
         fontSize: 16,
         color: '#666666',
     },
-    removeButton: {
-        width: 150,
+    deleteButton: {
+        flex: 1,
+        width: 140,
         height: 50,
 
-        marginTop: 20,
+        paddingLeft: 10,
 
         elevation: 2,
         ...shadowOptions,
 
         borderRadius: 15,
-        backgroundColor: ThemeColor.LIGHT_RED,
-    },
-    removeButtonTouchable: {
-        width: 150,
-        height: 50,
+        backgroundColor: ThemeColor.BRIGHT_RED,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
     removeButtonText: {
+        flex: 1,
+        marginLeft: 20,
         fontFamily: 'Roboto',
         fontSize: 16,
-        color: '#666666',
+        color: ThemeColor.WHITE,
     }
 })

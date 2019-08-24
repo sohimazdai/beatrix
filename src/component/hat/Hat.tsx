@@ -7,11 +7,17 @@ import { ThemeColor } from '../../constant/ThemeColor';
 interface HatProps {
     onBackPress: () => void;
     title?: string;
+    hatColor?: string;
 }
 
 export function Hat(props: HatProps) {
     return (
-        <View style={styles.hatView}>
+        <View
+            style={{
+                ...styles.hatView,
+                backgroundColor: props.hatColor ? props.hatColor : ThemeColor.LIGHT_BLUE
+            }}
+        >
             <View
                 style={styles.backArrow}
             >

@@ -228,15 +228,14 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
 
     renderSaveButton() {
         return (
-            <View style={styles.saveButton}>
-                <TouchableOpacity
-                    style={styles.saveButtonTouchable}
-                    onPress={this.createNote}>
-                    <Text style={styles.saveButtonText}>
-                        Записать
-                    </Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+                style={styles.saveButtonTouchable}
+                onPress={this.createNote}
+            >
+                <Text style={styles.saveButtonText}>
+                    Записать
+                </Text>
+            </TouchableOpacity>
         )
     }
 }
@@ -296,26 +295,22 @@ const styles = StyleSheet.create({
         margin: 15,
         marginRight: 10,
     },
-    saveButton: {
+    saveButtonTouchable: {
         flex: 1,
+
         width: 150,
         height: 50,
 
-        // marginTop: 20,
         marginVertical: 20,
 
         elevation: 2,
         ...shadowOptions,
 
         borderRadius: 15,
-        backgroundColor: ThemeColor.LIGHT_RED,
-    },
-    saveButtonTouchable: {
-        width: 150,
-        height: 50,
-
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: ThemeColor.LIGHT_RED,
+
     },
     saveButtonText: {
         fontFamily: 'Roboto',

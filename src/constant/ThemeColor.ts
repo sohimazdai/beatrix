@@ -6,6 +6,7 @@ export enum ThemeColor {
     LIGHT_GRAY = '#FFF8F2',
     LIGHT_PINK = '#FFB4B4',
     LIGHT_PINK_RED = '#FFC1AD',
+    BRIGHT_RED = '#FF5252',
 
     INDIAN_RED = '#B75454',
     TAN = '#D2A9A9',
