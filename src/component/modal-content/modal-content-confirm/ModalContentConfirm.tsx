@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: ThemeColor.LIGHT_BLUE,
+        backgroundColor: ThemeColor.LIGHT_PINK_RED,
     },
     questionText: {
         flex: 1,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: ThemeColor.LIGHT_RED,
+        borderColor: ThemeColor.INDIAN_RED,
         backgroundColor: 'white',
         textAlign: 'center',
         alignItems: 'center',

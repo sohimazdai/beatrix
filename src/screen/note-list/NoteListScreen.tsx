@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollViewComponent, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { AppState } from '../../model/AppState';
-import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
+import { INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { Note } from '../../view/notes/note/Note';

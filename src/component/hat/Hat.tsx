@@ -1,5 +1,5 @@
 import React from 'react';
-import { BackArrow } from '../icon/BackArrow';
+import { BackArrowIcon } from '../icon/BackArrowIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet } from 'react-native';
 import { ThemeColor } from '../../constant/ThemeColor';
@@ -18,7 +18,7 @@ export function Hat(props: HatProps) {
                 <TouchableOpacity
                     onPress={() => props.onBackPress()}
                 >
-                    <BackArrow />
+                    <BackArrowIcon />
                 </TouchableOpacity>
             </View>
             <Text style={styles.title}>
