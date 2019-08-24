@@ -25,6 +25,8 @@ import { Hat } from '../../component/hat/Hat';
 import * as lodash from "lodash"
 import { AppState } from '../../model/AppState';
 import { shadowOptions } from '../../constant/shadowOptions';
+import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
+import { ModalType, IModalConfirm } from '../../model/IModal';
 
 
 enum InputType {
@@ -121,11 +123,6 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         } else {
             alert('Заполните хотя бы одно поле')
         }
-    }
-
-    deleteNote = () => {
-        this.props.dispatch(deleteNoteInNoteListById(this.noteId));
-        this.props.navigation.navigate('NoteList')
     }
 
     onAndroidDatePickerPress = async () => {
@@ -274,12 +271,36 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
 
     renderDeleteButton() {
         return <View style={styles.removeButton}>
-            <TouchableOpacity onPress={this.deleteNote}>
+            <TouchableOpacity onPress={this.onDeleteClick}>
                 <Text style={styles.removeButtonText}>
                     Удалить
                 </Text>
             </TouchableOpacity>
         </View>
+    }
+
+    onDeleteClick = () => {
+        const confirmData: IModalConfirm = {
+            data: {
+                questionText: 'Вы уверены, что хотите удалить эту запись?',
+                positiveButtonText: 'Удалить',
+                negativeButtonText: 'Оставить',
+
+                onPositiveClick: () => this.deleteNote(),
+            }
+        }
+        this.props.dispatch(createModalChangeAction({
+            type: ModalType.CONFIRM,
+            needToShow: true,
+            data: confirmData.data
+        }))
+    }
+
+    deleteNote = () => {
+        return new Promise(() => {
+            this.props.dispatch(deleteNoteInNoteListById(this.noteId));
+            this.props.navigation.navigate('NoteList');
+        })
     }
 }
 
@@ -346,7 +367,7 @@ const styles = StyleSheet.create({
     },
     noteButtons: {
         flexDirection: 'row',
-        margin:14,
+        margin: 14,
     },
     changeButton: {
         width: 150,

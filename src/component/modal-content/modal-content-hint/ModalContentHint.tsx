@@ -1,20 +1,20 @@
 import React from 'react';
 import { IModalHint } from '../../../model/IModal';
-import { View, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
 
-interface ModalContentConfirmProps {
+interface ModalContentHintProps {
     modal: IModalHint,
-    onPositiveClick: () => void;
+    onResult: () => void;
 }
 
-export function ModalContentHint(props: ModalContentConfirmProps) {
+export function ModalContentHint(props: ModalContentHintProps) {
     return <View style={styles.view}>
-        <Text style={styles.questionText}>{props.modal.data.questionText}</Text>
+        <Text style={styles.questionText}>
+            {props.modal.data.questionText}
+        </Text>
         <TouchableOpacity
-            onPress={() => {
-                props.onPositiveClick()
-            }}
+            onPress={() => props.onResult()}
             style={styles.buttonView}
         >
             <Text style={styles.buttonText}>

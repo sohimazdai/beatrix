@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../model/AppState";
-import { IModal, ModalType } from "../../model/IModal";
+import { IModal, ModalType, IModalConfirm } from "../../model/IModal";
 import { ModalContentHint } from "./modal-content-hint/ModalContentHint";
 import { View, StyleSheet } from "react-native";
 import { Action, Dispatch } from "redux";
 import { createModalChangeAction } from "../../store/modules/modal/ModalActionCreator";
+import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
 
 interface ModalContentProps {
     modal: IModal;
@@ -24,10 +25,15 @@ class ModalContent extends React.PureComponent<ModalContentProps> {
 
     get modalToShow() {
         switch (this.props.modal.type) {
-            case ModalType.CONFIRM:
+            case ModalType.HINT:
                 return <ModalContentHint
                     modal={this.props.modal}
-                    onPositiveClick={() => this.onClose()}
+                    onResult={() => this.onClose()}
+                />
+            case ModalType.CONFIRM:
+                return <ModalContentConfirm
+                    modal={this.props.modal}
+                    onResult={() => this.onClose()}
                 />
             default:
                 return null;

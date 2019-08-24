@@ -7,13 +7,24 @@ export interface IModal {
 }
 
 export enum ModalType {
-    CONFIRM = 'confirm'
+    CONFIRM = 'confirm',
+    HINT = 'hint'
 }
 
 export interface IModalHint extends IModal {
     data?: {
-        questionText: string,
-        positiveButtonText: string,
+        questionText: string
+        positiveButtonText: string
+    }
+}
+
+export interface IModalConfirm extends IModal {
+    data?: {
+        questionText: string
+        positiveButtonText: string
+        negativeButtonText: string
+
+        onPositiveClick: () => void
     }
 }
 

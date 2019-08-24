@@ -89,7 +89,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
             this.props.navigation.navigate('NoteList')
         } else {
             this.props.dispatch(createModalChangeAction({
-                type: ModalType.CONFIRM,
+                type: ModalType.HINT,
                 needToShow: true,
                 data: {
                     questionText: 'Введите хотя бы один параметр',
