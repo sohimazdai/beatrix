@@ -22,6 +22,7 @@ import { shadowOptions } from '../../constant/shadowOptions';
 import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { ModalType } from '../../model/IModal';
+import { NoteDatePicker, NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -118,7 +119,12 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
         const { glucoseInput, breadUnitsInput, insulinInput } = this.state;
         return (
             <View style={styles.inputBlock}>
-                {this.renderDatePicker()}
+                <View style={styles.pickers}>
+                    <NoteDatePickerConnect
+                        date={this.state.date}
+                        onChange={(value) => this.setState({date: value})}
+                    />
+                </View>
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.GLUCOSE}
@@ -286,6 +292,15 @@ const styles = StyleSheet.create({
         // TODO: Hide this logic when you will put ios date picker to <Modal>
         alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
         backgroundColor: "#FFF8F2",
+    },
+    pickers: {
+        flex: 1,
+        height: 25,
+        width: '80%',
+
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     textInDatePickerIOS: {
         textAlign: 'center',

@@ -8,7 +8,8 @@ export interface IModal {
 
 export enum ModalType {
     CONFIRM = 'confirm',
-    HINT = 'hint'
+    HINT = 'hint',
+    IOS_DATE_PICKER = 'ios-date-picker',
 }
 
 export interface IModalHint extends IModal {
@@ -28,6 +29,16 @@ export interface IModalConfirm extends IModal {
     }
 }
 
+export interface IModalIOsDatePicker extends IModal {
+    data?: {
+        date: Date
+        positiveButtonText: string
+        onPositiveClick: (value) => void
+    }
+}
+
 export type IModalType = (
-    IModalHint
+    IModalHint |
+    IModalConfirm |
+    IModalIOsDatePicker
 )

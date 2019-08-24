@@ -7,6 +7,7 @@ import { View, StyleSheet } from "react-native";
 import { Action, Dispatch } from "redux";
 import { createModalChangeAction } from "../../store/modules/modal/ModalActionCreator";
 import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
+import { ModalContentIOsDatePicker } from "./modal-content-ios-date-picker/ModalContentIOsDatePicker";
 
 interface ModalContentProps {
     modal: IModal;
@@ -35,6 +36,11 @@ class ModalContent extends React.PureComponent<ModalContentProps> {
                     modal={this.props.modal}
                     onResult={() => this.onClose()}
                 />
+            case ModalType.IOS_DATE_PICKER:
+                return <ModalContentIOsDatePicker
+                    modal={this.props.modal}
+                    onResult={() => this.onClose()}
+                />
             default:
                 return null;
         }
@@ -59,8 +65,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
+        flex: 1,
         height: '100%',
         width: '100%',
+
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     }
 })
