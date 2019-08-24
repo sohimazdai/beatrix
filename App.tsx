@@ -3,8 +3,9 @@ import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { AppNavigator } from './src/navigator/Navigator';
 import { Provider } from 'react-redux';
-import { appStore } from './src/store/appStore';
+import { appStore, persistor } from './src/store/appStore';
 import { ModalContentConnect } from './src/component/modal-content/ModalContent';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export default class App extends React.Component {
   state = {
@@ -22,8 +23,10 @@ export default class App extends React.Component {
     return (
       this.state.appIsReady ?
           <Provider store={appStore}>
-            <AppNavigator />
-            <ModalContentConnect />
+            <PersistGate loading={null} persistor={persistor}>
+              <AppNavigator />
+              <ModalContentConnect />
+            </PersistGate>
           </Provider>
       : <AppLoading />
     )
