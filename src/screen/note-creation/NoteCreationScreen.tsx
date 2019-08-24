@@ -93,7 +93,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                 needToShow: true,
                 data: {
                     questionText: 'Введите хотя бы один параметр',
-                    confirmButtonText: 'ОК',
+                    positiveButtonText: 'ОК',
                 },
             }))
         }
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
 
         // with alignItems: 'center in IOS datepicker dont work(hide in interface)
         // alignItems: 'stretch',
-        // Hide this logic when you will put ios date picker to <Modal>
+        // TODO: Hide this logic when you will put ios date picker to <Modal>
         alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
         backgroundColor: "#FFF8F2",
     },

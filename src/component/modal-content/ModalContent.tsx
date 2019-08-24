@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../model/AppState";
 import { IModal, ModalType } from "../../model/IModal";
-import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
-import { Modal } from "react-native";
+import { ModalContentHint } from "./modal-content-hint/ModalContentHint";
+import { View, StyleSheet } from "react-native";
 import { Action, Dispatch } from "redux";
 import { createModalChangeAction } from "../../store/modules/modal/ModalActionCreator";
 
@@ -12,59 +12,29 @@ interface ModalContentProps {
     dispatch: Dispatch<Action>
 }
 
-interface ModalContentState {
-    isVisible: boolean;
-}
-
-class ModalContent extends React.PureComponent<
-    ModalContentProps,
-    ModalContentState
-    > {
-    state = {
-        isVisible: false
-    };
-
-    componentDidMount() {
-        if (this.props.modal && this.props.modal.needToShow) {
-            this.setState({
-                isVisible: true
-            });
-        }
-    }
-
-    componentDidUpdate(prevProps: ModalContentProps) {
-        if (
-            (!prevProps.modal || (prevProps.modal && !prevProps.modal.needToShow)) &&
-            this.props.modal && this.props.modal.needToShow
-        ) {
-            this.setState({
-                isVisible: true
-            });
-        }
-    }
-
+class ModalContent extends React.PureComponent<ModalContentProps> {
     render() {
-        return this.state.isVisible ? (
-            <Modal>
-                {this.modal}
-            </Modal>
+        return this.props.modal && this.props.modal.needToShow ? (
+            <View style={styles.modalContentView}>
+                {this.modalToShow}
+            </View>
         ) :
             null;
     }
 
-    get modal() {
+    get modalToShow() {
         switch (this.props.modal.type) {
             case ModalType.CONFIRM:
-                return <ModalContentConfirm
+                return <ModalContentHint
                     modal={this.props.modal}
-                    onConfirmClick={this.onClose}
+                    onPositiveClick={() => this.onClose()}
                 />
             default:
                 return null;
         }
     }
 
-    onClose = () => {
+    onClose() {
         this.props.dispatch(createModalChangeAction({
             needToShow: false
         }))
@@ -77,3 +47,14 @@ export const ModalContentConnect = connect(
     }),
     dispatch => ({ dispatch })
 )(ModalContent);
+
+const styles = StyleSheet.create({
+    modalContentView: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    }
+})

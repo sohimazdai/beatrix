@@ -10,13 +10,13 @@ export enum ModalType {
     CONFIRM = 'confirm'
 }
 
-export interface IModalConfirm extends IModal {
+export interface IModalHint extends IModal {
     data?: {
         questionText: string,
-        confirmButtonText: string,
+        positiveButtonText: string,
     }
 }
 
 export type IModalType = (
-    IModalConfirm
+    IModalHint
 )

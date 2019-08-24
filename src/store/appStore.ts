@@ -1,13 +1,13 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { noteListReducer } from "./modules/noteList/NoteListReducer";
 import { modalReducer } from "./modules/modal/ModalListReducer";
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import { AsyncStorage } from "react-native";
 
 const logger = store => next => action => {
-    console.log(action.type);
+    console.log("DISPATCHING", action.type);
+    action.payload && console.log(action.payload)
     const result = next(action);
-    console.log('next state', store.getState());
     return result
 }
 
@@ -16,16 +16,10 @@ const rootReducer = combineReducers({
     modal: modalReducer
 });
 
-const persistConfig = {
+const persistConfig: PersistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    noteList: [
-        'noteListReducer',
-    ],
-    ///////////////////////////////////// ??? modal will be on config?
-    // modal: [
-    //     'modalReducer',
-    // ],
+    blacklist: ['modal']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

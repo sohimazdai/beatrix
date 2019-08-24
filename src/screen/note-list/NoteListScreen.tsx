@@ -10,7 +10,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
-import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
 import { shadowOptions } from '../../constant/shadowOptions';
 
 interface NoteListScreenStateTProps {
@@ -82,7 +81,7 @@ class NoteListScreen extends React.Component<FullProps>{
     }
 
     renderCard(dayNotes: INoteListByDay) {
-        const notesIds = Object.keys(dayNotes);
+        const notesIds = Object.keys(dayNotes).reverse()
         return (
             <View style={styles.dayNotesWrap}>
                 <View style={styles.dayNotes}>
