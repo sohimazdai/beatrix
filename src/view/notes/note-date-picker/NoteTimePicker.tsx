@@ -21,8 +21,8 @@ export interface FullProps extends DispatchToProps, NoteTimePickerProps { }
 export class NoteTimePicker extends React.PureComponent<FullProps> {
     render() {
         const { date } = this.props;
-        const displayHours = date.getHours() > 10 ? date.getHours() : ('0' + date.getHours());
-        const displayMinutes = date.getMinutes() > 10 ? date.getMinutes() : ('0' + date.getMinutes());
+        const displayHours = date.getHours() > 9 ? date.getHours() : ('0' + date.getHours());
+        const displayMinutes = date.getMinutes() > 9 ? date.getMinutes() : ('0' + date.getMinutes());
 
         return (
             <View style={styles.view}>

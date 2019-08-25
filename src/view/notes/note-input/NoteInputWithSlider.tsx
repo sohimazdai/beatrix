@@ -23,6 +23,7 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
+                        value={parseInt(props.value.split('.')[0])}
                         onValueChange={(value) => props.onNaturalSlide(value)}
                         maximumValue={parseInt(props.maximumNum)}
                         step={1}

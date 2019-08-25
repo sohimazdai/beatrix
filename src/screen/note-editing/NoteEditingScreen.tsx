@@ -28,6 +28,8 @@ import { createModalChangeAction } from '../../store/modules/modal/ModalActionCr
 import { ModalType, IModalConfirm } from '../../model/IModal';
 import { DeleteNoteIcon } from '../../component/icon/DeleteNoteIcon';
 import { ChangeNoteIcon } from '../../component/icon/ChangeNoteIcon';
+import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
+import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 
 
 enum InputType {
@@ -56,13 +58,9 @@ interface NoteEdittingScreenState {
     insulinInput: string
 }
 
-interface IOSVisibilityDatePickerState {
-    visibilityIOSDatePicker: boolean
-}
-
 interface FullProps extends NoteEditingStateTProps, NoteEditingDispatchProps, NoteEditingProps { }
 
-interface FullState extends NoteEdittingScreenState, IOSVisibilityDatePickerState { }
+interface FullState extends NoteEdittingScreenState { }
 
 class NoteEditingScreen extends React.Component<FullProps, FullState>{
 
@@ -74,7 +72,6 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         glucoseInput: this.currentNote.glucose.toString(),
         breadUnitsInput: this.currentNote.breadUnits.toString(),
         insulinInput: this.currentNote.insulin.toString(),
-        visibilityIOSDatePicker: false
     }
 
     render() {
@@ -99,61 +96,21 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         )
     }
 
-    changeNote = () => {
-        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
-        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
-        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
-
-        let note: INoteListNote = {
-            date: this.state.date.getTime(),
-            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
-            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
-            insulin: insulinInput && parseFloat(insulinInput) || 0
-        }
-
-        if (note.glucose || note.breadUnits || note.insulin) {
-            if (note.date !== this.currentNote.date) {
-                this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
-                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-                this.props.navigation.navigate('NoteList')
-            }
-            else {
-                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-                this.props.navigation.navigate('NoteList')
-            }
-        } else {
-            alert('Заполните хотя бы одно поле')
-        }
-    }
-
-    onAndroidDatePickerPress = async () => {
-        try {
-            const { action, year, month, day } = await (DatePickerAndroid as any).open({
-                date: this.state.date,
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({
-                    date: new Date(year, month, day)
-                })
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
-        }
-    }
 
     renderInputBlock() {
         const { glucoseInput, breadUnitsInput, insulinInput } = this.state
-        const glucoseSliderValue = glucoseInput ?
-            Math.floor(parseFloat(glucoseInput)) : 0;
-        const breadUnitsSliderValue = breadUnitsInput ?
-            parseFloat(breadUnitsInput) : 0;
-        const insulinSliderValue = insulinInput ?
-            parseFloat(insulinInput) : 0;
-
         return (
             <View style={styles.inputBlock}>
-                {this.renderDatePicker()}
+                <View style={styles.pickers}>
+                    <NoteDatePickerConnect
+                        date={this.state.date}
+                        onChange={(value) => this.setState({ date: value })}
+                    />
+                    <NoteTimePickerConnect
+                        date={this.state.date}
+                        onChange={(value) => this.setState({ date: value })}
+                    />
+                </View>
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.GLUCOSE}
@@ -225,42 +182,6 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         )
     }
 
-    onIOSDatePickerPress = () => {
-        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker })
-    }
-
-    renderDatePicker() {
-        if (Platform.OS === 'android') {
-            return <View>
-                <TouchableOpacity
-                    onPress={this.onAndroidDatePickerPress}
-                >
-                    <Text>
-                        {this.state.date.toString()}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        } else if (Platform.OS === 'ios') {
-            return <View >
-                {
-                    this.state.visibilityIOSDatePicker === false ?
-                        <TouchableOpacity
-                            onPress={this.onIOSDatePickerPress}
-                        >
-                            <Text style={styles.textInDatePickerIOS}>
-                                {this.state.date.toString()}
-                            </Text>
-                        </TouchableOpacity>
-                        :
-                        <DatePickerIOS
-                            date={this.state.date}
-                            onDateChange={(date) => this.setState({ date: date })}
-                        />
-                }
-            </View>
-        }
-    }
-
     renderChangeButton() {
         return (
             <TouchableOpacity
@@ -289,6 +210,33 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         )
     }
 
+    changeNote = () => {
+        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
+        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
+        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
+        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
+
+        let note: INoteListNote = {
+            date: this.state.date.getTime(),
+            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
+            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
+            insulin: insulinInput && parseFloat(insulinInput) || 0
+        }
+
+        if (note.glucose || note.breadUnits || note.insulin) {
+            if (note.date !== this.currentNote.date) {
+                this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
+                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+                this.props.navigation.navigate('NoteList')
+            }
+            else {
+                this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+                this.props.navigation.navigate('NoteList')
+            }
+        } else {
+            alert('Заполните хотя бы одно поле')
+        }
+    }
     onDeleteClick = () => {
         const confirmData: IModalConfirm = {
             data: {
@@ -302,7 +250,7 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         this.props.dispatch(createModalChangeAction({
             type: ModalType.CONFIRM,
             needToShow: true,
-            data: confirmData.data
+            ...confirmData
         }))
     }
 
@@ -364,6 +312,15 @@ const styles = StyleSheet.create({
         alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
         backgroundColor: "#FFF8F2",
 
+    },
+    pickers: {
+        flex: 1,
+        height: 25,
+        width: '80%',
+
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     textInDatePickerIOS: {
         textAlign: 'center',

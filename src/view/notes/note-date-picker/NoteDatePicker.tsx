@@ -22,8 +22,8 @@ export interface FullProps extends DispatchToProps, NoteDatePickerProps { }
 export class NoteDatePicker extends React.PureComponent<FullProps> {
     render() {
         const { date } = this.props;
-        const displayDate = date.getDate() > 10 ? date.getDate() : ('0' + date.getDate());
-        const displayMonth = (date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
+        const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
+        const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
         const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
         return (
             <View style={styles.view}>

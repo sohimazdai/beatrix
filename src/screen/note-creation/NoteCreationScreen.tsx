@@ -22,7 +22,7 @@ import { shadowOptions } from '../../constant/shadowOptions';
 import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { ModalType } from '../../model/IModal';
-import { NoteDatePicker, NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
+import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 
 enum InputType {
@@ -43,11 +43,7 @@ interface NoteCreationScreenState {
     insulinInput: string
 }
 
-interface IOSVisibilityDatePickerState {
-    visibilityIOSDatePicker: boolean
-}
-
-interface FullState extends NoteCreationScreenState, IOSVisibilityDatePickerState { }
+interface FullState extends NoteCreationScreenState { }
 
 class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullState>{
     state = {
@@ -55,8 +51,8 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
         glucoseInput: "0.0",
         breadUnitsInput: "0.0",
         insulinInput: "0.0",
-        visibilityIOSDatePicker: false, // лучше называть були вот так: isIOSDatePickerVisible
     }
+
     render() {
         return (
             <View style={styles.noteCreationView}>
@@ -72,48 +68,6 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                 />
             </View>
         )
-    }
-
-    createNote = () => {
-        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
-        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
-        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
-
-        let note: INoteListNote = {
-            date: this.state.date.getTime(),
-            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
-            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
-            insulin: insulinInput && parseFloat(insulinInput) || 0
-        }
-        if (note.glucose || note.breadUnits || note.insulin) {
-            this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-            this.props.navigation.navigate('NoteList')
-        } else {
-            this.props.dispatch(createModalChangeAction({
-                type: ModalType.HINT,
-                needToShow: true,
-                data: {
-                    questionText: 'Введите хотя бы один параметр',
-                    positiveButtonText: 'ОК',
-                },
-            }))
-        }
-    }
-
-    onAndroidDatePickerPress = async () => {
-        try {
-            const { action, year, month, day } = await (DatePickerAndroid as any).open({
-                date: this.state.date,
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({
-                    date: new Date(year, month, day)
-                })
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date android picker', message);
-        }
     }
 
     renderInputBlock() {
@@ -196,45 +150,8 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                         )}
                     />
                 </View>
-
             </View>
         )
-    }
-
-    onIOSDatePickerPress = () => {
-        this.setState({ visibilityIOSDatePicker: !this.state.visibilityIOSDatePicker })
-    }
-
-    renderDatePicker() {
-        if (Platform.OS === 'android') {
-            return <View>
-                <TouchableOpacity
-                    onPress={this.onAndroidDatePickerPress}
-                >
-                    <Text>
-                        {this.state.date.toString()}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        } else if (Platform.OS === 'ios') {
-            return <View >
-                {
-                    this.state.visibilityIOSDatePicker === false ?
-                        <TouchableOpacity
-                            onPress={this.onIOSDatePickerPress}
-                        >
-                            <Text style={styles.textInDatePickerIOS}>
-                                {this.state.date.toString()}
-                            </Text>
-                        </TouchableOpacity>
-                        :
-                        <DatePickerIOS
-                            date={this.state.date}
-                            onDateChange={(date) => this.setState({ date: date })}
-                        />
-                }
-            </View>
-        }
     }
 
     renderSaveButton() {
@@ -248,6 +165,33 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                 </Text>
             </TouchableOpacity>
         )
+    }
+
+    createNote = () => {
+        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
+        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
+        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
+        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
+
+        let note: INoteListNote = {
+            date: this.state.date.getTime(),
+            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
+            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
+            insulin: insulinInput && parseFloat(insulinInput) || 0
+        }
+        if (note.glucose || note.breadUnits || note.insulin) {
+            this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+            this.props.navigation.navigate('NoteList')
+        } else {
+            this.props.dispatch(createModalChangeAction({
+                type: ModalType.HINT,
+                needToShow: true,
+                data: {
+                    questionText: 'Введите хотя бы один параметр',
+                    positiveButtonText: 'ОК',
+                },
+            }))
+        }
     }
 }
 
