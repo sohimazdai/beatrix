@@ -59,7 +59,10 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
 
     render() {
         return (
-            <KeyboardAvoidingView style={styles.noteCreationView} behavior='padding'>
+            <KeyboardAvoidingView
+                style={styles.noteCreationView}
+                behavior='padding'
+            >
                 <ScrollView style={styles.scrollView}>
                     <View style={styles.scrollViewContent}>
                         {this.renderInputBlock()}
@@ -81,7 +84,15 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 <View style={styles.pickers}>
                     <NoteDatePickerConnect
                         date={this.state.date}
-                        onChange={(value) => this.setState({ date: value })}
+                        onChange={(value) => this.setState({
+                            date: new Date(
+                                value.getFullYear(),
+                                value.getMonth(),
+                                value.getDate(),
+                                this.state.date.getHours(),
+                                this.state.date.getMinutes(),
+                            )
+                        })}
                     />
                     <NoteTimePickerConnect
                         date={this.state.date}

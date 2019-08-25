@@ -12,6 +12,7 @@ import {
     Platform,
     DatePickerIOS,
     ScrollView,
+    KeyboardAvoidingView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -78,7 +79,10 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
 
     render() {
         return (
-            <View style={styles.noteEdittingView}>
+            <KeyboardAvoidingView
+                style={styles.noteEdittingView}
+                behavior='padding'
+            >
                 <ScrollView style={styles.scrollView}>
                     <View style={styles.scrollViewContent}>
                         {this.renderInputBlock()}
@@ -94,7 +98,7 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
                     onBackPress={() => this.props.navigation.navigate('NoteList')}
                     hatColor={ThemeColor.LIGHT_PINK_RED}
                 />
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 
@@ -106,7 +110,15 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
                 <View style={styles.pickers}>
                     <NoteDatePickerConnect
                         date={this.state.date}
-                        onChange={(value) => this.setState({ date: value })}
+                        onChange={(value: Date) => this.setState({
+                            date: new Date(
+                                value.getFullYear(),
+                                value.getMonth(),
+                                value.getDate(),
+                                this.state.date.getHours(),
+                                this.state.date.getMinutes(),
+                            )
+                        })}
                     />
                     <NoteTimePickerConnect
                         date={this.state.date}
