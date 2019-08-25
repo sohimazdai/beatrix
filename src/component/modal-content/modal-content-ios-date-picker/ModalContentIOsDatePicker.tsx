@@ -12,7 +12,8 @@ export function ModalContentIOsDatePicker(props: ModalContentIOsDatePickerProps)
     return <View style={styles.view}>
         <DatePickerIOS
             date={props.modal.data.date}
-            onDateChange={props.onResult}
+            mode={props.modal.data.pickerType}
+            onDateChange={props.modal.data.onPositiveClick}
         />
         <TouchableOpacity
             onPress={() => props.onResult}
@@ -28,9 +29,10 @@ export function ModalContentIOsDatePicker(props: ModalContentIOsDatePickerProps)
 const styles = StyleSheet.create({
     view: {
         flex: 1,
+
         justifyContent: 'center',
         flexDirection: 'column',
-
+        alignItems: 'center',
         backgroundColor: ThemeColor.WHITE
     },
     buttonView: {
