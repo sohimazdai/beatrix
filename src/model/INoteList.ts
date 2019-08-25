@@ -6,7 +6,8 @@ export interface INoteListNote {
     date: number,
     glucose: number,
     breadUnits: number,
-    insulin: number
+    insulin: number,
+    longInsulin: number,
 }
 
 export interface INoteListByDay {

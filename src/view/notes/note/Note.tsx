@@ -27,7 +27,7 @@ export function Note(props: Props) {
                 {props.note.breadUnits}
             </Text>
             <Text style={styles.text}>
-                {props.note.insulin}
+                {props.note.insulin}{props.note.longInsulin ? '/' + props.note.longInsulin : ''}
             </Text>
         </TouchableOpacity>
     </View>

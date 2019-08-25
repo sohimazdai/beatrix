@@ -9,6 +9,7 @@ import {
     Platform,
     ScrollView,
     DatePickerIOS,
+    KeyboardAvoidingView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -28,7 +29,8 @@ import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTim
 enum InputType {
     GLUCOSE = 'Глюкоза',
     BREAD_UNITS = 'ХЕ',
-    INSULIN = 'Инсулин',
+    INSULIN = 'Длинный',
+    LONG_INSULIN = 'Короткий'
 }
 
 interface NoteCreationScreenProps {
@@ -41,21 +43,23 @@ interface NoteCreationScreenState {
     glucoseInput: string
     breadUnitsInput: string
     insulinInput: string
+    longInsulinInput: string
 }
 
 interface FullState extends NoteCreationScreenState { }
 
-class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullState>{
+class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, FullState>{
     state = {
         date: new Date(),
         glucoseInput: "0.0",
         breadUnitsInput: "0.0",
         insulinInput: "0.0",
+        longInsulinInput: "0.0",
     }
 
     render() {
         return (
-            <View style={styles.noteCreationView}>
+            <KeyboardAvoidingView style={styles.noteCreationView} behavior='padding'>
                 <ScrollView style={styles.scrollView}>
                     <View style={styles.scrollViewContent}>
                         {this.renderInputBlock()}
@@ -66,22 +70,22 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                     title={'Новая запись'}
                     onBackPress={() => this.props.navigation.navigate('NoteList')}
                 />
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 
     renderInputBlock() {
-        const { glucoseInput, breadUnitsInput, insulinInput } = this.state;
+        const { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
         return (
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
                     <NoteDatePickerConnect
                         date={this.state.date}
-                        onChange={(value) => this.setState({date: value})}
+                        onChange={(value) => this.setState({ date: value })}
                     />
                     <NoteTimePickerConnect
                         date={this.state.date}
-                        onChange={(value) => this.setState({date: value})}
+                        onChange={(value) => this.setState({ date: value })}
                     />
                 </View>
                 <View style={styles.inputView}>
@@ -130,7 +134,7 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                 </View>
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
-                        inputTitle={InputType.INSULIN}
+                        inputTitle={InputType.LONG_INSULIN}
                         value={this.state.insulinInput}
                         maximumNum={'15'}
                         onChangeText={(value) =>
@@ -145,6 +149,28 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
                             this.setState({
                                 insulinInput:
                                     insulinInput.split('.')[0] + '.' +
+                                    value.toString().split('.')[1]
+                            }), 50
+                        )}
+                    />
+                </View>
+                <View style={styles.inputView}>
+                    <NoteInputWithSlider
+                        inputTitle={InputType.INSULIN}
+                        value={this.state.longInsulinInput}
+                        maximumNum={'25'}
+                        onChangeText={(value) =>
+                            this.setState({ longInsulinInput: value })
+                        }
+                        onNaturalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                longInsulinInput: value + '.' + longInsulinInput.split('.')[1]
+                            }), 50
+                        )}
+                        onDecimalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                longInsulinInput:
+                                    longInsulinInput.split('.')[0] + '.' +
                                     value.toString().split('.')[1]
                             }), 50
                         )}
@@ -168,18 +194,20 @@ class NoteCreationScreen extends React.Component<NoteCreationScreenProps, FullSt
     }
 
     createNote = () => {
-        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
         glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
+        longInsulinInput = longInsulinInput.includes(',') ? longInsulinInput.replace(/,/g, '.') : longInsulinInput;
 
         let note: INoteListNote = {
             date: this.state.date.getTime(),
             glucose: glucoseInput && parseFloat(glucoseInput) || 0,
             breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
-            insulin: insulinInput && parseFloat(insulinInput) || 0
+            insulin: insulinInput && parseFloat(insulinInput) || 0,
+            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0
         }
-        if (note.glucose || note.breadUnits || note.insulin) {
+        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
             this.props.navigation.navigate('NoteList')
         } else {

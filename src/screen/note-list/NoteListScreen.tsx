@@ -26,7 +26,7 @@ interface NoteListScreenProps {
 
 interface FullProps extends NoteListScreenProps, NoteListScreenDispatchProps, NoteListScreenStateTProps { }
 
-class NoteListScreen extends React.Component<FullProps>{
+class NoteListScreen extends React.PureComponent<FullProps>{
     render() {
         return (
             <View style={styles.screenView}>

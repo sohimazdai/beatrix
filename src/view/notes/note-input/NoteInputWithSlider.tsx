@@ -38,8 +38,11 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={parseFloat(0 + '.' + props.value.split('.')[1])}
-                        onValueChange={(value) => props.onDecimalSlide(Math.floor(value * 10) / 10)}
+                        value={parseFloat(0 + '.' + props.value.split('.')[1]) || 0.0}
+                        onValueChange={(value) => value ?
+                            props.onDecimalSlide((Math.floor(value * 10) / 10)) :
+                            props.onDecimalSlide('0.0')
+                        }
                         maximumValue={0.9}
                         step={0.1}
                     />
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
         width: 85,
 
         flexDirection: 'column',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
     inputTitleText: {
@@ -113,11 +116,15 @@ const styles = StyleSheet.create({
     },
     input: {
         width: 50,
-        height: 41,
+        height: 50,
 
         padding: 5,
-        borderRadius: 5,
+        borderRadius: 10,
         borderWidth: 2,
+
+        textAlign: 'center',
+        fontSize: 20,
+        color: ThemeColor.TEXT_DARK_GRAY,
 
         borderColor: ThemeColor.TAN,
         backgroundColor: ThemeColor.WHITE,

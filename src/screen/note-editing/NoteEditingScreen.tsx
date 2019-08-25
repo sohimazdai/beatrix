@@ -56,13 +56,14 @@ interface NoteEdittingScreenState {
     glucoseInput: string
     breadUnitsInput: string
     insulinInput: string
+    longInsulinInput: string
 }
 
 interface FullProps extends NoteEditingStateTProps, NoteEditingDispatchProps, NoteEditingProps { }
 
 interface FullState extends NoteEdittingScreenState { }
 
-class NoteEditingScreen extends React.Component<FullProps, FullState>{
+class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
 
     noteId = this.props.navigation.getParam('noteId', 'currentId');
     currentNote = this.props.noteList[this.noteId];
@@ -72,6 +73,7 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
         glucoseInput: this.currentNote.glucose.toString(),
         breadUnitsInput: this.currentNote.breadUnits.toString(),
         insulinInput: this.currentNote.insulin.toString(),
+        longInsulinInput: this.currentNote.longInsulin.toString(),
     }
 
     render() {
@@ -98,7 +100,7 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
 
 
     renderInputBlock() {
-        const { glucoseInput, breadUnitsInput, insulinInput } = this.state
+        const { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state
         return (
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
@@ -177,7 +179,28 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
                         )}
                     />
                 </View>
-
+                <View style={styles.inputView}>
+                    <NoteInputWithSlider
+                        inputTitle={InputType.INSULIN}
+                        value={this.state.longInsulinInput}
+                        maximumNum={'25'}
+                        onChangeText={(value) =>
+                            this.setState({ longInsulinInput: value })
+                        }
+                        onNaturalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                longInsulinInput: value + '.' + longInsulinInput.split('.')[1]
+                            }), 50
+                        )}
+                        onDecimalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                longInsulinInput:
+                                    longInsulinInput.split('.')[0] + '.' +
+                                    value.toString().split('.')[1]
+                            }), 50
+                        )}
+                    />
+                </View>
             </View>
         )
     }
@@ -211,19 +234,21 @@ class NoteEditingScreen extends React.Component<FullProps, FullState>{
     }
 
     changeNote = () => {
-        let { glucoseInput, breadUnitsInput, insulinInput } = this.state;
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
         glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
+        longInsulinInput = longInsulinInput.includes(',') ? longInsulinInput.replace(/,/g, '.') : longInsulinInput;
 
         let note: INoteListNote = {
             date: this.state.date.getTime(),
             glucose: glucoseInput && parseFloat(glucoseInput) || 0,
             breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
-            insulin: insulinInput && parseFloat(insulinInput) || 0
+            insulin: insulinInput && parseFloat(insulinInput) || 0,
+            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0
         }
 
-        if (note.glucose || note.breadUnits || note.insulin) {
+        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin) {
             if (note.date !== this.currentNote.date) {
                 this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
                 this.props.dispatch(createNoteListChangeNoteByIdAction(note));
