@@ -11,6 +11,7 @@ import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { shadowOptions } from '../../constant/shadowOptions';
+import { ToChartButton } from '../../component/icon/ToChartButton';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -35,6 +36,9 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     {this.renderCards()}
                 </ScrollView>
                 <View style={styles.addNoteButtonView}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteChart')}>
+                        <ToChartButton />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteCreation')}>
                         <AddNoteIcon />
                     </TouchableOpacity>
@@ -94,7 +98,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                             key={noteId}
                             note={note}
                             onPress={() => { }}
-                            onLongPress={() => this.props.navigation.navigate('NoteEdittor', {
+                            onLongPress={() => this.props.navigation.navigate('NoteEditor', {
                                 noteId: noteId
                             })}
                         />
