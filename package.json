@@ -19,6 +19,7 @@
     "@types/redux-saga": "^0.10.5",
     "expo": "^34.0.1",
     "expo-cli": "3.0.9",
+    "expo-linear-gradient": "~6.0.0",
     "lodash": "^4.17.15",
     "mem": "^4.0.0",
     "react": "16.8.3",
