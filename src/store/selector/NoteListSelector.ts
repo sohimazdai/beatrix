@@ -22,4 +22,11 @@ export class NoteListSelector {
         })
         return notesByDay
     }
+
+    static convertNoteListToDayChartDots(noteList: INoteList, date: Date) {
+        let result;
+        const notesByDay = NoteListSelector.convertFlatNoteListToNoteListByDay(noteList);
+
+        return result;
+    }
 }

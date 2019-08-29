@@ -1,17 +1,22 @@
 export interface IChartDot {
-    x: number
-    y: number
+    x: number,
+    y: number,
+    id: number,
+}
+export enum ChartValueType {
+    GLUCOSE = "glucose",
+    BREAD_UNITS = "breadUnits",
+    INSULIN = "insulin",
+    LONG_INSULIN = "longInsulin"
 }
 
-export interface IChartLine {
-    dots: IChartDot[]
-}
-
-export interface IChartAxis {
-    type: ChartAxisType
+export enum ChartPeriodType {
+    DAY = 'day'
 }
 
 export enum ChartAxisType {
-    OX = 'ox',
-    OY = 'oy'
+    OX = "ox",
+    OY = "oy",
+    OX_REVERSE = "ox-reverse",
+    OY_REVERSE = "oy-reverse"
 }
