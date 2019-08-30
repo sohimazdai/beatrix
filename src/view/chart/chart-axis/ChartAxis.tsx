@@ -39,13 +39,17 @@ const getPath = (props) => {
             return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
                 end.x + ',' + end.y + ' ' +
                 (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize)
-        case ChartAxisType.OX_REVERSE:
-            return
+        case ChartAxisType.OX_UPSIDE:
+            return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
+            end.x + ',' + end.y + ' ' +
+            (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize)
         case ChartAxisType.OY:
             return (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize) + ' ' +
             end.x + ',' + end.y + ' ' +
             (end.x + config.arrowSize) + ',' + (end.y + config.arrowSize)
         case ChartAxisType.OY_REVERSE:
-            return
+            return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
+            end.x + ',' + end.y + ' ' +
+            (end.x + config.arrowSize) + ',' + (end.y - config.arrowSize)
     }
 }

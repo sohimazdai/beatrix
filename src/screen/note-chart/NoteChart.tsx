@@ -39,6 +39,43 @@ const chartConfig = {
         arrowSize: 5,
         yPadding: 1,
         dotRadius: 5,
+        reversedY: false,
+    },
+    breadUnits: {
+        width: Dimensions.get("screen").width,
+        height: Dimensions.get("screen").width / 3,
+        boxWidth: Dimensions.get("screen").width,
+        boxHeight: Dimensions.get("screen").width / 3,
+        axisWidth: 2,
+        axisColor: '#AAAAAA',
+        arrowSize: 5,
+        yPadding: 1,
+        dotRadius: 5,
+        reversedY: false,
+    },
+    insulin: {
+        width: Dimensions.get("screen").width,
+        height: Dimensions.get("screen").width / 3,
+        boxWidth: Dimensions.get("screen").width,
+        boxHeight: Dimensions.get("screen").width / 3,
+        axisWidth: 2,
+        axisColor: '#AAAAAA',
+        arrowSize: 5,
+        yPadding: 1,
+        dotRadius: 5,
+        reversedY: true
+    },
+    longInsulin: {
+        width: Dimensions.get("screen").width,
+        height: Dimensions.get("screen").width / 3,
+        boxWidth: Dimensions.get("screen").width,
+        boxHeight: Dimensions.get("screen").width / 3,
+        axisWidth: 2,
+        axisColor: '#AAAAAA',
+        arrowSize: 5,
+        yPadding: 1,
+        dotRadius: 5,
+        reversedY: false,
     }
 }
 
@@ -63,7 +100,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
 
     render() {
         const glucoseChartDots = this.getChartDots(ChartValueType.GLUCOSE);
-        console.log(glucoseChartDots)
+        const breadUnitsChartDots = this.getChartDots(ChartValueType.BREAD_UNITS);
+        const insulinChartDots = this.getChartDots(ChartValueType.INSULIN);
+        const longInsulinChartDots = this.getChartDots(ChartValueType.LONG_INSULIN);
+        console.log(breadUnitsChartDots)
         return (
             <View style={styles.view}>
                 <View style={styles.statusBar} />
@@ -80,14 +120,39 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                             style={styles.chartGradient}
                         >
                             <ChartBox
+                                {...chartConfig.insulin}
+                            >
+                                {/* INSULIN CHART */}
+                                <ChartAxis
+                                    {...this.getAxisDots(ChartValueType.INSULIN, ChartAxisType.OY_REVERSE)}
+                                    axisType={ChartAxisType.OY_REVERSE}
+                                    config={chartConfig[ChartValueType.INSULIN]}
+                                />
+                                <ChartAxis
+                                    {...this.getAxisDots(ChartValueType.INSULIN, ChartAxisType.OX_UPSIDE)}
+                                    axisType={ChartAxisType.OX_UPSIDE}
+                                    config={chartConfig[ChartValueType.INSULIN]}
+                                />
+                                {insulinChartDots.dots.map(item => {
+                                    return <ChartDot
+                                        key={item.id}
+                                        r={chartConfig.insulin.dotRadius}
+                                        onPress={() => Alert.alert(JSON.stringify(item))}
+                                        x={item.x}
+                                        y={item.y}
+                                    />
+                                })}
+                            </ChartBox>
+                            <ChartBox
                                 {...chartConfig.glucose}
                             >
+                                {/* GLUCOSE CHART */}
                                 <ChartAxis
                                     {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OY)}
                                     axisType={ChartAxisType.OY}
                                     config={chartConfig[ChartValueType.GLUCOSE]}
                                 />
-                                 <ChartAxis
+                                <ChartAxis
                                     {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OX)}
                                     axisType={ChartAxisType.OX}
                                     config={chartConfig[ChartValueType.GLUCOSE]}
@@ -101,27 +166,30 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         y={item.y}
                                     />
                                 })}
-
-                                {/* <ChartDot
-                                    onPress={() => Alert.alert('Clicked! Huray!1')}
-                                    r={10}
-                                    x={20}
-                                    y={55}
-                                />
-                                <ChartDot
-                                    onPress={() => Alert.alert('Clicked! Huray!1')}
-                                    r={10}
-                                    x={980}
-                                    y={980}
+                            </ChartBox>
+                            <ChartBox
+                                {...chartConfig.breadUnits}
+                            >
+                                {/* BREAD_UNITS CHART */}
+                                <ChartAxis
+                                    {...this.getAxisDots(ChartValueType.BREAD_UNITS, ChartAxisType.OY)}
+                                    axisType={ChartAxisType.OY}
+                                    config={chartConfig[ChartValueType.BREAD_UNITS]}
                                 />
                                 <ChartAxis
-                                    end={{ x: 900, y: 100 }}
-                                    start={{ x: 100, y: 100 }}
+                                    {...this.getAxisDots(ChartValueType.BREAD_UNITS, ChartAxisType.OX)}
                                     axisType={ChartAxisType.OX}
-                                    color={chartConfig.axisColor}
-                                    width={chartConfig.axisWidth}
-                                    arrowSize={chartConfig.arrowSize}
-                                /> */}
+                                    config={chartConfig[ChartValueType.BREAD_UNITS]}
+                                />
+                                {breadUnitsChartDots.dots.map(item => {
+                                    return <ChartDot
+                                        key={item.id}
+                                        r={chartConfig.breadUnits.dotRadius}
+                                        onPress={() => Alert.alert(JSON.stringify(item))}
+                                        x={item.x}
+                                        y={item.y}
+                                    />
+                                })}
                             </ChartBox>
                         </LinearGradient>
                     </View>
@@ -140,7 +208,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         )
     }
 
-    getChartDots(key: ChartValueType) {
+    getChartDots(valueKey: ChartValueType) {
         const { noteListByDay } = this.props;
         const chartData: {
             maxValue?: number,
@@ -151,21 +219,21 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         let values: number[] = [];
         if (this.state.mode === NoteChartMode.DAY) {
             Object.keys(currentDayNotes).map(index => {
-                values.push((currentDayNotes[index] as INoteListNote)[key])
+                values.push((currentDayNotes[index] as INoteListNote)[valueKey])
             })
         };
         chartData.maxValue = values.length ? Math.max(...values) : 0;
         chartData.minValue = values.length ? Math.min(...values) : 0;
-        chartData.dots = values.length ? this.getChartDotsByNoteListSection(chartData, currentDayNotes, key) : [];
+        chartData.dots = values.length ? this.getChartDotsByNoteListSection(chartData, currentDayNotes, valueKey) : [];
         return chartData;
     }
 
-    getChartDotsByNoteListSection(data, section: INoteList, key: ChartValueType) {
+    getChartDotsByNoteListSection(data, section: INoteList, valueKey: ChartValueType) {
         let chartDots: IChartDot[] = [];
         Object.keys(section).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
-            dot.x = ((section[noteId] as INoteListNote).date - this.getClearXDate()) * this.getXRelativity(key);
-            dot.y = this.getY(key, data, (section[noteId] as INoteListNote)[key]);
+            dot.x = ((section[noteId] as INoteListNote).date - this.getClearXDate()) * this.getXRelativity(valueKey) + this.getMargin(valueKey);
+            dot.y = this.getY(valueKey, data, (section[noteId] as INoteListNote)[valueKey]);
             dot.y && chartDots.push(dot);
         })
         chartDots.sort((a: IChartDot, b: IChartDot) => a.id - b.id);
@@ -183,40 +251,59 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         }
     }
 
-    getXRelativity(key: ChartValueType) {
+    getXRelativity(valueKey: ChartValueType) {
         switch (this.state.mode) {
             case NoteChartMode.DAY:
                 const dayInMS = 1000 * 60 * 60 * 24;
-                return chartConfig[key].boxWidth / dayInMS;
+                return (chartConfig[valueKey].boxWidth - 2 * this.getMargin(valueKey)) / dayInMS;
         }
     }
 
-    getY(key: ChartValueType, chartData, y): number { //y = 5
-        const min = chartData.minValue > chartConfig[key].yPadding ?
-            chartData.minValue - chartConfig[key].yPadding :
-            0; //1
-        const max = chartData.maxValue + chartConfig[key].yPadding; //9
-        const range = max - min; //8
-        const relativity = chartConfig[key].boxHeight / range // 320/8 = 40
-        const resultY = (y - min) * relativity; // (5 - 1) * 40
+    getY(valueKey: ChartValueType, chartData, y): number {
+        const min = chartData.minValue > chartConfig[valueKey].yPadding ?
+            chartData.minValue - chartConfig[valueKey].yPadding :
+            0;
+        const max = chartData.maxValue + chartConfig[valueKey].yPadding;
+        const range = max - min;
+        const relativity = (chartConfig[valueKey].boxHeight - 2 * this.getMargin(valueKey) ) / range;
+        const resultY = chartConfig[valueKey].reversedY ?
+            (y - min) * relativity + this.getMargin(valueKey):
+            chartConfig[valueKey].boxHeight - (y - min) * relativity - this.getMargin(valueKey);
         return resultY
     }
 
-    getAxisDots(key: ChartValueType, type: ChartAxisType) {
-        const start: { x: number, y: number, id: number } = {x: 0, y: 0, id: 0};
-        const end: { x: number, y: number, id: number } = {x: 0, y: 0, id: 1};
+    getAxisDots(valueKey: ChartValueType, type: ChartAxisType) {
+        const start: { x: number, y: number, id: number } = { x: 0, y: 0, id: 0 };
+        const end: { x: number, y: number, id: number } = { x: 0, y: 0, id: 1 };
+        const cfg = chartConfig[valueKey];
         if (type === ChartAxisType.OY) {
-            start.x = chartConfig[key].arrowSize;
-            start.y = chartConfig[key].boxHeight - chartConfig[key].arrowSize;
-            end.x = chartConfig[key].arrowSize;
-            end.y = chartConfig[key].arrowSize;
+            start.x = cfg.arrowSize;
+            start.y = cfg.boxHeight - cfg.arrowSize;
+            end.x = cfg.arrowSize;
+            end.y = cfg.arrowSize;
         } else if (type === ChartAxisType.OX) {
-            start.x = chartConfig[key].arrowSize;
-            start.y = chartConfig[key].boxHeight - chartConfig[key].arrowSize;
-            end.x = chartConfig[key].boxWidth - chartConfig[key].arrowSize;
-            end.y = chartConfig[key].boxHeight - chartConfig[key].arrowSize;
+            start.x = cfg.arrowSize;
+            start.y = cfg.boxHeight - cfg.arrowSize;
+            end.x = cfg.boxWidth - cfg.arrowSize;
+            end.y = cfg.boxHeight - cfg.arrowSize;
+        } else if (type === ChartAxisType.OY_REVERSE) {
+            end.x = cfg.arrowSize;
+            end.y = cfg.boxHeight - cfg.arrowSize;
+            start.x = cfg.arrowSize;
+            start.y = cfg.arrowSize;
+        } else if (type === ChartAxisType.OX_UPSIDE) {
+            start.x = cfg.arrowSize;
+            start.y = cfg.arrowSize;
+            end.x = cfg.boxWidth - cfg.arrowSize;
+            end.y = cfg.arrowSize;
         }
         return { start, end }
+    }
+
+    getMargin(valueKey: ChartValueType): number {
+        const cfg = chartConfig[valueKey];
+        const generalChartMargin = cfg.arrowSize;
+        return generalChartMargin;
     }
 }
 

@@ -16,6 +16,7 @@ export enum ChartPeriodType {
 
 export enum ChartAxisType {
     OX = "ox",
+    OX_UPSIDE = 'ox-upside',
     OY = "oy",
     OX_REVERSE = "ox-reverse",
     OY_REVERSE = "oy-reverse"
