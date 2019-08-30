@@ -6,46 +6,45 @@ import { IChartDot, ChartAxisType } from '../../../model/IChart';
 export interface ChartAxisProps {
     start: IChartDot
     end: IChartDot
-    color: string
-    width: number
     axisType: ChartAxisType
-    arrowSize: number
+    config: any
 }
 
 export function ChartAxis(props: ChartAxisProps) {
-    const { end, arrowSize } = props;
+    const { end, config } = props;
     let path = getPath(props);
-
     return <>
         <Line
             x1={props.start.x}
             y1={props.start.y}
             x2={props.end.x}
             y2={props.end.y}
-            stroke={props.color}
-            strokeWidth={props.width}
+            stroke={config.axisColor}
+            strokeWidth={config.axisWidth}
         />
         <Polyline
-            points={path}
-            stroke={props.color}
-            strokeWidth={props.width}
+            points={getPath(props)}
+            stroke={config.axisColor}
+            strokeWidth={config.axisWidth}
             fill={'transparent'}
         />
     </>
 }
 
 const getPath = (props) => {
-    const { end, arrowSize } = props;
+    const { end, config } = props;
 
     switch (props.axisType) {
         case ChartAxisType.OX:
-            return (end.x - arrowSize) + ',' + (end.y - arrowSize) + ' ' +
+            return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
                 end.x + ',' + end.y + ' ' +
-                (end.x - arrowSize) + ',' + (end.y + arrowSize)
+                (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize)
         case ChartAxisType.OX_REVERSE:
             return
         case ChartAxisType.OY:
-            return
+            return (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize) + ' ' +
+            end.x + ',' + end.y + ' ' +
+            (end.x + config.arrowSize) + ',' + (end.y + config.arrowSize)
         case ChartAxisType.OY_REVERSE:
             return
     }

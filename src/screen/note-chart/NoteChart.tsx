@@ -34,9 +34,11 @@ const chartConfig = {
         height: Dimensions.get("screen").width / 2,
         boxWidth: Dimensions.get("screen").width,
         boxHeight: Dimensions.get("screen").width / 2,
-        axisWidth: 5,
+        axisWidth: 2,
         axisColor: '#AAAAAA',
-        arrowSize: 10,
+        arrowSize: 5,
+        yPadding: 1,
+        dotRadius: 5,
     }
 }
 
@@ -80,14 +82,26 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                             <ChartBox
                                 {...chartConfig.glucose}
                             >
+                                <ChartAxis
+                                    {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OY)}
+                                    axisType={ChartAxisType.OY}
+                                    config={chartConfig[ChartValueType.GLUCOSE]}
+                                />
+                                 <ChartAxis
+                                    {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OX)}
+                                    axisType={ChartAxisType.OX}
+                                    config={chartConfig[ChartValueType.GLUCOSE]}
+                                />
                                 {glucoseChartDots.dots.map(item => {
                                     return <ChartDot
-                                        r={40}
+                                        key={item.id}
+                                        r={chartConfig.glucose.dotRadius}
                                         onPress={() => Alert.alert(JSON.stringify(item))}
                                         x={item.x}
                                         y={item.y}
                                     />
                                 })}
+
                                 {/* <ChartDot
                                     onPress={() => Alert.alert('Clicked! Huray!1')}
                                     r={10}
@@ -133,16 +147,16 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             minValue?: number,
             dots?: IChartDot[],
         } = {};
-        const currentDayNotes: INoteList = noteListByDay[this.state.currentStartDate.getTime()];
+        const currentDayNotes: INoteList = noteListByDay[this.state.currentStartDate.getTime()] || {};
         let values: number[] = [];
         if (this.state.mode === NoteChartMode.DAY) {
             Object.keys(currentDayNotes).map(index => {
                 values.push((currentDayNotes[index] as INoteListNote)[key])
             })
         };
-        chartData.maxValue = Math.max(...values);
-        chartData.minValue = Math.min(...values);
-        chartData.dots = this.getChartDotsByNoteListSection(chartData, currentDayNotes, key);
+        chartData.maxValue = values.length ? Math.max(...values) : 0;
+        chartData.minValue = values.length ? Math.min(...values) : 0;
+        chartData.dots = values.length ? this.getChartDotsByNoteListSection(chartData, currentDayNotes, key) : [];
         return chartData;
     }
 
@@ -150,17 +164,15 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         let chartDots: IChartDot[] = [];
         Object.keys(section).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
-            dot.x = ((section[noteId] as INoteListNote).date - this.getClearY()) * this.getYRelativity(key);
-            dot.y = ((section[noteId] as INoteListNote)[key] - data.minValue) > 0 ?
-                ((section[noteId] as INoteListNote)[key] - data.minValue) * this.getXRelativity(key, data) :
-                0
+            dot.x = ((section[noteId] as INoteListNote).date - this.getClearXDate()) * this.getXRelativity(key);
+            dot.y = this.getY(key, data, (section[noteId] as INoteListNote)[key]);
             dot.y && chartDots.push(dot);
         })
         chartDots.sort((a: IChartDot, b: IChartDot) => a.id - b.id);
         return chartDots;
     }
 
-    getClearY() {
+    getClearXDate() {
         switch (this.state.mode) {
             case NoteChartMode.DAY:
                 return new Date(
@@ -171,7 +183,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         }
     }
 
-    getYRelativity(key: ChartValueType) {
+    getXRelativity(key: ChartValueType) {
         switch (this.state.mode) {
             case NoteChartMode.DAY:
                 const dayInMS = 1000 * 60 * 60 * 24;
@@ -179,9 +191,32 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         }
     }
 
-    getXRelativity(key: ChartValueType, data) {
-        const range = data.maxValue - data.minValue || 2;
-        return (chartConfig[key].boxHeight / (range))
+    getY(key: ChartValueType, chartData, y): number { //y = 5
+        const min = chartData.minValue > chartConfig[key].yPadding ?
+            chartData.minValue - chartConfig[key].yPadding :
+            0; //1
+        const max = chartData.maxValue + chartConfig[key].yPadding; //9
+        const range = max - min; //8
+        const relativity = chartConfig[key].boxHeight / range // 320/8 = 40
+        const resultY = (y - min) * relativity; // (5 - 1) * 40
+        return resultY
+    }
+
+    getAxisDots(key: ChartValueType, type: ChartAxisType) {
+        const start: { x: number, y: number, id: number } = {x: 0, y: 0, id: 0};
+        const end: { x: number, y: number, id: number } = {x: 0, y: 0, id: 1};
+        if (type === ChartAxisType.OY) {
+            start.x = chartConfig[key].arrowSize;
+            start.y = chartConfig[key].boxHeight - chartConfig[key].arrowSize;
+            end.x = chartConfig[key].arrowSize;
+            end.y = chartConfig[key].arrowSize;
+        } else if (type === ChartAxisType.OX) {
+            start.x = chartConfig[key].arrowSize;
+            start.y = chartConfig[key].boxHeight - chartConfig[key].arrowSize;
+            end.x = chartConfig[key].boxWidth - chartConfig[key].arrowSize;
+            end.y = chartConfig[key].boxHeight - chartConfig[key].arrowSize;
+        }
+        return { start, end }
     }
 }
 
