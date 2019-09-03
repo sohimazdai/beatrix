@@ -12,7 +12,7 @@ import { shadowOptions } from '../../constant/shadowOptions';
 import { ChartAxis } from '../../view/chart/chart-axis/ChartAxis';
 import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
-import { ChartPolyline } from '../../view/chart/chart-polyline/ChartPolyline';
+import { ChartPolyline, PolylineType } from '../../view/chart/chart-polyline/ChartPolyline';
 
 export interface NoteChartProps {
     noteListByDay: INoteListByDay
@@ -101,8 +101,12 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         mode: NoteChartMode.DAY,
     }
 
-    componentDidUpdate() {
+    get generalPadding() {
+        return chartConfig.glucose.arrowSize * 3;
+    }
 
+    get initialPadding() {
+        return chartConfig.glucose.arrowSize;
     }
 
     render() {
@@ -139,16 +143,11 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     axisType={ChartAxisType.OX_UPSIDE}
                                     config={chartConfig[ChartValueType.INSULIN]}
                                 />
-                                <ChartPolyline dots={insulinChartDots} />
-                                {/* {insulinChartDots.dots.map(item => {
-                                    return <ChartDot
-                                        key={item.id}
-                                        r={chartConfig.insulin.dotRadius}
-                                        onPress={() => Alert.alert(JSON.stringify(item))}
-                                        x={item.x}
-                                        y={item.y}
-                                    />
-                                })} */}
+                                <ChartPolyline
+                                    polylineType={PolylineType.GRADIENTED}
+                                    dots={insulinChartDots}
+                                    withGradient
+                                />
                             </ChartBox>
                             <ChartBox
                                 {...chartConfig.glucose}
@@ -163,6 +162,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OX)}
                                     axisType={ChartAxisType.OX}
                                     config={chartConfig[ChartValueType.GLUCOSE]}
+                                />
+                                <ChartPolyline
+                                    polylineType={PolylineType.BEZIER}
+                                    dots={glucoseChartDots.dots}
                                 />
                                 {glucoseChartDots.dots.map(item => {
                                     return <ChartDot
@@ -239,7 +242,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         let chartDots: IChartDot[] = [];
         Object.keys(section).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
-            dot.x = ((section[noteId] as INoteListNote).date - this.getClearDateBeforeToday()) * this.getXRelativity(valueKey) + this.getMargin(valueKey);
+            dot.x = ((section[noteId] as INoteListNote).date - this.getClearDateBeforeToday()) * this.getXRelativity(valueKey) + this.initialPadding;
             dot.y = this.getY(valueKey, data, (section[noteId] as INoteListNote)[valueKey]);
             dot.y && chartDots.push(dot);
         })
@@ -262,7 +265,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         switch (this.state.mode) {
             case NoteChartMode.DAY:
                 const dayInMS = 1000 * 60 * 60 * 24;
-                return (chartConfig[valueKey].boxWidth - 2 * this.getMargin(valueKey)) / dayInMS;
+                return (chartConfig[valueKey].boxWidth - this.generalPadding) / dayInMS;
         }
     }
 
@@ -272,10 +275,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             0;
         const max = chartData.maxValue + chartConfig[valueKey].yPadding;
         const range = max - min;
-        const relativity = (chartConfig[valueKey].boxHeight - 2 * this.getMargin(valueKey)) / range;
+        const relativity = (chartConfig[valueKey].boxHeight - this.generalPadding) / range;
         const resultY = chartConfig[valueKey].reversedY ?
-            (y - min) * relativity + this.getMargin(valueKey) :
-            chartConfig[valueKey].boxHeight - (y - min) * relativity - this.getMargin(valueKey);
+            (y - min) * relativity + this.initialPadding :
+            chartConfig[valueKey].boxHeight - (y - min) * relativity - this.initialPadding;
         return resultY
     }
 
@@ -284,33 +287,27 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         const end: { x: number, y: number, id: number } = { x: 0, y: 0, id: 1 };
         const cfg = chartConfig[valueKey];
         if (type === ChartAxisType.OY) {
-            start.x = cfg.arrowSize;
-            start.y = cfg.boxHeight - cfg.arrowSize;
-            end.x = cfg.arrowSize;
-            end.y = cfg.arrowSize;
+            start.x = this.initialPadding;
+            start.y = cfg.boxHeight - this.initialPadding;
+            end.x = this.initialPadding;
+            end.y = this.initialPadding;
         } else if (type === ChartAxisType.OX) {
-            start.x = cfg.arrowSize;
-            start.y = cfg.boxHeight - cfg.arrowSize;
-            end.x = cfg.boxWidth - cfg.arrowSize;
-            end.y = cfg.boxHeight - cfg.arrowSize;
+            start.x = this.initialPadding;
+            start.y = cfg.boxHeight - this.initialPadding;
+            end.x = cfg.boxWidth - this.initialPadding;
+            end.y = cfg.boxHeight - this.initialPadding;
         } else if (type === ChartAxisType.OY_REVERSE) {
-            end.x = cfg.arrowSize;
-            end.y = cfg.boxHeight - cfg.arrowSize;
-            start.x = cfg.arrowSize;
-            start.y = cfg.arrowSize;
+            end.x = this.initialPadding;
+            end.y = cfg.boxHeight - this.initialPadding;
+            start.x = this.initialPadding;
+            start.y = this.initialPadding;
         } else if (type === ChartAxisType.OX_UPSIDE) {
-            start.x = cfg.arrowSize;
-            start.y = cfg.arrowSize;
-            end.x = cfg.boxWidth - cfg.arrowSize;
-            end.y = cfg.arrowSize;
+            start.x = this.initialPadding;
+            start.y = this.initialPadding;
+            end.x = cfg.boxWidth - this.initialPadding;
+            end.y = this.initialPadding;
         }
         return { start, end }
-    }
-
-    getMargin(valueKey: ChartValueType): number {
-        const cfg = chartConfig[valueKey];
-        const generalChartMargin = cfg.arrowSize;
-        return generalChartMargin;
     }
 
     getInsulinPolylinePath(chartData: {
@@ -338,10 +335,15 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             }
             this.getDotEffect(initDot, insulinTrain, ChartValueType.INSULIN, noteId, max);
         })
+        let result: IChartDot[] = [];
         Object.keys(insulinTrain).map(time => {
-            insulinTrain[time].y = this.calculateInsulineConcreteValue(insulinTrain[time].y, max)
+            result.push({
+                y: this.calculateInsulineConcreteValue(insulinTrain[time].y, max),
+                x: this.calculateInsulineTimeConcreteValue(insulinTrain[time].x) + this.initialPadding,
+                id: insulinTrain[time].id
+            })
         })
-        return insulinTrain
+        return result;
     }
 
     getApproximateTime(time: number) {
@@ -365,20 +367,20 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             let nextTrainValue = train[nextTime] && train[nextTime].y ? train[nextTime].y : 0;
             let nextY = clearCurrentY + insulinIncStepValue;
             train[nextTime] = {
-                id: 0,
+                id: nextTime,
                 y: nextTrainValue + nextY,
                 x: nextTime
             }
             currentTime = nextTime;
             clearCurrentY = nextY;
-            max.value =  train[nextTime].y > max.value ? train[nextTime].y : max.value
+            max.value = train[nextTime].y > max.value ? train[nextTime].y : max.value
         };
         for (let i = 0; i < flatStepNumber; i++) {
             let nextTime = currentTime + this.getIncreaseTime(ChartValueType.INSULIN);
             let nextTrainValue = train[nextTime] && train[nextTime].y ? train[nextTime].y : 0;
             let nextY = clearCurrentY;
             train[nextTime] = {
-                id: 0,
+                id: nextTime,
                 y: nextTrainValue + nextY,
                 x: nextTime
             }
@@ -392,7 +394,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             let nextTrainValue = train[nextTime] && train[nextTime].y ? train[nextTime].y : 0;
             let nextY = clearCurrentY - insulinDecStepValue;
             train[nextTime] = {
-                id: 0,
+                id: nextTime,
                 y: nextTrainValue + nextY,
                 x: nextTime
             }
@@ -403,13 +405,17 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     }
 
     calculateInsulineConcreteValue(number: number, max: { value: number }) {
-        return ((chartConfig.insulin.boxHeight - chartConfig.insulin.arrowSize) / max.value) * number + chartConfig.insulin.arrowSize
+        return ((chartConfig.insulin.boxHeight - this.generalPadding) / max.value) * number + this.initialPadding;
     }
 
     getIncreaseTime(type: ChartValueType) {
         let adaptedTimeStep = chartConfig.timeStepMinutes;
         let atsWithChartScale = (chartConfig[type].boxWidth / (60 * 24)) * adaptedTimeStep;
         return atsWithChartScale;
+    }
+
+    calculateInsulineTimeConcreteValue(number: number) {
+        return number * (chartConfig.insulin.boxWidth - this.generalPadding) / chartConfig.insulin.boxWidth
     }
 }
 
