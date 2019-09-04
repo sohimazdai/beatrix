@@ -21,3 +21,21 @@ export enum ChartAxisType {
     OX_REVERSE = "ox-reverse",
     OY_REVERSE = "oy-reverse"
 }
+
+export interface IChartConfiguration {
+    width: number
+    height: number
+    boxWidth: number
+    boxHeight: number
+    axisWidth?: number
+    axisColor?: string
+    arrowSize?: number
+    yPadding?: number
+    dotRadius?: number
+    reversedY?: boolean
+    increaseTime?: number
+    flatTime?: number
+    decreaseTime?: number
+    timeStepMinutes?: number,
+
+}

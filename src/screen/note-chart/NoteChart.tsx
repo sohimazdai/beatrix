@@ -10,9 +10,11 @@ import { ChartDot } from '../../view/chart/ChartDot';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { shadowOptions } from '../../constant/shadowOptions';
 import { ChartAxis } from '../../view/chart/chart-axis/ChartAxis';
-import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType } from '../../model/IChart';
+import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType, IChartConfiguration } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { ChartPolyline, PolylineType } from '../../view/chart/chart-polyline/ChartPolyline';
+import { ChartNet } from '../../view/chart/chart-net/ChartNet';
+import { ChartHighlightNet } from '../../view/chart/chart-highlight-net/ChartHighlightNet';
 
 export interface NoteChartProps {
     noteListByDay: INoteListByDay
@@ -30,46 +32,58 @@ export enum NoteChartMode {
     THREE_MONTH = 'three-month',
 }
 
-const chartConfig = {
-    glucose: {
-        width: Dimensions.get("screen").width,
-        height: Dimensions.get("screen").width / 2,
-        boxWidth: Dimensions.get("screen").width,
-        boxHeight: Dimensions.get("screen").width / 2,
-        axisWidth: 2,
-        axisColor: '#AAAAAA',
-        arrowSize: 5,
-        yPadding: 1,
-        dotRadius: 5,
-        reversedY: false,
-    },
-    breadUnits: {
-        width: Dimensions.get("screen").width,
-        height: Dimensions.get("screen").width / 3,
-        boxWidth: Dimensions.get("screen").width,
-        boxHeight: Dimensions.get("screen").width / 3,
-        axisWidth: 2,
-        axisColor: '#AAAAAA',
-        arrowSize: 5,
-        yPadding: 1,
-        dotRadius: 5,
-        reversedY: false,
-    },
-    insulin: {
-        width: Dimensions.get("screen").width,
-        height: Dimensions.get("screen").width / 3,
-        boxWidth: Dimensions.get("screen").width,
-        boxHeight: Dimensions.get("screen").width / 3,
-        axisWidth: 2,
-        axisColor: '#AAAAAA',
-        arrowSize: 5,
-        yPadding: 1,
-        dotRadius: 5,
-        reversedY: true,
-        increaseTime: 30,
-        flatTime: 30,
-        decreaseTime: 180,
-    },
+const glucoseConfig: IChartConfiguration = {
+    width: Dimensions.get("screen").width,
+    height: Dimensions.get("screen").width / 2,
+    boxWidth: Dimensions.get("screen").width,
+    boxHeight: Dimensions.get("screen").width / 2,
+    axisWidth: 2,
+    axisColor: '#AAAAAA',
+    arrowSize: 5,
+    yPadding: 1,
+    dotRadius: 5,
+    reversedY: false,
+    timeStepMinutes: 15,
+}
+
+const insulinConfig: IChartConfiguration = {
+    width: Dimensions.get("screen").width,
+    height: Dimensions.get("screen").width / 3,
+    boxWidth: Dimensions.get("screen").width,
+    boxHeight: Dimensions.get("screen").width / 3,
+    axisWidth: 2,
+    axisColor: '#AAAAAA',
+    arrowSize: 5,
+    yPadding: 1,
+    dotRadius: 5,
+    reversedY: true,
+    increaseTime: 30,
+    flatTime: 30,
+    decreaseTime: 180,
+    timeStepMinutes: 15,
+}
+
+const breadUnitsConfig: IChartConfiguration = {
+    width: Dimensions.get("screen").width,
+    height: Dimensions.get("screen").width / 3,
+    boxWidth: Dimensions.get("screen").width,
+    boxHeight: Dimensions.get("screen").width / 3,
+    axisWidth: 2,
+    axisColor: '#AAAAAA',
+    arrowSize: 5,
+    yPadding: 1,
+    dotRadius: 5,
+    reversedY: true,
+    increaseTime: 15,
+    flatTime: 15,
+    decreaseTime: 90,
+    timeStepMinutes: 15,
+}
+
+const chartConfig: { [id: string]: IChartConfiguration } = {
+    glucose: glucoseConfig,
+    breadUnits: breadUnitsConfig,
+    insulin: insulinConfig,
     longInsulin: {
         width: Dimensions.get("screen").width,
         height: Dimensions.get("screen").width / 3,
@@ -81,8 +95,8 @@ const chartConfig = {
         yPadding: 1,
         dotRadius: 5,
         reversedY: false,
+        timeStepMinutes: 15,
     },
-    timeStepMinutes: 15,
 
 }
 
@@ -111,8 +125,13 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
 
     render() {
         const glucoseChartDots = this.getChartDots(ChartValueType.GLUCOSE);
-        const breadUnitsChartDots = this.getChartDots(ChartValueType.BREAD_UNITS);
+        // console.log('!!!!boxWidth', chartConfig.glucose.boxWidth)
+        // console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
+
+        const breadUnitsChartDots = this.getBreadUnitsPolylinePath(this.getChartDots(ChartValueType.BREAD_UNITS));
+        // console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
         const insulinChartDots = this.getInsulinPolylinePath(this.getChartDots(ChartValueType.INSULIN));
+        // console.log('!!!!insulinChartDots', insulinChartDots)
         const longInsulinChartDots = this.getChartDots(ChartValueType.LONG_INSULIN);
         return (
             <View style={styles.view}>
@@ -133,6 +152,23 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                 {...chartConfig.insulin}
                             >
                                 {/* INSULIN CHART */}
+                                <ChartNet
+                                    dots={glucoseChartDots.dots}
+                                    cfg={insulinConfig}
+                                    type={ChartPeriodType.DAY}
+                                    paddingTop
+                                />
+                                <ChartHighlightNet
+                                    dots={glucoseChartDots.dots}
+                                    cfg={insulinConfig}
+                                    type={ChartPeriodType.DAY}
+                                    paddingTop
+                                />
+                                <ChartPolyline
+                                    polylineType={PolylineType.GRADIENTED}
+                                    dots={insulinChartDots}
+                                    withGradient
+                                />
                                 <ChartAxis
                                     {...this.getAxisDots(ChartValueType.INSULIN, ChartAxisType.OY_REVERSE)}
                                     axisType={ChartAxisType.OY_REVERSE}
@@ -143,16 +179,29 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     axisType={ChartAxisType.OX_UPSIDE}
                                     config={chartConfig[ChartValueType.INSULIN]}
                                 />
-                                <ChartPolyline
-                                    polylineType={PolylineType.GRADIENTED}
-                                    dots={insulinChartDots}
-                                    withGradient
-                                />
                             </ChartBox>
                             <ChartBox
                                 {...chartConfig.glucose}
                             >
                                 {/* GLUCOSE CHART */}
+                                <ChartNet
+                                    dots={glucoseChartDots.dots}
+                                    maxValue={glucoseChartDots.maxValue}
+                                    minValue={glucoseChartDots.minValue}
+                                    cfg={glucoseConfig}
+                                    type={ChartPeriodType.DAY}
+                                />
+                                <ChartHighlightNet
+                                    dots={glucoseChartDots.dots}
+                                    maxValue={glucoseChartDots.maxValue}
+                                    minValue={glucoseChartDots.minValue}
+                                    cfg={glucoseConfig}
+                                    type={ChartPeriodType.DAY}
+                                />
+                                <ChartPolyline
+                                    polylineType={PolylineType.REGULAR}
+                                    dots={glucoseChartDots.dots}
+                                />
                                 <ChartAxis
                                     {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OY)}
                                     axisType={ChartAxisType.OY}
@@ -162,10 +211,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OX)}
                                     axisType={ChartAxisType.OX}
                                     config={chartConfig[ChartValueType.GLUCOSE]}
-                                />
-                                <ChartPolyline
-                                    polylineType={PolylineType.BEZIER}
-                                    dots={glucoseChartDots.dots}
                                 />
                                 {glucoseChartDots.dots.map(item => {
                                     return <ChartDot
@@ -181,6 +226,23 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                 {...chartConfig.breadUnits}
                             >
                                 {/* BREAD_UNITS CHART */}
+                                <ChartNet
+                                    dots={glucoseChartDots.dots}
+                                    cfg={insulinConfig}
+                                    type={ChartPeriodType.DAY}
+                                    paddingBottom
+                                />
+                                <ChartHighlightNet
+                                    dots={glucoseChartDots.dots}
+                                    cfg={insulinConfig}
+                                    type={ChartPeriodType.DAY}
+                                    paddingBottom
+                                />
+                                <ChartPolyline
+                                    polylineType={PolylineType.GRADIENTED}
+                                    dots={breadUnitsChartDots}
+                                    withGradient
+                                />
                                 <ChartAxis
                                     {...this.getAxisDots(ChartValueType.BREAD_UNITS, ChartAxisType.OY)}
                                     axisType={ChartAxisType.OY}
@@ -191,15 +253,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     axisType={ChartAxisType.OX}
                                     config={chartConfig[ChartValueType.BREAD_UNITS]}
                                 />
-                                {breadUnitsChartDots.dots.map(item => {
-                                    return <ChartDot
-                                        key={item.id}
-                                        r={chartConfig.breadUnits.dotRadius}
-                                        onPress={() => Alert.alert(JSON.stringify(item))}
-                                        x={item.x}
-                                        y={item.y}
-                                    />
-                                })}
                             </ChartBox>
                         </LinearGradient>
                     </View>
@@ -333,13 +386,13 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                     id: dot.id
                 }
             }
-            this.getDotEffect(initDot, insulinTrain, ChartValueType.INSULIN, noteId, max);
+            this.getInsulinDotEffect(initDot, insulinTrain, ChartValueType.INSULIN, noteId, max);
         })
         let result: IChartDot[] = [];
         Object.keys(insulinTrain).map(time => {
             result.push({
-                y: this.calculateInsulineConcreteValue(insulinTrain[time].y, max),
-                x: this.calculateInsulineTimeConcreteValue(insulinTrain[time].x) + this.initialPadding,
+                y: this.reCalculateInsulinYValue(insulinTrain[time].y, max, ChartValueType.INSULIN),
+                x: this.reCalculateXValue(insulinTrain[time].x, ChartValueType.INSULIN),
                 id: insulinTrain[time].id
             })
         })
@@ -347,15 +400,15 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     }
 
     getApproximateTime(time: number) {
-        return Math.round(time / (chartConfig.timeStepMinutes)) * chartConfig.timeStepMinutes
+        return Math.round(time / (chartConfig.glucose.timeStepMinutes)) * chartConfig.glucose.timeStepMinutes
     }
 
-    getDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, noteId: number, max: { value: number }) {
+    getInsulinDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, noteId: number, max: { value: number }) {
         const keyCfg = (chartConfig[type] as any)
-        const increaseStepNumber = keyCfg.increaseTime / chartConfig.timeStepMinutes;
+        const increaseStepNumber = keyCfg.increaseTime / keyCfg.timeStepMinutes;
         const increaseStepValue = dot.y / increaseStepNumber;
-        const flatStepNumber = keyCfg.flatTime / chartConfig.timeStepMinutes;
-        const decreaseStepNumber = keyCfg.decreaseTime / chartConfig.timeStepMinutes;
+        const flatStepNumber = keyCfg.flatTime / keyCfg.timeStepMinutes;
+        const decreaseStepNumber = keyCfg.decreaseTime / keyCfg.timeStepMinutes;
         const decreaseStepValue = dot.y / decreaseStepNumber;
         const insulinValue = this.props.noteList[noteId].insulin;
         const insulinIncStepValue = insulinValue / increaseStepNumber;
@@ -404,19 +457,86 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         }
     }
 
-    calculateInsulineConcreteValue(number: number, max: { value: number }) {
-        return ((chartConfig.insulin.boxHeight - this.generalPadding) / max.value) * number + this.initialPadding;
+    getBreadUnitsPolylinePath(chartData: {
+        maxValue?: number,
+        minValue?: number,
+        dots?: IChartDot[],
+    }) {
+        const dots = chartData.dots;
+        const breadUnitsTrain: { [id: number]: IChartDot } = {};
+        const max = { value: chartData.maxValue }
+        dots.map((dot: IChartDot, index: number) => {
+            const initDot = {
+                x: this.getApproximateTime(dot.x),
+                y: chartConfig.breadUnits.boxHeight - dot.y,
+                id: dot.id
+            }
+            const noteId = dot.id;
+            if (Object.keys(breadUnitsTrain)) {
+                breadUnitsTrain[this.getApproximateTime(dot.x)] = {
+                    x: this.getApproximateTime(dot.x),
+                    y: breadUnitsTrain[this.getApproximateTime(dot.x)] ?
+                        chartConfig.breadUnits.boxHeight - breadUnitsTrain[this.getApproximateTime(dot.x)].y :
+                        chartConfig.breadUnits.boxHeight,
+                    id: dot.id
+                }
+            }
+            this.getBreadUnitsDotEffect(initDot, breadUnitsTrain, ChartValueType.BREAD_UNITS, noteId, max);
+        })
+        let result: IChartDot[] = [];
+        Object.keys(breadUnitsTrain).map(time => {
+            result.push({
+                y: this.reCalculateInsulinYValue(breadUnitsTrain[time].y, max, ChartValueType.BREAD_UNITS),
+                x: this.reCalculateXValue(breadUnitsTrain[time].x, ChartValueType.BREAD_UNITS),
+                id: breadUnitsTrain[time].id
+            })
+        })
+        return result;
+    }
+
+    getBreadUnitsDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, noteId: number, max: { value: number }) {
+        const keyCfg = (chartConfig[type] as any)
+        const increaseStepNumber = keyCfg.increaseTime / keyCfg.timeStepMinutes; //1
+        const flatStepNumber = keyCfg.flatTime / keyCfg.timeStepMinutes; //1
+        const decreaseStepNumber = keyCfg.decreaseTime / keyCfg.timeStepMinutes; //4
+        const breadUnitsValue = this.props.noteList[noteId].breadUnits; //200
+        const breadUnitsIncStepValue = breadUnitsValue / increaseStepNumber; //200
+        const breadUnitsDecStepValue = breadUnitsValue / decreaseStepNumber; //50
+        let clearCurrentY = chartConfig[type].boxHeight; //250
+        let currentTime = dot.x; //100
+        for (let i = 0; i < increaseStepNumber; i++) {
+            let nextTime = currentTime + this.getIncreaseTime(ChartValueType.INSULIN);
+            let nextTrainValue = train[nextTime] && train[nextTime].y ? train[nextTime].y : 0;
+            let nextY = breadUnitsIncStepValue;
+            train[nextTime] = {
+                id: nextTime,
+                y: clearCurrentY - nextY,
+                x: nextTime
+            }
+            currentTime = nextTime;
+            clearCurrentY = clearCurrentY - nextY;
+            max.value = train[nextTime].y > max.value ? train[nextTime].y : max.value
+        };
+    }
+
+    reCalculateInsulinYValue(number: number, max: { value: number }, type: ChartValueType) {
+        return ((chartConfig[type].boxHeight - this.generalPadding) / max.value) * number + this.initialPadding + chartConfig[type].axisWidth / 2;
+    }
+
+    reCalculateBreadUnitsYValue(number: number, max: { value: number }, type: ChartValueType) {
+        return ((chartConfig[type].boxHeight - this.generalPadding) / max.value) * number + 2 * this.initialPadding + chartConfig[type].axisWidth / 2;
+    }
+
+    reCalculateXValue(number: number, type: ChartValueType) {
+        return number * (chartConfig[type].boxWidth) / chartConfig[type].boxWidth + this.initialPadding;
     }
 
     getIncreaseTime(type: ChartValueType) {
-        let adaptedTimeStep = chartConfig.timeStepMinutes;
+        let adaptedTimeStep = chartConfig.glucose.timeStepMinutes;
         let atsWithChartScale = (chartConfig[type].boxWidth / (60 * 24)) * adaptedTimeStep;
         return atsWithChartScale;
     }
 
-    calculateInsulineTimeConcreteValue(number: number) {
-        return number * (chartConfig.insulin.boxWidth - this.generalPadding) / chartConfig.insulin.boxWidth
-    }
 }
 
 export const NoteChartConnect = connect(

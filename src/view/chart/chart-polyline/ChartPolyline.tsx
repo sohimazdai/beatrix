@@ -53,13 +53,6 @@ function renderPolyline(points) {
 function getPoints(props) {
     let points = ''
     switch (props.polylineType) {
-        case PolylineType.BEZIER:
-            props.dots.sort((a, b) => a.x - b.x).map(dot => {
-                points += points.length ?
-                    getPoint(dot) :
-                    getPoint(dot)
-            })
-            return points;
         case PolylineType.GRADIENTED:
         case PolylineType.REGULAR:
             props.dots.sort((a, b) => a.x - b.x).map(dot => {
