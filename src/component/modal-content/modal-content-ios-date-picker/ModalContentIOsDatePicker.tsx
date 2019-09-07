@@ -2,10 +2,11 @@ import React from 'react';
 import { IModalIOsDatePicker } from '../../../model/IModal';
 import { View, StyleSheet, DatePickerIOS, TouchableOpacity, Text } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
+import { shadowOptions } from '../../../constant/shadowOptions';
 
 interface ModalContentIOsDatePickerProps {
     modal: IModalIOsDatePicker
-    onResult: (value: Date) => void
+    onResult: () => void
 }
 
 export function ModalContentIOsDatePicker(props: ModalContentIOsDatePickerProps) {
@@ -16,7 +17,7 @@ export function ModalContentIOsDatePicker(props: ModalContentIOsDatePickerProps)
             onDateChange={props.modal.data.onPositiveClick}
         />
         <TouchableOpacity
-            onPress={() => props.onResult}
+            onPress={() => props.onResult()}
             style={styles.buttonView}
         >
             <Text style={styles.buttonText}>
@@ -28,15 +29,16 @@ export function ModalContentIOsDatePicker(props: ModalContentIOsDatePickerProps)
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
+        padding: 20,
+        borderRadius: 20,
 
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItems: 'center',
+        ...shadowOptions,
+        elevation: 5,
+
+        alignItems: 'stretch',
         backgroundColor: ThemeColor.WHITE
     },
     buttonView: {
-        flex: 1,
         height: 41,
         width: 234,
 

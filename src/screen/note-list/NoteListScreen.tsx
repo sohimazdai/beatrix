@@ -12,6 +12,7 @@ import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { shadowOptions } from '../../constant/shadowOptions';
 import { ToChartButton } from '../../component/icon/ToChartButton';
+import { Header } from '../../component/header/Header';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -31,7 +32,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     render() {
         return (
             <View style={styles.screenView}>
-                <View style={styles.header} />
+                <Header />
                 <ScrollView>
                     {this.renderCards()}
                 </ScrollView>
@@ -186,14 +187,11 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#D6E5ED',
     },
-    header: {
-        height: 25,
-        width: '100%',
-    },
     cardWrap: {
         width: '100%',
 
         marginBottom: 15,
+        marginTop: 15,
 
         alignItems: 'center',
     },
@@ -229,10 +227,7 @@ const styles = StyleSheet.create({
 
         elevation: 2,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 25,
         backgroundColor: ThemeColor.LIGHT_PINK,
@@ -244,10 +239,7 @@ const styles = StyleSheet.create({
 
         elevation: 3,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 25,
 
