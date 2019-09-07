@@ -3,6 +3,7 @@ import { BackArrowIcon } from '../icon/BackArrowIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet } from 'react-native';
 import { ThemeColor } from '../../constant/ThemeColor';
+import { shadowOptions } from '../../constant/shadowOptions';
 
 interface HatProps {
     onBackPress: () => void;
@@ -47,10 +48,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
 
-        shadowOpacity: 1,
-        shadowRadius: 0,
-        shadowColor: 'black',
-        shadowOffset: { height: 10, width: 10 },
+        ...shadowOptions,
 
         elevation: 3,
 

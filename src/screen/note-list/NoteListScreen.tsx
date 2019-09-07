@@ -225,10 +225,7 @@ const styles = StyleSheet.create({
 
         elevation: 2,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 25,
         backgroundColor: ThemeColor.LIGHT_PINK,
@@ -240,10 +237,7 @@ const styles = StyleSheet.create({
 
         elevation: 3,
 
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: '#000',
-        shadowRadius: 5,
-        shadowOpacity: 1,
+        ...shadowOptions,
 
         borderRadius: 25,
 
