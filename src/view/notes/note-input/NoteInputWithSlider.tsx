@@ -34,7 +34,7 @@ export function NoteInputWithSlider(props: Props) {
                 </View>
                 <View style={styles.sliderRow}>
                     <Text style={styles.sliderRowText}>
-                        {"0.0"}
+                        {".0"}
                     </Text>
                     <Slider
                         style={styles.slider}
@@ -47,7 +47,7 @@ export function NoteInputWithSlider(props: Props) {
                         step={0.1}
                     />
                     <Text style={styles.sliderRowText}>
-                        {"0.9"}
+                        {".9"}
                     </Text>
                 </View>
             </View>
@@ -71,12 +71,12 @@ const styles = StyleSheet.create({
     view: {
         flex: 1,
         width: '100%',
-        height: 70,
+        height: 90,
         flexDirection: 'row-reverse',
     },
     sliderView: {
         flex: 1,
-        height: 70,
+        height: 90,
 
         padding: 5,
         borderWidth: 2,
@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     sliderRowText: {
-        width: 20,
+        width: 18,
+        paddingTop: 10,
+
         textAlignVertical: 'center',
         textAlign: 'center',
     },
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
         color: ThemeColor.DIMGRAY
     },
     input: {
-        width: 50,
+        width: 70,
         height: 50,
 
         padding: 5,
