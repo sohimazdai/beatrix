@@ -332,9 +332,8 @@ const styles = StyleSheet.create({
 
     inputBlock: {
         width: '100%',
-        // height: Platform.OS === 'ios' ? 450 : 0,
         justifyContent: 'center',
-        marginTop: Platform.OS === 'ios' ? 100 : 30,
+        marginTop: 30,
         paddingTop: 31,
         paddingBottom: 15,
 
@@ -344,9 +343,7 @@ const styles = StyleSheet.create({
 
         borderRadius: 25,
 
-        // with alignItems: 'center in IOS datepicker dont work(hide in interface)
-        // alignItems: 'stretch',
-        alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
+        alignItems: 'center',
         backgroundColor: "#FFF8F2",
 
     },

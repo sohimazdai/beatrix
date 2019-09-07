@@ -263,8 +263,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         justifyContent: 'center',
-        marginTop: 30, // in ios so will be in center screen,but if you will to change date will be BIG BULL SHIT
-        // let it be on top. Scroll view content are not centerable :(
+        marginTop: 30,
         marginVertical: 20,
         paddingTop: 31,
         paddingBottom: 15,
@@ -275,10 +274,7 @@ const styles = StyleSheet.create({
 
         borderRadius: 25,
 
-        // with alignItems: 'center in IOS datepicker dont work(hide in interface)
-        // alignItems: 'stretch',
-        // TODO: Hide this logic when you will put ios date picker to <Modal>
-        alignItems: Platform.OS === "ios" ? 'stretch' : 'center',
+        alignItems: 'center',
         backgroundColor: "#FFF8F2",
     },
     pickers: {

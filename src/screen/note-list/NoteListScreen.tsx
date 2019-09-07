@@ -11,6 +11,7 @@ import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { shadowOptions } from '../../constant/shadowOptions';
+import { Header } from '../../component/header/Header';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -30,7 +31,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     render() {
         return (
             <View style={styles.screenView}>
-                <View style={styles.header} />
+                <Header />
                 <ScrollView>
                     {this.renderCards()}
                 </ScrollView>
@@ -182,14 +183,11 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#D6E5ED',
     },
-    header: {
-        height: 25,
-        width: '100%',
-    },
     cardWrap: {
         width: '100%',
 
         marginBottom: 15,
+        marginTop: 15,
 
         alignItems: 'center',
     },
