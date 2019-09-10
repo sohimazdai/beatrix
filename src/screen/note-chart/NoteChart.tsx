@@ -15,7 +15,6 @@ import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { ChartPolyline, PolylineType } from '../../view/chart/chart-polyline/ChartPolyline';
 import { ChartNet } from '../../view/chart/chart-net/ChartNet';
 import { ChartHighlightNet } from '../../view/chart/chart-highlight-net/ChartHighlightNet';
-import { Header } from '../../component/header/Header';
 import { Hat } from '../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 
@@ -36,7 +35,7 @@ export enum NoteChartMode {
     THREE_MONTH = 'three-month',
 }
 
-const TIME_STEP_MINUTES = 5;
+const TIME_STEP_MINUTES = 15;
 
 const glucoseConfig: IChartConfiguration = {
     width: Dimensions.get("screen").width,
@@ -54,9 +53,9 @@ const glucoseConfig: IChartConfiguration = {
 
 const insulinConfig: IChartConfiguration = {
     width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").width / 3,
+    height: Dimensions.get("screen").width / 5,
     boxWidth: Dimensions.get("screen").width,
-    boxHeight: Dimensions.get("screen").width / 3,
+    boxHeight: Dimensions.get("screen").width / 5,
     axisWidth: 2,
     axisColor: '#AAAAAA',
     arrowSize: 5,
@@ -71,9 +70,9 @@ const insulinConfig: IChartConfiguration = {
 
 const breadUnitsConfig: IChartConfiguration = {
     width: Dimensions.get("screen").width,
-    height: Dimensions.get("screen").width / 3,
+    height: Dimensions.get("screen").width / 5,
     boxWidth: Dimensions.get("screen").width,
-    boxHeight: Dimensions.get("screen").width / 3,
+    boxHeight: Dimensions.get("screen").width / 5,
     axisWidth: 2,
     axisColor: '#AAAAAA',
     arrowSize: 5,
@@ -123,12 +122,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         mode: NoteChartMode.DAY,
     }
 
-    componentWillMount() {
-        console.log('!!!! START !!!!',
-            { config: chartConfig.glucose }
-        )
-    }
-
     get generalPadding() {
         return chartConfig.glucose.arrowSize * 3;
     }
@@ -137,19 +130,14 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         return chartConfig.glucose.arrowSize;
     }
 
-    componentWillUnmount() {
-        console.log('!!!! END !!!!')
-    }
-
     render() {
         const glucoseChartDots = this.getGlucoseChartDots(this.getBaseChartDots(ChartValueType.GLUCOSE));
-        // console.log('!!!!boxWidth', chartConfig.glucose.boxWidth)
-        console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
+        // console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
 
         // const breadUnitsChartDots = this.getBreadUnitsPolylinePath(this.getBaseChartDots(ChartValueType.BREAD_UNITS));
         // console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
         const insulinChartDots = this.getInsulinPolylinePath(this.getBaseChartDots(ChartValueType.INSULIN));
-        console.log('!!!!insulinChartDots', insulinChartDots)
+        // console.log('!!!!insulinChartDots', insulinChartDots)
         const longInsulinChartDots = this.getBaseChartDots(ChartValueType.LONG_INSULIN);
         return (
             <View style={styles.view}>
@@ -309,8 +297,8 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         const range = max - min;
         const relativity = (chartConfig[valueKey].boxHeight - this.generalPadding) / range;
         const resultY = chartConfig[valueKey].reversedY ?
-            (y - min) * relativity + this.initialPadding :
-            chartConfig[valueKey].boxHeight - (y - min) * relativity - this.initialPadding;
+            (y - min) * relativity :
+            chartConfig[valueKey].boxHeight - (y - min) * relativity;
         return resultY
     }
 
@@ -322,7 +310,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         Object.keys(currentDayNotes).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
             dot.x = this.getScaledX((currentDayNotes[noteId] as INoteListNote).date, valueKey);
-            dot.y = this.getScaledY(valueKey, { maxValue, minValue }, (currentDayNotes[noteId] as INoteListNote)[valueKey]);
+            dot.y = this.getScaledY(valueKey, { maxValue, minValue }, (currentDayNotes[noteId] as INoteListNote)[valueKey]) + this.initialPadding;
             dot.y && chartDots.push(dot);
             dot.y && values.push(dot.y);
         })
@@ -355,7 +343,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         minValue?: number,
         dots?: IChartDot[],
     }) {
-        let dots: IChartDot[] = data.dots.map(dot => this.padd(ChartValueType.GLUCOSE, dot));;
+        const { noteList } = this.props;
+        let dots: IChartDot[] = data.dots
+            .filter(dot => noteList[dot.id].glucose != 0)
+            .map(dot => this.padd(ChartValueType.GLUCOSE, dot));
         return {
             maxValue: data.maxValue,
             minValue: data.minValue,
@@ -401,17 +392,17 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         const insulinTrain: { [id: number]: IChartDot } = {};
         dots.map((dot: IChartDot, index: number) => {
             const initDot = {
-                x: this.getApproximatedTime(dot.x),
+                x: dot.x,
                 y: 0,
                 id: dot.id
             }
             const noteId = dot.id;
 
             if (this.props.noteList[noteId].insulin) {
-
-                insulinTrain[this.getApproximatedTime(dot.x)] = {
-                    x: this.getApproximatedTime(dot.x),
-                    y: insulinTrain[this.getApproximatedTime(dot.x)] ? insulinTrain[this.getApproximatedTime(dot.x)].y : 0,
+                let id = this.getId(dot.x, ChartValueType.INSULIN);
+                insulinTrain[id] = {
+                    x: dot.x,
+                    y: insulinTrain[id] ? insulinTrain[id].y : 0,
                     id: dot.id
                 }
                 this.getInsulinDotEffect(initDot, insulinTrain, ChartValueType.INSULIN, noteId, chartData);
@@ -421,8 +412,12 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         return result;
     }
 
-    getApproximatedTime(time: number) {
-        return Math.round(time / chartConfig.glucose.timeStepMinutes * 2) * chartConfig.glucose.timeStepMinutes / 2;
+    getApproximatedTime(time: number, type: ChartValueType) {
+        return Math.round(Math.round(time * this.getIncreaseTime(type)) / this.getIncreaseTime(type));
+    }
+
+    getId(time: number, type: ChartValueType) {
+        return Math.floor(time / this.getIncreaseTime(type))
     }
 
     getInsulinDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, noteId: number, chartData: any) {
@@ -432,17 +427,19 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             flatStepNumber = cfg.flatTime / cfg.timeStepMinutes,
             decreaseStepNumber = cfg.decreaseTime / cfg.timeStepMinutes,
             increaseStepValue = originalNote[type] / increaseStepNumber,
-            decreaseStepValue = originalNote[type] / decreaseStepNumber;
+            decreaseStepValue = originalNote[type] / decreaseStepNumber,
+            timeIncreaseStepValue = this.getIncreaseTime(type);
         let currentTime = dot.x,
             currentClearValue = 0;
 
         for (let i = 0; i < increaseStepNumber; i++) {
-            let nextTime = currentTime + this.getApproximatedTime(this.getIncreaseTime(type)),
-                nextTrainValue = train[nextTime] && train[nextTime].y ?
-                    train[nextTime].y :
+            let nextTime = currentTime + timeIncreaseStepValue,
+                id = this.getId(nextTime, type),
+                nextTrainValue = train[id] && train[id].y ?
+                    train[id].y :
                     0,
                 nextClearValue = currentClearValue + increaseStepValue;
-            train[nextTime] = {
+            train[id] = {
                 y: nextClearValue + nextTrainValue,
                 x: nextTime,
                 id: nextTime
@@ -453,12 +450,13 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? currentClearValue + nextTrainValue : chartData.maxValue;
         }
         for (let i = 0; i < flatStepNumber; i++) {
-            let nextTime = currentTime + this.getApproximatedTime(this.getIncreaseTime(type)),
-                nextTrainValue = train[nextTime] && train[nextTime].y ?
-                    train[nextTime].y :
+            let nextTime = currentTime + timeIncreaseStepValue,
+                id = this.getId(nextTime, type),
+                nextTrainValue = train[id] && train[id].y ?
+                    train[id].y :
                     0,
                 nextClearValue = currentClearValue;
-            train[nextTime] = {
+            train[id] = {
                 y: nextClearValue + nextTrainValue,
                 x: nextTime,
                 id: nextTime
@@ -469,12 +467,13 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? currentClearValue + nextTrainValue : chartData.maxValue
         }
         for (let i = 0; i < decreaseStepNumber; i++) {
-            let nextTime = currentTime + this.getApproximatedTime(this.getIncreaseTime(type)),
-                nextTrainValue = train[nextTime] && train[nextTime].y ?
-                    train[nextTime].y :
+            let nextTime = currentTime + timeIncreaseStepValue,
+                id = this.getId(nextTime, type),
+                nextTrainValue = train[id] && train[id].y ?
+                    train[id].y :
                     0,
                 nextClearValue = currentClearValue - decreaseStepValue;
-            train[nextTime] = {
+            train[id] = {
                 y: nextClearValue + nextTrainValue,
                 x: nextTime,
                 id: nextTime
