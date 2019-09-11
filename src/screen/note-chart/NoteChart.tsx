@@ -36,6 +36,8 @@ export enum NoteChartMode {
 }
 
 const TIME_STEP_MINUTES = 15;
+const BASIC_PADDING = 5;
+const DOT_RADIUS = 5;
 
 const glucoseConfig: IChartConfiguration = {
     width: Dimensions.get("screen").width,
@@ -44,9 +46,9 @@ const glucoseConfig: IChartConfiguration = {
     boxHeight: Dimensions.get("screen").width / 2,
     axisWidth: 2,
     axisColor: '#AAAAAA',
-    arrowSize: 5,
+    basicPadding: BASIC_PADDING,
     yPadding: 1,
-    dotRadius: 5,
+    dotRadius: DOT_RADIUS,
     reversedY: false,
     timeStepMinutes: TIME_STEP_MINUTES,
 }
@@ -58,9 +60,9 @@ const insulinConfig: IChartConfiguration = {
     boxHeight: Dimensions.get("screen").width / 5,
     axisWidth: 2,
     axisColor: '#AAAAAA',
-    arrowSize: 5,
+    basicPadding: BASIC_PADDING,
     yPadding: 1,
-    dotRadius: 5,
+    dotRadius: DOT_RADIUS,
     reversedY: true,
     increaseTime: 30,
     flatTime: 30,
@@ -75,9 +77,9 @@ const breadUnitsConfig: IChartConfiguration = {
     boxHeight: Dimensions.get("screen").width / 5,
     axisWidth: 2,
     axisColor: '#AAAAAA',
-    arrowSize: 5,
+    basicPadding: BASIC_PADDING,
     yPadding: 1,
-    dotRadius: 5,
+    dotRadius: DOT_RADIUS,
     reversedY: true,
     increaseTime: 15,
     flatTime: 15,
@@ -92,9 +94,9 @@ const longInsulinConfig: IChartConfiguration = {
     boxHeight: Dimensions.get("screen").width / 3,
     axisWidth: 2,
     axisColor: '#AAAAAA',
-    arrowSize: 5,
+    basicPadding: BASIC_PADDING,
     yPadding: 1,
-    dotRadius: 5,
+    dotRadius: DOT_RADIUS,
     reversedY: false,
     timeStepMinutes: TIME_STEP_MINUTES,
 }
@@ -123,17 +125,18 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     }
 
     get generalPadding() {
-        return chartConfig.glucose.arrowSize * 3;
+        return chartConfig.glucose.basicPadding * 3;
     }
 
     get initialPadding() {
-        return chartConfig.glucose.arrowSize;
+        return chartConfig.glucose.basicPadding;
     }
 
     render() {
         const glucoseChartDots = this.getGlucoseChartDots(this.getBaseChartDots(ChartValueType.GLUCOSE));
         // console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
-
+        const highlightDots = [...glucoseChartDots.dots, ...glucoseChartDots.events];
+        console.log('!!!! highlightDots', highlightDots, glucoseChartDots.dots, glucoseChartDots.events);
         // const breadUnitsChartDots = this.getBreadUnitsPolylinePath(this.getBaseChartDots(ChartValueType.BREAD_UNITS));
         // console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
         const insulinChartDots = this.getInsulinPolylinePath(this.getBaseChartDots(ChartValueType.INSULIN));
@@ -164,7 +167,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     paddingTop
                                 />
                                 <ChartHighlightNet
-                                    dots={glucoseChartDots.dots}
+                                    dots={highlightDots}
                                     cfg={insulinConfig}
                                     type={ChartPeriodType.DAY}
                                     paddingTop
@@ -195,9 +198,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     minValue={glucoseChartDots.minValue}
                                     cfg={glucoseConfig}
                                     type={ChartPeriodType.DAY}
+                                    needHorizontalLines
                                 />
                                 <ChartHighlightNet
-                                    dots={glucoseChartDots.dots}
+                                    dots={highlightDots}
                                     maxValue={glucoseChartDots.maxValue}
                                     minValue={glucoseChartDots.minValue}
                                     cfg={glucoseConfig}
@@ -224,6 +228,19 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         onPress={() => Alert.alert(JSON.stringify(item))}
                                         x={item.x}
                                         y={item.y}
+                                        fill={ThemeColor.BRIGHT_RED}
+                                        stroke={ThemeColor.WHITE}
+                                    />
+                                })}
+                                {glucoseChartDots.events.map(item => {
+                                    return <ChartDot
+                                        key={item.id}
+                                        r={chartConfig.glucose.dotRadius}
+                                        onPress={() => Alert.alert(JSON.stringify(item))}
+                                        x={item.x}
+                                        y={item.y}
+                                        fill={ThemeColor.LIGHT_PINK_RED}
+                                        stroke={ThemeColor.INDIAN_RED}
                                     />
                                 })}
                             </ChartBox>
@@ -238,8 +255,8 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     paddingBottom
                                 />
                                 <ChartHighlightNet
-                                    dots={glucoseChartDots.dots}
-                                    cfg={insulinConfig}
+                                    dots={highlightDots}
+                                    cfg={breadUnitsConfig}
                                     type={ChartPeriodType.DAY}
                                     paddingBottom
                                 />
@@ -344,12 +361,18 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         dots?: IChartDot[],
     }) {
         const { noteList } = this.props;
-        let dots: IChartDot[] = data.dots
-            .filter(dot => noteList[dot.id].glucose != 0)
-            .map(dot => this.padd(ChartValueType.GLUCOSE, dot));
+        let events: IChartDot[] = [];
+        let dots: IChartDot[] = [];
+        data.dots.map(dot => {
+            let current = this.padd(ChartValueType.GLUCOSE, dot);
+            noteList[dot.id].glucose === 0 ?
+                events.push(current) :
+                dots.push(current)
+        });
         return {
             maxValue: data.maxValue,
             minValue: data.minValue,
+            events,
             dots
         };
     }

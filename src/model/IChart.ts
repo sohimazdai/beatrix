@@ -29,7 +29,7 @@ export interface IChartConfiguration {
     boxHeight: number
     axisWidth?: number
     axisColor?: string
-    arrowSize?: number
+    basicPadding?: number
     yPadding?: number
     dotRadius?: number
     reversedY?: boolean

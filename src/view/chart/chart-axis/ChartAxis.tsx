@@ -36,20 +36,20 @@ const getPath = (props) => {
 
     switch (props.axisType) {
         case ChartAxisType.OX:
-            return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
+            return (end.x - config.basicPadding) + ',' + (end.y - config.basicPadding) + ' ' +
                 end.x + ',' + end.y + ' ' +
-                (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize)
+                (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding)
         case ChartAxisType.OX_UPSIDE:
-            return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
+            return (end.x - config.basicPadding) + ',' + (end.y - config.basicPadding) + ' ' +
             end.x + ',' + end.y + ' ' +
-            (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize)
+            (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding)
         case ChartAxisType.OY:
-            return (end.x - config.arrowSize) + ',' + (end.y + config.arrowSize) + ' ' +
+            return (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding) + ' ' +
             end.x + ',' + end.y + ' ' +
-            (end.x + config.arrowSize) + ',' + (end.y + config.arrowSize)
+            (end.x + config.basicPadding) + ',' + (end.y + config.basicPadding)
         case ChartAxisType.OY_REVERSE:
-            return (end.x - config.arrowSize) + ',' + (end.y - config.arrowSize) + ' ' +
+            return (end.x - config.basicPadding) + ',' + (end.y - config.basicPadding) + ' ' +
             end.x + ',' + end.y + ' ' +
-            (end.x + config.arrowSize) + ',' + (end.y - config.arrowSize)
+            (end.x + config.basicPadding) + ',' + (end.y - config.basicPadding)
     }
 }

@@ -8,6 +8,7 @@ export interface ChartHighlightNetProps {
     minValue?: number
     cfg: IChartConfiguration
     type: ChartPeriodType
+
     noXX?: boolean
     noYY?: boolean
     paddingTop?: boolean
@@ -30,9 +31,9 @@ function verticalLines(props: ChartHighlightNetProps) {
                 return <Line
                     key={dot.id}
                     x1={dot.x}
-                    y1={props.paddingTop ? props.cfg.arrowSize : 0}
+                    y1={props.paddingTop ? props.cfg.basicPadding : 0}
                     x2={dot.x}
-                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.arrowSize : props.cfg.boxHeight}
+                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
                     stroke={'rgba(255, 255, 255, 0.55)'}
                     strokeWidth={1}
                 />
@@ -44,8 +45,4 @@ function horizontalLines(props: ChartHighlightNetProps) {
     switch (props.type) {
 
     }
-}
-
-function getAvailableZone(parameter, props: ChartHighlightNetProps) {
-    return parameter - 3 * props.cfg.arrowSize;
 }
