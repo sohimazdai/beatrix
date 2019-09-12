@@ -19,6 +19,7 @@ const VERTICAL_DAY_LINES_COUNT = 8
 const HORIZONTAL_DAY_LINES_COUNT = 4
 
 export function ChartNet(props: ChartNetProps) {
+    console.log('props', props)
     let toRender = [];
     !props.noXX && toRender.push(verticalLines(props));
     !props.noYY && toRender.push(horizontalLines(props))

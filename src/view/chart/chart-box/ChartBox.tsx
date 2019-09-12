@@ -1,24 +1,31 @@
-import React from 'react';
-import Svg from 'react-native-svg';
+import * as React from 'react';
+import Svg, { Circle, G } from 'react-native-svg';
+import { ThemeColor } from '../../../constant/ThemeColor';
+import { ChartAxisType, IChartConfiguration } from '../../../model/IChart';
+import { ChartAxis } from '../chart-axis/ChartAxis';
 
-export interface ChartBoxProps {
+export interface Props {
     children: any
 
-    height: number
-    width: number
-    boxHeight: number
-    boxWidth: number
+    config: IChartConfiguration
+
+    axisTypes: ChartAxisType[]
 }
 
-export function ChartBox(props: ChartBoxProps) {
-    return (
-        <Svg
-            width={props.width}
-            height={props.height}
-            viewBox={`0 0 ${props.boxWidth} ${props.boxHeight}`}
-            fill='transparent'
-        >
-            {props.children}
-        </Svg>
-    )
-}
+export const ChartBox = (props: Props) => (
+    <Svg
+        width={props.config.width}
+        height={props.config.height}
+        viewBox={`0 0 ${props.config.boxWidth} ${props.config.boxHeight}`}
+        fill='blue'
+    >
+        {props.axisTypes.map(axis => {
+            return <ChartAxis
+                key={axis}
+                axisType={axis}
+                config={props.config}
+            />
+        })}
+        {props.children}
+    </Svg>
+)

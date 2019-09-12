@@ -5,8 +5,8 @@ import { Dispatch, Action } from 'redux';
 import { StyleSheet, View, Text, Alert, Dimensions } from 'react-native';
 import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ChartBox } from '../../view/chart/ChartBox';
-import { ChartDot } from '../../view/chart/ChartDot';
+import { ChartBox } from '../../view/chart/chart-box/ChartBox';
+import { ChartDot } from '../../view/chart/chart-dot/ChartDot';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { shadowOptions } from '../../constant/shadowOptions';
 import { ChartAxis } from '../../view/chart/chart-axis/ChartAxis';
@@ -17,17 +17,10 @@ import { ChartNet } from '../../view/chart/chart-net/ChartNet';
 import { ChartHighlightNet } from '../../view/chart/chart-highlight-net/ChartHighlightNet';
 import { Hat } from '../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { InsulinTextRotated } from '../../component/icon/InsulinTextRotated';
+import { GlucoseTextRotated } from '../../component/icon/GlucoseTextRotated';
+import { BreadUnitsTextRotated } from '../../component/icon/BreadUnitsTextRotated';
 
-export interface NoteChartProps {
-    noteListByDay: INoteListByDay
-    noteList: INoteList
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>
-}
-
-export interface NoteChartState {
-    currentStartDate: Date,
-    currentEndDate: Date,
-}
 
 export enum NoteChartMode {
     DAY = 'day',
@@ -38,11 +31,12 @@ export enum NoteChartMode {
 const TIME_STEP_MINUTES = 15;
 const BASIC_PADDING = 5;
 const DOT_RADIUS = 5;
+const WIDTH = Dimensions.get("screen").width * 0.95;
 
 const glucoseConfig: IChartConfiguration = {
-    width: Dimensions.get("screen").width,
+    width: WIDTH,
     height: Dimensions.get("screen").width / 2,
-    boxWidth: Dimensions.get("screen").width,
+    boxWidth: WIDTH,
     boxHeight: Dimensions.get("screen").width / 2,
     axisWidth: 2,
     axisColor: '#AAAAAA',
@@ -54,9 +48,9 @@ const glucoseConfig: IChartConfiguration = {
 }
 
 const insulinConfig: IChartConfiguration = {
-    width: Dimensions.get("screen").width,
+    width: WIDTH,
     height: Dimensions.get("screen").width / 5,
-    boxWidth: Dimensions.get("screen").width,
+    boxWidth: WIDTH,
     boxHeight: Dimensions.get("screen").width / 5,
     axisWidth: 2,
     axisColor: '#AAAAAA',
@@ -71,16 +65,16 @@ const insulinConfig: IChartConfiguration = {
 }
 
 const breadUnitsConfig: IChartConfiguration = {
-    width: Dimensions.get("screen").width,
+    width: WIDTH,
     height: Dimensions.get("screen").width / 5,
-    boxWidth: Dimensions.get("screen").width,
+    boxWidth: WIDTH,
     boxHeight: Dimensions.get("screen").width / 5,
     axisWidth: 2,
     axisColor: '#AAAAAA',
     basicPadding: BASIC_PADDING,
     yPadding: 1,
     dotRadius: DOT_RADIUS,
-    reversedY: true,
+    reversedY: false,
     increaseTime: 15,
     flatTime: 15,
     decreaseTime: 90,
@@ -88,9 +82,9 @@ const breadUnitsConfig: IChartConfiguration = {
 }
 
 const longInsulinConfig: IChartConfiguration = {
-    width: Dimensions.get("screen").width,
+    width: WIDTH,
     height: Dimensions.get("screen").width / 3,
-    boxWidth: Dimensions.get("screen").width,
+    boxWidth: WIDTH,
     boxHeight: Dimensions.get("screen").width / 3,
     axisWidth: 2,
     axisColor: '#AAAAAA',
@@ -108,6 +102,18 @@ const chartConfig: { [id: string]: IChartConfiguration } = {
     longInsulin: longInsulinConfig,
 
 }
+export interface NoteChartProps {
+    noteListByDay: INoteListByDay
+    noteList: INoteList
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>
+}
+
+export interface NoteChartState {
+    currentStartDate: Date,
+    currentEndDate: Date,
+    mode: NoteChartMode,
+    activeDot: IChartDot,
+}
 
 class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     state = {
@@ -122,6 +128,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             new Date().getDate()
         ),
         mode: NoteChartMode.DAY,
+        activeDot: null,
     }
 
     get generalPadding() {
@@ -133,13 +140,13 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     }
 
     render() {
-        const glucoseChartDots = this.getGlucoseChartDots(this.getBaseChartDots(ChartValueType.GLUCOSE));
+        const glucoseChartDots = this.getGlucoseChartDots(this.getBaseChartDots(ChartValueType.GLUCOSE), ChartValueType.GLUCOSE);
         // console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
         const highlightDots = [...glucoseChartDots.dots, ...glucoseChartDots.events];
-        console.log('!!!! highlightDots', highlightDots, glucoseChartDots.dots, glucoseChartDots.events);
-        // const breadUnitsChartDots = this.getBreadUnitsPolylinePath(this.getBaseChartDots(ChartValueType.BREAD_UNITS));
+        // console.log('!!!! highlightDots', highlightDots, glucoseChartDots.dots, glucoseChartDots.events);
+        const breadUnitsChartDots = this.getPolylinePath(this.getBaseChartDots(ChartValueType.BREAD_UNITS), ChartValueType.BREAD_UNITS);
         // console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
-        const insulinChartDots = this.getInsulinPolylinePath(this.getBaseChartDots(ChartValueType.INSULIN));
+        const insulinChartDots = this.getPolylinePath(this.getBaseChartDots(ChartValueType.INSULIN), ChartValueType.INSULIN);
         // console.log('!!!!insulinChartDots', insulinChartDots)
         const longInsulinChartDots = this.getBaseChartDots(ChartValueType.LONG_INSULIN);
         return (
@@ -156,126 +163,122 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                             colors={['#163B50', '#3E2626']}
                             style={styles.chartGradient}
                         >
-                            <ChartBox
-                                {...chartConfig.insulin}
-                            >
-                                {/* INSULIN CHART */}
-                                <ChartNet
-                                    dots={glucoseChartDots.dots}
-                                    cfg={insulinConfig}
-                                    type={ChartPeriodType.DAY}
-                                    paddingTop
-                                />
-                                <ChartHighlightNet
-                                    dots={highlightDots}
-                                    cfg={insulinConfig}
-                                    type={ChartPeriodType.DAY}
-                                    paddingTop
-                                />
-                                <ChartPolyline
-                                    polylineType={PolylineType.GRADIENTED}
-                                    dots={insulinChartDots}
-                                    withGradient
-                                />
-                                <ChartAxis
-                                    {...this.getAxisDots(ChartValueType.INSULIN, ChartAxisType.OY_REVERSE)}
-                                    axisType={ChartAxisType.OY_REVERSE}
-                                    config={chartConfig[ChartValueType.INSULIN]}
-                                />
-                                <ChartAxis
-                                    {...this.getAxisDots(ChartValueType.INSULIN, ChartAxisType.OX_UPSIDE)}
-                                    axisType={ChartAxisType.OX_UPSIDE}
-                                    config={chartConfig[ChartValueType.INSULIN]}
-                                />
-                            </ChartBox>
-                            <ChartBox
-                                {...chartConfig.glucose}
-                            >
-                                {/* GLUCOSE CHART */}
-                                <ChartNet
-                                    dots={glucoseChartDots.dots}
-                                    maxValue={glucoseChartDots.maxValue}
-                                    minValue={glucoseChartDots.minValue}
-                                    cfg={glucoseConfig}
-                                    type={ChartPeriodType.DAY}
-                                    needHorizontalLines
-                                />
-                                <ChartHighlightNet
-                                    dots={highlightDots}
-                                    maxValue={glucoseChartDots.maxValue}
-                                    minValue={glucoseChartDots.minValue}
-                                    cfg={glucoseConfig}
-                                    type={ChartPeriodType.DAY}
-                                />
-                                <ChartPolyline
-                                    polylineType={PolylineType.REGULAR}
-                                    dots={glucoseChartDots.dots}
-                                />
-                                <ChartAxis
-                                    {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OY)}
-                                    axisType={ChartAxisType.OY}
-                                    config={chartConfig[ChartValueType.GLUCOSE]}
-                                />
-                                <ChartAxis
-                                    {...this.getAxisDots(ChartValueType.GLUCOSE, ChartAxisType.OX)}
-                                    axisType={ChartAxisType.OX}
-                                    config={chartConfig[ChartValueType.GLUCOSE]}
-                                />
-                                {glucoseChartDots.dots.map(item => {
-                                    return <ChartDot
-                                        key={item.id}
-                                        r={chartConfig.glucose.dotRadius}
-                                        onPress={() => Alert.alert(JSON.stringify(item))}
-                                        x={item.x}
-                                        y={item.y}
-                                        fill={ThemeColor.BRIGHT_RED}
-                                        stroke={ThemeColor.WHITE}
+                            {/* INSULIN CHART */}
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <ChartBox
+                                    config={chartConfig.insulin}
+                                    axisTypes={[
+                                        ChartAxisType.OX_UPSIDE,
+                                        ChartAxisType.OY_REVERSE
+                                    ]}
+                                >
+                                    <ChartNet
+                                        dots={glucoseChartDots.dots}
+                                        cfg={insulinConfig}
+                                        type={ChartPeriodType.DAY}
+                                        paddingTop
                                     />
-                                })}
-                                {glucoseChartDots.events.map(item => {
-                                    return <ChartDot
-                                        key={item.id}
-                                        r={chartConfig.glucose.dotRadius}
-                                        onPress={() => Alert.alert(JSON.stringify(item))}
-                                        x={item.x}
-                                        y={item.y}
-                                        fill={ThemeColor.LIGHT_PINK_RED}
-                                        stroke={ThemeColor.INDIAN_RED}
+                                    <ChartHighlightNet
+                                        dots={highlightDots}
+                                        cfg={insulinConfig}
+                                        type={ChartPeriodType.DAY}
+                                        paddingTop
                                     />
-                                })}
-                            </ChartBox>
-                            <ChartBox
-                                {...chartConfig.breadUnits}
-                            >
-                                {/* BREAD_UNITS CHART */}
-                                <ChartNet
-                                    dots={glucoseChartDots.dots}
-                                    cfg={insulinConfig}
-                                    type={ChartPeriodType.DAY}
-                                    paddingBottom
-                                />
-                                <ChartHighlightNet
-                                    dots={highlightDots}
-                                    cfg={breadUnitsConfig}
-                                    type={ChartPeriodType.DAY}
-                                    paddingBottom
-                                />
-                                {/* <ChartPolyline
-                                    polylineType={PolylineType.GRADIENTED}
-                                    dots={breadUnitsChartDots}
-                                    withGradient
-                                /> */}
-                                <ChartAxis
-                                    {...this.getAxisDots(ChartValueType.BREAD_UNITS, ChartAxisType.OY)}
-                                    axisType={ChartAxisType.OY}
-                                    config={chartConfig[ChartValueType.BREAD_UNITS]}
-                                />
-                                <ChartAxis
-                                    {...this.getAxisDots(ChartValueType.BREAD_UNITS, ChartAxisType.OX)}
-                                    axisType={ChartAxisType.OX}
-                                    config={chartConfig[ChartValueType.BREAD_UNITS]}
-                                />
-                            </ChartBox>
+                                    <ChartPolyline
+                                        polylineType={PolylineType.GRADIENTED}
+                                        dots={insulinChartDots}
+                                        initGradientColor={'#7C89FF'}
+                                        stopGradientColor={'#7C3869'}
+                                    />
+                                </ChartBox>
+                                <InsulinTextRotated />
+                            </View>
+                            {/* GLUCOSE CHART */}
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <ChartBox
+                                    config={chartConfig.glucose}
+                                    axisTypes={[
+                                        ChartAxisType.OX,
+                                        ChartAxisType.OY
+                                    ]}
+                                >
+                                    <ChartNet
+                                        dots={glucoseChartDots.dots}
+                                        maxValue={glucoseChartDots.maxValue}
+                                        minValue={glucoseChartDots.minValue}
+                                        cfg={glucoseConfig}
+                                        type={ChartPeriodType.DAY}
+                                        needHorizontalLines
+                                    />
+                                    <ChartHighlightNet
+                                        dots={highlightDots}
+                                        maxValue={glucoseChartDots.maxValue}
+                                        minValue={glucoseChartDots.minValue}
+                                        cfg={glucoseConfig}
+                                        type={ChartPeriodType.DAY}
+                                    />
+                                    <ChartPolyline
+                                        polylineType={PolylineType.REGULAR}
+                                        dots={glucoseChartDots.dots}
+                                    />
+                                    {glucoseChartDots.dots.map(item => {
+                                        return <ChartDot
+                                            key={item.id}
+                                            r={chartConfig.glucose.dotRadius}
+                                            onPress={() => Alert.alert(JSON.stringify(item))}
+                                            x={item.x}
+                                            y={item.y}
+                                            fill={ThemeColor.BRIGHT_RED}
+                                            stroke={ThemeColor.WHITE}
+                                        />
+                                    })}
+                                    {glucoseChartDots.events.map(item => {
+                                        return <ChartDot
+                                            key={item.id}
+                                            r={chartConfig.glucose.dotRadius}
+                                            onPress={() => Alert.alert(JSON.stringify(item))}
+                                            x={item.x}
+                                            y={item.y}
+                                            fill={ThemeColor.WHITE}
+                                            stroke={ThemeColor.INDIAN_RED}
+                                        />
+                                    })}
+                                </ChartBox>
+                                <GlucoseTextRotated />
+                            </View>
+                            {/* BREAD_UNITS CHART */}
+                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+
+                                <ChartBox
+                                    config={chartConfig.breadUnits}
+                                    axisTypes={[
+                                        ChartAxisType.OX,
+                                        ChartAxisType.OY
+                                    ]}
+                                >
+                                    <ChartNet
+                                        dots={glucoseChartDots.dots}
+                                        cfg={insulinConfig}
+                                        type={ChartPeriodType.DAY}
+                                        paddingBottom
+                                    />
+                                    <ChartHighlightNet
+                                        dots={highlightDots}
+                                        cfg={breadUnitsConfig}
+                                        type={ChartPeriodType.DAY}
+                                        paddingBottom
+                                    />
+                                    <ChartPolyline
+                                        polylineType={PolylineType.GRADIENTED}
+                                        dots={breadUnitsChartDots}
+                                        initGradientColor={'#FF4D00'}
+                                        stopGradientColor={'#F0EC91'}
+                                    />
+                                </ChartBox>
+                                <BreadUnitsTextRotated />
+                            </View>
+                            {this.renderNetTitles()}
+                            {/* {this.renderAxisName()} */}
                         </LinearGradient>
                     </View>
                     <View style={styles.settingsView}>
@@ -294,6 +297,45 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                 />
             </View>
         )
+    }
+
+    renderNetTitles() {
+        switch (this.state.mode) {
+            case NoteChartMode.DAY:
+                const highlightsNumber = 8;
+                const highlightsTitles = [3, 6, 9, 12, 15, 18, 21];
+                const newWidth = chartConfig.breadUnits.boxWidth - 3 * chartConfig.breadUnits.basicPadding;
+                const titleWidth = newWidth / highlightsNumber;
+                return <View
+                    style={{
+                        ...styles.highightTitlesView,
+                        width: newWidth,
+                        paddingLeft: titleWidth / 2 + chartConfig.breadUnits.basicPadding,
+                        paddingRight: titleWidth / 2
+                    }}
+                >
+                    {highlightsTitles.map(title => {
+                        return <Text
+                            key={title}
+                            style={{ ...styles.highightTitle, width: titleWidth }}
+                        >
+                            {title}
+                        </Text>
+                    })}
+                </View>
+        }
+    }
+
+    renderAxisName() {
+        switch (this.state.mode) {
+            case NoteChartMode.DAY:
+                const axiosName = 'ЧАС';
+                return <View style={styles.axisTitleView}>
+                    <Text style={styles.axisTitleText}>
+                        {axiosName}
+                    </Text>
+                </View>
+        }
     }
 
     getScaledX(date: number, valueKey: ChartValueType) {
@@ -359,12 +401,12 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         maxValue?: number,
         minValue?: number,
         dots?: IChartDot[],
-    }) {
+    }, type: ChartValueType) {
         const { noteList } = this.props;
         let events: IChartDot[] = [];
         let dots: IChartDot[] = [];
         data.dots.map(dot => {
-            let current = this.padd(ChartValueType.GLUCOSE, dot);
+            let current = this.padd(type, dot);
             noteList[dot.id].glucose === 0 ?
                 events.push(current) :
                 dots.push(current)
@@ -405,14 +447,14 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         return { start, end }
     }
 
-    getInsulinPolylinePath(data: {
+    getPolylinePath(data: {
         maxValue?: number,
         minValue?: number,
         dots?: IChartDot[],
-    }) {
+    }, type: ChartValueType) {
         const chartData = { ...data }
         const dots = chartData.dots;
-        const insulinTrain: { [id: number]: IChartDot } = {};
+        const train: { [id: number]: IChartDot } = {};
         dots.map((dot: IChartDot, index: number) => {
             const initDot = {
                 x: dot.x,
@@ -422,28 +464,20 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             const noteId = dot.id;
 
             if (this.props.noteList[noteId].insulin) {
-                let id = this.getId(dot.x, ChartValueType.INSULIN);
-                insulinTrain[id] = {
+                let id = this.getId(dot.x, type);
+                train[id] = {
                     x: dot.x,
-                    y: insulinTrain[id] ? insulinTrain[id].y : 0,
+                    y: train[id] ? train[id].y : 0,
                     id: dot.id
                 }
-                this.getInsulinDotEffect(initDot, insulinTrain, ChartValueType.INSULIN, noteId, chartData);
+                this.getDotEffect(initDot, train, type, chartData);
             }
         })
-        let result: IChartDot[] = this.adaptAndGetPolylineChartDots(ChartValueType.INSULIN, insulinTrain, chartData)
+        let result: IChartDot[] = this.adaptAndGetPolylineChartDots(type, train, chartData)
         return result;
     }
 
-    getApproximatedTime(time: number, type: ChartValueType) {
-        return Math.round(Math.round(time * this.getIncreaseTime(type)) / this.getIncreaseTime(type));
-    }
-
-    getId(time: number, type: ChartValueType) {
-        return Math.floor(time / this.getIncreaseTime(type))
-    }
-
-    getInsulinDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, noteId: number, chartData: any) {
+    getDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, chartData: any) {
         const cfg = chartConfig[type],
             originalNote = this.props.noteList[dot.id],
             increaseStepNumber = cfg.increaseTime / cfg.timeStepMinutes,
@@ -462,6 +496,14 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                     train[id].y :
                     0,
                 nextClearValue = currentClearValue + increaseStepValue;
+            if (nextTime > chartConfig[type].boxWidth) {
+                train[id] = {
+                    y: 0,
+                    x: currentTime,
+                    id: currentTime
+                };
+                return
+            }
             train[id] = {
                 y: nextClearValue + nextTrainValue,
                 x: nextTime,
@@ -479,6 +521,14 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                     train[id].y :
                     0,
                 nextClearValue = currentClearValue;
+            if (nextTime > chartConfig[type].boxWidth) {
+                train[id] = {
+                    y: 0,
+                    x: currentTime,
+                    id: currentTime
+                };
+                return
+            }
             train[id] = {
                 y: nextClearValue + nextTrainValue,
                 x: nextTime,
@@ -496,6 +546,14 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                     train[id].y :
                     0,
                 nextClearValue = currentClearValue - decreaseStepValue;
+            if (nextTime > chartConfig[type].boxWidth) {
+                train[id] = {
+                    y: 0,
+                    x: currentTime,
+                    id: currentTime
+                };
+                return
+            }
             train[id] = {
                 y: nextClearValue + nextTrainValue,
                 x: nextTime,
@@ -508,6 +566,14 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         }
     }
 
+    getApproximatedTime(time: number, type: ChartValueType) {
+        return Math.round(Math.round(time * this.getIncreaseTime(type)) / this.getIncreaseTime(type));
+    }
+
+    getId(time: number, type: ChartValueType) {
+        return Math.floor(time / this.getIncreaseTime(type))
+    }
+
     getIncreaseTime(type: ChartValueType) {
         const minutesOfDay = 60 * 24;
         const step = (chartConfig[type].boxWidth / minutesOfDay) * chartConfig[type].timeStepMinutes;
@@ -518,13 +584,16 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         const cfg = chartConfig[type]
         let result: IChartDot[] = [];
 
+
         Object.keys(train).map(id => {
             const yScale = (cfg.boxHeight / chartData.maxValue)
-            result.push(this.padd(type, {
+            const dot = {
                 y: train[id].y * yScale,
                 x: train[id].x,
                 id: (id as any)
-            }));
+            }
+            !cfg.reversedY && this.reverse(type, dot)
+            result.push(this.padd(type, dot));
         })
         return result;
     };
@@ -538,6 +607,11 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             x: dot.x * xRelativity + this.initialPadding,
             id: dot.id
         }
+    }
+
+    reverse(type: ChartValueType, dot: IChartDot) {
+        const cfg = chartConfig[type];
+        dot.y = cfg.boxHeight - dot.y + cfg.basicPadding + cfg.axisWidth / 2;
     }
 }
 
@@ -570,9 +644,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: ThemeColor.LIGHT_BLUE,
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
+        backgroundColor: ThemeColor.LIGHT_BLUE,
 
         elevation: 1,
         ...shadowOptions,
@@ -580,21 +654,56 @@ const styles = StyleSheet.create({
     chartView: {
         width: '100%',
 
-        elevation: 4,
-        ...shadowOptions,
-        backgroundColor: ThemeColor.LIGHT_BLUE,
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-    },
-    chartGradient: {
-        paddingTop: 80,
-        paddingBottom: 25,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
         backgroundColor: ThemeColor.LIGHT_BLUE,
 
-        elevation: 4,
+        elevation: 2,
         ...shadowOptions,
+    },
+    chartGradient: {
+        width: '100%',
+
+        paddingTop: 80,
+        paddingBottom: 25,
+
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        borderRadius: 25,
+        backgroundColor: ThemeColor.LIGHT_BLUE,
+
+        elevation: 3,
+        ...shadowOptions,
+    },
+    highightTitlesView: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    highightTitle: {
+        fontSize: 13,
+        color: '#AAAAAA',
+        textAlign: 'center',
+    },
+    axisTitleView: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    axisTitleText: {
+        paddingTop: 5,
+        paddingRight: 10,
+
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: '#eee',
     },
     settingsView: {
         padding: 20,

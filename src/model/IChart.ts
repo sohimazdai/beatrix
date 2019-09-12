@@ -23,7 +23,7 @@ export enum ChartAxisType {
 }
 
 export interface IChartConfiguration {
-    width: number
+    width: number | string
     height: number
     boxWidth: number
     boxHeight: number

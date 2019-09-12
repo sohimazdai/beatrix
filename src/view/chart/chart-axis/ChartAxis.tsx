@@ -1,29 +1,53 @@
 import React from 'react'
 import { Circle, Line, Polyline } from 'react-native-svg';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { IChartDot, ChartAxisType } from '../../../model/IChart';
+import { IChartDot, ChartAxisType, IChartConfiguration } from '../../../model/IChart';
 
 export interface ChartAxisProps {
-    start: IChartDot
-    end: IChartDot
     axisType: ChartAxisType
-    config: any
+    config: IChartConfiguration
 }
 
 export function ChartAxis(props: ChartAxisProps) {
-    const { end, config } = props;
-    let path = getPath(props);
+    const { axisType, config } = props;
+    const start: { x: number, y: number, id: number } = { x: 0, y: 0, id: 0 };
+    const end: { x: number, y: number, id: number } = { x: 0, y: 0, id: 1 };
+    if (axisType === ChartAxisType.OY) {
+        start.x = config.basicPadding;
+        start.y = config.boxHeight - config.basicPadding;
+        end.x = config.basicPadding;
+        end.y = config.basicPadding;
+    } else if (axisType === ChartAxisType.OX) {
+        start.x = config.basicPadding;
+        start.y = config.boxHeight - config.basicPadding;
+        end.x = config.boxWidth - config.basicPadding;
+        end.y = config.boxHeight - config.basicPadding;
+    } else if (axisType === ChartAxisType.OY_REVERSE) {
+        end.x = config.basicPadding;
+        end.y = config.boxHeight - config.basicPadding;
+        start.x = config.basicPadding;
+        start.y = config.basicPadding;
+    } else if (axisType === ChartAxisType.OX_UPSIDE) {
+        start.x = config.basicPadding;
+        start.y = config.basicPadding;
+        end.x = config.boxWidth - config.basicPadding;
+        end.y = config.basicPadding;
+    }
+
+    const points = getPath(end, config, axisType);
+    
+    console.log('axis', axisType, points)
     return <>
         <Line
-            x1={props.start.x}
-            y1={props.start.y}
-            x2={props.end.x}
-            y2={props.end.y}
+            x1={start.x}
+            y1={start.y}
+            x2={end.x}
+            y2={end.y}
             stroke={config.axisColor}
             strokeWidth={config.axisWidth}
         />
         <Polyline
-            points={getPath(props)}
+            points={points}
             stroke={config.axisColor}
             strokeWidth={config.axisWidth}
             fill={'transparent'}
@@ -31,25 +55,23 @@ export function ChartAxis(props: ChartAxisProps) {
     </>
 }
 
-const getPath = (props) => {
-    const { end, config } = props;
-
-    switch (props.axisType) {
+const getPath = (end, config, axisType) => {
+    switch (axisType) {
         case ChartAxisType.OX:
             return (end.x - config.basicPadding) + ',' + (end.y - config.basicPadding) + ' ' +
                 end.x + ',' + end.y + ' ' +
                 (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding)
         case ChartAxisType.OX_UPSIDE:
             return (end.x - config.basicPadding) + ',' + (end.y - config.basicPadding) + ' ' +
-            end.x + ',' + end.y + ' ' +
-            (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding)
+                end.x + ',' + end.y + ' ' +
+                (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding)
         case ChartAxisType.OY:
             return (end.x - config.basicPadding) + ',' + (end.y + config.basicPadding) + ' ' +
-            end.x + ',' + end.y + ' ' +
-            (end.x + config.basicPadding) + ',' + (end.y + config.basicPadding)
+                end.x + ',' + end.y + ' ' +
+                (end.x + config.basicPadding) + ',' + (end.y + config.basicPadding)
         case ChartAxisType.OY_REVERSE:
             return (end.x - config.basicPadding) + ',' + (end.y - config.basicPadding) + ' ' +
-            end.x + ',' + end.y + ' ' +
-            (end.x + config.basicPadding) + ',' + (end.y - config.basicPadding)
+                end.x + ',' + end.y + ' ' +
+                (end.x + config.basicPadding) + ',' + (end.y - config.basicPadding)
     }
 }

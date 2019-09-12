@@ -1,21 +1,25 @@
-import React from 'react'
+import * as React from 'react';
 import { Circle } from 'react-native-svg';
 import { ThemeColor } from '../../../constant/ThemeColor';
 
-export interface ChartDotProps {
+export interface Props {
+    onPress: () => void
+    r: number
     x: number
     y: number
-    r: number
-    color: string
-    onClick: () => void
+    fill: string
+    stroke: string
+    isSelected?: boolean
 }
 
-export function ChartDot(props: ChartDotProps) {
-    return <Circle
-        onPress={props.onClick}
+export const ChartDot = (props: Props) => (
+    <Circle
+        onPress={props.onPress}
         r={props.r}
-        y={props.y}
+        stroke={props.isSelected ? props.stroke : 'transparent'}
+        strokeWidth={2}
         x={props.x}
-        fill={props.color}
+        y={props.y}
+        fill={props.fill}
     />
-}
+)
