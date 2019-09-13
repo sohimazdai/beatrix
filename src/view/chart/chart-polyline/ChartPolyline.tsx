@@ -5,7 +5,6 @@ import { IChartDot } from '../../../model/IChart';
 export enum PolylineType {
     BEZIER = 'bezier',
     REGULAR = 'regular',
-    GRADIENTED = 'gradiented'
 }
 
 export interface ChartPolylineProps {
@@ -16,7 +15,7 @@ export interface ChartPolylineProps {
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    return props.initGradientColor &&  props.stopGradientColor ? 
+    return props.initGradientColor && props.stopGradientColor ?
         renderPolylineWithGradient(props) :
         renderPolyline(props)
 }
@@ -50,12 +49,20 @@ function renderPolyline(props) {
 function getPoints(props) {
     let points = ''
     switch (props.polylineType) {
-        case PolylineType.GRADIENTED:
         case PolylineType.REGULAR:
             props.dots.sort((a, b) => a.x - b.x).map(dot => {
                 points += getPoint(dot);
             })
             return points;
+        case PolylineType.BEZIER:
+            const tempDots = props.dots.sort((a, b) => a.x - b.x);
+            tempDots.map((dot, index) => {
+                if (index === 0) {
+                    points += 'M' + dot.x + ' ' + dot.y + ' '
+                } else {
+                    points += 'C' + (dot.x) + ' ' + tempDots[index - 1].y + ' ' + tempDots[index - 1].x + ' ' + dot.y + ' ' + dot.x + ' ' + dot.y + ' '
+                }
+            })
     }
 }
 

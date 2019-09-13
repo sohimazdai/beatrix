@@ -185,7 +185,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         paddingTop
                                     />
                                     <ChartPolyline
-                                        polylineType={PolylineType.GRADIENTED}
+                                        polylineType={PolylineType.REGULAR}
                                         dots={insulinChartDots}
                                         initGradientColor={'#7C89FF'}
                                         stopGradientColor={'#7C3869'}
@@ -218,7 +218,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         type={ChartPeriodType.DAY}
                                     />
                                     <ChartPolyline
-                                        polylineType={PolylineType.REGULAR}
+                                        polylineType={PolylineType.BEZIER}
                                         dots={glucoseChartDots.dots}
                                     />
                                     {glucoseChartDots.dots.map(item => {
@@ -269,7 +269,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         paddingBottom
                                     />
                                     <ChartPolyline
-                                        polylineType={PolylineType.GRADIENTED}
+                                        polylineType={PolylineType.REGULAR}
                                         dots={breadUnitsChartDots}
                                         initGradientColor={'#FF4D00'}
                                         stopGradientColor={'#F0EC91'}
