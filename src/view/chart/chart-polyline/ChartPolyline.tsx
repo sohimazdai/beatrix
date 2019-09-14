@@ -1,5 +1,5 @@
 import React from 'react'
-import { Polyline, LinearGradient, Stop } from 'react-native-svg';
+import Svg, { Polyline, LinearGradient, Stop, Path } from 'react-native-svg';
 import { IChartDot } from '../../../model/IChart';
 
 export enum PolylineType {
@@ -15,35 +15,35 @@ export interface ChartPolylineProps {
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    return props.initGradientColor && props.stopGradientColor ?
-        renderPolylineWithGradient(props) :
-        renderPolyline(props)
+    return renderPolyline(props);
 }
 
-function renderPolylineWithGradient(props) {
+function renderPolyline(props: ChartPolylineProps) {
+    const thereIsGradient = props.initGradientColor && props.stopGradientColor;
     return <>
-        <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
+        {thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
             <Stop offset="0%" stopColor={props.initGradientColor} stopOpacity="1" />
             <Stop offset="100%" stopColor={props.stopGradientColor} stopOpacity="1" />
-        </LinearGradient>
-        <Polyline
-            points={getPoints(props)}
-            stroke="rgba(255, 255, 255, 0.64)"
-            strokeWidth={2}
-            strokeLinecap='round'
-            fill="url(#grad)"
-        />
+        </LinearGradient>}
+        {props.polylineType === PolylineType.BEZIER ?
+            <Path
+                d={getPoints(props)}
+                stroke="rgba(255, 255, 255, 0.64)"
+                strokeWidth={2}
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                fill="url(#grad)"
+            />
+            :
+            <Polyline
+                points={getPoints(props)}
+                stroke="rgba(255, 255, 255, 0.64)"
+                strokeWidth={2}
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                fill="url(#grad)"
+            />}
     </>
-}
-
-function renderPolyline(props) {
-    return <Polyline
-        points={getPoints(props)}
-        stroke="rgba(255, 255, 255, 0.64)"
-        strokeWidth={3}
-        strokeLinecap='round'
-        fill="transparent"
-    />
 }
 
 function getPoints(props) {
@@ -58,11 +58,16 @@ function getPoints(props) {
             const tempDots = props.dots.sort((a, b) => a.x - b.x);
             tempDots.map((dot, index) => {
                 if (index === 0) {
-                    points += 'M' + dot.x + ' ' + dot.y + ' '
+                    points += 'M' + dot.x + ',' + dot.y + ' '
                 } else {
-                    points += 'C' + (dot.x) + ' ' + tempDots[index - 1].y + ' ' + tempDots[index - 1].x + ' ' + dot.y + ' ' + dot.x + ' ' + dot.y + ' '
+                    points +=
+                        'C' +
+                        (tempDots[index - 1].x + ((dot.x) - tempDots[index - 1].x) / 2) + ',' + tempDots[index - 1].y + ' ' + 
+                        (tempDots[index - 1].x + ((dot.x) - tempDots[index - 1].x) / 2) + ',' + dot.y + ' ' + 
+                        dot.x + ',' + dot.y + ' '
                 }
             })
+            return points;
     }
 }
 
