@@ -5,21 +5,22 @@ import { Dispatch, Action } from 'redux';
 import { StyleSheet, View, Text, Alert, Dimensions } from 'react-native';
 import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ChartBox } from '../../view/chart/chart-box/ChartBox';
-import { ChartDot } from '../../view/chart/chart-dot/ChartDot';
+import { ChartBox } from '../../view/chart/chart-svg/ChartBox';
+import { ChartDot } from '../../view/chart/chart-svg/ChartDot';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { shadowOptions } from '../../constant/shadowOptions';
-import { ChartAxis } from '../../view/chart/chart-axis/ChartAxis';
+import { ChartAxis } from '../../view/chart/chart-svg/ChartAxis';
 import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType, IChartConfiguration } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
-import { ChartPolyline, PolylineType } from '../../view/chart/chart-polyline/ChartPolyline';
-import { ChartNet } from '../../view/chart/chart-net/ChartNet';
-import { ChartHighlightNet } from '../../view/chart/chart-highlight-net/ChartHighlightNet';
+import { ChartPolyline, PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
+import { ChartNet } from '../../view/chart/chart-svg/ChartNet';
+import { ChartHighlightNet } from '../../view/chart/chart-svg/ChartHighlightNet';
 import { Hat } from '../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { InsulinTextRotated } from '../../component/icon/InsulinTextRotated';
 import { GlucoseTextRotated } from '../../component/icon/GlucoseTextRotated';
 import { BreadUnitsTextRotated } from '../../component/icon/BreadUnitsTextRotated';
+import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 
 
 export enum NoteChartMode {
@@ -112,7 +113,8 @@ export interface NoteChartState {
     currentStartDate: Date,
     currentEndDate: Date,
     mode: NoteChartMode,
-    activeDot: IChartDot,
+    selectedDotId: number,
+    selectedPeriod: ChartPeriodType,
 }
 
 class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
@@ -128,7 +130,8 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             new Date().getDate()
         ),
         mode: NoteChartMode.DAY,
-        activeDot: null,
+        selectedPeriod: ChartPeriodType.DAY,
+        selectedDotId: null,
     }
 
     get generalPadding() {
@@ -164,12 +167,12 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                             style={styles.chartGradient}
                         >
                             {/* INSULIN CHART */}
-                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.chartWrap}>
                                 <ChartBox
                                     config={chartConfig.insulin}
                                     axisTypes={[
                                         ChartAxisType.OX_UPSIDE,
-                                        ChartAxisType.OY_REVERSE
+                                        ChartAxisType.OY_REVERSE,
                                     ]}
                                 >
                                     <ChartNet
@@ -183,6 +186,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         cfg={insulinConfig}
                                         type={ChartPeriodType.DAY}
                                         paddingTop
+                                        selectedDotId={this.state.selectedDotId}
                                     />
                                     <ChartPolyline
                                         polylineType={PolylineType.REGULAR}
@@ -191,10 +195,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         stopGradientColor={'#7C3869'}
                                     />
                                 </ChartBox>
-                                <InsulinTextRotated />
+                                <InsulinTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {/* GLUCOSE CHART */}
-                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.chartWrap}>
                                 <ChartBox
                                     config={chartConfig.glucose}
                                     axisTypes={[
@@ -216,6 +220,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         minValue={glucoseChartDots.minValue}
                                         cfg={glucoseConfig}
                                         type={ChartPeriodType.DAY}
+                                        selectedDotId={this.state.selectedDotId}
                                     />
                                     <ChartPolyline
                                         polylineType={PolylineType.BEZIER}
@@ -224,31 +229,34 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     {glucoseChartDots.dots.map(item => {
                                         return <ChartDot
                                             key={item.id}
+                                            id={item.id}
                                             r={chartConfig.glucose.dotRadius}
-                                            onPress={() => Alert.alert(JSON.stringify(item))}
+                                            onPress={this.onDotPress}
                                             x={item.x}
                                             y={item.y}
                                             fill={ThemeColor.BRIGHT_RED}
                                             stroke={ThemeColor.WHITE}
+                                            selectedDotId={this.state.selectedDotId}
                                         />
                                     })}
                                     {glucoseChartDots.events.map(item => {
                                         return <ChartDot
                                             key={item.id}
+                                            id={item.id}
                                             r={chartConfig.glucose.dotRadius}
-                                            onPress={() => Alert.alert(JSON.stringify(item))}
+                                            onPress={this.onDotPress}
                                             x={item.x}
                                             y={item.y}
                                             fill={ThemeColor.WHITE}
                                             stroke={ThemeColor.INDIAN_RED}
+                                            selectedDotId={this.state.selectedDotId}
                                         />
                                     })}
                                 </ChartBox>
-                                <GlucoseTextRotated />
+                                <GlucoseTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {/* BREAD_UNITS CHART */}
-                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-
+                            <View style={styles.chartWrap}>
                                 <ChartBox
                                     config={chartConfig.breadUnits}
                                     axisTypes={[
@@ -267,6 +275,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         cfg={breadUnitsConfig}
                                         type={ChartPeriodType.DAY}
                                         paddingBottom
+                                        selectedDotId={this.state.selectedDotId}
                                     />
                                     <ChartPolyline
                                         polylineType={PolylineType.REGULAR}
@@ -275,16 +284,19 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         stopGradientColor={'#F0EC91'}
                                     />
                                 </ChartBox>
-                                <BreadUnitsTextRotated />
+                                <BreadUnitsTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {this.renderNetTitles()}
                             {/* {this.renderAxisName()} */}
                         </LinearGradient>
                     </View>
                     <View style={styles.settingsView}>
-                        <Text>
-                            Settings are here
-                        </Text>
+                        <ChartSettings
+                            onDateChange={this.onCurrentDateChange}
+                            date={this.state.currentStartDate}
+                            onChangingPeriod={this.onChangingPeriod}
+                            selectedPeriod={this.state.selectedPeriod}
+                        />
                     </View>
                 </View>
                 <View style={styles.statisticsView}>
@@ -309,6 +321,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                 return <View
                     style={{
                         ...styles.highightTitlesView,
+                        marginLeft: 8,
                         width: newWidth,
                         paddingLeft: titleWidth / 2 + chartConfig.breadUnits.basicPadding,
                         paddingRight: titleWidth / 2
@@ -336,6 +349,18 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                     </Text>
                 </View>
         }
+    }
+
+    onCurrentDateChange = (date: Date) => {
+        this.setState({ currentStartDate: date })
+    }
+
+    onDotPress = (dotId: number) => {
+        this.setState({ selectedDotId: dotId })
+    }
+
+    onChangingPeriod = (period: ChartPeriodType) => {
+        this.setState({ selectedPeriod: period })
     }
 
     getScaledX(date: number, valueKey: ChartValueType) {
@@ -678,6 +703,12 @@ const styles = StyleSheet.create({
         elevation: 3,
         ...shadowOptions,
     },
+    chartWrap: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     highightTitlesView: {
         width: '100%',
         display: 'flex',
@@ -697,6 +728,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    yAxisTitleIcon: {
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: -5,
+    },
     axisTitleText: {
         paddingTop: 5,
         paddingRight: 10,
@@ -706,7 +744,15 @@ const styles = StyleSheet.create({
         color: '#eee',
     },
     settingsView: {
+        width: '100%',
+        display: 'flex',
+
         padding: 20,
+        paddingRight: 28,
+        paddingBottom: 28,
+
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     statisticsView: {
     }

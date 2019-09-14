@@ -76,7 +76,7 @@ export const NoteDatePickerConnect = connect<{}, DispatchToProps>(
 const styles = StyleSheet.create({
     view: {
         width: 150,
-        height: 31,
+        height: 30,
 
         borderWidth: 1,
 

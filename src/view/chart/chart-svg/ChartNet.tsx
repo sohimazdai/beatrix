@@ -81,7 +81,7 @@ function horizontalLines(props: ChartNetProps) {
                 })
             }
             return res.map((dot, index) => {
-                return index != 0 && <Line
+                return <Line
                     key={dot.id}
                     x1={dot.x}
                     y1={dot.y}

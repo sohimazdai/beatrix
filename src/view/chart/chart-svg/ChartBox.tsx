@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, { Circle, G } from 'react-native-svg';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { ChartAxisType, IChartConfiguration } from '../../../model/IChart';
-import { ChartAxis } from '../chart-axis/ChartAxis';
+import { ChartAxis } from './ChartAxis';
 
 export interface Props {
     children: any

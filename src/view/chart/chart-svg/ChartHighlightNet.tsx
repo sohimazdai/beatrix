@@ -1,6 +1,7 @@
 import React from 'react';
 import { IChartDot, IChartConfiguration, ChartPeriodType } from '../../../model/IChart';
 import { Line } from 'react-native-svg';
+import { ThemeColor } from '../../../constant/ThemeColor';
 
 export interface ChartHighlightNetProps {
     dots: IChartDot[]
@@ -13,6 +14,7 @@ export interface ChartHighlightNetProps {
     noYY?: boolean
     paddingTop?: boolean
     paddingBottom?: boolean
+    selectedDotId: number
 }
 
 export function ChartHighlightNet(props: ChartHighlightNetProps) {
@@ -34,8 +36,8 @@ function verticalLines(props: ChartHighlightNetProps) {
                     y1={props.paddingTop ? props.cfg.basicPadding : 0}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={'rgba(255, 255, 255, 0.55)'}
-                    strokeWidth={1}
+                    stroke={props.selectedDotId == dot.id ? ThemeColor.WHITE : 'rgba(255, 255, 255, 0.55)'}
+                    strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
                 />
             })
     }

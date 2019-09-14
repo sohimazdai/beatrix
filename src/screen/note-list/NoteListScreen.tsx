@@ -168,7 +168,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     }
 }
 
-export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps>(
+export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps, NoteListScreenProps>(
     (state: AppState) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),

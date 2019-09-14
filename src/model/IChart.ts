@@ -11,7 +11,9 @@ export enum ChartValueType {
 }
 
 export enum ChartPeriodType {
-    DAY = 'day'
+    DAY = 'day',
+    MONTH = 'month',
+    THREE_MONTH = '3 month'
 }
 
 export enum ChartAxisType {
