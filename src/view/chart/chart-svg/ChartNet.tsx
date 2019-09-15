@@ -12,20 +12,19 @@ export interface ChartNetProps {
     noYY?: boolean
     paddingTop?: boolean
     paddingBottom?: boolean
-    needHorizontalLines?: boolean
+    horizontalLinesNumber?: number
 }
 
 const VERTICAL_DAY_LINES_COUNT = 8
 const HORIZONTAL_DAY_LINES_COUNT = 4
 
 export function ChartNet(props: ChartNetProps) {
-    console.log('props', props)
     let toRender = [];
     !props.noXX && toRender.push(verticalLines(props));
     !props.noYY && toRender.push(horizontalLines(props))
     return <>
         {verticalLines(props)}
-        {props.needHorizontalLines && horizontalLines(props)}
+        {props.horizontalLinesNumber && horizontalLines(props)}
     </>
 }
 
@@ -64,10 +63,10 @@ function verticalLines(props: ChartNetProps) {
 function horizontalLines(props: ChartNetProps) {
     switch (props.type) {
         case ChartPeriodType.DAY:
-            const firstY = props.cfg.basicPadding * 2;
+            const firstY = props.cfg.reversedY ? props.cfg.basicPadding : props.cfg.basicPadding * 2;
             const firstX = props.cfg.basicPadding;
             const range = props.maxValue - props.minValue;
-            let lapStep = getAvailableZone(props.cfg.boxHeight, props) / HORIZONTAL_DAY_LINES_COUNT;
+            let lapStep = getAvailableZone(props.cfg.boxHeight, props) / props.horizontalLinesNumber;
             let res: IChartDot[] = [{
                 x: firstX,
                 y: firstY,
@@ -92,17 +91,6 @@ function horizontalLines(props: ChartNetProps) {
                 />
             })
     }
-}
-
-function line(props: ChartNetProps, start: IChartDot, end: IChartDot) {
-    return <Line
-        x1={start.x}
-        y1={start.y}
-        x2={end.x}
-        y2={end.y}
-        stroke={'rgba(102, 102, 102, 0.38)'}
-        strokeWidth={1}
-    />
 }
 
 function getAvailableZone(parameter, props: ChartNetProps) {

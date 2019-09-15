@@ -36,7 +36,6 @@ export function ChartAxis(props: ChartAxisProps) {
 
     const points = getPath(end, config, axisType);
     
-    console.log('axis', axisType, points)
     return <>
         <Line
             x1={start.x}

@@ -111,7 +111,6 @@ export interface NoteChartProps {
 
 export interface NoteChartState {
     currentStartDate: Date,
-    currentEndDate: Date,
     mode: NoteChartMode,
     selectedDotId: number,
     selectedPeriod: ChartPeriodType,
@@ -120,11 +119,6 @@ export interface NoteChartState {
 class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     state = {
         currentStartDate: new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate()
-        ),
-        currentEndDate: new Date(
             new Date().getFullYear(),
             new Date().getMonth(),
             new Date().getDate()
@@ -143,15 +137,19 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     }
 
     render() {
-        const glucoseChartDots = this.getGlucoseChartDots(this.getBaseChartDots(ChartValueType.GLUCOSE), ChartValueType.GLUCOSE);
+        const glucoseChartDots = this.getGlucoseChartDots(
+            this.getBaseChartDots(ChartValueType.GLUCOSE),
+            ChartValueType.GLUCOSE
+        );
         // console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
         const highlightDots = [...glucoseChartDots.dots, ...glucoseChartDots.events];
         // console.log('!!!! highlightDots', highlightDots, glucoseChartDots.dots, glucoseChartDots.events);
         const breadUnitsChartDots = this.getPolylinePath(this.getBaseChartDots(ChartValueType.BREAD_UNITS), ChartValueType.BREAD_UNITS);
-        // console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
+        console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
         const insulinChartDots = this.getPolylinePath(this.getBaseChartDots(ChartValueType.INSULIN), ChartValueType.INSULIN);
         // console.log('!!!!insulinChartDots', insulinChartDots)
         const longInsulinChartDots = this.getBaseChartDots(ChartValueType.LONG_INSULIN);
+        console.log('!!!!', new Date().getTime())
         return (
             <View style={styles.view}>
                 <LinearGradient
@@ -179,6 +177,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         dots={glucoseChartDots.dots}
                                         cfg={insulinConfig}
                                         type={ChartPeriodType.DAY}
+                                        horizontalLinesNumber={2}
                                         paddingTop
                                     />
                                     <ChartHighlightNet
@@ -212,7 +211,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         minValue={glucoseChartDots.minValue}
                                         cfg={glucoseConfig}
                                         type={ChartPeriodType.DAY}
-                                        needHorizontalLines
+                                        horizontalLinesNumber={4}
                                     />
                                     <ChartHighlightNet
                                         dots={highlightDots}
@@ -266,9 +265,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                 >
                                     <ChartNet
                                         dots={glucoseChartDots.dots}
-                                        cfg={insulinConfig}
+                                        cfg={breadUnitsConfig}
                                         type={ChartPeriodType.DAY}
                                         paddingBottom
+                                        horizontalLinesNumber={2}
                                     />
                                     <ChartHighlightNet
                                         dots={highlightDots}
@@ -386,15 +386,15 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         return resultY
     }
 
-    getBaseChartData(currentDayNotes: INoteList, valueKey: ChartValueType) {
+    getBaseChartData(dayNotes: INoteList, valueKey: ChartValueType) {
         let chartDots: IChartDot[] = [];
-        let values = Object.keys(currentDayNotes).map(noteId => currentDayNotes[noteId][valueKey]);
+        let values = Object.keys(dayNotes).map(noteId => dayNotes[noteId][valueKey]);
         let maxValue = values.length ? Math.max(...values) : 0;
         let minValue = values.length ? Math.min(...values) : 0;
-        Object.keys(currentDayNotes).map(noteId => {
+        Object.keys(dayNotes).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
-            dot.x = this.getScaledX((currentDayNotes[noteId] as INoteListNote).date, valueKey);
-            dot.y = this.getScaledY(valueKey, { maxValue, minValue }, (currentDayNotes[noteId] as INoteListNote)[valueKey]) + this.initialPadding;
+            dot.x = this.getScaledX((dayNotes[noteId] as INoteListNote).date, valueKey);
+            dot.y = this.getScaledY(valueKey, { maxValue, minValue }, (dayNotes[noteId] as INoteListNote)[valueKey]) + this.initialPadding;
             dot.y && chartDots.push(dot);
             dot.y && values.push(dot.y);
         })
@@ -408,37 +408,59 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
 
     getBaseChartDots(valueKey: ChartValueType) {
         const { noteListByDay } = this.props;
-        let baseChartData: {
+        let currentDayBaseChartData: {
             maxValue?: number,
             minValue?: number,
             dots?: IChartDot[],
+            previous?: {
+                maxValue?: number,
+                minValue?: number,
+                dots?: IChartDot[]
+            },
         } = {};
+        const previousDayNotes: INoteList = noteListByDay[
+            new Date(
+                this.state.currentStartDate.getFullYear(),
+                this.state.currentStartDate.getMonth(),
+                this.state.currentStartDate.getDate() - 1
+            ).getTime()
+        ] || {};
         const currentDayNotes: INoteList = noteListByDay[this.state.currentStartDate.getTime()] || {};
         if (Object.keys(currentDayNotes).length) {
-            baseChartData = this.getBaseChartData(currentDayNotes, valueKey);
+            currentDayBaseChartData = this.getBaseChartData(currentDayNotes, valueKey);
+            currentDayBaseChartData.previous = this.getBaseChartData(previousDayNotes, valueKey)
         } else {
-            baseChartData.dots = [];
+            currentDayBaseChartData.dots = [];
+            currentDayBaseChartData.previous.dots = [];
         }
-        return baseChartData;
+        return currentDayBaseChartData
     }
 
-    getGlucoseChartDots(data: {
-        maxValue?: number,
-        minValue?: number,
-        dots?: IChartDot[],
-    }, type: ChartValueType) {
+    getGlucoseChartDots(
+        currentDayData: {
+            maxValue?: number,
+            minValue?: number,
+            dots?: IChartDot[],
+            previous?: {
+                maxValue?: number,
+                minValue?: number,
+                dots?: IChartDot[],
+            },
+        },
+        type: ChartValueType
+    ) {
         const { noteList } = this.props;
         let events: IChartDot[] = [];
         let dots: IChartDot[] = [];
-        data.dots.map(dot => {
+        currentDayData.dots.map(dot => {
             let current = this.padd(type, dot);
             noteList[dot.id].glucose === 0 ?
                 events.push(current) :
                 dots.push(current)
         });
         return {
-            maxValue: data.maxValue,
-            minValue: data.minValue,
+            maxValue: currentDayData.maxValue,
+            minValue: currentDayData.minValue,
             events,
             dots
         };
@@ -472,14 +494,66 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         return { start, end }
     }
 
-    getPolylinePath(data: {
-        maxValue?: number,
-        minValue?: number,
-        dots?: IChartDot[],
-    }, type: ChartValueType) {
-        const chartData = { ...data }
+    getPolylinePath(
+        currentDayData: {
+            maxValue?: number,
+            minValue?: number,
+            dots?: IChartDot[],
+            previous?: {
+                maxValue?: number,
+                minValue?: number,
+                dots?: IChartDot[],
+            },
+        },
+        type: ChartValueType
+    ) {
+        const previousChartData = { ...currentDayData.previous }
+        const previousDots = previousChartData.dots;
+        const previousDayTrain: { [id: number]: IChartDot } = {};
+        previousDots.map((dot: IChartDot, index: number) => {
+            const initDot = {
+                x: dot.x,
+                y: 0,
+                id: dot.id
+            }
+            const noteId = dot.id;
+
+            if (this.props.noteList[noteId][type]) {
+                let id = this.getId(dot.x, type);
+                previousDayTrain[id] = {
+                    x: dot.x,
+                    y: 0,
+                    id: dot.id
+                }
+                this.getDotEffect(initDot, previousDayTrain, type, previousChartData);
+            }
+        })
+        const chartData = { ...currentDayData }
         const dots = chartData.dots;
         const train: { [id: number]: IChartDot } = {};
+        let count = 0;
+        Object.keys(previousDayTrain).map(id => {
+            if (parseInt(id) >= 0) {
+                if (count === 0) {
+                    train[-1] = {
+                        x: 0,
+                        y: 0,
+                        id: previousDayTrain[id].id
+                    }
+                }
+                train[id] = count === 0 ? 
+                    {
+                        x: previousDayTrain[id].x,
+                        y: previousDayTrain[id].y,
+                        id: previousDayTrain[id].id
+                    }
+                    :
+                    previousDayTrain[id]
+                chartData.maxValue = previousDayTrain[id].y > chartData.maxValue ? Math.ceil(previousDayTrain[id].y) : chartData.maxValue;
+                ++count
+            }
+        });
+
         dots.map((dot: IChartDot, index: number) => {
             const initDot = {
                 x: dot.x,
@@ -502,7 +576,12 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         return result;
     }
 
-    getDotEffect(dot: IChartDot, train: { [id: number]: IChartDot }, type: ChartValueType, chartData: any) {
+    getDotEffect(
+        dot: IChartDot,
+        train: { [id: number]: IChartDot },
+        type: ChartValueType,
+        chartData: any,
+    ) {
         const cfg = chartConfig[type],
             originalNote = this.props.noteList[dot.id],
             increaseStepNumber = cfg.increaseTime / cfg.timeStepMinutes,
@@ -537,7 +616,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
 
             currentClearValue = nextClearValue;
             currentTime = nextTime;
-            chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? currentClearValue + nextTrainValue : chartData.maxValue;
+            chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? Math.ceil(currentClearValue + nextTrainValue) : chartData.maxValue;
         }
         for (let i = 0; i < flatStepNumber; i++) {
             let nextTime = currentTime + timeIncreaseStepValue,
@@ -562,7 +641,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
 
             currentClearValue = nextClearValue;
             currentTime = nextTime;
-            chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? currentClearValue + nextTrainValue : chartData.maxValue
+            chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? Math.ceil(currentClearValue + nextTrainValue) : chartData.maxValue
         }
         for (let i = 0; i < decreaseStepNumber; i++) {
             let nextTime = currentTime + timeIncreaseStepValue,
@@ -587,7 +666,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
 
             currentClearValue = nextClearValue;
             currentTime = nextTime;
-            chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? currentClearValue + nextTrainValue : chartData.maxValue
+            chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? Math.ceil(currentClearValue + nextTrainValue) : chartData.maxValue
         }
     }
 

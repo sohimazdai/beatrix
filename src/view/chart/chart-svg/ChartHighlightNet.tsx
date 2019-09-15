@@ -36,7 +36,7 @@ function verticalLines(props: ChartHighlightNetProps) {
                     y1={props.paddingTop ? props.cfg.basicPadding : 0}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={props.selectedDotId == dot.id ? ThemeColor.WHITE : 'rgba(255, 255, 255, 0.55)'}
+                    stroke={props.selectedDotId == dot.id ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
                     strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
                 />
             })

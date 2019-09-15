@@ -27,13 +27,13 @@ export function ChartSettings(props: ChartSettingsProps) {
     );
     return <View style={styles.chartSettingsView}>
         <View style={styles.dateInputBlock}>
-        <View style={styles.dateClicker}>
+            <View style={styles.dateClicker}>
                 <TouchableOpacity
                     style={styles.dateClickerTouchable}
                     onPress={() => props.onDateChange(getPreviousDate(props.date))}
                 >
                     <Text style={styles.dateClickerText}>
-                        {'<'}
+                        {'-'}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -45,13 +45,13 @@ export function ChartSettings(props: ChartSettingsProps) {
             <View style={styles.dateClicker}>
                 <TouchableOpacity
                     style={styles.dateClickerTouchable}
-                    onPress={getNextDate(props.date) <= today ? 
-                        () => props.onDateChange(getNextDate(props.date)) : 
-                        () => {}
+                    onPress={getNextDate(props.date) <= today ?
+                        () => props.onDateChange(getNextDate(props.date)) :
+                        () => { }
                     }
                 >
                     <Text style={styles.dateClickerText}>
-                        {'>'}
+                        {'+'}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -64,22 +64,26 @@ export function ChartSettings(props: ChartSettingsProps) {
             </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
-                        const addictiveStyle = period == props.selectedPeriod ?
-                            styles.periodButtonActive :
-                            {}
-                        const buttonStyle = {
-                            ...styles.periodButton,
-                            ...addictiveStyle
+                        let buttonStyle = styles.periodButton;
+                        let buttonTextStyle = styles.periodButtonText;
+                        if (period === props.selectedPeriod) {
+                            buttonStyle = {...buttonStyle, ...styles.periodButtonActive}
+                            buttonTextStyle = {...buttonTextStyle, ...styles.periodButtonTextActive}
                         }
-                        return <TouchableOpacity
-                            key={period}
+                        return <View
                             style={buttonStyle}
-                            onPress={() => props.selectedPeriod != period && props.onChangingPeriod(period)}
+                            key={period}
+
                         >
-                            <Text style={styles.periodButtonText}>
-                                {getPeriodName(period)}
-                            </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.periodButtonTouchable}
+                                onPress={() => props.selectedPeriod != period && props.onChangingPeriod(period)}
+                            >
+                                <Text style={buttonTextStyle}>
+                                    {getPeriodName(period)}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     })}
                 </View>
             </View>
@@ -210,6 +214,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 2,
 
+        ...shadowOptions,
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
@@ -219,6 +224,14 @@ const styles = StyleSheet.create({
     },
     periodButtonActive: {
         borderColor: ThemeColor.LIGHT_RED
+    },
+    periodButtonTouchable: {
+        display: 'flex',
+        width: 87,
+        height: 25,
+
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     periodButtonText: {
         fontSize: 14,
