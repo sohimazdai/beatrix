@@ -32,7 +32,7 @@ export enum NoteChartMode {
 const TIME_STEP_MINUTES = 15;
 const BASIC_PADDING = 5;
 const DOT_RADIUS = 5;
-const WIDTH = Dimensions.get("screen").width * 0.95;
+const WIDTH = Dimensions.get("screen").width * 0.85;
 
 const glucoseConfig: IChartConfiguration = {
     width: WIDTH,
@@ -166,6 +166,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                         >
                             {/* INSULIN CHART */}
                             <View style={styles.chartWrap}>
+
                                 <ChartBox
                                     config={chartConfig.insulin}
                                     axisTypes={[
@@ -174,10 +175,10 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     ]}
                                 >
                                     <ChartNet
-                                        dots={glucoseChartDots.dots}
+                                        maxValue={insulinChartDots.maxValue}
                                         cfg={insulinConfig}
                                         type={ChartPeriodType.DAY}
-                                        horizontalLinesNumber={2}
+                                        horizontalLinesNumber={3}
                                         paddingTop
                                     />
                                     <ChartHighlightNet
@@ -189,11 +190,12 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     />
                                     <ChartPolyline
                                         polylineType={PolylineType.REGULAR}
-                                        dots={insulinChartDots}
+                                        dots={insulinChartDots.dots}
                                         initGradientColor={'#7C89FF'}
                                         stopGradientColor={'#7C3869'}
                                     />
                                 </ChartBox>
+                                {this.renderNetYTitles(ChartValueType.INSULIN, insulinChartDots.maxValue, 0, 3)}
                                 <InsulinTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {/* GLUCOSE CHART */}
@@ -206,7 +208,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     ]}
                                 >
                                     <ChartNet
-                                        dots={glucoseChartDots.dots}
                                         maxValue={glucoseChartDots.maxValue}
                                         minValue={glucoseChartDots.minValue}
                                         cfg={glucoseConfig}
@@ -252,6 +253,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         />
                                     })}
                                 </ChartBox>
+                                {this.renderNetYTitles(ChartValueType.GLUCOSE, glucoseChartDots.maxValue, glucoseChartDots.minValue, 4)}
                                 <GlucoseTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {/* BREAD_UNITS CHART */}
@@ -264,11 +266,11 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     ]}
                                 >
                                     <ChartNet
-                                        dots={glucoseChartDots.dots}
+                                        maxValue={breadUnitsChartDots.maxValue}
                                         cfg={breadUnitsConfig}
                                         type={ChartPeriodType.DAY}
                                         paddingBottom
-                                        horizontalLinesNumber={2}
+                                        horizontalLinesNumber={3}
                                     />
                                     <ChartHighlightNet
                                         dots={highlightDots}
@@ -279,14 +281,15 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                     />
                                     <ChartPolyline
                                         polylineType={PolylineType.REGULAR}
-                                        dots={breadUnitsChartDots}
+                                        dots={breadUnitsChartDots.dots}
                                         initGradientColor={'#FF4D00'}
                                         stopGradientColor={'#F0EC91'}
                                     />
                                 </ChartBox>
+                                {this.renderNetYTitles(ChartValueType.BREAD_UNITS, breadUnitsChartDots.maxValue, 0, 3)}
                                 <BreadUnitsTextRotated style={styles.yAxisTitleIcon} />
                             </View>
-                            {this.renderNetTitles()}
+                            {this.renderNetXTitles()}
                             {/* {this.renderAxisName()} */}
                         </LinearGradient>
                     </View>
@@ -311,7 +314,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         )
     }
 
-    renderNetTitles() {
+    renderNetXTitles() {
         switch (this.state.mode) {
             case NoteChartMode.DAY:
                 const highlightsNumber = 8;
@@ -321,9 +324,9 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                 return <View
                     style={{
                         ...styles.highightTitlesView,
-                        marginLeft: 8,
+                        // marginLeft: 8,
                         width: newWidth,
-                        paddingLeft: titleWidth / 2 + chartConfig.breadUnits.basicPadding,
+                        paddingLeft: titleWidth / 2,
                         paddingRight: titleWidth / 2
                     }}
                 >
@@ -337,6 +340,28 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                     })}
                 </View>
         }
+    }
+
+    renderNetYTitles(type: ChartValueType, max: number, min: number, netNumber: number) {
+        let range = max - min;
+        let step = range / netNumber;
+        let toRender = [];
+        for (let i = 0; i <= netNumber; i++) {
+            toRender.push(min + i * step)
+        }
+        return <View style={{
+            ...styles.yNetTitlesView,
+            height: chartConfig[type].boxHeight,
+            top: chartConfig[type].reversedY ? -9 : 9,
+            flexDirection: chartConfig[type].reversedY ? 'column' : 'column-reverse'
+        }}>
+            {toRender.map((step, index) => <Text
+                key={index}
+                style={styles.yNetTitlesText}
+            >
+                {index !== 0 && Math.round(step * 10) / 10 || ''}
+            </Text>)}
+        </View>
     }
 
     renderAxisName() {
@@ -389,8 +414,8 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     getBaseChartData(dayNotes: INoteList, valueKey: ChartValueType) {
         let chartDots: IChartDot[] = [];
         let values = Object.keys(dayNotes).map(noteId => dayNotes[noteId][valueKey]);
-        let maxValue = values.length ? Math.max(...values) : 0;
-        let minValue = values.length ? Math.min(...values) : 0;
+        let maxValue = values.length ? Math.max(...values) + 1: 0;
+        let minValue = values.length && Math.min(...values) - 1 > 0 ? Math.min(...values) - 1 : 0;
         Object.keys(dayNotes).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
             dot.x = this.getScaledX((dayNotes[noteId] as INoteListNote).date, valueKey);
@@ -430,6 +455,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             currentDayBaseChartData = this.getBaseChartData(currentDayNotes, valueKey);
             currentDayBaseChartData.previous = this.getBaseChartData(previousDayNotes, valueKey)
         } else {
+            currentDayBaseChartData.previous = {};
             currentDayBaseChartData.dots = [];
             currentDayBaseChartData.previous.dots = [];
         }
@@ -541,7 +567,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                         id: previousDayTrain[id].id
                     }
                 }
-                train[id] = count === 0 ? 
+                train[id] = count === 0 ?
                     {
                         x: previousDayTrain[id].x,
                         y: previousDayTrain[id].y,
@@ -562,7 +588,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             }
             const noteId = dot.id;
 
-            if (this.props.noteList[noteId].insulin) {
+            if (this.props.noteList[noteId][type]) {
                 let id = this.getId(dot.x, type);
                 train[id] = {
                     x: dot.x,
@@ -573,7 +599,11 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             }
         })
         let result: IChartDot[] = this.adaptAndGetPolylineChartDots(type, train, chartData)
-        return result;
+        return {
+            dots: result,
+            maxValue: currentDayData.maxValue,
+            minValue: currentDayData.minValue
+        }
     }
 
     getDotEffect(
@@ -778,15 +808,32 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 0,
         borderRadius: 25,
         backgroundColor: ThemeColor.LIGHT_BLUE,
+        justifyContent: 'center',
+        alignItems: 'center',
 
         elevation: 3,
         ...shadowOptions,
     },
     chartWrap: {
+        position: 'relative',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    yNetTitlesView: {
+        position: 'absolute',
+        left: 12,
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    yNetTitlesText: {
+        paddingRight: 3,
+        fontSize: 12,
+        textAlign: 'center',
+        color: '#CCCCCC'
     },
     highightTitlesView: {
         width: '100%',
@@ -797,7 +844,7 @@ const styles = StyleSheet.create({
     },
     highightTitle: {
         fontSize: 13,
-        color: '#AAAAAA',
+        color: '#CCCCCC',
         textAlign: 'center',
     },
     axisTitleView: {
@@ -808,11 +855,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     yAxisTitleIcon: {
+        position: 'absolute',
+        right: -10,
         display: 'flex',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: -5,
     },
     axisTitleText: {
         paddingTop: 5,

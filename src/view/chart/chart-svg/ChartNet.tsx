@@ -3,7 +3,6 @@ import { IChartDot, IChartConfiguration, ChartPeriodType } from '../../../model/
 import { Line } from 'react-native-svg';
 
 export interface ChartNetProps {
-    dots: IChartDot[]
     maxValue?: number
     minValue?: number
     cfg: IChartConfiguration
