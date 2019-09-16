@@ -78,7 +78,13 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
     }
 
     renderInputBlock() {
-        const { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
+        
+        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput || glucoseInput.includes('undefined') ? glucoseInput.replace(/undefined/g, '0') : glucoseInput;
+        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput || breadUnitsInput.includes('undefined') ? breadUnitsInput.replace(/undefined/g, '0') : breadUnitsInput;
+        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput || insulinInput.includes('undefined') ? insulinInput.replace(/undefined/g, '0') : insulinInput;
+        longInsulinInput = longInsulinInput.includes(',') ? longInsulinInput.replace(/,/g, '.') : longInsulinInput || longInsulinInput.includes('undefined') ? longInsulinInput.replace(/undefined/g, '0') : longInsulinInput;
+
         return (
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
@@ -102,7 +108,7 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.GLUCOSE}
-                        value={this.state.glucoseInput}
+                        value={glucoseInput}
                         maximumNum={'15'}
                         onChangeText={(value) =>
                             this.setState({ glucoseInput: value })
@@ -124,7 +130,7 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.BREAD_UNITS}
-                        value={this.state.breadUnitsInput}
+                        value={breadUnitsInput}
                         maximumNum={'12'}
                         onChangeText={(value) =>
                             this.setState({ breadUnitsInput: value })
@@ -146,7 +152,7 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.LONG_INSULIN}
-                        value={this.state.insulinInput}
+                        value={insulinInput}
                         maximumNum={'15'}
                         onChangeText={(value) =>
                             this.setState({ insulinInput: value })
@@ -168,7 +174,7 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.INSULIN}
-                        value={this.state.longInsulinInput}
+                        value={longInsulinInput}
                         maximumNum={'25'}
                         onChangeText={(value) =>
                             this.setState({ longInsulinInput: value })

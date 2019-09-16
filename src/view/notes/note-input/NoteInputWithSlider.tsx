@@ -23,7 +23,7 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={parseInt(props.value.split('.')[0])}
+                        value={parseInt(props.value.split('.')[0]) || 0}
                         onValueChange={(value) => props.onNaturalSlide(value)}
                         maximumValue={parseInt(props.maximumNum)}
                         step={1}
@@ -38,7 +38,7 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={parseFloat(0 + '.' + props.value.split('.')[1]) || 0.0}
+                        value={parseFloat(0 + '.' + props.value.split('.')[1]) || 0.0 }
                         onValueChange={(value) => value ?
                             props.onDecimalSlide((Math.floor(value * 10) / 10)) :
                             props.onDecimalSlide('0.0')
