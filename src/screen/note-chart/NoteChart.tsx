@@ -46,6 +46,7 @@ const glucoseConfig: IChartConfiguration = {
     dotRadius: DOT_RADIUS,
     reversedY: false,
     timeStepMinutes: TIME_STEP_MINUTES,
+    horizontalLineNumber: 5,
 }
 
 const insulinConfig: IChartConfiguration = {
@@ -63,6 +64,7 @@ const insulinConfig: IChartConfiguration = {
     flatTime: 30,
     decreaseTime: 180,
     timeStepMinutes: TIME_STEP_MINUTES,
+    horizontalLineNumber: 3,
 }
 
 const breadUnitsConfig: IChartConfiguration = {
@@ -80,6 +82,7 @@ const breadUnitsConfig: IChartConfiguration = {
     flatTime: 15,
     decreaseTime: 90,
     timeStepMinutes: TIME_STEP_MINUTES,
+    horizontalLineNumber: 3,
 }
 
 const longInsulinConfig: IChartConfiguration = {
@@ -94,6 +97,7 @@ const longInsulinConfig: IChartConfiguration = {
     dotRadius: DOT_RADIUS,
     reversedY: false,
     timeStepMinutes: TIME_STEP_MINUTES,
+    horizontalLineNumber: 3,
 }
 
 const chartConfig: { [id: string]: IChartConfiguration } = {
@@ -143,13 +147,11 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         );
         // console.log('!!!!glucoseChartDots', glucoseChartDots.dots)
         const highlightDots = [...glucoseChartDots.dots, ...glucoseChartDots.events];
-        // console.log('!!!! highlightDots', highlightDots, glucoseChartDots.dots, glucoseChartDots.events);
         const breadUnitsChartDots = this.getPolylinePath(this.getBaseChartDots(ChartValueType.BREAD_UNITS), ChartValueType.BREAD_UNITS);
-        console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
+        // console.log('!!!!breadUnitsChartDots', breadUnitsChartDots)
         const insulinChartDots = this.getPolylinePath(this.getBaseChartDots(ChartValueType.INSULIN), ChartValueType.INSULIN);
         // console.log('!!!!insulinChartDots', insulinChartDots)
         const longInsulinChartDots = this.getBaseChartDots(ChartValueType.LONG_INSULIN);
-        console.log('!!!!', new Date().getTime())
         return (
             <View style={styles.view}>
                 <LinearGradient
@@ -178,7 +180,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         maxValue={insulinChartDots.maxValue}
                                         cfg={insulinConfig}
                                         type={ChartPeriodType.DAY}
-                                        horizontalLinesNumber={3}
                                         paddingTop
                                     />
                                     <ChartHighlightNet
@@ -195,7 +196,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         stopGradientColor={'#7C3869'}
                                     />
                                 </ChartBox>
-                                {this.renderNetYTitles(ChartValueType.INSULIN, insulinChartDots.maxValue, 0, 3)}
+                                {this.renderNetYTitles(insulinConfig, insulinChartDots.maxValue, 0)}
                                 <InsulinTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {/* GLUCOSE CHART */}
@@ -212,7 +213,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         minValue={glucoseChartDots.minValue}
                                         cfg={glucoseConfig}
                                         type={ChartPeriodType.DAY}
-                                        horizontalLinesNumber={4}
                                     />
                                     <ChartHighlightNet
                                         dots={highlightDots}
@@ -253,7 +253,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         />
                                     })}
                                 </ChartBox>
-                                {this.renderNetYTitles(ChartValueType.GLUCOSE, glucoseChartDots.maxValue, glucoseChartDots.minValue, 4)}
+                                {this.renderNetYTitles(glucoseConfig, glucoseChartDots.maxValue, glucoseChartDots.minValue)}
                                 <GlucoseTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {/* BREAD_UNITS CHART */}
@@ -270,7 +270,6 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         cfg={breadUnitsConfig}
                                         type={ChartPeriodType.DAY}
                                         paddingBottom
-                                        horizontalLinesNumber={3}
                                     />
                                     <ChartHighlightNet
                                         dots={highlightDots}
@@ -286,7 +285,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
                                         stopGradientColor={'#F0EC91'}
                                     />
                                 </ChartBox>
-                                {this.renderNetYTitles(ChartValueType.BREAD_UNITS, breadUnitsChartDots.maxValue, 0, 3)}
+                                {this.renderNetYTitles(breadUnitsConfig, breadUnitsChartDots.maxValue, 0)}
                                 <BreadUnitsTextRotated style={styles.yAxisTitleIcon} />
                             </View>
                             {this.renderNetXTitles()}
@@ -342,18 +341,18 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         }
     }
 
-    renderNetYTitles(type: ChartValueType, max: number, min: number, netNumber: number) {
+    renderNetYTitles(cfg: IChartConfiguration, max: number, min: number) {
         let range = max - min;
-        let step = range / netNumber;
+        let step = range / cfg.horizontalLineNumber;
         let toRender = [];
-        for (let i = 0; i <= netNumber; i++) {
+        for (let i = 0; i <= cfg.horizontalLineNumber; i++) {
             toRender.push(min + i * step)
         }
         return <View style={{
             ...styles.yNetTitlesView,
-            height: chartConfig[type].boxHeight,
-            top: chartConfig[type].reversedY ? -9 : 9,
-            flexDirection: chartConfig[type].reversedY ? 'column' : 'column-reverse'
+            height: cfg.boxHeight,
+            top: cfg.reversedY ? -9 : 9,
+            flexDirection: cfg.reversedY ? 'column' : 'column-reverse'
         }}>
             {toRender.map((step, index) => <Text
                 key={index}
@@ -414,8 +413,8 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
     getBaseChartData(dayNotes: INoteList, valueKey: ChartValueType) {
         let chartDots: IChartDot[] = [];
         let values = Object.keys(dayNotes).map(noteId => dayNotes[noteId][valueKey]);
-        let maxValue = values.length ? Math.max(...values) + 1: 0;
-        let minValue = values.length && Math.min(...values) - 1 > 0 ? Math.min(...values) - 1 : 0;
+        let maxValue = values.length ? Math.max(...values) + 1 : 0;
+        let minValue = values.length && Math.min(...values) - 1 > 0 ? Math.floor(Math.min(...values) - 1) : 0;
         Object.keys(dayNotes).map(noteId => {
             let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
             dot.x = this.getScaledX((dayNotes[noteId] as INoteListNote).date, valueKey);
@@ -478,6 +477,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         const { noteList } = this.props;
         let events: IChartDot[] = [];
         let dots: IChartDot[] = [];
+        this.getNewMaxValue(currentDayData, type)
         currentDayData.dots.map(dot => {
             let current = this.padd(type, dot);
             noteList[dot.id].glucose === 0 ?
@@ -601,8 +601,8 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
         let result: IChartDot[] = this.adaptAndGetPolylineChartDots(type, train, chartData)
         return {
             dots: result,
-            maxValue: currentDayData.maxValue,
-            minValue: currentDayData.minValue
+            maxValue: chartData.maxValue,
+            minValue: chartData.minValue
         }
     }
 
@@ -647,6 +647,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             currentClearValue = nextClearValue;
             currentTime = nextTime;
             chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? Math.ceil(currentClearValue + nextTrainValue) : chartData.maxValue;
+            this.getNewMaxValue(chartData, type)
         }
         for (let i = 0; i < flatStepNumber; i++) {
             let nextTime = currentTime + timeIncreaseStepValue,
@@ -672,6 +673,7 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             currentClearValue = nextClearValue;
             currentTime = nextTime;
             chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? Math.ceil(currentClearValue + nextTrainValue) : chartData.maxValue
+            this.getNewMaxValue(chartData, type)
         }
         for (let i = 0; i < decreaseStepNumber; i++) {
             let nextTime = currentTime + timeIncreaseStepValue,
@@ -697,6 +699,20 @@ class NoteChart extends React.PureComponent<NoteChartProps, NoteChartState> {
             currentClearValue = nextClearValue;
             currentTime = nextTime;
             chartData.maxValue = (currentClearValue + nextTrainValue) > chartData.maxValue ? Math.ceil(currentClearValue + nextTrainValue) : chartData.maxValue
+        }
+        this.getNewMaxValue(chartData, type);
+    }
+
+    getNewMaxValue(chartData, type: ChartValueType) {
+        if (type !== ChartValueType.GLUCOSE) {
+
+            chartData.maxValue = chartData.maxValue % chartConfig[type].horizontalLineNumber == 0 ?
+                chartData.maxValue :
+                chartConfig[type].horizontalLineNumber * Math.ceil(chartData.maxValue / chartConfig[type].horizontalLineNumber)
+        } else if( type === ChartValueType.GLUCOSE) {
+            chartData.maxValue = (chartData.maxValue - chartData.minValue) % chartConfig[type].horizontalLineNumber == 0 ?
+                chartData.maxValue :
+                chartConfig[type].horizontalLineNumber * Math.ceil((chartData.maxValue - chartData.minValue) / chartConfig[type].horizontalLineNumber)
         }
     }
 

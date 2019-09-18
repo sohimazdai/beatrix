@@ -39,5 +39,5 @@ export interface IChartConfiguration {
     flatTime?: number
     decreaseTime?: number
     timeStepMinutes?: number,
-
+    horizontalLineNumber?: number,
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Svg, { Polyline, LinearGradient, Stop, Path } from 'react-native-svg';
 import { IChartDot } from '../../../model/IChart';
+import { domainToASCII } from 'url';
 
 export enum PolylineType {
     BEZIER = 'bezier',
@@ -20,7 +21,7 @@ export function ChartPolyline(props: ChartPolylineProps) {
 
 function renderPolyline(props: ChartPolylineProps) {
     const thereIsGradient = props.initGradientColor && props.stopGradientColor;
-    return <>
+    return props.dots && props.dots.length > 0 && <>
         {thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
             <Stop offset="0%" stopColor={props.initGradientColor} stopOpacity="1" />
             <Stop offset="100%" stopColor={props.stopGradientColor} stopOpacity="1" />

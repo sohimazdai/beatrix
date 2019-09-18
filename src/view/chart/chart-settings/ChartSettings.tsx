@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { ChartPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { NoteDatePicker, NoteDatePickerConnect } from '../../notes/note-date-picker/NoteDatePicker';
+import { NoteDatePickerConnect } from '../../notes/note-date-picker/NoteDatePicker';
 import { shadowOptions } from '../../../constant/shadowOptions';
 
 export interface ChartSettingsProps {

@@ -23,7 +23,7 @@ export function ChartNet(props: ChartNetProps) {
     !props.noYY && toRender.push(horizontalLines(props))
     return <>
         {verticalLines(props)}
-        {props.horizontalLinesNumber && horizontalLines(props)}
+        {props.cfg.horizontalLineNumber && horizontalLines(props)}
     </>
 }
 
@@ -65,13 +65,13 @@ function horizontalLines(props: ChartNetProps) {
             const firstY = props.cfg.reversedY ? props.cfg.basicPadding : props.cfg.basicPadding * 2;
             const firstX = props.cfg.basicPadding;
             const range = props.maxValue - props.minValue;
-            let lapStep = getAvailableZone(props.cfg.boxHeight, props) / props.horizontalLinesNumber;
+            let lapStep = getAvailableZone(props.cfg.boxHeight, props) / props.cfg.horizontalLineNumber;
             let res: IChartDot[] = [{
                 x: firstX,
                 y: firstY,
                 id: 0
             }];
-            for (let i = 0; i < HORIZONTAL_DAY_LINES_COUNT; i++) {
+            for (let i = 0; i < props.cfg.horizontalLineNumber; i++) {
                 res.push({
                     x: res[res.length - 1].x,
                     y: res[res.length - 1].y + lapStep,
