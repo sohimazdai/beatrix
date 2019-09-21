@@ -1,3 +1,5 @@
+import { PolylineType } from "../view/chart/chart-svg/ChartPolyline";
+
 export interface IChartDot {
     x: number,
     y: number,
@@ -29,8 +31,11 @@ export interface IChartConfiguration {
     height: number
     boxWidth: number
     boxHeight: number
+    axisTypes: ChartAxisType[]
     axisWidth?: number
     axisColor?: string
+    initGradientColor?: string
+    stopGradientColor?: string
     basicPadding?: number
     yPadding?: number
     dotRadius?: number
@@ -40,4 +45,7 @@ export interface IChartConfiguration {
     decreaseTime?: number
     timeStepMinutes?: number,
     horizontalLineNumber?: number,
+    paddingTop?: boolean
+    paddingBottom?: boolean
+    polylineType?: PolylineType
 }

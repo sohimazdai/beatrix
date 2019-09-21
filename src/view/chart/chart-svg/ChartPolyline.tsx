@@ -16,7 +16,7 @@ export interface ChartPolylineProps {
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    return renderPolyline(props);
+    return renderPolyline(props) || null;
 }
 
 function renderPolyline(props: ChartPolylineProps) {

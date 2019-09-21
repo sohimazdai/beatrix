@@ -37,7 +37,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     {this.renderCards()}
                 </ScrollView>
                 <View style={styles.addNoteButtonView}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteChart')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Chart')}>
                         <ToChartButton />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteCreation')}>
