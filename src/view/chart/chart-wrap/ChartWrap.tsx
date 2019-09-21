@@ -428,7 +428,11 @@ export function ChartWrap(props: ChartWrapProps) {
                 />
                 <ChartPolyline
                     polylineType={config.polylineType}
-                    dots={polylineDotsData.dots}
+                    dots={
+                        type === ChartValueType.GLUCOSE ?
+                        basicDotsData.dots :
+                        polylineDotsData.dots
+                    }
                     initGradientColor={config.initGradientColor}
                     stopGradientColor={config.stopGradientColor}
                 />
