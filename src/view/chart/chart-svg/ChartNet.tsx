@@ -1,21 +1,28 @@
 import React from 'react';
-import { IChartDot, IChartConfiguration, ChartPeriodType } from '../../../model/IChart';
+import { IChartDot, IChartConfiguration, ChartPeriodType, ChartValueType } from '../../../model/IChart';
 import { Line } from 'react-native-svg';
 
 export interface ChartNetProps {
     maxValue?: number
     minValue?: number
     cfg: IChartConfiguration
-    type: ChartPeriodType
+    periodType: ChartPeriodType
     noXX?: boolean
     noYY?: boolean
     paddingTop?: boolean
     paddingBottom?: boolean
     horizontalLinesNumber?: number
+    maxCritical?: number
+    minCritical?: number
+    renderCritical?: boolean
+    type?: ChartValueType
 }
 
-const VERTICAL_DAY_LINES_COUNT = 8
-const HORIZONTAL_DAY_LINES_COUNT = 4
+const VERTICAL_DAY_LINES_COUNT = 8;
+const MIN_CRITICAL_DEFAULT = 4;
+const MAX_CRITICAL_DEFAULT = 8;
+const MAX_CRITICAL_COLOR_DEFAULT = '#FF6161';
+const MIN_CRITICAL_COLOR_DEFAULT = '#50ABFF';
 
 export function ChartNet(props: ChartNetProps) {
     let toRender = [];
@@ -24,11 +31,57 @@ export function ChartNet(props: ChartNetProps) {
     return <>
         {verticalLines(props)}
         {props.cfg.horizontalLineNumber && horizontalLines(props)}
+        {props.renderCritical && renderCriticals(props)}
     </>
 }
 
+function renderCriticals(props: ChartNetProps) {
+    const range = props.maxValue - (props.minValue ? props.minValue : 0);
+    const maxCritical = props.maxCritical ? props.maxCritical : MAX_CRITICAL_DEFAULT;
+    const minCritical = props.minCritical ? props.minCritical : MIN_CRITICAL_DEFAULT;
+    const thereIsMin = props.minValue < minCritical;
+    const thereIsMax = props.maxValue > maxCritical;
+    const maxCritPosition = thereIsMax ? props.maxValue - maxCritical : null;
+    const minCritPosition = thereIsMin ? props.maxValue - minCritical : null;
+    let minY = thereIsMin && ((getAvailableZone(props.cfg.boxHeight, props) / range) * minCritPosition);
+    let maxY = thereIsMax && ((getAvailableZone(props.cfg.boxHeight, props) / range) * maxCritPosition);
+    minY = props.cfg.reversedY ? props.cfg.boxHeight - minY : minY;
+    maxY = props.cfg.reversedY ? props.cfg.boxHeight - maxY : maxY;
+    maxY += props.cfg.basicPadding * 2;
+    minY += props.cfg.basicPadding * 2;
+    let toRender = [];
+    if (thereIsMin) {
+        toRender.push(
+            <Line
+                key={'minCritical'}
+                x1={props.cfg.basicPadding}
+                x2={getAvailableZone(props.cfg.boxWidth, props) + props.cfg.basicPadding}
+                y1={minY}
+                y2={minY}
+                stroke={MIN_CRITICAL_COLOR_DEFAULT}
+                strokeDasharray={[1, 1]}
+            />
+        )
+    }
+    if (thereIsMax) {
+        toRender.push(
+            <Line
+                key={'maxCritical'}
+                x1={props.cfg.basicPadding}
+                x2={getAvailableZone(props.cfg.boxWidth, props) + props.cfg.basicPadding}
+                y1={maxY}
+                y2={maxY}
+                stroke={MAX_CRITICAL_COLOR_DEFAULT}
+                strokeDasharray={[1, 1]}
+            />
+        )
+    }
+
+    return toRender
+}
+
 function verticalLines(props: ChartNetProps) {
-    switch (props.type) {
+    switch (props.periodType) {
         case ChartPeriodType.DAY:
             const firstX = props.cfg.basicPadding;
             const firstY = props.paddingTop ? props.cfg.basicPadding : 0;
@@ -60,7 +113,7 @@ function verticalLines(props: ChartNetProps) {
 }
 
 function horizontalLines(props: ChartNetProps) {
-    switch (props.type) {
+    switch (props.periodType) {
         case ChartPeriodType.DAY:
             const firstY = props.cfg.reversedY ? props.cfg.basicPadding : props.cfg.basicPadding * 2;
             const firstX = props.cfg.basicPadding;

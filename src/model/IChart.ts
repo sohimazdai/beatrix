@@ -26,6 +26,18 @@ export enum ChartAxisType {
     OY_REVERSE = "oy-reverse"
 }
 
+export interface ChartDotsData {
+    maxValue?: number
+    minValue?: number
+    dots?: IChartDot[]
+    events?: IChartDot[]
+    previous?: {
+        maxValue?: number
+        minValue?: number
+        dots?: IChartDot[]
+    }
+}
+
 export interface IChartConfiguration {
     width: number | string
     height: number

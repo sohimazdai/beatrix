@@ -14,6 +14,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
+import { ChartPopup } from '../../view/chart/chart-popup/ChartPopup';
 
 const TIME_STEP_MINUTES = 15;
 const BASIC_PADDING = 5;
@@ -104,20 +105,22 @@ export interface ChartWithSettingsProps {
 }
 
 export interface ChartWithSettingsState {
-    currentStartDate: Date,
+    currentDate: Date,
     selectedDotId: number,
     selectedPeriod: ChartPeriodType,
+    popupShown?: boolean,
 }
 
 class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, ChartWithSettingsState> {
     state = {
-        currentStartDate: new Date(
+        currentDate: new Date(
             new Date().getFullYear(),
             new Date().getMonth(),
             new Date().getDate()
         ),
         selectedPeriod: ChartPeriodType.DAY,
         selectedDotId: null,
+        popupShown: false
     }
 
     get generalPadding() {
@@ -152,10 +155,10 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                                 return <ChartWrap
                                     key={type}
                                     type={type}
-                                    globalConfig={chartConfig}
+                                    config={chartConfig[type]}
                                     selectedPeriod={this.state.selectedPeriod}
                                     selectedDotId={this.state.selectedDotId}
-                                    currentStartDate={this.state.currentStartDate}
+                                    currentDate={this.state.currentDate}
                                     noteList={this.props.noteList}
                                     noteListByDay={this.props.noteListByDay}
                                     onDotPress={this.onDotPress}
@@ -168,7 +171,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     <View style={styles.settingsView}>
                         <ChartSettings
                             onDateChange={this.onCurrentDateChange}
-                            date={this.state.currentStartDate}
+                            date={this.state.currentDate}
                             onChangingPeriod={this.onChangingPeriod}
                             selectedPeriod={this.state.selectedPeriod}
                         />
@@ -181,9 +184,27 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                 </View>
                 <Hat
                     onBackPress={this.props.navigation.goBack}
+                    title={this.getHatTitle()}
+                />
+                <ChartPopup 
+                    dateTitle={this.state.currentDate}
+                    shown={this.state.popupShown}
+                    onClose={this.onPopupClose}
+                    note={this.props.noteList[this.state.selectedDotId]}
                 />
             </View>
         )
+    }
+
+    getHatTitle() {
+        switch(this.state.selectedPeriod) {
+            case ChartPeriodType.DAY:
+                return 'Дневной график'
+            case ChartPeriodType.MONTH:
+                return 'Месячный график'
+            case ChartPeriodType.THREE_MONTH:
+                return 'Три месяца'
+        }
     }
 
     renderNetXTitles() {
@@ -196,7 +217,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                 return <View
                     style={{
                         ...styles.highightTitlesView,
-                        // marginLeft: 8,
                         width: newWidth,
                         paddingLeft: titleWidth / 2,
                         paddingRight: titleWidth / 2
@@ -227,15 +247,25 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     onCurrentDateChange = (date: Date) => {
-        this.setState({ currentStartDate: date })
+        this.setState({ currentDate: date })
     }
 
     onDotPress = (dotId: number) => {
-        this.setState({ selectedDotId: dotId })
+        this.setState({ 
+            selectedDotId: dotId,
+            popupShown: true
+        })
     }
 
     onChangingPeriod = (period: ChartPeriodType) => {
         this.setState({ selectedPeriod: period })
+    }
+
+    onPopupClose = () => {
+        this.setState({
+            popupShown: false,
+            selectedDotId: null
+        })
     }
 }
 
