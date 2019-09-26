@@ -31,11 +31,6 @@ export interface ChartDotsData {
     minValue?: number
     dots?: IChartDot[]
     events?: IChartDot[]
-    previous?: {
-        maxValue?: number
-        minValue?: number
-        dots?: IChartDot[]
-    }
 }
 
 export interface IChartConfiguration {
@@ -60,4 +55,8 @@ export interface IChartConfiguration {
     paddingTop?: boolean
     paddingBottom?: boolean
     polylineType?: PolylineType
+}
+
+export interface IChartTrain {
+    [id: number]: IChartDot
 }

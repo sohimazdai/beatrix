@@ -30,8 +30,8 @@ export function ChartNet(props: ChartNetProps) {
     !props.noYY && toRender.push(horizontalLines(props))
     return <>
         {verticalLines(props)}
-        {props.cfg.horizontalLineNumber && horizontalLines(props)}
-        {props.renderCritical && renderCriticals(props)}
+        {props.maxValue && props.cfg.horizontalLineNumber && horizontalLines(props)}
+        {props.maxValue && props.renderCritical && renderCriticals(props)}
     </>
 }
 

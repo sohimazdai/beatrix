@@ -16,7 +16,7 @@ import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
 import { ChartPopup } from '../../view/chart/chart-popup/ChartPopup';
 
-const TIME_STEP_MINUTES = 15;
+const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
 const DOT_RADIUS = 5;
 const WIDTH = Dimensions.get("screen").width * 0.85;
@@ -33,7 +33,7 @@ const glucoseConfig: IChartConfiguration = {
     dotRadius: DOT_RADIUS,
     reversedY: false,
     timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 5,
+    horizontalLineNumber: 6,
     axisTypes: [
         ChartAxisType.OX,
         ChartAxisType.OY
@@ -165,7 +165,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                                 />
                             })}
                             {this.renderNetXTitles()}
-                            {/* {this.renderAxisName()} */}
                         </LinearGradient>
                     </View>
                     <View style={styles.settingsView}>

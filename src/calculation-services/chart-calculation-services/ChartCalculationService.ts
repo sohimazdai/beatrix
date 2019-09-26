@@ -1,27 +1,21 @@
-import { ChartDotsData, IChartDot, ChartValueType } from "../../model/IChart";
-import { INoteList, INoteListNote } from "../../model/INoteList";
+import { ChartDotsData, IChartDot, ChartValueType, IChartTrain } from "../../model/IChart";
+import { INoteList } from "../../model/INoteList";
 import { ChartWrapProps } from "../../view/chart/chart-wrap/ChartWrap";
-import { generalPadding, initialPadding, getNewMaxValue, addPadding, getIncreaseTime, getId, adaptAndGetPolylineChartDots } from "./ChartCalculationHelper";
+import { 
+    adaptDots, 
+    getDotsAndEvents, 
+    filterValidEffects, 
+    getTrainItemId, 
+    getMaxTrainItemId 
+} from "./ChartCalculationHelper";
 
-//GETTING BASE CHART DOTS FOR CALCULATING DOT EFFECTS
-export function getBaseChartDots(props: ChartWrapProps): ChartDotsData {
+export function calculateChartDots(props: ChartWrapProps): ChartDotsData {
     const {
         noteListByDay,
         currentDate,
         type,
-        config,
     } = props;
 
-    let currentDayBaseChartData: {
-        maxValue?: number,
-        minValue?: number,
-        dots?: IChartDot[],
-        previous?: {
-            maxValue?: number,
-            minValue?: number,
-            dots?: IChartDot[]
-        },
-    } = {};
     const previousDayNotes: INoteList = noteListByDay[
         new Date(
             currentDate.getFullYear(),
@@ -30,273 +24,94 @@ export function getBaseChartDots(props: ChartWrapProps): ChartDotsData {
         ).getTime()
     ] || {};
     const currentDayNotes: INoteList = noteListByDay[currentDate.getTime()] || {};
+    const currentGroundDots = getGroundDots(props, currentDayNotes)
+    let dots = getDotsAndEvents(currentGroundDots);
+    let groundAdaptedData = adaptDots(props, dots.dots, dots.events, currentDate);
+    if (type === ChartValueType.GLUCOSE) {
+        return groundAdaptedData;
+    }
+    const previousGroundDots = getGroundDots(props, previousDayNotes);
+    const train: IChartTrain = {};
+    previousGroundDots.map(dot => {
+        calculateDotEffect(props, dot, train, currentDate);
+    })
+    currentGroundDots.map(dot => {
+        calculateDotEffect(props, dot, train, currentDate);
+    })
+    const trainDots = filterValidEffects(train);
+    return adaptDots(props, trainDots);
+}
 
-    function getBaseChartData(dayNotes: INoteList) {
-        let chartDots: IChartDot[] = [];
-        let values = Object.keys(dayNotes).map(noteId => dayNotes[noteId][type]);
-        let maxValue = values.length ? Math.max(...values) + 1 : 0;
-        let minValue = values.length && Math.min(...values) - 1 > 0 ? Math.floor(Math.min(...values) - 1) : 0;
-
-        function getScaledY(chartData, y): number {
-            const min = chartData.minValue > config.yPadding ?
-                chartData.minValue - config.yPadding :
-                0;
-            const max = chartData.maxValue + config.yPadding;
-            const range = max - min;
-            const relativity = (config.boxHeight - generalPadding(props)) / range;
-            const resultY = config.reversedY ?
-                (y - min) * relativity:
-                config.boxHeight - (y - min) * relativity;
-            return resultY
-        }
-
-        function getScaledX(date: number) {
-            const beforeToday = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                currentDate.getDate()
-            ).getTime();
-            const xRelativity = (config.boxWidth) / (1000 * 60 * 60 * 24);
-            return (date - beforeToday) * xRelativity;
-        }
-
-        Object.keys(dayNotes).map(noteId => {
-            let dot: IChartDot = { x: 0, y: 0, id: parseInt(noteId) };
-            dot.x = getScaledX((dayNotes[noteId] as INoteListNote).date);
-            dot.y = getScaledY({ maxValue, minValue }, (dayNotes[noteId] as INoteListNote)[type]) + initialPadding(props);
-            dot.y && chartDots.push(dot);
-            dot.y && values.push(dot.y);
+function getGroundDots(props: ChartWrapProps, noteList: INoteList): IChartDot[] {
+    let groundDots: IChartDot[] = [];
+    Object.keys(noteList).map(noteId => {
+        groundDots.push({
+            x: noteList[noteId as any].date,
+            y: noteList[noteId as any][props.type],
+            id: noteList[noteId as any].date
         })
-        chartDots.sort((a: IChartDot, b: IChartDot) => a.id - b.id);
-        return {
-            dots: chartDots,
-            maxValue,
-            minValue
-        };
-    }
-
-    if (Object.keys(currentDayNotes).length) {
-        currentDayBaseChartData = getBaseChartData(currentDayNotes);
-    } else {
-        currentDayBaseChartData.dots = [];
-    }
-    if (Object.keys(previousDayNotes).length) {
-        currentDayBaseChartData.previous = getBaseChartData(previousDayNotes)
-    } else {
-        currentDayBaseChartData.previous = {};
-        currentDayBaseChartData.previous.dots = [];
-    }
-    return currentDayBaseChartData
+    })
+    return groundDots
 }
 
-//GETTING GLUCOSE DOTS BY BASE DOTS
-export function getGlucoseChartDots(props: ChartWrapProps, currentDayData: ChartDotsData) {
-    const {
-        noteList,
-    } = props;
+function calculateDotEffect(props: ChartWrapProps, dot: IChartDot, train: IChartTrain, date: Date) {
+    const { config } = props;
+    const id = getTrainItemId(props, dot, date);
 
-    let events: IChartDot[] = [];
-    let dots: IChartDot[] = [];
-    getNewMaxValue(props, currentDayData);
-    currentDayData.dots.map(dot => {
-        let current = addPadding(props, dot);
-        noteList[dot.id].glucose === 0 ?
-            events.push(current) :
-            dots.push(current)
-    });
-    return {
-        maxValue: currentDayData.maxValue,
-        minValue: currentDayData.minValue,
-        events,
-        dots
-    };
-}
+    const increaseStepNumber = config.increaseTime / config.timeStepMinutes,
+        flatStepNumber = config.flatTime / config.timeStepMinutes,
+        decreaseStepNumber = config.decreaseTime / config.timeStepMinutes,
+        increaseStepValue = dot.y / increaseStepNumber,
+        decreaseStepValue = dot.y / decreaseStepNumber;
+    let ownCurrentY = 0;
+    let ownCurrentId = id;
 
-//GETTING DOTS EFFECT
-export function getPolylinePath(props: ChartWrapProps, currentDayData: ChartDotsData) {
-    const {
-        noteList,
-        type,
-        config
-    } = props;
-
-    const previousChartData = { ...currentDayData.previous }
-    const chartData = { ...currentDayData }
-    const previousDots = previousChartData.dots;
-    const dots = chartData.dots;
-    const previousDayTrain: { [id: number]: IChartDot } = {};
-    const train: { [id: number]: IChartDot } = {};
-
-    function getDotEffect(
-        dot: IChartDot,
-        train: { [id: number]: IChartDot },
-        chartData: any,
-    ) {
-        const cfg = config,
-            originalNote = noteList[dot.id],
-            increaseStepNumber = cfg.increaseTime / cfg.timeStepMinutes,
-            flatStepNumber = cfg.flatTime / cfg.timeStepMinutes,
-            decreaseStepNumber = cfg.decreaseTime / cfg.timeStepMinutes,
-            increaseStepValue = originalNote[type] / increaseStepNumber,
-            decreaseStepValue = originalNote[type] / decreaseStepNumber,
-            timeIncreaseStepValue = getIncreaseTime(config);
-        let currentTime = dot.x,
-            currentClearValue = 0;
-
-        for (let i = 0; i < increaseStepNumber; i++) {
-            let nextTime = currentTime + timeIncreaseStepValue,
-                id = getId(config, nextTime),
-                nextTrainValue = train[id] && train[id].y ?
-                    train[id].y :
-                    0,
-                nextClearValue = currentClearValue + increaseStepValue;
-            if (nextTime > config.boxWidth) {
-                train[id] = {
-                    y: 0,
-                    x: currentTime,
-                    id: currentTime
-                };
-                return
-            }
-            train[id] = {
-                y: nextClearValue + nextTrainValue,
-                x: nextTime,
-                id: nextTime
-            };
-
-            currentClearValue = nextClearValue;
-            currentTime = nextTime;
-            chartData.maxValue =
-                (currentClearValue + nextTrainValue) > chartData.maxValue ?
-                    Math.ceil(currentClearValue + nextTrainValue) :
-                    chartData.maxValue;
-            getNewMaxValue(props, chartData)
-        }
-        for (let i = 0; i < flatStepNumber; i++) {
-            let nextTime = currentTime + timeIncreaseStepValue,
-                id = getId(config, nextTime),
-                nextTrainValue = train[id] && train[id].y ?
-                    train[id].y :
-                    0,
-                nextClearValue = currentClearValue;
-            if (nextTime > config.boxWidth) {
-                train[id] = {
-                    y: 0,
-                    x: currentTime,
-                    id: currentTime
-                };
-                return
-            }
-            train[id] = {
-                y: nextClearValue + nextTrainValue,
-                x: nextTime,
-                id: nextTime
-            };
-
-            currentClearValue = nextClearValue;
-            currentTime = nextTime;
-            chartData.maxValue =
-                (currentClearValue + nextTrainValue) > chartData.maxValue ?
-                    Math.ceil(currentClearValue + nextTrainValue) :
-                    chartData.maxValue;
-            getNewMaxValue(props, chartData)
-        }
-        for (let i = 0; i < decreaseStepNumber; i++) {
-            let nextTime = currentTime + timeIncreaseStepValue,
-                id = getId(config, nextTime),
-                nextTrainValue = train[id] && train[id].y ?
-                    train[id].y :
-                    0,
-                nextClearValue = currentClearValue - decreaseStepValue;
-            if (nextTime > config.boxWidth) {
-                train[id] = {
-                    y: 0,
-                    x: currentTime,
-                    id: currentTime
-                };
-                return
-            }
-            train[id] = {
-                y: nextClearValue + nextTrainValue,
-                x: nextTime,
-                id: nextTime
-            };
-
-            currentClearValue = nextClearValue;
-            currentTime = nextTime;
-            chartData.maxValue =
-                (currentClearValue + nextTrainValue) > chartData.maxValue ?
-                    Math.ceil(currentClearValue + nextTrainValue) :
-                    chartData.maxValue
-        }
-        getNewMaxValue(props, chartData);
+    let trainYValue = train[id] && train[id].y ?
+        ownCurrentY + train[id].y :
+        ownCurrentY
+    train[ownCurrentId] = {
+        y: trainYValue,
+        x: ownCurrentId,
+        id: ownCurrentId,
     }
-
-    previousDots.map((dot: IChartDot) => {
-        const initDot = {
-            x: dot.x,
-            y: 0,
-            id: dot.id
+    ownCurrentY += increaseStepValue;
+    ownCurrentId++;
+    for (let i = 1; i < increaseStepNumber; i++) {
+        let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+            ownCurrentY + train[ownCurrentId].y :
+            ownCurrentY
+        train[ownCurrentId] = {
+            y: trainYValue,
+            x: ownCurrentId,
+            id: ownCurrentId,
         }
-        const noteId = dot.id;
-
-        if (noteList[noteId][type]) {
-            let id = getId(config, dot.x);
-            previousDayTrain[id] = {
-                x: dot.x,
-                y: 0,
-                id: dot.id
-            }
-            getDotEffect(initDot, previousDayTrain, previousChartData);
+        ownCurrentY += increaseStepValue;
+        ownCurrentId++;
+        if (ownCurrentId > getMaxTrainItemId(props, date)) return
+    }
+    for (let i = 0; i < flatStepNumber; i++) {
+        let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+            ownCurrentY + train[ownCurrentId].y :
+            ownCurrentY
+        train[ownCurrentId] = {
+            y: trainYValue,
+            x: ownCurrentId,
+            id: ownCurrentId,
         }
-    })
-
-
-    let count = 0;
-    Object.keys(previousDayTrain).map(id => {
-        if (parseInt(id) >= 0) {
-            if (count === 0) {
-                train[-1] = {
-                    x: 0,
-                    y: 0,
-                    id: previousDayTrain[id].id
-                }
-            }
-            train[id] = count === 0 ?
-                {
-                    x: previousDayTrain[id].x,
-                    y: previousDayTrain[id].y,
-                    id: previousDayTrain[id].id
-                }
-                :
-                previousDayTrain[id]
-            chartData.maxValue = previousDayTrain[id].y > chartData.maxValue ? Math.ceil(previousDayTrain[id].y) : chartData.maxValue;
-            ++count
+        ownCurrentId++;
+        if (ownCurrentId > getMaxTrainItemId(props, date)) return
+    }
+    for (let i = 0; i < decreaseStepNumber + 1; i++) {
+        let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+            ownCurrentY + train[ownCurrentId].y :
+            ownCurrentY
+        train[ownCurrentId] = {
+            y: trainYValue,
+            x: ownCurrentId,
+            id: ownCurrentId,
         }
-    });
-
-    dots.map((dot: IChartDot, index: number) => {
-        const initDot = {
-            x: dot.x,
-            y: 0,
-            id: dot.id
-        }
-        const noteId = dot.id;
-
-        if (noteList[noteId][type]) {
-            let id = getId(config, dot.x);
-            train[id] = {
-                x: dot.x,
-                y: train[id] ? train[id].y : 0,
-                id: dot.id
-            }
-            getDotEffect(initDot, train, chartData);
-        }
-    })
-    let result: IChartDot[] = adaptAndGetPolylineChartDots(props, config, train, chartData)
-    return {
-        dots: result,
-        maxValue: chartData.maxValue,
-        minValue: chartData.minValue
+        ownCurrentY = ownCurrentY - decreaseStepValue
+        ownCurrentId++;
+        if (ownCurrentId > getMaxTrainItemId(props, date)) return
     }
 }

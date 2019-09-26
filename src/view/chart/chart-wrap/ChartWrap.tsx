@@ -11,8 +11,8 @@ import { GlucoseTextRotated } from '../../../component/icon/GlucoseTextRotated';
 import { INoteList, INoteListByDay } from '../../../model/INoteList';
 import { ChartDot } from '../chart-svg/ChartDot';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { getBaseChartDots, getGlucoseChartDots, getPolylinePath } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
-import { generalPadding, initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { calculateChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
+import { initialPadding, isBreadUnitsType } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 
 export interface ChartWrapProps {
     config: IChartConfiguration
@@ -35,15 +35,14 @@ export function ChartWrap(props: ChartWrapProps) {
         config
     } = props;
     const basicDotsData: ChartDotsData = React.useMemo(
-        () => getGlucoseChartDots(props, getBaseChartDots(props)),
+        () => calculateChartDots(Object.assign({...props}, {type: ChartValueType.GLUCOSE})),
         [currentDate, noteList, selectedPeriod]
-    );
+    )
     let polylineDotsData: ChartDotsData = React.useMemo(
         () => polylineCalculator(),
         [currentDate, noteList, selectedPeriod]
     )
     const highlights: IChartDot[] = [...basicDotsData.events, ...basicDotsData.dots]
-
     function polylineCalculator() {
         let polylineDotsData: ChartDotsData = {};
         switch (selectedPeriod) {
@@ -54,7 +53,7 @@ export function ChartWrap(props: ChartWrapProps) {
                         break;
                     case ChartValueType.INSULIN:
                     case ChartValueType.BREAD_UNITS:
-                        polylineDotsData = getPolylinePath(props, getBaseChartDots(props))
+                        polylineDotsData = calculateChartDots(props)
                         break;
                 }
             case ChartPeriodType.MONTH:
