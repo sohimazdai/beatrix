@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { ChartPeriodType } from '../../../model/IChart';
+import { ChartPeriodType, ChartAvarageValueOfPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NoteDatePickerConnect } from '../../notes/note-date-picker/NoteDatePicker';
 import { shadowOptions } from '../../../constant/shadowOptions';
@@ -11,6 +11,8 @@ export interface ChartSettingsProps {
     onDateChange: (date: Date) => void;
     date: Date;
     selectedPeriod: ChartPeriodType;
+    // selectedAvarageValueOfPeriod: ChartAvarageValueOfPeriodType;
+    // onChangeaAvarageValueOfPeriod: (avaragePeriod: ChartAvarageValueOfPeriodType) => void //TODO:
 }
 
 const PERIODS = [
@@ -18,6 +20,12 @@ const PERIODS = [
     ChartPeriodType.MONTH,
     ChartPeriodType.THREE_MONTH
 ]
+
+// const AVARAGEVALUEOFPERIOD = [
+//     ChartAvarageValueOfPeriodType.MONTH,
+//     ChartAvarageValueOfPeriodType.THREE_MONTH,
+//     ChartAvarageValueOfPeriodType.SIX_MONTH
+// ]
 
 export function ChartSettings(props: ChartSettingsProps) {
     const today = new Date(
@@ -61,7 +69,7 @@ export function ChartSettings(props: ChartSettingsProps) {
             <View style={styles.periodChangingBlock}>
                 <Text style={styles.periodTitle}>
                     Период
-            </Text>
+                </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
                         let buttonStyle = styles.periodButton;
@@ -86,6 +94,33 @@ export function ChartSettings(props: ChartSettingsProps) {
                         </View>
                     })}
                 </View>
+                {/* <Text style={styles.scaleAvarageValueTitle}>
+                    Наложить график среднего значения глюкозы за период:
+                </Text>
+                <View style={styles.periodChangingButtons}>
+                    {AVARAGEVALUEOFPERIOD.map(period => {
+                        let buttonStyle = styles.periodButton;
+                        let buttonTextStyle = styles.periodButtonText;
+                        if (period === props.selectedAvarageValueOfPeriod) {
+                            buttonStyle = {...buttonStyle, ...styles.periodButtonActive}
+                            buttonTextStyle = {...buttonTextStyle, ...styles.periodButtonTextActive}
+                        }
+                        return <View
+                            style={buttonStyle}
+                            key={period}
+
+                        >
+                            <TouchableOpacity
+                                style={styles.periodButtonTouchable}
+                                onPress={() => props.selectedAvarageValueOfPeriod != period && props.onChangeaAvarageValueOfPeriod(period)}
+                            >
+                                <Text style={buttonTextStyle}>
+                                    {gerAvaragePeriod(period)}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    })}
+                </View> */}
             </View>
         </View>
     </View>
@@ -98,6 +133,14 @@ function getPeriodName(period: ChartPeriodType) {
         case ChartPeriodType.THREE_MONTH: return '3 месяца';
     }
 }
+
+// function gerAvaragePeriod(avaragePeriod: ChartAvarageValueOfPeriodType) {
+//     switch(avaragePeriod) {
+//         case ChartAvarageValueOfPeriodType.MONTH: return 'Месяц';
+//         case ChartAvarageValueOfPeriodType.THREE_MONTH: return '3 месяца';
+//         case ChartAvarageValueOfPeriodType.SIX_MONTH: return '6 месяца'
+//     }
+// }
 
 function getPreviousDate(date: Date) {
     return new Date(
@@ -239,5 +282,17 @@ const styles = StyleSheet.create({
     },
     periodButtonTextActive: {
         fontWeight: 'bold'
+    },
+    scaleAvarageValueTitle: {
+        width: '100%',
+        display: 'flex',
+
+        paddingBottom: 5,
+
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontSize: 18,
+        lineHeight: 21,
+        color: '#333333',
     },
 })

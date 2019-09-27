@@ -18,6 +18,12 @@ export enum ChartPeriodType {
     THREE_MONTH = '3 month'
 }
 
+export enum ChartAvarageValueOfPeriodType {
+    MONTH = 'month',
+    THREE_MONTH = '3 month',
+    SIX_MONTH = '6 month'
+}
+
 export enum ChartAxisType {
     OX = "ox",
     OX_UPSIDE = 'ox-upside',
