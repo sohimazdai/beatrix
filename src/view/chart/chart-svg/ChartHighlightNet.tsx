@@ -40,6 +40,18 @@ function verticalLines(props: ChartHighlightNetProps) {
                     strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
                 />
             })
+        case ChartPeriodType.MONTH:
+            return props.dots.map((dot, index) => {
+                return dot.id === props.selectedDotId && <Line
+                    key={dot.id}
+                    x1={dot.x}
+                    y1={props.paddingTop ? props.cfg.basicPadding : 0}
+                    x2={dot.x}
+                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
+                    stroke={props.selectedDotId == dot.id ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
+                    strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
+                />
+            })
     }
 }
 

@@ -4,15 +4,15 @@ import { StyleSheet, View, Text } from 'react-native';
 import { ChartBox } from '../chart-svg/ChartBox';
 import { ChartNet } from '../chart-svg/ChartNet';
 import { ChartHighlightNet } from '../chart-svg/ChartHighlightNet';
-import { ChartPolyline } from '../chart-svg/ChartPolyline';
+import { ChartPolyline, PolylineType } from '../chart-svg/ChartPolyline';
 import { InsulinTextRotated } from '../../../component/icon/InsulinTextRotated';
 import { BreadUnitsTextRotated } from '../../../component/icon/BreadUnitsTextRotated';
 import { GlucoseTextRotated } from '../../../component/icon/GlucoseTextRotated';
 import { INoteList, INoteListByDay } from '../../../model/INoteList';
 import { ChartDot } from '../chart-svg/ChartDot';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { calculateChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
-import { initialPadding, isBreadUnitsType } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { calculateDayChartDots, calculateMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
+import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 
 export interface ChartWrapProps {
     config: IChartConfiguration
@@ -34,44 +34,43 @@ export function ChartWrap(props: ChartWrapProps) {
         selectedDotId,
         config
     } = props;
-    const basicDotsData: ChartDotsData = React.useMemo(
-        () => calculateChartDots(Object.assign({...props}, {type: ChartValueType.GLUCOSE})),
-        [currentDate, noteList, selectedPeriod]
-    )
+    let basicDotsData: ChartDotsData = {}
     let polylineDotsData: ChartDotsData = React.useMemo(
         () => polylineCalculator(),
         [currentDate, noteList, selectedPeriod]
     )
-    const highlights: IChartDot[] = [...basicDotsData.events, ...basicDotsData.dots]
     function polylineCalculator() {
         let polylineDotsData: ChartDotsData = {};
         switch (selectedPeriod) {
             case ChartPeriodType.DAY:
+                basicDotsData = calculateDayChartDots(Object.assign({ ...props }, { type: ChartValueType.GLUCOSE }))
                 switch (type) {
                     case ChartValueType.GLUCOSE:
                         polylineDotsData = basicDotsData;
                         break;
                     case ChartValueType.INSULIN:
                     case ChartValueType.BREAD_UNITS:
-                        polylineDotsData = calculateChartDots(props)
+                        polylineDotsData = calculateDayChartDots(props)
                         break;
                 }
+                break;
             case ChartPeriodType.MONTH:
-                switch (type) {
-                    case ChartValueType.GLUCOSE:
-                    case ChartValueType.INSULIN:
-                    case ChartValueType.BREAD_UNITS:
-                }
+                basicDotsData = calculateMonthChartDots(props)
+                polylineDotsData = calculateMonthChartDots(props)
+                break; 
             case ChartPeriodType.THREE_MONTH:
                 switch (type) {
                     case ChartValueType.GLUCOSE:
                     case ChartValueType.INSULIN:
                     case ChartValueType.BREAD_UNITS:
                 }
+                break;
+
         }
         return polylineDotsData;
     }
 
+    const highlights: IChartDot[] = [...basicDotsData.events, ...basicDotsData.dots]
     return (
         <View style={styles.chartWrap}>
             <ChartBox
@@ -87,6 +86,8 @@ export function ChartWrap(props: ChartWrapProps) {
                     paddingTop={config.paddingTop}
                     paddingBottom={config.paddingBottom}
                     renderCritical={type === ChartValueType.GLUCOSE}
+                    selectedPeriod={selectedPeriod}
+                    currentDate={currentDate}
                 />
                 <ChartHighlightNet
                     dots={highlights}
@@ -97,10 +98,10 @@ export function ChartWrap(props: ChartWrapProps) {
                     selectedDotId={props.selectedDotId}
                 />
                 <ChartPolyline
-                    polylineType={config.polylineType}
+                    polylineType={props.selectedPeriod === ChartPeriodType.DAY ? config.polylineType : PolylineType.REGULAR}
                     dots={polylineDotsData.dots}
-                    initGradientColor={config.initGradientColor}
-                    stopGradientColor={config.stopGradientColor}
+                    initGradientColor={isGradientNeeded() && config.initGradientColor}
+                    stopGradientColor={isGradientNeeded() && config.stopGradientColor}
                 />
                 {clickableDotsAvailable() && basicDotsData.dots.map(item => {
                     return <ChartDot
@@ -113,6 +114,7 @@ export function ChartWrap(props: ChartWrapProps) {
                         fill={ThemeColor.BRIGHT_RED}
                         stroke={ThemeColor.WHITE}
                         selectedDotId={selectedDotId}
+                        type={props.type}
                     />
                 })}
                 {clickableDotsAvailable() && basicDotsData.events.map(item => {
@@ -147,24 +149,25 @@ export function ChartWrap(props: ChartWrapProps) {
             height: config.boxHeight,
             paddingTop: config.reversedY ? 0 : initialPadding(props),
             paddingBottom: config.reversedY ? initialPadding(props) : 0,
-
-            // top: config.reversedY ? -9 : 9,
             flexDirection: config.reversedY ? 'column' : 'column-reverse'
         }}>
-            {toRender.map((step, index) => <Text
-                key={index}
-                style={styles.yNetTitlesText}
-            >
-                {
-                    // index !== 0 && 
-                    Math.round(step * 10) / 10 || ''
-                }
-            </Text>)}
+            {toRender.map((step, index) => (
+                <Text
+                    key={index}
+                    style={styles.yNetTitlesText}
+                >
+                    {Math.round(step * 10) / 10 || ''}
+                </Text>
+            ))}
         </View>
     }
 
     function clickableDotsAvailable(): boolean {
-        return type === ChartValueType.GLUCOSE
+        return type === ChartValueType.GLUCOSE || props.selectedPeriod !== ChartPeriodType.DAY;
+    }
+
+    function isGradientNeeded(): boolean {
+        return props.selectedPeriod === ChartPeriodType.DAY;
     }
 }
 

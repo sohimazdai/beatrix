@@ -2,14 +2,19 @@ import { ChartDotsData, IChartDot, ChartValueType, IChartTrain } from "../../mod
 import { INoteList } from "../../model/INoteList";
 import { ChartWrapProps } from "../../view/chart/chart-wrap/ChartWrap";
 import { 
-    adaptDots, 
+    adaptDayDots, 
     getDotsAndEvents, 
     filterValidEffects, 
     getTrainItemId, 
-    getMaxTrainItemId 
+    getMaxTrainItemId, 
+    getDaysBetweenDates,
+    getArrayAverage,
+    getDayAfterThatNumber,
+    adaptMonthDots,
+    getMonthStart
 } from "./ChartCalculationHelper";
 
-export function calculateChartDots(props: ChartWrapProps): ChartDotsData {
+export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
     const {
         noteListByDay,
         currentDate,
@@ -26,7 +31,7 @@ export function calculateChartDots(props: ChartWrapProps): ChartDotsData {
     const currentDayNotes: INoteList = noteListByDay[currentDate.getTime()] || {};
     const currentGroundDots = getGroundDots(props, currentDayNotes)
     let dots = getDotsAndEvents(currentGroundDots);
-    let groundAdaptedData = adaptDots(props, dots.dots, dots.events, currentDate);
+    let groundAdaptedData = adaptDayDots(props, dots.dots, dots.events, currentDate);
     if (type === ChartValueType.GLUCOSE) {
         return groundAdaptedData;
     }
@@ -39,7 +44,7 @@ export function calculateChartDots(props: ChartWrapProps): ChartDotsData {
         calculateDotEffect(props, dot, train, currentDate);
     })
     const trainDots = filterValidEffects(train);
-    return adaptDots(props, trainDots);
+    return adaptDayDots(props, trainDots);
 }
 
 function getGroundDots(props: ChartWrapProps, noteList: INoteList): IChartDot[] {
@@ -114,4 +119,26 @@ function calculateDotEffect(props: ChartWrapProps, dot: IChartDot, train: IChart
         ownCurrentId++;
         if (ownCurrentId > getMaxTrainItemId(props, date)) return
     }
+}
+
+export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData{
+    let result: ChartDotsData = {};
+
+    const dateFinishedCalculation = getMonthStart(props.currentDate);
+    const dayAverages: IChartDot[] = [];
+    let currentDate: number = props.currentDate.getTime();
+    for (let i = 0; i <= getDaysBetweenDates(currentDate, dateFinishedCalculation); i++) {
+        let accumulator: number[] = [];
+        const currentDayNotes: INoteList = props.noteListByDay[getDayAfterThatNumber(dateFinishedCalculation, i)] || {};
+        Object.keys(currentDayNotes).map(noteId => {
+            currentDayNotes[noteId][props.type] != 0 && accumulator.push(currentDayNotes[noteId][props.type])
+        })
+        dayAverages.push({
+            x: i,
+            y: getArrayAverage(accumulator),
+            id: getDayAfterThatNumber(dateFinishedCalculation, i),
+        })
+    }
+    result = adaptMonthDots(props, dayAverages)
+    return result;
 }

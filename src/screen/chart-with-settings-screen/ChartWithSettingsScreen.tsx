@@ -257,7 +257,11 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     onChangingPeriod = (period: ChartPeriodType) => {
-        this.setState({ selectedPeriod: period })
+        let toStateSet: any = { selectedPeriod: period };
+        if (period === ChartPeriodType.MONTH) {
+            // toStateSet.currentDate = 
+        }
+        this.setState(toStateSet)
     }
 
     onPopupClose = () => {

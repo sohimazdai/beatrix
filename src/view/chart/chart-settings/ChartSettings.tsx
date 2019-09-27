@@ -3,8 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { ChartPeriodType, ChartAvarageValueOfPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { NoteDatePickerConnect } from '../../notes/note-date-picker/NoteDatePicker';
 import { shadowOptions } from '../../../constant/shadowOptions';
+import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
+import { DateHelper } from '../../../utils/DateHelper';
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
@@ -38,7 +39,7 @@ export function ChartSettings(props: ChartSettingsProps) {
             <View style={styles.dateClicker}>
                 <TouchableOpacity
                     style={styles.dateClickerTouchable}
-                    onPress={() => props.onDateChange(getPreviousDate(props.date))}
+                    onPress={() => props.onDateChange(setPreviousDateValueByChartPeriodType(props))}
                 >
                     <Text style={styles.dateClickerText}>
                         {'-'}
@@ -46,15 +47,16 @@ export function ChartSettings(props: ChartSettingsProps) {
                 </TouchableOpacity>
             </View>
 
-            <NoteDatePickerConnect
+            <ChartSettingsDatePickerConnect
                 date={props.date}
+                selectedPeriod={props.selectedPeriod}
                 onChange={props.onDateChange}
             />
             <View style={styles.dateClicker}>
                 <TouchableOpacity
                     style={styles.dateClickerTouchable}
                     onPress={getNextDate(props.date) <= today ?
-                        () => props.onDateChange(getNextDate(props.date)) :
+                        () => props.onDateChange(setNextDateValueByChartPeriodType(props)) :
                         () => { }
                     }
                 >
@@ -124,6 +126,22 @@ export function ChartSettings(props: ChartSettingsProps) {
             </View>
         </View>
     </View>
+}
+
+function setPreviousDateValueByChartPeriodType(props: ChartSettingsProps) {
+    switch (props.selectedPeriod) {
+        case ChartPeriodType.MONTH:
+            return DateHelper.getPreviousMonthDate(props.date)
+        default: return getPreviousDate(props.date)
+    }
+}
+
+function setNextDateValueByChartPeriodType(props: ChartSettingsProps) {
+    switch (props.selectedPeriod) {
+        case ChartPeriodType.MONTH:
+            return DateHelper.getNextMonthDate(props.date)
+        default: return getNextDate(props.date)
+    }
 }
 
 function getPeriodName(period: ChartPeriodType) {

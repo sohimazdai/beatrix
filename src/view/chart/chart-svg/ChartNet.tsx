@@ -16,9 +16,12 @@ export interface ChartNetProps {
     minCritical?: number
     renderCritical?: boolean
     type?: ChartValueType
+    currentDate: Date
+    selectedPeriod: ChartPeriodType
 }
 
 const VERTICAL_DAY_LINES_COUNT = 8;
+const VERTICAL_MONTH_LINES_COUNT = 31;
 const MIN_CRITICAL_DEFAULT = 4;
 const MAX_CRITICAL_DEFAULT = 8;
 const MAX_CRITICAL_COLOR_DEFAULT = '#FF6161';
@@ -81,16 +84,18 @@ function renderCriticals(props: ChartNetProps) {
 }
 
 function verticalLines(props: ChartNetProps) {
+    const firstX = props.cfg.basicPadding;
+    const firstY = props.paddingTop ? props.cfg.basicPadding : 0;
+    let lapStep: number = 0;
+    let res: IChartDot[] = [{
+        x: firstX,
+        y: firstY,
+        id: 0
+    }];
     switch (props.periodType) {
         case ChartPeriodType.DAY:
-            const firstX = props.cfg.basicPadding;
-            const firstY = props.paddingTop ? props.cfg.basicPadding : 0;
-            let lapStep = getAvailableZone(props.cfg.boxWidth, props) / VERTICAL_DAY_LINES_COUNT;
-            let res: IChartDot[] = [{
-                x: firstX,
-                y: firstY,
-                id: 0
-            }];
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / VERTICAL_DAY_LINES_COUNT;
+
             for (let i = 0; i < VERTICAL_DAY_LINES_COUNT; i++) {
                 res.push({
                     x: res[res.length - 1].x + lapStep,
@@ -106,6 +111,26 @@ function verticalLines(props: ChartNetProps) {
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
                     stroke={'rgba(102, 102, 102, 0.38)'}
+                    strokeWidth={1}
+                />
+            })
+        case ChartPeriodType.MONTH:
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / VERTICAL_MONTH_LINES_COUNT;
+            for (let i = 0; i < VERTICAL_MONTH_LINES_COUNT; i++) {
+                res.push({
+                    x: res[res.length - 1].x + lapStep,
+                    y: res[res.length - 1].y,
+                    id: res[res.length - 1].id + lapStep
+                })
+            }
+            return res.map((dot, index) => {
+                return index != 0 && <Line
+                    key={dot.id}
+                    x1={dot.x}
+                    y1={dot.y}
+                    x2={dot.x}
+                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
+                    stroke={getVerticalLineColor(props, index + 1)}
                     strokeWidth={1}
                 />
             })
@@ -147,4 +172,28 @@ function horizontalLines(props: ChartNetProps) {
 
 function getAvailableZone(parameter, props: ChartNetProps) {
     return parameter - 3 * props.cfg.basicPadding;
+}
+
+function getVerticalLineColor(props: ChartNetProps, date: number): string {
+    switch (props.selectedPeriod) {
+        case ChartPeriodType.DAY:
+            return 'rgba(102, 102, 102, 0.38)';
+        case ChartPeriodType.MONTH:
+            const dayOfWeek = new Date(
+                props.currentDate.getFullYear(),
+                props.currentDate.getMonth() - 1,
+                date
+            ).getDay()
+            switch (dayOfWeek) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    return 'rgba(102, 102, 102, 0.38)'
+                case 6:
+                case 0:
+                    return 'rgba(184, 2, 2, 0.38)'
+            }
+    }
 }

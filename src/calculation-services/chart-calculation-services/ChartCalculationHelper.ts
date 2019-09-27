@@ -7,7 +7,7 @@ import {
     IChartTrain
 } from "../../model/IChart";
 
-export function adaptDots(props: ChartWrapProps, dots: IChartDot[], events?: IChartDot[], date?: Date): ChartDotsData {
+export function adaptDayDots(props: ChartWrapProps, dots: IChartDot[], events?: IChartDot[], date?: Date): ChartDotsData {
     let result: ChartDotsData = {};
     let ys = dots.map(d => d.y)
     let maxValue = 0;
@@ -27,17 +27,17 @@ export function adaptDots(props: ChartWrapProps, dots: IChartDot[], events?: ICh
     maxValue = calculateNewMaxAndMin(props, maxValue, minValue);
     dots.map(dot => {
         dot.id === 0 && newDots.push({
-            x: adaptTime(props, dot.x, date),
+            x: adaptDayTime(props, dot.x, date),
             y: adaptYValue(props, 0, maxValue, minValue),
             id: dot.id
         })
         newDots.push({
-            x: adaptTime(props, dot.x, date),
+            x: adaptDayTime(props, dot.x, date),
             y: adaptYValue(props, dot.y, maxValue, minValue),
             id: dot.id
         })
         dot.id === getMaxTrainItemId(props, date) && newDots.push({
-            x: adaptTime(props, dot.x, date),
+            x: adaptDayTime(props, dot.x, date),
             y: adaptYValue(props, 0, maxValue, minValue),
             id: dot.id
         })
@@ -49,7 +49,7 @@ export function adaptDots(props: ChartWrapProps, dots: IChartDot[], events?: ICh
     if (events && events.length) {
         newEvents = events.map(dot => {
             return {
-                x: adaptTime(props, dot.x, date),
+                x: adaptDayTime(props, dot.x, date),
                 y: adaptYValue(props, 0, maxValue, minValue),
                 id: dot.id
             }
@@ -87,7 +87,7 @@ export function getDotsAndEvents(ds: IChartDot[]) {
     }
 }
 
-function adaptTime(props: ChartWrapProps, timeOrId: number, date: Date): number {
+function adaptDayTime(props: ChartWrapProps, timeOrId: number, date: Date): number {
     const firstMultiplier = props.type === ChartValueType.GLUCOSE ?
         timeOrId - getDateMidnightNumber(date) :
         timeOrId
@@ -116,6 +116,14 @@ export function getDateMidnightNumber(date: Date): number {
         date.getFullYear(),
         date.getMonth(),
         date.getDate()
+    ).getTime();
+}
+
+export function getMonthStart(date: Date): number {
+    return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        1
     ).getTime();
 }
 
@@ -168,5 +176,63 @@ export function filterValidEffects(train: IChartTrain): IChartDot[] {
     Object.keys(train).map(key => {
         train[key].id >= 0 && result.push(train[key])
     })
+    return result;
+}
+
+export function getDaysBetweenDates(dateAfter: number, dateBefore: number) {
+    return (dateAfter - dateBefore) / (1000 * 60 * 60 * 24)
+}
+
+export function getArrayAverage(array: any[]) {
+    let sum = 0;
+    array.map(item => sum = item + sum);
+    return sum == 0 ? 0 : sum / array.length
+}
+
+export function getDayAfterThatNumber(date: number, inc: number) {
+    const d = new Date(date);
+    return new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate() + inc
+    ).getTime()
+}
+
+export function adaptMonthDots(props: ChartWrapProps, dots: IChartDot[]): ChartDotsData {
+    let result: ChartDotsData = {};
+    let newDots: IChartDot[] = [];
+    let ys = dots.map(d => d.y)
+    let maxValue = 0;
+    let minValue = ys.length ? Math.min(...ys) : 0;
+    dots.map(dot => {
+        maxValue = dot.y > maxValue ? Math.ceil(dot.y) + 1 : Math.ceil(maxValue);
+        minValue = minValue && dot.y <= minValue ?
+            Math.floor(dot.y - 1) >= 0 ?
+                Math.floor(dot.y - 1) :
+                0 :
+            Math.floor(minValue);
+    }
+    )
+    maxValue = calculateNewMaxAndMin(props, maxValue, minValue);
+    dots.map(dot => {
+        dot.y && newDots.push({
+            x: adaptMonthTime(props, dot.x),
+            y: adaptYValue(props, dot.y, maxValue, minValue),
+            id: dot.id
+        })
+    })
+    result.dots = newDots;
+    result.maxValue = maxValue;
+    result.minValue = minValue;
+    result.events = [];
+    return result
+}
+
+function adaptMonthTime(props: ChartWrapProps, day: number): number {
+    let result = 0;
+    const daysCount = 31;
+    const clearChartWidth = props.config.boxWidth - generalPadding(props);
+    let dayStepOnChart = clearChartWidth / daysCount;
+    result = day * dayStepOnChart + initialPadding(props);
     return result;
 }
