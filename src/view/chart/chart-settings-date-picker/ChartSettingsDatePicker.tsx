@@ -70,10 +70,18 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
             case ChartPeriodType.MONTH:
                 return DateHelper.getMonthStringCommon(date.getMonth()) + ' ' + date.getFullYear();
             default:
-                const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
-                const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
-                const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
-                return displayDate + '.' + displayMonth + '.' + displayYear
+                let text = '';
+                if (DateHelper.today() === date.getTime()) {
+                    text = 'Сегодня'
+                } else if (DateHelper.yesterday() === date.getTime()) {
+                    text = 'Вчера'
+                } else {
+                    const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
+                    const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
+                    const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
+                    text = displayDate + '.' + displayMonth + '.' + displayYear
+                }
+                return text;
         }
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, CheckBox, ScrollView } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { ChartPeriodType, ChartAvaragePeriodType } from '../../../model/IChart';
+import { ChartPeriodType, ChartAveragePeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
@@ -10,10 +10,11 @@ import { DateHelper } from '../../../utils/DateHelper';
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
     onDateChange: (date: Date) => void;
+    onChangingAveragePeriod: (averagePeriod: ChartAveragePeriodType) => void //TODO:
     date: Date;
     selectedPeriod: ChartPeriodType;
-    selectedAvaragePeriod: ChartAvaragePeriodType;
-    onChangingAvaragePeriod: (avaragePeriod: ChartAvaragePeriodType) => void //TODO:
+    selectedAveragePeriod: ChartAveragePeriodType;
+    glucoseAverageShown?: boolean;
 }
 
 const PERIODS = [
@@ -22,10 +23,10 @@ const PERIODS = [
     ChartPeriodType.THREE_MONTH
 ]
 
-const AVARAGE_PERIOD = [
-    ChartAvaragePeriodType.MONTH,
-    ChartAvaragePeriodType.THREE_MONTH,
-    ChartAvaragePeriodType.SIX_MONTH
+const AVERAGE_PERIOD = [
+    ChartAveragePeriodType.MONTH,
+    ChartAveragePeriodType.THREE_MONTH,
+    ChartAveragePeriodType.SIX_MONTH
 ]
 
 export function ChartSettings(props: ChartSettingsProps) {
@@ -96,14 +97,14 @@ export function ChartSettings(props: ChartSettingsProps) {
                         </View>
                     })}
                 </View>
-                <Text style={styles.scaleAvarageValueTitle}>
+                <Text style={styles.scaleAverageValueTitle}>
                     Наложить график среднего значения глюкозы за период:
                 </Text>
                 <View style={styles.periodChangingButtons}>
-                    {AVARAGE_PERIOD.map(period => {
+                    {AVERAGE_PERIOD.map(period => {
                         let buttonStyle = styles.periodButton;
                         let buttonTextStyle = styles.periodButtonText;
-                        if (period === props.selectedAvaragePeriod) {
+                        if (period === props.selectedAveragePeriod) {
                             buttonStyle = {...buttonStyle, ...styles.periodButtonActive}
                             buttonTextStyle = {...buttonTextStyle, ...styles.periodButtonTextActive}
                         }
@@ -114,10 +115,10 @@ export function ChartSettings(props: ChartSettingsProps) {
                         >
                             <TouchableOpacity
                                 style={styles.periodButtonTouchable}
-                                onPress={() => props.selectedAvaragePeriod != period && props.onChangingAvaragePeriod(period)}
+                                onPress={() => props.selectedAveragePeriod != period && props.onChangingAveragePeriod(period)}
                             >
                                 <Text style={buttonTextStyle}>
-                                    {getAvaragePeriodName(period)}
+                                    {getAveragePeriodName(period)}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -132,11 +133,11 @@ export function ChartSettings(props: ChartSettingsProps) {
                     </Text>
                 </TouchableOpacity>
                 <View style={{}}>
-                    <Text style={styles.scaleAvarageValueTitle}> 
+                    <Text style={styles.scaleAverageValueTitle}> 
                         Отобразить так же для ХЕ и инсулина
                     </Text>
                     <CheckBox
-                        // value={} ???
+                        value={props.glucoseAverageShown}
                         onValueChange={() => {}} //TODO:
                     />
                 </View>
@@ -169,27 +170,27 @@ function getPeriodName(period: ChartPeriodType) {
     }
 }
 
-// function setPreviousDateValueByChartAvaragePeriodType(props: ChartSettingsProps) { //TODO:
-//     switch (props.selectedAvaragePeriod) {
-//         case ChartAvaragePeriodType.MONTH:
+// function setPreviousDateValueByChartAveragePeriodType(props: ChartSettingsProps) { //TODO:
+//     switch (props.selectedAveragePeriod) {
+//         case ChartAveragePeriodType.MONTH:
 //             return DateHelper.getPreviousMonthDate(props.date)
 //         default: return getPreviousDate(props.date)
 //     }
 // }
 
-// function setNextDateValueByChartAvaragePeriodType(props: ChartSettingsProps) {
-//     switch (props.selectedAvaragePeriod) {
-//         case ChartAvaragePeriodType.MONTH:
+// function setNextDateValueByChartAveragePeriodType(props: ChartSettingsProps) {
+//     switch (props.selectedAveragePeriod) {
+//         case ChartAveragePeriodType.MONTH:
 //             return DateHelper.getNextMonthDate(props.date)
 //         default: return getNextDate(props.date)
 //     }
 // }
 
-function getAvaragePeriodName(avaragePeriod: ChartAvaragePeriodType) {
-    switch(avaragePeriod) {
-        case ChartAvaragePeriodType.MONTH: return 'Месяц';
-        case ChartAvaragePeriodType.THREE_MONTH: return '3 месяца';
-        case ChartAvaragePeriodType.SIX_MONTH: return '6 месяца'
+function getAveragePeriodName(averagePeriod: ChartAveragePeriodType) {
+    switch(averagePeriod) {
+        case ChartAveragePeriodType.MONTH: return 'Месяц';
+        case ChartAveragePeriodType.THREE_MONTH: return '3 месяца';
+        case ChartAveragePeriodType.SIX_MONTH: return '6 месяца'
     }
 }
 
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
     periodButtonTextActive: {
         fontWeight: 'bold'
     },
-    scaleAvarageValueTitle: {
+    scaleAverageValueTitle: {
         width: '100%',
         display: 'flex',
 

@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { IAppState } from '../../model/IAppState';
 import { Dispatch, Action } from 'redux';
-import { StyleSheet, View, Text, Alert, Dimensions } from 'react-native';
-import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { shadowOptions } from '../../constant/shadowOptions';
-import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAvaragePeriodType } from '../../model/IChart';
+import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { Hat } from '../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
@@ -111,6 +111,7 @@ export interface ChartWithSettingsState {
     selectedDotId: number,
     selectedPeriod: ChartPeriodType,
     popupShown?: boolean,
+    glucoseAverageShown?: boolean
 }
 
 class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, ChartWithSettingsState> {
@@ -121,9 +122,10 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
             new Date().getDate()
         ),
         selectedPeriod: ChartPeriodType.DAY,
-        selectedAvaragePeriod: ChartAvaragePeriodType.MONTH,
+        selectedAveragePeriod: ChartAveragePeriodType.MONTH,
         selectedDotId: null,
-        popupShown: false
+        popupShown: false,
+        glucoseAverageShown: false,
     }
 
     get generalPadding() {
@@ -175,11 +177,11 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                             onDateChange={this.onCurrentDateChange}
                             date={this.state.currentDate}
                             onChangingPeriod={this.onChangingPeriod}
-                            onChangingAvaragePeriod={this.onChangingAvaragePeriod}
+                            onChangingAveragePeriod={this.onChangingAveragePeriod}
                             selectedPeriod={this.state.selectedPeriod}
-                            selectedAvaragePeriod={this.state.selectedAvaragePeriod}
-
-                        />
+                            selectedAveragePeriod={this.state.selectedAveragePeriod}
+                            glucoseAverageShown={this.state.glucoseAverageShown}
+                        />  
                     </View>
                 </View>
                 <View style={styles.statisticsView}>
@@ -274,9 +276,9 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         this.setState(toStateSet)
     }
 
-    onChangingAvaragePeriod =(avaragePeriod: ChartAvaragePeriodType) => {
-        let toStateSet: any = { selectedAvaragePeriod: avaragePeriod };
-        if(avaragePeriod === ChartAvaragePeriodType.MONTH) { //TODO:
+    onChangingAveragePeriod =(averagePeriod: ChartAveragePeriodType) => {
+        let toStateSet: any = { selectedAveragePeriod: averagePeriod };
+        if(averagePeriod === ChartAveragePeriodType.MONTH) { //TODO:
             // toStateSet.currenDate =    
         }
         this.setState(toStateSet)
