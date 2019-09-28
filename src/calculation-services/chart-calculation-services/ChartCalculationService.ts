@@ -7,12 +7,12 @@ import {
     filterValidEffects, 
     getTrainItemId, 
     getMaxTrainItemId, 
-    getDaysBetweenDates,
     getArrayAverage,
     getDayAfterThatNumber,
     adaptMonthDots,
     getMonthStart
 } from "./ChartCalculationHelper";
+import { DateHelper } from "../../utils/DateHelper";
 
 export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
     const {
@@ -126,18 +126,19 @@ export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData{
 
     const dateFinishedCalculation = getMonthStart(props.currentDate);
     const dayAverages: IChartDot[] = [];
-    let currentDate: number = props.currentDate.getTime();
-    for (let i = 0; i <= getDaysBetweenDates(currentDate, dateFinishedCalculation); i++) {
+    for (let i = 0; i <= DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0); i++) {
         let accumulator: number[] = [];
         const currentDayNotes: INoteList = props.noteListByDay[getDayAfterThatNumber(dateFinishedCalculation, i)] || {};
         Object.keys(currentDayNotes).map(noteId => {
             currentDayNotes[noteId][props.type] != 0 && accumulator.push(currentDayNotes[noteId][props.type])
         })
+        i + 1 <= DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0) &&
         dayAverages.push({
-            x: i,
+            x: i + 1,
             y: getArrayAverage(accumulator),
             id: getDayAfterThatNumber(dateFinishedCalculation, i),
         })
+        
     }
     result = adaptMonthDots(props, dayAverages)
     return result;

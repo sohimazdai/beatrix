@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { AppState } from '../../model/AppState';
+import { IAppState } from '../../model/IAppState';
 import { INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -169,7 +169,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
 }
 
 export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps, NoteListScreenProps>(
-    (state: AppState) => ({
+    (state: IAppState) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch })

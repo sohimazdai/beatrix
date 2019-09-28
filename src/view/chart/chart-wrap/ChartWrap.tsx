@@ -34,40 +34,40 @@ export function ChartWrap(props: ChartWrapProps) {
         selectedDotId,
         config
     } = props;
-    let basicDotsData: ChartDotsData = {}
+    let basicDotsData: ChartDotsData = React.useMemo(
+        () => basicDotsCalculator(),
+        [currentDate, noteList, selectedPeriod]
+    );
     let polylineDotsData: ChartDotsData = React.useMemo(
         () => polylineCalculator(),
         [currentDate, noteList, selectedPeriod]
     )
     function polylineCalculator() {
-        let polylineDotsData: ChartDotsData = {};
         switch (selectedPeriod) {
             case ChartPeriodType.DAY:
-                basicDotsData = calculateDayChartDots(Object.assign({ ...props }, { type: ChartValueType.GLUCOSE }))
                 switch (type) {
                     case ChartValueType.GLUCOSE:
-                        polylineDotsData = basicDotsData;
-                        break;
+                        return basicDotsData;
                     case ChartValueType.INSULIN:
                     case ChartValueType.BREAD_UNITS:
-                        polylineDotsData = calculateDayChartDots(props)
-                        break;
+                        return calculateDayChartDots(props)
                 }
-                break;
             case ChartPeriodType.MONTH:
-                basicDotsData = calculateMonthChartDots(props)
-                polylineDotsData = calculateMonthChartDots(props)
-                break; 
+                return calculateMonthChartDots(props)
             case ChartPeriodType.THREE_MONTH:
-                switch (type) {
-                    case ChartValueType.GLUCOSE:
-                    case ChartValueType.INSULIN:
-                    case ChartValueType.BREAD_UNITS:
-                }
+        }
+    }
+
+    function basicDotsCalculator() {
+        switch (selectedPeriod) {
+            case ChartPeriodType.DAY:
+                return calculateDayChartDots(Object.assign({ ...props }, { type: ChartValueType.GLUCOSE }))
+            case ChartPeriodType.MONTH:
+                return calculateMonthChartDots(props)
+            case ChartPeriodType.THREE_MONTH:
                 break;
 
         }
-        return polylineDotsData;
     }
 
     const highlights: IChartDot[] = [...basicDotsData.events, ...basicDotsData.dots]

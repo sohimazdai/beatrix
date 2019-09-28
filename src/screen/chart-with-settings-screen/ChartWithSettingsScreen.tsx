@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { AppState } from '../../model/AppState';
+import { IAppState } from '../../model/IAppState';
 import { Dispatch, Action } from 'redux';
 import { StyleSheet, View, Text, Alert, Dimensions } from 'react-native';
 import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
@@ -15,6 +15,8 @@ import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
 import { ChartPopup } from '../../view/chart/chart-popup/ChartPopup';
+import { DateHelper } from '../../utils/DateHelper';
+import { getArrayAverage } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -193,7 +195,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     dateTitle={this.state.currentDate}
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
-                    note={this.props.noteList[this.state.selectedDotId]}
+                    note={this.getNoteForChartPopup()}
                 />
             </View>
         )
@@ -262,8 +264,12 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
 
     onChangingPeriod = (period: ChartPeriodType) => {
         let toStateSet: any = { selectedPeriod: period };
-        if (period === ChartPeriodType.MONTH) {
-            // toStateSet.currentDate = 
+        if (this.state.selectedPeriod === ChartPeriodType.MONTH && period === ChartPeriodType.DAY) {
+            if ( this.state.currentDate.getTime() > DateHelper.today()) {
+                toStateSet.currentDate = new Date(DateHelper.today());
+            }
+        } else if (this.state.selectedPeriod === ChartPeriodType.DAY && period === ChartPeriodType.MONTH) {
+            toStateSet.currentDate = DateHelper.getDifferentMonthDate(this.state.currentDate, 0)
         }
         this.setState(toStateSet)
     }
@@ -275,6 +281,31 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         }
         this.setState(toStateSet)
     }
+    getNoteForChartPopup () {
+        switch(this.state.selectedPeriod) {
+            case ChartPeriodType.DAY:
+                return this.props.noteList[this.state.selectedDotId]
+            case ChartPeriodType.MONTH:
+                const dayNotes = this.props.noteListByDay[this.state.selectedDotId];
+                let glucoseArray = [];
+                let breadUnitsArray = [];
+                let insulinArray = [];
+                let longInsulinArray = [];
+                dayNotes && Object.keys(dayNotes) && Object.keys(dayNotes).map(noteId => {
+                    dayNotes[noteId].glucose && glucoseArray.push(dayNotes[noteId].glucose);
+                    dayNotes[noteId].breadUnits && breadUnitsArray.push(dayNotes[noteId].breadUnits);
+                    dayNotes[noteId].insulin && insulinArray.push(dayNotes[noteId].insulin);
+                    dayNotes[noteId].longInsulin && longInsulinArray.push(dayNotes[noteId].longInsulin);
+                })
+                return {
+                    glucose: Math.round(getArrayAverage(glucoseArray) * 10) / 10,
+                    breadUnits: Math.round(getArrayAverage(breadUnitsArray) * 10) / 10,
+                    insulin: Math.round(getArrayAverage(insulinArray) * 10) / 10,
+                    longInsulin: Math.round(getArrayAverage(longInsulinArray) * 10) / 10,
+                    date: this.state.selectedDotId
+                }
+        }
+    }
 
     onPopupClose = () => {
         this.setState({
@@ -285,7 +316,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
 }
 
 export const ChartWithSettingsConnect = connect(
-    (state: AppState) => ({
+    (state: IAppState) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList),
         noteList: state.noteList,
     }),

@@ -1,6 +1,7 @@
 import React from 'react';
 import { IChartDot, IChartConfiguration, ChartPeriodType, ChartValueType } from '../../../model/IChart';
 import { Line } from 'react-native-svg';
+import { DateHelper } from '../../../utils/DateHelper';
 
 export interface ChartNetProps {
     maxValue?: number
@@ -21,7 +22,6 @@ export interface ChartNetProps {
 }
 
 const VERTICAL_DAY_LINES_COUNT = 8;
-const VERTICAL_MONTH_LINES_COUNT = 31;
 const MIN_CRITICAL_DEFAULT = 4;
 const MAX_CRITICAL_DEFAULT = 8;
 const MAX_CRITICAL_COLOR_DEFAULT = '#FF6161';
@@ -95,7 +95,6 @@ function verticalLines(props: ChartNetProps) {
     switch (props.periodType) {
         case ChartPeriodType.DAY:
             lapStep = getAvailableZone(props.cfg.boxWidth, props) / VERTICAL_DAY_LINES_COUNT;
-
             for (let i = 0; i < VERTICAL_DAY_LINES_COUNT; i++) {
                 res.push({
                     x: res[res.length - 1].x + lapStep,
@@ -115,8 +114,9 @@ function verticalLines(props: ChartNetProps) {
                 />
             })
         case ChartPeriodType.MONTH:
-            lapStep = getAvailableZone(props.cfg.boxWidth, props) / VERTICAL_MONTH_LINES_COUNT;
-            for (let i = 0; i < VERTICAL_MONTH_LINES_COUNT; i++) {
+            const verticalMonthLinesCount = DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0);
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / verticalMonthLinesCount;
+            for (let i = 0; i < verticalMonthLinesCount; i++) {
                 res.push({
                     x: res[res.length - 1].x + lapStep,
                     y: res[res.length - 1].y,
@@ -130,7 +130,7 @@ function verticalLines(props: ChartNetProps) {
                     y1={dot.y}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={getVerticalLineColor(props, index + 1)}
+                    stroke={getVerticalLineColor(props, index )}
                     strokeWidth={1}
                 />
             })
@@ -140,6 +140,7 @@ function verticalLines(props: ChartNetProps) {
 function horizontalLines(props: ChartNetProps) {
     switch (props.periodType) {
         case ChartPeriodType.DAY:
+        case ChartPeriodType.MONTH:
             const firstY = props.cfg.reversedY ? props.cfg.basicPadding : props.cfg.basicPadding * 2;
             const firstX = props.cfg.basicPadding;
             const range = props.maxValue - props.minValue;
@@ -174,15 +175,15 @@ function getAvailableZone(parameter, props: ChartNetProps) {
     return parameter - 3 * props.cfg.basicPadding;
 }
 
-function getVerticalLineColor(props: ChartNetProps, date: number): string {
+function getVerticalLineColor(props: ChartNetProps, dayOfMonth: number): string {
     switch (props.selectedPeriod) {
         case ChartPeriodType.DAY:
             return 'rgba(102, 102, 102, 0.38)';
         case ChartPeriodType.MONTH:
             const dayOfWeek = new Date(
                 props.currentDate.getFullYear(),
-                props.currentDate.getMonth() - 1,
-                date
+                props.currentDate.getMonth(),
+                dayOfMonth
             ).getDay()
             switch (dayOfWeek) {
                 case 1:

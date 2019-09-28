@@ -1,9 +1,9 @@
 export class DateHelper {
-    get today() {
+    static today() {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
     }
 
-    get yesterday() {
+    static yesterday() {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1).getTime();
     }
 
@@ -19,42 +19,22 @@ export class DateHelper {
         ).getTime()
     }
 
-    static getPreviousMonthDate(date_: Date) {
+    static getDifferentMonthDate(date_: Date | number, diff: number) {
         let date = date_;
         if (typeof date != 'string') {
             date = new Date(date)
         }
         return new Date(
             date.getFullYear(),
-            date.getMonth() - 1,
-            DateHelper.getMaxDateOfPreviousMonth(date)
+            date.getMonth() + diff ,
+            DateHelper.getMaxDateOfDifferentMonth(date, diff)
         )
     }
 
-    static getNextMonthDate(date_: Date | number) {
-        let date = date_;
-        if (typeof date != 'string') {
-            date = new Date(date)
-        }
+    static getMaxDateOfDifferentMonth(date: Date, diff: number) {
         return new Date(
             date.getFullYear(),
-            date.getMonth() + 1,
-            DateHelper.getMaxDateOfNextMonth(date)
-        )
-    }
-
-    static getMaxDateOfNextMonth(date: Date) {
-        return new Date(
-            date.getFullYear(),
-            date.getMonth() + 2,
-            0
-        ).getDate()
-    }
-
-    static getMaxDateOfPreviousMonth(date: Date) {
-        return new Date(
-            date.getFullYear(),
-            date.getMonth(),
+            date.getMonth() + 1 + diff,
             0
         ).getDate()
     }

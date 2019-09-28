@@ -1,7 +1,6 @@
 import React from 'react';
 import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { AppState } from '../../../model/AppState';
 import { Action, Dispatch } from 'redux';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalPickerType } from '../../../model/IModal';
@@ -24,7 +23,6 @@ export interface FullProps extends DispatchToProps, ChartSettingsDatePickerProps
 
 export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
     render() {
-        const { date } = this.props;
         return (
             <View style={styles.view}>
                 <TouchableOpacity
@@ -70,7 +68,7 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
         const { date } = this.props;
         switch (this.props.selectedPeriod) {
             case ChartPeriodType.MONTH:
-                return DateHelper.getMonthStringCommon(date.getMonth());
+                return DateHelper.getMonthStringCommon(date.getMonth()) + ' ' + date.getFullYear();
             default:
                 const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
                 const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
@@ -88,7 +86,7 @@ export const ChartSettingsDatePickerConnect = connect<{}, DispatchToProps>(
 
 const styles = StyleSheet.create({
     view: {
-        width: 150,
+        width: 170,
         height: 30,
 
         borderWidth: 1,
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
         marginLeft: 7,
 
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 17,
         color: ThemeColor.DIMGRAY,
     }
 })

@@ -1,7 +1,6 @@
 import React from 'react'
-import Svg, { Polyline, LinearGradient, Stop, Path } from 'react-native-svg';
+import { Polyline, LinearGradient, Stop, Path } from 'react-native-svg';
 import { IChartDot } from '../../../model/IChart';
-import { domainToASCII } from 'url';
 
 export enum PolylineType {
     BEZIER = 'bezier',

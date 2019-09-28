@@ -6,6 +6,7 @@ import {
     IChartConfiguration,
     IChartTrain
 } from "../../model/IChart";
+import { DateHelper } from "../../utils/DateHelper";
 
 export function adaptDayDots(props: ChartWrapProps, dots: IChartDot[], events?: IChartDot[], date?: Date): ChartDotsData {
     let result: ChartDotsData = {};
@@ -179,10 +180,6 @@ export function filterValidEffects(train: IChartTrain): IChartDot[] {
     return result;
 }
 
-export function getDaysBetweenDates(dateAfter: number, dateBefore: number) {
-    return (dateAfter - dateBefore) / (1000 * 60 * 60 * 24)
-}
-
 export function getArrayAverage(array: any[]) {
     let sum = 0;
     array.map(item => sum = item + sum);
@@ -230,7 +227,7 @@ export function adaptMonthDots(props: ChartWrapProps, dots: IChartDot[]): ChartD
 
 function adaptMonthTime(props: ChartWrapProps, day: number): number {
     let result = 0;
-    const daysCount = 31;
+    const daysCount = DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0);
     const clearChartWidth = props.config.boxWidth - generalPadding(props);
     let dayStepOnChart = clearChartWidth / daysCount;
     result = day * dayStepOnChart + initialPadding(props);

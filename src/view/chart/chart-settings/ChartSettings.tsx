@@ -148,7 +148,7 @@ export function ChartSettings(props: ChartSettingsProps) {
 function setPreviousDateValueByChartPeriodType(props: ChartSettingsProps) {
     switch (props.selectedPeriod) {
         case ChartPeriodType.MONTH:
-            return DateHelper.getPreviousMonthDate(props.date)
+            return DateHelper.getDifferentMonthDate(props.date, - 1)
         default: return getPreviousDate(props.date)
     }
 }
@@ -156,7 +156,7 @@ function setPreviousDateValueByChartPeriodType(props: ChartSettingsProps) {
 function setNextDateValueByChartPeriodType(props: ChartSettingsProps) {
     switch (props.selectedPeriod) {
         case ChartPeriodType.MONTH:
-            return DateHelper.getNextMonthDate(props.date)
+            return DateHelper.getDifferentMonthDate(props.date, 1)
         default: return getNextDate(props.date)
     }
 }

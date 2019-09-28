@@ -23,7 +23,7 @@ import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-n
 import { ThemeColor } from '../../constant/ThemeColor';
 import { Hat } from '../../component/hat/Hat';
 import * as lodash from "lodash"
-import { AppState } from '../../model/AppState';
+import { IAppState } from '../../model/IAppState';
 import { shadowOptions } from '../../constant/shadowOptions';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalConfirm } from '../../model/IModal';
@@ -298,7 +298,7 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
 }
 
 export const NoteEditingScreenConnect = connect<NoteEditingStateTProps, NoteEditingDispatchProps>(
-    (state: AppState) => ({ noteList: state.noteList }),
+    (state: IAppState) => ({ noteList: state.noteList }),
     (dispatch: Dispatch<Action>) => ({ dispatch })
 )(NoteEditingScreen)
 
