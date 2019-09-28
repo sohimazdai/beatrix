@@ -181,7 +181,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                             selectedPeriod={this.state.selectedPeriod}
                             selectedAveragePeriod={this.state.selectedAveragePeriod}
                             glucoseAverageShown={this.state.glucoseAverageShown}
-                        />  
+                        />
                     </View>
                 </View>
                 <View style={styles.statisticsView}>
@@ -193,8 +193,8 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     onBackPress={this.props.navigation.goBack}
                     title={this.getHatTitle()}
                 />
-                <ChartPopup 
-                    dateTitle={this.state.currentDate}
+                <ChartPopup
+                    dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
                     note={this.getNoteForChartPopup()}
@@ -204,7 +204,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     getHatTitle() {
-        switch(this.state.selectedPeriod) {
+        switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 return 'Дневной график'
             case ChartPeriodType.MONTH:
@@ -214,19 +214,32 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         }
     }
 
-    renderNetXTitles() {
+    getChartPopupTitle() {
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
-                const highlightsNumber = 8;
-                const highlightsTitles = [3, 6, 9, 12, 15, 18, 21];
-                const newWidth = chartConfig.breadUnits.boxWidth - 3 * chartConfig.breadUnits.basicPadding;
-                const titleWidth = newWidth / highlightsNumber;
+                return this.state.currentDate
+            case ChartPeriodType.MONTH:
+                return new Date(this.state.selectedDotId)
+        }
+    }
+
+    renderNetXTitles() {
+        let highlightsNumber;
+        let highlightsTitles = [];
+        let newWidth = chartConfig.breadUnits.boxWidth - 3 * chartConfig.breadUnits.basicPadding;
+        let titleWidth;
+        switch (this.state.selectedPeriod) {
+            case ChartPeriodType.DAY:
+                highlightsNumber = 10;
+                highlightsTitles = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+                newWidth = chartConfig.breadUnits.boxWidth;
+                titleWidth = 20;
                 return <View
                     style={{
                         ...styles.highightTitlesView,
-                        width: newWidth,
-                        paddingLeft: titleWidth / 2,
-                        paddingRight: titleWidth / 2
+                        width: newWidth + 5,
+                        // paddingLeft: 3,
+                        paddingRight: 3
                     }}
                 >
                     {highlightsTitles.map(title => {
@@ -238,6 +251,57 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         </Text>
                     })}
                 </View>
+            case ChartPeriodType.MONTH:
+                switch (DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0)) {
+                    case 31:
+                    case 30:
+                        highlightsNumber = 7;
+                        highlightsTitles = [0, 5, 10, 15, 20, 25, 30];
+                        newWidth = chartConfig.breadUnits.boxWidth;
+                        titleWidth = 20;
+                        return <View
+                            style={{
+                                ...styles.highightTitlesView,
+                                width: newWidth + 5,
+                                paddingRight: DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0) === 30 ?
+                                    3 :
+                                    12
+                            }}
+                        >
+                            {highlightsTitles.map(title => {
+                                return <Text
+                                    key={title}
+                                    style={{ ...styles.highightTitle, width: titleWidth }}
+                                >
+                                    {title}
+                                </Text>
+                            })}
+                        </View>
+                    case 28:
+                    case 29:
+                        highlightsNumber = 6;
+                        highlightsTitles = [0, 5, 10, 15, 20, 25];
+                        newWidth = chartConfig.breadUnits.boxWidth;
+                        titleWidth = 20;
+                        return <View
+                            style={{
+                                ...styles.highightTitlesView,
+                                width: newWidth + 5,
+                                paddingRight: DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0) === 28 ?
+                                    36 :
+                                    45
+                            }}
+                        >
+                            {highlightsTitles.map(title => {
+                                return <Text
+                                    key={title}
+                                    style={{ ...styles.highightTitle, width: titleWidth }}
+                                >
+                                    {title}
+                                </Text>
+                            })}
+                        </View>
+                }
         }
     }
 
@@ -258,7 +322,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     onDotPress = (dotId: number) => {
-        this.setState({ 
+        this.setState({
             selectedDotId: dotId,
             popupShown: true
         })
@@ -267,7 +331,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     onChangingPeriod = (period: ChartPeriodType) => {
         let toStateSet: any = { selectedPeriod: period };
         if (this.state.selectedPeriod === ChartPeriodType.MONTH && period === ChartPeriodType.DAY) {
-            if ( this.state.currentDate.getTime() > DateHelper.today()) {
+            if (this.state.currentDate.getTime() > DateHelper.today()) {
                 toStateSet.currentDate = new Date(DateHelper.today());
             }
         } else if (this.state.selectedPeriod === ChartPeriodType.DAY && period === ChartPeriodType.MONTH) {
@@ -276,15 +340,15 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         this.setState(toStateSet)
     }
 
-    onChangingAveragePeriod =(averagePeriod: ChartAveragePeriodType) => {
+    onChangingAveragePeriod = (averagePeriod: ChartAveragePeriodType) => {
         let toStateSet: any = { selectedAveragePeriod: averagePeriod };
-        if(averagePeriod === ChartAveragePeriodType.MONTH) { //TODO:
+        if (averagePeriod === ChartAveragePeriodType.MONTH) { //TODO:
             // toStateSet.currenDate =    
         }
         this.setState(toStateSet)
     }
-    getNoteForChartPopup () {
-        switch(this.state.selectedPeriod) {
+    getNoteForChartPopup() {
+        switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 return this.props.noteList[this.state.selectedDotId]
             case ChartPeriodType.MONTH:
@@ -333,7 +397,7 @@ const styles = StyleSheet.create({
     },
     viewGradient: {
         position: 'absolute',
-
+ 
         left: 0,
         top: 0,
 
