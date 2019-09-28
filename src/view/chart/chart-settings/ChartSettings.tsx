@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, CheckBox, ScrollView } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { ChartPeriodType, ChartAvarageValueOfPeriodType } from '../../../model/IChart';
+import { ChartPeriodType, ChartAvaragePeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
@@ -12,8 +12,8 @@ export interface ChartSettingsProps {
     onDateChange: (date: Date) => void;
     date: Date;
     selectedPeriod: ChartPeriodType;
-    // selectedAvarageValueOfPeriod: ChartAvarageValueOfPeriodType;
-    // onChangeaAvarageValueOfPeriod: (avaragePeriod: ChartAvarageValueOfPeriodType) => void //TODO:
+    selectedAvaragePeriod: ChartAvaragePeriodType;
+    onChangingAvaragePeriod: (avaragePeriod: ChartAvaragePeriodType) => void //TODO:
 }
 
 const PERIODS = [
@@ -22,11 +22,11 @@ const PERIODS = [
     ChartPeriodType.THREE_MONTH
 ]
 
-// const AVARAGEVALUEOFPERIOD = [
-//     ChartAvarageValueOfPeriodType.MONTH,
-//     ChartAvarageValueOfPeriodType.THREE_MONTH,
-//     ChartAvarageValueOfPeriodType.SIX_MONTH
-// ]
+const AVARAGE_PERIOD = [
+    ChartAvaragePeriodType.MONTH,
+    ChartAvaragePeriodType.THREE_MONTH,
+    ChartAvaragePeriodType.SIX_MONTH
+]
 
 export function ChartSettings(props: ChartSettingsProps) {
     const today = new Date(
@@ -34,7 +34,7 @@ export function ChartSettings(props: ChartSettingsProps) {
         new Date().getMonth(),
         new Date().getDate()
     );
-    return <View style={styles.chartSettingsView}>
+    return <View style={styles.chartSettingsView}> 
         <View style={styles.dateInputBlock}>
             <View style={styles.dateClicker}>
                 <TouchableOpacity
@@ -96,14 +96,14 @@ export function ChartSettings(props: ChartSettingsProps) {
                         </View>
                     })}
                 </View>
-                {/* <Text style={styles.scaleAvarageValueTitle}>
+                <Text style={styles.scaleAvarageValueTitle}>
                     Наложить график среднего значения глюкозы за период:
                 </Text>
                 <View style={styles.periodChangingButtons}>
-                    {AVARAGEVALUEOFPERIOD.map(period => {
+                    {AVARAGE_PERIOD.map(period => {
                         let buttonStyle = styles.periodButton;
                         let buttonTextStyle = styles.periodButtonText;
-                        if (period === props.selectedAvarageValueOfPeriod) {
+                        if (period === props.selectedAvaragePeriod) {
                             buttonStyle = {...buttonStyle, ...styles.periodButtonActive}
                             buttonTextStyle = {...buttonTextStyle, ...styles.periodButtonTextActive}
                         }
@@ -114,15 +114,32 @@ export function ChartSettings(props: ChartSettingsProps) {
                         >
                             <TouchableOpacity
                                 style={styles.periodButtonTouchable}
-                                onPress={() => props.selectedAvarageValueOfPeriod != period && props.onChangeaAvarageValueOfPeriod(period)}
+                                onPress={() => props.selectedAvaragePeriod != period && props.onChangingAvaragePeriod(period)}
                             >
                                 <Text style={buttonTextStyle}>
-                                    {gerAvaragePeriod(period)}
+                                    {getAvaragePeriodName(period)}
                                 </Text>
                             </TouchableOpacity>
                         </View>
                     })}
-                </View> */}
+                </View>
+                <TouchableOpacity //TODO: add mark-up and styles
+                    style={styles.periodButtonTouchable}
+                    onPress={() => {}} //TODO: 
+                >
+                    <Text style={styles.dontDisplayButton}>
+                        Не отображать
+                    </Text>
+                </TouchableOpacity>
+                <View style={{}}>
+                    <Text style={styles.scaleAvarageValueTitle}> 
+                        Отобразить так же для ХЕ и инсулина
+                    </Text>
+                    <CheckBox
+                        // value={} ???
+                        onValueChange={() => {}} //TODO:
+                    />
+                </View>
             </View>
         </View>
     </View>
@@ -152,13 +169,29 @@ function getPeriodName(period: ChartPeriodType) {
     }
 }
 
-// function gerAvaragePeriod(avaragePeriod: ChartAvarageValueOfPeriodType) {
-//     switch(avaragePeriod) {
-//         case ChartAvarageValueOfPeriodType.MONTH: return 'Месяц';
-//         case ChartAvarageValueOfPeriodType.THREE_MONTH: return '3 месяца';
-//         case ChartAvarageValueOfPeriodType.SIX_MONTH: return '6 месяца'
+// function setPreviousDateValueByChartAvaragePeriodType(props: ChartSettingsProps) { //TODO:
+//     switch (props.selectedAvaragePeriod) {
+//         case ChartAvaragePeriodType.MONTH:
+//             return DateHelper.getPreviousMonthDate(props.date)
+//         default: return getPreviousDate(props.date)
 //     }
 // }
+
+// function setNextDateValueByChartAvaragePeriodType(props: ChartSettingsProps) {
+//     switch (props.selectedAvaragePeriod) {
+//         case ChartAvaragePeriodType.MONTH:
+//             return DateHelper.getNextMonthDate(props.date)
+//         default: return getNextDate(props.date)
+//     }
+// }
+
+function getAvaragePeriodName(avaragePeriod: ChartAvaragePeriodType) {
+    switch(avaragePeriod) {
+        case ChartAvaragePeriodType.MONTH: return 'Месяц';
+        case ChartAvaragePeriodType.THREE_MONTH: return '3 месяца';
+        case ChartAvaragePeriodType.SIX_MONTH: return '6 месяца'
+    }
+}
 
 function getPreviousDate(date: Date) {
     return new Date(
@@ -312,5 +345,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 21,
         color: '#333333',
+    },
+    dontDisplayButton: {
+        fontSize: 14,
+        lineHeight: 16,
     },
 })

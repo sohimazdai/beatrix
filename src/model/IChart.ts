@@ -18,7 +18,7 @@ export enum ChartPeriodType {
     THREE_MONTH = '3 month'
 }
 
-export enum ChartAvarageValueOfPeriodType {
+export enum ChartAvaragePeriodType {
     MONTH = 'month',
     THREE_MONTH = '3 month',
     SIX_MONTH = '6 month'

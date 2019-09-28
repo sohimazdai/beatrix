@@ -7,7 +7,7 @@ import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList'
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { shadowOptions } from '../../constant/shadowOptions';
-import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType, IChartConfiguration } from '../../model/IChart';
+import { ChartAxisType, IChartDot, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAvaragePeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { Hat } from '../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
@@ -119,6 +119,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
             new Date().getDate()
         ),
         selectedPeriod: ChartPeriodType.DAY,
+        selectedAvaragePeriod: ChartAvaragePeriodType.MONTH,
         selectedDotId: null,
         popupShown: false
     }
@@ -172,7 +173,10 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                             onDateChange={this.onCurrentDateChange}
                             date={this.state.currentDate}
                             onChangingPeriod={this.onChangingPeriod}
+                            onChangingAvaragePeriod={this.onChangingAvaragePeriod}
                             selectedPeriod={this.state.selectedPeriod}
+                            selectedAvaragePeriod={this.state.selectedAvaragePeriod}
+
                         />
                     </View>
                 </View>
@@ -260,6 +264,14 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         let toStateSet: any = { selectedPeriod: period };
         if (period === ChartPeriodType.MONTH) {
             // toStateSet.currentDate = 
+        }
+        this.setState(toStateSet)
+    }
+
+    onChangingAvaragePeriod =(avaragePeriod: ChartAvaragePeriodType) => {
+        let toStateSet: any = { selectedAvaragePeriod: avaragePeriod };
+        if(avaragePeriod === ChartAvaragePeriodType.MONTH) { //TODO:
+            // toStateSet.currenDate =    
         }
         this.setState(toStateSet)
     }
