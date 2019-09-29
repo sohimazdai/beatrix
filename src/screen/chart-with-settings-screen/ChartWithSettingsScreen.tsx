@@ -17,6 +17,7 @@ import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
 import { ChartPopup } from '../../view/chart/chart-popup/ChartPopup';
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -148,58 +149,61 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     colors={['#FFF2CF', '#4249FF']}
                     style={styles.viewGradient}
                 />
-                <View
-                    style={styles.chartWithSettingsView}
-                >
-                    <View style={styles.chartView}>
-                        <LinearGradient
-                            colors={['#163B50', '#3E2626']}
-                            style={styles.chartGradient}
-                        >
-                            {chartsToRender.map(type => {
-                                return <ChartWrap
-                                    key={type}
-                                    type={type}
-                                    config={chartConfig[type]}
-                                    selectedPeriod={this.state.selectedPeriod}
-                                    selectedDotId={this.state.selectedDotId}
-                                    currentDate={this.state.currentDate}
-                                    noteList={this.props.noteList}
-                                    noteListByDay={this.props.noteListByDay}
-                                    onDotPress={this.onDotPress}
-                                />
-                            })}
-                            {this.renderNetXTitles()}
-                        </LinearGradient>
+                <ScrollView style={styles.scrollView}>
+                    <View
+                        style={styles.chartWithSettingsView}
+                    >
+                        <View style={styles.chartView}>
+                            <LinearGradient
+                                colors={['#163B50', '#3E2626']}
+                                style={styles.chartGradient}
+                            >
+                                {chartsToRender.map(type => {
+                                    return <ChartWrap
+                                        key={type}
+                                        type={type}
+                                        config={chartConfig[type]}
+                                        selectedPeriod={this.state.selectedPeriod}
+                                        selectedDotId={this.state.selectedDotId}
+                                        currentDate={this.state.currentDate}
+                                        noteList={this.props.noteList}
+                                        noteListByDay={this.props.noteListByDay}
+                                        onDotPress={this.onDotPress}
+                                    />
+                                })}
+                                {this.renderNetXTitles()}
+                            </LinearGradient>
+                        </View>
+                        <View style={styles.settingsView}>
+                            <ChartSettings
+                                onDateChange={this.onCurrentDateChange}
+                                date={this.state.currentDate}
+                                onChangingPeriod={this.onChangingPeriod}
+                                onChangingAveragePeriod={this.onChangingAveragePeriod}
+                                selectedPeriod={this.state.selectedPeriod}
+                                selectedAveragePeriod={this.state.selectedAveragePeriod}
+                                glucoseAverageShown={this.state.glucoseAverageShown}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.settingsView}>
-                        <ChartSettings
-                            onDateChange={this.onCurrentDateChange}
-                            date={this.state.currentDate}
-                            onChangingPeriod={this.onChangingPeriod}
-                            onChangingAveragePeriod={this.onChangingAveragePeriod}
-                            selectedPeriod={this.state.selectedPeriod}
-                            selectedAveragePeriod={this.state.selectedAveragePeriod}
-                            glucoseAverageShown={this.state.glucoseAverageShown}
-                        />
+                    <View>
+                        <Text style={styles.statisticsViewText}>
+                            Statisctics are here
+                        </Text>
                     </View>
-                </View>
-                <View style={styles.statisticsView}>
-                    <Text>
-                        Statisctics are here
-                    </Text>
-                </View>
-                <Hat
-                    onBackPress={this.props.navigation.goBack}
-                    title={this.getHatTitle()}
-                />
-                <ChartPopup
-                    dateTitle={this.getChartPopupTitle()}
-                    shown={this.state.popupShown}
-                    onClose={this.onPopupClose}
-                    note={this.getNoteForChartPopup()}
-                />
+                    <Hat
+                        onBackPress={this.props.navigation.goBack}
+                        title={this.getHatTitle()}
+                    />
+                    <ChartPopup
+                        dateTitle={this.getChartPopupTitle()}
+                        shown={this.state.popupShown}
+                        onClose={this.onPopupClose}
+                        note={this.getNoteForChartPopup()}
+                    />
+                </ScrollView>
             </View>
+            
         )
     }
 
@@ -395,6 +399,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
+    scrollView: {
+        flex:1,
+        width: '100%',
+        height: '100%',
+    },
     viewGradient: {
         position: 'absolute',
  
@@ -514,5 +523,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     statisticsView: {
+    },
+    statisticsViewText: {
+        textAlign: 'center',
     }
 })

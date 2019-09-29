@@ -124,11 +124,14 @@ export function ChartSettings(props: ChartSettingsProps) {
                         </View>
                     })}
                 </View>
+                <Text style={styles.scaleAverageValueTitle}> 
+                    {/* TODO: */}
+                </Text>
                 <TouchableOpacity //TODO: add mark-up and styles
                     style={styles.periodButtonTouchable}
                     onPress={() => {}} //TODO: 
                 >
-                    <Text style={styles.dontDisplayButton}>
+                    <Text style={styles.dontDisplayButtonTouchable}>
                         Не отображать
                     </Text>
                 </TouchableOpacity>
@@ -343,11 +346,26 @@ const styles = StyleSheet.create({
 
         justifyContent: 'center',
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 14,
         lineHeight: 21,
         color: '#333333',
     },
-    dontDisplayButton: {
+    dontDisplayButtonTouchable: {
+        display: 'flex',
+        width: 100,
+        height: 25,
+
+        borderWidth: 2,
+
+        ...shadowOptions,
+        borderRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: ThemeColor.WHITE,
+        backgroundColor: ThemeColor.WHITE,
+        color: ThemeColor.TEXT_DARK_GRAY,
+    },
+    dontDisplayButtonText: {
         fontSize: 14,
         lineHeight: 16,
     },
