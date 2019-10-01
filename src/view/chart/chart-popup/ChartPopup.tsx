@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Button } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Button, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { INoteListNote } from '../../../model/INoteList';
+import { DownTopPopup } from '../../../component/popup/DownTopPopup';
 
 export interface ChartPopupProps {
     shown?: boolean
@@ -12,7 +13,7 @@ export interface ChartPopupProps {
 }
 
 export function ChartPopup(props: ChartPopupProps) {
-    return props.shown &&
+    return <DownTopPopup hidden={!props.shown}>
         <LinearGradient
             style={styles.popupGradient}
             colors={['#FFB4B4', '#D6E5ED']}
@@ -23,7 +24,7 @@ export function ChartPopup(props: ChartPopupProps) {
                 </Text>
             </View>
             {
-                Object.keys(props.note).map(key => {
+                props.note && Object.keys(props.note) && Object.keys(props.note).map(key => {
                     return <Text
                         key={key}
                     >
@@ -31,11 +32,12 @@ export function ChartPopup(props: ChartPopupProps) {
                     </Text>
                 })
             }
-        <Button
-            title="окейшн"
-            onPress={props.onClose}
-        />
+            <Button
+                title="окейшн"
+                onPress={props.onClose}
+            />
         </LinearGradient>
+    </DownTopPopup>
 }
 
 function renderDate(day: number) {
@@ -61,9 +63,18 @@ function renderDate(day: number) {
 }
 
 const styles = StyleSheet.create({
+    animatedView: {
+        width: '100%',
+        display: 'flex',
+
+        borderRadius: 25,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        backgroundColor: ThemeColor.WHITE,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     popupGradient: {
-        position: 'absolute',
-        bottom: 0,
         width: '100%',
         display: 'flex',
 

@@ -195,15 +195,15 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         onBackPress={this.props.navigation.goBack}
                         title={this.getHatTitle()}
                     />
-                    <ChartPopup
-                        dateTitle={this.getChartPopupTitle()}
-                        shown={this.state.popupShown}
-                        onClose={this.onPopupClose}
-                        note={this.getNoteForChartPopup()}
-                    />
                 </ScrollView>
+                <ChartPopup
+                    dateTitle={this.getChartPopupTitle()}
+                    shown={this.state.popupShown}
+                    onClose={this.onPopupClose}
+                    note={this.getNoteForChartPopup()}
+                />
             </View>
-            
+
         )
     }
 
@@ -400,13 +400,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrollView: {
-        flex:1,
+        flex: 1,
         width: '100%',
         height: '100%',
     },
     viewGradient: {
         position: 'absolute',
- 
+
         left: 0,
         top: 0,
 
