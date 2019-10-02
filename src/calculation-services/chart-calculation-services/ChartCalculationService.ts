@@ -10,7 +10,8 @@ import {
     getArrayAverage,
     getDayAfterThatNumber,
     adaptMonthDots,
-    getMonthStart
+    getMonthStart,
+    getWeekDaysNumbers
 } from "./ChartCalculationHelper";
 import { DateHelper } from "../../utils/DateHelper";
 
@@ -141,5 +142,27 @@ export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData{
         
     }
     result = adaptMonthDots(props, dayAverages)
+    return result;
+}
+
+export function calculateThreeMonthChartDots(props: ChartWrapProps): ChartDotsData {
+    let result: ChartDotsData = {};
+    let weekAverages: IChartDot[] = [];
+    let weekNumber = 14;
+    for (let i = 0; i < weekNumber; i++) {
+        let weekDotsValues: number[] = [];
+        let weekDaysIds = getWeekDaysNumbers(DateHelper.getWeekAfterOrBefore(props.currentDate, -i));
+        weekDaysIds.map(weekDayId => {
+            props.noteListByDay[weekDayId] && Object.keys(props.noteListByDay[weekDayId]).map(noteId => {
+                props.noteList[noteId][props.type] && weekDotsValues.push(props.noteList[noteId][props.type])
+            })
+        })
+        weekAverages.push({
+            x: weekNumber - i,
+            y: Math.round(getArrayAverage(weekDotsValues) * 10) / 10,
+            id: weekNumber - i
+        })
+    }
+    result = adaptMonthDots(props, weekAverages)    
     return result;
 }

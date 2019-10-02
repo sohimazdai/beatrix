@@ -11,7 +11,7 @@ import { GlucoseTextRotated } from '../../../component/icon/GlucoseTextRotated';
 import { INoteList, INoteListByDay } from '../../../model/INoteList';
 import { ChartDot } from '../chart-svg/ChartDot';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { calculateDayChartDots, calculateMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
+import { calculateDayChartDots, calculateMonthChartDots, calculateThreeMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 
 export interface ChartWrapProps {
@@ -55,6 +55,7 @@ export function ChartWrap(props: ChartWrapProps) {
             case ChartPeriodType.MONTH:
                 return calculateMonthChartDots(props)
             case ChartPeriodType.THREE_MONTH:
+                return calculateThreeMonthChartDots(props)
         }
     }
 
@@ -65,8 +66,7 @@ export function ChartWrap(props: ChartWrapProps) {
             case ChartPeriodType.MONTH:
                 return calculateMonthChartDots(props)
             case ChartPeriodType.THREE_MONTH:
-                break;
-
+                return calculateThreeMonthChartDots(props)
         }
     }
 

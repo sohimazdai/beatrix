@@ -233,3 +233,15 @@ function adaptMonthTime(props: ChartWrapProps, day: number): number {
     result = day * dayStepOnChart + initialPadding(props);
     return result;
 }
+
+export function getWeekDaysNumbers(date: Date): number[] {
+    let result = [];
+    const current = date.getDay();
+    for (let i = current; i > 0 ; i--) {
+        result.push(DateHelper.getDiffDate(date, -i))
+    }
+    for (let i = 6; i >= current; i--) {
+        result.push(DateHelper.getDiffDate(date, i - current))
+    }
+    return result;
+}

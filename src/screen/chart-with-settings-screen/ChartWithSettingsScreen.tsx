@@ -224,6 +224,8 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                 return this.state.currentDate
             case ChartPeriodType.MONTH:
                 return new Date(this.state.selectedDotId)
+            case ChartPeriodType.THREE_MONTH:
+                return new Date(this.state.selectedDotId)
         }
     }
 

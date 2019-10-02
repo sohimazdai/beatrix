@@ -130,7 +130,28 @@ function verticalLines(props: ChartNetProps) {
                     y1={dot.y}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={getVerticalLineColor(props, index )}
+                    stroke={getVerticalLineColor(props, index)}
+                    strokeWidth={1}
+                />
+            })
+        case ChartPeriodType.MONTH:
+            const verticalThreeMonthLinesCount = 14;
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / verticalThreeMonthLinesCount;
+            for (let i = 0; i < verticalThreeMonthLinesCount; i++) {
+                res.push({
+                    x: res[res.length - 1].x + lapStep,
+                    y: res[res.length - 1].y,
+                    id: res[res.length - 1].id + lapStep
+                })
+            }
+            return res.map((dot, index) => {
+                return index != 0 && <Line
+                    key={dot.id}
+                    x1={dot.x}
+                    y1={dot.y}
+                    x2={dot.x}
+                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
+                    stroke={getVerticalLineColor(props, index)}
                     strokeWidth={1}
                 />
             })

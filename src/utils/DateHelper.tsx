@@ -39,6 +39,24 @@ export class DateHelper {
         ).getDate()
     }
 
+    static getWeekAfterOrBefore(date: Date, diff: number) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + diff * 7
+        )
+    }
+
+    static getDiffDate(date: Date, diff: number) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + diff
+        )
+        .getTime()
+    }
+    
+
     static getMonthStringPossesive(m: number) {
         switch (m) {
             case 0:
