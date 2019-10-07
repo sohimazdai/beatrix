@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Button, Animated } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { INoteListNote } from '../../../model/INoteList';
@@ -8,7 +8,7 @@ import { DownTopPopup } from '../../../component/popup/DownTopPopup';
 export interface ChartPopupProps {
     shown?: boolean
     onClose?: () => void
-    dateTitle?: Date
+    dateTitle?: string
     note?: INoteListNote
 }
 
@@ -20,7 +20,7 @@ export function ChartPopup(props: ChartPopupProps) {
         >
             <View style={styles.dateTitleView}>
                 <Text style={styles.dateTitle}>
-                    {renderDate(props.dateTitle.getTime())}
+                    {props.dateTitle}
                 </Text>
             </View>
             {
@@ -38,28 +38,6 @@ export function ChartPopup(props: ChartPopupProps) {
             />
         </LinearGradient>
     </DownTopPopup>
-}
-
-function renderDate(day: number) {
-    const today = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate()
-    ).getTime();
-    const yesterday = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate() - 1
-    ).getTime();
-    let displayingDate = '';
-    if (day === today) {
-        displayingDate = 'Сегодня'
-    } else if (day === yesterday) {
-        displayingDate = 'Вчера'
-    } else {
-        displayingDate = `${new Date(day).getDate()}.${new Date(day).getMonth()}.${new Date(day).getFullYear()}`;
-    }
-    return displayingDate
 }
 
 const styles = StyleSheet.create({

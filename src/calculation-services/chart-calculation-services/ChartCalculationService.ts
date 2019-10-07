@@ -1,17 +1,18 @@
 import { ChartDotsData, IChartDot, ChartValueType, IChartTrain } from "../../model/IChart";
 import { INoteList } from "../../model/INoteList";
 import { ChartWrapProps } from "../../view/chart/chart-wrap/ChartWrap";
-import { 
-    adaptDayDots, 
-    getDotsAndEvents, 
-    filterValidEffects, 
-    getTrainItemId, 
-    getMaxTrainItemId, 
+import {
+    adaptDayDots,
+    getDotsAndEvents,
+    filterValidEffects,
+    getTrainItemId,
+    getMaxTrainItemId,
     getArrayAverage,
     getDayAfterThatNumber,
     adaptMonthDots,
     getMonthStart,
-    getWeekDaysNumbers
+    getWeekDaysNumbers,
+    adaptThreeMonthDots,
 } from "./ChartCalculationHelper";
 import { DateHelper } from "../../utils/DateHelper";
 
@@ -122,7 +123,7 @@ function calculateDotEffect(props: ChartWrapProps, dot: IChartDot, train: IChart
     }
 }
 
-export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData{
+export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData {
     let result: ChartDotsData = {};
 
     const dateFinishedCalculation = getMonthStart(props.currentDate);
@@ -134,12 +135,11 @@ export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData{
             currentDayNotes[noteId][props.type] != 0 && accumulator.push(currentDayNotes[noteId][props.type])
         })
         i + 1 <= DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0) &&
-        dayAverages.push({
-            x: i + 1,
-            y: getArrayAverage(accumulator),
-            id: getDayAfterThatNumber(dateFinishedCalculation, i),
-        })
-        
+            dayAverages.push({
+                x: i + 1,
+                y: getArrayAverage(accumulator),
+                id: getDayAfterThatNumber(dateFinishedCalculation, i),
+            })
     }
     result = adaptMonthDots(props, dayAverages)
     return result;
@@ -148,10 +148,16 @@ export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData{
 export function calculateThreeMonthChartDots(props: ChartWrapProps): ChartDotsData {
     let result: ChartDotsData = {};
     let weekAverages: IChartDot[] = [];
-    let weekNumber = 14;
+    let startWeekDate = new Date(
+        props.currentDate.getFullYear(),
+        props.currentDate.getMonth(),
+        DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0)
+    )
+    let weekNumber = DateHelper.getWeekNumber();
     for (let i = 0; i < weekNumber; i++) {
         let weekDotsValues: number[] = [];
-        let weekDaysIds = getWeekDaysNumbers(DateHelper.getWeekAfterOrBefore(props.currentDate, -i));
+        let weekDaysIds = getWeekDaysNumbers(DateHelper.getDiffWeek(startWeekDate, -i))
+            .sort((a, b) => a - b);
         weekDaysIds.map(weekDayId => {
             props.noteListByDay[weekDayId] && Object.keys(props.noteListByDay[weekDayId]).map(noteId => {
                 props.noteList[noteId][props.type] && weekDotsValues.push(props.noteList[noteId][props.type])
@@ -160,9 +166,9 @@ export function calculateThreeMonthChartDots(props: ChartWrapProps): ChartDotsDa
         weekAverages.push({
             x: weekNumber - i,
             y: Math.round(getArrayAverage(weekDotsValues) * 10) / 10,
-            id: weekNumber - i
+            id: weekDaysIds[0]
         })
     }
-    result = adaptMonthDots(props, weekAverages)    
+    result = adaptThreeMonthDots(props, weekAverages)
     return result;
 }

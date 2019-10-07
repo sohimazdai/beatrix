@@ -229,19 +229,55 @@ function adaptMonthTime(props: ChartWrapProps, day: number): number {
     let result = 0;
     const daysCount = DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0);
     const clearChartWidth = props.config.boxWidth - generalPadding(props);
-    let dayStepOnChart = clearChartWidth / daysCount;
-    result = day * dayStepOnChart + initialPadding(props);
+    let dayStepOnChart = clearChartWidth / (daysCount - 1);
+    result = (day - 1) * dayStepOnChart + initialPadding(props);
     return result;
 }
 
 export function getWeekDaysNumbers(date: Date): number[] {
     let result = [];
-    const current = date.getDay();
-    for (let i = current; i > 0 ; i--) {
-        result.push(DateHelper.getDiffDate(date, -i))
+    const currentWeekFirstDay = DateHelper.getDiffDate(date, -date.getDay());
+    for (let i = 0; i < 7 ; i++) {
+        result.push(DateHelper.getDiffDate(new Date(currentWeekFirstDay), i))
     }
-    for (let i = 6; i >= current; i--) {
-        result.push(DateHelper.getDiffDate(date, i - current))
+    return result;
+}
+
+export function adaptThreeMonthDots(props: ChartWrapProps, dots: IChartDot[]): ChartDotsData {
+    let result: ChartDotsData = {};
+    let newDots: IChartDot[] = [];
+    let ys = dots.map(d => d.y)
+    let maxValue = 0;
+    let minValue = ys.length ? Math.min(...ys) : 0;
+    dots.map(dot => {
+        maxValue = dot.y > maxValue ? Math.ceil(dot.y) + 1 : Math.ceil(maxValue);
+        minValue = minValue && dot.y <= minValue ?
+            Math.floor(dot.y - 1) >= 0 ?
+                Math.floor(dot.y - 1) :
+                0 :
+            Math.floor(minValue);
     }
+    )
+    maxValue = calculateNewMaxAndMin(props, maxValue, minValue);
+    dots.map(dot => {
+        dot.y && newDots.push({
+            x: adaptThreeMonthTime(props, dot.x),
+            y: adaptYValue(props, dot.y, maxValue, minValue),
+            id: dot.id
+        })
+    })
+    result.dots = newDots;
+    result.maxValue = maxValue;
+    result.minValue = minValue;
+    result.events = [];
+    return result
+}
+
+function adaptThreeMonthTime(props: ChartWrapProps, week: number): number {
+    let result = 0;
+    const daysCount = DateHelper.getWeekNumber();
+    const clearChartWidth = props.config.boxWidth - generalPadding(props);
+    let dayStepOnChart = clearChartWidth / ( daysCount - 1);
+    result = (week - 1) * dayStepOnChart + initialPadding(props);
     return result;
 }

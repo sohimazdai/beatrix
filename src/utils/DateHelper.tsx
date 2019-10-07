@@ -1,3 +1,5 @@
+import { ChartPeriodThreeMonthType } from "../model/IChart";
+
 export class DateHelper {
     static today() {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
@@ -26,7 +28,7 @@ export class DateHelper {
         }
         return new Date(
             date.getFullYear(),
-            date.getMonth() + diff ,
+            date.getMonth() + diff,
             DateHelper.getMaxDateOfDifferentMonth(date, diff)
         )
     }
@@ -39,7 +41,7 @@ export class DateHelper {
         ).getDate()
     }
 
-    static getWeekAfterOrBefore(date: Date, diff: number) {
+    static getDiffWeek(date: Date, diff: number) {
         return new Date(
             date.getFullYear(),
             date.getMonth(),
@@ -53,9 +55,22 @@ export class DateHelper {
             date.getMonth(),
             date.getDate() + diff
         )
-        .getTime()
+            .getTime()
     }
-    
+
+    static getDiffMonth(date: Date, diff: number) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth() + diff,
+            date.getDate()
+        )
+            .getTime()
+    }
+
+    static getWeekNumber() {
+        return 14;
+    }
+
 
     static getMonthStringPossesive(m: number) {
         switch (m) {
@@ -117,5 +132,36 @@ export class DateHelper {
             default:
                 console.warn('12 month is ... ? I think it is error')
         }
+    }
+
+    static getCurrentThreeMonthMonths(date: Date): number[] {
+        switch (date.getMonth()) {
+            case 0:
+            case 1:
+            case 11:
+                return [-1, 0, 1];
+            case 2:
+            case 3:
+            case 4:
+                return [2, 3, 4];
+            case 5:
+            case 6:
+            case 7:
+                return [5, 6, 7];
+            default:
+                return [8, 9, 10];
+        }
+    }
+
+    static makeDateWithMonthAsString(date: Date) {
+        return '' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ' +
+            DateHelper.getMonthStringPossesive(date.getMonth()) + ' ' +
+            date.getFullYear()
+    }
+
+    static makeDateWithMonthAsNumber(date: Date) {
+        return '' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '.' +
+            ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '.' +
+            date.getFullYear()
     }
 }

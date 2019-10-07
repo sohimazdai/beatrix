@@ -34,6 +34,7 @@ export function ChartWrap(props: ChartWrapProps) {
         selectedDotId,
         config
     } = props;
+
     let basicDotsData: ChartDotsData = React.useMemo(
         () => basicDotsCalculator(),
         [currentDate, noteList, selectedPeriod]
@@ -42,6 +43,18 @@ export function ChartWrap(props: ChartWrapProps) {
         () => polylineCalculator(),
         [currentDate, noteList, selectedPeriod]
     )
+
+    function basicDotsCalculator() {
+        switch (selectedPeriod) {
+            case ChartPeriodType.DAY:
+                return calculateDayChartDots(Object.assign({ ...props }, { type: ChartValueType.GLUCOSE }))
+            case ChartPeriodType.MONTH:
+                return calculateMonthChartDots(props)
+            case ChartPeriodType.THREE_MONTH:
+                return calculateThreeMonthChartDots(props)
+        }
+    }
+
     function polylineCalculator() {
         switch (selectedPeriod) {
             case ChartPeriodType.DAY:
@@ -53,20 +66,9 @@ export function ChartWrap(props: ChartWrapProps) {
                         return calculateDayChartDots(props)
                 }
             case ChartPeriodType.MONTH:
-                return calculateMonthChartDots(props)
+                return basicDotsData
             case ChartPeriodType.THREE_MONTH:
-                return calculateThreeMonthChartDots(props)
-        }
-    }
-
-    function basicDotsCalculator() {
-        switch (selectedPeriod) {
-            case ChartPeriodType.DAY:
-                return calculateDayChartDots(Object.assign({ ...props }, { type: ChartValueType.GLUCOSE }))
-            case ChartPeriodType.MONTH:
-                return calculateMonthChartDots(props)
-            case ChartPeriodType.THREE_MONTH:
-                return calculateThreeMonthChartDots(props)
+                return basicDotsData
         }
     }
 

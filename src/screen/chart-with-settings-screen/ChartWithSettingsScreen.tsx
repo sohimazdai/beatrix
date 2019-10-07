@@ -16,7 +16,7 @@ import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
 import { ChartPopup } from '../../view/chart/chart-popup/ChartPopup';
 import { DateHelper } from '../../utils/DateHelper';
-import { getArrayAverage } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const TIME_STEP_MINUTES = 5;
@@ -219,13 +219,31 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     getChartPopupTitle() {
+        let displayingDate = '';
+        if (this.state.selectedDotId === DateHelper.today()) {
+            displayingDate = 'Сегодня'
+        } else if (this.state.selectedDotId === DateHelper.yesterday()) {
+            displayingDate = 'Вчера'
+        }
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
-                return this.state.currentDate
+                if (!displayingDate) {
+                    displayingDate = DateHelper.makeDateWithMonthAsString(
+                        new Date(this.state.selectedDotId)
+                    )
+                }
+                return displayingDate
             case ChartPeriodType.MONTH:
-                return new Date(this.state.selectedDotId)
+                if (!displayingDate) {
+                    displayingDate = DateHelper.makeDateWithMonthAsString(new Date(this.state.selectedDotId))
+                }
+                return displayingDate
             case ChartPeriodType.THREE_MONTH:
-                return new Date(this.state.selectedDotId)
+                displayingDate = DateHelper.makeDateWithMonthAsNumber(new Date(this.state.selectedDotId)) +
+                    ' - ' + DateHelper.makeDateWithMonthAsNumber(
+                        new Date(DateHelper.getDiffDate(new Date(this.state.selectedDotId), 6))
+                    )
+                return displayingDate
         }
     }
 
@@ -244,7 +262,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     style={{
                         ...styles.highightTitlesView,
                         width: newWidth + 5,
-                        // paddingLeft: 3,
                         paddingRight: 3
                     }}
                 >
@@ -308,6 +325,30 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                             })}
                         </View>
                 }
+            case ChartPeriodType.THREE_MONTH:
+                highlightsNumber = 3;
+                highlightsTitles = [-2, -1, 0];
+                newWidth = chartConfig.breadUnits.boxWidth;
+                titleWidth = 100;
+                return <View
+                    style={{
+                        ...styles.highightTitlesView,
+                        width: newWidth + 5,
+                    }}
+                >
+                    {highlightsTitles.map(title => {
+                        return <Text
+                            key={title}
+                            style={{ ...styles.highightTitle, width: titleWidth }}
+                        >
+                            {DateHelper.getMonthStringCommon(
+                                this.state.currentDate.getMonth() + title ?
+                                    this.state.currentDate.getMonth() + title :
+                                    this.state.currentDate.getMonth() + title + 12
+                            )}
+                        </Text>
+                    })}
+                </View>
         }
     }
 
@@ -336,12 +377,20 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
 
     onChangingPeriod = (period: ChartPeriodType) => {
         let toStateSet: any = { selectedPeriod: period };
-        if (this.state.selectedPeriod === ChartPeriodType.MONTH && period === ChartPeriodType.DAY) {
+        if (
+            (this.state.selectedPeriod === ChartPeriodType.THREE_MONTH ||
+                this.state.selectedPeriod === ChartPeriodType.MONTH) && period === ChartPeriodType.DAY
+        ) {
             if (this.state.currentDate.getTime() > DateHelper.today()) {
                 toStateSet.currentDate = new Date(DateHelper.today());
             }
         } else if (this.state.selectedPeriod === ChartPeriodType.DAY && period === ChartPeriodType.MONTH) {
             toStateSet.currentDate = DateHelper.getDifferentMonthDate(this.state.currentDate, 0)
+        }
+
+        if (this.state.selectedPeriod !== period) {
+            toStateSet.popupShown = false;
+            toStateSet.selectedDotId = null;
         }
         this.setState(toStateSet)
     }
@@ -354,21 +403,41 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         this.setState(toStateSet)
     }
     getNoteForChartPopup() {
+        let weekDayNotes = [];
+        let dayNotes = {};
+        let glucoseArray = [];
+        let breadUnitsArray = [];
+        let insulinArray = [];
+        let longInsulinArray = [];
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 return this.props.noteList[this.state.selectedDotId]
             case ChartPeriodType.MONTH:
-                const dayNotes = this.props.noteListByDay[this.state.selectedDotId];
-                let glucoseArray = [];
-                let breadUnitsArray = [];
-                let insulinArray = [];
-                let longInsulinArray = [];
+                dayNotes = this.props.noteListByDay[this.state.selectedDotId];
                 dayNotes && Object.keys(dayNotes) && Object.keys(dayNotes).map(noteId => {
                     dayNotes[noteId].glucose && glucoseArray.push(dayNotes[noteId].glucose);
                     dayNotes[noteId].breadUnits && breadUnitsArray.push(dayNotes[noteId].breadUnits);
                     dayNotes[noteId].insulin && insulinArray.push(dayNotes[noteId].insulin);
                     dayNotes[noteId].longInsulin && longInsulinArray.push(dayNotes[noteId].longInsulin);
                 })
+                return {
+                    glucose: Math.round(getArrayAverage(glucoseArray) * 10) / 10,
+                    breadUnits: Math.round(getArrayAverage(breadUnitsArray) * 10) / 10,
+                    insulin: Math.round(getArrayAverage(insulinArray) * 10) / 10,
+                    longInsulin: Math.round(getArrayAverage(longInsulinArray) * 10) / 10,
+                    date: this.state.selectedDotId
+                }
+            case ChartPeriodType.THREE_MONTH:
+                weekDayNotes = getWeekDaysNumbers(new Date(this.state.selectedDotId))
+                    .map(weekDayNumber => {
+                        dayNotes = this.props.noteListByDay[weekDayNumber];
+                        dayNotes && Object.keys(dayNotes) && Object.keys(dayNotes).map(noteId => {
+                            dayNotes[noteId].glucose && glucoseArray.push(dayNotes[noteId].glucose);
+                            dayNotes[noteId].breadUnits && breadUnitsArray.push(dayNotes[noteId].breadUnits);
+                            dayNotes[noteId].insulin && insulinArray.push(dayNotes[noteId].insulin);
+                            dayNotes[noteId].longInsulin && longInsulinArray.push(dayNotes[noteId].longInsulin);
+                        })
+                    })
                 return {
                     glucose: Math.round(getArrayAverage(glucoseArray) * 10) / 10,
                     breadUnits: Math.round(getArrayAverage(breadUnitsArray) * 10) / 10,

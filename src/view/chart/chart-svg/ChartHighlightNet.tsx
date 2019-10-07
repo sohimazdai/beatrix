@@ -41,6 +41,7 @@ function verticalLines(props: ChartHighlightNetProps) {
                 />
             })
         case ChartPeriodType.MONTH:
+        case ChartPeriodType.THREE_MONTH:
             return props.dots.map((dot, index) => {
                 return dot.id === props.selectedDotId && <Line
                     key={dot.id}
@@ -52,6 +53,7 @@ function verticalLines(props: ChartHighlightNetProps) {
                     strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
                 />
             })
+
     }
 }
 

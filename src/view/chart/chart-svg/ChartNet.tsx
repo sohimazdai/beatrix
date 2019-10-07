@@ -134,10 +134,9 @@ function verticalLines(props: ChartNetProps) {
                     strokeWidth={1}
                 />
             })
-        case ChartPeriodType.MONTH:
-            const verticalThreeMonthLinesCount = 14;
-            lapStep = getAvailableZone(props.cfg.boxWidth, props) / verticalThreeMonthLinesCount;
-            for (let i = 0; i < verticalThreeMonthLinesCount; i++) {
+        case ChartPeriodType.THREE_MONTH:
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / DateHelper.getWeekNumber();
+            for (let i = 0; i < DateHelper.getWeekNumber(); i++) {
                 res.push({
                     x: res[res.length - 1].x + lapStep,
                     y: res[res.length - 1].y,
@@ -151,7 +150,7 @@ function verticalLines(props: ChartNetProps) {
                     y1={dot.y}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={getVerticalLineColor(props, index)}
+                    stroke={'rgba(102, 102, 102, 0.38)'}
                     strokeWidth={1}
                 />
             })
@@ -162,6 +161,7 @@ function horizontalLines(props: ChartNetProps) {
     switch (props.periodType) {
         case ChartPeriodType.DAY:
         case ChartPeriodType.MONTH:
+        case ChartPeriodType.THREE_MONTH:
             const firstY = props.cfg.reversedY ? props.cfg.basicPadding : props.cfg.basicPadding * 2;
             const firstX = props.cfg.basicPadding;
             const range = props.maxValue - props.minValue;

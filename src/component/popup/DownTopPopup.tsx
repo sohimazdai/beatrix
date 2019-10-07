@@ -28,10 +28,10 @@ export const DownTopPopup = (props: DownTopPopupProps) => {
     }, [props.hidden])
 
     return <Animated.View style={{
-            ...styles.downTopPopupView,
-            opacity: currentOpacity,
-            bottom: currentBottom
-        }}>
+        ...styles.downTopPopupView,
+        opacity: currentOpacity,
+        bottom: currentBottom
+    }}>
         {props.children}
     </Animated.View>
 }
