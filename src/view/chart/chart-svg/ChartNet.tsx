@@ -114,7 +114,7 @@ function verticalLines(props: ChartNetProps) {
                 />
             })
         case ChartPeriodType.MONTH:
-            const verticalMonthLinesCount = DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0);
+            const verticalMonthLinesCount = DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0) - 1;
             lapStep = getAvailableZone(props.cfg.boxWidth, props) / verticalMonthLinesCount;
             for (let i = 0; i < verticalMonthLinesCount; i++) {
                 res.push({
@@ -135,8 +135,9 @@ function verticalLines(props: ChartNetProps) {
                 />
             })
         case ChartPeriodType.THREE_MONTH:
-            lapStep = getAvailableZone(props.cfg.boxWidth, props) / DateHelper.getWeekNumber();
-            for (let i = 0; i < DateHelper.getWeekNumber(); i++) {
+            let verticalThreeMonthLinesCount = DateHelper.getWeekNumber() - 1;
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / verticalThreeMonthLinesCount;
+            for (let i = 0; i < verticalThreeMonthLinesCount; i++) {
                 res.push({
                     x: res[res.length - 1].x + lapStep,
                     y: res[res.length - 1].y,

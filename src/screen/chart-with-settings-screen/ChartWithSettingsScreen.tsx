@@ -279,7 +279,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     case 31:
                     case 30:
                         highlightsNumber = 7;
-                        highlightsTitles = [0, 5, 10, 15, 20, 25, 30];
+                        highlightsTitles = [1, 5, 10, 15, 20, 25, 30];
                         newWidth = chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
                         return <View
@@ -291,10 +291,18 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                                     12
                             }}
                         >
-                            {highlightsTitles.map(title => {
+                            {highlightsTitles.map((title, index) => {
                                 return <Text
                                     key={title}
-                                    style={{ ...styles.highightTitle, width: titleWidth }}
+                                    style={{
+                                        ...styles.highightTitle,
+                                        width: index ?
+                                            titleWidth :
+                                            9,
+                                        paddingLeft: index ?
+                                            0 :
+                                            4.5,
+                                    }}
                                 >
                                     {title}
                                 </Text>
@@ -303,7 +311,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     case 28:
                     case 29:
                         highlightsNumber = 6;
-                        highlightsTitles = [0, 5, 10, 15, 20, 25];
+                        highlightsTitles = [1, 5, 10, 15, 20, 25];
                         newWidth = chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
                         return <View
@@ -315,10 +323,18 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                                     45
                             }}
                         >
-                            {highlightsTitles.map(title => {
+                            {highlightsTitles.map((title, index) => {
                                 return <Text
                                     key={title}
-                                    style={{ ...styles.highightTitle, width: titleWidth }}
+                                    style={{
+                                        ...styles.highightTitle,
+                                        width: index ?
+                                            titleWidth :
+                                            9,
+                                        paddingLeft: index ?
+                                            0 :
+                                            4.5
+                                    }}
                                 >
                                     {title}
                                 </Text>
