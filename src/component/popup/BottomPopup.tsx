@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, View, Animated } from 'react-native'
 
-export interface DownTopPopupProps {
+export interface BottomPopupProps {
     hidden: boolean;
     children: any
 }
 
-export const DownTopPopup = (props: DownTopPopupProps) => {
+export const BottomPopup = (props: BottomPopupProps) => {
     const [currentOpacity] = React.useState(new Animated.Value(0))
     const [currentBottom] = React.useState(new Animated.Value(-100))
 
@@ -28,7 +28,7 @@ export const DownTopPopup = (props: DownTopPopupProps) => {
     }, [props.hidden])
 
     return <Animated.View style={{
-        ...styles.downTopPopupView,
+        ...styles.BottomPopupView,
         opacity: currentOpacity,
         bottom: currentBottom
     }}>
@@ -37,7 +37,7 @@ export const DownTopPopup = (props: DownTopPopupProps) => {
 }
 
 const styles = StyleSheet.create({
-    downTopPopupView: {
+    BottomPopupView: {
         position: 'absolute',
         bottom: 0,
 
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 
         opacity: 0
     },
-    downTopPopupViewActive: {
+    BottomPopupViewActive: {
         opacity: 1
     }
 })

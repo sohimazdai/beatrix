@@ -63,8 +63,7 @@ export class DateHelper {
             date.getFullYear(),
             date.getMonth() + diff,
             date.getDate()
-        )
-            .getTime()
+        ).getTime()
     }
 
     static getWeekNumber() {
@@ -129,6 +128,37 @@ export class DateHelper {
                 return 'Ноябрь';
             case 11:
                 return 'Декабрь';
+            default:
+                console.warn('12 month is ... ? I think it is error')
+        }
+    }
+
+    static getMonthStringCommonShort(m: number) {
+        switch (m) {
+            case 0:
+                return 'Янв';
+            case 1:
+                return 'Фев';
+            case 2:
+                return 'Март';
+            case 3:
+                return 'Апр';
+            case 4:
+                return 'Май';
+            case 5:
+                return 'Июнь';
+            case 6:
+                return 'Июль';
+            case 7:
+                return 'Авг';
+            case 8:
+                return 'Сент';
+            case 9:
+                return 'Окт';
+            case 10:
+                return 'Нояб';
+            case 11:
+                return 'Дек';
             default:
                 console.warn('12 month is ... ? I think it is error')
         }

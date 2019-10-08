@@ -236,7 +236,7 @@ function adaptMonthTime(props: ChartWrapProps, day: number): number {
 
 export function getWeekDaysNumbers(date: Date): number[] {
     let result = [];
-    const currentWeekFirstDay = DateHelper.getDiffDate(date, -date.getDay());
+    const currentWeekFirstDay = DateHelper.getDiffDate(date, -date.getDay() + 1);
     for (let i = 0; i < 7 ; i++) {
         result.push(DateHelper.getDiffDate(new Date(currentWeekFirstDay), i))
     }

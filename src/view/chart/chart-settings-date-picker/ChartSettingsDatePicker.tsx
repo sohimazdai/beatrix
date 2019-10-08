@@ -24,7 +24,10 @@ export interface FullProps extends DispatchToProps, ChartSettingsDatePickerProps
 export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
     render() {
         return (
-            <View style={styles.view}>
+            <View style={this.props.selectedPeriod === ChartPeriodType.THREE_MONTH ?
+                { ...styles.view, ...styles.viewWide } :
+                { ...styles.view }
+            }>
                 <TouchableOpacity
                     style={styles.touchable}
                     onPress={() => Platform.OS === 'android' ?
@@ -33,7 +36,10 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
                     }
                 >
                     <CalendarIcon />
-                    <Text style={styles.inputText}>
+                    <Text style={this.props.selectedPeriod === ChartPeriodType.THREE_MONTH ?
+                        { ...styles.inputText, ...styles.inputTextWide } :
+                        { ...styles.inputText }
+                    }>
                         {this.getInputText()}
                     </Text>
                 </TouchableOpacity>
@@ -67,6 +73,24 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
     private getInputText = () => {
         const { date } = this.props;
         switch (this.props.selectedPeriod) {
+            case ChartPeriodType.THREE_MONTH:
+                const currentYear = new Date().getFullYear();
+                let endPostfix = currentYear === date.getFullYear() &&
+                    new Date(DateHelper.getDiffMonth(date, -2)).getFullYear() === date.getFullYear() ?
+                    '' : ' ' + String(date.getFullYear()).slice(2);
+                let startPostfix = currentYear === new Date(DateHelper.getDiffMonth(date, -2)).getFullYear() &&
+                    new Date(DateHelper.getDiffMonth(date, -2)).getFullYear() === date.getFullYear() ?
+                    '' : ' ' + String(new Date(DateHelper.getDiffMonth(date, -2)).getFullYear()).slice(2);
+                return endPostfix && startPostfix && endPostfix !== startPostfix?
+                    DateHelper.getMonthStringCommonShort(this.props.date.getMonth() - 2 >= 0 ?
+                        this.props.date.getMonth() - 2 :
+                        this.props.date.getMonth() + 10
+                    ) + (startPostfix === endPostfix ? '' : startPostfix) + ' - ' + DateHelper.getMonthStringCommonShort(this.props.date.getMonth()) + endPostfix
+                    :
+                    DateHelper.getMonthStringCommon(this.props.date.getMonth() - 2 >= 0 ?
+                        this.props.date.getMonth() - 2 :
+                        this.props.date.getMonth() + 10
+                    ) + (startPostfix === endPostfix ? '' : startPostfix) + ' - ' + DateHelper.getMonthStringCommon(this.props.date.getMonth()) + endPostfix
             case ChartPeriodType.MONTH:
                 return DateHelper.getMonthStringCommon(date.getMonth()) + ' ' + date.getFullYear();
             default:
@@ -103,6 +127,9 @@ const styles = StyleSheet.create({
         backgroundColor: ThemeColor.WHITE,
         borderColor: ThemeColor.TAN
     },
+    viewWide: {
+        width: 190,
+    },
     touchable: {
         flex: 1,
 
@@ -123,5 +150,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
         color: ThemeColor.DIMGRAY,
-    }
+    },
+    inputTextWide: {
+        fontSize: 14,
+    },
 })

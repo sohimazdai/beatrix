@@ -358,7 +358,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                             style={{ ...styles.highightTitle, width: titleWidth }}
                         >
                             {DateHelper.getMonthStringCommon(
-                                this.state.currentDate.getMonth() + title ?
+                                this.state.currentDate.getMonth() + title >= 0 ?
                                     this.state.currentDate.getMonth() + title :
                                     this.state.currentDate.getMonth() + title + 12
                             )}

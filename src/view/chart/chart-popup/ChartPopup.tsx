@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import { View, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { INoteListNote } from '../../../model/INoteList';
-import { DownTopPopup } from '../../../component/popup/DownTopPopup';
+import { BottomPopup } from '../../../component/popup/BottomPopup';
+import { ChartPopupValue } from './chart-popup-components/ChartPopupValue';
+import { ChartValueType } from '../../../model/IChart';
+import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
 
 export interface ChartPopupProps {
     shown?: boolean
@@ -13,31 +16,46 @@ export interface ChartPopupProps {
 }
 
 export function ChartPopup(props: ChartPopupProps) {
-    return <DownTopPopup hidden={!props.shown}>
+    return <BottomPopup hidden={!props.shown}>
         <LinearGradient
             style={styles.popupGradient}
             colors={['#FFB4B4', '#D6E5ED']}
         >
-            <View style={styles.dateTitleView}>
-                <Text style={styles.dateTitle}>
-                    {props.dateTitle}
-                </Text>
-            </View>
-            {
-                props.note && Object.keys(props.note) && Object.keys(props.note).map(key => {
-                    return <Text
-                        key={key}
-                    >
-                        {key + ': ' + props.note[key]}
+            {props.note && <>
+                <View style={styles.dateTitleView}>
+                    <Text style ={styles.dateTitle}>
+                        {props.dateTitle}
                     </Text>
-                })
-            }
-            <Button
-                title="окейшн"
+                </View>
+                <View style={styles.upperValues}>
+                    <ChartPopupValue
+                        type={ChartValueType.GLUCOSE}
+                        value={props.note[ChartValueType.GLUCOSE]}
+                    />
+                    <ChartPopupValue
+                        type={ChartValueType.INSULIN}
+                        value={props.note[ChartValueType.INSULIN]}
+                    />
+                </View>
+                <View style={styles.bottomValues}>
+                    <ChartPopupValue
+                        type={ChartValueType.BREAD_UNITS}
+                        value={props.note[ChartValueType.BREAD_UNITS]}
+                    />
+                    <ChartPopupValue
+                        type={ChartValueType.LONG_INSULIN}
+                        value={props.note[ChartValueType.LONG_INSULIN]}
+                    />
+                </View>
+            </>}
+            <TouchableOpacity
+                style={styles.arrowDown}
                 onPress={props.onClose}
-            />
+            >
+                <ArrowDownIcon />
+            </TouchableOpacity>
         </LinearGradient>
-    </DownTopPopup>
+    </BottomPopup>
 }
 
 const styles = StyleSheet.create({
@@ -57,6 +75,7 @@ const styles = StyleSheet.create({
         display: 'flex',
 
         padding: 15,
+        paddingBottom: 35,
 
         borderRadius: 25,
         borderBottomLeftRadius: 0,
@@ -74,5 +93,24 @@ const styles = StyleSheet.create({
     },
     dateTitle: {
         fontSize: 18,
+    },
+    upperValues: {
+        display: 'flex',
+        width: '100%',
+
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    bottomValues: {
+        display: 'flex',
+        width: '100%',
+
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    arrowDown: {
+        position: 'absolute',
+        right: 20,
+        top: 20,
     }
 })
