@@ -2,7 +2,7 @@ import React from 'react'
 import Svg, { Path, Rect, Defs, Pattern, Use, G, ClipPath } from 'react-native-svg'
 
 export const BloodDropIcon = props => (
-  <Svg width={30} height={30} viewBox="0 0 20 20" fill="none" {...props}>
+  <Svg width={25} height={25} viewBox="0 0 20 20" fill="none" {...props}>
     <G clipPath="url(#clip0)">
       <Path
         d="M10.3644 0.198036C10.2342 -0.00301757 9.96575 -0.0604839 9.76469 0.0696949C9.71333 0.102963 9.66962 0.146669 9.63635 0.198036C9.39531 0.62919 3.74512 10.7887 3.74512 13.7452C3.74512 17.1996 6.54549 20 9.99995 20C13.4544 20 16.2548 17.1996 16.2548 13.7452C16.2548 10.7887 10.6046 0.62919 10.3644 0.198036Z"

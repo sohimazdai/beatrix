@@ -42,7 +42,7 @@ function renderIcon(props: ChartPopupValueProps) {
 const styles = StyleSheet.create({
     view: {
         display: 'flex',
-        height: 35,
+        height: 40,
         width: 90,
 
         margin: 5,
