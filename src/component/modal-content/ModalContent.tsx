@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { AppState } from "../../model/AppState";
+import { IAppState } from "../../model/IAppState";
 import { IModal, ModalType, IModalConfirm } from "../../model/IModal";
 import { ModalContentHint } from "./modal-content-hint/ModalContentHint";
 import { View, StyleSheet } from "react-native";
@@ -54,7 +54,7 @@ class ModalContent extends React.PureComponent<ModalContentProps> {
 }
 
 export const ModalContentConnect = connect(
-    (state: AppState) => ({
+    (state: IAppState) => ({
         modal: state.modal
     }),
     dispatch => ({ dispatch })

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { AppState } from '../../model/AppState';
+import { IAppState } from '../../model/IAppState';
 import { INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -11,6 +11,7 @@ import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { shadowOptions } from '../../constant/shadowOptions';
+import { ToChartButton } from '../../component/icon/ToChartButton';
 import { Header } from '../../component/header/Header';
 
 interface NoteListScreenStateTProps {
@@ -36,6 +37,9 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     {this.renderCards()}
                 </ScrollView>
                 <View style={styles.addNoteButtonView}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Chart')}>
+                        <ToChartButton />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteCreation')}>
                         <AddNoteIcon />
                     </TouchableOpacity>
@@ -95,7 +99,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                             key={noteId}
                             note={note}
                             onPress={() => { }}
-                            onLongPress={() => this.props.navigation.navigate('NoteEdittor', {
+                            onLongPress={() => this.props.navigation.navigate('NoteEditor', {
                                 noteId: noteId
                             })}
                         />
@@ -164,8 +168,8 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     }
 }
 
-export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps>(
-    (state: AppState) => ({
+export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps, NoteListScreenProps>(
+    (state: IAppState) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch })

@@ -6,7 +6,6 @@ import { AsyncStorage } from "react-native";
 
 const logger = store => next => action => {
     console.log("DISPATCHING", action.type);
-    action.payload && console.log(action.payload)
     const result = next(action);
     return result
 }

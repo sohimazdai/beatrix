@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../model/INoteList';
+import { ThemeColor } from '../../../constant/ThemeColor';
 
 interface Props {
     note?: INoteListNote
@@ -21,13 +22,13 @@ export function Note(props: Props) {
                 {getTime(new Date(props.note.date))}
             </Text>
             <Text style={styles.text}>
-                {props.note.glucose}
+                {props.note.glucose || '-'}
             </Text>
             <Text style={styles.text}>
-                {props.note.breadUnits}
+                {props.note.breadUnits || '-'}
             </Text>
             <Text style={styles.text}>
-                {props.note.insulin}{props.note.longInsulin ? '/' + props.note.longInsulin : ''}
+                {props.note.insulin || '-'}{props.note.longInsulin ? '/' + props.note.longInsulin : ''}
             </Text>
         </TouchableOpacity>
     </View>
@@ -62,6 +63,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
 
-        color: '#666666'
+        color: '#666666',
     }
 })

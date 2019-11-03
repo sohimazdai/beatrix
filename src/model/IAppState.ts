@@ -1,7 +1,7 @@
 import { INoteList } from "./INoteList";
 import { IModal } from "./IModal";
 
-export interface AppState {
+export interface IAppState {
     noteList: INoteList,
     modal: IModal
 }

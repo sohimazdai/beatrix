@@ -2,12 +2,14 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import { NoteListScreenConnect } from "../screen/note-list/NoteListScreen";
 import { NoteCreationScreenConnect } from "../screen/note-creation/NoteCreationScreen";
 import { NoteEditingScreenConnect } from "../screen/note-editing/NoteEditingScreen";
+import { ChartWithSettingsConnect } from "../screen/chart-with-settings-screen/ChartWithSettingsScreen";
 
 const MainNavigator = createStackNavigator(
     {
         NoteList: { screen: NoteListScreenConnect },
         NoteCreation: { screen: NoteCreationScreenConnect },
-        NoteEdittor: { screen: NoteEditingScreenConnect }
+        NoteEditor: { screen: NoteEditingScreenConnect },
+        Chart: { screen: ChartWithSettingsConnect },
     }, {
         headerMode: 'none'
     }

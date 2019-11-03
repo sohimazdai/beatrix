@@ -1,7 +1,6 @@
 import React from 'react';
 import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { AppState } from '../../../model/AppState';
 import { Action, Dispatch } from 'redux';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalPickerType } from '../../../model/IModal';
@@ -76,7 +75,7 @@ export const NoteDatePickerConnect = connect<{}, DispatchToProps>(
 const styles = StyleSheet.create({
     view: {
         width: 150,
-        height: 31,
+        height: 30,
 
         borderWidth: 1,
 
