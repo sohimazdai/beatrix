@@ -10,23 +10,14 @@ import { DateHelper } from '../../../utils/DateHelper';
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
     onDateChange: (date: Date) => void;
-    onChangingAveragePeriod: (averagePeriod: ChartAveragePeriodType) => void //TODO:
     date: Date;
     selectedPeriod: ChartPeriodType;
-    selectedAveragePeriod: ChartAveragePeriodType;
-    glucoseAverageShown?: boolean;
 }
 
 const PERIODS = [
     ChartPeriodType.DAY,
     ChartPeriodType.MONTH,
     ChartPeriodType.THREE_MONTH
-]
-
-const AVERAGE_PERIOD = [
-    ChartAveragePeriodType.MONTH,
-    ChartAveragePeriodType.THREE_MONTH,
-    ChartAveragePeriodType.SIX_MONTH
 ]
 
 export function ChartSettings(props: ChartSettingsProps) {
@@ -97,53 +88,6 @@ export function ChartSettings(props: ChartSettingsProps) {
                         </View>
                     })}
                 </View>
-                <Text style={styles.scaleAverageValueTitle}>
-                    Наложить график среднего значения глюкозы за период:
-                </Text>
-                <View style={styles.periodChangingButtons}>
-                    {AVERAGE_PERIOD.map(period => {
-                        let buttonStyle = styles.periodButton;
-                        let buttonTextStyle = styles.periodButtonText;
-                        if (period === props.selectedAveragePeriod) {
-                            buttonStyle = { ...buttonStyle, ...styles.periodButtonActive }
-                            buttonTextStyle = { ...buttonTextStyle, ...styles.periodButtonTextActive }
-                        }
-                        return <View
-                            style={buttonStyle}
-                            key={period}
-
-                        >
-                            <TouchableOpacity
-                                style={styles.periodButtonTouchable}
-                                onPress={() => props.selectedAveragePeriod != period && props.onChangingAveragePeriod(period)}
-                            >
-                                <Text style={buttonTextStyle}>
-                                    {getAveragePeriodName(period)}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    })}
-                </View>
-                <Text style={styles.scaleAverageValueTitle}>
-                    {/* TODO: */}
-                </Text>
-                <TouchableOpacity //TODO: add mark-up and styles
-                    style={styles.periodButtonTouchable}
-                    onPress={() => { }} //TODO: 
-                >
-                    <Text style={styles.dontDisplayButtonTouchable}>
-                        Не отображать
-                    </Text>
-                </TouchableOpacity>
-                <View style={{}}>
-                    <Text style={styles.scaleAverageValueTitle}>
-                        Отобразить так же для ХЕ и инсулина
-                    </Text>
-                    <CheckBox
-                        value={props.glucoseAverageShown}
-                        onValueChange={() => { }} //TODO:
-                    />
-                </View>
             </View>
         </View>
     </View>
@@ -172,30 +116,6 @@ function getPeriodName(period: ChartPeriodType) {
         case ChartPeriodType.DAY: return 'День';
         case ChartPeriodType.MONTH: return 'Месяц';
         case ChartPeriodType.THREE_MONTH: return '3 месяца';
-    }
-}
-
-// function setPreviousDateValueByChartAveragePeriodType(props: ChartSettingsProps) { //TODO:
-//     switch (props.selectedAveragePeriod) {
-//         case ChartAveragePeriodType.MONTH:
-//             return DateHelper.getPreviousMonthDate(props.date)
-//         default: return getPreviousDate(props.date)
-//     }
-// }
-
-// function setNextDateValueByChartAveragePeriodType(props: ChartSettingsProps) {
-//     switch (props.selectedAveragePeriod) {
-//         case ChartAveragePeriodType.MONTH:
-//             return DateHelper.getNextMonthDate(props.date)
-//         default: return getNextDate(props.date)
-//     }
-// }
-
-function getAveragePeriodName(averagePeriod: ChartAveragePeriodType) {
-    switch (averagePeriod) {
-        case ChartAveragePeriodType.MONTH: return 'Месяц';
-        case ChartAveragePeriodType.THREE_MONTH: return '3 месяца';
-        case ChartAveragePeriodType.SIX_MONTH: return '6 месяца'
     }
 }
 

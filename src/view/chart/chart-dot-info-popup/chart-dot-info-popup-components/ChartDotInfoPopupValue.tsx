@@ -7,12 +7,12 @@ import { LongSyringeIcon } from '../../../../component/icon/value-icons/LongSyri
 import { ShortSyringeIcon } from '../../../../component/icon/value-icons/ShortSyringeIcon'
 import { MinusSignIcon } from '../../../../component/icon/MinusSignIcon'
 
-export interface ChartPopupValueProps {
+export interface ChartDotInfoPopupValueProps {
     type: string
     value: number
 }
 
-export const ChartPopupValue = (props: ChartPopupValueProps) => {
+export const ChartDotInfoPopupValue = (props: ChartDotInfoPopupValueProps) => {
     return <View style={styles.view}>
         {renderIcon(props)}
         <View style={styles.value}>
@@ -26,7 +26,7 @@ export const ChartPopupValue = (props: ChartPopupValueProps) => {
     </View>
 }
 
-function renderIcon(props: ChartPopupValueProps) {
+function renderIcon(props: ChartDotInfoPopupValueProps) {
     switch (props.type) {
         case ChartValueType.INSULIN:
             return <ShortSyringeIcon />

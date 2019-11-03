@@ -4,18 +4,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
-import { ChartPopupValue } from './chart-popup-components/ChartPopupValue';
+import { ChartDotInfoPopupValue } from './chart-dot-info-popup-components/ChartDotInfoPopupValue';
 import { ChartValueType } from '../../../model/IChart';
 import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
 
-export interface ChartPopupProps {
+export interface ChartDotInfoPopupProps {
     shown?: boolean
     onClose?: () => void
     dateTitle?: string
     note?: INoteListNote
 }
 
-export function ChartPopup(props: ChartPopupProps) {
+export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
     return <BottomPopup hidden={!props.shown}>
         <LinearGradient
             style={styles.popupGradient}
@@ -28,21 +28,21 @@ export function ChartPopup(props: ChartPopupProps) {
                     </Text>
                 </View>
                 <View style={styles.upperValues}>
-                    <ChartPopupValue
+                    <ChartDotInfoPopupValue
                         type={ChartValueType.GLUCOSE}
                         value={props.note[ChartValueType.GLUCOSE]}
                     />
-                    <ChartPopupValue
+                    <ChartDotInfoPopupValue
                         type={ChartValueType.INSULIN}
                         value={props.note[ChartValueType.INSULIN]}
                     />
                 </View>
                 <View style={styles.bottomValues}>
-                    <ChartPopupValue
+                    <ChartDotInfoPopupValue
                         type={ChartValueType.BREAD_UNITS}
                         value={props.note[ChartValueType.BREAD_UNITS]}
                     />
-                    <ChartPopupValue
+                    <ChartDotInfoPopupValue
                         type={ChartValueType.LONG_INSULIN}
                         value={props.note[ChartValueType.LONG_INSULIN]}
                     />

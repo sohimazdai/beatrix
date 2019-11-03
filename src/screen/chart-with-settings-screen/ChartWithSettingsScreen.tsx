@@ -14,7 +14,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
-import { ChartPopup } from '../../view/chart/chart-popup/ChartPopup';
+import { ChartDotInfoPopup } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -179,24 +179,16 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                                 onDateChange={this.onCurrentDateChange}
                                 date={this.state.currentDate}
                                 onChangingPeriod={this.onChangingPeriod}
-                                onChangingAveragePeriod={this.onChangingAveragePeriod}
                                 selectedPeriod={this.state.selectedPeriod}
-                                selectedAveragePeriod={this.state.selectedAveragePeriod}
-                                glucoseAverageShown={this.state.glucoseAverageShown}
                             />
                         </View>
-                    </View>
-                    <View>
-                        <Text style={styles.statisticsViewText}>
-                            Statisctics are here
-                        </Text>
                     </View>
                     <Hat
                         onBackPress={this.props.navigation.goBack}
                         title={this.getHatTitle()}
                     />
                 </ScrollView>
-                <ChartPopup
+                <ChartDotInfoPopup
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
@@ -411,13 +403,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         this.setState(toStateSet)
     }
 
-    onChangingAveragePeriod = (averagePeriod: ChartAveragePeriodType) => {
-        let toStateSet: any = { selectedAveragePeriod: averagePeriod };
-        if (averagePeriod === ChartAveragePeriodType.MONTH) { //TODO:
-            // toStateSet.currenDate =    
-        }
-        this.setState(toStateSet)
-    }
     getNoteForChartPopup() {
         let weekDayNotes = [];
         let dayNotes = {};
