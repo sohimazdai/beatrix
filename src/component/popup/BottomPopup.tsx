@@ -7,17 +7,10 @@ export interface BottomPopupProps {
 }
 
 export const BottomPopup = (props: BottomPopupProps) => {
-    const [currentOpacity] = React.useState(new Animated.Value(0))
     const [currentBottom] = React.useState(new Animated.Value(-100))
+    const [children, setChildren] = React.useState(null)
 
     React.useEffect(() => {
-        Animated.timing(
-            currentOpacity,
-            {
-                toValue: props.hidden ? 0 : 1,
-                duration: 200,
-            }
-        ).start();
         Animated.timing(
             currentBottom,
             {
@@ -25,14 +18,14 @@ export const BottomPopup = (props: BottomPopupProps) => {
                 duration: 300,
             }
         ).start();
+        !props.hidden && setChildren(props.children);
     }, [props.hidden])
 
     return <Animated.View style={{
         ...styles.BottomPopupView,
-        opacity: currentOpacity,
         bottom: currentBottom
     }}>
-        {props.children}
+        {children}
     </Animated.View>
 }
 
@@ -44,9 +37,6 @@ const styles = StyleSheet.create({
         display: "flex",
         width: '100%',
 
-        opacity: 0
-    },
-    BottomPopupViewActive: {
         opacity: 1
     }
 })

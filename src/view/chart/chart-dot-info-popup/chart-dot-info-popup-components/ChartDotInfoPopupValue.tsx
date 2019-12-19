@@ -1,11 +1,11 @@
 import React from 'react'
 import { ChartValueType } from '../../../../model/IChart'
 import { View, StyleSheet, Text } from 'react-native'
-import { DishIcon } from '../../../../component/icon/value-icons/DishIcon'
-import { BloodDropIcon } from '../../../../component/icon/value-icons/BloodDropIcon'
 import { LongSyringeIcon } from '../../../../component/icon/value-icons/LongSyringeIcon'
 import { ShortSyringeIcon } from '../../../../component/icon/value-icons/ShortSyringeIcon'
 import { MinusSignIcon } from '../../../../component/icon/MinusSignIcon'
+import { VegetablesIcon } from '../../../../component/icon/value-icons/VegetablesIcon'
+import { GlucometerIcon } from '../../../../component/icon/value-icons/GlucometerIcon'
 
 export interface ChartDotInfoPopupValueProps {
     type: string
@@ -29,13 +29,13 @@ export const ChartDotInfoPopupValue = (props: ChartDotInfoPopupValueProps) => {
 function renderIcon(props: ChartDotInfoPopupValueProps) {
     switch (props.type) {
         case ChartValueType.INSULIN:
-            return <ShortSyringeIcon />
+            return <ShortSyringeIcon style={styles.icon}/>
         case ChartValueType.BREAD_UNITS:
-            return <DishIcon />
+            return <VegetablesIcon style={styles.icon}/>
         case ChartValueType.LONG_INSULIN:
-            return <LongSyringeIcon />
+            return <LongSyringeIcon style={styles.icon}/>
         default:
-            return <BloodDropIcon />
+            return <GlucometerIcon style={styles.icon}/>
     }
 }
 
@@ -55,6 +55,10 @@ const styles = StyleSheet.create({
 
         backgroundColor: '#81A8E3',
         borderRadius: 5
+    },
+    icon: {
+        flex: 1,
+        height: 30,
     },
     value: {
         display: "flex",

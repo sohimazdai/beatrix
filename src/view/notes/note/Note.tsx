@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../model/INoteList';
 import { ThemeColor } from '../../../constant/ThemeColor';
+import { shadowOptions } from '../../../constant/shadowOptions';
 
 interface Props {
     note?: INoteListNote
@@ -16,21 +17,23 @@ export function Note(props: Props) {
         <TouchableOpacity
             style={styles.touchableContainer}
             onPress={props.onPress}
-            onLongPress={props.onLongPress}
         >
             <Text style={styles.text}>
                 {getTime(new Date(props.note.date))}
             </Text>
-            <Text style={styles.text}>
-                {props.note.glucose || '-'}
-            </Text>
-            <Text style={styles.text}>
-                {props.note.breadUnits || '-'}
-            </Text>
-            <Text style={styles.text}>
-                {props.note.insulin || '-'}{props.note.longInsulin ? '/' + props.note.longInsulin : ''}
-            </Text>
         </TouchableOpacity>
+        <Text style={styles.text}>
+            {props.note.glucose || '-'}
+        </Text>
+        <Text style={styles.text}>
+            {props.note.breadUnits || '-'}
+        </Text>
+        <Text style={styles.text}>
+            {props.note.insulin || '-'}
+        </Text>
+        <Text style={styles.text}>
+            {props.note.longInsulin || '-'}
+        </Text>
     </View>
 }
 
@@ -43,26 +46,36 @@ const getTime = (date: Date) => {
 const styles = StyleSheet.create({
     noteView: {
         width: '100%',
-        height: 20,
+        height: 30,
 
-        marginBottom: 10,
-    },
-    touchableContainer: {
-        flex: 1,
-        width: '100%',
-        height: 20,
+        display: 'flex',
+        marginTop: 5,
+        marginBottom: 5,
 
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
+    },
+    touchableContainer: {
+        flex: 1,
+        height: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        ...shadowOptions
     },
     text: {
-        width: '25%',
+        flex: 1,
+
+        justifyContent: 'center',
+        alignItems: 'center',
 
         textAlign: 'center',
         fontFamily: 'Roboto',
-        fontSize: 16,
-        lineHeight: 19,
+        fontSize: 18,
+        lineHeight: 21,
 
-        color: '#666666',
+        color: '#333',
     }
 })
