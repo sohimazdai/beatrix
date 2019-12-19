@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Modal } from 'react-native';
 import { connect } from 'react-redux';
 import { IAppState } from '../../model/IAppState';
 import { INoteListByDay, INoteListNote } from '../../model/INoteList';
@@ -18,6 +18,18 @@ import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon'
 import { GlucometerIcon } from '../../component/icon/value-icons/GlucometerIcon';
 import { ShortSyringeIcon } from '../../component/icon/value-icons/ShortSyringeIcon';
 import { LongSyringeIcon } from '../../component/icon/value-icons/LongSyringeIcon';
+import { BottomPopup } from '../../component/popup/BottomPopup';
+import { NoteCreationScreenConnect } from '../note-creation/NoteCreationScreen';
+import { NoteEditingScreenConnect } from '../note-editing/NoteEditingScreen';
+
+export enum NoteValueType {
+    GLUCOSE = 'glucose',
+    DATE = 'date',
+    FOOD = 'food',
+    SHORT_INSULIN = 'short-insulin',
+    LONG_INSULIN = 'long-insulin',
+    COMMENT = 'comment'
+}
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -34,6 +46,11 @@ interface NoteListScreenProps {
 interface FullProps extends NoteListScreenProps, NoteListScreenDispatchProps, NoteListScreenStateTProps { }
 
 class NoteListScreen extends React.PureComponent<FullProps>{
+    state = {
+        noteCreationShown: false,
+        noteEditingShown: false,
+        editingNoteId: null
+    }
     render() {
         return (
             <View style={styles.screenView}>
@@ -46,10 +63,19 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Chart')}>
                         <ToChartButton />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteCreation')}>
+                    <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
                         <AddNoteIcon />
                     </TouchableOpacity>
                 </View>
+                <BottomPopup hidden={!this.state.noteCreationShown}>
+                    <NoteCreationScreenConnect onBackPress={() => this.setState({ noteCreationShown: false })}/>
+                </BottomPopup>
+                <BottomPopup hidden={!this.state.noteEditingShown}>
+                    <NoteEditingScreenConnect
+                        noteId={this.state.editingNoteId}
+                        onBackPress={() => this.setState({ noteEditingShown: false })}
+                    />
+                </BottomPopup>
             </View>
         )
     }
@@ -112,9 +138,9 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     return <Note
                         key={noteId}
                         note={note}
-                        onPress={() => { }}
-                        onLongPress={() => this.props.navigation.navigate('NoteEditor', {
-                            noteId: noteId
+                        onPress={() => this.setState({ 
+                            noteEditingShown: true,
+                            editingNoteId: noteId
                         })}
                     />
                 })}

@@ -19,7 +19,6 @@ import { Dispatch, Action } from 'redux';
 import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
 import { INoteListNote, INoteList } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction, deleteNoteInNoteListById } from '../../store/modules/noteList/NoteListActionCreator';
-import { NavigationScreenProp, NavigationParams, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { Hat } from '../../component/hat/Hat';
 import * as lodash from "lodash"
@@ -31,6 +30,7 @@ import { DeleteNoteIcon } from '../../component/icon/DeleteNoteIcon';
 import { ChangeNoteIcon } from '../../component/icon/ChangeNoteIcon';
 import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
+import { ArrowDownIcon } from '../../component/icon/ArrowDownIcon';
 
 
 enum InputType {
@@ -40,16 +40,23 @@ enum InputType {
 }
 
 
-interface NoteEditingStateTProps {
-    noteList: INoteList,
+interface NoteEditingStateToProps {
+    noteList?: INoteList
 }
 
 interface NoteEditingDispatchProps {
-    dispatch: Dispatch<Action>
+    dispatch?: Dispatch<Action>
+}
+
+interface NoteMergeProps {
+    noteId?: number
+    note?: INoteListNote
+    onDeleteNote?: () => void
 }
 
 interface NoteEditingProps {
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    noteId?: number
+    onBackPress?: () => void
 }
 
 interface NoteEdittingScreenState {
@@ -60,21 +67,17 @@ interface NoteEdittingScreenState {
     longInsulinInput: string
 }
 
-interface FullProps extends NoteEditingStateTProps, NoteEditingDispatchProps, NoteEditingProps { }
+interface FullProps extends NoteEditingStateToProps, NoteEditingDispatchProps, NoteEditingProps, NoteMergeProps { }
 
 interface FullState extends NoteEdittingScreenState { }
 
 class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
-
-    noteId = this.props.navigation.getParam('noteId', 'currentId');
-    currentNote = this.props.noteList[this.noteId];
-
     state = {
-        date: new Date(this.currentNote.date),
-        glucoseInput: this.currentNote.glucose.toString(),
-        breadUnitsInput: this.currentNote.breadUnits.toString(),
-        insulinInput: this.currentNote.insulin.toString(),
-        longInsulinInput: this.currentNote.longInsulin.toString(),
+        date: new Date(this.props.note.date),
+        glucoseInput: this.props.note.glucose.toString(),
+        breadUnitsInput: this.props.note.breadUnits.toString(),
+        insulinInput: this.props.note.insulin.toString(),
+        longInsulinInput: this.props.note.longInsulin.toString(),
     }
 
     render() {
@@ -92,12 +95,12 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
                         </View>
                     </View>
                 </ScrollView>
-
-                <Hat
-                    title={'Редактировать запись'}
-                    onBackPress={() => this.props.navigation.navigate('NoteList')}
-                    hatColor={ThemeColor.LIGHT_PINK_RED}
-                />
+                <TouchableOpacity
+                    style={styles.arrowDown}
+                    onPress={this.props.onBackPress}
+                >
+                    <ArrowDownIcon />
+                </TouchableOpacity>
             </KeyboardAvoidingView>
         )
     }
@@ -267,14 +270,14 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
         }
 
         if (note.glucose || note.breadUnits || note.insulin || note.longInsulin) {
-            if (note.date !== this.currentNote.date) {
-                this.props.dispatch(deleteNoteInNoteListById(this.currentNote.date))
+            if (note.date !== this.props.note.date) {
+                this.props.onDeleteNote();
                 this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-                this.props.navigation.navigate('NoteList')
+                this.props.onBackPress()
             }
             else {
                 this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-                this.props.navigation.navigate('NoteList')
+                this.props.onBackPress()
             }
         } else {
             alert('Заполните хотя бы одно поле')
@@ -298,14 +301,26 @@ class NoteEditingScreen extends React.PureComponent<FullProps, FullState>{
     }
 
     deleteNote = () => {
-        this.props.dispatch(deleteNoteInNoteListById(this.noteId));
-        this.props.navigation.navigate('NoteList');
+        this.props.onDeleteNote();
+        this.props.onBackPress()
     }
 }
 
-export const NoteEditingScreenConnect = connect<NoteEditingStateTProps, NoteEditingDispatchProps>(
-    (state: IAppState) => ({ noteList: state.noteList }),
-    (dispatch: Dispatch<Action>) => ({ dispatch })
+export const NoteEditingScreenConnect = connect<NoteEditingStateToProps, NoteEditingDispatchProps, NoteMergeProps>(
+    (state: IAppState) => ({
+        noteList: state.noteList
+    }),
+    (dispatch: Dispatch<Action>) => ({ dispatch }),
+    (stateProps, { dispatch }, ownProps) => {
+        return {
+            ...ownProps,
+            note: stateProps.noteList[ownProps.noteId],
+            dispatch,
+            onDeleteNote() {
+                dispatch(deleteNoteInNoteListById(ownProps.noteId))
+            }
+        }
+    }
 )(NoteEditingScreen)
 
 const styles = StyleSheet.create({
@@ -427,5 +442,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 16,
         color: ThemeColor.WHITE,
+    },
+    arrowDown: {
+        position: 'absolute',
+        right: 20,
+        top: 20,
     }
 })

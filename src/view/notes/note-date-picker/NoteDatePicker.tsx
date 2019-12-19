@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 
         borderRadius: 5,
         backgroundColor: ThemeColor.WHITE,
-        borderColor: ThemeColor.TAN
+        borderColor: '#DDDDDD'
     },
     touchable: {
         flex: 1,
@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         fontSize: 18,
-        color: ThemeColor.DIMGRAY,
+        color: ThemeColor.TEXT_DARK_GRAY,
     }
 })

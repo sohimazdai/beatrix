@@ -16,6 +16,18 @@ interface Props {
 export function NoteInputWithSlider(props: Props) {
     return (
         <View style={styles.view}>
+            <View style={styles.inputView}>
+                <Text style={styles.inputTitleText}>
+                    {props.inputTitle}
+                </Text>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={(value) => props.onChangeText(value)}
+                    value={props.value}
+                    keyboardType={'numeric'}
+                    returnKeyType={'done'}
+                />
+            </View>
             <View style={styles.sliderView}>
                 <View style={styles.sliderRow}>
                     <Text style={styles.sliderRowText}>
@@ -38,7 +50,7 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={parseFloat(0 + '.' + props.value.split('.')[1]) || 0.0 }
+                        value={parseFloat(0 + '.' + props.value.split('.')[1]) || 0.0}
                         onValueChange={(value) => value ?
                             props.onDecimalSlide((Math.floor(value * 10) / 10)) :
                             props.onDecimalSlide('0.0')
@@ -51,18 +63,6 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                 </View>
             </View>
-            <View style={styles.inputView}>
-                <Text style={styles.inputTitleText}>
-                    {props.inputTitle}
-                </Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(value) => props.onChangeText(value)}
-                    value={props.value}
-                    keyboardType={'numeric'}
-                    returnKeyType={'done'}
-                />
-            </View>
         </View>
     )
 }
@@ -71,30 +71,29 @@ const styles = StyleSheet.create({
     view: {
         flex: 1,
         width: '100%',
-        height: 90,
-        flexDirection: 'row-reverse',
+        flexDirection: 'column',
     },
     sliderView: {
         flex: 1,
         height: 90,
+        width: '100%',
 
+        margin: 5,
         padding: 5,
-        borderWidth: 2,
-        borderRadius: 10,
 
         flexDirection: 'column',
         justifyContent: 'center',
-        borderColor: ThemeColor.TAN,
-        backgroundColor: ThemeColor.WHITE,
     },
     sliderRow: {
         flex: 1,
+        width: '100%',
         height: 30,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
     sliderRowText: {
-        width: 18,
+        width: 25,
+        fontSize: 19,
         paddingTop: 10,
 
         textAlignVertical: 'center',
@@ -104,17 +103,16 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     inputView: {
-        height: 70,
-        width: 85,
-
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     inputTitleText: {
-        fontSize: 16,
+        margin: 3,
+        fontSize: 19,
         lineHeight: 20,
-        color: ThemeColor.DIMGRAY
+        fontWeight: "bold",
+        color: ThemeColor.TEXT_DARK_GRAY
     },
     input: {
         width: 70,
@@ -128,7 +126,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: ThemeColor.TEXT_DARK_GRAY,
 
-        borderColor: ThemeColor.TAN,
+        borderColor: '#DDDDDD',
         backgroundColor: ThemeColor.WHITE,
     },
 })

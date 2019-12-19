@@ -7,7 +7,6 @@ import { shadowOptions } from '../../../constant/shadowOptions';
 interface Props {
     note?: INoteListNote
     onPress?: () => void
-    onLongPress?: () => void
 }
 
 export function Note(props: Props) {
