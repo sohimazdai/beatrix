@@ -94,7 +94,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
 
     renderCards() {
         const days = Object.keys(this.props.noteListByDay).sort((a, b) => parseInt(b) - parseInt(a));
-        return days.map(day => {
+        return days.length !== 0 ? days.map(day => {
             return (
                 <View
                     key={day}
@@ -104,7 +104,9 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     {this.renderCard(this.props.noteListByDay[day])}
                 </View>
             )
-        })
+        }) : <Text style={styles.noNotesStub}>
+            Записей не найдено!
+        </Text>
     }
 
     renderDate(day: number) {
@@ -277,4 +279,12 @@ const styles = StyleSheet.create({
         elevation: 4,
         ...shadowOptions,
     },
+    noNotesStub: {
+        flex: 1,
+        padding: 40,
+        fontSize: 20,
+
+        color: '#333333'
+
+    }
 })

@@ -13,22 +13,26 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    await Font.loadAsync({
-      "Roboto": require("./assets/fonts/Roboto/Roboto-Regular.ttf")
-    });
-    this.setState({appIsReady: true});
+    try {
+      await Font.loadAsync({
+        "Roboto": require("./assets/fonts/Roboto/Roboto-Regular.ttf")
+      })
+    } catch (e) {
+      alert(e.message)
+    }
+    this.setState({ appIsReady: true });
   }
 
-  render(){
+  render() {
     return (
       this.state.appIsReady ?
-          <Provider store={appStore}>
-            <PersistGate loading={null} persistor={persistor}>
-              <AppNavigator />
-              <ModalContentConnect />
-            </PersistGate>
-          </Provider>
-      : <AppLoading />
+        <Provider store={appStore}>
+          <PersistGate loading={null} persistor={persistor}>
+            <AppNavigator />
+            <ModalContentConnect />
+          </PersistGate>
+        </Provider>
+        : <AppLoading />
     )
   }
 }
