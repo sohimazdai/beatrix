@@ -3,6 +3,7 @@ import { noteListReducer } from "./modules/noteList/NoteListReducer";
 import { modalReducer } from "./modules/modal/ModalListReducer";
 import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import { AsyncStorage } from "react-native";
+import { userReducer } from "./modules/user/UserReducer";
 
 const logger = store => next => action => {
     console.log("DISPATCHING", action.type);
@@ -12,7 +13,8 @@ const logger = store => next => action => {
 
 const rootReducer = combineReducers({
     noteList: noteListReducer,
-    modal: modalReducer
+    modal: modalReducer,
+    user: userReducer
 });
 
 const persistConfig: PersistConfig = {

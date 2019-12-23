@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import {
     View,
     Text,
     StyleSheet,
-    Platform,
-    Touchable,
-    // TouchableOpacity, ???
-    Button,
-    Image,
+    ActivityIndicator,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import Svg, { Circle, Polygon } from 'react-native-svg';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
 import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountainsIcon';
 import { shadowOptions } from '../../constant/shadowOptions';
-import { GoogleLogoIcon } from '../../component/icon/GoogleLogoIcon';
+import { connect } from 'react-redux';
+import { IAppState } from '../../model/IAppState';
+import { Action } from 'redux';
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
+import { IUser } from '../../model/IUser';
+import { firebaseApp } from '../../app/FirebaseApp';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    filfullUser?: (user: IUser) => void;
+    setUserInLoading?: () => void;
+    setUserInLoaded?: () => void;
+    user?: IUser
 }
 
 interface AuthScreenState {
@@ -27,11 +31,14 @@ interface AuthScreenState {
     password: string
 }
 
-class AuthorizationScreen extends React.Component<AuthScreenProps, AuthScreenState>{
 
+export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthScreenState>{
     state = {
         email: '',
         password: ''
+    }
+
+    componentDidMount() {
     }
 
     render() {
@@ -41,8 +48,6 @@ class AuthorizationScreen extends React.Component<AuthScreenProps, AuthScreenSta
                     {this.renderBackgroundSun()}
                     {this.renderBackgroundMountains()}
                     {this.renderAuthForm()}
-                    <GoogleLogoIcon />
-
                 </View>
             </View>
         )
@@ -129,16 +134,72 @@ class AuthorizationScreen extends React.Component<AuthScreenProps, AuthScreenSta
 
     renderSignInButton() {
         return (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteList')}
-                style={styles.signInButton}
-            >
-                <Text style={styles.signInButtonText}>
-                    Войти
-                </Text>
+            <TouchableOpacity onPress={() => this.signInWithEmailAndPassword()} >
+                <View style={styles.signInButton}>
+                    {(this.props.user && this.props.user.loading) ?
+                        <ActivityIndicator size="small" color="#000000" /> :
+                        <Text style={styles.signInButtonText}>
+                            Войти
+                        </Text>
+                    }
+                </View>
             </TouchableOpacity>
         )
     }
+
+    toRegistration = () => {
+        this.props.navigation.navigate('Registration')
+    }
+
+    signInWithEmailAndPassword = async () => {
+        this.props.setUserInLoading && this.props.setUserInLoading();
+        try {
+            await firebaseApp.auth()
+                .signInWithEmailAndPassword(this.state.email, this.state.password)
+                .then((data) => {
+                    alert(JSON.stringify(data, null, 1))
+                    const userData = {
+                        id: data.user.uid,
+                        email: data.user.email,
+                        name: data.user.email.split('@')[0],
+                        isAuthed: true
+                    }
+                    return userData
+                })
+                .then((data) => {
+                    this.props.filfullUser && this.props.filfullUser(data)
+                    this.props.navigation.navigate('NoteList')
+                })
+        } catch (e) {
+            this.props.setUserInLoaded && this.props.setUserInLoaded();
+            alert(e.message);
+        };
+    }
 }
+
+export const AuthorizationScreenConnect = connect(
+    (state: IAppState) => ({ user: state.user }),
+    (dispatch: Dispatch<Action>) => ({ dispatch }),
+    (stateProps, { dispatch }, ownProps) => {
+        return {
+            ...stateProps,
+            ...ownProps,
+            setUserInLoading() {
+                dispatch(createUserChangeAction({ loading: true }))
+            },
+            setUserInLoaded() {
+                dispatch(createUserChangeAction({ loading: false }))
+            },
+            filfullUser(user: IUser) {
+                dispatch(createUserChangeAction({
+                    ...stateProps.user,
+                    ...user,
+                    loading: false
+                }))
+            }
+        }
+    }
+)(AuthorizationScreen)
 
 const styles = StyleSheet.create({
     AuthView: {
@@ -227,15 +288,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     signInButton: {
-        width: 120,
-        height: 30,
-
-        // marginLeft: 20,
-        // paddingLeft: 10,
-
-        // elevation: 2,
-        // ...shadowOptions,
-
+        display: 'flex',
+        padding: 10,
+        margin: 10,
+        width: 100,
+        height: 50,
 
         borderWidth: 1,
         borderRadius: 15,
