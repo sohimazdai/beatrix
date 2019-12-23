@@ -17,44 +17,51 @@ export interface ChartDotInfoPopupProps {
 
 export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
     return <BottomPopup hidden={!props.shown}>
-        <LinearGradient
-            style={styles.popupGradient}
-            colors={['#FFB4B4', '#D6E5ED']}
-        >
-            {props.note && <>
-                <View style={styles.dateTitleView}>
-                    <Text style ={styles.dateTitle}>
-                        {props.dateTitle}
-                    </Text>
-                </View>
-                <View style={styles.upperValues}>
-                    <ChartDotInfoPopupValue
-                        type={ChartValueType.GLUCOSE}
-                        value={props.note[ChartValueType.GLUCOSE]}
-                    />
-                    <ChartDotInfoPopupValue
-                        type={ChartValueType.INSULIN}
-                        value={props.note[ChartValueType.INSULIN]}
-                    />
-                </View>
-                <View style={styles.bottomValues}>
-                    <ChartDotInfoPopupValue
-                        type={ChartValueType.BREAD_UNITS}
-                        value={props.note[ChartValueType.BREAD_UNITS]}
-                    />
-                    <ChartDotInfoPopupValue
-                        type={ChartValueType.LONG_INSULIN}
-                        value={props.note[ChartValueType.LONG_INSULIN]}
-                    />
-                </View>
-            </>}
-            <TouchableOpacity
-                style={styles.arrowDown}
-                onPress={props.onClose}
+        <View style={styles.animatedView}>
+            <LinearGradient
+                style={styles.popupGradient}
+                colors={['#DFF2FF', '#F6F8FF']}
             >
-                <ArrowDownIcon />
-            </TouchableOpacity>
-        </LinearGradient>
+                {props.note && <>
+                    <View style={styles.dateTitleView}>
+                        <Text style={styles.dateTitle}>
+                            {props.dateTitle}
+                        </Text>
+                    </View>
+                    <View style={styles.upperValues}>
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.GLUCOSE}
+                            value={props.note[ChartValueType.GLUCOSE]}
+                        />
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.INSULIN}
+                            value={props.note[ChartValueType.INSULIN]}
+                        />
+                    </View>
+                    <View style={styles.bottomValues}>
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.BREAD_UNITS}
+                            value={props.note[ChartValueType.BREAD_UNITS]}
+                        />
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.LONG_INSULIN}
+                            value={props.note[ChartValueType.LONG_INSULIN]}
+                        />
+                    </View>
+                    {!!props.note.commentary && <View style={styles.commentValue}>
+                        <Text style={styles.commentValueText}>
+                            {props.note.commentary}
+                        </Text>
+                    </View>}
+                </>}
+                <TouchableOpacity
+                    style={styles.arrowDown}
+                    onPress={props.onClose}
+                >
+                    <ArrowDownIcon />
+                </TouchableOpacity>
+            </LinearGradient>
+        </View>
     </BottomPopup>
 }
 
@@ -69,6 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor: ThemeColor.WHITE,
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'hidden'
     },
     popupGradient: {
         width: '100%',
@@ -77,9 +85,9 @@ const styles = StyleSheet.create({
         padding: 15,
         paddingBottom: 35,
 
-        borderRadius: 25,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
+        // borderRadius: 25,
+        // borderBottomLeftRadius: 0,
+        // borderBottomRightRadius: 0,
 
         justifyContent: 'center',
         alignItems: 'center',
@@ -107,6 +115,17 @@ const styles = StyleSheet.create({
 
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    commentValue: {
+        marginTop: 15,
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: "white",
+        padding: 15
+    },
+    commentValueText: {
+        fontSize: 18,
+        color: "#333333"
     },
     arrowDown: {
         position: 'absolute',

@@ -22,7 +22,6 @@ import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTim
 import { ArrowDownIcon } from '../../component/icon/ArrowDownIcon';
 import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
 import { IAppState } from '../../model/IAppState';
-import { stat } from 'fs';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',

@@ -18,6 +18,7 @@ import { ChartDotInfoPopup } from '../../view/chart/chart-dot-info-popup/ChartDo
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
+import { BlockHat } from '../../component/hat/BlockHat';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -145,10 +146,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         ];
         return (
             <View style={styles.view}>
-                <LinearGradient
-                    colors={['#FFF2CF', '#4249FF']}
-                    style={styles.viewGradient}
-                />
                 <ScrollView style={styles.scrollView}>
                     <View
                         style={styles.chartWithSettingsView}
@@ -183,10 +180,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                             />
                         </View>
                     </View>
-                    <Hat
-                        onBackPress={this.props.navigation.goBack}
-                        title={this.getHatTitle()}
-                    />
                 </ScrollView>
                 <ChartDotInfoPopup
                     dateTitle={this.getChartPopupTitle()}
@@ -470,6 +463,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
+        backgroundColor: '#F6F8FF'
     },
     scrollView: {
         flex: 1,
@@ -493,7 +487,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
-        backgroundColor: ThemeColor.LIGHT_BLUE,
+        // backgroundColor: ThemeColor.LIGHT_BLUE,
 
         elevation: 1,
         ...shadowOptions,
@@ -514,7 +508,7 @@ const styles = StyleSheet.create({
     chartGradient: {
         width: '100%',
 
-        paddingTop: 80,
+        paddingTop: 40,
         paddingBottom: 25,
 
         borderTopLeftRadius: 0,
@@ -526,27 +520,6 @@ const styles = StyleSheet.create({
 
         elevation: 3,
         ...shadowOptions,
-    },
-    chartWrap: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    yNetTitlesView: {//
-        position: 'absolute',
-        left: 12,
-        display: 'flex',
-        flexDirection: 'column-reverse',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    yNetTitlesText: {
-        paddingRight: 3,
-        fontSize: 12,
-        textAlign: 'center',
-        color: '#CCCCCC'
     },
     highightTitlesView: {
         width: '100%',
@@ -564,14 +537,6 @@ const styles = StyleSheet.create({
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    yAxisTitleIcon: {//
-        position: 'absolute',
-        right: -10,
-        display: 'flex',
-        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
     },

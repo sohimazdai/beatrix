@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     dateClicker: {
         display: 'flex',
         width: 45,
-        height: 30,
 
         borderWidth: 1,
 
@@ -168,19 +167,18 @@ const styles = StyleSheet.create({
         ...shadowOptions,
         borderRadius: 5,
         backgroundColor: ThemeColor.WHITE,
-        borderColor: '#FFEBEB',
+        borderColor: '#2E3858',
     },
     dateClickerTouchable: {
         display: 'flex',
         width: 45,
-        height: 25,
-
         justifyContent: 'center',
         alignItems: 'center',
     },
     dateClickerText: {
         fontWeight: 'bold',
         fontSize: 16,
+        padding: 10,
         color: '#333'
     },
     borderedChartSettings: {
@@ -188,6 +186,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: '100%',
 
+        margin: 20,
         paddingTop: 10,
         padding: 25,
         borderWidth: 1,
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
-        borderColor: ThemeColor.WHITE,
+        borderColor: "#2E3858",
     },
     periodChangingBlock: {
         display: 'flex',
@@ -243,7 +242,8 @@ const styles = StyleSheet.create({
         color: ThemeColor.TEXT_DARK_GRAY,
     },
     periodButtonActive: {
-        borderColor: ThemeColor.LIGHT_RED
+        backgroundColor: "#2E3858",
+        borderColor: "#2E3858"
     },
     periodButtonTouchable: {
         display: 'flex',
@@ -258,7 +258,8 @@ const styles = StyleSheet.create({
         lineHeight: 16,
     },
     periodButtonTextActive: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: "#FFFFFF"
     },
     scaleAverageValueTitle: {
         width: '100%',

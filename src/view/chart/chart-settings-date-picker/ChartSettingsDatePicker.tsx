@@ -119,13 +119,12 @@ export const ChartSettingsDatePickerConnect = connect<{}, DispatchToProps>(
 const styles = StyleSheet.create({
     view: {
         width: 170,
-        height: 30,
 
         borderWidth: 1,
 
         borderRadius: 5,
         backgroundColor: ThemeColor.WHITE,
-        borderColor: ThemeColor.TAN
+        borderColor: "#2E3858"
     },
     viewWide: {
         width: 190,
@@ -144,6 +143,9 @@ const styles = StyleSheet.create({
     },
     inputText: {
         flex: 1,
+
+        paddingTop: 5,
+        paddingBottom: 5,
 
         marginLeft: 7,
 
