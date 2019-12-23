@@ -6,8 +6,8 @@ import { VegetablesIcon } from '../../../component/icon/value-icons/VegetablesIc
 import { ShortSyringeIcon } from '../../../component/icon/value-icons/ShortSyringeIcon'
 import { LongSyringeIcon } from '../../../component/icon/value-icons/LongSyringeIcon'
 import { shadowOptions } from '../../../constant/shadowOptions'
-import { NoteValueType } from '../../../screen/note-list/NoteListScreen'
 import { CommentIcon } from '../../../component/icon/CommentIcon'
+import { NoteValueType } from '../../../model/INoteList'
 
 interface Props {
     onSelect?: (value: NoteValueType) => void;

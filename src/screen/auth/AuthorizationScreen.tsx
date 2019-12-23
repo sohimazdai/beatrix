@@ -10,13 +10,15 @@ import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-n
 import { ThemeColor } from '../../constant/ThemeColor';
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
 import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountainsIcon';
+import { firebaseApp } from '../../app/FirebaseApp';
+import "firebase/firestore";
 import { shadowOptions } from '../../constant/shadowOptions';
 import { connect } from 'react-redux';
 import { IAppState } from '../../model/IAppState';
 import { Action } from 'redux';
 import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 import { IUser } from '../../model/IUser';
-import { firebaseApp } from '../../app/FirebaseApp';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -38,7 +40,12 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
         password: ''
     }
 
-    componentDidMount() {
+    static getDerivedStateFromProps(props: AuthScreenProps, state: AuthScreenState) {
+        if (props.user.email) {
+            return {...state, email: props.user.email}
+        }
+
+        return state;
     }
 
     render() {
@@ -73,24 +80,25 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
     renderAuthForm() {
         return (
             <View style={styles.AuthForm}>
-                <Text style={styles.titleFormText}>
-                    Авторизация
-                </Text>
-                {this.renderInputBlock()}
-                <View style={styles.formButtons}>
-                    {this.renderRegistrationButton()}
-                    {this.renderSignInButton()}
+                <LinearGradient
+                    colors={['#F6F8FF', '#FFEBEB']}
+                    style={styles.authFormGradient}
+                />
+                <View style={styles.form}>
+                    <Text style={styles.titleFormText}>
+                        Авторизация
+                        </Text>
+                    {this.renderInputBlock()}
+                    <View style={styles.formButtons}>
+                        {this.renderSignInButton()}
+                        {this.renderRegistrationButton()}
+                        {
+                            this.props.user && this.props.user.loading &&
+                            <ActivityIndicator size="small" color="#000000" />
+                        }
+                    </View>
                 </View>
-                <Text style={styles.titleFormText}>
-                    ------- или -------
-                </Text>
-                <View style={styles.formButtons}>
-                    {/* <GoogleLogoIcon />  */}
-                    {/* <Svg width="80" height="80">
-                        <Image href={require('file:///C:/Users/mikha/OneDrive/Desktop/VKAuth.svg')} />
-                    </Svg> */}
-                </View>
-            </View>
+            </View >
         )
     }
 
@@ -136,12 +144,9 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
         return (
             <TouchableOpacity onPress={() => this.signInWithEmailAndPassword()} >
                 <View style={styles.signInButton}>
-                    {(this.props.user && this.props.user.loading) ?
-                        <ActivityIndicator size="small" color="#000000" /> :
-                        <Text style={styles.signInButtonText}>
-                            Войти
+                    <Text style={styles.signInButtonText}>
+                        Войти
                         </Text>
-                    }
                 </View>
             </TouchableOpacity>
         )
@@ -157,7 +162,6 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
             await firebaseApp.auth()
                 .signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then((data) => {
-                    alert(JSON.stringify(data, null, 1))
                     const userData = {
                         id: data.user.uid,
                         email: data.user.email,
@@ -236,6 +240,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFEBEB',
         borderRadius: 40,
         marginTop: 280,
+        overflow: 'hidden',
+    },
+
+    authFormGradient: {
+        flex: 1,
+        height: '100%',
+        width: '100%',
     },
     inputForm: {
         margin: 10,
@@ -314,6 +325,9 @@ const styles = StyleSheet.create({
         fontSize: 19,
         color: '#333333',
     },
+    form: {
+        
+    }
 })
 
 

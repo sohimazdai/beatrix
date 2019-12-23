@@ -4,17 +4,12 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Slider,
-    DatePickerAndroid,
-    Platform,
-    ScrollView,
-    DatePickerIOS,
     KeyboardAvoidingView,
     TextInput,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
-import { INoteListNote } from '../../model/INoteList';
+import { INoteListNote, NoteValueType } from '../../model/INoteList';
 import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
 import { ThemeColor } from '../../constant/ThemeColor';
 import * as lodash from "lodash";
@@ -26,13 +21,12 @@ import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDat
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 import { ArrowDownIcon } from '../../component/icon/ArrowDownIcon';
 import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
-import { NoteValueType } from '../note-list/NoteListScreen';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
     BREAD_UNITS = 'ХЕ',
-    INSULIN = 'Длинный',
-    LONG_INSULIN = 'Короткий',
+    LONG_INSULIN = 'Длинный',
+    INSULIN = 'Короткий',
     COMMENT = 'Комментарий'
 }
 
@@ -48,6 +42,7 @@ interface NoteCreationScreenState {
     insulinInput: string
     longInsulinInput: string
     currentValueType: NoteValueType
+    commentary: string
 }
 
 interface FullState extends NoteCreationScreenState { }
@@ -179,7 +174,31 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 return <View style={styles.inputView}>
                     <NoteInputWithSlider
                         inputTitle={InputType.INSULIN}
+                        value={insulinInput}
+                        maximumNum={'15'}
+                        onChangeText={(value) =>
+                            this.setState({ insulinInput: value })
+                        }
+                        onNaturalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                insulinInput: value + '.' + insulinInput.split('.')[1]
+                            }), 50
+                        )}
+                        onDecimalSlide={lodash.debounce((value) =>
+                            this.setState({
+                                insulinInput:
+                                    insulinInput.split('.')[0] + '.' +
+                                    value.toString().split('.')[1]
+                            }), 50
+                        )}
+
+                    />
+                </View>
+            case NoteValueType.LONG_INSULIN:
+                return <View style={styles.inputView}>
+                    <NoteInputWithSlider
                         value={longInsulinInput}
+                        inputTitle={InputType.LONG_INSULIN}
                         maximumNum={'25'}
                         onChangeText={(value) =>
                             this.setState({ longInsulinInput: value })
@@ -198,31 +217,19 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                         )}
                     />
                 </View>
-            case NoteValueType.LONG_INSULIN:
+            case NoteValueType.COMMENT:
                 return <View style={styles.inputView}>
-                    <NoteInputWithSlider
-                        inputTitle={InputType.LONG_INSULIN}
-                        value={insulinInput}
-                        maximumNum={'15'}
-                        onChangeText={(value) =>
-                            this.setState({ insulinInput: value })
-                        }
-                        onNaturalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                insulinInput: value + '.' + insulinInput.split('.')[1]
-                            }), 50
-                        )}
-                        onDecimalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                insulinInput:
-                                    insulinInput.split('.')[0] + '.' +
-                                    value.toString().split('.')[1]
-                            }), 50
-                        )}
+                    <Text style={styles.inputViewTitle}>
+                        Комментарий
+                    </Text>
+                    <TextInput
+                        style={styles.commentTextArea}
+                        multiline={true}
+                        numberOfLines={4}
+                        onChangeText={(text) => this.setState({ commentary: text })}
+                        value={this.state.commentary}
                     />
                 </View>
-                case NoteValueType.COMMENT:
-                    return <TextInput multiline numberOfLines={3} value={this.state.commentary}/>
         }
     }
 
@@ -240,7 +247,7 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
     }
 
     createNote = () => {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, commentary } = this.state;
         glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
         breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
         insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
@@ -251,9 +258,10 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
             glucose: glucoseInput && parseFloat(glucoseInput) || 0,
             breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
             insulin: insulinInput && parseFloat(insulinInput) || 0,
-            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0
+            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0,
+            commentary: commentary || ""
         }
-        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin) {
+        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
             this.setInitialState();
             this.props.onBackPress()
@@ -277,6 +285,7 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
             breadUnitsInput: "0.0",
             insulinInput: "0.0",
             longInsulinInput: "0.0",
+            commentary: "",
             currentValueType: NoteValueType.GLUCOSE
         })
     }
@@ -312,7 +321,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
-        paddingTop: 16,
+        padding: 16,
 
         elevation: 2,
 
@@ -336,8 +345,9 @@ const styles = StyleSheet.create({
     },
     inputView: {
         flex: 1,
+        width: '100%',
         margin: 15,
-        marginRight: 10,
+        marginBottom: 0,
     },
     saveButtonTouchable: {
         flex: 1,
@@ -345,7 +355,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 50,
 
-        marginVertical: 20,
+        marginVertical: 10,
 
         elevation: 2,
         ...shadowOptions,
@@ -353,13 +363,30 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: ThemeColor.LIGHT_RED,
+        backgroundColor: "rgba(250, 250, 250, 0.9)",
 
     },
     saveButtonText: {
         fontFamily: 'Roboto',
-        fontSize: 16,
-        color: '#666666',
+        fontSize: 19,
+        color: '#333333',
+        fontWeight: 'bold',
+    },
+    inputViewTitle: {
+        width: '100%',
+        textAlign: 'center',
+        margin: 3,
+        fontSize: 19,
+        lineHeight: 20,
+        fontWeight: "bold",
+        color: ThemeColor.TEXT_DARK_GRAY
+    },
+    commentTextArea: {
+        backgroundColor: 'white',
+        padding: 10,
+        width: '100%',
+        height: 80,
+        borderRadius: 15,
     },
     arrowDown: {
         position: 'absolute',

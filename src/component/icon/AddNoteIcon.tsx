@@ -2,25 +2,23 @@ import React from 'react'
 import Svg, { G, Circle, Rect, Defs } from 'react-native-svg'
 
 export const AddNoteIcon = props => (
-  <Svg width={66} height={66} fill="none" {...props}>
+  <Svg width={40} height={40} viewBox="0 0 49 45" fill="none" {...props}>
     <G>
-      <Circle cx={33} cy={29} r={29} fill="#FF8B66" />
       <Rect
-        x={28.443}
-        y={9.114}
-        width={9.114}
-        height={40.186}
-        rx={4.557}
-        fill="#D6E5ED"
+        x={19.5357}
+        width={9.11429}
+        height={40.1857}
+        rx={4.55714}
+        fill="#2E3858"
       />
       <Rect
-        x={12.907}
-        y={33.764}
-        width={9.114}
-        height={40.186}
-        rx={4.557}
-        transform="rotate(-90 12.907 33.764)"
-        fill="#D6E5ED"
+        x={4}
+        y={24.65}
+        width={9.11428}
+        height={40.1857}
+        rx={4.55714}
+        transform="rotate(-90 4 24.65)"
+        fill="#2E3858"
       />
     </G>
     <Defs></Defs>

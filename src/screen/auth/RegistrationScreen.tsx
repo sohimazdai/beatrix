@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import {
     View,
     Text,
     StyleSheet,
+    ActivityIndicator,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -12,9 +13,19 @@ import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountain
 import { firebaseApp } from '../../firebase-config';
 import "firebase/firestore";
 import { shadowOptions } from '../../constant/shadowOptions';
+import { LinearGradient } from 'expo-linear-gradient';
+import { IUser } from '../../model/IUser';
+import { connect } from 'react-redux';
+import { IAppState } from '../../model/IAppState';
+import { Action } from 'redux';
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 
 interface RegistrationScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    filfullUser?: (user: IUser) => void;
+    setUserInLoading?: () => void;
+    setUserInLoaded?: () => void;
+    user?: IUser
 }
 
 interface RegistrationScreenState {
@@ -23,10 +34,9 @@ interface RegistrationScreenState {
 }
 
 class RegistrationScreen extends React.Component<RegistrationScreenProps, RegistrationScreenState>{
-
     state = {
         email: '',
-        password: '',
+        password: ''
     }
 
     render() {
@@ -58,17 +68,25 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
     renderAuthForm() {
         return (
             <View style={styles.AuthForm}>
+                <LinearGradient
+                    colors={['#F6F8FF', '#FFEBEB']}
+                    style={styles.authFormGradient}
+                />
                 <View style={styles.form}>
                     <Text style={styles.titleFormText}>
                         Регистрация
-                    </Text>
+                        </Text>
                     {this.renderInputBlock()}
                     <View style={styles.formButtons}>
                         {this.renderRegistrationButton()}
-                        {this.renderToAuthButton()}
+                        {this.renderToSignInButton()}
+                        {
+                            this.props.user && this.props.user.loading &&
+                            <ActivityIndicator size="small" color="#000000" />
+                        }
                     </View>
                 </View>
-            </View>
+            </View >
         )
     }
 
@@ -76,10 +94,11 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
         return (
             <View>
                 <View style={styles.inputForm}>
+                    {/* TODO:keyboardType doesnt work if make custom Input and  */}
                     <TextInput
                         style={styles.input}
                         value={this.state.email}
-                        keyboardType={'email-address'}
+                        keyboardType={'email-address'} // TODO:
                         placeholder={'Почта'}
                         onChangeText={(value) => this.setState({ email: value })}
                     />
@@ -89,7 +108,7 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
                         secureTextEntry
                         style={styles.input}
                         value={this.state.password}
-                        keyboardType={'visible-password'}
+                        keyboardType={'visible-password'} //TODO:
                         placeholder={'Пароль'}
                         onChangeText={(value) => this.setState({ password: value })}
                     />
@@ -101,19 +120,19 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
     renderRegistrationButton() {
         return (
             <TouchableOpacity
-                onPress={this.createUserWithEmailAndPassword}
+                onPress={this.signUpWithEmailAndPassword}
                 style={styles.registrationButton}
             >
                 <Text style={styles.registrationButtonText}>
                     Зарегистрироваться
-                </Text>
+                    </Text>
             </TouchableOpacity>
         )
     }
 
-    renderToAuthButton() {
+    renderToSignInButton() {
         return (
-            <TouchableOpacity onPress={this.toAuth} >
+            <TouchableOpacity onPress={() => this.toRegistration()} >
                 <View style={styles.signInButton}>
                     <Text style={styles.signInButtonText}>
                         У меня уже есть аккаунт
@@ -123,22 +142,57 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
         )
     }
 
-    createUserWithEmailAndPassword = () => {
-        firebaseApp.auth()
-            .createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => {
-                this.props.navigation.navigate('NoteList')
-            })
-            .catch(function (error) {
-                var errorMessage = error.message;
-                alert(errorMessage);
-            });
+    toRegistration = () => {
+        this.props.navigation.navigate('Registration')
     }
 
-    toAuth = () => {
-        this.props.navigation.navigate('Auth')
+    signUpWithEmailAndPassword = async () => {
+        this.props.setUserInLoading && this.props.setUserInLoading();
+        try {
+            await firebaseApp.auth()
+                .createUserWithEmailAndPassword(this.state.email, this.state.password)
+                .then((data) => {
+                    const userData = {
+                        id: data.user.uid,
+                        email: data.user.email,
+                        name: data.user.email.split('@')[0],
+                        isAuthed: true
+                    }
+                    return userData
+                })
+                .then((data) => {
+                    this.props.filfullUser && this.props.filfullUser(data)
+                })
+        } catch (e) {
+            this.props.setUserInLoaded && this.props.setUserInLoaded();
+            alert(e.message);
+        };
     }
 }
+
+export const RegistrationScreenConnect = connect(
+    (state: IAppState) => ({ user: state.user }),
+    (dispatch: Dispatch<Action>) => ({ dispatch }),
+    (stateProps, { dispatch }, ownProps) => {
+        return {
+            ...stateProps,
+            ...ownProps,
+            setUserInLoading() {
+                dispatch(createUserChangeAction({ loading: true }))
+            },
+            setUserInLoaded() {
+                dispatch(createUserChangeAction({ loading: false }))
+            },
+            filfullUser(user: IUser) {
+                dispatch(createUserChangeAction({
+                    ...stateProps.user,
+                    ...user,
+                    loading: false
+                }))
+            }
+        }
+    }
+)(RegistrationScreen)
 
 const styles = StyleSheet.create({
     AuthView: {
@@ -173,6 +227,13 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 55,
         borderTopRightRadius: 55,
         marginTop: 280,
+        overflow: 'hidden',
+    },
+
+    authFormGradient: {
+        flex: 1,
+        height: '100%',
+        width: '100%',
     },
 
     form: {
@@ -222,21 +283,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     registrationButton: {
+        position: 'relative',
         padding: 10,
         margin: 10,
-
-        borderWidth: 1,
         borderRadius: 15,
-        backgroundColor: ThemeColor.WHITE,
         justifyContent: 'center',
-        ...shadowOptions,
+        height: 50,
+
+        backgroundColor: '#ffffff',
+        borderWidth: 1,
+        borderColor: '#2E3858',
+        ...shadowOptions
     },
     signInButton: {
         display: 'flex',
         padding: 10,
 
-        borderRadius: 15,
-        borderColor: '#FFB4B4',
         justifyContent: 'center',
     },
     registrationButtonText: {
@@ -250,9 +312,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 16,
         color: '#333333',
-        textDecorationLine: 'underline'
-    },
+        textDecorationLine: 'underline',
+    }
 })
-
-
-export default RegistrationScreen;

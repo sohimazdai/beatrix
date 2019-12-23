@@ -21,15 +21,9 @@ import { LongSyringeIcon } from '../../component/icon/value-icons/LongSyringeIco
 import { BottomPopup } from '../../component/popup/BottomPopup';
 import { NoteCreationScreenConnect } from '../note-creation/NoteCreationScreen';
 import { NoteEditingScreenConnect } from '../note-editing/NoteEditingScreen';
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
+import { BlockHat } from '../../component/hat/BlockHat';
 
-export enum NoteValueType {
-    GLUCOSE = 'glucose',
-    DATE = 'date',
-    FOOD = 'food',
-    SHORT_INSULIN = 'short-insulin',
-    LONG_INSULIN = 'long-insulin',
-    COMMENT = 'comment'
-}
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -54,21 +48,25 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     render() {
         return (
             <View style={styles.screenView}>
-                <Header />
+                <BlockHat title={'Записи'} />
                 {this.renderIconBar()}
                 <ScrollView>
                     {this.renderCards()}
                 </ScrollView>
                 <View style={styles.addNoteButtonView}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Chart')}>
-                        <ToChartButton />
-                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
-                        <AddNoteIcon />
+                        <View style={styles.addNoteButton}>
+                            <Text style={styles.addNoteButtonText}>
+                                Записать
+                            </Text>
+                            <AddNoteIcon />
+                        </View>
                     </TouchableOpacity>
                 </View>
                 <BottomPopup hidden={!this.state.noteCreationShown}>
-                    <NoteCreationScreenConnect onBackPress={() => this.setState({ noteCreationShown: false })}/>
+                    <NoteCreationScreenConnect
+                        onBackPress={() => this.setState({ noteCreationShown: false })}
+                    />
                 </BottomPopup>
                 <BottomPopup hidden={!this.state.noteEditingShown}>
                     <NoteEditingScreenConnect
@@ -105,7 +103,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                 </View>
             )
         }) : <Text style={styles.noNotesStub}>
-            Записей не найдено!
+                Записей не найдено!
         </Text>
     }
 
@@ -140,7 +138,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     return <Note
                         key={noteId}
                         note={note}
-                        onPress={() => this.setState({ 
+                        onPress={() => this.setState({
                             noteEditingShown: true,
                             editingNoteId: noteId
                         })}
@@ -286,5 +284,21 @@ const styles = StyleSheet.create({
 
         color: '#333333'
 
+    },
+    addNoteButton: {
+        display: 'flex',
+        padding: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(250,250,250, 0.9)',
+        borderRadius: 30,
+    },
+    addNoteButtonText: {
+        fontSize: 18,
+        color: "#333333",
+        marginRight: 5
     }
 })

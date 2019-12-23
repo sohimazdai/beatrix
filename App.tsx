@@ -27,12 +27,15 @@ export default class App extends React.Component {
     return (
       this.state.appIsReady ?
         <Provider store={appStore}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate
+            loading={<AppLoading key={'AppLoading'} />}
+            persistor={persistor}
+          >
             <AppNavigator />
             <ModalContentConnect />
           </PersistGate>
         </Provider>
-        : <AppLoading />
+        : <AppLoading key={'AppLoading'} />
     )
   }
 }
