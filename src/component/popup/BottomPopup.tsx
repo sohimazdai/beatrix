@@ -17,9 +17,11 @@ export const BottomPopup = (props: BottomPopupProps) => {
                 toValue: props.hidden ? -Dimensions.get('screen').height : 0,
                 duration: 300,
             }
-        ).start();
+        ).start(() => {
+            props.hidden && setChildren(null)
+        });
         !props.hidden && setChildren(props.children);
-    }, [props.hidden])
+    }, [props.hidden, props.children])
 
     return <Animated.View style={{
         ...styles.BottomPopupView,

@@ -1,5 +1,3 @@
-import { ChartPeriodThreeMonthType } from "../model/IChart";
-
 export class DateHelper {
     static today() {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();

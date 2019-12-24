@@ -62,6 +62,7 @@ export function ChartWrap(props: ChartWrapProps) {
                     case ChartValueType.GLUCOSE:
                         return basicDotsData;
                     case ChartValueType.INSULIN:
+                        return calculateDayChartDots(props)
                     case ChartValueType.BREAD_UNITS:
                         return calculateDayChartDots(props)
                 }

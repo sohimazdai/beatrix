@@ -9,7 +9,6 @@ import { ThemeColor } from '../../constant/ThemeColor';
 import { shadowOptions } from '../../constant/shadowOptions';
 import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
-import { Hat } from '../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
@@ -147,6 +146,10 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         return (
             <View style={styles.view}>
                 <ScrollView style={styles.scrollView}>
+                    <BlockHat 
+                    title={"График"}
+                    additionalTitle={this.getHatTitle()}
+                    />
                     <View
                         style={styles.chartWithSettingsView}
                     >
@@ -487,9 +490,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
-        // backgroundColor: ThemeColor.LIGHT_BLUE,
 
-        elevation: 1,
         ...shadowOptions,
     },
     chartView: {
@@ -502,23 +503,20 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 25,
         backgroundColor: ThemeColor.LIGHT_BLUE,
 
-        elevation: 2,
         ...shadowOptions,
+
+        overflow: 'hidden'
     },
     chartGradient: {
         width: '100%',
 
-        paddingTop: 40,
+        paddingTop: 20,
         paddingBottom: 25,
 
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        borderRadius: 25,
         backgroundColor: ThemeColor.LIGHT_BLUE,
         justifyContent: 'center',
         alignItems: 'center',
 
-        elevation: 3,
         ...shadowOptions,
     },
     highightTitlesView: {

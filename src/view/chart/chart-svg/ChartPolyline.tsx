@@ -15,7 +15,7 @@ export interface ChartPolylineProps {
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    return renderPolyline(props) || null;
+    return renderPolyline(props);
 }
 
 function renderPolyline(props: ChartPolylineProps) {
@@ -32,7 +32,7 @@ function renderPolyline(props: ChartPolylineProps) {
                 strokeWidth={2}
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                fill="url(#grad)"
+                fill="transparent"
             />
             :
             <Polyline
@@ -46,25 +46,27 @@ function renderPolyline(props: ChartPolylineProps) {
     </>
 }
 
-function getPoints(props) {
-    let points = ''
+function getPoints(props: ChartPolylineProps) {
+    let points = '';
     switch (props.polylineType) {
         case PolylineType.REGULAR:
+            if (props.dots.some(dot => isNaN(dot.id) || isNaN(dot.x) || isNaN(dot.y))) return "";
             props.dots.sort((a, b) => a.x - b.x).map(dot => {
                 points += getPoint(dot);
             })
+            alert(JSON.stringify({ "getPointsRegular": points }))
             return points;
         case PolylineType.BEZIER:
             const tempDots = props.dots.sort((a, b) => a.x - b.x);
             tempDots.map((dot, index) => {
                 if (index === 0) {
-                    points += 'M' + dot.x + ',' + dot.y + ' '
+                    points += 'M' + dot.x + ',' + dot.y
                 } else {
                     points +=
                         'C' +
-                        (tempDots[index - 1].x + ((dot.x) - tempDots[index - 1].x) / 2) + ',' + tempDots[index - 1].y + ' ' + 
-                        (tempDots[index - 1].x + ((dot.x) - tempDots[index - 1].x) / 2) + ',' + dot.y + ' ' + 
-                        dot.x + ',' + dot.y + ' '
+                        (tempDots[index - 1].x + ((dot.x) - tempDots[index - 1].x) / 2) + ',' + tempDots[index - 1].y + ' ' +
+                        (tempDots[index - 1].x + ((dot.x) - tempDots[index - 1].x) / 2) + ',' + dot.y + ' ' +
+                        dot.x + ',' + dot.y
                 }
             })
             return points;

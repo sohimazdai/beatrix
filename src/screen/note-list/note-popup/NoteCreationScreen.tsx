@@ -9,18 +9,18 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
-import { INoteListNote, NoteValueType } from '../../model/INoteList';
-import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
-import { ThemeColor } from '../../constant/ThemeColor';
+import { INoteListNote, NoteValueType } from '../../../model/INoteList';
+import { createNoteListChangeNoteByIdAction } from '../../../store/modules/noteList/NoteListActionCreator';
+import { ThemeColor } from '../../../constant/ThemeColor';
 import * as lodash from "lodash";
-import { shadowOptions } from '../../constant/shadowOptions';
-import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
-import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
-import { ModalType } from '../../model/IModal';
-import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
-import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
-import { ArrowDownIcon } from '../../component/icon/ArrowDownIcon';
-import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
+import { shadowOptions } from '../../../constant/shadowOptions';
+import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
+import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
+import { ModalType } from '../../../model/IModal';
+import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
+import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
+import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
+import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -323,8 +323,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
 
-        elevation: 2,
-
         ...shadowOptions,
 
         borderRadius: 25,
@@ -357,7 +355,6 @@ const styles = StyleSheet.create({
 
         marginVertical: 10,
 
-        elevation: 2,
         ...shadowOptions,
 
         borderRadius: 15,

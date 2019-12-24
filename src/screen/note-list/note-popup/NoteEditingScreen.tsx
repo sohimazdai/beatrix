@@ -9,19 +9,19 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
-import { INoteListNote, NoteValueType } from '../../model/INoteList';
-import { createNoteListChangeNoteByIdAction } from '../../store/modules/noteList/NoteListActionCreator';
-import { ThemeColor } from '../../constant/ThemeColor';
+import { INoteListNote, NoteValueType } from '../../../model/INoteList';
+import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
+import { ThemeColor } from '../../../constant/ThemeColor';
 import * as lodash from "lodash";
-import { shadowOptions } from '../../constant/shadowOptions';
-import { NoteInputWithSlider } from '../../view/notes/note-input/NoteInputWithSlider';
-import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
-import { ModalType, IModalConfirm } from '../../model/IModal';
-import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
-import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
-import { ArrowDownIcon } from '../../component/icon/ArrowDownIcon';
-import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
-import { IAppState } from '../../model/IAppState';
+import { shadowOptions } from '../../../constant/shadowOptions';
+import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
+import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
+import { ModalType, IModalConfirm } from '../../../model/IModal';
+import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
+import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
+import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
+import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
+import { IAppState } from '../../../model/IAppState';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -35,6 +35,7 @@ interface NoteEditingScreenProps {
     note?: INoteListNote
     dispatch?: (action: Action) => void
     onBackPress?: () => void
+    onNoteDelete?: (noteId: number) => void;
 }
 
 interface NoteEditingScreenState {
@@ -282,7 +283,7 @@ class NoteEditingScreen extends React.PureComponent<NoteEditingScreenProps, Full
     }
 
     deleteNote = () => {
-        // this.props.onDeleteNote();
+        this.props.onNoteDelete(this.props.note.date);
         this.props.onBackPress()
     }
 
@@ -337,7 +338,10 @@ export const NoteEditingScreenConnect = connect(
         return {
             ...ownProps,
             dispatch,
-            note: stateProps.notes[ownProps.noteId]
+            note: stateProps.notes[ownProps.noteId],
+            onNoteDelete(noteId) {
+                dispatch(createDeleteNoteInNoteListById(noteId))
+            }
         }
     }
 )(NoteEditingScreen)
@@ -348,7 +352,7 @@ const styles = StyleSheet.create({
         width: '100%',
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        backgroundColor: "#D4EEFF",
+        backgroundColor: "#FFE1DF",
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
@@ -375,8 +379,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         padding: 16,
-
-        elevation: 2,
 
         ...shadowOptions,
 
@@ -409,7 +411,6 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginLeft: 15,
 
-        elevation: 2,
         ...shadowOptions,
 
         borderRadius: 15,
@@ -424,13 +425,12 @@ const styles = StyleSheet.create({
 
         marginVertical: 10,
 
-        elevation: 2,
         ...shadowOptions,
 
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(255,225,223, 0.9)",
+        backgroundColor: "rgba(255, 80, 80, 0.8)",
 
     },
     saveButtonText: {
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
     deleteButtonText: {
         fontFamily: 'Roboto',
         fontSize: 19,
-        color: '#333333',
+        color: 'white',
         fontWeight: 'bold',
     },
     inputViewTitle: {

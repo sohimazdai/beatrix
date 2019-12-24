@@ -11,18 +11,15 @@ import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { ThemeColor } from '../../constant/ThemeColor';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { shadowOptions } from '../../constant/shadowOptions';
-import { ToChartButton } from '../../component/icon/ToChartButton';
-import { Header } from '../../component/header/Header';
 import { RoundClocksIcon } from '../../component/icon/RoundClocksIcon';
 import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
 import { GlucometerIcon } from '../../component/icon/value-icons/GlucometerIcon';
 import { ShortSyringeIcon } from '../../component/icon/value-icons/ShortSyringeIcon';
 import { LongSyringeIcon } from '../../component/icon/value-icons/LongSyringeIcon';
 import { BottomPopup } from '../../component/popup/BottomPopup';
-import { NoteCreationScreenConnect } from '../note-creation/NoteCreationScreen';
-import { NoteEditingScreenConnect } from '../note-editing/NoteEditingScreen';
-import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 import { BlockHat } from '../../component/hat/BlockHat';
+import { NoteCreationScreenConnect } from './note-popup/NoteCreationScreen';
+import { NoteEditingScreenConnect } from './note-popup/NoteEditingScreen';
 
 
 interface NoteListScreenStateTProps {
@@ -46,6 +43,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
         editingNoteId: null
     }
     render() {
+        const { noteCreationShown, noteEditingShown } = this.state;
         return (
             <View style={styles.screenView}>
                 <BlockHat title={'Записи'} />
@@ -53,29 +51,28 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                 <ScrollView>
                     {this.renderCards()}
                 </ScrollView>
-                {
-                    !this.state.noteCreationShown ?
-                        <View style={styles.addNoteButtonView}>
-                            <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
-                                <View style={styles.addNoteButton}>
-                                    <Text style={styles.addNoteButtonText}>
-                                        Записать
+                {!(noteCreationShown || noteEditingShown) && <View style={styles.addNoteButtonView}>
+                    <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
+                        <View style={styles.addNoteButton}>
+                            <Text style={styles.addNoteButtonText}>
+                                Записать
                                     </Text>
-                                    <AddNoteIcon />
-                                </View>
-                            </TouchableOpacity>
-                        </View> 
-                        : 
-                        <BottomPopup>
-                            <NoteCreationScreenConnect
-                                onBackPress={() => this.setState({ noteCreationShown: false })}
-                            />
-                        </BottomPopup>
-                }
+                            <AddNoteIcon />
+                        </View>
+                    </TouchableOpacity>
+                </View>}
+                <BottomPopup hidden={!this.state.noteCreationShown}>
+                    <NoteCreationScreenConnect
+                        onBackPress={() => this.setState({ noteCreationShown: false })}
+                    />
+                </BottomPopup>
                 <BottomPopup hidden={!this.state.noteEditingShown}>
                     <NoteEditingScreenConnect
                         noteId={this.state.editingNoteId}
-                        onBackPress={() => this.setState({ noteEditingShown: false })}
+                        onBackPress={() => this.setState({ 
+                            noteEditingShown: false,
+                            editingNoteId: null
+                        })}
                     />
                 </BottomPopup>
             </View>
@@ -248,7 +245,7 @@ const styles = StyleSheet.create({
 
         padding: 10,
 
-        elevation: 3,
+        // elevation: 3,
 
         borderRadius: 25,
 
