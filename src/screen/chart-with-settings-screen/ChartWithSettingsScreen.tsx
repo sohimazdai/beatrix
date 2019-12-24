@@ -16,8 +16,12 @@ import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
 import { ChartDotInfoPopup } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { BlockHat } from '../../component/hat/BlockHat';
+import { BottomPopup } from '../../component/popup/BottomPopup';
+import { NoteCreationScreenConnect } from '../note-list/note-popup/NoteCreationScreen';
+import { NoteEditingScreenConnect } from '../note-list/note-popup/NoteEditingScreen';
+import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -113,6 +117,9 @@ export interface ChartWithSettingsState {
     selectedPeriod: ChartPeriodType,
     popupShown?: boolean,
     glucoseAverageShown?: boolean
+    noteCreationShown?: boolean,
+    noteEditingShown?: boolean,
+    editingNoteId?: number
 }
 
 class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, ChartWithSettingsState> {
@@ -127,6 +134,9 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         selectedDotId: null,
         popupShown: false,
         glucoseAverageShown: false,
+        noteCreationShown: false,
+        noteEditingShown: false,
+        editingNoteId: null
     }
 
     get generalPadding() {
@@ -138,17 +148,19 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     render() {
+        const { noteCreationShown, noteEditingShown, selectedDotId } = this.state;
         const chartsToRender = [
             ChartValueType.INSULIN,
             ChartValueType.GLUCOSE,
             ChartValueType.BREAD_UNITS
         ];
+
         return (
             <View style={styles.view}>
                 <ScrollView style={styles.scrollView}>
-                    <BlockHat 
-                    title={"График"}
-                    additionalTitle={this.getHatTitle()}
+                    <BlockHat
+                        title={"График"}
+                        additionalTitle={this.getHatTitle()}
                     />
                     <View
                         style={styles.chartWithSettingsView}
@@ -184,12 +196,40 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         </View>
                     </View>
                 </ScrollView>
+                {!(selectedDotId || noteCreationShown || noteEditingShown) && <View style={styles.addNoteButtonView}>
+                    <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
+                        <View style={styles.addNoteButton}>
+                            <Text style={styles.addNoteButtonText}>
+                                Записать
+                                    </Text>
+                            <AddNoteIcon />
+                        </View>
+                    </TouchableOpacity>
+                </View>}
                 <ChartDotInfoPopup
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
                     note={this.getNoteForChartPopup()}
+                    onEditPress={() => this.setState({
+                        editingNoteId: this.state.selectedDotId,
+                        noteEditingShown: true
+                    })}
                 />
+                <BottomPopup hidden={!this.state.noteCreationShown}>
+                    <NoteCreationScreenConnect
+                        onBackPress={() => this.setState({ noteCreationShown: false })}
+                    />
+                </BottomPopup>
+                <BottomPopup hidden={!this.state.noteEditingShown}>
+                    <NoteEditingScreenConnect
+                        noteId={this.state.editingNoteId}
+                        onBackPress={() => this.setState({
+                            noteEditingShown: false,
+                            editingNoteId: null
+                        })}
+                    />
+                </BottomPopup>
             </View>
 
         )
@@ -561,5 +601,29 @@ const styles = StyleSheet.create({
     },
     statisticsViewText: {
         textAlign: 'center',
+    },
+    addNoteButtonView: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+
+        elevation: 4,
+        ...shadowOptions,
+    },
+    addNoteButton: {
+        display: 'flex',
+        padding: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(250,250,250, 0.9)',
+        borderRadius: 30,
+    },
+    addNoteButtonText: {
+        fontSize: 18,
+        color: "#333333",
+        marginRight: 5
     }
 })

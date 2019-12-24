@@ -16,7 +16,7 @@ export interface Props {
 }
 
 export const ChartDot = (props: Props) => (
-    <Svg>
+    <>
         <Circle
             r={getDotRadius(props)}
             stroke={props.selectedDotId == props.id ? props.stroke : 'transparent'}
@@ -27,7 +27,7 @@ export const ChartDot = (props: Props) => (
         />
         <Circle
             onPress={() => props.onPress(props.id)}
-            r={getDotRadius(props) * 2 }
+            r={getDotRadius(props) * 2}
             stroke={'transparent'}
             strokeWidth={2}
             x={props.x}
@@ -35,7 +35,7 @@ export const ChartDot = (props: Props) => (
             fill={'transparent'}
         >
         </Circle>
-    </Svg>
+    </>
 )
 
 function getDotColor(props: Props) {

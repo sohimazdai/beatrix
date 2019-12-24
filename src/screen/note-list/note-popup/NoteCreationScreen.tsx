@@ -21,6 +21,7 @@ import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/Note
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
 import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
+import { ScrollView } from 'react-native-gesture-handler';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -64,16 +65,18 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                 style={styles.noteCreationView}
                 behavior='padding'
             >
-                <View style={styles.scrollViewContent}>
-                    {this.renderInputBlock()}
-                    {this.renderSaveButton()}
-                </View>
-                <TouchableOpacity
-                    style={styles.arrowDown}
-                    onPress={this.props.onBackPress}
-                >
-                    <ArrowDownIcon />
-                </TouchableOpacity>
+                <ScrollView style={styles.noteCreationViewScrollView}>
+                    <View style={styles.scrollViewContent}>
+                        {this.renderInputBlock()}
+                        {this.renderSaveButton()}
+                    </View>
+                    <TouchableOpacity
+                        style={styles.arrowDown}
+                        onPress={this.props.onBackPress}
+                    >
+                        <ArrowDownIcon />
+                    </TouchableOpacity>
+                </ScrollView>
             </KeyboardAvoidingView>
         )
     }
@@ -307,7 +310,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
-
+    noteCreationViewScrollView: {
+        width: '100%',
+        height: '100%',
+    },
     scrollViewContent: {
         flex: 1,
         width: '100%',

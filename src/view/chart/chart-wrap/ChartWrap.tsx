@@ -103,6 +103,7 @@ export function ChartWrap(props: ChartWrapProps) {
                 <ChartPolyline
                     polylineType={props.selectedPeriod === ChartPeriodType.DAY ? config.polylineType : PolylineType.REGULAR}
                     dots={polylineDotsData.dots}
+                    chartPeriodType={props.selectedPeriod}
                     initGradientColor={isGradientNeeded() && config.initGradientColor}
                     stopGradientColor={isGradientNeeded() && config.stopGradientColor}
                 />

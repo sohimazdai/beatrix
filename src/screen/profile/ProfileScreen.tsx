@@ -45,7 +45,8 @@ export const ProfileScreenConnect = connect(
             ...ownProps,
             onLogOut() {
                 dispatch(createUserChangeAction({
-                    id: ''
+                    id: '',
+                    isAuthed: false
                 }))
             }
         }

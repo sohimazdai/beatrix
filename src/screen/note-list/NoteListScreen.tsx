@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { IAppState } from '../../model/IAppState';
 import { INoteListByDay, INoteListNote } from '../../model/INoteList';

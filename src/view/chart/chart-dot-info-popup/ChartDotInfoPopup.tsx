@@ -7,10 +7,13 @@ import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { ChartDotInfoPopupValue } from './chart-dot-info-popup-components/ChartDotInfoPopupValue';
 import { ChartValueType } from '../../../model/IChart';
 import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
+import { shadowOptions } from '../../../constant/shadowOptions';
+import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
 
 export interface ChartDotInfoPopupProps {
     shown?: boolean
     onClose?: () => void
+    onEditPress?: () => void
     dateTitle?: string
     note?: INoteListNote
 }
@@ -58,7 +61,16 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                     style={styles.arrowDown}
                     onPress={props.onClose}
                 >
-                    <ArrowDownIcon />
+                    <ArrowDownIcon style={styles.arrowDownIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.editNoteIconTouchable}
+                    onPress={() => {
+                        props.onEditPress();
+                        props.onClose();
+                    }}
+                >
+                    <EditNoteIcon style={styles.editNoteIcon} />
                 </TouchableOpacity>
             </LinearGradient>
         </View>
@@ -131,5 +143,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 20,
         top: 20,
+    },
+    arrowDownIcon: {
+        ...shadowOptions
+    },
+    editNoteIconTouchable: {
+        position: 'absolute',
+        left: 20,
+        top: 20,
+    },
+    editNoteIcon: {
+        ...shadowOptions
     }
 })

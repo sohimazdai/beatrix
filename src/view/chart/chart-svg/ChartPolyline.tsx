@@ -1,6 +1,6 @@
 import React from 'react'
 import { Polyline, LinearGradient, Stop, Path } from 'react-native-svg';
-import { IChartDot } from '../../../model/IChart';
+import { IChartDot, ChartPeriodType } from '../../../model/IChart';
 
 export enum PolylineType {
     BEZIER = 'bezier',
@@ -12,6 +12,7 @@ export interface ChartPolylineProps {
     polylineType: PolylineType
     initGradientColor?: string;
     stopGradientColor?: string;
+    chartPeriodType?: ChartPeriodType
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
@@ -41,7 +42,7 @@ function renderPolyline(props: ChartPolylineProps) {
                 strokeWidth={2}
                 strokeLinecap='round'
                 strokeLinejoin='round'
-                fill="url(#grad)"
+                fill={props.chartPeriodType === ChartPeriodType.DAY ? "url(#grad)" : "transparent"}
             />}
     </>
 }

@@ -303,6 +303,7 @@ class NoteEditingScreen extends React.PureComponent<NoteEditingScreenProps, Full
         }
         if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+            this.props.onNoteDelete(this.props.note.date);
             this.setInitialState();
             this.props.onBackPress()
         } else {
