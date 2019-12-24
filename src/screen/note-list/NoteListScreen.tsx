@@ -53,21 +53,25 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                 <ScrollView>
                     {this.renderCards()}
                 </ScrollView>
-                <View style={styles.addNoteButtonView}>
-                    <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
-                        <View style={styles.addNoteButton}>
-                            <Text style={styles.addNoteButtonText}>
-                                Записать
-                            </Text>
-                            <AddNoteIcon />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                <BottomPopup hidden={!this.state.noteCreationShown}>
-                    <NoteCreationScreenConnect
-                        onBackPress={() => this.setState({ noteCreationShown: false })}
-                    />
-                </BottomPopup>
+                {
+                    !this.state.noteCreationShown ?
+                        <View style={styles.addNoteButtonView}>
+                            <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
+                                <View style={styles.addNoteButton}>
+                                    <Text style={styles.addNoteButtonText}>
+                                        Записать
+                                    </Text>
+                                    <AddNoteIcon />
+                                </View>
+                            </TouchableOpacity>
+                        </View> 
+                        : 
+                        <BottomPopup>
+                            <NoteCreationScreenConnect
+                                onBackPress={() => this.setState({ noteCreationShown: false })}
+                            />
+                        </BottomPopup>
+                }
                 <BottomPopup hidden={!this.state.noteEditingShown}>
                     <NoteEditingScreenConnect
                         noteId={this.state.editingNoteId}

@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Animated, Dimensions } from 'react-native'
 
 export interface BottomPopupProps {
-    hidden: boolean;
+    hidden?: boolean;
     children: any
 }
 
