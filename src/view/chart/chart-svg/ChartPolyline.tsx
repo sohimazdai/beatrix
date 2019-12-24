@@ -54,7 +54,6 @@ function getPoints(props: ChartPolylineProps) {
             props.dots.sort((a, b) => a.x - b.x).map(dot => {
                 points += getPoint(dot);
             })
-            alert(JSON.stringify({ "getPointsRegular": points }))
             return points;
         case PolylineType.BEZIER:
             const tempDots = props.dots.sort((a, b) => a.x - b.x);
