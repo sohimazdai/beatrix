@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 10,
         width: '100%',
-        height: 80,
+        height: 150,
         borderRadius: 15,
     },
     arrowDown: {
