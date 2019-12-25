@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     ActivityIndicator,
+    KeyboardAvoidingView,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -36,13 +37,13 @@ interface AuthScreenState {
 
 export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthScreenState>{
     state = {
-        email: '',
+        email: this.props.user.email || '',
         password: ''
     }
 
     static getDerivedStateFromProps(props: AuthScreenProps, state: AuthScreenState) {
-        if (props.user.email) {
-            return {...state, email: props.user.email}
+        if (props.user.email === state.email) {
+            return { ...state, email: props.user.email }
         }
 
         return state;
@@ -50,13 +51,10 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
 
     render() {
         return (
-            <View style={styles.AuthView}>
-                <View style={styles.BackgroundAuth}>
-                    {this.renderBackgroundSun()}
-                    {this.renderBackgroundMountains()}
-                    {this.renderAuthForm()}
-                </View>
-            </View>
+            <KeyboardAvoidingView behavior="padding" style={styles.AuthView}>
+
+                {this.renderAuthForm()}
+            </KeyboardAvoidingView>
         )
     }
 
@@ -80,51 +78,48 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
     renderAuthForm() {
         return (
             <View style={styles.AuthForm}>
-                <LinearGradient
-                    colors={['#F6F8FF', '#FFEBEB']}
-                    style={styles.authFormGradient}
-                />
+                {this.renderBackgroundSun()}
+                {this.renderBackgroundMountains()}
                 <View style={styles.form}>
-                    <Text style={styles.titleFormText}>
-                        Авторизация
+
+                    <LinearGradient
+                        colors={['#F6F8FF', '#FFEBEB']}
+                        style={styles.authFormGradient}
+                    >
+                        <Text style={styles.titleFormText}>
+                            Авторизация
                         </Text>
-                    {this.renderInputBlock()}
-                    <View style={styles.formButtons}>
-                        {this.renderSignInButton()}
-                        {this.renderRegistrationButton()}
-                        {
-                            this.props.user && this.props.user.loading &&
-                            <ActivityIndicator size="small" color="#000000" />
-                        }
-                    </View>
+                        <View style={styles.inputForm}>
+                            <TextInput
+                                style={styles.input}
+                                value={this.state.email}
+                                keyboardType={'email-address'}
+                                placeholder={'Почта'}
+                                onChangeText={(value) => this.setState({ email: value })}
+                            />
+                        </View>
+                        <View style={styles.inputForm}>
+                            <KeyboardAvoidingView behavior="padding">
+                                <TextInput
+                                    secureTextEntry
+                                    style={styles.input}
+                                    value={this.state.password}
+                                    placeholder={'Пароль'}
+                                    onChangeText={(value) => this.setState({ password: value })}
+                                />
+                            </KeyboardAvoidingView>
+                        </View>
+                        <View style={styles.formButtons}>
+                            {this.renderSignInButton()}
+                            {this.renderRegistrationButton()}
+                            {
+                                this.props.user && this.props.user.loading &&
+                                <ActivityIndicator size="small" color="#000000" />
+                            }
+                        </View>
+                    </LinearGradient>
                 </View>
             </View >
-        )
-    }
-
-    renderInputBlock() {
-        return (
-            <View>
-                <View style={styles.inputForm}>
-                    {/* TODO:keyboardType doesnt work if make custom Input and  */}
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.email}
-                        keyboardType={'email-address'} // TODO:
-                        placeholder={'Почта'}
-                        onChangeText={(value) => this.setState({ email: value })}
-                    />
-                </View>
-                <View style={styles.inputForm}>
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.password}
-                        keyboardType={'visible-password'} //TODO:
-                        placeholder={'Пароль'}
-                        onChangeText={(value) => this.setState({ password: value })}
-                    />
-                </View>
-            </View>
         )
     }
 
@@ -207,47 +202,45 @@ export const AuthorizationScreenConnect = connect(
 
 const styles = StyleSheet.create({
     AuthView: {
-        flex: 1,
+        display: "flex",
         width: '100%',
         height: '100%',
-        backgroundColor: '#D6E5ED',
-    },
-    BackgroundAuth: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
+        backgroundColor: '#F6F8FF',
+        flexDirection: "column-reverse",
     },
     BackgroundSun: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
         position: "absolute",
+        top: -300,
     },
     BackgroundMountains: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
+        top: -100,
+        right: 0,
         position: "absolute",
     },
     AuthForm: {
-        flex: 1,
         width: '100%',
         height: '70%',
         position: "absolute",
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFEBEB',
-        borderRadius: 40,
-        marginTop: 280,
-        overflow: 'hidden',
+    },
+
+    form: {
+        width: '100%',
+        display: 'flex',
+        borderTopLeftRadius: 55,
+        borderTopRightRadius: 55,
+        overflow: 'hidden'
     },
 
     authFormGradient: {
-        flex: 1,
-        height: '100%',
         width: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
+
     inputForm: {
         margin: 10,
     },
@@ -274,14 +267,13 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     formButtons: {
-        flex: 1,
-        marginTop: 8,
         width: 280,
         height: 60,
 
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
+        marginBottom: 30,
     },
     registrationButton: {
         width: 160,
@@ -324,9 +316,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 19,
         color: '#333333',
-    },
-    form: {
-        
     }
 })
 

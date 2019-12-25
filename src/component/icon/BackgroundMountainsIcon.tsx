@@ -1,23 +1,11 @@
 import React from 'react';
-import Svg, { Polygon } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
 export const BackgroundMountainsIcon = props => (
-    <Svg height="100%" width="100%" fill="none" {...props}>
-        <Polygon  
-            points="305,200 235,340 365,340"
-            fill="#B7B7B7"
-        />
-        <Polygon  
-            points="230,230 60,430 410,430"
-            fill="#B0B0B0"
-        />
-        <Polygon  
-            points="165,190 90,330 250,330"
-            fill="#C4C4C4"
-        />
-        <Polygon  
-            points="290,214 225,350 355,350"
-            fill="#CBCBCB"
-        />
+    <Svg width={341} height={305} viewBox="0 0 341 305" fill="none" {...props}>
+        <Path d="M271 13L335.086 148H206.914L271 13Z" fill="#2E3858" />
+        <Path d="M197.5 39L368.54 238.5H26.46L197.5 39Z" fill="#2E3858" />
+        <Path d="M134 0L211.076 135H56.9237L134 0Z" fill="#444E71" />
+        <Path d="M257 21L321.086 156H192.914L257 21Z" fill="#444E71" />
     </Svg>
 )

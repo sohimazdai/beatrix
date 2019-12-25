@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 interface Props {
@@ -10,22 +10,24 @@ interface Props {
 
 export function NoteInput(props: Props) {
     return (
-        <TextInput
-            {...props}
-            keyboardType= {'numeric'}
-            returnKeyType={'done'}
-            style={{
-                width: 88,
-                height: 41,
+        <KeyboardAvoidingView behavior="padding">
+            <TextInput
+                {...props}
+                keyboardType={'numeric'}
+                returnKeyType={'done'}
+                style={{
+                    width: 88,
+                    height: 41,
 
-                padding: 5,
+                    padding: 5,
 
-                borderColor: '#D2a9a9',
-                borderWidth: 2,
-                borderRadius: 5,
+                    borderColor: '#D2a9a9',
+                    borderWidth: 2,
+                    borderRadius: 5,
 
-                backgroundColor: '#FFFFFF',
-            }}
-        />
+                    backgroundColor: '#FFFFFF',
+                }}
+            />
+        </KeyboardAvoidingView>
     )
 }

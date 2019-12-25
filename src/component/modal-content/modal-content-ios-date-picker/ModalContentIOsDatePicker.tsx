@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
 
         ...shadowOptions,
-        elevation: 5,
 
         alignItems: 'stretch',
         backgroundColor: ThemeColor.WHITE

@@ -50,8 +50,6 @@ const styles = StyleSheet.create({
 
         ...shadowOptions,
 
-        elevation: 3,
-
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

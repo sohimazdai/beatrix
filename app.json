@@ -38,6 +38,7 @@
     "android": {
       "package": "beatrix.expo.googlesignin",
       "googleServicesFile": "./google-services.json"
-    }
+    },
+    "description": ""
   }
 }

@@ -19,9 +19,9 @@ import { createModalChangeAction } from '../../../store/modules/modal/ModalActio
 import { ModalType, IModalConfirm } from '../../../model/IModal';
 import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
-import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
 import { IAppState } from '../../../model/IAppState';
+import { CloseIcon } from '../../../component/icon/CloseIcon';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -31,14 +31,14 @@ enum InputType {
     COMMENT = 'Комментарий'
 }
 
-interface NoteEditingScreenProps {
+interface NoteEditingPopupProps {
     note?: INoteListNote
     dispatch?: (action: Action) => void
     onBackPress?: () => void
     onNoteDelete?: (noteId: number) => void;
 }
 
-interface NoteEditingScreenState {
+interface NoteEditingPopupState {
     date: Date
     glucoseInput: string
     breadUnitsInput: string
@@ -48,9 +48,9 @@ interface NoteEditingScreenState {
     commentary: string
 }
 
-interface FullState extends NoteEditingScreenState { }
+interface FullState extends NoteEditingPopupState { }
 
-class NoteEditingScreen extends React.PureComponent<NoteEditingScreenProps, FullState>{
+class NoteEditingPopup extends React.PureComponent<NoteEditingPopupProps, FullState>{
     state = {
         date: new Date(this.props.note.date),
         glucoseInput: this.props.note.glucose.toString(),
@@ -75,10 +75,10 @@ class NoteEditingScreen extends React.PureComponent<NoteEditingScreenProps, Full
                     </View>
                 </View>
                 <TouchableOpacity
-                    style={styles.arrowDown}
+                    style={styles.close}
                     onPress={this.props.onBackPress}
                 >
-                    <ArrowDownIcon />
+                    <CloseIcon />
                 </TouchableOpacity>
             </KeyboardAvoidingView>
         )
@@ -332,7 +332,7 @@ class NoteEditingScreen extends React.PureComponent<NoteEditingScreenProps, Full
     }
 }
 
-export const NoteEditingScreenConnect = connect(
+export const NoteEditingPopupConnect = connect(
     (state: IAppState) => ({ notes: state.noteList }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps: any) => {
@@ -345,7 +345,7 @@ export const NoteEditingScreenConnect = connect(
             }
         }
     }
-)(NoteEditingScreen)
+)(NoteEditingPopup)
 
 const styles = StyleSheet.create({
     noteCreationView: {
@@ -381,8 +381,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
 
-        ...shadowOptions,
-
         borderRadius: 25,
 
         alignItems: 'center',
@@ -417,7 +415,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(250, 250, 250, 0.9)",
+        backgroundColor: "rgba(250, 250, 250, 1)",
 
     },
     deleteButtonTouchable: {
@@ -431,7 +429,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(255, 80, 80, 0.8)",
+        backgroundColor: "rgba(255, 80, 80, 1)",
 
     },
     saveButtonText: {
@@ -462,10 +460,12 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 15,
     },
-    arrowDown: {
+    close: {
         position: 'absolute',
         right: 20,
         top: 20,
+        height: 30,
+        width: 30
     }
 })
 

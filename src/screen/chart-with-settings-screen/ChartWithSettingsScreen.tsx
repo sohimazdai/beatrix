@@ -19,8 +19,8 @@ import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { BottomPopup } from '../../component/popup/BottomPopup';
-import { NoteCreationScreenConnect } from '../note-list/note-popup/NoteCreationScreen';
-import { NoteEditingScreenConnect } from '../note-list/note-popup/NoteEditingScreen';
+import { NoteCreationPopupConnect } from '../note-list/note-popup/NoteCreationPopup';
+import { NoteEditingPopupConnect } from '../note-list/note-popup/NoteEditingPopup';
 import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 
 const TIME_STEP_MINUTES = 5;
@@ -217,12 +217,12 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     })}
                 />
                 <BottomPopup hidden={!this.state.noteCreationShown}>
-                    <NoteCreationScreenConnect
+                    <NoteCreationPopupConnect
                         onBackPress={() => this.setState({ noteCreationShown: false })}
                     />
                 </BottomPopup>
                 <BottomPopup hidden={!this.state.noteEditingShown}>
-                    <NoteEditingScreenConnect
+                    <NoteEditingPopupConnect
                         noteId={this.state.editingNoteId}
                         onBackPress={() => this.setState({
                             noteEditingShown: false,
@@ -607,19 +607,20 @@ const styles = StyleSheet.create({
         bottom: 20,
         right: 20,
 
-        elevation: 4,
         ...shadowOptions,
     },
     addNoteButton: {
         display: 'flex',
         padding: 5,
+        margin: 5,
         paddingLeft: 10,
         paddingRight: 10,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(250,250,250, 0.9)',
+        backgroundColor: 'rgba(250,250,250, 1)',
         borderRadius: 30,
+        ...shadowOptions
     },
     addNoteButtonText: {
         fontSize: 18,

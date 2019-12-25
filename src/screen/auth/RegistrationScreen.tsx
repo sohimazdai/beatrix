@@ -44,7 +44,7 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
             <View style={styles.AuthView}>
                 {this.renderBackgroundSun()}
                 {this.renderBackgroundMountains()}
-                {this.renderAuthForm()}
+                {this.renderRegForm()}
             </View>
         )
     }
@@ -65,7 +65,7 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
         )
     }
 
-    renderAuthForm() {
+    renderRegForm() {
         return (
             <View style={styles.AuthForm}>
                 <LinearGradient
@@ -108,7 +108,6 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
                         secureTextEntry
                         style={styles.input}
                         value={this.state.password}
-                        keyboardType={'visible-password'} //TODO:
                         placeholder={'Пароль'}
                         onChangeText={(value) => this.setState({ password: value })}
                     />
@@ -143,7 +142,7 @@ class RegistrationScreen extends React.Component<RegistrationScreenProps, Regist
     }
 
     toRegistration = () => {
-        this.props.navigation.navigate('Registration')
+        this.props.navigation.navigate('Auth')
     }
 
     signUpWithEmailAndPassword = async () => {

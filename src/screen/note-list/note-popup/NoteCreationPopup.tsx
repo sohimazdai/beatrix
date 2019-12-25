@@ -19,9 +19,9 @@ import { createModalChangeAction } from '../../../store/modules/modal/ModalActio
 import { ModalType } from '../../../model/IModal';
 import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
-import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
 import { ScrollView } from 'react-native-gesture-handler';
+import { CloseIcon } from '../../../component/icon/CloseIcon';
 
 enum InputType {
     GLUCOSE = 'Глюкоза',
@@ -31,12 +31,12 @@ enum InputType {
     COMMENT = 'Комментарий'
 }
 
-interface NoteCreationScreenProps {
+interface NoteCreationPopupProps {
     dispatch?: (action: Action) => void
     onBackPress?: () => void
 }
 
-interface NoteCreationScreenState {
+interface NoteCreationPopupState {
     date: Date
     glucoseInput: string
     breadUnitsInput: string
@@ -46,9 +46,9 @@ interface NoteCreationScreenState {
     commentary: string
 }
 
-interface FullState extends NoteCreationScreenState { }
+interface FullState extends NoteCreationPopupState { }
 
-class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, FullState>{
+class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, FullState>{
     state = {
         date: new Date(),
         glucoseInput: "0.0",
@@ -71,10 +71,10 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
                         {this.renderSaveButton()}
                     </View>
                     <TouchableOpacity
-                        style={styles.arrowDown}
+                        style={styles.hideTouchable}
                         onPress={this.props.onBackPress}
                     >
-                        <ArrowDownIcon />
+                        <CloseIcon />
                     </TouchableOpacity>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -294,10 +294,10 @@ class NoteCreationScreen extends React.PureComponent<NoteCreationScreenProps, Fu
     }
 }
 
-export const NoteCreationScreenConnect = connect(
+export const NoteCreationPopupConnect = connect(
     null,
     (dispatch: Dispatch<Action>) => ({ dispatch })
-)(NoteCreationScreen)
+)(NoteCreationPopup)
 
 const styles = StyleSheet.create({
     noteCreationView: {
@@ -328,8 +328,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         padding: 16,
-
-        ...shadowOptions,
 
         borderRadius: 25,
 
@@ -366,7 +364,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(250, 250, 250, 0.9)",
+        backgroundColor: "rgba(250, 250, 250, 1)",
 
     },
     saveButtonText: {
@@ -391,10 +389,12 @@ const styles = StyleSheet.create({
         height: 150,
         borderRadius: 15,
     },
-    arrowDown: {
+    hideTouchable: {
         position: 'absolute',
         right: 20,
         top: 20,
+        height: 30,
+        width: 30
     }
 })
 

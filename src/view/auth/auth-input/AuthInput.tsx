@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { ThemeColor } from '../../../constant/ThemeColor';
 
@@ -12,6 +12,7 @@ interface Props {
 // TODO:
 export function AuthInput(props: Props) {
     return (
+        <KeyboardAvoidingView behavior={"padding"}>
             <TextInput
                 style={styles.input}
                 onChangeText={props.onChangeText}
@@ -19,6 +20,7 @@ export function AuthInput(props: Props) {
 
                 returnKeyType={'done'}
             />
+        </KeyboardAvoidingView>
     )
 }
 

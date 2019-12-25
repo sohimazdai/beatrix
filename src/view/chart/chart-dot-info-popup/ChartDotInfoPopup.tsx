@@ -6,7 +6,7 @@ import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { ChartDotInfoPopupValue } from './chart-dot-info-popup-components/ChartDotInfoPopupValue';
 import { ChartValueType } from '../../../model/IChart';
-import { ArrowDownIcon } from '../../../component/icon/ArrowDownIcon';
+import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
 
@@ -58,10 +58,10 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                     </View>}
                 </>}
                 <TouchableOpacity
-                    style={styles.arrowDown}
+                    style={styles.closeTouchable}
                     onPress={props.onClose}
                 >
-                    <ArrowDownIcon style={styles.arrowDownIcon} />
+                    <CloseIcon />
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.editNoteIconTouchable}
@@ -139,20 +139,20 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#333333"
     },
-    arrowDown: {
+    closeTouchable: {
         position: 'absolute',
         right: 20,
         top: 20,
-    },
-    arrowDownIcon: {
         ...shadowOptions
     },
     editNoteIconTouchable: {
         position: 'absolute',
         left: 20,
         top: 20,
+        ...shadowOptions,
     },
     editNoteIcon: {
-        ...shadowOptions
+        width: 30,
+        height: 30
     }
 })
