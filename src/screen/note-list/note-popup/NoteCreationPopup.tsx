@@ -62,7 +62,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
     render() {
         return (
             <KeyboardAvoidingView
-                style={styles.noteCreationView}
+                style={styles.noteCreationView} 
+                keyboardVerticalOffset={90}
                 behavior='padding'
             >
                 <ScrollView style={styles.noteCreationViewScrollView}>
@@ -225,13 +226,17 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
                     <Text style={styles.inputViewTitle}>
                         Комментарий
                     </Text>
-                    <TextInput
-                        style={styles.commentTextArea}
-                        multiline={true}
-                        numberOfLines={4}
-                        onChangeText={(text) => this.setState({ commentary: text })}
-                        value={this.state.commentary}
-                    />
+                    <View
+                        style={styles.commentViewTextArea}
+                    >
+                        <TextInput
+                            multiline
+                            numberOfLines={4}
+                            editable
+                            onChangeText={(text) => this.setState({ commentary: text })}
+                            value={this.state.commentary}
+                        />
+                    </View>
                 </View>
         }
     }
@@ -376,13 +381,13 @@ const styles = StyleSheet.create({
     inputViewTitle: {
         width: '100%',
         textAlign: 'center',
-        margin: 3,
+        margin: 5,
         fontSize: 19,
         lineHeight: 20,
         fontWeight: "bold",
         color: ThemeColor.TEXT_DARK_GRAY
     },
-    commentTextArea: {
+    commentViewTextArea: {
         backgroundColor: 'white',
         padding: 10,
         width: '100%',

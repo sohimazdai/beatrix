@@ -21,6 +21,7 @@ import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/Note
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
 import { IAppState } from '../../../model/IAppState';
+import { ScrollView } from 'react-native-gesture-handler';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 
 enum InputType {
@@ -65,21 +66,24 @@ class NoteEditingPopup extends React.PureComponent<NoteEditingPopupProps, FullSt
         return (
             <KeyboardAvoidingView
                 style={styles.noteCreationView}
+                keyboardVerticalOffset={90}
                 behavior='padding'
             >
-                <View style={styles.scrollViewContent}>
-                    {this.renderInputBlock()}
-                    <View style={styles.editButtons}>
-                        {this.renderDeleteButton()}
-                        {this.renderSaveButton()}
+                <ScrollView style={styles.noteCreationViewScrollView}>
+                    <View style={styles.scrollViewContent}>
+                        {this.renderInputBlock()}
+                        <View style={styles.editButtons}>
+                            {this.renderDeleteButton()}
+                            {this.renderSaveButton()}
+                        </View>
                     </View>
-                </View>
-                <TouchableOpacity
-                    style={styles.close}
-                    onPress={this.props.onBackPress}
-                >
-                    <CloseIcon />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.close}
+                        onPress={this.props.onBackPress}
+                        >
+                        <CloseIcon />
+                    </TouchableOpacity>
+                </ScrollView>
             </KeyboardAvoidingView>
         )
     }
@@ -228,13 +232,17 @@ class NoteEditingPopup extends React.PureComponent<NoteEditingPopupProps, FullSt
                     <Text style={styles.inputViewTitle}>
                         Комментарий
                     </Text>
-                    <TextInput
-                        style={styles.commentTextArea}
-                        multiline={true}
-                        numberOfLines={4}
-                        onChangeText={(text) => this.setState({ commentary: text })}
-                        value={this.state.commentary}
-                    />
+                    <View
+                        style={styles.commentViewTextArea}
+                    >
+                        <TextInput
+                            multiline
+                            numberOfLines={4}
+                            editable
+                            onChangeText={(text) => this.setState({ commentary: text })}
+                            value={this.state.commentary}
+                        />
+                    </View>
                 </View>
         }
     }
@@ -358,7 +366,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
-
+    noteCreationViewScrollView: {
+        width: '100%',
+        height: '100%',
+    },
     scrollViewContent: {
         flex: 1,
         width: '100%',
@@ -447,17 +458,17 @@ const styles = StyleSheet.create({
     inputViewTitle: {
         width: '100%',
         textAlign: 'center',
-        margin: 3,
+        margin: 5,
         fontSize: 19,
         lineHeight: 20,
         fontWeight: "bold",
         color: ThemeColor.TEXT_DARK_GRAY
     },
-    commentTextArea: {
+    commentViewTextArea: {
         backgroundColor: 'white',
         padding: 10,
         width: '100%',
-        height: 80,
+        height: 150,
         borderRadius: 15,
     },
     close: {
