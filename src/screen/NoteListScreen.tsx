@@ -1,25 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { IAppState } from '../../model/IAppState';
-import { INoteListByDay, INoteListNote } from '../../model/INoteList';
+import { IStorage } from '../model/IStorage';
+import { INoteListByDay, INoteListNote } from '../model/INoteList';
 import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
-import { Note } from '../../view/notes/note/Note';
+import { Note } from '../view/notes/note/Note';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
-import { ThemeColor } from '../../constant/ThemeColor';
-import { NoteListSelector } from '../../store/selector/NoteListSelector';
-import { shadowOptions } from '../../constant/shadowOptions';
-import { RoundClocksIcon } from '../../component/icon/RoundClocksIcon';
-import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
-import { GlucometerIcon } from '../../component/icon/value-icons/GlucometerIcon';
-import { ShortSyringeIcon } from '../../component/icon/value-icons/ShortSyringeIcon';
-import { LongSyringeIcon } from '../../component/icon/value-icons/LongSyringeIcon';
-import { BottomPopup } from '../../component/popup/BottomPopup';
-import { BlockHat } from '../../component/hat/BlockHat';
-import { NoteCreationPopupConnect } from './note-popup/NoteCreationPopup';
-import { NoteEditingPopupConnect } from './note-popup/NoteEditingPopup';
+import { AddNoteIcon } from '../component/icon/AddNoteIcon';
+import { ThemeColor } from '../constant/ThemeColor';
+import { NoteListSelector } from '../store/selector/NoteListSelector';
+import { shadowOptions } from '../constant/shadowOptions';
+import { RoundClocksIcon } from '../component/icon/RoundClocksIcon';
+import { VegetablesIcon } from '../component/icon/value-icons/VegetablesIcon';
+import { GlucometerIcon } from '../component/icon/value-icons/GlucometerIcon';
+import { ShortSyringeIcon } from '../component/icon/value-icons/ShortSyringeIcon';
+import { LongSyringeIcon } from '../component/icon/value-icons/LongSyringeIcon';
+import { BottomPopup } from '../component/popup/BottomPopup';
+import { BlockHat } from '../component/hat/BlockHat';
+import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { NoteEditingPopupConnect } from '../view/notes/note-popup/NoteEditingPopup';
 
 
 interface NoteListScreenStateTProps {
@@ -190,7 +190,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
 }
 
 export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps, NoteListScreenProps>(
-    (state: IAppState) => ({
+    (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch })

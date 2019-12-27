@@ -1,11 +1,11 @@
 import React from 'react'
-import { BlockHat } from '../../component/hat/BlockHat'
+import { BlockHat } from '../component/hat/BlockHat'
 import { connect } from 'react-redux'
-import { IAppState } from '../../model/IAppState'
+import { IStorage } from '../model/IStorage'
 import { View, StyleSheet, ScrollView, Text } from 'react-native'
-import { ProfileItem } from '../../view/profile/ProfileItem'
+import { ProfileItem } from '../view/profile/ProfileItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { createUserChangeAction } from '../../store/modules/user/UserActionCreator'
+import { createUserChangeAction } from '../store/modules/user/UserActionCreator'
 
 interface Props {
     onLogOut?: () => void;
@@ -37,7 +37,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
 }
 
 export const ProfileScreenConnect = connect(
-    (state: IAppState) => ({}),
+    (state: IStorage) => ({}),
     (dispatch) => ({ dispatch }),
     (stateProps, {dispatch}, ownProps) => {
         return {

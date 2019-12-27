@@ -1,13 +1,12 @@
 import React from 'react'
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
-import { AuthorizationScreenConnect } from "../screen/auth/AuthorizationScreen";
-import { NoteListScreenConnect } from "../screen/note-list/NoteListScreen";
-import { ChartWithSettingsConnect } from "../screen/chart-with-settings-screen/ChartWithSettingsScreen";
-import { RegistrationScreenConnect } from "../screen/auth/RegistrationScreen";
+import { AuthScreenConnect } from "../screen/AuthScreen";
+import { NoteListScreenConnect } from "../screen/NoteListScreen";
+import { ChartWithSettingsConnect } from "../screen/ChartWithSettingsScreen";
 import { IUser } from '../model/IUser';
 import { connect } from 'react-redux';
-import { IAppState } from '../model/IAppState';
-import { ProfileScreenConnect } from '../screen/profile/ProfileScreen';
+import { IStorage } from '../model/IStorage';
+import { ProfileScreenConnect } from '../screen/ProfileScreen';
 import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
@@ -26,7 +25,7 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 }
 
 export const AppNavigator = connect(
-    (state: IAppState) => ({
+    (state: IStorage) => ({
         user: state.user
     })
 )(AppNavigatorComponent)
@@ -60,8 +59,7 @@ const AuthedMainNavigator = createBottomTabNavigator(
 
 const UnknownMainNavigator = createStackNavigator(
     {
-        Auth: { screen: AuthorizationScreenConnect },
-        Registration: { screen: RegistrationScreenConnect },
+        Auth: { screen: AuthScreenConnect },
     },
     {
         headerMode: 'none'

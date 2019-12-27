@@ -1,27 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { IAppState } from '../../model/IAppState';
+import { IStorage } from '../model/IStorage';
 import { Dispatch, Action } from 'redux';
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
-import { INoteList, INoteListByDay } from '../../model/INoteList';
+import { INoteList, INoteListByDay } from '../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeColor } from '../../constant/ThemeColor';
-import { shadowOptions } from '../../constant/shadowOptions';
-import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
-import { NoteListSelector } from '../../store/selector/NoteListSelector';
+import { ThemeColor } from '../constant/ThemeColor';
+import { shadowOptions } from '../constant/shadowOptions';
+import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../model/IChart';
+import { NoteListSelector } from '../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
-import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
-import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
-import { ChartDotInfoPopup } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
-import { DateHelper } from '../../utils/DateHelper';
-import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { ChartSettings } from '../view/chart/chart-settings/ChartSettings';
+import { ChartWrap } from '../view/chart/chart-wrap/ChartWrap';
+import { PolylineType } from '../view/chart/chart-svg/ChartPolyline';
+import { ChartDotInfoPopup } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { DateHelper } from '../utils/DateHelper';
+import { getArrayAverage, getWeekDaysNumbers } from '../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { BlockHat } from '../../component/hat/BlockHat';
-import { BottomPopup } from '../../component/popup/BottomPopup';
-import { NoteCreationPopupConnect } from '../note-list/note-popup/NoteCreationPopup';
-import { NoteEditingPopupConnect } from '../note-list/note-popup/NoteEditingPopup';
-import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
+import { BlockHat } from '../component/hat/BlockHat';
+import { BottomPopup } from '../component/popup/BottomPopup';
+import { AddNoteIcon } from '../component/icon/AddNoteIcon';
+import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { NoteEditingPopupConnect } from '../view/notes/note-popup/NoteEditingPopup';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -494,7 +494,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
 }
 
 export const ChartWithSettingsConnect = connect(
-    (state: IAppState) => ({
+    (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList),
         noteList: state.noteList,
     }),

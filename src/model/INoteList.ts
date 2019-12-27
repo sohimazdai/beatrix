@@ -16,8 +16,8 @@ export interface INoteListByDay {
 }
 
 export enum NoteValueType {
-    GLUCOSE = 'glucose',
     DATE = 'date',
+    GLUCOSE = 'glucose',
     FOOD = 'food',
     SHORT_INSULIN = 'short-insulin',
     LONG_INSULIN = 'long-insulin',

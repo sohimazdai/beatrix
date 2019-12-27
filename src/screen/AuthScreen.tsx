@@ -1,25 +1,23 @@
 import React, { Dispatch } from 'react';
 import {
     View,
-    Text,
     StyleSheet,
-    ActivityIndicator,
     KeyboardAvoidingView,
 } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
-import { ThemeColor } from '../../constant/ThemeColor';
-import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
-import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountainsIcon';
-import { firebaseApp } from '../../app/FirebaseApp';
+import { ThemeColor } from '../constant/ThemeColor';
+import { BackgroundSunIcon } from '../component/icon/BackgroundSunIcon';
+import { BackgroundMountainsIcon } from '../component/icon/BackgroundMountainsIcon';
+import { firebaseApp } from '../app/FirebaseApp';
 import "firebase/firestore";
-import { shadowOptions } from '../../constant/shadowOptions';
+import { shadowOptions } from '../constant/shadowOptions';
 import { connect } from 'react-redux';
-import { IAppState } from '../../model/IAppState';
+import { IStorage } from '../model/IStorage';
 import { Action } from 'redux';
-import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
-import { IUser } from '../../model/IUser';
-import { LinearGradient } from 'expo-linear-gradient';
+import { createUserChangeAction } from '../store/modules/user/UserActionCreator';
+import { IUser } from '../model/IUser';
+import { AuthForm } from '../view/auth/AuthForm';
+
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -34,8 +32,7 @@ interface AuthScreenState {
     password: string
 }
 
-
-export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthScreenState>{
+export class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
     state = {
         email: this.props.user.email || '',
         password: ''
@@ -52,7 +49,6 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
     render() {
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.AuthView}>
-
                 {this.renderAuthForm()}
             </KeyboardAvoidingView>
         )
@@ -80,82 +76,25 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
             <View style={styles.AuthForm}>
                 {this.renderBackgroundSun()}
                 {this.renderBackgroundMountains()}
-                <View style={styles.form}>
-
-                    <LinearGradient
-                        colors={['#F6F8FF', '#FFEBEB']}
-                        style={styles.authFormGradient}
-                    >
-                        <Text style={styles.titleFormText}>
-                            Авторизация
-                        </Text>
-                        <View style={styles.inputForm}>
-                            <TextInput
-                                style={styles.input}
-                                value={this.state.email}
-                                keyboardType={'email-address'}
-                                placeholder={'Почта'}
-                                onChangeText={(value) => this.setState({ email: value })}
-                            />
-                        </View>
-                        <View style={styles.inputForm}>
-                            <KeyboardAvoidingView behavior="padding">
-                                <TextInput
-                                    secureTextEntry
-                                    style={styles.input}
-                                    value={this.state.password}
-                                    placeholder={'Пароль'}
-                                    onChangeText={(value) => this.setState({ password: value })}
-                                />
-                            </KeyboardAvoidingView>
-                        </View>
-                        <View style={styles.formButtons}>
-                            {this.renderSignInButton()}
-                            {this.renderRegistrationButton()}
-                            {
-                                this.props.user && this.props.user.loading &&
-                                <ActivityIndicator size="small" color="#000000" />
-                            }
-                        </View>
-                    </LinearGradient>
-                </View>
+                <AuthForm
+                    loading={this.loading}
+                    onSignIn={this.signInWithEmailAndPassword}
+                    onRegistration={this.signUpWithEmailAndPassword}
+                />
             </View >
         )
     }
 
-    renderRegistrationButton() {
-        return (
-            <TouchableOpacity
-                style={styles.registrationButton}
-            >
-                <Text style={styles.registrationButtonText}>
-                    Зарегистрироваться
-                </Text>
-            </TouchableOpacity>
-        )
+    get loading() {
+        const { user } = this.props;
+        return user && user.loading
     }
 
-    renderSignInButton() {
-        return (
-            <TouchableOpacity onPress={() => this.signInWithEmailAndPassword()} >
-                <View style={styles.signInButton}>
-                    <Text style={styles.signInButtonText}>
-                        Войти
-                        </Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-
-    toRegistration = () => {
-        this.props.navigation.navigate('Registration')
-    }
-
-    signInWithEmailAndPassword = async () => {
+    signInWithEmailAndPassword = async (email: string, password: string) => {
         this.props.setUserInLoading && this.props.setUserInLoading();
         try {
             await firebaseApp.auth()
-                .signInWithEmailAndPassword(this.state.email, this.state.password)
+                .signInWithEmailAndPassword(email, password)
                 .then((data) => {
                     const userData = {
                         id: data.user.uid,
@@ -174,10 +113,33 @@ export class AuthorizationScreen extends React.Component<AuthScreenProps, AuthSc
             alert(e.message);
         };
     }
+
+    signUpWithEmailAndPassword = async (email: string, password: string) => {
+        this.props.setUserInLoading && this.props.setUserInLoading();
+        try {
+            await firebaseApp.auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then((data) => {
+                    const userData = {
+                        id: data.user.uid,
+                        email: data.user.email,
+                        name: data.user.email.split('@')[0],
+                        isAuthed: true
+                    }
+                    return userData
+                })
+                .then((data) => {
+                    this.props.filfullUser && this.props.filfullUser(data)
+                })
+        } catch (e) {
+            this.props.setUserInLoaded && this.props.setUserInLoaded();
+            alert(e.message);
+        };
+    }
 }
 
-export const AuthorizationScreenConnect = connect(
-    (state: IAppState) => ({ user: state.user }),
+export const AuthScreenConnect = connect(
+    (state: IStorage) => ({ user: state.user }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {
@@ -198,7 +160,7 @@ export const AuthorizationScreenConnect = connect(
             }
         }
     }
-)(AuthorizationScreen)
+)(AuthScreen)
 
 const styles = StyleSheet.create({
     AuthView: {

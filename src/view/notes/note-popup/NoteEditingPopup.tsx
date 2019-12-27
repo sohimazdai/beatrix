@@ -20,7 +20,7 @@ import { ModalType, IModalConfirm } from '../../../model/IModal';
 import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
-import { IAppState } from '../../../model/IAppState';
+import { IStorage } from '../../../model/IStorage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 
@@ -341,7 +341,7 @@ class NoteEditingPopup extends React.PureComponent<NoteEditingPopupProps, FullSt
 }
 
 export const NoteEditingPopupConnect = connect(
-    (state: IAppState) => ({ notes: state.noteList }),
+    (state: IStorage) => ({ notes: state.noteList }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps: any) => {
         return {
