@@ -32,7 +32,7 @@ interface AuthScreenState {
     password: string
 }
 
-export class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
+class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
     state = {
         email: this.props.user.email || '',
         password: ''

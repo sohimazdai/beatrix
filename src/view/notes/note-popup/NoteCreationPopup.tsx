@@ -24,10 +24,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 
 enum InputType {
-    GLUCOSE = 'Глюкоза',
-    BREAD_UNITS = 'ХЕ',
-    LONG_INSULIN = 'Длинный',
-    INSULIN = 'Короткий',
+    glucoseInput = 'Глюкоза',
+    breadUnitsInput = 'ХЕ',
+    insulinInput = 'Короткий',
+    longInsulinInput = 'Длинный',
     COMMENT = 'Комментарий'
 }
 
@@ -62,7 +62,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
     render() {
         return (
             <KeyboardAvoidingView
-                style={styles.noteCreationView} 
+                style={styles.noteCreationView}
                 keyboardVerticalOffset={90}
                 behavior='padding'
             >
@@ -83,13 +83,6 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
     }
 
     renderInputBlock() {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput } = this.state;
-
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput || glucoseInput.includes('undefined') ? glucoseInput.replace(/undefined/g, '0') : glucoseInput;
-        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput || breadUnitsInput.includes('undefined') ? breadUnitsInput.replace(/undefined/g, '0') : breadUnitsInput;
-        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput || insulinInput.includes('undefined') ? insulinInput.replace(/undefined/g, '0') : insulinInput;
-        longInsulinInput = longInsulinInput.includes(',') ? longInsulinInput.replace(/,/g, '.') : longInsulinInput || longInsulinInput.includes('undefined') ? longInsulinInput.replace(/undefined/g, '0') : longInsulinInput;
-
         return (
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
@@ -120,107 +113,17 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
     }
 
     renderInputByValue() {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, currentValueType } = this.state;
-
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput || glucoseInput.includes('undefined') ? glucoseInput.replace(/undefined/g, '0') : glucoseInput;
-        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput || breadUnitsInput.includes('undefined') ? breadUnitsInput.replace(/undefined/g, '0') : breadUnitsInput;
-        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput || insulinInput.includes('undefined') ? insulinInput.replace(/undefined/g, '0') : insulinInput;
-        longInsulinInput = longInsulinInput.includes(',') ? longInsulinInput.replace(/,/g, '.') : longInsulinInput || longInsulinInput.includes('undefined') ? longInsulinInput.replace(/undefined/g, '0') : longInsulinInput;
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, currentValueType } = this.stateWithoutComma;
 
         switch (currentValueType) {
             case NoteValueType.GLUCOSE:
-                return <View style={styles.inputView}>
-                    <NoteInputWithSlider
-                        inputTitle={InputType.GLUCOSE}
-                        value={glucoseInput}
-                        maximumNum={'15'}
-                        onChangeText={(value) =>
-                            this.setState({ glucoseInput: value })
-                        }
-                        onNaturalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                glucoseInput: value + '.' + glucoseInput.split('.')[1]
-                            }), 50
-                        )}
-                        onDecimalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                glucoseInput:
-                                    glucoseInput.split('.')[0] + '.' +
-                                    value.toString().split('.')[1]
-                            }), 50
-                        )}
-                    />
-                </View>
+                return this.renderInputByType(glucoseInput, 'glucoseInput', 18)
             case NoteValueType.FOOD:
-                return <View style={styles.inputView}>
-                    <NoteInputWithSlider
-                        inputTitle={InputType.BREAD_UNITS}
-                        value={breadUnitsInput}
-                        maximumNum={'12'}
-                        onChangeText={(value) =>
-                            this.setState({ breadUnitsInput: value })
-                        }
-                        onNaturalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                breadUnitsInput: value + '.' + breadUnitsInput.split('.')[1]
-                            }), 50
-                        )}
-                        onDecimalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                breadUnitsInput:
-                                    breadUnitsInput.split('.')[0] + '.' +
-                                    value.toString().split('.')[1]
-                            }), 50
-                        )}
-                    />
-                </View>
+                return this.renderInputByType(breadUnitsInput, 'breadUnitsInput', 15)
             case NoteValueType.SHORT_INSULIN:
-                return <View style={styles.inputView}>
-                    <NoteInputWithSlider
-                        inputTitle={InputType.INSULIN}
-                        value={insulinInput}
-                        maximumNum={'15'}
-                        onChangeText={(value) =>
-                            this.setState({ insulinInput: value })
-                        }
-                        onNaturalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                insulinInput: value + '.' + insulinInput.split('.')[1]
-                            }), 50
-                        )}
-                        onDecimalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                insulinInput:
-                                    insulinInput.split('.')[0] + '.' +
-                                    value.toString().split('.')[1]
-                            }), 50
-                        )}
-
-                    />
-                </View>
+                return this.renderInputByType(insulinInput, 'insulinInput', 15)
             case NoteValueType.LONG_INSULIN:
-                return <View style={styles.inputView}>
-                    <NoteInputWithSlider
-                        value={longInsulinInput}
-                        inputTitle={InputType.LONG_INSULIN}
-                        maximumNum={'25'}
-                        onChangeText={(value) =>
-                            this.setState({ longInsulinInput: value })
-                        }
-                        onNaturalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                longInsulinInput: value + '.' + longInsulinInput.split('.')[1]
-                            }), 50
-                        )}
-                        onDecimalSlide={lodash.debounce((value) =>
-                            this.setState({
-                                longInsulinInput:
-                                    longInsulinInput.split('.')[0] + '.' +
-                                    value.toString().split('.')[1]
-                            }), 50
-                        )}
-                    />
-                </View>
+                return this.renderInputByType(longInsulinInput, 'longInsulinInput', 25)
             case NoteValueType.COMMENT:
                 return <View style={styles.inputView}>
                     <Text style={styles.inputViewTitle}>
@@ -231,7 +134,6 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
                     >
                         <TextInput
                             multiline
-                            numberOfLines={4}
                             editable
                             onChangeText={(text) => this.setState({ commentary: text })}
                             value={this.state.commentary}
@@ -239,6 +141,29 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
                     </View>
                 </View>
         }
+    }
+
+    renderInputByType(inputValue, name, maxNum ) {
+        const obj = { [`${name}`]: null }
+        return <View style={styles.inputView}>
+            <NoteInputWithSlider
+                value={inputValue}
+                inputTitle={InputType[name]}
+                maximumNum={maxNum}
+                onChangeText={(value) => {
+                    obj[`${name}`] = value;
+                    this.setState(obj as any)
+                }}
+                onNaturalSlide={lodash.debounce((value) => {
+                    obj[`${name}`] = value + '.' + inputValue.split('.')[1];
+                    this.setState(obj as any), 50
+                })}
+                onDecimalSlide={lodash.debounce((value) => {
+                    obj[`${name}`] = inputValue.split('.')[0] + '.' + value.toString().split('.')[1];
+                    this.setState(obj as any), 50
+                })}
+            />
+        </View>
     }
 
     renderSaveButton() {
@@ -255,21 +180,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
     }
 
     createNote = () => {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, commentary } = this.state;
-        glucoseInput = glucoseInput.includes(',') ? glucoseInput.replace(/,/g, '.') : glucoseInput;
-        breadUnitsInput = breadUnitsInput.includes(',') ? breadUnitsInput.replace(/,/g, '.') : breadUnitsInput;
-        insulinInput = insulinInput.includes(',') ? insulinInput.replace(/,/g, '.') : insulinInput;
-        longInsulinInput = longInsulinInput.includes(',') ? longInsulinInput.replace(/,/g, '.') : longInsulinInput;
-
-        let note: INoteListNote = {
-            date: this.state.date.getTime(),
-            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
-            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
-            insulin: insulinInput && parseFloat(insulinInput) || 0,
-            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0,
-            commentary: commentary || ""
-        }
-        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || commentary) {
+        let note: INoteListNote = this.noteFromState;
+        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
             this.setInitialState();
             this.props.onBackPress()
@@ -296,6 +208,36 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
             commentary: "",
             currentValueType: NoteValueType.GLUCOSE
         })
+    }
+
+    get stateWithoutComma() {
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, commentary, currentValueType, date } = this.state;
+
+        return {
+            date,
+            glucoseInput: this.exceptComma(glucoseInput),
+            breadUnitsInput: this.exceptComma(breadUnitsInput),
+            insulinInput: this.exceptComma(insulinInput),
+            longInsulinInput: this.exceptComma(longInsulinInput),
+            commentary,
+            currentValueType
+        }
+    }
+
+    get noteFromState() {
+        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, commentary, date } = this.state;
+        return {
+            date: date.getTime(),
+            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
+            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
+            insulin: insulinInput && parseFloat(insulinInput) || 0,
+            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0,
+            commentary: commentary || ""
+        }
+    }
+
+    exceptComma(input) {
+        return input.includes(',') ? input.replace(/,/g, '.') : input || input.includes('undefined') ? input.replace(/undefined/g, '0') : input;
     }
 }
 
