@@ -3,6 +3,9 @@ import {
     View,
     StyleSheet,
     KeyboardAvoidingView,
+    TouchableOpacity,
+    Text,
+    ActivityIndicator,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../constant/ThemeColor';
@@ -17,6 +20,9 @@ import { Action } from 'redux';
 import { createUserChangeAction } from '../store/modules/user/UserActionCreator';
 import { IUser } from '../model/IUser';
 import { AuthForm } from '../view/auth/AuthForm';
+import { Popup } from '../component/popup/Popup';
+import { TextInput } from 'react-native-gesture-handler';
+import { Fader } from '../component/Fader';
 
 
 interface AuthScreenProps {
@@ -28,28 +34,53 @@ interface AuthScreenProps {
 }
 
 interface AuthScreenState {
-    email: string
-    password: string
+    restorePasswordPopupShown: boolean
+    restorePasswordEmail?: string
 }
 
 class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
     state = {
-        email: this.props.user.email || '',
-        password: ''
-    }
-
-    static getDerivedStateFromProps(props: AuthScreenProps, state: AuthScreenState) {
-        if (props.user.email === state.email) {
-            return { ...state, email: props.user.email }
-        }
-
-        return state;
+        restorePasswordEmail: "",
+        restorePasswordPopupShown: false,
     }
 
     render() {
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.AuthView}>
                 {this.renderAuthForm()}
+                {this.state.restorePasswordPopupShown && <Fader hidden={!this.state.restorePasswordPopupShown} />}
+                <Popup hidden={!this.state.restorePasswordPopupShown}>
+                    <View style={styles.authScreenRestorePasswordView}>
+                        <Text style={styles.authScreenRestorePasswordViewTitle}>
+                            Восстановление пароля
+                                </Text>
+                        <TextInput
+                            style={styles.input}
+                            value={this.state.restorePasswordEmail}
+                            keyboardType={'email-address'}
+                            placeholder={'Почта'}
+                            onChangeText={(value) => this.setState({ restorePasswordEmail: value })}
+                        />
+                        <TouchableOpacity
+                            onPress={() => this.rememberPassword(this.state.restorePasswordEmail)}
+                        >
+                            <View style={styles.rememberButton}>
+                                <Text>
+                                    Напомнить
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.setState({ restorePasswordPopupShown: false })}
+                        >
+                            <View style={styles.cancelRememberButton}>
+                                <Text>
+                                    Отмена
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </Popup>
             </KeyboardAvoidingView>
         )
     }
@@ -80,6 +111,7 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
                     loading={this.loading}
                     onSignIn={this.signInWithEmailAndPassword}
                     onRegistration={this.signUpWithEmailAndPassword}
+                    onForget={() => this.setState({ restorePasswordPopupShown: true })}
                 />
             </View >
         )
@@ -130,6 +162,21 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
                 })
                 .then((data) => {
                     this.props.filfullUser && this.props.filfullUser(data)
+                })
+        } catch (e) {
+            this.props.setUserInLoaded && this.props.setUserInLoaded();
+            alert(e.message);
+        };
+    }
+
+    rememberPassword = async (email: string) => {
+        this.props.setUserInLoading && this.props.setUserInLoading();
+        try {
+            await firebaseApp.auth()
+                .sendPasswordResetEmail(email)
+                .then((data) => {
+                    alert(JSON.stringify(data))
+                    this.props.filfullUser && this.props.filfullUser({})
                 })
         } catch (e) {
             this.props.setUserInLoaded && this.props.setUserInLoaded();
@@ -221,6 +268,29 @@ const styles = StyleSheet.create({
         borderColor: ThemeColor.TAN,
         backgroundColor: ThemeColor.WHITE,
     },
+    rememberButton: {
+        width: 150,
+        height: 40,
+        display: 'flex',
+        margin: 10,
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        backgroundColor: "white",
+        ...shadowOptions
+    },
+    cancelRememberButton: {
+        width: 150,
+        height: 40,
+        display: 'flex',
+        marginBottom: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textDecorationLine: 'underline',
+        textDecorationColor: 'black',
+        ...shadowOptions
+    },
     titleFormText: {
         textAlign: 'center',
         fontFamily: 'Roboto',
@@ -278,15 +348,25 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 19,
         color: '#333333',
+    },
+
+    authScreenRestorePasswordView: {
+        position: 'relative',
+        width: 300,
+
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        flexDirection: 'column',
+        alignItems: 'center',
+
+        backgroundColor: 'white',
+        borderRadius: 10,
+        ...shadowOptions
+    },
+    authScreenRestorePasswordViewTitle: {
+        height: 30,
+        fontSize: 18,
+        color: '#333333',
+        margin: 20,
     }
 })
-
-
-export default AuthorizationScreen;
-
-
-{/* <TouchableOpacity onPress={() => this.props.navigation.navigate('NoteList')}>
-                    <Text style={styles.text}>Go to Note List</Text>
-                </TouchableOpacity> */}
-
-

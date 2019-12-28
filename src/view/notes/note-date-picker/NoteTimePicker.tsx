@@ -64,7 +64,7 @@ export class NoteTimePicker extends React.PureComponent<FullProps> {
             data: {
                 date: this.props.date,
                 pickerType: IModalPickerType.TIME,
-                positiveButtonText: 'Обновить дату',
+                positiveButtonText: 'Обновить время',
                 onPositiveClick: this.props.onChange,
             }
         }))
@@ -79,7 +79,7 @@ export const NoteTimePickerConnect = connect<{}, DispatchToProps>(
 
 const styles = StyleSheet.create({
     view: {
-        width: 105,
+        width: 100,
         height: 31,
 
         borderWidth: 1,

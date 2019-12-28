@@ -22,8 +22,13 @@ export function NoteInputWithSlider(props: Props) {
                 </Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(value) => props.onChangeText(value)}
-                    value={props.value}
+                    onChangeText={(value) => {
+                        value.split('.')[0].length < 3 &&
+                        (!value.split('.')[1] || (value.split('.')[1] && value.split('.')[1].length < 2)) &&
+                        props.onChangeText(value)
+                    }}
+                    placeholder={'0.0'}
+                    value={Number(props.value) > 0 ? props.value : ""}
                     keyboardType={'numeric'}
                     returnKeyType={'done'}
                 />
@@ -75,19 +80,19 @@ const styles = StyleSheet.create({
     },
     sliderView: {
         flex: 1,
-        height: 90,
         width: '100%',
 
         margin: 5,
-        padding: 5,
 
         flexDirection: 'column',
-        justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     sliderRow: {
         flex: 1,
         width: '100%',
-        height: 30,
+        height: 40,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },

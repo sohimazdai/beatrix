@@ -21,7 +21,6 @@ import { BlockHat } from '../component/hat/BlockHat';
 import { BottomPopup } from '../component/popup/BottomPopup';
 import { AddNoteIcon } from '../component/icon/AddNoteIcon';
 import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
-import { NoteEditingPopupConnect } from '../view/notes/note-popup/NoteEditingPopup';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -118,7 +117,6 @@ export interface ChartWithSettingsState {
     popupShown?: boolean,
     glucoseAverageShown?: boolean
     noteCreationShown?: boolean,
-    noteEditingShown?: boolean,
     editingNoteId?: number
 }
 
@@ -135,7 +133,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         popupShown: false,
         glucoseAverageShown: false,
         noteCreationShown: false,
-        noteEditingShown: false,
         editingNoteId: null
     }
 
@@ -148,7 +145,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     render() {
-        const { noteCreationShown, noteEditingShown, selectedDotId } = this.state;
+        const { noteCreationShown, selectedDotId } = this.state;
         const chartsToRender = [
             ChartValueType.INSULIN,
             ChartValueType.GLUCOSE,
@@ -196,7 +193,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         </View>
                     </View>
                 </ScrollView>
-                {!(selectedDotId || noteCreationShown || noteEditingShown) && <View style={styles.addNoteButtonView}>
+                {!(selectedDotId || noteCreationShown) && <View style={styles.addNoteButtonView}>
                     <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
                         <View style={styles.addNoteButton}>
                             <Text style={styles.addNoteButtonText}>
@@ -213,19 +210,14 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     note={this.getNoteForChartPopup()}
                     onEditPress={() => this.setState({
                         editingNoteId: this.state.selectedDotId,
-                        noteEditingShown: true
+                        noteCreationShown: true
                     })}
                 />
                 <BottomPopup hidden={!this.state.noteCreationShown}>
                     <NoteCreationPopupConnect
-                        onBackPress={() => this.setState({ noteCreationShown: false })}
-                    />
-                </BottomPopup>
-                <BottomPopup hidden={!this.state.noteEditingShown}>
-                    <NoteEditingPopupConnect
                         noteId={this.state.editingNoteId}
                         onBackPress={() => this.setState({
-                            noteEditingShown: false,
+                            noteCreationShown: false,
                             editingNoteId: null
                         })}
                     />
@@ -604,9 +596,9 @@ const styles = StyleSheet.create({
     },
     addNoteButtonView: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
-
+        bottom: 5,
+        right: 5,
+        
         ...shadowOptions,
     },
     addNoteButton: {

@@ -14,6 +14,7 @@ interface Props {
 
     onSignIn?: (email: string, password: string) => void
     onRegistration?: (email: string, password: string) => void
+    onForget?: (email: string) => void
 }
 
 interface State {
@@ -61,6 +62,14 @@ export class AuthForm extends React.Component<Props, State> {
                             onChangeText={(value) => this.setState({ password: value })}
                         />
                     </View>
+                    {mode === AuthFormMode.AUTH && <TouchableOpacity
+                        onPress={() => this.props.onForget(this.state.email)}
+                        style={styles.authFormInputForget}
+                    >
+                        <Text style={styles.authFormInputForgetText}>
+                            Забыли пароль?
+                        </Text>
+                    </TouchableOpacity>}
                     {mode === AuthFormMode.REG && <View style={styles.authFormInputForm}>
                         <TextInput
                             secureTextEntry
@@ -203,6 +212,16 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontSize: 19,
         color: '#333333',
+    },
+    authFormInputForget: {
+        width: 280,
+        backgroundColor: "rgba(250,250,250, 0.1)",
+        marginTop: -20,
+        marginBottom: 20,
+    },
+    authFormInputForgetText: {
+        textAlign: 'left',
+        textDecorationLine: 'underline',
     },
     authFormLoading: {
         position: 'absolute',

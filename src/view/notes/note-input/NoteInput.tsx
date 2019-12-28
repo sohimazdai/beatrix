@@ -15,6 +15,7 @@ export function NoteInput(props: Props) {
                 {...props}
                 keyboardType={'numeric'}
                 returnKeyType={'done'}
+                maxLength={2}
                 style={{
                     width: 88,
                     height: 41,

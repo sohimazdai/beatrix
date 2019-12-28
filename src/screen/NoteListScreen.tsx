@@ -19,8 +19,6 @@ import { LongSyringeIcon } from '../component/icon/value-icons/LongSyringeIcon';
 import { BottomPopup } from '../component/popup/BottomPopup';
 import { BlockHat } from '../component/hat/BlockHat';
 import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
-import { NoteEditingPopupConnect } from '../view/notes/note-popup/NoteEditingPopup';
-
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -63,16 +61,11 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                 </View>}
                 <BottomPopup hidden={!this.state.noteCreationShown}>
                     <NoteCreationPopupConnect
-                        onBackPress={() => this.setState({ noteCreationShown: false })}
-                    />
-                </BottomPopup>
-                <BottomPopup hidden={!this.state.noteEditingShown}>
-                    <NoteEditingPopupConnect
-                        noteId={this.state.editingNoteId}
-                        onBackPress={() => this.setState({ 
-                            noteEditingShown: false,
+                        onBackPress={() => this.setState({
+                            noteCreationShown: false,
                             editingNoteId: null
                         })}
+                        noteId={this.state.editingNoteId}
                     />
                 </BottomPopup>
             </View>
@@ -140,7 +133,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                         key={noteId}
                         note={note}
                         onPress={() => this.setState({
-                            noteEditingShown: true,
+                            noteCreationShown: true,
                             editingNoteId: noteId
                         })}
                     />
@@ -270,8 +263,8 @@ const styles = StyleSheet.create({
     },
     addNoteButtonView: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
+        bottom: 5,
+        right: 5,
 
         ...shadowOptions,
     },

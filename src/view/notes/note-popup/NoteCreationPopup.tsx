@@ -10,18 +10,19 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { INoteListNote, NoteValueType } from '../../../model/INoteList';
-import { createNoteListChangeNoteByIdAction } from '../../../store/modules/noteList/NoteListActionCreator';
+import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import * as lodash from "lodash";
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
-import { ModalType } from '../../../model/IModal';
+import { ModalType, IModalConfirm } from '../../../model/IModal';
 import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
+import { IStorage } from '../../../model/IStorage';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -32,8 +33,10 @@ enum InputType {
 }
 
 interface NoteCreationPopupProps {
+    note?: INoteListNote
     dispatch?: (action: Action) => void
     onBackPress?: () => void
+    onNoteDelete?: (noteId: number) => void;
 }
 
 interface NoteCreationPopupState {
@@ -49,27 +52,53 @@ interface NoteCreationPopupState {
 interface FullState extends NoteCreationPopupState { }
 
 class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, FullState>{
-    state = {
-        date: new Date(),
-        glucoseInput: "0.0",
-        breadUnitsInput: "0.0",
-        insulinInput: "0.0",
-        longInsulinInput: "0.0",
-        commentary: "",
-        currentValueType: NoteValueType.GLUCOSE
+    constructor(props: NoteCreationPopupProps) {
+        super(props);
+        this.state = this.props.note ?
+            this.noteFromProps :
+            {
+                date: new Date(),
+                glucoseInput: "0.0",
+                breadUnitsInput: "0.0",
+                insulinInput: "0.0",
+                longInsulinInput: "0.0",
+                commentary: "",
+                currentValueType: NoteValueType.GLUCOSE
+            };
     }
+
+    get noteFromProps() {
+        const { note } = this.props;
+        const newState: FullState = {
+            date: new Date(note.date) || new Date(),
+            glucoseInput: String(note.glucose) || "0.0",
+            breadUnitsInput: String(note.breadUnits) || "0.0",
+            insulinInput: String(note.insulin) || "0.0",
+            longInsulinInput: String(note.longInsulin) || "0.0",
+            commentary: note.commentary || "",
+            currentValueType: NoteValueType.GLUCOSE
+        }
+        return newState
+    }
+
 
     render() {
         return (
             <KeyboardAvoidingView
-                style={styles.noteCreationView}
+                style={!this.props.note ? 
+                    styles.noteCreationView :
+                    styles.noteEditingView
+                }
                 keyboardVerticalOffset={90}
                 behavior='padding'
             >
                 <ScrollView style={styles.noteCreationViewScrollView}>
                     <View style={styles.scrollViewContent}>
-                        {this.renderInputBlock()}
-                        {this.renderSaveButton()}
+                        {this.renderPickerBlock()}
+                        <View style={styles.buttonsBlock}>
+                            {this.props.note && this.renderDeleteButton()}
+                            {this.renderSaveButton()}
+                        </View>
                     </View>
                     <TouchableOpacity
                         style={styles.hideTouchable}
@@ -82,7 +111,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
         )
     }
 
-    renderInputBlock() {
+    renderPickerBlock() {
         return (
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
@@ -143,7 +172,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
         }
     }
 
-    renderInputByType(inputValue, name, maxNum ) {
+    renderInputByType(inputValue, name, maxNum) {
         const obj = { [`${name}`]: null }
         return <View style={styles.inputView}>
             <NoteInputWithSlider
@@ -173,7 +202,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
                 onPress={this.createNote}
             >
                 <Text style={styles.saveButtonText}>
-                    Записать
+                    {this.props.note ? 'Перезаписать' : 'Записать'}
                 </Text>
             </TouchableOpacity>
         )
@@ -196,6 +225,41 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
                 },
             }))
         }
+    }
+
+    renderDeleteButton() {
+        return (
+            <TouchableOpacity
+                style={styles.deleteButtonTouchable}
+                onPress={this.onDeleteClick}
+            >
+                <Text style={styles.deleteButtonText}>
+                    Удалить
+                </Text>
+            </TouchableOpacity>
+        )
+    }
+
+    onDeleteClick = () => {
+        const confirmData: IModalConfirm = {
+            data: {
+                questionText: 'Вы уверены, что хотите удалить эту запись?',
+                positiveButtonText: 'Удалить',
+                negativeButtonText: 'Оставить',
+
+                onPositiveClick: () => this.deleteNote(),
+            }
+        }
+        this.props.dispatch(createModalChangeAction({
+            type: ModalType.CONFIRM,
+            needToShow: true,
+            ...confirmData
+        }))
+    }
+
+    deleteNote = () => {
+        this.props.onNoteDelete(this.props.note.date);
+        this.props.onBackPress()
     }
 
     setInitialState() {
@@ -236,14 +300,30 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
         }
     }
 
+
+
     exceptComma(input) {
-        return input.includes(',') ? input.replace(/,/g, '.') : input || input.includes('undefined') ? input.replace(/undefined/g, '0') : input;
+        return input.includes(',') ?
+            input.replace(/,/g, '.') :
+            input || input.includes('undefined') ?
+                input.replace(/undefined/g, '0') :
+                input;
     }
 }
 
 export const NoteCreationPopupConnect = connect(
-    null,
-    (dispatch: Dispatch<Action>) => ({ dispatch })
+    (state: IStorage) => ({ notes: state.noteList }),
+    (dispatch: Dispatch<Action>) => ({ dispatch }),
+    (stateProps, { dispatch }, ownProps: any) => {
+        return {
+            ...ownProps,
+            dispatch,
+            note: stateProps.notes[ownProps.noteId],
+            onNoteDelete(noteId) {
+                dispatch(createDeleteNoteInNoteListById(noteId))
+            }
+        }
+    }
 )(NoteCreationPopup)
 
 const styles = StyleSheet.create({
@@ -257,9 +337,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
+    noteEditingView: {
+        flex: 1,
+        width: '100%',
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        backgroundColor: "#FFE1DF",
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+    },
     noteCreationViewScrollView: {
         width: '100%',
         height: '100%',
+    },
+    buttonsBlock: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
     },
     scrollViewContent: {
         flex: 1,
@@ -282,10 +379,10 @@ const styles = StyleSheet.create({
     },
     pickers: {
         flex: 1,
-        height: 80,
-        width: '100%',
+        height: 50,
+        width: 240,
 
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -299,9 +396,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     saveButtonTouchable: {
-        flex: 1,
-
-        width: 150,
+        width: 160,
         height: 50,
 
         marginVertical: 10,
@@ -320,6 +415,25 @@ const styles = StyleSheet.create({
         color: '#333333',
         fontWeight: 'bold',
     },
+    deleteButtonTouchable: {
+        width: 80,
+        height: 50,
+
+        marginVertical: 10,
+        ...shadowOptions,
+
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
+    deleteButtonText: {
+        fontFamily: 'Roboto',
+        fontSize: 17,
+        color: 'crimson',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+    },
     inputViewTitle: {
         width: '100%',
         textAlign: 'center',
@@ -333,13 +447,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 10,
         width: '100%',
-        height: 150,
         borderRadius: 15,
     },
     hideTouchable: {
         position: 'absolute',
-        right: 20,
-        top: 20,
+        right: 10,
+        top: 10,
         height: 30,
         width: 30
     }
