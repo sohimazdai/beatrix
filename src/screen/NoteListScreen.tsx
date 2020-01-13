@@ -19,13 +19,15 @@ import { LongSyringeIcon } from '../component/icon/value-icons/LongSyringeIcon';
 import { BottomPopup } from '../component/popup/BottomPopup';
 import { BlockHat } from '../component/hat/BlockHat';
 import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { createChangeInteractive } from '../store/modules/interactive/interactive';
+import { NoteCreationPopupButtonConnect } from '../view/notes/note-popup/NoteCreationPopupButton';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
 }
 
 interface NoteListScreenDispatchProps {
-    dispatch: Dispatch<Action>
+    selectNoteToEdit: (noteId: string) => void
 }
 
 interface NoteListScreenProps {
@@ -49,25 +51,9 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                 <ScrollView>
                     {this.renderCards()}
                 </ScrollView>
-                {!(noteCreationShown || noteEditingShown) && <View style={styles.addNoteButtonView}>
-                    <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
-                        <View style={styles.addNoteButton}>
-                            <Text style={styles.addNoteButtonText}>
-                                Записать
-                                    </Text>
-                            <AddNoteIcon />
-                        </View>
-                    </TouchableOpacity>
-                </View>}
-                <BottomPopup hidden={!this.state.noteCreationShown}>
-                    <NoteCreationPopupConnect
-                        onBackPress={() => this.setState({
-                            noteCreationShown: false,
-                            editingNoteId: null
-                        })}
-                        noteId={this.state.editingNoteId}
-                    />
-                </BottomPopup>
+                <View style={styles.addNoteButtonView}>
+                    <NoteCreationPopupButtonConnect />
+                </View>
             </View>
         )
     }
@@ -132,10 +118,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                     return <Note
                         key={noteId}
                         note={note}
-                        onPress={() => this.setState({
-                            noteCreationShown: true,
-                            editingNoteId: noteId
-                        })}
+                        onPress={() => this.props.selectNoteToEdit(noteId)}
                     />
                 })}
             </View>
@@ -186,7 +169,12 @@ export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteList
     (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),
-    (dispatch: Dispatch<Action>) => ({ dispatch })
+    (dispatch: Dispatch<Action>) => ({ 
+        selectNoteToEdit: (noteId: string) => dispatch(createChangeInteractive({
+            editingNoteId: noteId,
+            creatingNoteMode: true
+        }))
+     })
 )(NoteListScreen)
 
 const styles = StyleSheet.create({

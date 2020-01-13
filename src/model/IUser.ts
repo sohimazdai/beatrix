@@ -6,4 +6,5 @@ export interface IUser {
     loading?: boolean
 
     isAuthed?: boolean
+    isPendingVerification?: boolean
 }

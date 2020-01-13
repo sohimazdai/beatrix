@@ -26,7 +26,8 @@ export const Fader = (props: FaderProps) => {
 
     return <Animated.View style={{
         ...styles.FaderView,
-        opacity: opacity
+        opacity: opacity,
+        display: props.hidden ? 'none' : 'flex',
     }}>
         {children}
     </Animated.View>
@@ -43,6 +44,6 @@ const styles = StyleSheet.create({
 
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
     }
 })

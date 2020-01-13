@@ -21,6 +21,7 @@ import { BlockHat } from '../component/hat/BlockHat';
 import { BottomPopup } from '../component/popup/BottomPopup';
 import { AddNoteIcon } from '../component/icon/AddNoteIcon';
 import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { NoteCreationPopupButtonConnect } from '../view/notes/note-popup/NoteCreationPopupButton';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -145,7 +146,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 
     render() {
-        const { noteCreationShown, selectedDotId } = this.state;
         const chartsToRender = [
             ChartValueType.INSULIN,
             ChartValueType.GLUCOSE,
@@ -193,16 +193,9 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         </View>
                     </View>
                 </ScrollView>
-                {!(selectedDotId || noteCreationShown) && <View style={styles.addNoteButtonView}>
-                    <TouchableOpacity onPress={() => this.setState({ noteCreationShown: true })}>
-                        <View style={styles.addNoteButton}>
-                            <Text style={styles.addNoteButtonText}>
-                                Записать
-                                    </Text>
-                            <AddNoteIcon />
-                        </View>
-                    </TouchableOpacity>
-                </View>}
+                <View style={styles.addNoteButtonView}>
+                    <NoteCreationPopupButtonConnect />
+                </View>
                 <ChartDotInfoPopup
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
@@ -213,15 +206,6 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         noteCreationShown: true
                     })}
                 />
-                <BottomPopup hidden={!this.state.noteCreationShown}>
-                    <NoteCreationPopupConnect
-                        noteId={this.state.editingNoteId}
-                        onBackPress={() => this.setState({
-                            noteCreationShown: false,
-                            editingNoteId: null
-                        })}
-                    />
-                </BottomPopup>
             </View>
 
         )
@@ -598,7 +582,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 5,
         right: 5,
-        
+
         ...shadowOptions,
     },
     addNoteButton: {

@@ -5,6 +5,7 @@ import { persistStore, persistReducer, PersistConfig, createTransform } from 're
 import { AsyncStorage } from "react-native";
 import { userReducer } from "./modules/user/UserReducer";
 import { appReducer } from "./modules/app/app";
+import { interactiveReducer } from "./modules/interactive/interactive";
 
 const logger = store => next => action => {
     console.log("DISPATCHING", action.type);
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     app: appReducer,
     noteList: noteListReducer,
     modal: modalReducer,
-    user: userReducer
+    user: userReducer,
+    interactive: interactiveReducer
 });
 
 const persistConfig: PersistConfig = {

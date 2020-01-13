@@ -10,9 +10,15 @@ import { ProfileScreenConnect } from '../screen/ProfileScreen';
 import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
+import { IInteractive } from '../model/IInteractive';
+import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
 
 interface AppNavigatorComponentProps {
-    user: IUser
+    user?: IUser,
+}
+
+interface AuthedContainer {
+    interactive?: IInteractive
 }
 
 const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
@@ -20,13 +26,20 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 
     })
     return props.user.id ?
-        <AppAuthedNavigatorContainer /> :
+        <AuthedContainer /> :
         <AppUnknownNavigatorContainer />
 }
 
+export const AuthedContainer = () => (
+    <>
+        <AuthedNavigatorContainer />
+        <NoteCreationPopupConnect />
+    </>
+)
+
 export const AppNavigator = connect(
     (state: IStorage) => ({
-        user: state.user
+        user: state.user,
     })
 )(AppNavigatorComponent)
 
@@ -44,7 +57,7 @@ const AuthedMainNavigator = createBottomTabNavigator(
                     return <NotesIcon />
                 } else if (routeName === "Графики") {
                     return <ChartsIcon />
-                }else if (routeName === "Профиль") {
+                } else if (routeName === "Профиль") {
                     return <ProfileIcon />
                 }
             },
@@ -66,6 +79,6 @@ const UnknownMainNavigator = createStackNavigator(
     }
 )
 
-const AppAuthedNavigatorContainer = createAppContainer(AuthedMainNavigator)
+const AuthedNavigatorContainer = createAppContainer(AuthedMainNavigator)
 
 const AppUnknownNavigatorContainer = createAppContainer(UnknownMainNavigator)

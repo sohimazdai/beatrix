@@ -23,6 +23,10 @@ import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueType
 import { ScrollView } from 'react-native-gesture-handler';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { IStorage } from '../../../model/IStorage';
+import { BottomPopup } from '../../../component/popup/BottomPopup';
+import { IInteractive } from '../../../model/IInteractive';
+import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
+import { Fader } from '../../../component/Fader';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -33,9 +37,10 @@ enum InputType {
 }
 
 interface NoteCreationPopupProps {
+    interactive?: IInteractive
     note?: INoteListNote
     dispatch?: (action: Action) => void
-    onBackPress?: () => void
+    hidePopup?: () => void
     onNoteDelete?: (noteId: number) => void;
 }
 
@@ -49,27 +54,38 @@ interface NoteCreationPopupState {
     commentary: string
 }
 
-interface FullState extends NoteCreationPopupState { }
-
-class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, FullState>{
+class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, NoteCreationPopupState>{
     constructor(props: NoteCreationPopupProps) {
         super(props);
-        this.state = this.props.note ?
-            this.noteFromProps :
-            {
-                date: new Date(),
-                glucoseInput: "0.0",
-                breadUnitsInput: "0.0",
-                insulinInput: "0.0",
-                longInsulinInput: "0.0",
-                commentary: "",
-                currentValueType: NoteValueType.GLUCOSE
-            };
+        this.state = {
+            date: new Date(),
+            glucoseInput: "0.0",
+            breadUnitsInput: "0.0",
+            insulinInput: "0.0",
+            longInsulinInput: "0.0",
+            commentary: "",
+            currentValueType: NoteValueType.GLUCOSE
+        }
     }
+
+    componentDidMount = () => {
+        this.props.note && this.setState({
+            ...this.noteFromProps
+        })
+    };
+
+    componentDidUpdate = (pP: NoteCreationPopupProps) => {
+        if (!pP.note && this.props.note) {
+            this.setState({
+                ...this.noteFromProps
+            })
+        }
+    };
+
 
     get noteFromProps() {
         const { note } = this.props;
-        const newState: FullState = {
+        const newState: NoteCreationPopupState = {
             date: new Date(note.date) || new Date(),
             glucoseInput: String(note.glucose) || "0.0",
             breadUnitsInput: String(note.breadUnits) || "0.0",
@@ -84,30 +100,35 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
 
     render() {
         return (
-            <KeyboardAvoidingView
-                style={!this.props.note ? 
-                    styles.noteCreationView :
-                    styles.noteEditingView
-                }
-                keyboardVerticalOffset={90}
-                behavior='padding'
-            >
-                <ScrollView style={styles.noteCreationViewScrollView}>
-                    <View style={styles.scrollViewContent}>
-                        {this.renderPickerBlock()}
-                        <View style={styles.buttonsBlock}>
-                            {this.props.note && this.renderDeleteButton()}
-                            {this.renderSaveButton()}
-                        </View>
-                    </View>
-                    <TouchableOpacity
-                        style={styles.hideTouchable}
-                        onPress={this.props.onBackPress}
+            <>
+                <Fader hidden={!this.props.interactive.creatingNoteMode} />
+                <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
+                    <KeyboardAvoidingView
+                        style={!this.props.note ?
+                            styles.noteCreationView :
+                            styles.noteEditingView
+                        }
+                        keyboardVerticalOffset={90}
+                        behavior='padding'
                     >
-                        <CloseIcon />
-                    </TouchableOpacity>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                        <ScrollView style={styles.noteCreationViewScrollView}>
+                            <View style={styles.scrollViewContent}>
+                                {this.renderPickerBlock()}
+                                <View style={styles.buttonsBlock}>
+                                    {this.props.note && this.renderDeleteButton()}
+                                    {this.renderSaveButton()}
+                                </View>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.hideTouchable}
+                                onPress={this.props.hidePopup}
+                            >
+                                <CloseIcon />
+                            </TouchableOpacity>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                </BottomPopup>
+            </>
         )
     }
 
@@ -213,7 +234,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
         if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
             this.setInitialState();
-            this.props.onBackPress()
+            this.props.hidePopup()
         } else {
             this.setInitialState();
             this.props.dispatch(createModalChangeAction({
@@ -259,7 +280,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
 
     deleteNote = () => {
         this.props.onNoteDelete(this.props.note.date);
-        this.props.onBackPress()
+        this.props.hidePopup()
     }
 
     setInitialState() {
@@ -312,13 +333,23 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Full
 }
 
 export const NoteCreationPopupConnect = connect(
-    (state: IStorage) => ({ notes: state.noteList }),
+    (state: IStorage) => ({
+        notes: state.noteList,
+        interactive: state.interactive
+    }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps: any) => {
+        const noteId = stateProps.interactive.editingNoteId || "";
         return {
-            ...ownProps,
+            ...stateProps,
             dispatch,
-            note: stateProps.notes[ownProps.noteId],
+            note: stateProps.notes[noteId] || null,
+            hidePopup() {
+                dispatch(createChangeInteractive({
+                    creatingNoteMode: false,
+                    editingNoteId: ''
+                }))
+            },
             onNoteDelete(noteId) {
                 dispatch(createDeleteNoteInNoteListById(noteId))
             }

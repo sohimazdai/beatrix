@@ -5,7 +5,6 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity,
     Text,
-    ActivityIndicator,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { ThemeColor } from '../constant/ThemeColor';
@@ -156,12 +155,20 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
                         id: data.user.uid,
                         email: data.user.email,
                         name: data.user.email.split('@')[0],
-                        isAuthed: true
+                        isAuthed: false
                     }
                     return userData
                 })
                 .then((data) => {
-                    this.props.filfullUser && this.props.filfullUser(data)
+                    this.props.filfullUser && this.props.filfullUser(data);
+                    alert(JSON.stringify(data))
+                    this.sendVerificationEmail()
+                    return data
+                }).then((data) => {
+                    const verificationPendingData = {
+                        ...data,
+                        isPendingVerification: true
+                    };
                 })
         } catch (e) {
             this.props.setUserInLoaded && this.props.setUserInLoaded();
@@ -182,6 +189,17 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
             this.props.setUserInLoaded && this.props.setUserInLoaded();
             alert(e.message);
         };
+    }
+
+    sendVerificationEmail = async () => {
+        this.props.setUserInLoading && this.props.setUserInLoading();
+        try {
+            await firebaseApp.auth().currentUser
+                .sendEmailVerification();
+        } catch (e) {
+            this.props.setUserInLoaded && this.props.setUserInLoaded();
+            alert(e.message);
+        }
     }
 }
 

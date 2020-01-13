@@ -18,56 +18,77 @@ export class ValueTypePicker extends React.Component<Props> {
     render() {
         const { selectedType } = this.props;
         return <View style={styles.view}>
-            <TouchableOpacity onPress={() => this.props.onSelect(NoteValueType.GLUCOSE)}>
-                <View
-                    style={selectedType === NoteValueType.GLUCOSE ?
-                        { ...styles.iconButton, ...styles.iconButtonActive } :
-                        styles.iconButton
-                    }
+
+            <View
+                style={selectedType === NoteValueType.GLUCOSE ?
+                    { ...styles.iconButton, ...styles.iconButtonActive } :
+                    styles.iconButton
+                }
+            >
+                <TouchableOpacity
+                    onPress={() => this.props.onSelect(NoteValueType.GLUCOSE)}
+                    style={styles.touchableView}
                 >
                     <GlucometerIcon style={styles.icon} />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.onSelect(NoteValueType.FOOD)}>
-                <View
-                    style={selectedType === NoteValueType.FOOD ?
-                        { ...styles.iconButton, ...styles.iconButtonActive } :
-                        styles.iconButton
-                    }
+                </TouchableOpacity>
+            </View>
+
+            <View
+                style={selectedType === NoteValueType.FOOD ?
+                    { ...styles.iconButton, ...styles.iconButtonActive } :
+                    styles.iconButton
+                }
+            >
+                <TouchableOpacity
+                    onPress={() => this.props.onSelect(NoteValueType.FOOD)}
+                    style={styles.touchableView}
                 >
                     <VegetablesIcon style={styles.icon} />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.onSelect(NoteValueType.SHORT_INSULIN)}>
-                <View
-                    style={selectedType === NoteValueType.SHORT_INSULIN ?
-                        { ...styles.iconButton, ...styles.iconButtonActive } :
-                        styles.iconButton
-                    }
+                </TouchableOpacity>
+            </View>
+
+            <View
+                style={selectedType === NoteValueType.SHORT_INSULIN ?
+                    { ...styles.iconButton, ...styles.iconButtonActive } :
+                    styles.iconButton
+                }
+            >
+                <TouchableOpacity
+                    onPress={() => this.props.onSelect(NoteValueType.SHORT_INSULIN)}
+                    style={styles.touchableView}
                 >
                     <ShortSyringeIcon style={styles.icon} />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.onSelect(NoteValueType.LONG_INSULIN)}>
-                <View
-                    style={selectedType === NoteValueType.LONG_INSULIN ?
-                        { ...styles.iconButton, ...styles.iconButtonActive } :
-                        styles.iconButton
-                    }
+                </TouchableOpacity>
+            </View>
+
+            <View
+                style={selectedType === NoteValueType.LONG_INSULIN ?
+                    { ...styles.iconButton, ...styles.iconButtonActive } :
+                    styles.iconButton
+                }
+            >
+                <TouchableOpacity
+                    onPress={() => this.props.onSelect(NoteValueType.LONG_INSULIN)}
+                    style={styles.touchableView}
                 >
                     <LongSyringeIcon style={styles.icon} />
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.onSelect(NoteValueType.COMMENT)}>
-                <View
-                    style={selectedType === NoteValueType.COMMENT ?
-                        { ...styles.iconButton, ...styles.iconButtonActive } :
-                        styles.iconButton
-                    }
+                </TouchableOpacity>
+            </View>
+
+            <View
+                style={selectedType === NoteValueType.COMMENT ?
+                    { ...styles.iconButton, ...styles.iconButtonActive } :
+                    styles.iconButton
+                }
+            >
+                <TouchableOpacity
+                    onPress={() => this.props.onSelect(NoteValueType.COMMENT)}
+                    style={styles.touchableView}
                 >
                     <CommentIcon style={styles.icon} />
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </View>
+
         </View>
     }
 }
@@ -77,9 +98,16 @@ const styles = StyleSheet.create({
         margin: 20,
         flex: 1,
         width: 280,
+
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
+    },
+    touchableView: {
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     iconButton: {
         justifyContent: 'center',
