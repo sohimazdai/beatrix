@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
-import { ChartDotInfoPopupValue } from './chart-dot-info-popup-components/ChartDotInfoPopupValue';
+import { ChartDotInfoPopupValue } from './ChartDotInfoPopupValue';
 import { ChartValueType } from '../../../model/IChart';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { shadowOptions } from '../../../constant/shadowOptions';

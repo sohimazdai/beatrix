@@ -1,11 +1,11 @@
 import React from 'react'
-import { ChartValueType } from '../../../../model/IChart'
+import { ChartValueType } from '../../../model/IChart'
 import { View, StyleSheet, Text } from 'react-native'
-import { LongSyringeIcon } from '../../../../component/icon/value-icons/LongSyringeIcon'
-import { ShortSyringeIcon } from '../../../../component/icon/value-icons/ShortSyringeIcon'
-import { MinusSignIcon } from '../../../../component/icon/MinusSignIcon'
-import { VegetablesIcon } from '../../../../component/icon/value-icons/VegetablesIcon'
-import { GlucometerIcon } from '../../../../component/icon/value-icons/GlucometerIcon'
+import { LongSyringeIcon } from '../../../component/icon/value-icons/LongSyringeIcon'
+import { ShortSyringeIcon } from '../../../component/icon/value-icons/ShortSyringeIcon'
+import { MinusSignIcon } from '../../../component/icon/MinusSignIcon'
+import { VegetablesIcon } from '../../../component/icon/value-icons/VegetablesIcon'
+import { GlucometerIcon } from '../../../component/icon/value-icons/GlucometerIcon'
 
 export interface ChartDotInfoPopupValueProps {
     type: string

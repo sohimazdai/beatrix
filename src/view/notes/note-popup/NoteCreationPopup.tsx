@@ -231,6 +231,9 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     createNote = () => {
         let note: INoteListNote = this.noteFromState;
+        if (this.props.note) {
+            this.props.onNoteDelete(this.props.note.date)
+        }
         if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
             this.setInitialState();
@@ -451,7 +454,6 @@ const styles = StyleSheet.create({
         height: 50,
 
         marginVertical: 10,
-        ...shadowOptions,
 
         borderRadius: 15,
         justifyContent: 'center',

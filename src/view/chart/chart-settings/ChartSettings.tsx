@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, CheckBox, ScrollView } from 'react-native';
+import { View, Text, StyleSheet} from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import { ChartPeriodType, ChartAveragePeriodType } from '../../../model/IChart';
+import { ChartPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
@@ -26,6 +26,9 @@ export function ChartSettings(props: ChartSettingsProps) {
         new Date().getMonth(),
         new Date().getDate()
     );
+    const dateClickerStyle = getNextDate(props.date) > today ?
+        { ...styles.dateClicker, ...styles.dateClickerDisable } :
+        styles.dateClicker
     return <View style={styles.chartSettingsView}>
         <View style={styles.dateInputBlock}>
             <View style={styles.dateClicker}>
@@ -46,11 +49,12 @@ export function ChartSettings(props: ChartSettingsProps) {
             />
             <View style={styles.dateClicker}>
                 <TouchableOpacity
-                    style={styles.dateClickerTouchable}
+                    style={dateClickerStyle}
                     onPress={getNextDate(props.date) <= today ?
                         () => props.onDateChange(setNextDateValueByChartPeriodType(props)) :
                         () => { }
                     }
+                    disabled={getNextDate(props.date) > today}
                 >
                     <Text style={styles.dateClickerText}>
                         {'+'}
@@ -66,12 +70,12 @@ export function ChartSettings(props: ChartSettingsProps) {
                 </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
-                        let buttonStyle = styles.periodButton;
-                        let buttonTextStyle = styles.periodButtonText;
-                        if (period === props.selectedPeriod) {
-                            buttonStyle = { ...buttonStyle, ...styles.periodButtonActive }
-                            buttonTextStyle = { ...buttonTextStyle, ...styles.periodButtonTextActive }
-                        }
+                        let buttonStyle = period === props.selectedPeriod ?
+                            { ...styles.periodButton, ...styles.periodButtonActive } :
+                            styles.periodButton;
+                        let buttonTextStyle = period === props.selectedPeriod ?
+                            { ...styles.periodButtonText, ...styles.periodButtonTextActive } :
+                            styles.periodButtonText;
                         return <View
                             style={buttonStyle}
                             key={period}
@@ -168,6 +172,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: ThemeColor.WHITE,
         borderColor: '#2E3858',
+    },
+    dateClickerDisable: {
+        opacity: 0.5,
     },
     dateClickerTouchable: {
         display: 'flex',

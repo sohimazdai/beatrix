@@ -23,7 +23,6 @@ import { Popup } from '../component/popup/Popup';
 import { TextInput } from 'react-native-gesture-handler';
 import { Fader } from '../component/Fader';
 
-
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     filfullUser?: (user: IUser) => void;
@@ -60,24 +59,25 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
                             placeholder={'Почта'}
                             onChangeText={(value) => this.setState({ restorePasswordEmail: value })}
                         />
-                        <TouchableOpacity
-                            onPress={() => this.rememberPassword(this.state.restorePasswordEmail)}
-                        >
-                            <View style={styles.rememberButton}>
+                        <View style={styles.rememberButton}>
+                            <TouchableOpacity
+                                onPress={() => this.rememberPassword(this.state.restorePasswordEmail)}
+                                style={styles.rememberButtonTouchable}
+                            >
                                 <Text>
                                     Напомнить
                                 </Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.setState({ restorePasswordPopupShown: false })}
-                        >
-                            <View style={styles.cancelRememberButton}>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.cancelRememberButton}>
+                            <TouchableOpacity
+                                onPress={() => this.setState({ restorePasswordPopupShown: false })}
+                            >
                                 <Text>
                                     Отмена
                                 </Text>
-                            </View>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </Popup>
             </KeyboardAvoidingView>
@@ -289,14 +289,19 @@ const styles = StyleSheet.create({
     rememberButton: {
         width: 150,
         height: 40,
-        display: 'flex',
         margin: 10,
         marginTop: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 10,
         backgroundColor: "white",
         ...shadowOptions
+    },
+    rememberButtonTouchable: {
+        width: '100%',
+        height: '100%',
+
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     cancelRememberButton: {
         width: 150,
@@ -307,7 +312,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textDecorationLine: 'underline',
         textDecorationColor: 'black',
-        ...shadowOptions
     },
     titleFormText: {
         textAlign: 'center',
