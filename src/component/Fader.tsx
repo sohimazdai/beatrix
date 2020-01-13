@@ -35,12 +35,14 @@ export const Fader = (props: FaderProps) => {
 
 const styles = StyleSheet.create({
     FaderView: {
+        display: "none",
+        height: '100%',
+        width: '100%',
+
         position: 'absolute',
         top: 0,
         left: 0,
         flex: 1,
-        height: '100%',
-        width: '100%',
 
         justifyContent: 'center',
         alignItems: 'center',
