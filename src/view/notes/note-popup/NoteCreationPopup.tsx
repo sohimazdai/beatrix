@@ -101,14 +101,15 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     render() {
         return (
             <>
-                <Fader hidden={!this.props.interactive.creatingNoteMode} />
+                {this.props.interactive.creatingNoteMode &&
+                    <Fader hidden={!this.props.interactive.creatingNoteMode} />}
                 <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
                     <KeyboardAvoidingView
                         style={!this.props.note ?
                             styles.noteCreationView :
                             styles.noteEditingView
                         }
-                        keyboardVerticalOffset={90}
+                        keyboardVerticalOffset={190}
                         behavior='padding'
                     >
                         <ScrollView style={styles.noteCreationViewScrollView}>
@@ -175,7 +176,9 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             case NoteValueType.LONG_INSULIN:
                 return this.renderInputByType(longInsulinInput, 'longInsulinInput', 25)
             case NoteValueType.COMMENT:
-                return <View style={styles.inputView}>
+                return <View
+                    style={styles.commentInputView}
+                >
                     <Text style={styles.inputViewTitle}>
                         Комментарий
                     </Text>
@@ -324,8 +327,6 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         }
     }
 
-
-
     exceptComma(input) {
         return input.includes(',') ?
             input.replace(/,/g, '.') :
@@ -428,6 +429,13 @@ const styles = StyleSheet.create({
         width: '100%',
         margin: 15,
         marginBottom: 0,
+    },
+    commentInputView: {
+        flex: 1,
+        width: '100%',
+        margin: 15,
+        marginBottom: 0,
+        height: 185
     },
     saveButtonTouchable: {
         width: 160,

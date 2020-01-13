@@ -24,8 +24,8 @@ const rootReducer = combineReducers({
 const persistConfig: PersistConfig = {
     key: 'root',
     blacklist: [
-        'error',
-        'loading',
+        'modal',
+        'interactive'
     ],
     storage: AsyncStorage,
     transforms: [

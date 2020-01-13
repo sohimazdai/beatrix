@@ -27,7 +27,7 @@ export const Fader = (props: FaderProps) => {
     return <Animated.View style={{
         ...styles.FaderView,
         opacity: opacity,
-        display: props.hidden ? 'none' : 'flex',
+        // display: props.hidden ? 'none' : 'flex'
     }}>
         {children}
     </Animated.View>
@@ -35,7 +35,7 @@ export const Fader = (props: FaderProps) => {
 
 const styles = StyleSheet.create({
     FaderView: {
-        display: "none",
+        // display: "none",
         height: '100%',
         width: '100%',
 
