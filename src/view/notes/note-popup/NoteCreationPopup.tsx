@@ -68,16 +68,20 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         }
     }
 
-    componentDidMount = () => {
-        this.props.note && this.setState({
-            ...this.noteFromProps
-        })
-    };
-
     componentDidUpdate = (pP: NoteCreationPopupProps) => {
         if (!pP.note && this.props.note) {
             this.setState({
                 ...this.noteFromProps
+            })
+        } else if (pP.note && !this.props.note) {
+            this.setState({
+                date: new Date(),
+                glucoseInput: "0.0",
+                breadUnitsInput: "0.0",
+                insulinInput: "0.0",
+                longInsulinInput: "0.0",
+                commentary: "",
+                currentValueType: NoteValueType.GLUCOSE
             })
         }
     };
