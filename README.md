@@ -1,5 +1,5 @@
 # beatrix
 
-###Diabetes control app
+### Diabetes control app
 
-####react-native redux firebase
+#### react-native redux firebase
