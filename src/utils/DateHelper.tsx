@@ -192,4 +192,11 @@ export class DateHelper {
             ((date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + '.' +
             date.getFullYear()
     }
+
+    static makeTimewithDateWithMonthAsString(date: Date) {
+        return '' + date.getHours() + ":" + date.getMinutes() + " " +
+            (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ' +
+            DateHelper.getMonthStringPossesive(date.getMonth()) + ' ' +
+            date.getFullYear()
+    }
 }

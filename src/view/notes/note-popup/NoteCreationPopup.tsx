@@ -12,7 +12,6 @@ import { Dispatch, Action } from 'redux';
 import { INoteListNote, NoteValueType } from '../../../model/INoteList';
 import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
 import { ThemeColor } from '../../../constant/ThemeColor';
-import * as lodash from "lodash";
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
@@ -65,6 +64,14 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             longInsulinInput: "0.0",
             commentary: "",
             currentValueType: NoteValueType.GLUCOSE
+        }
+    }
+
+    componentDidMount() {
+        if (!this.props.note) {
+            this.setState({
+                date: new Date()
+            })
         }
     }
 
@@ -211,14 +218,14 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     obj[`${name}`] = value;
                     this.setState(obj as any)
                 }}
-                onNaturalSlide={lodash.debounce((value) => {
+                onNaturalSlide={(value) => {
                     obj[`${name}`] = value + '.' + inputValue.split('.')[1];
                     this.setState(obj as any), 50
-                })}
-                onDecimalSlide={lodash.debounce((value) => {
+                }}
+                onDecimalSlide={(value) => {
                     obj[`${name}`] = inputValue.split('.')[0] + '.' + value.toString().split('.')[1];
                     this.setState(obj as any), 50
-                })}
+                }}
             />
         </View>
     }

@@ -13,7 +13,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import { ChartSettings } from '../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../view/chart/chart-wrap/ChartWrap';
 import { PolylineType } from '../view/chart/chart-svg/ChartPolyline';
-import { ChartDotInfoPopup } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -22,6 +22,8 @@ import { BottomPopup } from '../component/popup/BottomPopup';
 import { AddNoteIcon } from '../component/icon/AddNoteIcon';
 import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
 import { NoteCreationPopupButtonConnect } from '../view/notes/note-popup/NoteCreationPopupButton';
+import { Fader } from '../component/Fader';
+import { createChangeInteractive } from '../store/modules/interactive/interactive';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -193,19 +195,16 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         </View>
                     </View>
                 </ScrollView>
-                <View style={styles.addNoteButtonView}>
-                    <NoteCreationPopupButtonConnect />
-                </View>
-                <ChartDotInfoPopup
+                {this.state.popupShown && <Fader hidden={!this.state.popupShown} />}
+                <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
                     note={this.getNoteForChartPopup()}
-                    onEditPress={() => this.setState({
-                        editingNoteId: this.state.selectedDotId,
-                        noteCreationShown: true
-                    })}
                 />
+                {!this.state.popupShown && <View style={styles.addNoteButtonView}>
+                    <NoteCreationPopupButtonConnect />
+                </View>}
             </View>
 
         )
@@ -229,10 +228,11 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         } else if (this.state.selectedDotId === DateHelper.yesterday()) {
             displayingDate = 'Вчера'
         }
+
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 if (!displayingDate) {
-                    displayingDate = DateHelper.makeDateWithMonthAsString(
+                    displayingDate = DateHelper.makeTimewithDateWithMonthAsString(
                         new Date(this.state.selectedDotId)
                     )
                 }
@@ -474,7 +474,14 @@ export const ChartWithSettingsConnect = connect(
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList),
         noteList: state.noteList,
     }),
-    (dispatch: Dispatch<Action>) => ({ dispatch })
+    (dispatch: Dispatch<Action>) => ({ dispatch }),
+    (stateProps, {dispatch}, ownProps) => {
+        return {
+            ...stateProps,
+            dispatch,
+            ownProps,
+        }
+    }
 )(ChartWithSettings)
 
 const styles = StyleSheet.create({

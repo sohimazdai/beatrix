@@ -9,11 +9,14 @@ import { ChartValueType } from '../../../model/IChart';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../model/IStorage';
+import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 
 export interface ChartDotInfoPopupProps {
     shown?: boolean
     onClose?: () => void
-    onEditPress?: () => void
+    openEditPopup?: (noteId) => void
     dateTitle?: string
     note?: INoteListNote
 }
@@ -66,7 +69,7 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 <TouchableOpacity
                     style={styles.editNoteIconTouchable}
                     onPress={() => {
-                        props.onEditPress();
+                        props.openEditPopup(props.note.date);
                         props.onClose();
                     }}
                 >
@@ -76,6 +79,22 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
         </View>
     </BottomPopup>
 }
+
+export const ChartDotInfoPopupConnect = connect(
+    (state: IStorage) => ({}),
+    (dispatch) => ({ dispatch }),
+    (stateProps, { dispatch }, ownProps) => {
+        return {
+            ...ownProps,
+            openEditPopup: (noteId) => {
+                dispatch(createChangeInteractive({
+                    creatingNoteMode: true,
+                    editingNoteId: noteId
+                }))
+            }
+        }
+    }
+)(ChartDotInfoPopup)
 
 const styles = StyleSheet.create({
     animatedView: {

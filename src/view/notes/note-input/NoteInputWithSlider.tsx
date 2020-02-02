@@ -13,7 +13,15 @@ interface Props {
     maximumNum: string;
 }
 
+
+let inputValue = "";
+
 export function NoteInputWithSlider(props: Props) {
+    React.useEffect(() => {
+        if (!inputValue && props.value) {
+            inputValue = props.value;
+        }
+    })
     return (
         <View style={styles.view}>
             <View style={styles.inputView}>
@@ -23,12 +31,13 @@ export function NoteInputWithSlider(props: Props) {
                 <TextInput
                     style={styles.input}
                     onChangeText={(value) => {
-                        value.split('.')[0].length < 3 &&
-                        (!value.split('.')[1] || (value.split('.')[1] && value.split('.')[1].length < 2)) &&
-                        props.onChangeText(value)
+                        inputValue = value;
+                        inputValue.split('.')[0].length < 3 &&
+                            (!inputValue.split('.')[1] || (inputValue.split('.')[1] && inputValue.split('.')[1].length < 2)) &&
+                            props.onChangeText(inputValue)
                     }}
                     placeholder={'0.0'}
-                    value={Number(props.value) > 0 ? props.value : ""}
+                    value={props.value}
                     keyboardType={'numeric'}
                     returnKeyType={'done'}
                 />
@@ -40,8 +49,11 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={parseInt(props.value.split('.')[0]) || 0}
-                        onValueChange={(value) => props.onNaturalSlide(value)}
+                        value={props.value && parseInt(props.value.split('.')[0])}
+                        onValueChange={(value) => {
+                            inputValue = String(value)
+                            props.onNaturalSlide(value)
+                        }}
                         maximumValue={parseInt(props.maximumNum)}
                         step={1}
                     />
@@ -55,11 +67,13 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={parseFloat(0 + '.' + props.value.split('.')[1]) || 0.0}
-                        onValueChange={(value) => value ?
-                            props.onDecimalSlide((Math.floor(value * 10) / 10)) :
-                            props.onDecimalSlide('0.0')
-                        }
+                        value={props.value && parseFloat(0 + '.' + props.value.split('.')[1])}
+                        onValueChange={(value) => {
+                            inputValue = String(value)
+                            value ?
+                                props.onDecimalSlide((Math.floor(value * 10) / 10)) :
+                                props.onDecimalSlide('0.0')
+                        }}
                         maximumValue={0.9}
                         step={0.1}
                     />
