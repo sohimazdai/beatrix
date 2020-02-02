@@ -1,5 +1,7 @@
 export interface IUserDiabetesProperties {
+    targetGlycemia?: number;
     
+    insulinSensitiveFactor?: number;
 }
 
 /*

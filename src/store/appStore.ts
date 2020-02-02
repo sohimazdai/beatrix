@@ -6,6 +6,7 @@ import { AsyncStorage } from "react-native";
 import { userReducer } from "./modules/user/UserReducer";
 import { appReducer } from "./modules/app/app";
 import { interactiveReducer } from "./modules/interactive/interactive";
+import { userDiabetesPropertiesReducer } from "./modules/user-diabetes-properties/UserDiabetesPropertiesReducer";
 
 const logger = store => next => action => {
     console.log("DISPATCHING", action.type);
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     noteList: noteListReducer,
     modal: modalReducer,
     user: userReducer,
-    interactive: interactiveReducer
+    interactive: interactiveReducer,
+    userDiabetesProperties: userDiabetesPropertiesReducer
 });
 
 const persistConfig: PersistConfig = {

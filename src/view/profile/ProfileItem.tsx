@@ -61,15 +61,17 @@ const styles = StyleSheet.create({
     },
     itemCardLeft: {
         display: 'flex',
+        width: '80%',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
     },
     itemCardRight: {
         display: 'flex',
+        width: "20%",
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     itemCardTitle: {
         marginTop: 5,

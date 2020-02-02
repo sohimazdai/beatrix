@@ -6,12 +6,14 @@ import { ChartWithSettingsConnect } from "../screen/ChartWithSettingsScreen";
 import { IUser } from '../model/IUser';
 import { connect } from 'react-redux';
 import { IStorage } from '../model/IStorage';
-import { ProfileScreenConnect } from '../screen/ProfileScreen';
+import { ProfileScreenConnect } from '../screen/profile/ProfileScreen';
 import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
 import { IInteractive } from '../model/IInteractive';
 import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { ProfileScreenDiabetesSettingsConnect } from '../screen/profile/ProfileScreenDiabetesSettings';
+import { Text } from 'react-native';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
@@ -43,11 +45,28 @@ export const AppNavigator = connect(
     })
 )(AppNavigatorComponent)
 
+const ProfileScreenStack = createStackNavigator(
+    {
+        Profile: {
+            screen: ProfileScreenConnect,
+            navigationOptions: ({ navigation }) => ({
+                header: () => (null),
+            }),
+        },
+        ProfileDiabetesSettings: {
+            screen: ProfileScreenDiabetesSettingsConnect,
+            navigationOptions: ({ navigation }) => ({
+                title: "Ваши параметры",
+            }),
+        }
+    }
+)
+
 const AuthedMainNavigator = createBottomTabNavigator(
     {
         'Записи': { screen: NoteListScreenConnect },
         "Графики": { screen: ChartWithSettingsConnect },
-        "Профиль": { screen: ProfileScreenConnect }
+        "Профиль": { screen: ProfileScreenStack }
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -69,6 +88,8 @@ const AuthedMainNavigator = createBottomTabNavigator(
         },
     }
 )
+
+
 
 const UnknownMainNavigator = createStackNavigator(
     {
