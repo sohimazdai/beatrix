@@ -1,21 +1,74 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Picker, TextInput } from 'react-native';
+import { ProfileItem } from '../../view/profile/ProfileItem';
+import { ProfilePicker } from '../../view/profile/ProfilePicker';
+
+export enum ShortInsulinType {
+    SHORT = 'short',
+    ULTRA_SHORT = 'ultra-short'
+}
 
 export default class ProfileScreenDiabetesSettings extends Component {
+    state = {
+        shortInsulinType: ShortInsulinType.ULTRA_SHORT,
+        targetGlycemia: "",
+    }
+
     render() {
         return (
             <View style={styles.profileView}>
-                <Text>u la la</Text>
+                {this.renderInsulinTypePicker()}
+                {this.renderTargetGlycemiaInput()}
             </View>
+        )
+    }
+
+    renderInsulinTypePicker() {
+        return (
+            <ProfilePicker
+                title={'Тип инсулина'}
+                description={'Укажите тип инсулина по продолжительности действия'}
+                hint={
+                    this.state.shortInsulinType === ShortInsulinType.SHORT ?
+                        'Такие как АКТРАПИД НМ, ХУМУЛИН R, ИНСУМАН РАПИД' :
+                        'Такие как НОВОРАПИД, ХУМАЛОГ, АПИДРА'
+                }
+            >
+                <Picker
+                    selectedValue={this.state.shortInsulinType}
+                    onValueChange={(itemValue) => this.setState({ shortInsulinType: itemValue })}
+                    style={styles.insulinPicker}
+                    itemStyle={styles.insulinPickerItem}
+                >
+                    <Picker.Item label="Ультракороткий" value={ShortInsulinType.ULTRA_SHORT} />
+                    <Picker.Item label="Короткий" value={ShortInsulinType.SHORT} />
+                </Picker>
+            </ProfilePicker>
+        )
+    }
+
+    renderTargetGlycemiaInput() {
+        return (
+            <ProfilePicker
+                title={'Целевая гликемия'}
+                description={'Укажите целевое значение сахара крови'}
+            >
+                <TextInput
+                    defaultValue={this.state.targetGlycemia}
+                    onChangeText={(text) => this.setState({ targetGlycemia: text })}
+                    style={styles.glycemiaInput}
+                    placeholder="6.0"
+                />
+            </ProfilePicker>
         )
     }
 }
 
 export const ProfileScreenDiabetesSettingsConnect = connect(
     (state: IStorage) => ({}),
-    (dispatch) => ({dispatch})
+    (dispatch) => ({ dispatch })
 )(ProfileScreenDiabetesSettings)
 
 
@@ -28,12 +81,22 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: "#DDDDDD"
     },
-    activeElementExit: {
-        fontSize: 16,
-        color: 'crimson'
+    insulinPicker: {
+        width: 300,
     },
-    activeElementToSettings: {
-        fontSize: 16,
-        color: '#2E3858'
+    insulinPickerItem: {
+        height: 150
+    },
+    glycemiaInput: {
+        height: 50,
+        width: 70,
+        margin: 10,
+
+        borderWidth: 1.5,
+        borderColor: "#cecece",
+        borderRadius: 5,
+
+        textAlign: 'center',
+        fontSize: 18,
     }
 })

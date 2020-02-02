@@ -26,7 +26,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                 <ScrollView>
                     <ProfileItem
                         title={'Диабетический профиль'}
-                        description={'Вы можете настроить свои параметры для лучшей компенсации диабета'}
+                        description={'Настройте ваши параметры и улучшите компенсацию'}
                         activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
                             <Text style={styles.activeElementToSettings}>
                                 {'Перейти'}

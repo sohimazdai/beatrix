@@ -3,21 +3,18 @@ import { StyleSheet, View, Text } from 'react-native'
 import { shadowOptions } from '../../constant/shadowOptions'
 
 interface Props {
-    header?: string
     title?: string
     description?: string
-    activeElement: JSX.Element
     hint?: string
+    children?: any
+
 }
 
-export class ProfileItem extends React.Component<Props> {
+export class ProfilePicker extends React.Component<Props> {
     render() {
-        return <View style={styles.profileItemView}>
-            {this.props.header && <Text style={styles.itemHeader}>
-                {this.props.header}
-            </Text>}
+        return <View style={styles.profilePickerView}>
             <View style={styles.itemCard}>
-                <View style={styles.itemCardLeft}>
+                <View style={styles.itemCardTop}>
                     {this.props.title && <Text style={styles.itemCardTitle}>
                         {this.props.title}
                     </Text>}
@@ -25,9 +22,7 @@ export class ProfileItem extends React.Component<Props> {
                         {this.props.description}
                     </Text>}
                 </View>
-                <View style={styles.itemCardRight}>
-                    {this.props.activeElement}
-                </View>
+                {this.props.children}
             </View>
             {this.props.hint && <Text style={styles.hint}>
                 {this.props.hint}
@@ -37,40 +32,26 @@ export class ProfileItem extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
-    profileItemView: {
+    profilePickerView: {
         display: 'flex',
 
         marginTop: 10,
         marginBottom: 10,
     },
-    itemHeader: {
-        margin: 10,
-        marginBottom: 5,
-        fontSize: 19,
-        fontWeight: 'bold',
-        color: "#000000"
-    },
     itemCard: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#ffffff',
         padding: 10,
         ...shadowOptions
     },
-    itemCardLeft: {
+    itemCardTop: {
         display: 'flex',
-        width: '80%',
+        width: '100%',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-    },
-    itemCardRight: {
-        display: 'flex',
-        width: "20%",
-        flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'flex-start',
     },
     itemCardTitle: {
