@@ -200,7 +200,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                             multiline
                             editable
                             onChangeText={(text) => this.setState({ commentary: text })}
-                            value={this.state.commentary}
+                            defaultValue={this.props.note && this.props.note.commentary}
                         />
                     </View>
                 </View>

@@ -11,7 +11,7 @@ import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
 import { IInteractive } from '../model/IInteractive';
-import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import { ProfileScreenDiabetesSettingsConnect } from '../screen/profile/ProfileScreenDiabetesSettings';
 import { Text } from 'react-native';
 

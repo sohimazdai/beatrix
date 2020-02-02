@@ -18,9 +18,9 @@ import { ShortSyringeIcon } from '../component/icon/value-icons/ShortSyringeIcon
 import { LongSyringeIcon } from '../component/icon/value-icons/LongSyringeIcon';
 import { BottomPopup } from '../component/popup/BottomPopup';
 import { BlockHat } from '../component/hat/BlockHat';
-import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
+import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import { createChangeInteractive } from '../store/modules/interactive/interactive';
-import { NoteCreationPopupButtonConnect } from '../view/notes/note-popup/NoteCreationPopupButton';
+import { NoteCreationPopupButtonConnect } from '../view/notes/note-creation-popup/NoteCreationPopupButton';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,

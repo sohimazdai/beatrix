@@ -16,14 +16,10 @@ import { PolylineType } from '../view/chart/chart-svg/ChartPolyline';
 import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../calculation-services/chart-calculation-services/ChartCalculationHelper';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { BlockHat } from '../component/hat/BlockHat';
-import { BottomPopup } from '../component/popup/BottomPopup';
-import { AddNoteIcon } from '../component/icon/AddNoteIcon';
-import { NoteCreationPopupConnect } from '../view/notes/note-popup/NoteCreationPopup';
-import { NoteCreationPopupButtonConnect } from '../view/notes/note-popup/NoteCreationPopupButton';
 import { Fader } from '../component/Fader';
-import { createChangeInteractive } from '../store/modules/interactive/interactive';
+import { NoteCreationPopupButtonConnect } from '../view/notes/note-creation-popup/NoteCreationPopupButton';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
