@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { ChartPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -26,9 +26,6 @@ export function ChartSettings(props: ChartSettingsProps) {
         new Date().getMonth(),
         new Date().getDate()
     );
-    const dateClickerStyle = getNextDate(props.date) > today ?
-        { ...styles.dateClicker, ...styles.dateClickerDisable } :
-        styles.dateClicker
     return <View style={styles.chartSettingsView}>
         <View style={styles.dateInputBlock}>
             <View style={styles.dateClicker}>
@@ -49,12 +46,11 @@ export function ChartSettings(props: ChartSettingsProps) {
             />
             <View style={styles.dateClicker}>
                 <TouchableOpacity
-                    style={dateClickerStyle}
+                    style={styles.dateClickerTouchable}
                     onPress={getNextDate(props.date) <= today ?
                         () => props.onDateChange(setNextDateValueByChartPeriodType(props)) :
                         () => { }
                     }
-                    disabled={getNextDate(props.date) > today}
                 >
                     <Text style={styles.dateClickerText}>
                         {'+'}
