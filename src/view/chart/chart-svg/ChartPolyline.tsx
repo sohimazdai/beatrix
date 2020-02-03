@@ -1,6 +1,7 @@
 import React from 'react'
 import { Polyline, LinearGradient, Stop, Path } from 'react-native-svg';
 import { IChartDot, ChartPeriodType } from '../../../model/IChart';
+import { Alert } from 'react-native';
 
 export enum PolylineType {
     BEZIER = 'bezier',
@@ -21,14 +22,15 @@ export function ChartPolyline(props: ChartPolylineProps) {
 
 function renderPolyline(props: ChartPolylineProps) {
     const thereIsGradient = props.initGradientColor && props.stopGradientColor;
-    return props.dots && props.dots.length > 0 && <>
-        {thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
+    const points = getPoints(props);
+    return <>
+        {!!points && thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
             <Stop offset="0%" stopColor={props.initGradientColor} stopOpacity="1" />
             <Stop offset="100%" stopColor={props.stopGradientColor} stopOpacity="1" />
         </LinearGradient>}
         {props.polylineType === PolylineType.BEZIER ?
             <Path
-                d={getPoints(props)}
+                d={points}
                 stroke="rgba(255, 255, 255, 0.64)"
                 strokeWidth={2}
                 strokeLinecap='round'
@@ -37,7 +39,7 @@ function renderPolyline(props: ChartPolylineProps) {
             />
             :
             <Polyline
-                points={getPoints(props)}
+                points={points}
                 stroke="rgba(255, 255, 255, 0.64)"
                 strokeWidth={2}
                 strokeLinecap='round'
@@ -49,12 +51,15 @@ function renderPolyline(props: ChartPolylineProps) {
 
 function getPoints(props: ChartPolylineProps) {
     let points = '';
+    let thereIsYs = false;
     switch (props.polylineType) {
         case PolylineType.REGULAR:
             if (props.dots.some(dot => isNaN(dot.id) || isNaN(dot.x) || isNaN(dot.y))) return "";
             props.dots.sort((a, b) => a.x - b.x).map(dot => {
+                thereIsYs = dot.y > 0 && !thereIsYs ? true : false;
                 points += getPoint(dot);
             })
+            if (thereIsYs) return "";
             return points;
         case PolylineType.BEZIER:
             const tempDots = props.dots.sort((a, b) => a.x - b.x);
