@@ -54,17 +54,19 @@ interface NoteCreationPopupState {
 }
 
 class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, NoteCreationPopupState>{
-    constructor(props: NoteCreationPopupProps) {
-        super(props);
-        this.state = {
-            date: new Date(),
-            glucoseInput: "0.0",
-            breadUnitsInput: "0.0",
-            insulinInput: "0.0",
-            longInsulinInput: "0.0",
-            commentary: "",
-            currentValueType: NoteValueType.GLUCOSE
-        }
+    glucoseInputForSlider = 0.0;
+    breadUnitsInputForSlider = 0.0;
+    shortInsulinInputForSlider = 0.0;
+    longInsulinInputForSlider = 0.0;
+
+    state = {
+        date: new Date(),
+        glucoseInput: "0.0",
+        breadUnitsInput: "0.0",
+        insulinInput: "0.0",
+        longInsulinInput: "0.0",
+        commentary: "",
+        currentValueType: NoteValueType.GLUCOSE
     }
 
     componentDidMount() {
@@ -77,6 +79,10 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     componentDidUpdate = (pP: NoteCreationPopupProps) => {
         if (!pP.note && this.props.note) {
+            this.glucoseInputForSlider = this.props.note && this.props.note.glucose;
+            this.breadUnitsInputForSlider = this.props.note && this.props.note.breadUnits;
+            this.shortInsulinInputForSlider = this.props.note && this.props.note.insulin;
+            this.longInsulinInputForSlider = this.props.note && this.props.note.longInsulin;
             this.setState({
                 ...this.noteFromProps
             })
@@ -90,6 +96,13 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 commentary: "",
                 currentValueType: NoteValueType.GLUCOSE
             })
+        }
+
+        if (
+            !pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode &&
+            !this.props.interactive.editingNoteId
+        ) {
+            this.setState({ date: new Date() })
         }
     };
 
@@ -179,13 +192,13 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
         switch (currentValueType) {
             case NoteValueType.GLUCOSE:
-                return this.renderInputByType(glucoseInput, 'glucoseInput', 18)
+                return this.renderInputByType(this.glucoseInputForSlider, glucoseInput, 'glucoseInput', 18)
             case NoteValueType.FOOD:
-                return this.renderInputByType(breadUnitsInput, 'breadUnitsInput', 15)
+                return this.renderInputByType(this.breadUnitsInputForSlider, breadUnitsInput, 'breadUnitsInput', 15)
             case NoteValueType.SHORT_INSULIN:
-                return this.renderInputByType(insulinInput, 'insulinInput', 15)
+                return this.renderInputByType(this.shortInsulinInputForSlider, insulinInput, 'insulinInput', 15)
             case NoteValueType.LONG_INSULIN:
-                return this.renderInputByType(longInsulinInput, 'longInsulinInput', 25)
+                return this.renderInputByType(this.longInsulinInputForSlider, longInsulinInput, 'longInsulinInput', 25)
             case NoteValueType.COMMENT:
                 return <View
                     style={styles.commentInputView}
@@ -207,10 +220,11 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         }
     }
 
-    renderInputByType(inputValue, name, maxNum) {
+    renderInputByType(defaultValue, inputValue, name, maxNum) {
         const obj = { [`${name}`]: null }
         return <View style={styles.inputView}>
             <NoteInputWithSlider
+                defaultValue={defaultValue}
                 value={inputValue}
                 inputTitle={InputType[name]}
                 maximumNum={maxNum}
