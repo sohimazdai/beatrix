@@ -73,7 +73,10 @@ export function ChartWrap(props: ChartWrapProps) {
         }
     }
 
-    const highlights: IChartDot[] = [...basicDotsData.events, ...basicDotsData.dots]
+    const highlights: IChartDot[] = [
+        ...basicDotsData.events, 
+        ...basicDotsData.dots
+    ]
     return (
         <View style={styles.chartWrap}>
             <ChartBox

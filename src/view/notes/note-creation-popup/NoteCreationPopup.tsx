@@ -87,6 +87,10 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 ...this.noteFromProps
             })
         } else if (pP.note && !this.props.note) {
+            this.glucoseInputForSlider = 0.0;
+            this.breadUnitsInputForSlider = 0.0;
+            this.shortInsulinInputForSlider = 0.0;
+            this.longInsulinInputForSlider = 0.0;
             this.setState({
                 date: new Date(),
                 glucoseInput: "0.0",

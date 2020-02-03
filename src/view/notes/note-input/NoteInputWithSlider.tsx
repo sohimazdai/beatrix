@@ -63,7 +63,7 @@ export function NoteInputWithSlider(props: Props) {
                         value={props.value && parseFloat(0 + '.' + props.value.split('.')[1])}
                         onValueChange={(value) => {
                             value ?
-                                props.onDecimalSlide((Math.floor(value * 10) / 10)) :
+                                props.onDecimalSlide((Math.round(value * 10) / 10)) :
                                 props.onDecimalSlide('0.0')
                         }}
                         maximumValue={0.9}
