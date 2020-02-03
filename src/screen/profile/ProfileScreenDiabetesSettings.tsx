@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
-import { View, Text, StyleSheet, Picker, TextInput, Slider, ScrollView } from 'react-native';
-import { ProfileItem } from '../../view/profile/ProfileItem';
+import { View, Text, StyleSheet, TextInput, Slider, ScrollView, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { ProfilePicker } from '../../view/profile/ProfilePicker';
 import { createUserDiabetesPropertiesChangeAction } from '../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { IUserDiabetesProperties, ShortInsulinType } from '../../model/IUserDiabetesProperties';
 import { isNumber } from 'util';
+import { shadowOptions } from '../../constant/shadowOptions';
 
 
 
@@ -21,14 +21,21 @@ export default class ProfileScreenDiabetesSettings extends Component<Props> {
 
     render() {
         return (
-            <ScrollView style={styles.profileView}>
-                {this.renderInsulinTypePicker()}
-                {this.renderTargetGlycemiaInput()}
-            </ScrollView>
+            <KeyboardAvoidingView
+                style={styles.keyboardAvoidingView}
+                behavior="padding"
+                keyboardVerticalOffset={100}
+            >
+                <ScrollView style={styles.profileView}>
+                    {this.renderInsulinTypePicker()}
+                    {this.renderTargetGlycemiaInput()}
+                </ScrollView>
+            </KeyboardAvoidingView>
         )
     }
 
     renderInsulinTypePicker() {
+        const { shortInsulinType } = this.props.userDiabetesProperties;
         return (
             <ProfilePicker
                 title={'Тип инсулина'}
@@ -39,15 +46,48 @@ export default class ProfileScreenDiabetesSettings extends Component<Props> {
                         'Такие инсулины как НОВОРАПИД, ХУМАЛОГ, АПИДРА. Действуют 3-5 часов.'
                 }
             >
-                <Picker
-                    selectedValue={this.props.userDiabetesProperties.shortInsulinType}
-                    onValueChange={(itemValue) => this.props.onPropertiesChange({ shortInsulinType: itemValue })}
-                    style={styles.insulinPicker}
-                    itemStyle={styles.insulinPickerItem}
-                >
-                    <Picker.Item label="Ультракороткий" value={ShortInsulinType.ULTRA_SHORT} />
-                    <Picker.Item label="Короткий" value={ShortInsulinType.SHORT} />
-                </Picker>
+                <View style={styles.shortInsulinTypePickerView}>
+                    <View
+                        style={shortInsulinType === ShortInsulinType.ULTRA_SHORT ?
+                            { ...styles.shortInsulinTypeButton, ...styles.shortInsulinTypeButtonActive } :
+                            styles.shortInsulinTypeButton}
+                    >
+
+                        <TouchableOpacity
+                            onPress={() => this.props.onPropertiesChange({
+                                shortInsulinType: ShortInsulinType.ULTRA_SHORT
+                            })}
+                        >
+                            <Text
+                                style={shortInsulinType === ShortInsulinType.ULTRA_SHORT ?
+                                    { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
+                                    styles.shortInsulinTypePickerItemText}
+                            >
+                                {'Ультракороткий'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View
+                        style={shortInsulinType === ShortInsulinType.SHORT ?
+                            { ...styles.shortInsulinTypeButton, ...styles.shortInsulinTypeButtonActive } :
+                            styles.shortInsulinTypeButton}
+                    >
+
+                        <TouchableOpacity
+                            onPress={() => this.props.onPropertiesChange({
+                                shortInsulinType: ShortInsulinType.SHORT
+                            })}
+                        >
+                            <Text
+                                style={shortInsulinType === ShortInsulinType.SHORT ?
+                                    { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
+                                    styles.shortInsulinTypePickerItemText}
+                            >
+                                {'Короткий'}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </ProfilePicker>
         )
     }
@@ -107,6 +147,11 @@ export const ProfileScreenDiabetesSettingsConnect = connect(
 
 
 const styles = StyleSheet.create({
+    keyboardAvoidingView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
     profileView: {
         height: '100%',
         width: '100%',
@@ -114,12 +159,6 @@ const styles = StyleSheet.create({
 
         flexDirection: 'column',
         backgroundColor: "#DDDDDD"
-    },
-    insulinPicker: {
-        width: 300,
-    },
-    insulinPickerItem: {
-        height: 150
     },
     targetGlycemiaView: {
         display: 'flex',
@@ -145,5 +184,34 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         fontSize: 18,
+    },
+    shortInsulinTypePickerView: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    shortInsulinTypeButton: {
+        padding: 10,
+        margin: 5,
+        backgroundColor: "white",
+        borderColor: "white",
+        borderWidth: 2,
+        borderRadius: 5,
+        ...shadowOptions
+    },
+    shortInsulinTypeButtonActive: {
+        borderColor: "#2E3858",
+        borderWidth: 2,
+        borderRadius: 5,
+        ...shadowOptions
+    },
+    shortInsulinTypePickerItemText: {
+        fontSize: 16,
+        color: "rgba(0, 0, 0, 0.6)",
+    },
+    shortInsulinTypePickerItemTextActive: {
+        fontSize: 16,
+        color: "rgba(0, 0, 0, 0.8)",
+        fontWeight: 'bold'
     }
 })

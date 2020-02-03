@@ -86,7 +86,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             this.setState({
                 ...this.noteFromProps
             })
-        } else if (pP.note && !this.props.note) {
+        } else if (!pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode) {
             this.glucoseInputForSlider = 0.0;
             this.breadUnitsInputForSlider = 0.0;
             this.shortInsulinInputForSlider = 0.0;
