@@ -56,10 +56,12 @@ function getPoints(props: ChartPolylineProps) {
         case PolylineType.REGULAR:
             if (props.dots.some(dot => isNaN(dot.id) || isNaN(dot.x) || isNaN(dot.y))) return "";
             props.dots.sort((a, b) => a.x - b.x).map(dot => {
-                thereIsYs = dot.y > 0 && !thereIsYs ? true : false;
+                if (!thereIsYs && dot.y) {
+                    thereIsYs = true;
+                }
                 points += getPoint(dot);
             })
-            if (thereIsYs) return "";
+            if (!thereIsYs) return "";
             return points;
         case PolylineType.BEZIER:
             const tempDots = props.dots.sort((a, b) => a.x - b.x);

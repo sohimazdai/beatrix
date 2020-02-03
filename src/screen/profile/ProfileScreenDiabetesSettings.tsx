@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
-import { View, Text, StyleSheet, Picker, TextInput, Slider } from 'react-native';
+import { View, Text, StyleSheet, Picker, TextInput, Slider, ScrollView } from 'react-native';
 import { ProfileItem } from '../../view/profile/ProfileItem';
 import { ProfilePicker } from '../../view/profile/ProfilePicker';
 import { createUserDiabetesPropertiesChangeAction } from '../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
@@ -16,24 +16,15 @@ interface Props {
     onPropertiesChange?: (properties: IUserDiabetesProperties) => void
 }
 
-interface State {
-    shortInsulinType?: ShortInsulinType
-    targetGlycemia?: string
-}
-
-export default class ProfileScreenDiabetesSettings extends Component<Props, State> {
+export default class ProfileScreenDiabetesSettings extends Component<Props> {
     targetGlycemia = this.props.userDiabetesProperties.targetGlycemia || 6.0;
-    state = {
-        shortInsulinType: ShortInsulinType.ULTRA_SHORT,
-        targetGlycemia: "",
-    }
 
     render() {
         return (
-            <View style={styles.profileView}>
+            <ScrollView style={styles.profileView}>
                 {this.renderInsulinTypePicker()}
                 {this.renderTargetGlycemiaInput()}
-            </View>
+            </ScrollView>
         )
     }
 
@@ -43,9 +34,9 @@ export default class ProfileScreenDiabetesSettings extends Component<Props, Stat
                 title={'Тип инсулина'}
                 description={'Укажите тип инсулина по продолжительности действия'}
                 hint={
-                    this.state.shortInsulinType === ShortInsulinType.SHORT ?
-                        'Такие как АКТРАПИД НМ, ХУМУЛИН R, ИНСУМАН РАПИД' :
-                        'Такие как НОВОРАПИД, ХУМАЛОГ, АПИДРА'
+                    this.props.userDiabetesProperties.shortInsulinType === ShortInsulinType.SHORT ?
+                        'Такие инсулины как АКТРАПИД НМ, ХУМУЛИН R, ИНСУМАН РАПИДю Действуют 6-8 часов.' :
+                        'Такие инсулины как НОВОРАПИД, ХУМАЛОГ, АПИДРА. Действуют 3-5 часов.'
                 }
             >
                 <Picker
@@ -100,7 +91,7 @@ export default class ProfileScreenDiabetesSettings extends Component<Props, Stat
             </ProfilePicker>
         )
     }
-    
+
 }
 
 export const ProfileScreenDiabetesSettingsConnect = connect(

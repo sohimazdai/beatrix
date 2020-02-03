@@ -60,7 +60,7 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={props.value && parseFloat(0 + '.' + props.value.split('.')[1])}
+                        value={props.defaultValue && parseFloat(0 + '.' + String(props.defaultValue).split('.')[1])}
                         onValueChange={(value) => {
                             value ?
                                 props.onDecimalSlide((Math.round(value * 10) / 10)) :
