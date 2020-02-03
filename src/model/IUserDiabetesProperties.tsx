@@ -1,7 +1,14 @@
+export enum ShortInsulinType {
+    SHORT = 'short',
+    ULTRA_SHORT = 'ultra-short'
+}
+
 export interface IUserDiabetesProperties {
     targetGlycemia?: number;
     
     insulinSensitiveFactor?: number;
+
+    shortInsulinType?: ShortInsulinType
 }
 
 /*

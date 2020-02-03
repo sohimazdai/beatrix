@@ -7,7 +7,7 @@ interface Props {
     description?: string
     hint?: string
     children?: any
-
+    hintCritical?: boolean
 }
 
 export class ProfilePicker extends React.Component<Props> {
@@ -24,7 +24,9 @@ export class ProfilePicker extends React.Component<Props> {
                 </View>
                 {this.props.children}
             </View>
-            {this.props.hint && <Text style={styles.hint}>
+            {!!this.props.hint && <Text
+                style={this.props.hintCritical ? { ...styles.hint, ...styles.hintCritical } : styles.hint}
+            >
                 {this.props.hint}
             </Text>}
         </View>
@@ -66,8 +68,11 @@ const styles = StyleSheet.create({
         color: "#333333"
     },
     hint: {
-        padding: 10,
+        padding: 5,
         fontSize: 16,
         color: "#333333"
+    },
+    hintCritical: {
+        color: "crimson"
     }
 })

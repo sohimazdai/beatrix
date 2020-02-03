@@ -1,3 +1,3 @@
 export enum UserDiabetesPropertiesActionType {
-    CHANGE = "USER_CHANGE"
+    CHANGE = "USER_DIABETES_PROPERTIES_CHANGE"
 }
