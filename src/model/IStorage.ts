@@ -4,6 +4,7 @@ import { IUser } from "./IUser";
 import { IApp } from "./IApp";
 import { IInteractive } from "./IInteractive";
 import { IUserDiabetesProperties } from "./IUserDiabetesProperties";
+import { IUserPropertiesShedule } from "./IUserPropertiesShedule";
 
 export interface IStorage {
     app?: IApp,
@@ -11,5 +12,6 @@ export interface IStorage {
     modal?: IModal,
     user?: IUser,
     interactive?: IInteractive,
-    userDiabetesProperties?: IUserDiabetesProperties
+    userDiabetesProperties?: IUserDiabetesProperties,
+    userPropertiesShedule?: IUserPropertiesShedule
 }

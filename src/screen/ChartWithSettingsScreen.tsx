@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { IStorage } from '../model/IStorage';
 import { Dispatch, Action } from 'redux';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, NativeModules } from 'react-native';
 import { INoteList, INoteListByDay } from '../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../constant/ThemeColor';
@@ -197,6 +197,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
                     note={this.getNoteForChartPopup()}
+                    editable={this.state.selectedPeriod === ChartPeriodType.DAY}
                 />
                 {!this.state.popupShown && <View style={styles.addNoteButtonView}>
                     <NoteCreationPopupButtonConnect />

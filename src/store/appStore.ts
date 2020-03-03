@@ -7,6 +7,9 @@ import { userReducer } from "./modules/user/UserReducer";
 import { appReducer } from "./modules/app/app";
 import { interactiveReducer } from "./modules/interactive/interactive";
 import { userDiabetesPropertiesReducer } from "./modules/user-diabetes-properties/UserDiabetesPropertiesReducer";
+import { enableBatching } from 'redux-batched-actions';
+import { isEnv } from "apollo-utilities";
+import { userPropertiesSheduleReducer } from "./modules/user-properties-shedule/UserPropertiesShedule";
 
 const logger = store => next => action => {
     console.log("DISPATCHING", action.type);
@@ -20,7 +23,8 @@ const rootReducer = combineReducers({
     modal: modalReducer,
     user: userReducer,
     interactive: interactiveReducer,
-    userDiabetesProperties: userDiabetesPropertiesReducer
+    userDiabetesProperties: userDiabetesPropertiesReducer,
+    userPropertiesByHour: userPropertiesSheduleReducer,
 });
 
 const persistConfig: PersistConfig = {
@@ -47,7 +51,7 @@ const persistConfig: PersistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const appStore = createStore(
-    persistedReducer,
+    enableBatching(persistedReducer),
     applyMiddleware(logger)
 )
 

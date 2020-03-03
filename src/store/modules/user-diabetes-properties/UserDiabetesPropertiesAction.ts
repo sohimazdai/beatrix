@@ -9,5 +9,5 @@ export interface UserDiabetesPropertiesChangeAction {
 }
 
 export type UserDiabetesPropertiesAction = (
-    UserDiabetesPropertiesChangeAction
+    UserDiabetesPropertiesChangeAction 
 )

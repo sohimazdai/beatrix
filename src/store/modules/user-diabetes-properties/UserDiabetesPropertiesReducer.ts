@@ -7,12 +7,11 @@ export function userDiabetesPropertiesReducer(
   action: UserDiabetesPropertiesAction
 ): IUserDiabetesProperties {
   switch (action.type) {
-    case UserDiabetesPropertiesActionType.CHANGE: {
+    case UserDiabetesPropertiesActionType.CHANGE:
       return {
         ...properties,
         ...action.payload.properties
       }
-    };
 
     default:
       return properties;

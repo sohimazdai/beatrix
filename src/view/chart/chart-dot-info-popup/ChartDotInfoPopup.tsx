@@ -15,10 +15,12 @@ import { createChangeInteractive } from '../../../store/modules/interactive/inte
 
 export interface ChartDotInfoPopupProps {
     shown?: boolean
-    onClose?: () => void
-    openEditPopup?: (noteId) => void
     dateTitle?: string
     note?: INoteListNote
+    editable?: boolean
+    
+    onClose?: () => void
+    openEditPopup?: (noteId) => void
 }
 
 export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
@@ -66,7 +68,7 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 >
                     <CloseIcon />
                 </TouchableOpacity>
-                <TouchableOpacity
+                {props.editable && <TouchableOpacity
                     style={styles.editNoteIconTouchable}
                     onPress={() => {
                         props.openEditPopup(props.note.date);
@@ -74,7 +76,7 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                     }}
                 >
                     <EditNoteIcon style={styles.editNoteIcon} />
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </LinearGradient>
         </View>
     </BottomPopup>

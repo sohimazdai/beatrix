@@ -14,6 +14,8 @@ import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettingsConnect } from '../screen/profile/ProfileScreenDiabetesSettings';
 import { Text } from 'react-native';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
+import ConfirmPopup, { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
+import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/ProfileUserPropertiesShedulePopup';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
@@ -36,6 +38,8 @@ export const AuthedContainer = () => (
     <>
         <AuthedNavigatorContainer />
         <NoteCreationPopupConnect />
+        <ConfirmPopupConnect />
+        <ProfileUserPropertiesShedulePopupConnect />
     </>
 )
 
