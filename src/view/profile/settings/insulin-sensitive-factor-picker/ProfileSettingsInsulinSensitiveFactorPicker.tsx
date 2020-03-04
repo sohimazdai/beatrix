@@ -10,27 +10,37 @@ import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from './Style';
 import * as lodash from 'lodash';
+import { ProfileUserPropertiesShedulePopupKey } from '../../shedule-popup/ProfileUserPropertiesShedulePopup';
+
+export enum SheduleKeyType {
+    INSULIN_SENSITIVITY_FACTOR = 'insulinSensitivityFactor',
+    CARBOHYDRATE_RATIO = 'carbohydrateRatio'
+}
 
 interface Props {
+    sheduleKey: ProfileUserPropertiesShedulePopupKey
     userPropertiesShedule?: IUserPropertiesShedule
     onInsulinSensitivityPopupCall?: () => void
 }
 
 function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
     const { userPropertiesShedule } = props;
+    const sheduleKey = props.sheduleKey === ProfileUserPropertiesShedulePopupKey.INSULIN_SENSIBILITY_FACTOR ?
+        SheduleKeyType.INSULIN_SENSITIVITY_FACTOR :
+        SheduleKeyType.CARBOHYDRATE_RATIO
     const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
     lodash.values(userPropertiesShedule).map((prop, index, array) => {
         if (index === 0) {
             shedule.push({
                 since: prop.id,
                 to: prop.id + 1,
-                value: prop.insulinSensitivityFactor,
+                value: prop[sheduleKey],
                 id: prop.id,
-                needToSave: prop.insulinSensitivityFactor > 0 ? false : true
+                needToSave: prop[sheduleKey] > 0 ? false : true
             })
             return;
         }
-        if (prop.insulinSensitivityFactor === array[index - 1].insulinSensitivityFactor &&
+        if (prop[sheduleKey] === array[index - 1][sheduleKey] &&
             prop.id === array[index - 1].id + 1) {
             shedule[shedule.length - 1].to = prop.id + 1;
             return;
@@ -39,9 +49,9 @@ function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
         shedule.push({
             since: prop.id,
             to: prop.id + 1,
-            value: prop.insulinSensitivityFactor,
+            value: prop[sheduleKey],
             id: prop.id,
-            needToSave: prop.insulinSensitivityFactor > 0 ? false : true
+            needToSave: prop[sheduleKey] > 0 ? false : true
         })
         return;
     });

@@ -15,7 +15,7 @@ import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-setting
 import { Text } from 'react-native';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import ConfirmPopup, { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
-import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/ProfileUserPropertiesShedulePopup';
+import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/shedule-popup/ProfileUserPropertiesShedulePopup';
 
 interface AppNavigatorComponentProps {
     user?: IUser,

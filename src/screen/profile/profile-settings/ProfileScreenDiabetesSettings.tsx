@@ -4,6 +4,7 @@ import { ProfileSettingsInsulinTypePickerConnect } from '../../../view/profile/s
 import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
 import { ProfileSettingsInsulinSensitiveFactorPickerConnect } from '../../../view/profile/settings/insulin-sensitive-factor-picker/ProfileSettingsInsulinSensitiveFactorPicker';
 import { styles } from './Style';
+import { ProfileUserPropertiesShedulePopupKey } from '../../../view/profile/shedule-popup/ProfileUserPropertiesShedulePopup';
 
 interface Props {
 }
@@ -19,7 +20,9 @@ export class ProfileScreenDiabetesSettings extends Component<Props> {
                 <ScrollView style={styles.profileView}>
                     <ProfileSettingsInsulinTypePickerConnect />
                     <ProfileSettingsTargetGlycemiaPickerConnect />
-                    <ProfileSettingsInsulinSensitiveFactorPickerConnect />
+                    <ProfileSettingsInsulinSensitiveFactorPickerConnect
+                        sheduleKey={ProfileUserPropertiesShedulePopupKey.INSULIN_SENSIBILITY_FACTOR}
+                    />
                 </ScrollView>
             </KeyboardAvoidingView>
         )
