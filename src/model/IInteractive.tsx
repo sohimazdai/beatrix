@@ -1,3 +1,5 @@
+import { SheduleKeyType } from "./IUserPropertiesShedule";
+
 export interface IInteractive  {
     creatingNoteMode?: boolean
     editingNoteId?: string
@@ -7,7 +9,7 @@ export interface IInteractive  {
     confirmPopupRejectCallback?: Function
     confirmPopupDescription?: string
 
-    userPropertiesShedulePopupType?: InteractiveUserPropertiesShedulePopupType
+    userPropertiesShedulePopupType?: SheduleKeyType
 }
 
 export enum InteractiveUserPropertiesShedulePopupType {

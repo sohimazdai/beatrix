@@ -13,14 +13,30 @@ import * as lodash from 'lodash';
 interface Props {
     sheduleKey: SheduleKeyType
     userPropertiesShedule?: IUserPropertiesShedule
-    onInsulinSensitivityPopupCall?: () => void
+    onShedulePopupCall?: (key: SheduleKeyType) => void
 }
 
-function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
+function ProfileSettingsShedulePicker(props: Props) {
     const { userPropertiesShedule, sheduleKey } = props;
     const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
     lodash.values(userPropertiesShedule).map((prop, index, array) => {
-        if (index === 0) {
+        if (prop[sheduleKey] > 0) {
+            if (index === 0) {
+                shedule.push({
+                    since: prop.id,
+                    to: prop.id + 1,
+                    value: prop[sheduleKey],
+                    id: prop.id,
+                    needToSave: prop[sheduleKey] > 0 ? false : true
+                })
+                return;
+            }
+            if (prop[sheduleKey] === array[index - 1][sheduleKey] &&
+                prop.id === array[index - 1].id + 1) {
+                shedule[shedule.length - 1].to = prop.id + 1;
+                return;
+            }
+
             shedule.push({
                 since: prop.id,
                 to: prop.id + 1,
@@ -30,20 +46,6 @@ function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
             })
             return;
         }
-        if (prop[sheduleKey] === array[index - 1][sheduleKey] &&
-            prop.id === array[index - 1].id + 1) {
-            shedule[shedule.length - 1].to = prop.id + 1;
-            return;
-        }
-
-        shedule.push({
-            since: prop.id,
-            to: prop.id + 1,
-            value: prop[sheduleKey],
-            id: prop.id,
-            needToSave: prop[sheduleKey] > 0 ? false : true
-        })
-        return;
     });
 
     function sheduleTable() {
@@ -76,7 +78,7 @@ function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
         return (
             <TouchableOpacity
                 style={styles.insulinSensitiveFactorPickerTouchable}
-                onPress={props.onInsulinSensitivityPopupCall}
+                onPress={() => props.onShedulePopupCall(props.sheduleKey)}
             >
                 <Text style={{ fontSize: 16 }}>
                     {shedule.length > 0 ? 'Изменить' : 'Добавить'}
@@ -85,8 +87,17 @@ function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
         )
     }
 
+    function getSettingTitle() {
+        switch(props.sheduleKey) {
+            case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
+                return 'Фактор чувствительности к инсулину'
+            case SheduleKeyType.CARBOHYDRATE_RATIO:
+                return 'Углеводный коэффициент'
+        }
+    }
+
     return <ProfilePicker
-        title={'Фактор чувствительности к инсулину или ФЧИ'}
+        title={getSettingTitle()}
         description={'Показывает, насколько понизит сахар крови (в ммолях) 1 ед. короткого или ультракороткого инсулина'}
         hint={'Укажите ФЧИ для разных промежутков времени'}
     >
@@ -100,15 +111,15 @@ function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
     </ProfilePicker>
 }
 
-export const ProfileSettingsInsulinSensitiveFactorPickerConnect = connect(
+export const ProfileSettingsShedulePickerConnect = connect(
     (state: IStorage) => ({
         userPropertiesShedule: state.userPropertiesShedule
     }),
     (dispatch) => ({
-        onInsulinSensitivityPopupCall: () => {
+        onShedulePopupCall: (sheduleKey: SheduleKeyType) => {
             dispatch(createChangeInteractive({
-                userPropertiesShedulePopupType: InteractiveUserPropertiesShedulePopupType.INSULIN_SENSITIVITY
+                userPropertiesShedulePopupType: sheduleKey
             }))
         }
     })
-)(ProfileSettingsInsulinSensitiveFactorPicker)
+)(ProfileSettingsShedulePicker)

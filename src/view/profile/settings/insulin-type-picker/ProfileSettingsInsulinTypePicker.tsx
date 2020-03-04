@@ -13,7 +13,10 @@ interface Props {
 }
 
 function ProfileSettingsInsulinTypePicker(props: Props) {
-    const { shortInsulinType } = props.userDiabetesProperties;
+    const shortInsulinType = props.userDiabetesProperties.shortInsulinType ?
+        props.userDiabetesProperties.shortInsulinType :
+        ShortInsulinType.ULTRA_SHORT
+
     return (
         <ProfilePicker
             title={'Тип инсулина'}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import { ProfileSettingsInsulinTypePickerConnect } from '../../../view/profile/settings/insulin-type-picker/ProfileSettingsInsulinTypePicker';
 import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
-import { ProfileSettingsInsulinSensitiveFactorPickerConnect } from '../../../view/profile/settings/insulin-sensitive-factor-picker/ProfileSettingsInsulinSensitiveFactorPicker';
+import { ProfileSettingsShedulePickerConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsShedulePicker';
 import { styles } from './Style';
 import { SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 
@@ -20,8 +20,11 @@ export class ProfileScreenDiabetesSettings extends Component<Props> {
                 <ScrollView style={styles.profileView}>
                     <ProfileSettingsInsulinTypePickerConnect />
                     <ProfileSettingsTargetGlycemiaPickerConnect />
-                    <ProfileSettingsInsulinSensitiveFactorPickerConnect
+                    <ProfileSettingsShedulePickerConnect
                         sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
+                    />
+                    <ProfileSettingsShedulePickerConnect
+                        sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
                     />
                 </ScrollView>
             </KeyboardAvoidingView>

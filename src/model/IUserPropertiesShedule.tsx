@@ -1,4 +1,5 @@
 export enum SheduleKeyType {
+    NONE = "none",
     INSULIN_SENSITIVITY_FACTOR = 'insulinSensitivityFactor',
     CARBOHYDRATE_RATIO = 'carbohydrateRatio'
 }

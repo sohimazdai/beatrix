@@ -10,7 +10,7 @@ import { styles } from './Style';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
-    onPropertiesChange?: (properties: IUserDiabetesProperties) => void
+    onPropertiesChange?: (properties: IUserDiabetesProperties) => void;
 }
 
 function ProfileSettingsTargetGlycemiaPicker(props: Props) {

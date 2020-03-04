@@ -18,7 +18,7 @@ interface Props {
     sheduleKey?: SheduleKeyType
     userPropertiesShedule?: IUserPropertiesShedule
     shown?: boolean
-    userPropertiesPopupType?: InteractiveUserPropertiesShedulePopupType
+    userPropertiesPopupType?: SheduleKeyType
 
     onSaveShedule?: (shedule: IUserPropertiesShedule) => void
     onClose?: () => void
@@ -138,7 +138,28 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
     get sheduleArrayFromAnObject(): IUserDiabetesPropertiesDayTimeValue[] {
         const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
         lodash.values(this.state.newShedule).map((prop, index, array) => {
-            if (index === 0) {
+            if (prop[this.props.sheduleKey] > 0) {
+                if (index === 0) {
+                    shedule.push({
+                        since: prop.id,
+                        to: prop.id + 1,
+                        value: prop[this.sheduleKey],
+                        id: prop.id,
+                        needToSave: prop[this.sheduleKey] > 0 ? false : true
+                    })
+
+                    return;
+                }
+                if ((
+                    prop[this.sheduleKey] === array[index - 1][this.sheduleKey] &&
+                    prop.id === array[index - 1].id + 1
+                )) {
+                    shedule[shedule.length - 1].to = prop.id + 1;
+
+                    return
+                }
+
+
                 shedule.push({
                     since: prop.id,
                     to: prop.id + 1,
@@ -146,27 +167,8 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                     id: prop.id,
                     needToSave: prop[this.sheduleKey] > 0 ? false : true
                 })
-
                 return;
             }
-            if ((
-                prop[this.sheduleKey] === array[index - 1][this.sheduleKey] &&
-                prop.id === array[index - 1].id + 1
-            )) {
-                shedule[shedule.length - 1].to = prop.id + 1;
-
-                return
-            }
-
-
-            shedule.push({
-                since: prop.id,
-                to: prop.id + 1,
-                value: prop[this.sheduleKey],
-                id: prop.id,
-                needToSave: prop[this.sheduleKey] > 0 ? false : true
-            })
-            return;
         });
 
         return shedule;
@@ -182,7 +184,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
     renderTitle() {
         const { userPropertiesPopupType } = this.props;
         return <Text style={styles.popupTitle}>
-            {userPropertiesPopupType == InteractiveUserPropertiesShedulePopupType.INSULIN_SENSITIVITY ?
+            {userPropertiesPopupType == SheduleKeyType.INSULIN_SENSITIVITY_FACTOR ?
                 'Фактор чувствительности к инсулину' :
                 "Углеводный коэффициент"
             }
@@ -263,7 +265,7 @@ export const ProfileUserPropertiesShedulePopupConnect = connect(
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         const shown = stateProps.interactive.userPropertiesShedulePopupType &&
-            stateProps.interactive.userPropertiesShedulePopupType !== InteractiveUserPropertiesShedulePopupType.NONE;
+            stateProps.interactive.userPropertiesShedulePopupType !== SheduleKeyType.NONE;
 
         return {
             ...stateProps,
@@ -271,8 +273,7 @@ export const ProfileUserPropertiesShedulePopupConnect = connect(
             shown,
             userPropertiesPopupType: stateProps.interactive.userPropertiesShedulePopupType,
             sheduleKey:
-                stateProps.interactive.userPropertiesShedulePopupType ===
-                    InteractiveUserPropertiesShedulePopupType.INSULIN_SENSITIVITY ?
+                stateProps.interactive.userPropertiesShedulePopupType === SheduleKeyType.INSULIN_SENSITIVITY_FACTOR ?
                     SheduleKeyType.INSULIN_SENSITIVITY_FACTOR :
                     SheduleKeyType.CARBOHYDRATE_RATIO,
             onClose: () => {
