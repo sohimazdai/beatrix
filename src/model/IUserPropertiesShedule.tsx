@@ -1,3 +1,8 @@
+export enum SheduleKeyType {
+    INSULIN_SENSITIVITY_FACTOR = 'insulinSensitivityFactor',
+    CARBOHYDRATE_RATIO = 'carbohydrateRatio'
+}
+
 export interface IUserPropertiesShedule {
     [id: number]: IUserPropertiesSheduleItem
 }

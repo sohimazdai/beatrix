@@ -3,22 +3,16 @@ import { IUserDiabetesPropertiesDayTimeValue } from '../../../model/IUserDiabete
 import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
-import ProfileDayTimeRangeValuePicker from '../ProfileDayTimeRangeValuePicker';
+import ProfileDayTimeRangeValuePicker from '../range-value-picker/ProfileDayTimeRangeValuePicker';
 import { InteractiveUserPropertiesShedulePopupType } from '../../../model/IInteractive';
 import * as lodash from 'lodash';
-import { IUserPropertiesShedule } from '../../../model/IUserPropertiesShedule';
+import { IUserPropertiesShedule, SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableOpacity, Text, View } from 'react-native';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { createOneLevelMergeUserPropertiesShedule } from '../../../store/modules/user-properties-shedule/UserPropertiesShedule';
 import { styles } from './Style';
-import { SheduleKeyType } from '../settings/insulin-sensitive-factor-picker/ProfileSettingsInsulinSensitiveFactorPicker';
-
-export enum ProfileUserPropertiesShedulePopupKey {
-    INSULIN_SENSIBILITY_FACTOR = 'INSULIN_SENSIBILITY_FACTOR',
-    CARBOHYDRATE_RATIO = "CARBOHYDRATE_RATIO"
-}
 
 interface Props {
     sheduleKey?: SheduleKeyType

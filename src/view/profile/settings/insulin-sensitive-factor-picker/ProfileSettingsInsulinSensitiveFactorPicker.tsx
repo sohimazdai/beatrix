@@ -1,33 +1,23 @@
 import React from 'react';
-import { IUserDiabetesPropertiesDayTimeValue, IUserDiabetesProperties } from "../../../../model/IUserDiabetesProperties";
+import { IUserDiabetesPropertiesDayTimeValue } from "../../../../model/IUserDiabetesProperties";
 import { connect } from "react-redux";
 import { IStorage } from "../../../../model/IStorage";
-import { createUserDiabetesPropertiesChangeAction } from "../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator";
-import { IUserPropertiesShedule } from "../../../../model/IUserPropertiesShedule";
+import { IUserPropertiesShedule, SheduleKeyType } from "../../../../model/IUserPropertiesShedule";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
 import { InteractiveUserPropertiesShedulePopupType } from "../../../../model/IInteractive";
 import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from './Style';
 import * as lodash from 'lodash';
-import { ProfileUserPropertiesShedulePopupKey } from '../../shedule-popup/ProfileUserPropertiesShedulePopup';
-
-export enum SheduleKeyType {
-    INSULIN_SENSITIVITY_FACTOR = 'insulinSensitivityFactor',
-    CARBOHYDRATE_RATIO = 'carbohydrateRatio'
-}
 
 interface Props {
-    sheduleKey: ProfileUserPropertiesShedulePopupKey
+    sheduleKey: SheduleKeyType
     userPropertiesShedule?: IUserPropertiesShedule
     onInsulinSensitivityPopupCall?: () => void
 }
 
 function ProfileSettingsInsulinSensitiveFactorPicker(props: Props) {
-    const { userPropertiesShedule } = props;
-    const sheduleKey = props.sheduleKey === ProfileUserPropertiesShedulePopupKey.INSULIN_SENSIBILITY_FACTOR ?
-        SheduleKeyType.INSULIN_SENSITIVITY_FACTOR :
-        SheduleKeyType.CARBOHYDRATE_RATIO
+    const { userPropertiesShedule, sheduleKey } = props;
     const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
     lodash.values(userPropertiesShedule).map((prop, index, array) => {
         if (index === 0) {
