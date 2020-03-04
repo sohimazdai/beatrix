@@ -11,7 +11,7 @@ import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
 import { IInteractive } from '../model/IInteractive';
-import { ProfileScreenDiabetesSettingsConnect } from '../screen/profile/ProfileScreenDiabetesSettings';
+import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
 import { Text } from 'react-native';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import ConfirmPopup, { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
@@ -58,7 +58,7 @@ const ProfileScreenStack = createStackNavigator(
             }),
         },
         ProfileDiabetesSettings: {
-            screen: ProfileScreenDiabetesSettingsConnect,
+            screen: ProfileScreenDiabetesSettings,
             navigationOptions: ({ navigation }) => ({
                 title: "Ваши параметры",
             }),

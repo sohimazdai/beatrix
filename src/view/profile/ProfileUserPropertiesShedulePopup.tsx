@@ -85,7 +85,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                         {!!!this.rangeThatNeedToWriteMore &&
                             <TouchableOpacity
                                 style={styles.addTouchable}
-                                onPress={() => this.props.onSaveShedule(this.state.newShedule)}
+                                onPress={this.onSaveSheduleClick}
                             >
                                 <Text style={{ fontSize: 16 }}>
                                     {'Сохранить'}
@@ -128,24 +128,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         this.setState({
             newShedule,
             needToApply: false
-        })
-        // let editedShedule = this.state.newShedule.map(item => {
-        //     if (item.id === range.id) {
-        //         return item = range
-        //     }
-        //     return item
-        // }).sort((a, b) => a.since - b.since);
-        // editedShedule = editedShedule.map((sheduleItem, index, array) => {
-        //     if (index === 0) {
-        //         return sheduleItem;
-        //     }
-
-        //     if ()
-        // })
-        // this.setState({
-        //     newShedule: editedShedule,
-        //     needToApply: false
-        // })
+        }, () => console.log('newShedule', this.state.newShedule))
     }
 
     onAddPress = () => {
@@ -171,32 +154,6 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                 setted = true;
             }
         }
-
-        // if (shedule.length < 1) {
-        //     this.setState({
-        //         newShedule: {
-        //             0: {
-        //                 id: 0,
-        //                 insulinSensitivityFactor: 0
-        //             }
-        //         },
-        //         needToApply: true
-        //     })
-        //     return;
-        // }
-
-        // if (shedule[shedule.length - 1].to <= 23) {
-        //     this.setState({
-        //         newShedule: {
-        //             ...this.state.newShedule,
-        //             [shedule[shedule.length - 1].to]: {
-        //                 id: shedule[shedule.length - 1].to,
-        //                 insulinSensitivityFactor: 0
-        //             }
-        //         },
-        //         needToApply: true
-        //     })
-        // }
     }
 
     get rangeThatNeedToWriteMore(): string {
@@ -255,7 +212,6 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                     id: prop.id,
                     needToSave: prop.insulinSensitivityFactor > 0 ? false : true
                 })
-                console.log('prev !== this', shedule);
                 return;
             });
         } else if (userPropertiesPopupType === InteractiveUserPropertiesShedulePopupType.CARBOHYDRATE_RATIO) {
@@ -284,11 +240,16 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         return shedule.sort((a, b) => a.since - b.since)
     }
 
+    onSaveSheduleClick = () => {
+        this.props.onSaveShedule(this.state.newShedule);
+        this.props.onClose();
+    }
+
 }
 
 export const ProfileUserPropertiesShedulePopupConnect = connect(
     (state: IStorage) => ({
-        userPropertiesShedule: state.userPropertiesShedule,
+        userPropertiesShedule: state.userPropertiesShedule || {},
         interactive: state.interactive
     }),
     (dispatch) => ({ dispatch }),

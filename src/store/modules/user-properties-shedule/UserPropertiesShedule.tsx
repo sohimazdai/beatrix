@@ -45,14 +45,22 @@ export function userPropertiesSheduleReducer(
                 ...action.payload
             }
         case UserPropertiesSheduleActionType.ONE_LEVEL_DEEP_MERGE:
+                console.log('action.payload', action.payload)
+
             const newModule: IUserPropertiesShedule = Object.values(action.payload).reduce((prev, curr) => {
-                return prev[curr.id] = {
-                    ...module[curr.id],
-                    id: curr.id,
-                    ...curr
+                console.log('prev', prev);
+                console.log('curr', curr);
+                return {
+                    ...prev,
+                    [curr.id]: {
+                        ...module[curr.id],
+                        ...curr
+                    }
                 }
             }, {})
+            console.log('newModule', newModule)
             return {
+                ...module,
                 ...newModule
             }
 

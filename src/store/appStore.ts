@@ -8,7 +8,6 @@ import { appReducer } from "./modules/app/app";
 import { interactiveReducer } from "./modules/interactive/interactive";
 import { userDiabetesPropertiesReducer } from "./modules/user-diabetes-properties/UserDiabetesPropertiesReducer";
 import { enableBatching } from 'redux-batched-actions';
-import { isEnv } from "apollo-utilities";
 import { userPropertiesSheduleReducer } from "./modules/user-properties-shedule/UserPropertiesShedule";
 
 const logger = store => next => action => {
@@ -24,7 +23,7 @@ const rootReducer = combineReducers({
     user: userReducer,
     interactive: interactiveReducer,
     userDiabetesProperties: userDiabetesPropertiesReducer,
-    userPropertiesByHour: userPropertiesSheduleReducer,
+    userPropertiesShedule: userPropertiesSheduleReducer,
 });
 
 const persistConfig: PersistConfig = {
