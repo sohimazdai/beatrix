@@ -2,4 +2,4 @@
 
 ### Diabetes control app
 
-#### react-native redux firebase
+#### Client stack: react-native, redux, redux-saga, axios
