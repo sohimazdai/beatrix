@@ -2,7 +2,7 @@ import { shadowOptions } from "../../constant/shadowOptions";
 import { StyleSheet } from "react-native";
 import { ThemeColor } from "../../constant/ThemeColor";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     AuthView: {
         display: "flex",
         width: '100%',

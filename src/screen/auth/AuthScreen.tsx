@@ -10,6 +10,7 @@ import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-n
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
 import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountainsIcon';
 import { firebaseApp } from '../../firebase-config';
+import "firebase/firestore";
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { Action } from 'redux';
@@ -19,7 +20,7 @@ import { AuthForm } from '../../view/auth/AuthForm';
 import { Popup } from '../../component/popup/Popup';
 import { TextInput } from 'react-native-gesture-handler';
 import { Fader } from '../../component/Fader';
-const styles = require('./Style');
+import { styles } from './Style';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -224,4 +225,3 @@ export const AuthScreenConnect = connect(
         }
     }
 )(AuthScreen)
-
