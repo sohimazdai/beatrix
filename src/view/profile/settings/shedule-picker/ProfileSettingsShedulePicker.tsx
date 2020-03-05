@@ -4,16 +4,18 @@ import { connect } from "react-redux";
 import { IStorage } from "../../../../model/IStorage";
 import { IUserPropertiesShedule, SheduleKeyType } from "../../../../model/IUserPropertiesShedule";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
-import { InteractiveUserPropertiesShedulePopupType } from "../../../../model/IInteractive";
 import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from './Style';
 import * as lodash from 'lodash';
+import { createClearSheduleByKeyType } from '../../../../store/modules/user-properties-shedule/UserPropertiesShedule';
 
 interface Props {
     sheduleKey: SheduleKeyType
     userPropertiesShedule?: IUserPropertiesShedule
+
     onShedulePopupCall?: (key: SheduleKeyType) => void
+    clearShedule?: (sheduleKey: SheduleKeyType) => void
 }
 
 function ProfileSettingsShedulePicker(props: Props) {
@@ -87,8 +89,21 @@ function ProfileSettingsShedulePicker(props: Props) {
         )
     }
 
+    function clearSheduleButton() {
+        return (
+            <TouchableOpacity
+                style={styles.clearSheduleButton}
+                onPress={() => props.clearShedule(props.sheduleKey)}
+            >
+                <Text style={{ fontSize: 16, color: 'white' }}>
+                    {'Очистить'}
+                </Text>
+            </TouchableOpacity>
+        )
+    }
+
     function getSettingTitle() {
-        switch(props.sheduleKey) {
+        switch (props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
                 return 'Фактор чувствительности к инсулину'
             case SheduleKeyType.CARBOHYDRATE_RATIO:
@@ -105,7 +120,10 @@ function ProfileSettingsShedulePicker(props: Props) {
             <View style={styles.sensitivityFactorView}>
                 {sheduleTableTitle()}
                 {sheduleTable()}
-                {openPopupButton()}
+                <View style={styles.buttons}>
+                    {shedule.length > 0 && clearSheduleButton()}
+                    {openPopupButton()}
+                </View>
             </View>
         </View>
     </ProfilePicker>
@@ -120,6 +138,9 @@ export const ProfileSettingsShedulePickerConnect = connect(
             dispatch(createChangeInteractive({
                 userPropertiesShedulePopupType: sheduleKey
             }))
+        },
+        clearShedule: (sheduleKey: SheduleKeyType) => {
+            dispatch(createClearSheduleByKeyType(sheduleKey))
         }
     })
 )(ProfileSettingsShedulePicker)

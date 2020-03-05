@@ -95,6 +95,12 @@ export const styles = StyleSheet.create({
     insulinSensitiveFactorPickerListItemTextInput: {
 
     },
+    buttons: {
+        display: 'flex',
+
+        flexDirection:'row',
+        justifyContent: 'space-evenly'
+    },
     sensitivityFactorItemTitle: {
         flex: 1,
         alignContent: 'center',
@@ -111,5 +117,17 @@ export const styles = StyleSheet.create({
         padding: 20,
         paddingBottom: 10,
         paddingTop: 10
+    },
+    clearSheduleButton: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        padding: 10,
+        margin: 10,
+
+        backgroundColor: 'crimson',
+        borderRadius: 50,
+        ...shadowOptions
     }
 })

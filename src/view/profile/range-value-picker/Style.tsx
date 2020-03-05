@@ -85,6 +85,9 @@ export const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     savedValue: {
-        fontSize: 17
+        width: 50,
+
+        textAlign: 'center',
+        fontSize: 17,
     }
 })
