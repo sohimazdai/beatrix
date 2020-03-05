@@ -26,6 +26,7 @@ export const Fader = (props: FaderProps) => {
 
     return <Animated.View style={{
         ...styles.FaderView,
+        display: props.hidden ? 'none' : 'block',
         opacity: opacity,
         // display: props.hidden ? 'none' : 'flex'
     }}>

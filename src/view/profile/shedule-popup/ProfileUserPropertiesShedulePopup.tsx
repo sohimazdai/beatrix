@@ -40,6 +40,13 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                 needToApply: false
             }
         }
+
+        if (props.shown && Object.values(state.newShedule).length === 0) {
+            return {
+                newShedule: props.userPropertiesShedule
+            }
+        }
+        return state;
     }
 
     //get

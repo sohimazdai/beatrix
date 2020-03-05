@@ -129,8 +129,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     render() {
         return (
             <>
-                {this.props.interactive.creatingNoteMode &&
-                    <Fader hidden={!this.props.interactive.creatingNoteMode} />}
+                <Fader hidden={!this.props.interactive.creatingNoteMode} />
                 <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
                     <KeyboardAvoidingView
                         style={!this.props.note ?

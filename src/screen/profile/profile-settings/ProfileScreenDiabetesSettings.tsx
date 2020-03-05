@@ -5,12 +5,19 @@ import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profil
 import { ProfileSettingsShedulePickerConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsShedulePicker';
 import { styles } from './Style';
 import { SheduleKeyType } from '../../../model/IUserPropertiesShedule';
+import { Fader } from '../../../component/Fader';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../model/IStorage';
+import { IInteractive } from '../../../model/IInteractive';
 
 interface Props {
+    interactive: IInteractive
 }
 
-export class ProfileScreenDiabetesSettings extends Component<Props> {
+export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
     render() {
+        const isFadeHidden = !!!this.props.interactive.userPropertiesShedulePopupType ||
+            this.props.interactive.userPropertiesShedulePopupType === SheduleKeyType.NONE;
         return (
             <KeyboardAvoidingView
                 style={styles.keyboardAvoidingView}
@@ -26,8 +33,16 @@ export class ProfileScreenDiabetesSettings extends Component<Props> {
                     <ProfileSettingsShedulePickerConnect
                         sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
                     />
+                    <Fader hidden={isFadeHidden} />
+
                 </ScrollView>
             </KeyboardAvoidingView>
         )
     }
 }
+
+export const ProfileScreenDiabetesSettings = connect(
+    (state: IStorage) => ({
+        interactive: state.interactive
+    })
+)(ProfileScreenDiabetesSettingsComponent)

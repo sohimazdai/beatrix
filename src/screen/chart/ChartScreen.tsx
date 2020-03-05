@@ -1,25 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { IStorage } from '../model/IStorage';
+import { IStorage } from '../../model/IStorage';
 import { Dispatch, Action } from 'redux';
-import { StyleSheet, View, Text, Dimensions, NativeModules } from 'react-native';
-import { INoteList, INoteListByDay } from '../model/INoteList';
+import { View, Text, Dimensions } from 'react-native';
+import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeColor } from '../constant/ThemeColor';
-import { shadowOptions } from '../constant/shadowOptions';
-import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../model/IChart';
-import { NoteListSelector } from '../store/selector/NoteListSelector';
+import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
+import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { ChartSettings } from '../view/chart/chart-settings/ChartSettings';
-import { ChartWrap } from '../view/chart/chart-wrap/ChartWrap';
-import { PolylineType } from '../view/chart/chart-svg/ChartPolyline';
-import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
-import { DateHelper } from '../utils/DateHelper';
-import { getArrayAverage, getWeekDaysNumbers } from '../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
+import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
+import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { DateHelper } from '../../utils/DateHelper';
+import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
-import { BlockHat } from '../component/hat/BlockHat';
-import { Fader } from '../component/Fader';
-import { NoteCreationPopupButtonConnect } from '../view/notes/note-creation-popup/NoteCreationPopupButton';
+import { BlockHat } from '../../component/hat/BlockHat';
+import { Fader } from '../../component/Fader';
+import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/NoteCreationPopupButton';
+import { styles } from './Style';
 
 const TIME_STEP_MINUTES = 5;
 const BASIC_PADDING = 5;
@@ -103,13 +102,13 @@ const chartConfig: { [id: string]: IChartConfiguration } = {
     breadUnits: breadUnitsConfig,
     insulin: insulinConfig,
 }
-export interface ChartWithSettingsProps {
+export interface ChartProps {
     noteListByDay: INoteListByDay
     noteList: INoteList
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
-export interface ChartWithSettingsState {
+export interface ChartState {
     currentDate: Date,
     selectedDotId: number,
     selectedPeriod: ChartPeriodType,
@@ -119,7 +118,7 @@ export interface ChartWithSettingsState {
     editingNoteId?: number
 }
 
-class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, ChartWithSettingsState> {
+class Chart extends React.PureComponent<ChartProps, ChartState> {
     state = {
         currentDate: new Date(
             new Date().getFullYear(),
@@ -158,7 +157,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         additionalTitle={this.getHatTitle()}
                     />
                     <View
-                        style={styles.chartWithSettingsView}
+                        style={styles.ChartView}
                     >
                         <View style={styles.chartView}>
                             <LinearGradient
@@ -191,7 +190,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                         </View>
                     </View>
                 </ScrollView>
-                {this.state.popupShown && <Fader hidden={!this.state.popupShown} />}
+                <Fader hidden={!this.state.popupShown} />
                 <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
@@ -466,145 +465,18 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 }
 
-export const ChartWithSettingsConnect = connect(
+export const ChartConnect = connect(
     (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList),
         noteList: state.noteList,
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
-    (stateProps, {dispatch}, ownProps) => {
+    (stateProps, { dispatch }, ownProps) => {
         return {
             ...stateProps,
             dispatch,
             ownProps,
         }
     }
-)(ChartWithSettings)
+)(Chart)
 
-const styles = StyleSheet.create({
-    view: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#F6F8FF'
-    },
-    scrollView: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-    },
-    viewGradient: {
-        position: 'absolute',
-
-        left: 0,
-        top: 0,
-
-        height: '100%',
-        width: '100%',
-    },
-    chartWithSettingsView: {
-        width: '100%',
-
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-
-        ...shadowOptions,
-    },
-    chartView: {
-        width: '100%',
-
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-        backgroundColor: ThemeColor.LIGHT_BLUE,
-
-        ...shadowOptions,
-
-        overflow: 'hidden'
-    },
-    chartGradient: {
-        width: '100%',
-
-        paddingTop: 20,
-        paddingBottom: 25,
-
-        backgroundColor: ThemeColor.LIGHT_BLUE,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        ...shadowOptions,
-    },
-    highightTitlesView: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    highightTitle: {
-        fontSize: 13,
-        color: '#CCCCCC',
-        textAlign: 'center',
-    },
-    axisTitleView: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    axisTitleText: {
-        paddingTop: 5,
-        paddingRight: 10,
-
-        fontSize: 11,
-        fontWeight: 'bold',
-        color: '#eee',
-    },
-    settingsView: {
-        width: '100%',
-        display: 'flex',
-
-        padding: 20,
-        paddingRight: 28,
-        paddingBottom: 28,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    statisticsView: {
-    },
-    statisticsViewText: {
-        textAlign: 'center',
-    },
-    addNoteButtonView: {
-        position: 'absolute',
-        bottom: 5,
-        right: 5,
-
-        ...shadowOptions,
-    },
-    addNoteButton: {
-        display: 'flex',
-        padding: 5,
-        margin: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(250,250,250, 1)',
-        borderRadius: 30,
-        ...shadowOptions
-    },
-    addNoteButtonText: {
-        fontSize: 18,
-        color: "#333333",
-        marginRight: 5
-    }
-})
