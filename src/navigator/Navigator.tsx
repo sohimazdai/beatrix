@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
-import { AuthScreenConnect } from "../screen/AuthScreen";
+import { AuthScreenConnect } from "../screen/auth/AuthScreen";
 import { NoteListScreenConnect } from "../screen/NoteListScreen";
 import { ChartWithSettingsConnect } from "../screen/ChartWithSettingsScreen";
 import { IUser } from '../model/IUser';

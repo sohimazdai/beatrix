@@ -7,21 +7,19 @@ import {
     Text,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
-import { ThemeColor } from '../constant/ThemeColor';
-import { BackgroundSunIcon } from '../component/icon/BackgroundSunIcon';
-import { BackgroundMountainsIcon } from '../component/icon/BackgroundMountainsIcon';
-import { firebaseApp } from '../app/FirebaseApp';
-import "firebase/firestore";
-import { shadowOptions } from '../constant/shadowOptions';
+import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
+import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountainsIcon';
+import { firebaseApp } from '../../firebase-config';
 import { connect } from 'react-redux';
-import { IStorage } from '../model/IStorage';
+import { IStorage } from '../../model/IStorage';
 import { Action } from 'redux';
-import { createUserChangeAction } from '../store/modules/user/UserActionCreator';
-import { IUser } from '../model/IUser';
-import { AuthForm } from '../view/auth/AuthForm';
-import { Popup } from '../component/popup/Popup';
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
+import { IUser } from '../../model/IUser';
+import { AuthForm } from '../../view/auth/AuthForm';
+import { Popup } from '../../component/popup/Popup';
 import { TextInput } from 'react-native-gesture-handler';
-import { Fader } from '../component/Fader';
+import { Fader } from '../../component/Fader';
+const styles = require('./Style');
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -101,7 +99,6 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
         )
     }
 
-    // TODO: form does not exist in React Native
     renderAuthForm() {
         return (
             <View style={styles.AuthForm}>
@@ -228,168 +225,3 @@ export const AuthScreenConnect = connect(
     }
 )(AuthScreen)
 
-const styles = StyleSheet.create({
-    AuthView: {
-        display: "flex",
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#F6F8FF',
-        flexDirection: "column-reverse",
-    },
-    BackgroundSun: {
-        position: "absolute",
-        top: -300,
-    },
-    BackgroundMountains: {
-        top: -100,
-        right: 0,
-        position: "absolute",
-    },
-    AuthForm: {
-        width: '100%',
-        height: '70%',
-        position: "absolute",
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    form: {
-        width: '100%',
-        display: 'flex',
-        borderTopLeftRadius: 55,
-        borderTopRightRadius: 55,
-        overflow: 'hidden'
-    },
-
-    authFormGradient: {
-        width: '100%',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-
-    inputForm: {
-        margin: 10,
-    },
-    input: {
-        width: 280,
-        height: 30,
-
-        padding: 5,
-        borderRadius: 5,
-        borderWidth: 2,
-
-        textAlign: 'left',
-        fontSize: 16,
-        color: ThemeColor.TEXT_DARK_GRAY,
-
-        borderColor: ThemeColor.TAN,
-        backgroundColor: ThemeColor.WHITE,
-    },
-    rememberButton: {
-        width: 150,
-        height: 40,
-        margin: 10,
-        marginTop: 20,
-        borderRadius: 10,
-        backgroundColor: "white",
-        ...shadowOptions
-    },
-    rememberButtonTouchable: {
-        width: '100%',
-        height: '100%',
-
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    cancelRememberButton: {
-        width: 150,
-        height: 40,
-        display: 'flex',
-        marginBottom: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textDecorationLine: 'underline',
-        textDecorationColor: 'black',
-    },
-    titleFormText: {
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-        fontSize: 16,
-        color: '#666666',
-        margin: 10,
-    },
-    formButtons: {
-        width: 280,
-        height: 60,
-
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginBottom: 30,
-    },
-    registrationButton: {
-        width: 160,
-        height: 30,
-
-        // marginLeft: 20,
-        // paddingLeft: 10,
-
-        // elevation: 2,
-        // ...shadowOptions,
-
-        // textAlign: 'center',
-        borderWidth: 1,
-        borderRadius: 15,
-        justifyContent: 'center',
-    },
-    signInButton: {
-        display: 'flex',
-        padding: 10,
-        margin: 10,
-        width: 100,
-        height: 50,
-
-        borderWidth: 1,
-        borderRadius: 15,
-        borderColor: '#FFB4B4',
-        backgroundColor: ThemeColor.WHITE,
-        justifyContent: 'center',
-        ...shadowOptions
-    },
-    registrationButtonText: {
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-        fontSize: 16,
-        color: '#333333',
-        textDecorationLine: 'underline',
-    },
-    signInButtonText: {
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-        fontSize: 19,
-        color: '#333333',
-    },
-
-    authScreenRestorePasswordView: {
-        position: 'relative',
-        width: 300,
-
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        flexDirection: 'column',
-        alignItems: 'center',
-
-        backgroundColor: 'white',
-        borderRadius: 10,
-        ...shadowOptions
-    },
-    authScreenRestorePasswordViewTitle: {
-        height: 30,
-        fontSize: 18,
-        color: '#333333',
-        margin: 20,
-    }
-})
