@@ -2,106 +2,24 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { Dispatch, Action } from 'redux';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text } from 'react-native';
 import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
+import { ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
-import { PolylineType } from '../../view/chart/chart-svg/ChartPolyline';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { Fader } from '../../component/Fader';
-import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/NoteCreationPopupButton';
+import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
 import { styles } from './Style';
+import { ChartConfig } from './config/ChartConfig';
 
-const TIME_STEP_MINUTES = 5;
-const BASIC_PADDING = 5;
-const DOT_RADIUS = 5;
-const WIDTH = Dimensions.get("screen").width * 0.85;
-
-const glucoseConfig: IChartConfiguration = {
-    width: WIDTH,
-    height: Dimensions.get("screen").width / 2,
-    boxWidth: WIDTH,
-    boxHeight: Dimensions.get("screen").width / 2,
-    axisWidth: 2,
-    axisColor: '#AAAAAA',
-    basicPadding: BASIC_PADDING,
-    yPadding: 1,
-    dotRadius: DOT_RADIUS,
-    reversedY: false,
-    timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 6,
-    axisTypes: [
-        ChartAxisType.OX,
-        ChartAxisType.OY
-    ],
-    polylineType: PolylineType.BEZIER
-}
-
-const insulinConfig: IChartConfiguration = {
-    width: WIDTH,
-    height: Dimensions.get("screen").width / 5,
-    boxWidth: WIDTH,
-    boxHeight: Dimensions.get("screen").width / 5,
-    axisWidth: 2,
-    axisColor: '#AAAAAA',
-    basicPadding: BASIC_PADDING,
-    yPadding: 1,
-    dotRadius: DOT_RADIUS,
-    reversedY: true,
-    increaseTime: 30,
-    flatTime: 30,
-    decreaseTime: 180,
-    timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 3,
-    initGradientColor: '#7C89FF',
-    stopGradientColor: '#7C3869',
-    axisTypes: [
-        ChartAxisType.OX_UPSIDE,
-        ChartAxisType.OY_REVERSE,
-    ],
-    paddingTop: true,
-    polylineType: PolylineType.REGULAR
-}
-
-const breadUnitsConfig: IChartConfiguration = {
-    width: WIDTH,
-    height: Dimensions.get("screen").width / 5,
-    boxWidth: WIDTH,
-    boxHeight: Dimensions.get("screen").width / 5,
-    axisWidth: 2,
-    axisColor: '#AAAAAA',
-    basicPadding: BASIC_PADDING,
-    yPadding: 1,
-    dotRadius: DOT_RADIUS,
-    reversedY: false,
-    increaseTime: 15,
-    flatTime: 15,
-    decreaseTime: 90,
-    timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 3,
-    initGradientColor: '#FF4D00',
-    stopGradientColor: '#F0EC91',
-    axisTypes: [
-        ChartAxisType.OX,
-        ChartAxisType.OY
-    ],
-    paddingBottom: true,
-    polylineType: PolylineType.REGULAR
-}
-
-const chartConfig: { [id: string]: IChartConfiguration } = {
-    glucose: glucoseConfig,
-    breadUnits: breadUnitsConfig,
-    insulin: insulinConfig,
-}
 export interface ChartProps {
     noteListByDay: INoteListByDay
     noteList: INoteList
@@ -134,21 +52,19 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         editingNoteId: null
     }
 
+    get chartConfig() {
+        return new ChartConfig().getConfigs();
+    }
+
     get generalPadding() {
-        return chartConfig.glucose.basicPadding * 3;
+        return this.chartConfig.glucose.basicPadding * 3;
     }
 
     get initialPadding() {
-        return chartConfig.glucose.basicPadding;
+        return this.chartConfig.glucose.basicPadding;
     }
 
     render() {
-        const chartsToRender = [
-            ChartValueType.INSULIN,
-            ChartValueType.GLUCOSE,
-            ChartValueType.BREAD_UNITS
-        ];
-
         return (
             <View style={styles.view}>
                 <ScrollView style={styles.scrollView}>
@@ -159,35 +75,8 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                     <View
                         style={styles.ChartView}
                     >
-                        <View style={styles.chartView}>
-                            <LinearGradient
-                                colors={['#163B50', '#3E2626']}
-                                style={styles.chartGradient}
-                            >
-                                {chartsToRender.map(type => {
-                                    return <ChartWrap
-                                        key={type}
-                                        type={type}
-                                        config={chartConfig[type]}
-                                        selectedPeriod={this.state.selectedPeriod}
-                                        selectedDotId={this.state.selectedDotId}
-                                        currentDate={this.state.currentDate}
-                                        noteList={this.props.noteList}
-                                        noteListByDay={this.props.noteListByDay}
-                                        onDotPress={this.onDotPress}
-                                    />
-                                })}
-                                {this.renderNetXTitles()}
-                            </LinearGradient>
-                        </View>
-                        <View style={styles.settingsView}>
-                            <ChartSettings
-                                onDateChange={this.onCurrentDateChange}
-                                date={this.state.currentDate}
-                                onChangingPeriod={this.onChangingPeriod}
-                                selectedPeriod={this.state.selectedPeriod}
-                            />
-                        </View>
+                        {this.renderChat()}
+                        {this.renderSettings()}
                     </View>
                 </ScrollView>
                 <Fader hidden={!this.state.popupShown} />
@@ -203,6 +92,51 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 </View>}
             </View>
 
+        )
+    }
+
+    renderChat() {
+        const chartsToRender = [
+            ChartValueType.INSULIN,
+            ChartValueType.GLUCOSE,
+            ChartValueType.BREAD_UNITS
+        ];
+
+        return (
+            <View style={styles.chartView}>
+                <LinearGradient
+                    colors={['#163B50', '#3E2626']}
+                    style={styles.chartGradient}
+                >
+                    {chartsToRender.map(type => {
+                        return <ChartWrap
+                            key={type}
+                            type={type}
+                            config={this.chartConfig[type]}
+                            selectedPeriod={this.state.selectedPeriod}
+                            selectedDotId={this.state.selectedDotId}
+                            currentDate={this.state.currentDate}
+                            noteList={this.props.noteList}
+                            noteListByDay={this.props.noteListByDay}
+                            onDotPress={this.onDotPress}
+                        />
+                    })}
+                    {this.renderNetXTitles()}
+                </LinearGradient>
+            </View>
+        )
+    }
+
+    renderSettings() {
+        return (
+            <View style={styles.settingsView}>
+                <ChartSettings
+                    onDateChange={this.onCurrentDateChange}
+                    date={this.state.currentDate}
+                    onChangingPeriod={this.onChangingPeriod}
+                    selectedPeriod={this.state.selectedPeriod}
+                />
+            </View>
         )
     }
 
@@ -250,13 +184,13 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
     renderNetXTitles() {
         let highlightsNumber;
         let highlightsTitles = [];
-        let newWidth = chartConfig.breadUnits.boxWidth - 3 * chartConfig.breadUnits.basicPadding;
+        let newWidth = this.chartConfig.breadUnits.boxWidth - 3 * this.chartConfig.breadUnits.basicPadding;
         let titleWidth;
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 highlightsNumber = 10;
                 highlightsTitles = [0, 3, 6, 9, 12, 15, 18, 21, 24];
-                newWidth = chartConfig.breadUnits.boxWidth;
+                newWidth = this.chartConfig.breadUnits.boxWidth;
                 titleWidth = 20;
                 return <View
                     style={{
@@ -280,7 +214,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                     case 30:
                         highlightsNumber = 7;
                         highlightsTitles = [1, 5, 10, 15, 20, 25, 30];
-                        newWidth = chartConfig.breadUnits.boxWidth;
+                        newWidth = this.chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
                         return <View
                             style={{
@@ -312,7 +246,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                     case 29:
                         highlightsNumber = 6;
                         highlightsTitles = [1, 5, 10, 15, 20, 25];
-                        newWidth = chartConfig.breadUnits.boxWidth;
+                        newWidth = this.chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
                         return <View
                             style={{
@@ -344,7 +278,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
             case ChartPeriodType.THREE_MONTH:
                 highlightsNumber = 3;
                 highlightsTitles = [-2, -1, 0];
-                newWidth = chartConfig.breadUnits.boxWidth;
+                newWidth = this.chartConfig.breadUnits.boxWidth;
                 titleWidth = 100;
                 return <View
                     style={{

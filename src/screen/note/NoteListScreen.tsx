@@ -1,22 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { IStorage } from '../model/IStorage';
-import { INoteListByDay, INoteListNote } from '../model/INoteList';
+import { IStorage } from '../../model/IStorage';
+import { INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
-import { Note } from '../view/notes/note/Note';
-import { ThemeColor } from '../constant/ThemeColor';
-import { NoteListSelector } from '../store/selector/NoteListSelector';
-import { shadowOptions } from '../constant/shadowOptions';
-import { RoundClocksIcon } from '../component/icon/RoundClocksIcon';
-import { VegetablesIcon } from '../component/icon/value-icons/VegetablesIcon';
-import { GlucometerIcon } from '../component/icon/value-icons/GlucometerIcon';
-import { ShortSyringeIcon } from '../component/icon/value-icons/ShortSyringeIcon';
-import { LongSyringeIcon } from '../component/icon/value-icons/LongSyringeIcon';
-import { BlockHat } from '../component/hat/BlockHat';
-import { createChangeInteractive } from '../store/modules/interactive/interactive';
-import { NoteCreationPopupButtonConnect } from '../view/notes/note-creation-popup/NoteCreationPopupButton';
+import { Note } from '../../view/notes/note/Note';
+import { NoteListSelector } from '../../store/selector/NoteListSelector';
+import { RoundClocksIcon } from '../../component/icon/RoundClocksIcon';
+import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
+import { GlucometerIcon } from '../../component/icon/value-icons/GlucometerIcon';
+import { ShortSyringeIcon } from '../../component/icon/value-icons/ShortSyringeIcon';
+import { LongSyringeIcon } from '../../component/icon/value-icons/LongSyringeIcon';
+import { BlockHat } from '../../component/hat/BlockHat';
+import { createChangeInteractive } from '../../store/modules/interactive/interactive';
+import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
+import { styles } from './Style';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -173,110 +172,3 @@ export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteList
      })
 )(NoteListScreen)
 
-const styles = StyleSheet.create({
-    screenView: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        backgroundColor: ThemeColor.BG_COLOR,
-    },
-    iconBarView: {
-        display: 'flex',
-
-        padding: 10,
-
-        flexDirection: 'row',
-        alignItems: 'center',
-
-        backgroundColor: '#E3EAFF',
-    },
-    iconBarIcon: {
-        flex: 1,
-        height: 30,
-    },
-    cardWrap: {
-        width: '100%',
-
-        marginBottom: 15,
-        marginTop: 15,
-
-        alignItems: 'center',
-    },
-    dateView: {
-        marginBottom: 10,
-
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    dateText: {
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-        fontWeight: 'bold',
-        fontSize: 19,
-        lineHeight: 22,
-
-        color: '#555'
-    },
-    dayNotes: {
-        width: '100%',
-
-        padding: 10,
-
-        borderRadius: 25,
-
-        flexDirection: 'column',
-    },
-    cardHat: {
-        height: 20,
-        width: '100%',
-
-        marginBottom: 20,
-
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-    },
-    cardHatText: {
-        width: '25%',
-
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-        fontSize: 16,
-        lineHeight: 19,
-
-        color: '#666666'
-    },
-    addNoteButtonView: {
-        position: 'absolute',
-        bottom: 5,
-        right: 5,
-
-        ...shadowOptions,
-    },
-    noNotesStub: {
-        flex: 1,
-        padding: 40,
-        fontSize: 20,
-
-        color: '#333333'
-
-    },
-    addNoteButton: {
-        display: 'flex',
-        padding: 5,
-        margin: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(250,250,250, 1)',
-        borderRadius: 30,
-        ...shadowOptions
-    },
-    addNoteButtonText: {
-        fontSize: 18,
-        color: "#333333",
-        marginRight: 5
-    }
-})

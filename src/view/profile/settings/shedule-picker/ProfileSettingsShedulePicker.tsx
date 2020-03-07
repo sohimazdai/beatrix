@@ -111,10 +111,28 @@ function ProfileSettingsShedulePicker(props: Props) {
         }
     }
 
+    function getDescription() {
+        switch (props.sheduleKey) {
+            case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
+                return 'Показывает, насколько понизит сахар крови (в ммолях) 1 ед. короткого или ультракороткого инсулина';
+            case SheduleKeyType.CARBOHYDRATE_RATIO:
+                return 'Показывает количество единиц инсулина для усвоения 1 ХЕ';
+        }
+    }
+
+    function getHint() {
+        switch (props.sheduleKey) {
+            case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
+                return 'Укажите ФЧИ для разных промежутков времени';
+            case SheduleKeyType.CARBOHYDRATE_RATIO:
+                return 'Укажите УК для разных промежутков времени';
+        }
+    }
+
     return <ProfilePicker
         title={getSettingTitle()}
-        description={'Показывает, насколько понизит сахар крови (в ммолях) 1 ед. короткого или ультракороткого инсулина'}
-        hint={'Укажите ФЧИ для разных промежутков времени'}
+        description={getDescription()}
+        hint={getHint()}
     >
         <View>
             <View style={styles.sensitivityFactorView}>
