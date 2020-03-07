@@ -100,7 +100,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         this.setState({
             newShedule,
             needToApply: false
-        }, () => console.log('newShedule', this.state.newShedule))
+        })
     }
 
     onAddPress = () => {
@@ -121,7 +121,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                         }
                     },
                     needToApply: true
-                }, () => console.log('onAddPress', this.state.newShedule))
+                })
                 setted = true;
             }
         }
@@ -151,15 +151,9 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
 
     get sheduleArrayFromAnObject(): IUserDiabetesPropertiesDayTimeValue[] {
         const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
-        console.log('sheduleArrayFromAnObject newwShedule', this.state.newShedule)
         Object.values(this.state.newShedule).map((prop, index, array) => {
-            console.log(' Object.values(this.state.newShedule).map((prop, index, array) => {', prop, index, array, shedule)
             if (prop[this.sheduleKey] >= 0) {
-                console.log('prop[this.sheduleKey] > 0', prop, index, array, shedule)
-                
                 if (index === 0) {
-                console.log('index === 0', prop, index, array, shedule)
-
                     shedule.push({
                         since: prop.id,
                         to: prop.id + 1,
@@ -175,10 +169,8 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                     prop.id === array[index - 1].id + 1
                 )) {
                     shedule[shedule.length - 1].to = prop.id + 1;
-
                     return
                 }
-
 
                 shedule.push({
                     since: prop.id,
@@ -190,7 +182,6 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                 return;
             }
         });
-        console.log('sheduleArrayFromAnObject', shedule)
         return shedule;
     }
 
