@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
     noteEditingView: {
         flex: 1,
         width: '100%',
+        minHeight: 500,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#FFE1DF",
