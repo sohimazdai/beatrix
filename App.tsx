@@ -35,7 +35,9 @@ export default class App extends React.Component {
             <ModalContentConnect />
           </PersistGate>
         </Provider>
-        : <AppLoading key={'AppLoading'} />
+        : (
+          <AppLoading key={'AppLoading'} />
+        )
     )
   }
 }

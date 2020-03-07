@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
-import { ChartDotInfoPopupValue } from './ChartDotInfoPopupValue';
+import { ChartDotInfoPopupValue } from './dot-info-popup-value/ChartDotInfoPopupValue';
 import { ChartValueType } from '../../../model/IChart';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { shadowOptions } from '../../../constant/shadowOptions';
@@ -12,13 +12,15 @@ import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
+import { ScrollView } from 'react-native-gesture-handler';
+import { styles } from './Style';
 
 export interface ChartDotInfoPopupProps {
     shown?: boolean
     dateTitle?: string
     note?: INoteListNote
     editable?: boolean
-    
+
     onClose?: () => void
     openEditPopup?: (noteId) => void
 }
@@ -56,11 +58,13 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                             value={props.note[ChartValueType.LONG_INSULIN]}
                         />
                     </View>
-                    {!!props.note.commentary && <View style={styles.commentValue}>
-                        <Text style={styles.commentValueText}>
-                            {props.note.commentary}
-                        </Text>
-                    </View>}
+                    {!!props.note.commentary && <ScrollView style={styles.commentValue}>
+                        <View>
+                            <Text style={styles.commentValueText}>
+                                {props.note.commentary}
+                            </Text>
+                        </View>
+                    </ScrollView>}
                 </>}
                 <TouchableOpacity
                     style={styles.closeTouchable}
@@ -97,83 +101,3 @@ export const ChartDotInfoPopupConnect = connect(
         }
     }
 )(ChartDotInfoPopup)
-
-const styles = StyleSheet.create({
-    animatedView: {
-        width: '100%',
-        display: 'flex',
-
-        borderRadius: 25,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-        backgroundColor: ThemeColor.WHITE,
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden'
-    },
-    popupGradient: {
-        width: '100%',
-        display: 'flex',
-
-        padding: 15,
-        paddingBottom: 35,
-
-        // borderRadius: 25,
-        // borderBottomLeftRadius: 0,
-        // borderBottomRightRadius: 0,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: ThemeColor.WHITE,
-    },
-    dateTitleView: {
-        width: '100%',
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    dateTitle: {
-        fontSize: 18,
-    },
-    upperValues: {
-        display: 'flex',
-        width: '100%',
-
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    bottomValues: {
-        display: 'flex',
-        width: '100%',
-
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    commentValue: {
-        marginTop: 15,
-        width: '100%',
-        borderRadius: 10,
-        backgroundColor: "white",
-        padding: 15
-    },
-    commentValueText: {
-        fontSize: 18,
-        color: "#333333"
-    },
-    closeTouchable: {
-        position: 'absolute',
-        right: 20,
-        top: 20,
-        ...shadowOptions
-    },
-    editNoteIconTouchable: {
-        position: 'absolute',
-        left: 20,
-        top: 20,
-        ...shadowOptions,
-    },
-    editNoteIcon: {
-        width: 30,
-        height: 30
-    }
-})

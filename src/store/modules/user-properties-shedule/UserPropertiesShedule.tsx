@@ -1,13 +1,15 @@
-import { IUserPropertiesShedule } from "../../../model/IUserPropertiesShedule";
+import { IUserPropertiesShedule, SheduleKeyType } from "../../../model/IUserPropertiesShedule";
 
 export enum UserPropertiesSheduleActionType {
     UPLOAD = "USER_PROPERTIES_SHEDULE_UPLOAD",
-    ONE_LEVEL_DEEP_MERGE = "USER_PROPERTIES_SHEDULE_ONE_LEVEL_DEEP_MERGE"
+    ONE_LEVEL_DEEP_MERGE = "USER_PROPERTIES_SHEDULE_ONE_LEVEL_DEEP_MERGE",
+    CLEAR_SHEDULE_BY_KEY_TYPE = 'CLEAR_SHEDULE_BY_KEY_TYPE'
 }
 
 export type UserPropertiesSheduleActionTypes = (
     UserPropertiesSheduleChangeAction |
-    UserPropertiesSheduleOneLevelDeepMergeAction
+    UserPropertiesSheduleOneLevelDeepMergeAction |
+    UserPropertiesSheduleClearSheduleByKeyTypeAction
 )
 
 export interface UserPropertiesSheduleChangeAction {
@@ -18,6 +20,11 @@ export interface UserPropertiesSheduleChangeAction {
 export interface UserPropertiesSheduleOneLevelDeepMergeAction {
     type: UserPropertiesSheduleActionType.ONE_LEVEL_DEEP_MERGE,
     payload: IUserPropertiesShedule
+}
+
+export interface UserPropertiesSheduleClearSheduleByKeyTypeAction {
+    type: UserPropertiesSheduleActionType.CLEAR_SHEDULE_BY_KEY_TYPE,
+    payload: string
 }
 
 export function createChangeUserPropertiesShedule(shedule: IUserPropertiesShedule) {
@@ -34,6 +41,13 @@ export function createOneLevelMergeUserPropertiesShedule(shedule: IUserPropertie
     }
 }
 
+export function createClearSheduleByKeyType(key: SheduleKeyType): UserPropertiesSheduleClearSheduleByKeyTypeAction {
+    return {
+        type: UserPropertiesSheduleActionType.CLEAR_SHEDULE_BY_KEY_TYPE,
+        payload: key
+    }
+}
+
 export function userPropertiesSheduleReducer(
     module: IUserPropertiesShedule = {},
     action: UserPropertiesSheduleActionTypes
@@ -45,11 +59,7 @@ export function userPropertiesSheduleReducer(
                 ...action.payload
             }
         case UserPropertiesSheduleActionType.ONE_LEVEL_DEEP_MERGE:
-                console.log('action.payload', action.payload)
-
             const newModule: IUserPropertiesShedule = Object.values(action.payload).reduce((prev, curr) => {
-                console.log('prev', prev);
-                console.log('curr', curr);
                 return {
                     ...prev,
                     [curr.id]: {
@@ -58,12 +68,22 @@ export function userPropertiesSheduleReducer(
                     }
                 }
             }, {})
-            console.log('newModule', newModule)
             return {
                 ...module,
                 ...newModule
             }
-
+        case UserPropertiesSheduleActionType.CLEAR_SHEDULE_BY_KEY_TYPE:
+            const clearedModule: IUserPropertiesShedule = Object.values(module).reduce((prev, curr) => {
+                delete curr[action.payload];
+                return {
+                    ...prev,
+                    [curr.id]: {
+                        ...module[curr.id],
+                        ...curr
+                    }
+                }
+            }, {})
+            return clearedModule
         default: return module;
     }
 }

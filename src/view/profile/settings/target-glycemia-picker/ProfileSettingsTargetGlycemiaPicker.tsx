@@ -14,7 +14,7 @@ interface Props {
 }
 
 function ProfileSettingsTargetGlycemiaPicker(props: Props) {
-    const targetGlycemia = props.userDiabetesProperties.targetGlycemia || 6.0;
+    const targetGlycemia = props.userDiabetesProperties.targetGlycemia;
     const transformedValue = isNumber(targetGlycemia) ?
         String(Math.round(targetGlycemia * 10) / 10) :
         ""

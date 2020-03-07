@@ -1,115 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { IStorage } from '../model/IStorage';
+import { IStorage } from '../../model/IStorage';
 import { Dispatch, Action } from 'redux';
-import { StyleSheet, View, Text, Dimensions, NativeModules } from 'react-native';
-import { INoteList, INoteListByDay } from '../model/INoteList';
+import { View, Text } from 'react-native';
+import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeColor } from '../constant/ThemeColor';
-import { shadowOptions } from '../constant/shadowOptions';
-import { ChartAxisType, ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../model/IChart';
-import { NoteListSelector } from '../store/selector/NoteListSelector';
+import { ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
+import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { ChartSettings } from '../view/chart/chart-settings/ChartSettings';
-import { ChartWrap } from '../view/chart/chart-wrap/ChartWrap';
-import { PolylineType } from '../view/chart/chart-svg/ChartPolyline';
-import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
-import { DateHelper } from '../utils/DateHelper';
-import { getArrayAverage, getWeekDaysNumbers } from '../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
+import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { DateHelper } from '../../utils/DateHelper';
+import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
-import { BlockHat } from '../component/hat/BlockHat';
-import { Fader } from '../component/Fader';
-import { NoteCreationPopupButtonConnect } from '../view/notes/note-creation-popup/NoteCreationPopupButton';
+import { BlockHat } from '../../component/hat/BlockHat';
+import { Fader } from '../../component/Fader';
+import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
+import { styles } from './Style';
+import { ChartConfig } from './config/ChartConfig';
 
-const TIME_STEP_MINUTES = 5;
-const BASIC_PADDING = 5;
-const DOT_RADIUS = 5;
-const WIDTH = Dimensions.get("screen").width * 0.85;
-
-const glucoseConfig: IChartConfiguration = {
-    width: WIDTH,
-    height: Dimensions.get("screen").width / 2,
-    boxWidth: WIDTH,
-    boxHeight: Dimensions.get("screen").width / 2,
-    axisWidth: 2,
-    axisColor: '#AAAAAA',
-    basicPadding: BASIC_PADDING,
-    yPadding: 1,
-    dotRadius: DOT_RADIUS,
-    reversedY: false,
-    timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 6,
-    axisTypes: [
-        ChartAxisType.OX,
-        ChartAxisType.OY
-    ],
-    polylineType: PolylineType.BEZIER
-}
-
-const insulinConfig: IChartConfiguration = {
-    width: WIDTH,
-    height: Dimensions.get("screen").width / 5,
-    boxWidth: WIDTH,
-    boxHeight: Dimensions.get("screen").width / 5,
-    axisWidth: 2,
-    axisColor: '#AAAAAA',
-    basicPadding: BASIC_PADDING,
-    yPadding: 1,
-    dotRadius: DOT_RADIUS,
-    reversedY: true,
-    increaseTime: 30,
-    flatTime: 30,
-    decreaseTime: 180,
-    timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 3,
-    initGradientColor: '#7C89FF',
-    stopGradientColor: '#7C3869',
-    axisTypes: [
-        ChartAxisType.OX_UPSIDE,
-        ChartAxisType.OY_REVERSE,
-    ],
-    paddingTop: true,
-    polylineType: PolylineType.REGULAR
-}
-
-const breadUnitsConfig: IChartConfiguration = {
-    width: WIDTH,
-    height: Dimensions.get("screen").width / 5,
-    boxWidth: WIDTH,
-    boxHeight: Dimensions.get("screen").width / 5,
-    axisWidth: 2,
-    axisColor: '#AAAAAA',
-    basicPadding: BASIC_PADDING,
-    yPadding: 1,
-    dotRadius: DOT_RADIUS,
-    reversedY: false,
-    increaseTime: 15,
-    flatTime: 15,
-    decreaseTime: 90,
-    timeStepMinutes: TIME_STEP_MINUTES,
-    horizontalLineNumber: 3,
-    initGradientColor: '#FF4D00',
-    stopGradientColor: '#F0EC91',
-    axisTypes: [
-        ChartAxisType.OX,
-        ChartAxisType.OY
-    ],
-    paddingBottom: true,
-    polylineType: PolylineType.REGULAR
-}
-
-const chartConfig: { [id: string]: IChartConfiguration } = {
-    glucose: glucoseConfig,
-    breadUnits: breadUnitsConfig,
-    insulin: insulinConfig,
-}
-export interface ChartWithSettingsProps {
+export interface ChartProps {
     noteListByDay: INoteListByDay
     noteList: INoteList
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
-export interface ChartWithSettingsState {
+export interface ChartState {
     currentDate: Date,
     selectedDotId: number,
     selectedPeriod: ChartPeriodType,
@@ -119,7 +36,7 @@ export interface ChartWithSettingsState {
     editingNoteId?: number
 }
 
-class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, ChartWithSettingsState> {
+class Chart extends React.PureComponent<ChartProps, ChartState> {
     state = {
         currentDate: new Date(
             new Date().getFullYear(),
@@ -135,63 +52,34 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         editingNoteId: null
     }
 
+    get chartConfig() {
+        return new ChartConfig().getConfigs();
+    }
+
     get generalPadding() {
-        return chartConfig.glucose.basicPadding * 3;
+        return this.chartConfig.glucose.basicPadding * 3;
     }
 
     get initialPadding() {
-        return chartConfig.glucose.basicPadding;
+        return this.chartConfig.glucose.basicPadding;
     }
 
     render() {
-        const chartsToRender = [
-            ChartValueType.INSULIN,
-            ChartValueType.GLUCOSE,
-            ChartValueType.BREAD_UNITS
-        ];
-
         return (
             <View style={styles.view}>
                 <ScrollView style={styles.scrollView}>
                     <BlockHat
                         title={"График"}
-                        additionalTitle={this.getHatTitle()}
+                        rightSideSlot={this.getHatTitle()}
                     />
                     <View
-                        style={styles.chartWithSettingsView}
+                        style={styles.ChartView}
                     >
-                        <View style={styles.chartView}>
-                            <LinearGradient
-                                colors={['#163B50', '#3E2626']}
-                                style={styles.chartGradient}
-                            >
-                                {chartsToRender.map(type => {
-                                    return <ChartWrap
-                                        key={type}
-                                        type={type}
-                                        config={chartConfig[type]}
-                                        selectedPeriod={this.state.selectedPeriod}
-                                        selectedDotId={this.state.selectedDotId}
-                                        currentDate={this.state.currentDate}
-                                        noteList={this.props.noteList}
-                                        noteListByDay={this.props.noteListByDay}
-                                        onDotPress={this.onDotPress}
-                                    />
-                                })}
-                                {this.renderNetXTitles()}
-                            </LinearGradient>
-                        </View>
-                        <View style={styles.settingsView}>
-                            <ChartSettings
-                                onDateChange={this.onCurrentDateChange}
-                                date={this.state.currentDate}
-                                onChangingPeriod={this.onChangingPeriod}
-                                selectedPeriod={this.state.selectedPeriod}
-                            />
-                        </View>
+                        {this.renderChat()}
+                        {this.renderSettings()}
                     </View>
                 </ScrollView>
-                {this.state.popupShown && <Fader hidden={!this.state.popupShown} />}
+                <Fader hidden={!this.state.popupShown} />
                 <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
@@ -207,15 +95,68 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
         )
     }
 
+    renderChat() {
+        const chartsToRender = [
+            ChartValueType.INSULIN,
+            ChartValueType.GLUCOSE,
+            ChartValueType.BREAD_UNITS
+        ];
+
+        return (
+            <View style={styles.chartView}>
+                <LinearGradient
+                    colors={['#163B50', '#3E2626']}
+                    style={styles.chartGradient}
+                >
+                    {chartsToRender.map(type => {
+                        return <ChartWrap
+                            key={type}
+                            type={type}
+                            config={this.chartConfig[type]}
+                            selectedPeriod={this.state.selectedPeriod}
+                            selectedDotId={this.state.selectedDotId}
+                            currentDate={this.state.currentDate}
+                            noteList={this.props.noteList}
+                            noteListByDay={this.props.noteListByDay}
+                            onDotPress={this.onDotPress}
+                        />
+                    })}
+                    {this.renderNetXTitles()}
+                </LinearGradient>
+            </View>
+        )
+    }
+
+    renderSettings() {
+        return (
+            <View style={styles.settingsView}>
+                <ChartSettings
+                    onDateChange={this.onCurrentDateChange}
+                    date={this.state.currentDate}
+                    onChangingPeriod={this.onChangingPeriod}
+                    selectedPeriod={this.state.selectedPeriod}
+                />
+            </View>
+        )
+    }
+
     getHatTitle() {
+        let title = ""
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
-                return 'Дневной график'
+                title = 'Дневной';
+                break;
             case ChartPeriodType.MONTH:
-                return 'Месячный график'
+                title = 'Месячный';
+                break;
             case ChartPeriodType.THREE_MONTH:
-                return 'Три месяца'
+                title = 'Три месяца';
+                break;
         }
+
+        return <Text style={styles.rightTitle}>
+            {title}
+        </Text>
     }
 
     getChartPopupTitle() {
@@ -251,13 +192,13 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     renderNetXTitles() {
         let highlightsNumber;
         let highlightsTitles = [];
-        let newWidth = chartConfig.breadUnits.boxWidth - 3 * chartConfig.breadUnits.basicPadding;
+        let newWidth = this.chartConfig.breadUnits.boxWidth - 3 * this.chartConfig.breadUnits.basicPadding;
         let titleWidth;
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 highlightsNumber = 10;
                 highlightsTitles = [0, 3, 6, 9, 12, 15, 18, 21, 24];
-                newWidth = chartConfig.breadUnits.boxWidth;
+                newWidth = this.chartConfig.breadUnits.boxWidth;
                 titleWidth = 20;
                 return <View
                     style={{
@@ -281,7 +222,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     case 30:
                         highlightsNumber = 7;
                         highlightsTitles = [1, 5, 10, 15, 20, 25, 30];
-                        newWidth = chartConfig.breadUnits.boxWidth;
+                        newWidth = this.chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
                         return <View
                             style={{
@@ -313,7 +254,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
                     case 29:
                         highlightsNumber = 6;
                         highlightsTitles = [1, 5, 10, 15, 20, 25];
-                        newWidth = chartConfig.breadUnits.boxWidth;
+                        newWidth = this.chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
                         return <View
                             style={{
@@ -345,7 +286,7 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
             case ChartPeriodType.THREE_MONTH:
                 highlightsNumber = 3;
                 highlightsTitles = [-2, -1, 0];
-                newWidth = chartConfig.breadUnits.boxWidth;
+                newWidth = this.chartConfig.breadUnits.boxWidth;
                 titleWidth = 100;
                 return <View
                     style={{
@@ -466,145 +407,18 @@ class ChartWithSettings extends React.PureComponent<ChartWithSettingsProps, Char
     }
 }
 
-export const ChartWithSettingsConnect = connect(
+export const ChartConnect = connect(
     (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList),
         noteList: state.noteList,
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
-    (stateProps, {dispatch}, ownProps) => {
+    (stateProps, { dispatch }, ownProps) => {
         return {
             ...stateProps,
             dispatch,
             ownProps,
         }
     }
-)(ChartWithSettings)
+)(Chart)
 
-const styles = StyleSheet.create({
-    view: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#F6F8FF'
-    },
-    scrollView: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-    },
-    viewGradient: {
-        position: 'absolute',
-
-        left: 0,
-        top: 0,
-
-        height: '100%',
-        width: '100%',
-    },
-    chartWithSettingsView: {
-        width: '100%',
-
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-
-        ...shadowOptions,
-    },
-    chartView: {
-        width: '100%',
-
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-        backgroundColor: ThemeColor.LIGHT_BLUE,
-
-        ...shadowOptions,
-
-        overflow: 'hidden'
-    },
-    chartGradient: {
-        width: '100%',
-
-        paddingTop: 20,
-        paddingBottom: 25,
-
-        backgroundColor: ThemeColor.LIGHT_BLUE,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        ...shadowOptions,
-    },
-    highightTitlesView: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    highightTitle: {
-        fontSize: 13,
-        color: '#CCCCCC',
-        textAlign: 'center',
-    },
-    axisTitleView: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    axisTitleText: {
-        paddingTop: 5,
-        paddingRight: 10,
-
-        fontSize: 11,
-        fontWeight: 'bold',
-        color: '#eee',
-    },
-    settingsView: {
-        width: '100%',
-        display: 'flex',
-
-        padding: 20,
-        paddingRight: 28,
-        paddingBottom: 28,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    statisticsView: {
-    },
-    statisticsViewText: {
-        textAlign: 'center',
-    },
-    addNoteButtonView: {
-        position: 'absolute',
-        bottom: 5,
-        right: 5,
-
-        ...shadowOptions,
-    },
-    addNoteButton: {
-        display: 'flex',
-        padding: 5,
-        margin: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(250,250,250, 1)',
-        borderRadius: 30,
-        ...shadowOptions
-    },
-    addNoteButtonText: {
-        fontSize: 18,
-        color: "#333333",
-        marginRight: 5
-    }
-})

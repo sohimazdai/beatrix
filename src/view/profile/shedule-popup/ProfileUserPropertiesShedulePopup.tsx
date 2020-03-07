@@ -4,8 +4,6 @@ import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import ProfileDayTimeRangeValuePicker from '../range-value-picker/ProfileDayTimeRangeValuePicker';
-import { InteractiveUserPropertiesShedulePopupType } from '../../../model/IInteractive';
-import * as lodash from 'lodash';
 import { IUserPropertiesShedule, SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 import { ScrollView } from 'react-native-gesture-handler';
 import { TouchableOpacity, Text, View } from 'react-native';
@@ -33,6 +31,22 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
     state = {
         newShedule: this.props.userPropertiesShedule || {},
         needToApply: false
+    }
+
+    static getDerivedStateFromProps(props: Props, state: State) {
+        if (!props.shown) {
+            return {
+                newShedule: {},
+                needToApply: false
+            }
+        }
+
+        if (props.shown && Object.values(state.newShedule).length === 0) {
+            return {
+                newShedule: props.userPropertiesShedule
+            }
+        }
+        return state;
     }
 
     //get
@@ -86,7 +100,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         this.setState({
             newShedule,
             needToApply: false
-        }, () => console.log('newShedule', this.state.newShedule))
+        })
     }
 
     onAddPress = () => {
@@ -137,13 +151,13 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
 
     get sheduleArrayFromAnObject(): IUserDiabetesPropertiesDayTimeValue[] {
         const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
-        lodash.values(this.state.newShedule).map((prop, index, array) => {
-            if (prop[this.props.sheduleKey] > 0) {
+        Object.values(this.state.newShedule).map((prop, index, array) => {
+            if (prop[this.sheduleKey] >= 0) {
                 if (index === 0) {
                     shedule.push({
                         since: prop.id,
                         to: prop.id + 1,
-                        value: prop[this.sheduleKey],
+                        value: prop[this.sheduleKey] || 0,
                         id: prop.id,
                         needToSave: prop[this.sheduleKey] > 0 ? false : true
                     })
@@ -151,26 +165,23 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                     return;
                 }
                 if ((
-                    prop[this.sheduleKey] === array[index - 1][this.sheduleKey] &&
+                    prop[this.sheduleKey] > 0 && prop[this.sheduleKey] === array[index - 1][this.sheduleKey] &&
                     prop.id === array[index - 1].id + 1
                 )) {
                     shedule[shedule.length - 1].to = prop.id + 1;
-
                     return
                 }
-
 
                 shedule.push({
                     since: prop.id,
                     to: prop.id + 1,
-                    value: prop[this.sheduleKey],
+                    value: prop[this.sheduleKey] || 0,
                     id: prop.id,
                     needToSave: prop[this.sheduleKey] > 0 ? false : true
                 })
                 return;
             }
         });
-
         return shedule;
     }
 

@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
         position: 'relative',
 
         width: "100%",
+        maxHeight: 400,
         paddingTop: 20,
         paddingBottom: 40,
         backgroundColor: '#FDFFDE',
@@ -19,6 +20,8 @@ export const styles = StyleSheet.create({
         width: '100%',
 
         display: 'flex',
+
+        paddingBottom: 40,
 
         alignItems: 'center',
         justifyContent: 'center',

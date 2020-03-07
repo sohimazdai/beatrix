@@ -2,17 +2,15 @@ import React from 'react';
 import {
     View,
     Text,
-    StyleSheet,
     TouchableOpacity,
     KeyboardAvoidingView,
     TextInput,
+    Keyboard,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { INoteListNote, NoteValueType } from '../../../model/INoteList';
 import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
-import { ThemeColor } from '../../../constant/ThemeColor';
-import { shadowOptions } from '../../../constant/shadowOptions';
 import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalConfirm } from '../../../model/IModal';
@@ -26,6 +24,8 @@ import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { IInteractive } from '../../../model/IInteractive';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { Fader } from '../../../component/Fader';
+import { styles } from './Style';
+import { NoteInsulinDoseRecommendationConnect } from '../insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -50,7 +50,12 @@ interface NoteCreationPopupState {
     insulinInput: string
     longInsulinInput: string
     currentValueType: NoteValueType
-    commentary: string
+    prevValueType?: NoteValueType
+    commentary: string,
+    glucoseInputForSlider?: number,
+    breadUnitsInputForSlider?: number,
+    shortInsulinInputForSlider?: number,
+    longInsulinInputForSlider?: number
 }
 
 class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, NoteCreationPopupState>{
@@ -66,7 +71,12 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         insulinInput: "0.0",
         longInsulinInput: "0.0",
         commentary: "",
-        currentValueType: NoteValueType.GLUCOSE
+        currentValueType: NoteValueType.GLUCOSE,
+        prevValueType: NoteValueType.GLUCOSE,
+        glucoseInputForSlider: 0.0,
+        breadUnitsInputForSlider: 0.0,
+        shortInsulinInputForSlider: 0.0,
+        longInsulinInputForSlider: 0.0
     }
 
     componentDidMount() {
@@ -77,20 +87,16 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         }
     }
 
-    componentDidUpdate = (pP: NoteCreationPopupProps) => {
+    componentDidUpdate = (pP: NoteCreationPopupProps, pS: NoteCreationPopupState) => {
         if (!pP.note && this.props.note) {
-            this.glucoseInputForSlider = this.props.note && this.props.note.glucose;
-            this.breadUnitsInputForSlider = this.props.note && this.props.note.breadUnits;
-            this.shortInsulinInputForSlider = this.props.note && this.props.note.insulin;
-            this.longInsulinInputForSlider = this.props.note && this.props.note.longInsulin;
             this.setState({
-                ...this.noteFromProps
+                ...this.noteFromProps,
+                glucoseInputForSlider: this.props.note && this.props.note.glucose,
+                breadUnitsInputForSlider: this.props.note && this.props.note.breadUnits,
+                shortInsulinInputForSlider: this.props.note && this.props.note.insulin,
+                longInsulinInputForSlider: this.props.note && this.props.note.longInsulin
             })
         } else if (!pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode) {
-            this.glucoseInputForSlider = 0.0;
-            this.breadUnitsInputForSlider = 0.0;
-            this.shortInsulinInputForSlider = 0.0;
-            this.longInsulinInputForSlider = 0.0;
             this.setState({
                 date: new Date(),
                 glucoseInput: "0.0",
@@ -98,7 +104,11 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 insulinInput: "0.0",
                 longInsulinInput: "0.0",
                 commentary: "",
-                currentValueType: NoteValueType.GLUCOSE
+                currentValueType: NoteValueType.GLUCOSE,
+                glucoseInputForSlider: 0.0,
+                breadUnitsInputForSlider: 0.0,
+                shortInsulinInputForSlider: 0.0,
+                longInsulinInputForSlider: 0.0
             })
         }
 
@@ -110,6 +120,18 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         }
     };
 
+    static getDerivedStateFromProps(p: NoteCreationPopupProps, s: NoteCreationPopupState) {
+        if (s.prevValueType !== s.currentValueType) {
+            return {
+                glucoseInputForSlider: Number(s.glucoseInput),
+                breadUnitsInputForSlider: Number(s.breadUnitsInput),
+                shortInsulinInputForSlider: Number(s.insulinInput),
+                longInsulinInputForSlider: Number(s.longInsulinInput),
+                prevValueType: s.currentValueType
+            }
+        }
+        return s
+    }
 
     get noteFromProps() {
         const { note } = this.props;
@@ -129,18 +151,17 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     render() {
         return (
             <>
-                {this.props.interactive.creatingNoteMode &&
-                    <Fader hidden={!this.props.interactive.creatingNoteMode} />}
+                <Fader hidden={!this.props.interactive.creatingNoteMode} />
                 <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
-                    <KeyboardAvoidingView
-                        style={!this.props.note ?
-                            styles.noteCreationView :
-                            styles.noteEditingView
-                        }
-                        keyboardVerticalOffset={190}
-                        behavior='padding'
-                    >
-                        <ScrollView style={styles.noteCreationViewScrollView}>
+                    <ScrollView style={styles.noteCreationViewScrollView}>
+                        <KeyboardAvoidingView
+                            style={!this.props.note ?
+                                styles.noteCreationView :
+                                styles.noteEditingView
+                            }
+                            keyboardVerticalOffset={30}
+                            behavior='padding'
+                        >
                             <View style={styles.scrollViewContent}>
                                 {this.renderPickerBlock()}
                                 <View style={styles.buttonsBlock}>
@@ -154,8 +175,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                             >
                                 <CloseIcon />
                             </TouchableOpacity>
-                        </ScrollView>
-                    </KeyboardAvoidingView>
+                        </KeyboardAvoidingView>
+                    </ScrollView>
                 </BottomPopup>
             </>
         )
@@ -183,7 +204,10 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     />
                 </View>
                 <ValueTypePicker
-                    onSelect={(type) => this.setState({ currentValueType: type })}
+                    onSelect={(type) => this.setState({ 
+                        currentValueType: type,
+                        prevValueType: this.state.currentValueType
+                    })}
                     selectedType={this.state.currentValueType}
                 />
                 {this.renderInputByValue()}
@@ -193,16 +217,19 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     renderInputByValue() {
         let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, currentValueType } = this.stateWithoutComma;
-
+        const isCreating = this.props.interactive.creatingNoteMode && !this.props.interactive.editingNoteId;
         switch (currentValueType) {
             case NoteValueType.GLUCOSE:
-                return this.renderInputByType(this.glucoseInputForSlider, glucoseInput, 'glucoseInput', 18)
+                return this.renderInputByType(this.state.glucoseInputForSlider, glucoseInput, 'glucoseInput', 18)
             case NoteValueType.FOOD:
-                return this.renderInputByType(this.breadUnitsInputForSlider, breadUnitsInput, 'breadUnitsInput', 15)
+                return this.renderInputByType(this.state.breadUnitsInputForSlider, breadUnitsInput, 'breadUnitsInput', 15)
             case NoteValueType.SHORT_INSULIN:
-                return this.renderInputByType(this.shortInsulinInputForSlider, insulinInput, 'insulinInput', 15)
+                return <>
+                    {this.renderInputByType(this.state.shortInsulinInputForSlider, insulinInput, 'insulinInput', 15)}
+                    <NoteInsulinDoseRecommendationConnect note={this.noteFromState} />
+                </>
             case NoteValueType.LONG_INSULIN:
-                return this.renderInputByType(this.longInsulinInputForSlider, longInsulinInput, 'longInsulinInput', 25)
+                return this.renderInputByType(this.state.longInsulinInputForSlider, longInsulinInput, 'longInsulinInput', 25)
             case NoteValueType.COMMENT:
                 return <View
                     style={styles.commentInputView}
@@ -214,10 +241,18 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                         style={styles.commentViewTextArea}
                     >
                         <TextInput
+                            autoFocus
                             multiline
-                            editable
+                            blurOnSubmit
+                            style={{ maxHeight: 80 }}
                             onChangeText={(text) => this.setState({ commentary: text })}
-                            defaultValue={this.props.note && this.props.note.commentary}
+                            defaultValue={isCreating ?
+                                this.state.commentary :
+                                this.props.note && this.props.note.commentary
+                            }
+                            keyboardType="default"
+                            returnKeyType="done"
+                            onSubmitEditing={() => { Keyboard.dismiss() }}
                         />
                     </View>
                 </View>
@@ -389,142 +424,3 @@ export const NoteCreationPopupConnect = connect(
         }
     }
 )(NoteCreationPopup)
-
-const styles = StyleSheet.create({
-    noteCreationView: {
-        flex: 1,
-        width: '100%',
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        backgroundColor: "#D4EEFF",
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-    },
-    noteEditingView: {
-        flex: 1,
-        width: '100%',
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        backgroundColor: "#FFE1DF",
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-    },
-    noteCreationViewScrollView: {
-        width: '100%',
-        height: '100%',
-    },
-    buttonsBlock: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-    },
-    scrollViewContent: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-
-    inputBlock: {
-        flex: 1,
-        width: '100%',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: 16,
-
-        borderRadius: 25,
-
-        alignItems: 'center',
-    },
-    pickers: {
-        flex: 1,
-        height: 50,
-        width: 240,
-
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    textInDatePickerIOS: {
-        textAlign: 'center',
-    },
-    inputView: {
-        flex: 1,
-        width: '100%',
-        margin: 15,
-        marginBottom: 0,
-    },
-    commentInputView: {
-        flex: 1,
-        width: '100%',
-        margin: 15,
-        marginBottom: 0,
-        height: 185
-    },
-    saveButtonTouchable: {
-        width: 160,
-        height: 50,
-
-        marginVertical: 10,
-
-        ...shadowOptions,
-
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: "rgba(250, 250, 250, 1)",
-
-    },
-    saveButtonText: {
-        fontFamily: 'Roboto',
-        fontSize: 19,
-        color: '#333333',
-        fontWeight: 'bold',
-    },
-    deleteButtonTouchable: {
-        width: 80,
-        height: 50,
-
-        marginVertical: 10,
-
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-    },
-    deleteButtonText: {
-        fontFamily: 'Roboto',
-        fontSize: 17,
-        color: 'crimson',
-        fontWeight: 'bold',
-        textDecorationLine: 'underline',
-    },
-    inputViewTitle: {
-        width: '100%',
-        textAlign: 'center',
-        margin: 5,
-        fontSize: 19,
-        lineHeight: 20,
-        fontWeight: "bold",
-        color: ThemeColor.TEXT_DARK_GRAY
-    },
-    commentViewTextArea: {
-        backgroundColor: 'white',
-        padding: 10,
-        width: '100%',
-        borderRadius: 15,
-    },
-    hideTouchable: {
-        position: 'absolute',
-        right: 10,
-        top: 10,
-        height: 30,
-        width: 30
-    }
-})
-
