@@ -127,5 +127,10 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         color: "#333333",
         marginRight: 5
+    },
+    rightTitle: {
+        fontWeight: '300',
+        fontSize: 19,
+        color: '#ffffff'
     }
 })

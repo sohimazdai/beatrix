@@ -1,5 +1,5 @@
 import React from 'react'
-import { BlockHat } from '../../component/hat/BlockHat'
+import { Hat } from '../../component/hat/Hat'
 import { connect } from 'react-redux'
 import { IStorage } from '../../model/IStorage'
 import { View, StyleSheet, ScrollView, Text } from 'react-native'
@@ -8,6 +8,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { createUserChangeAction } from '../../store/modules/user/UserActionCreator'
 import { NavigationParams, NavigationScreenProp } from 'react-navigation'
 import { NavigationState } from 'react-navigation'
+import { createChangeInteractive } from '../../store/modules/interactive/interactive'
+import { batchActions } from 'redux-batched-actions'
 
 interface Props {
     onLogOut?: () => void;
@@ -22,7 +24,10 @@ class ProfileScreenComponent extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.profileView}>
-                <BlockHat title={'Профиль'} />
+                <Hat
+                    onBackPress={() => this.props.navigation.navigate('Main')}
+                    title={'Профиль'}
+                />
                 <ScrollView>
                     <ProfileItem
                         title={'Диабетический профиль'}
@@ -61,10 +66,33 @@ export const ProfileScreenConnect = connect(
             ...stateProps,
             ...ownProps,
             onLogOut() {
-                dispatch(createUserChangeAction({
-                    id: '',
-                    isAuthed: false
+                dispatch(createChangeInteractive({
+                    confirmPopupShown: true,
+                    confirmPopupDescription: "Вы уверены?",
+                    confirmPopupSuccessCallback: () => {
+                        batchActions([
+                            dispatch(createUserChangeAction({
+                                id: '',
+                                isAuthed: false
+                            })),
+                            dispatch(createChangeInteractive({
+                                confirmPopupShown: false,
+                                confirmPopupSuccessCallback: null,
+                                confirmPopupRejectCallback: null,
+                                confirmPopupDescription: null
+                            }))
+                        ])
+                    },
+                    confirmPopupRejectCallback: () => {
+                        dispatch(createChangeInteractive({
+                            confirmPopupShown: false,
+                            confirmPopupSuccessCallback: null,
+                            confirmPopupRejectCallback: null,
+                            confirmPopupDescription: null
+                        }))
+                    }
                 }))
+
             }
         }
     }

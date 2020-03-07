@@ -9,9 +9,12 @@ import { Fader } from '../../../component/Fader';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IInteractive } from '../../../model/IInteractive';
+import { Hat } from '../../../component/hat/Hat';
+import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 
 interface Props {
     interactive: IInteractive
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
 export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
@@ -25,7 +28,12 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                 keyboardVerticalOffset={100}
             >
                 <ScrollView style={styles.profileView}>
-                    <ProfileSettingsInsulinTypePickerConnect />
+                    <Hat 
+                        onBackPress={() => this.props.navigation.navigate('Profile')}
+                        title={"Диабетический профиль"}
+                    />
+                    {/* TODO: add change insulin type posibility */}
+                    {/* <ProfileSettingsInsulinTypePickerConnect /> */}
                     <ProfileSettingsTargetGlycemiaPickerConnect />
                     <ProfileSettingsShedulePickerConnect
                         sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}

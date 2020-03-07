@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     noteCreationView: {
         flex: 1,
         width: '100%',
+        minHeight: 500,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#D4EEFF",

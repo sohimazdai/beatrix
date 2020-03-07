@@ -70,7 +70,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 <ScrollView style={styles.scrollView}>
                     <BlockHat
                         title={"График"}
-                        additionalTitle={this.getHatTitle()}
+                        rightSideSlot={this.getHatTitle()}
                     />
                     <View
                         style={styles.ChartView}
@@ -141,14 +141,22 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
     }
 
     getHatTitle() {
+        let title = ""
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
-                return 'Дневной график'
+                title = 'Дневной';
+                break;
             case ChartPeriodType.MONTH:
-                return 'Месячный график'
+                title = 'Месячный';
+                break;
             case ChartPeriodType.THREE_MONTH:
-                return 'Три месяца'
+                title = 'Три месяца';
+                break;
         }
+
+        return <Text style={styles.rightTitle}>
+            {title}
+        </Text>
     }
 
     getChartPopupTitle() {

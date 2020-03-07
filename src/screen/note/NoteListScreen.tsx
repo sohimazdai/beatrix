@@ -16,6 +16,8 @@ import { BlockHat } from '../../component/hat/BlockHat';
 import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
 import { styles } from './Style';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ProfileIcon } from '../../component/icon/ProfileIcon';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -41,7 +43,10 @@ class NoteListScreen extends React.PureComponent<FullProps>{
         const { noteCreationShown, noteEditingShown } = this.state;
         return (
             <View style={styles.screenView}>
-                <BlockHat title={'Записи'} />
+                <BlockHat 
+                    title={'Записи'} 
+                    rightSideSlot={this.renderProfileIcon()}
+                />
                 {this.renderIconBar()}
                 <ScrollView>
                     {this.renderCards()}
@@ -51,6 +56,14 @@ class NoteListScreen extends React.PureComponent<FullProps>{
                 </View>
             </View>
         )
+    }
+
+    renderProfileIcon() {
+        return <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Profile")}
+        >
+            <ProfileIcon fill={'white'}/>
+        </TouchableOpacity>
     }
 
     renderIconBar() {

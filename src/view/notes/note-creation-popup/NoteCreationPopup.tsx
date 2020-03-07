@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     TextInput,
+    Keyboard,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -130,15 +131,15 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             <>
                 <Fader hidden={!this.props.interactive.creatingNoteMode} />
                 <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
-                    <KeyboardAvoidingView
-                        style={!this.props.note ?
-                            styles.noteCreationView :
-                            styles.noteEditingView
-                        }
-                        keyboardVerticalOffset={190}
-                        behavior='padding'
-                    >
-                        <ScrollView style={styles.noteCreationViewScrollView}>
+                    <ScrollView style={styles.noteCreationViewScrollView}>
+                        <KeyboardAvoidingView
+                            style={!this.props.note ?
+                                styles.noteCreationView :
+                                styles.noteEditingView
+                            }
+                            keyboardVerticalOffset={30}
+                            behavior='padding'
+                        >
                             <View style={styles.scrollViewContent}>
                                 {this.renderPickerBlock()}
                                 <View style={styles.buttonsBlock}>
@@ -152,8 +153,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                             >
                                 <CloseIcon />
                             </TouchableOpacity>
-                        </ScrollView>
-                    </KeyboardAvoidingView>
+                        </KeyboardAvoidingView>
+                    </ScrollView>
                 </BottomPopup>
             </>
         )
@@ -200,7 +201,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             case NoteValueType.SHORT_INSULIN:
                 return <>
                     {this.renderInputByType(this.shortInsulinInputForSlider, insulinInput, 'insulinInput', 15)}
-                    <NoteInsulinDoseRecommendationConnect note={this.noteFromState}/>
+                    <NoteInsulinDoseRecommendationConnect note={this.noteFromState} />
                 </>
             case NoteValueType.LONG_INSULIN:
                 return this.renderInputByType(this.longInsulinInputForSlider, longInsulinInput, 'longInsulinInput', 25)
@@ -215,10 +216,15 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                         style={styles.commentViewTextArea}
                     >
                         <TextInput
+                            autoFocus
                             multiline
-                            editable
+                            blurOnSubmit
+                            style={{ maxHeight: 80 }}
                             onChangeText={(text) => this.setState({ commentary: text })}
                             defaultValue={this.props.note && this.props.note.commentary}
+                            keyboardType="default"
+                            returnKeyType="done"
+                            onSubmitEditing={() => { Keyboard.dismiss() }}
                         />
                     </View>
                 </View>

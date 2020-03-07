@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { shadowOptions } from '../../constant/shadowOptions'
+import { JsxElement } from 'typescript'
 
 interface Props {
     title?: string
-    additionalTitle?: string
+    rightSideSlot?: ReactElement
 }
 
 interface State {
@@ -18,9 +19,9 @@ export class BlockHat extends React.Component<Props, State> {
                 <Text style={styles.title}>
                     {this.props.title}
                 </Text>
-                <Text style={styles.additionalTitle}>
-                    {this.props.additionalTitle}
-                </Text>
+                <View style={styles.rightSideSlot}>
+                    {this.props.rightSideSlot}
+                </View>
             </View>
         )
     }
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     settingsView: {
         display: 'flex',
         width: '100%',
-        padding: 10,
+        padding: 16,
         paddingTop: 40,
 
         flexDirection: 'row',
@@ -44,9 +45,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#ffffff'
     },
-    additionalTitle: {
-        fontWeight: '300',
-        fontSize: 19,
-        color: '#ffffff'
+    rightSideSlot: {
+        // fontWeight: '300',
+        // fontSize: 19,
+        // color: '#ffffff'
     }
 })

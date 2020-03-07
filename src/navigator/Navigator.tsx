@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
 import { AuthScreenConnect } from "../screen/auth/AuthScreen";
-import { NoteListScreenConnect } from "../screen/NoteListScreen";
+import { NoteListScreenConnect } from "../screen/note/NoteListScreen";
 import { ChartConnect } from "../screen/chart/ChartScreen";
 import { IUser } from '../model/IUser';
 import { connect } from 'react-redux';
@@ -12,7 +12,6 @@ import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
 import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
-import { Text } from 'react-native';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import ConfirmPopup, { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/shedule-popup/ProfileUserPropertiesShedulePopup';
@@ -53,24 +52,23 @@ const ProfileScreenStack = createStackNavigator(
     {
         Profile: {
             screen: ProfileScreenConnect,
-            navigationOptions: ({ navigation }) => ({
-                header: () => (null),
-            }),
         },
         ProfileDiabetesSettings: {
             screen: ProfileScreenDiabetesSettings,
-            navigationOptions: ({ navigation }) => ({
-                title: "Ваши параметры",
-            }),
         }
+    },
+    {
+        headerMode: 'none'
     }
 )
+
+
 
 const AuthedMainNavigator = createBottomTabNavigator(
     {
         'Записи': { screen: NoteListScreenConnect },
         "Графики": { screen: ChartConnect },
-        "Профиль": { screen: ProfileScreenStack }
+        // "Профиль": { screen: ProfileScreenStack }
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -93,6 +91,16 @@ const AuthedMainNavigator = createBottomTabNavigator(
     }
 )
 
+const AuthedNavigator = createStackNavigator(
+    {
+        Main: {screen: AuthedMainNavigator},
+        Profile: {screen: ProfileScreenStack},
+    },
+    {
+        headerMode: 'none'
+    }
+)
+
 
 
 const UnknownMainNavigator = createStackNavigator(
@@ -104,6 +112,6 @@ const UnknownMainNavigator = createStackNavigator(
     }
 )
 
-const AuthedNavigatorContainer = createAppContainer(AuthedMainNavigator)
+const AuthedNavigatorContainer = createAppContainer(AuthedNavigator)
 
 const AppUnknownNavigatorContainer = createAppContainer(UnknownMainNavigator)
