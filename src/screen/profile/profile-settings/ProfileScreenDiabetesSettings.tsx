@@ -41,8 +41,6 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                     <ProfileSettingsShedulePickerConnect
                         sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
                     />
-                    <Fader hidden={isFadeHidden} />
-
                 </ScrollView>
             </KeyboardAvoidingView>
         )

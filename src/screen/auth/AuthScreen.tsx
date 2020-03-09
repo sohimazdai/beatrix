@@ -45,7 +45,8 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.AuthView}>
                 {this.renderAuthForm()}
-                <Fader hidden={!this.state.restorePasswordPopupShown} />
+                {this.state.restorePasswordPopupShown &&
+                    <Fader hidden={!this.state.restorePasswordPopupShown} />}
                 <Popup hidden={!this.state.restorePasswordPopupShown}>
                     <View style={styles.authScreenRestorePasswordView}>
                         <Text style={styles.authScreenRestorePasswordViewTitle}>

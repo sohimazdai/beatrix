@@ -23,7 +23,6 @@ import { IStorage } from '../../../model/IStorage';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { IInteractive } from '../../../model/IInteractive';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
-import { Fader } from '../../../component/Fader';
 import { styles } from './Style';
 import { NoteInsulinDoseRecommendationConnect } from '../insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 
@@ -147,11 +146,9 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         return newState
     }
 
-
     render() {
         return (
             <>
-                <Fader hidden={!this.props.interactive.creatingNoteMode} />
                 <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
                     <ScrollView style={styles.noteCreationViewScrollView}>
                         <KeyboardAvoidingView
@@ -204,7 +201,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     />
                 </View>
                 <ValueTypePicker
-                    onSelect={(type) => this.setState({ 
+                    onSelect={(type) => this.setState({
                         currentValueType: type,
                         prevValueType: this.state.currentValueType
                     })}

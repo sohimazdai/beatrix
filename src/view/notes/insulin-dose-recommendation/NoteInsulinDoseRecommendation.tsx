@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../model/IUserPropertiesShedule';
 import { INoteListNote } from '../../../model/INoteList';
-import * as lodash from 'lodash';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 
 interface OwnProps {
@@ -33,11 +32,11 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
     get recommendation() {
         const { note, userPropertiesShedule, userDiabetesProperties } = this.props;
         const currentHour = new Date(note.date).getHours();
-        const sheduleItem = userPropertiesShedule[currentHour];
-        if (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio) {
-            return Math.random() < 0.1 ?
-            'Заполните диабетический профиль для получения рекомендаций' :
-            ''
+        const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
+        if (!(sheduleItem.insulinSensitivityFactor || sheduleItem.carbohydrateRatio)) {
+            return Math.random() < 0.2 ?
+                'Заполните диабетический профиль для получения рекомендаций' :
+                ''
         }
 
         const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
@@ -66,7 +65,7 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
         }
 
         return 'Рекомендуемое значение инсулина: ' + insulinValue;
-        
+
     }
 }
 

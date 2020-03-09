@@ -10,17 +10,20 @@ import { ProfileScreenConnect } from '../screen/profile/ProfileScreen';
 import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
-import { IInteractive } from '../model/IInteractive';
+import { IInteractive, InteractiveUserPropertiesShedulePopupType } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import ConfirmPopup, { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/shedule-popup/ProfileUserPropertiesShedulePopup';
+import { Fader } from '../component/Fader';
+import { SheduleKeyType } from '../model/IUserPropertiesShedule';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
+    interactive?: IInteractive
 }
 
-interface AuthedContainer {
+interface AuthedContainerProps {
     interactive?: IInteractive
 }
 
@@ -29,22 +32,30 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 
     })
     return props.user.id ?
-        <AuthedContainer /> :
+        <AuthedContainer interactive={props.interactive} /> :
         <AppUnknownNavigatorContainer />
 }
 
-export const AuthedContainer = () => (
-    <>
-        <AuthedNavigatorContainer />
-        <NoteCreationPopupConnect />
-        <ConfirmPopupConnect />
-        <ProfileUserPropertiesShedulePopupConnect />
-    </>
-)
+const AuthedContainer = (props: AuthedContainerProps) => {
+    const faded = props.interactive.confirmPopupShown ||
+        props.interactive.creatingNoteMode ||
+        (props.interactive.userPropertiesShedulePopupType &&
+            props.interactive.userPropertiesShedulePopupType !== SheduleKeyType.NONE)
+    return (
+        <>
+            <AuthedNavigatorContainer />
+            <Fader hidden={!faded} />
+            <NoteCreationPopupConnect />
+            <ConfirmPopupConnect />
+            <ProfileUserPropertiesShedulePopupConnect />
+        </>
+    )
+}
 
 export const AppNavigator = connect(
     (state: IStorage) => ({
         user: state.user,
+        interactive: state.interactive
     })
 )(AppNavigatorComponent)
 
@@ -93,8 +104,8 @@ const AuthedMainNavigator = createBottomTabNavigator(
 
 const AuthedNavigator = createStackNavigator(
     {
-        Main: {screen: AuthedMainNavigator},
-        Profile: {screen: ProfileScreenStack},
+        Main: { screen: AuthedMainNavigator },
+        Profile: { screen: ProfileScreenStack },
     },
     {
         headerMode: 'none'

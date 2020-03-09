@@ -1,17 +1,17 @@
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
 
-
 export interface FaderProps {
     hidden?: boolean;
     children?: any
 }
 
 export const Fader = (props: FaderProps) => {
-    const [opacity] = React.useState(new Animated.Value(0))
-    const [children, setChildren] = React.useState(null)
+    const [opacity] = React.useState(new Animated.Value(0));
+    const [isDisplay, setDisplay] = React.useState(false);
 
     React.useEffect(() => {
+        !props.hidden && !isDisplay && setDisplay(true);
         Animated.timing(
             opacity,
             {
@@ -19,24 +19,22 @@ export const Fader = (props: FaderProps) => {
                 duration: 200,
             }
         ).start(() => {
-            props.hidden && setChildren(null)
+            props.hidden && isDisplay && setDisplay(false);
         });
-        !props.hidden && setChildren(props.children);
-    }, [props.hidden, props.children])
+    }, [props.hidden, props.children]);
 
-    return <Animated.View style={{
-        ...styles.FaderView,
-        display: props.hidden ? 'none' : 'block',
-        opacity: opacity,
-        // display: props.hidden ? 'none' : 'flex'
-    }}>
-        {children}
-    </Animated.View>
+    return isDisplay && (
+        <Animated.View
+            style={{
+                ...styles.FaderView,
+                opacity: opacity,
+            }}
+        />
+    ) || null;
 }
 
 const styles = StyleSheet.create({
     FaderView: {
-        // display: "none",
         height: '100%',
         width: '100%',
 

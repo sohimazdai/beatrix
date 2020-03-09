@@ -39,6 +39,7 @@
       "package": "beatrix.expo.googlesignin",
       "googleServicesFile": "./google-services.json"
     },
-    "description": ""
+    "description": "",
+    "githubUrl": "https://github.com/sohimazdai/beatrix"
   }
 }

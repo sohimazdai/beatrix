@@ -40,7 +40,6 @@ class NoteListScreen extends React.PureComponent<FullProps>{
         editingNoteId: null
     }
     render() {
-        const { noteCreationShown, noteEditingShown } = this.state;
         return (
             <View style={styles.screenView}>
                 <BlockHat 

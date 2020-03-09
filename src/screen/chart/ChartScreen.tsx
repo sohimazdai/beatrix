@@ -79,7 +79,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                         {this.renderSettings()}
                     </View>
                 </ScrollView>
-                <Fader hidden={!this.state.popupShown} />
+                {/* <Fader hidden={!this.state.popupShown} /> */}
                 <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
