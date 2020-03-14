@@ -27,7 +27,7 @@
     "facebookAppId": "871414539985872",
     "facebookDisplayName": "beatrix",
     "ios": {
-      "bundleIdentifier": "beatrix.expo.googlesignin",
+      "bundleIdentifier": "com.doq.beatrix",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.361031893824-4edpqvb34sod64s7tvngoqpkmtuhuebe"
@@ -36,8 +36,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "beatrix.expo.googlesignin",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.doq.beatrix"
     },
     "description": "",
     "githubUrl": "https://github.com/sohimazdai/beatrix"
