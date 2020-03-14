@@ -1,26 +1,24 @@
 import React, { Dispatch } from 'react';
 import {
     View,
-    StyleSheet,
     KeyboardAvoidingView,
-    TouchableOpacity,
-    Text,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
 import { BackgroundMountainsIcon } from '../../component/icon/BackgroundMountainsIcon';
-import { firebaseApp } from '../../firebase-config';
+import { firebaseApp } from '../../config/firebase-config';
 import "firebase/firestore";
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { Action } from 'redux';
 import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 import { IUser } from '../../model/IUser';
-import { AuthForm } from '../../view/auth/AuthForm';
+import { AuthForm, AuthFormConnect } from '../../view/auth/AuthForm';
 import { Popup } from '../../component/popup/Popup';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import { Fader } from '../../component/Fader';
 import { styles } from './Style';
+import { AuthRememberPasswordPopupConnect } from '../../view/auth/password-recovery-popup/AuthPasswordRecoveryPopup';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -33,53 +31,29 @@ interface AuthScreenProps {
 interface AuthScreenState {
     restorePasswordPopupShown: boolean
     restorePasswordEmail?: string
+    // shown?: boolean
 }
 
-class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
+class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
     state = {
         restorePasswordEmail: "",
         restorePasswordPopupShown: false,
+        // shown: false
     }
 
     render() {
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.AuthView}>
-                {this.renderAuthForm()}
+                <ScrollView style={styles.AuthView}>
+                    {this.renderAuthForm()}
+                </ScrollView>
+
                 {this.state.restorePasswordPopupShown &&
                     <Fader hidden={!this.state.restorePasswordPopupShown} />}
-                <Popup hidden={!this.state.restorePasswordPopupShown}>
-                    <View style={styles.authScreenRestorePasswordView}>
-                        <Text style={styles.authScreenRestorePasswordViewTitle}>
-                            Восстановление пароля
-                                </Text>
-                        <TextInput
-                            style={styles.input}
-                            value={this.state.restorePasswordEmail}
-                            keyboardType={'email-address'}
-                            placeholder={'Почта'}
-                            onChangeText={(value) => this.setState({ restorePasswordEmail: value })}
-                        />
-                        <View style={styles.rememberButton}>
-                            <TouchableOpacity
-                                onPress={() => this.rememberPassword(this.state.restorePasswordEmail)}
-                                style={styles.rememberButtonTouchable}
-                            >
-                                <Text>
-                                    Напомнить
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.cancelRememberButton}>
-                            <TouchableOpacity
-                                onPress={() => this.setState({ restorePasswordPopupShown: false })}
-                            >
-                                <Text>
-                                    Отмена
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Popup>
+                <AuthRememberPasswordPopupConnect
+                    onRememberEnd={() => this.setState({ restorePasswordPopupShown: false })}
+                    restorePasswordPopupShown={this.state.restorePasswordPopupShown}
+                />
             </KeyboardAvoidingView>
         )
     }
@@ -105,9 +79,8 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
             <View style={styles.AuthForm}>
                 {this.renderBackgroundSun()}
                 {this.renderBackgroundMountains()}
-                <AuthForm
+                <AuthFormConnect
                     loading={this.loading}
-                    onSignIn={this.signInWithEmailAndPassword}
                     onRegistration={this.signUpWithEmailAndPassword}
                     onForget={() => this.setState({ restorePasswordPopupShown: true })}
                 />
@@ -118,30 +91,6 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
     get loading() {
         const { user } = this.props;
         return user && user.loading
-    }
-
-    signInWithEmailAndPassword = async (email: string, password: string) => {
-        this.props.setUserInLoading && this.props.setUserInLoading();
-        try {
-            await firebaseApp.auth()
-                .signInWithEmailAndPassword(email, password)
-                .then((data) => {
-                    const userData = {
-                        id: data.user.uid,
-                        email: data.user.email,
-                        name: data.user.email.split('@')[0],
-                        isAuthed: true
-                    }
-                    return userData
-                })
-                .then((data) => {
-                    this.props.filfullUser && this.props.filfullUser(data)
-                    this.props.navigation.navigate('NoteList')
-                })
-        } catch (e) {
-            this.props.setUserInLoaded && this.props.setUserInLoaded();
-            alert(e.message);
-        };
     }
 
     signUpWithEmailAndPassword = async (email: string, password: string) => {
@@ -168,21 +117,6 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState>{
                         ...data,
                         isPendingVerification: true
                     };
-                })
-        } catch (e) {
-            this.props.setUserInLoaded && this.props.setUserInLoaded();
-            alert(e.message);
-        };
-    }
-
-    rememberPassword = async (email: string) => {
-        this.props.setUserInLoading && this.props.setUserInLoading();
-        try {
-            await firebaseApp.auth()
-                .sendPasswordResetEmail(email)
-                .then((data) => {
-                    alert(JSON.stringify(data))
-                    this.props.filfullUser && this.props.filfullUser({})
                 })
         } catch (e) {
             this.props.setUserInLoaded && this.props.setUserInLoaded();
