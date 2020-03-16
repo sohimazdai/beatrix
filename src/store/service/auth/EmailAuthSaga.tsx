@@ -1,9 +1,9 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
-import { batchActions } from 'redux-batched-actions';
+import { put, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
-import { LogInResult } from 'expo-google-app-auth';
 import { firebaseApp } from '../../../config/firebase-config';
 import { IUser } from '../../../model/IUser';
+import { createSyncUserAction } from '../user/SyncUserSaga';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = 'EMAIL_AUTH_ACTION';
 
@@ -32,7 +32,6 @@ function* emailAuth(action?: EmailAuthAction) {
         const password = action.payload.password;
         const appAuth = firebaseApp.auth();
         const data: firebase.auth.UserCredential = yield appAuth.signInWithEmailAndPassword(email, password);
-        console.log(JSON.stringify(data))
         const userData: IUser = {
             id: data.user.uid,
             email: data.user.email,
@@ -42,8 +41,9 @@ function* emailAuth(action?: EmailAuthAction) {
         yield put(createUserChangeAction({
             ...userData,
             loading: false,
-            error: null
+            error: null,
         }));
+        yield put(createSyncUserAction(userData));
     } catch (e) {
         alert(e.message)
         yield put(createUserChangeAction({
@@ -54,7 +54,5 @@ function* emailAuth(action?: EmailAuthAction) {
 };
 
 export function* watchEmailAuth() {
-    console.log('saga watching')
-
     yield takeLatest(ACTION_TYPE, emailAuth);
 };

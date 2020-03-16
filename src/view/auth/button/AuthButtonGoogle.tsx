@@ -6,32 +6,22 @@ import { shadowOptions } from '../../../constant/shadowOptions';
 import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
 import * as Google from 'expo-google-app-auth';
 import { googleAuthConfig } from '../../../config/googleAuthConfig';
+import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
 // import { createEmailAuthAction } from '../../../service/auth/AuthSaga';
 
 interface Props {
+    onGoogleSignin?: () => void;
     onPress?: () => void;
 }
 
 export function AuthButtonGoogle(props: Props) {
-    async function onGoogleSignIn() {
-        try {
-            const result = await Google.logInAsync({
-                androidClientId: googleAuthConfig.androidClientId,
-                clientId: googleAuthConfig.iosClientId,
-                scopes: ["profile", "email"]
-            })
-        } catch (e) {
-            console.log("error", e)
-        }
-    }
-
     function renderDescription() {
         return "Войти с Google"
     }
 
     return (
         <View style={styles.socialAuthButton}>
-            <TouchableOpacity onPress={onGoogleSignIn}>
+            <TouchableOpacity style={styles.touchable} onPress={props.onGoogleSignin}>
                 <View style={styles.buttonContent}>
                     <View style={styles.icon}>
                         <GoogleLogoIcon />
@@ -46,15 +36,13 @@ export function AuthButtonGoogle(props: Props) {
 }
 
 export const AuthButtonGoogleConnect = connect(
-    (state) => ({ }),
+    (state) => ({}),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {
             ...stateProps,
             ...ownProps,
-            onGoogleSignInEnd: (result: Google.LogInResult) => {
-                // dispatch(createEmailAuthAction(result))
-            }
+            onGoogleSignin: () => dispatch(createGoogleAuthAction())
         }
     }
 )(AuthButtonGoogle)
@@ -64,10 +52,12 @@ const styles = StyleSheet.create({
     socialAuthButton: {
         width: 200,
         marginBottom: 20,
-        padding: 10,
         backgroundColor: "#FFFFFF",
         borderRadius: 5,
         ...shadowOptions
+    },
+    touchable: {
+        padding: 10,
     },
     buttonContent: {
         display: 'flex',

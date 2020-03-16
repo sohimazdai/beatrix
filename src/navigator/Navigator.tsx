@@ -10,10 +10,10 @@ import { ProfileScreenConnect } from '../screen/profile/ProfileScreen';
 import { NotesIcon } from '../component/icon/NotesIcon';
 import { ChartsIcon } from '../component/icon/ChartsIcon';
 import { ProfileIcon } from '../component/icon/ProfileIcon';
-import { IInteractive, InteractiveUserPropertiesShedulePopupType } from '../model/IInteractive';
+import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
-import ConfirmPopup, { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
+import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/shedule-popup/ProfileUserPropertiesShedulePopup';
 import { Fader } from '../component/Fader';
 import { SheduleKeyType } from '../model/IUserPropertiesShedule';
@@ -28,10 +28,7 @@ interface AuthedContainerProps {
 }
 
 const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
-    React.useEffect(() => {
-
-    })
-    return props.user.id ?
+    return props.user && props.user.isAuthed ?
         <AuthedContainer interactive={props.interactive} /> :
         <AppUnknownNavigatorContainer />
 }
@@ -79,11 +76,10 @@ const AuthedMainNavigator = createBottomTabNavigator(
     {
         'Записи': { screen: NoteListScreenConnect },
         "Графики": { screen: ChartConnect },
-        // "Профиль": { screen: ProfileScreenStack }
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, horizontal, tintColor }) => {
+            tabBarIcon: () => {
                 const { routeName } = navigation.state;
                 if (routeName === 'Записи') {
                     return <NotesIcon />

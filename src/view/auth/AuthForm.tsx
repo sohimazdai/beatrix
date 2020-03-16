@@ -1,13 +1,13 @@
 import React from 'react'
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { AuthButtonGoogle } from './button/AuthButtonGoogle';
+import { AuthButtonGoogle, AuthButtonGoogleConnect } from './button/AuthButtonGoogle';
 import { styles } from './Style';
 import { IUser } from '../../model/IUser';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { createEmailAuthAction } from '../../store/service/auth/EmailAuthSaga';
-import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
+import { createEmailSignUpAction } from '../../store/service/auth/EmailSignUpSaga';
 
 enum AuthFormMode {
     AUTH = 'auth',
@@ -24,9 +24,8 @@ interface Props {
     loading?: boolean
 
     onEmailLogin?: (email: string, password: string) => void
+    onEmailSignUp?: (email: string, password: string) => void
 
-    onSignIn?: (email: string, password: string) => void
-    onRegistration?: (email: string, password: string) => void
     onForget?: (email: string) => void
 }
 
@@ -56,8 +55,6 @@ export class AuthForm extends React.Component<Props, State> {
     }
 
     render() {
-        const { loading } = this.props;
-        const { mode } = this.state;
         return (
             <View style={styles.authForm}>
                 <LinearGradient
@@ -66,9 +63,6 @@ export class AuthForm extends React.Component<Props, State> {
                 >
                     {this.renderTitleFormTitle()}
                     {this.renderAuthBlock()}
-                    {loading && <View style={styles.authFormLoading}>
-                        <ActivityIndicator size="small" color="#000000" />
-                    </View>}
                 </LinearGradient>
             </View>
         )
@@ -92,7 +86,7 @@ export class AuthForm extends React.Component<Props, State> {
 
     renderSocialButtons() {
         return <View style={styles.socialButton}>
-            <AuthButtonGoogle />
+            <AuthButtonGoogleConnect />
             <TouchableOpacity
                 style={styles.authOption}
                 onPress={this.changeAuthType}
@@ -123,6 +117,7 @@ export class AuthForm extends React.Component<Props, State> {
                     value={this.state.password}
                     placeholder={'Пароль'}
                     onChangeText={(value) => this.setState({ password: value })}
+                    keyboardType={'default'}
                 />
             </View>,
             mode === AuthFormMode.AUTH && (
@@ -195,7 +190,7 @@ export class AuthForm extends React.Component<Props, State> {
         mode === AuthFormMode.AUTH ?
             this.props.onEmailLogin(this.state.email, this.state.password) :
             this.state.password === this.state.checkPassword ?
-                this.props.onRegistration(this.state.email, this.state.password) :
+                this.props.onEmailSignUp(this.state.email, this.state.password) :
                 alert("Пароли не совпадают!")
     }
 
@@ -211,8 +206,12 @@ export const AuthFormConnect = connect(
         return {
             ...stateProps,
             ...ownProps,
+            loading: stateProps.user.loading,
             onEmailLogin: (email: string, password: string) => dispatch(
                 createEmailAuthAction(email, password)
+            ),
+            onEmailSignUp: (email: string, password: string) => dispatch(
+                createEmailSignUpAction(email, password)
             )
         }
     }

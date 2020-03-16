@@ -158,5 +158,16 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         color: '#333333',
         margin: 20,
-    }
+    },
+    authFormLoading: {
+        position: 'absolute',
+        top: 0,
+        height: "100%",
+        width: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 })

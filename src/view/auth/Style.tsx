@@ -103,17 +103,6 @@ export const styles = StyleSheet.create({
         textAlign: 'left',
         textDecorationLine: 'underline',
     },
-    authFormLoading: {
-        position: 'absolute',
-        top: 0,
-        height: "100%",
-        width: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.2)",
-
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
     errorHintText: {
         padding: 20,
         textAlign: 'center',

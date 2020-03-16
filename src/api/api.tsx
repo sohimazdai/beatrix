@@ -1,11 +1,14 @@
-export class Api {
-    apiAddress = 'http://localhost:7000';
+import axios, { AxiosInstance } from 'axios';
+import { appConfig } from '../config/appConfig';
 
-    sendGet(params: any) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                return resolve()
-            }, 1000)
+class Api {
+    axios: AxiosInstance
+
+    constructor() {
+        this.axios = axios.create({
+            baseURL: appConfig.protocol + '://' + appConfig.apiAddress,
         })
     }
 }
+
+export const api = new Api();
