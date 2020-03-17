@@ -25,6 +25,8 @@ import { IInteractive } from '../../../model/IInteractive';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { styles } from './Style';
 import { NoteInsulinDoseRecommendationConnect } from '../insulin-dose-recommendation/NoteInsulinDoseRecommendation';
+import { batchActions } from 'redux-batched-actions';
+import { createCreateNoteAction } from '../../../store/service/note/CreateNoteSaga';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -300,6 +302,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         }
         if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
+            this.props.dispatch(createCreateNoteAction(note));
             this.setInitialState();
             this.props.hidePopup()
         } else {

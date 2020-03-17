@@ -27,6 +27,7 @@ function* syncUser({ payload }: SyncUserAction) {
             loading: true,
             error: null
         }));
+
         const syncData = yield call(UserApi.syncUser, payload.user);
         yield put(createUserChangeAction({
             loading: false,
