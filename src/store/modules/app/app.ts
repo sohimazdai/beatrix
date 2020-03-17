@@ -1,9 +1,8 @@
 import { IApp } from "../../../model/IApp";
-import { persistReducer, createTransform } from "redux-persist";
 
 export enum AppActionType {
    CHANGE_LAST_ACTIVE_USER_ID = "CHANGE_LAST_ACTIVE_USER_ID"
-} 
+}
 
 export type AppActionTypes = AppChangeLastActiveUserIdAction
 
@@ -30,10 +29,9 @@ export function appReducer (
             switch(action.type) {
                 case AppActionType.CHANGE_LAST_ACTIVE_USER_ID:
                     return {
-                        ...module,
                         lastUserId: action.payload.userId
                     }
-                
+
                 default: return module;
             }
     }

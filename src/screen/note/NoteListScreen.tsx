@@ -42,8 +42,8 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     render() {
         return (
             <View style={styles.screenView}>
-                <BlockHat 
-                    title={'Записи'} 
+                <BlockHat
+                    title={'Записи'}
                     rightSideSlot={this.renderProfileIcon()}
                 />
                 {this.renderIconBar()}
@@ -61,7 +61,7 @@ class NoteListScreen extends React.PureComponent<FullProps>{
         return <TouchableOpacity
             onPress={() => this.props.navigation.navigate("Profile")}
         >
-            <ProfileIcon fill={'white'}/>
+            <ProfileIcon fill={'white'} />
         </TouchableOpacity>
     }
 
@@ -176,11 +176,10 @@ export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteList
     (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
     }),
-    (dispatch: Dispatch<Action>) => ({ 
+    (dispatch: Dispatch<Action>) => ({
         selectNoteToEdit: (noteId: string) => dispatch(createChangeInteractive({
             editingNoteId: noteId,
             creatingNoteMode: true
         }))
-     })
+    })
 )(NoteListScreen)
-

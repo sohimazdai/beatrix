@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../model/INoteList';
-import { ThemeColor } from '../../../constant/ThemeColor';
 import { shadowOptions } from '../../../constant/shadowOptions';
 
 interface Props {
@@ -37,8 +36,8 @@ export function Note(props: Props) {
 }
 
 const getTime = (date: Date) => {
-    const firstItem = date.toString().split(' ')[4].split(':')[0];
-    const time = date.toString().split(' ')[4].split(':')[1];
+    const firstItem = date.getHours() > 10 ? '' + date.getHours() : '0' + date.getHours();
+    const time = date.getMinutes() > 10 ? '' + date.getMinutes() : "0" + date.getMinutes();
     return firstItem + ':' + time;
 }
 

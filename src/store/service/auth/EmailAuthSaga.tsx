@@ -36,6 +36,7 @@ function* emailAuth(action?: EmailAuthAction) {
             id: data.user.uid,
             email: data.user.email,
             name: data.user.email.split('@')[0],
+            isAuthed: true
         };
 
         yield put(createUserChangeAction({
