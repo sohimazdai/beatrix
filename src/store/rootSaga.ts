@@ -5,6 +5,8 @@ import { watchEmailSignUp } from './service/auth/EmailSignUpSaga';
 import { watchGoogleAuth } from './service/auth/GoogleAuthSaga';
 import { watchSyncUser } from './service/user/SyncUserSaga';
 import { watchCreateNote } from './service/note/CreateNoteSaga';
+import { watchUpdateNote } from './service/note/UpdateNoteSaga';
+import { watchDeleteNote } from './service/note/DeleteNoteSaga';
 
 export function* rootSaga() {
     yield all([
@@ -17,5 +19,7 @@ export function* rootSaga() {
         fork(watchSyncUser),
         //NOTES
         fork(watchCreateNote),
+        fork(watchUpdateNote),
+        fork(watchDeleteNote)
     ]);
 };

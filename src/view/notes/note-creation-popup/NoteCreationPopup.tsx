@@ -27,6 +27,8 @@ import { styles } from './Style';
 import { NoteInsulinDoseRecommendationConnect } from '../insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 import { batchActions } from 'redux-batched-actions';
 import { createCreateNoteAction } from '../../../store/service/note/CreateNoteSaga';
+import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSaga';
+import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -298,11 +300,14 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     createNote = () => {
         let note: INoteListNote = this.noteFromState;
         if (this.props.note) {
-            this.props.onNoteDelete(this.props.note.date)
+            this.props.onNoteDelete(this.props.note.date);
+            this.props.dispatch(createUpdateNoteAction(note, this.props.note.date));
         }
         if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
             this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-            this.props.dispatch(createCreateNoteAction(note));
+            if (!this.props.note) {
+                this.props.dispatch(createCreateNoteAction(note));
+            }
             this.setInitialState();
             this.props.hidePopup()
         } else {
@@ -350,6 +355,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     deleteNote = () => {
         this.props.onNoteDelete(this.props.note.date);
+        this.props.dispatch(createDeleteNoteAction(this.props.note.date))
         this.props.hidePopup()
     }
 

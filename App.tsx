@@ -7,9 +7,13 @@ import { ModalContentConnect } from './src/component/modal-content/ModalContent'
 import { PersistGate } from 'redux-persist/integration/react';
 import { appStarter } from './src/app/AppStarter';
 
-export default class App extends React.Component {
+interface State {
+  appIsReady: boolean
+}
+
+export default class App extends React.Component<never, State> {
   state = {
-    appIsReady: false,
+    appIsReady: false
   }
 
   async componentDidMount() {
