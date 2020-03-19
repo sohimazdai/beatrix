@@ -6,6 +6,7 @@ import { userReducer } from './modules/user/UserReducer';
 import { interactiveReducer } from './modules/interactive/interactive';
 import { userDiabetesPropertiesReducer } from './modules/user-diabetes-properties/UserDiabetesPropertiesReducer';
 import { userPropertiesSheduleReducer } from './modules/user-properties-shedule/UserPropertiesShedule';
+import { pendingNoteListReducer } from './modules/pending-note-list/PendingNoteList';
 
 export const rootReducer = combineReducers({
     app: appReducer,
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers({
     interactive: interactiveReducer,
     userDiabetesProperties: userDiabetesPropertiesReducer,
     userPropertiesShedule: userPropertiesSheduleReducer,
+    pendingNoteList: pendingNoteListReducer
 });

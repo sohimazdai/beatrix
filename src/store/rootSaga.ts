@@ -20,6 +20,6 @@ export function* rootSaga() {
         //NOTES
         fork(watchCreateNote),
         fork(watchUpdateNote),
-        fork(watchDeleteNote)
+        fork(watchDeleteNote),
     ]);
 };

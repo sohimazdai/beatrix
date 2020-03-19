@@ -3,6 +3,10 @@ import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { INoteListNote } from '../../../model/INoteList';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
+import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
+import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
+import { PendingOperationType } from '../../../model/IPendingNoteList';
+import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 
 const ACTION_TYPE = 'CREATE_NOTE_ACTION';
 
@@ -29,7 +33,21 @@ function* createNote({ payload }: CreateNoteAction) {
             error: null
         }));
         const state: IStorage = yield select(state => state);
-        yield call(NoteApi.createNote, payload.note, state.user.id);
+        const networkState: NetInfoState = yield call(NetInfo.fetch);
+        if (networkState.isConnected) {
+            yield call(NoteApi.createNote, payload.note, state.user.id);
+        } else {
+            // yield put(createOneLevelMergePendingNoteList({
+            //     notes: {
+            //         [payload.note.date]: {
+            //             ...payload.note,
+            //             userId: state.user.id,
+            //             operation: PendingOperationType.CREATE
+            //         }
+            //     }
+            // }));
+        }
+        yield put(createNoteListChangeNoteByIdAction(payload.note));
         yield put(createUserChangeAction({
             loading: false,
             error: null

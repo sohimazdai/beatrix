@@ -36,8 +36,8 @@ export function Note(props: Props) {
 }
 
 const getTime = (date: Date) => {
-    const firstItem = date.getHours() > 10 ? '' + date.getHours() : '0' + date.getHours();
-    const time = date.getMinutes() > 10 ? '' + date.getMinutes() : "0" + date.getMinutes();
+    const firstItem = date.getHours() >= 10 ? '' + date.getHours() : '0' + date.getHours();
+    const time = date.getMinutes() >= 10 ? '' + date.getMinutes() : "0" + date.getMinutes();
     return firstItem + ':' + time;
 }
 

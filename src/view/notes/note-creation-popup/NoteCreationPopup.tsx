@@ -29,6 +29,7 @@ import { batchActions } from 'redux-batched-actions';
 import { createCreateNoteAction } from '../../../store/service/note/CreateNoteSaga';
 import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSaga';
 import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
+import uuid from 'uuid';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -308,10 +309,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             if (!this.props.note) {
                 this.props.dispatch(createCreateNoteAction(note));
             }
-            this.setInitialState();
             this.props.hidePopup()
         } else {
-            this.setInitialState();
             this.props.dispatch(createModalChangeAction({
                 type: ModalType.HINT,
                 needToShow: true,
@@ -321,6 +320,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 },
             }))
         }
+        this.setInitialState();
     }
 
     renderDeleteButton() {

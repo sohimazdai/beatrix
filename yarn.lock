@@ -1667,6 +1667,11 @@
     xcode "^2.0.0"
     xmldoc "^0.4.0"
 
+"@react-native-community/netinfo@~3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-3.2.1.tgz#cd073b81a4b978f7f55f1a960a0b56c462813e02"
+  integrity sha512-A2qANOnlRDVe+8kMbKMwy3/0bOlOA2+y8DyWg2Rv2KHICIfin+oxixbG0ewAOLQdLkSEyyumZXRmIVl7VI/KJg==
+
 "@react-navigation/core@~3.4.1":
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.4.2.tgz#bec563e94fde40fbab3730cdc97f22afbb2a1498"
@@ -5030,6 +5035,11 @@ expo-location@~6.0.0:
   integrity sha512-5uSebmZos0DKJ/xpi+2e9myWVPUWk+fshFedi55wzlGqy2YpTG5MlDcCLlJlamgJ5Tm8+3ECdhbFX3g1pNRDVQ==
   dependencies:
     invariant "^2.2.4"
+
+expo-network@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-2.0.0.tgz#4a6019f613bb3dcbe933973d0bd2fcd4cb07ef7d"
+  integrity sha512-LgWu0CqWzSRYbtIK9egHDGEHG07QaZ51LVMENmIuuZ5w7qJAdrM6MXdOB5nJcfjj1npXxX3TMlR6VoYkUWYU/Q==
 
 expo-permissions@~6.0.0:
   version "6.0.0"
