@@ -1,9 +1,11 @@
 export interface INoteList {
-    [id: number]: INoteListNote
+    [id: string]: INoteListNote
 }
 
 export interface INoteListNote {
+    id?: string
     date: number,
+    userId?: string,
     glucose?: number,
     breadUnits?: number,
     insulin?: number,

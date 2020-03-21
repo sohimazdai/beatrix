@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from "redux";
-import { persistStore, persistReducer, PersistConfig, createTransform } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
 import { enableBatching } from 'redux-batched-actions';
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './rootSaga';
@@ -15,7 +15,7 @@ export const appStore = createStore(
     enableBatching(persistedReducer),
     applyMiddleware(
         sagaMiddleware,
-        loggerMiddleware
+        loggerMiddleware,
     )
 );
 

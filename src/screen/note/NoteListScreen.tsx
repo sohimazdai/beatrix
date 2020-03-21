@@ -18,6 +18,8 @@ import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-p
 import { styles } from './Style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ProfileIcon } from '../../component/icon/ProfileIcon';
+import { createFDTRUUIDAction } from '../../store/modules/noteList/NoteListActionCreator';
+import { createChangeAppAction } from '../../store/modules/app/app';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -25,6 +27,7 @@ interface NoteListScreenStateTProps {
 
 interface NoteListScreenDispatchProps {
     selectNoteToEdit: (noteId: string) => void
+    fdtuuidAndSetAsMigrated?: () => void
 }
 
 interface NoteListScreenProps {
@@ -39,6 +42,11 @@ class NoteListScreen extends React.PureComponent<FullProps>{
         noteEditingShown: false,
         editingNoteId: null
     }
+
+    componentDidMount() {
+        this.props.fdtuuidAndSetAsMigrated();
+    }
+
     render() {
         return (
             <View style={styles.screenView}>
@@ -115,17 +123,16 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     }
 
     renderCard(dayNotes: INoteListByDay) {
-        const notesIds = Object.keys(dayNotes).sort((a, b) => {
-            return parseInt(a) > parseInt(b) ? -1 : 1;
+        const notes: INoteListNote[] = Object.values(dayNotes).sort((a, b) => {
+            return b.date - a.date;
         })
         return (
             <View style={styles.dayNotes}>
-                {notesIds.map(noteId => {
-                    const note: INoteListNote = dayNotes[noteId]
+                {notes.map(note => {
                     return <Note
-                        key={noteId}
+                        key={note.id}
                         note={note}
-                        onPress={() => this.props.selectNoteToEdit(noteId)}
+                        onPress={() => this.props.selectNoteToEdit(note.id)}
                     />
                 })}
             </View>
@@ -172,14 +179,31 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     }
 }
 
-export const NoteListScreenConnect = connect<NoteListScreenStateTProps, NoteListScreenDispatchProps, NoteListScreenProps>(
-    (state: IStorage) => ({
-        noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList)
-    }),
+export const NoteListScreenConnect = connect(
+    (state: IStorage) => {
+        return {
+            app: state.app,
+            user: state.user,
+            noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state)
+        }
+    },
     (dispatch: Dispatch<Action>) => ({
+        dispatch,
         selectNoteToEdit: (noteId: string) => dispatch(createChangeInteractive({
             editingNoteId: noteId,
             creatingNoteMode: true
         }))
+    }),
+    (stateProps, dispatchProps) => ({
+        ...stateProps,
+        ...dispatchProps,
+        fdtuuidAndSetAsMigrated: () => {
+            if (!stateProps.app.isNoteListMigrated) {
+                dispatchProps.dispatch(createFDTRUUIDAction(stateProps.user.id));
+                dispatchProps.dispatch(createChangeAppAction({
+                    isNoteListMigrated: true
+                }));
+            }
+        }
     })
 )(NoteListScreen)

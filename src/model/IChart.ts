@@ -3,7 +3,8 @@ import { PolylineType } from "../view/chart/chart-svg/ChartPolyline";
 export interface IChartDot {
     x: number,
     y: number,
-    id: number
+    id: number,
+    noteId?: string
 }
 export enum ChartValueType {
     GLUCOSE = "glucose",
@@ -19,7 +20,7 @@ export enum ChartPeriodType {
 }
 
 export enum ChartPeriodThreeMonthType {
-    WINTER  = 'winter',
+    WINTER = 'winter',
     SUMMER = 'summer',
     AUTUMN = 'autumn',
     SPRING = 'spring'

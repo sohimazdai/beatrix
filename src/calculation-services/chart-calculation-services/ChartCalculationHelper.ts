@@ -30,17 +30,20 @@ export function adaptDayDots(props: ChartWrapProps, dots: IChartDot[], events?: 
         dot.id === 0 && newDots.push({
             x: adaptDayTime(props, dot.x, date),
             y: adaptYValue(props, 0, maxValue, minValue),
-            id: dot.id
+            id: dot.id,
+            noteId: dot.noteId
         })
         newDots.push({
             x: adaptDayTime(props, dot.x, date),
             y: adaptYValue(props, dot.y, maxValue, minValue),
-            id: dot.id
+            id: dot.id,
+            noteId: dot.noteId
         })
         dot.id === getMaxTrainItemId(props, date) && newDots.push({
             x: adaptDayTime(props, dot.x, date),
             y: adaptYValue(props, 0, maxValue, minValue),
-            id: dot.id
+            id: dot.id,
+            noteId: dot.noteId
         })
     })
     result.dots = newDots;
@@ -52,7 +55,8 @@ export function adaptDayDots(props: ChartWrapProps, dots: IChartDot[], events?: 
             return {
                 x: adaptDayTime(props, dot.x, date),
                 y: adaptYValue(props, 0, maxValue, minValue),
-                id: dot.id
+                id: dot.id,
+                noteId: dot.noteId
             }
         })
         result.events = newEvents;
@@ -237,7 +241,7 @@ function adaptMonthTime(props: ChartWrapProps, day: number): number {
 export function getWeekDaysNumbers(date: Date): number[] {
     let result = [];
     const currentWeekFirstDay = DateHelper.getDiffDate(date, -date.getDay() + 1);
-    for (let i = 0; i < 7 ; i++) {
+    for (let i = 0; i < 7; i++) {
         result.push(DateHelper.getDiffDate(new Date(currentWeekFirstDay), i))
     }
     return result;
@@ -277,7 +281,7 @@ function adaptThreeMonthTime(props: ChartWrapProps, week: number): number {
     let result = 0;
     const daysCount = DateHelper.getWeekNumber();
     const clearChartWidth = props.config.boxWidth - generalPadding(props);
-    let dayStepOnChart = clearChartWidth / ( daysCount - 1);
+    let dayStepOnChart = clearChartWidth / (daysCount - 1);
     result = (week - 1) * dayStepOnChart + initialPadding(props);
     return result;
 }

@@ -28,14 +28,11 @@ export function createCreateNoteAction(note: INoteListNote): CreateNoteAction {
 
 function* createNote({ payload }: CreateNoteAction) {
     try {
-        yield put(createUserChangeAction({
-            loading: true,
-            error: null
-        }));
         const state: IStorage = yield select(state => state);
+        const userId = state.user.id;
         const networkState: NetInfoState = yield call(NetInfo.fetch);
         if (networkState.isConnected) {
-            yield call(NoteApi.createNote, payload.note, state.user.id);
+            yield call(NoteApi.createNote, payload.note, userId);
         } else {
             // yield put(createOneLevelMergePendingNoteList({
             //     notes: {
@@ -47,11 +44,7 @@ function* createNote({ payload }: CreateNoteAction) {
             //     }
             // }));
         }
-        yield put(createNoteListChangeNoteByIdAction(payload.note));
-        yield put(createUserChangeAction({
-            loading: false,
-            error: null
-        }));
+        yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
     } catch (e) {
         alert(e.message);
         yield put(createUserChangeAction({

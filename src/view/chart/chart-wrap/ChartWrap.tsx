@@ -18,11 +18,11 @@ export interface ChartWrapProps {
     config: IChartConfiguration
     type: ChartValueType
     selectedPeriod: ChartPeriodType
-    selectedDotId?: number
+    selectedDotId?: string
     currentDate?: Date
     noteList?: INoteList
     noteListByDay?: INoteListByDay
-    onDotPress?: (id: number) => void
+    onDotPress?: (id: string) => void
 }
 
 export function ChartWrap(props: ChartWrapProps) {
@@ -74,7 +74,7 @@ export function ChartWrap(props: ChartWrapProps) {
     }
 
     const highlights: IChartDot[] = [
-        ...basicDotsData.events, 
+        ...basicDotsData.events,
         ...basicDotsData.dots
     ]
     return (
@@ -118,6 +118,7 @@ export function ChartWrap(props: ChartWrapProps) {
                         onPress={props.onDotPress}
                         x={item.x}
                         y={item.y}
+                        noteId={item.noteId}
                         fill={ThemeColor.BRIGHT_RED}
                         stroke={ThemeColor.WHITE}
                         selectedDotId={selectedDotId}
@@ -132,6 +133,7 @@ export function ChartWrap(props: ChartWrapProps) {
                         onPress={props.onDotPress}
                         x={item.x}
                         y={item.y}
+                        noteId={item.noteId}
                         fill={ThemeColor.WHITE}
                         stroke={ThemeColor.INDIAN_RED}
                         selectedDotId={selectedDotId}

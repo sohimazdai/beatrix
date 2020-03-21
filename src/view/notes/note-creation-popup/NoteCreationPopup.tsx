@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { INoteListNote, NoteValueType } from '../../../model/INoteList';
-import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
+import { createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
 import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalConfirm } from '../../../model/IModal';
@@ -25,11 +25,9 @@ import { IInteractive } from '../../../model/IInteractive';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { styles } from './Style';
 import { NoteInsulinDoseRecommendationConnect } from '../insulin-dose-recommendation/NoteInsulinDoseRecommendation';
-import { batchActions } from 'redux-batched-actions';
 import { createCreateNoteAction } from '../../../store/service/note/CreateNoteSaga';
 import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSaga';
 import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
-import uuid from 'uuid';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -44,7 +42,7 @@ interface NoteCreationPopupProps {
     note?: INoteListNote
     dispatch?: (action: Action) => void
     hidePopup?: () => void
-    onNoteDelete?: (noteId: number) => void;
+    onNoteDelete?: (noteId: string) => void;
 }
 
 interface NoteCreationPopupState {
@@ -275,11 +273,11 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 }}
                 onNaturalSlide={(value) => {
                     obj[`${name}`] = value + '.' + inputValue.split('.')[1];
-                    this.setState(obj as any), 50
+                    this.setState(obj as any)//, 50
                 }}
                 onDecimalSlide={(value) => {
                     obj[`${name}`] = inputValue.split('.')[0] + '.' + value.toString().split('.')[1];
-                    this.setState(obj as any), 50
+                    this.setState(obj as any)//, 50
                 }}
             />
         </View>
@@ -300,27 +298,32 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     createNote = () => {
         let note: INoteListNote = this.noteFromState;
+        // console.log('before ' + this.props.note.id);
         if (this.props.note) {
-            this.props.onNoteDelete(this.props.note.date);
-            this.props.dispatch(createUpdateNoteAction(note, this.props.note.date));
+            // this.props.onNoteDelete(this.props.note.id);
+            this.props.dispatch(createUpdateNoteAction({
+                ...note,
+                id: this.props.note.id
+            }));
+            this.props.hidePopup();
         }
-        if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
-            this.props.dispatch(createNoteListChangeNoteByIdAction(note));
-            if (!this.props.note) {
+        else {
+            if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
                 this.props.dispatch(createCreateNoteAction(note));
+                this.props.hidePopup()
+            } else {
+                this.props.dispatch(createModalChangeAction({
+                    type: ModalType.HINT,
+                    needToShow: true,
+                    data: {
+                        questionText: 'Введите хотя бы один параметр',
+                        positiveButtonText: 'ОК',
+                    },
+                }))
             }
-            this.props.hidePopup()
-        } else {
-            this.props.dispatch(createModalChangeAction({
-                type: ModalType.HINT,
-                needToShow: true,
-                data: {
-                    questionText: 'Введите хотя бы один параметр',
-                    positiveButtonText: 'ОК',
-                },
-            }))
+            this.setInitialState();
         }
-        this.setInitialState();
+        // console.log('after ' + this.props.note.id);
     }
 
     renderDeleteButton() {
@@ -354,7 +357,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     }
 
     deleteNote = () => {
-        this.props.onNoteDelete(this.props.note.date);
+        this.props.onNoteDelete(this.props.note.id);
         this.props.dispatch(createDeleteNoteAction(this.props.note.date))
         this.props.hidePopup()
     }
@@ -408,7 +411,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
 export const NoteCreationPopupConnect = connect(
     (state: IStorage) => ({
-        notes: state.noteList,
+        noteList: state.noteList,
         interactive: state.interactive
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
@@ -417,7 +420,7 @@ export const NoteCreationPopupConnect = connect(
         return {
             ...stateProps,
             dispatch,
-            note: stateProps.notes[noteId] || null,
+            note: stateProps.noteList[noteId] || null,
             hidePopup() {
                 dispatch(createChangeInteractive({
                     creatingNoteMode: false,

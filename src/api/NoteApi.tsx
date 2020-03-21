@@ -9,11 +9,10 @@ export class NoteApi {
         })
     }
 
-    static updateNote(note: INoteListNote, userId: string, prevDate?: number) {
+    static updateNote(note: INoteListNote, userId: String) {
         return api.axios.post('note/update', {
             ...note,
-            userId,
-            prevDate
+            userId
         })
     }
 

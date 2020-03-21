@@ -182,6 +182,7 @@ export class DateHelper {
     }
 
     static makeDateWithMonthAsString(date: Date) {
+        alert('date is ' + date)
         return '' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ' +
             DateHelper.getMonthStringPossesive(date.getMonth()) + ' ' +
             date.getFullYear()

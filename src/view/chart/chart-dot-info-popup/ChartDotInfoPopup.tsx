@@ -22,6 +22,7 @@ export interface ChartDotInfoPopupProps {
     editable?: boolean
 
     onClose?: () => void
+    //TODO: open popups with real ids not fake date ids
     openEditPopup?: (noteId) => void
 }
 
@@ -75,7 +76,7 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 {props.editable && <TouchableOpacity
                     style={styles.editNoteIconTouchable}
                     onPress={() => {
-                        props.openEditPopup(props.note.date);
+                        props.openEditPopup(props.note.id);
                         props.onClose();
                     }}
                 >

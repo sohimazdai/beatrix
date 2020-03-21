@@ -9,56 +9,59 @@ export interface ChartHighlightNetProps {
     minValue?: number
     cfg: IChartConfiguration
     type: ChartPeriodType
-
     noXX?: boolean
     noYY?: boolean
     paddingTop?: boolean
     paddingBottom?: boolean
-    selectedDotId: number
+    selectedDotId: string
 }
 
 export function ChartHighlightNet(props: ChartHighlightNetProps) {
-    let toRender = [];
-    !props.noXX && toRender.push(verticalLines(props));
-    !props.noYY && toRender.push(horizontalLines(props))
+    // let toRender = [];
+    // !props.noXX && toRender.push(verticalLines());
+    // !props.noYY && toRender.push(horizontalLines(props));
+    function isSelectedDot(dot: IChartDot) {
+        return props.selectedDotId == String(dot.id) || props.selectedDotId == dot.noteId
+    }
+
+    function horizontalLines() {
+        switch (props.type) {
+
+        }
+    }
+
+    function verticalLines() {
+        switch (props.type) {
+            case ChartPeriodType.DAY:
+                return props.dots.map((dot, index) => {
+                    return <Line
+                        key={dot.id}
+                        x1={dot.x}
+                        y1={props.paddingTop ? props.cfg.basicPadding : 0}
+                        x2={dot.x}
+                        y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
+                        stroke={isSelectedDot(dot) ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
+                        strokeWidth={isSelectedDot(dot) ? 2 : 1}
+                    />
+                })
+            case ChartPeriodType.MONTH:
+            case ChartPeriodType.THREE_MONTH:
+                return props.dots.map((dot, index) => {
+                    return (dot.noteId ? dot.noteId : dot.id) == props.selectedDotId && <Line
+                        key={dot.id}
+                        x1={dot.x}
+                        y1={props.paddingTop ? props.cfg.basicPadding : 0}
+                        x2={dot.x}
+                        y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
+                        stroke={isSelectedDot(dot) ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
+                        strokeWidth={isSelectedDot(dot) ? 2 : 1}
+                    />
+                })
+
+        }
+    }
+
     return <>
-        {verticalLines(props)}
+        {verticalLines()}
     </>
-}
-
-function verticalLines(props: ChartHighlightNetProps) {
-    switch (props.type) {
-        case ChartPeriodType.DAY:
-            return props.dots.map((dot, index) => {
-                return <Line
-                    key={dot.id}
-                    x1={dot.x}
-                    y1={props.paddingTop ? props.cfg.basicPadding : 0}
-                    x2={dot.x}
-                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={props.selectedDotId == dot.id ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
-                    strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
-                />
-            })
-        case ChartPeriodType.MONTH:
-        case ChartPeriodType.THREE_MONTH:
-            return props.dots.map((dot, index) => {
-                return dot.id === props.selectedDotId && <Line
-                    key={dot.id}
-                    x1={dot.x}
-                    y1={props.paddingTop ? props.cfg.basicPadding : 0}
-                    x2={dot.x}
-                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={props.selectedDotId == dot.id ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
-                    strokeWidth={props.selectedDotId == dot.id ? 2 : 1}
-                />
-            })
-
-    }
-}
-
-function horizontalLines(props: ChartHighlightNetProps) {
-    switch (props.type) {
-
-    }
 }

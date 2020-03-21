@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { Dispatch, Action } from 'redux';
 import { View, Text } from 'react-native';
-import { INoteList, INoteListByDay } from '../../model/INoteList';
+import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
@@ -15,7 +15,6 @@ import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlockHat } from '../../component/hat/BlockHat';
-import { Fader } from '../../component/Fader';
 import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
 import { styles } from './Style';
 import { ChartConfig } from './config/ChartConfig';
@@ -28,7 +27,7 @@ export interface ChartProps {
 
 export interface ChartState {
     currentDate: Date,
-    selectedDotId: number,
+    selectedDotId: string,
     selectedPeriod: ChartPeriodType,
     popupShown?: boolean,
     glucoseAverageShown?: boolean
@@ -80,13 +79,13 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                     </View>
                 </ScrollView>
                 {/* <Fader hidden={!this.state.popupShown} /> */}
-                <ChartDotInfoPopupConnect
+                {this.state.selectedDotId && <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
                     onClose={this.onPopupClose}
                     note={this.getNoteForChartPopup()}
                     editable={this.state.selectedPeriod === ChartPeriodType.DAY}
-                />
+                />}
                 {!this.state.popupShown && <View style={styles.addNoteButtonView}>
                     <NoteCreationPopupButtonConnect />
                 </View>}
@@ -161,29 +160,28 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
 
     getChartPopupTitle() {
         let displayingDate = '';
-        if (this.state.selectedDotId === DateHelper.today()) {
-            displayingDate = 'Сегодня'
-        } else if (this.state.selectedDotId === DateHelper.yesterday()) {
-            displayingDate = 'Вчера'
-        }
+        let selectedDotId = this.state.selectedDotId;
 
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
-                if (!displayingDate) {
-                    displayingDate = DateHelper.makeTimewithDateWithMonthAsString(
-                        new Date(this.state.selectedDotId)
-                    )
-                }
+                const note = this.props.noteList[selectedDotId];
+                displayingDate = note && DateHelper.makeTimewithDateWithMonthAsString(new Date(note.date));
                 return displayingDate
             case ChartPeriodType.MONTH:
-                if (!displayingDate) {
-                    displayingDate = DateHelper.makeDateWithMonthAsString(new Date(this.state.selectedDotId))
+                selectedDotId = Number(this.state.selectedDotId);
+                if (selectedDotId === DateHelper.today()) {
+                    return 'Сегодня'
                 }
+                if (selectedDotId === DateHelper.yesterday()) {
+                    return 'Вчера';
+                }
+                displayingDate = DateHelper.makeDateWithMonthAsString(new Date(selectedDotId))
                 return displayingDate
             case ChartPeriodType.THREE_MONTH:
-                displayingDate = DateHelper.makeDateWithMonthAsNumber(new Date(this.state.selectedDotId)) +
+                selectedDotId = Number(this.state.selectedDotId);
+                displayingDate = DateHelper.makeDateWithMonthAsNumber(new Date(selectedDotId)) +
                     ' - ' + DateHelper.makeDateWithMonthAsNumber(
-                        new Date(DateHelper.getDiffDate(new Date(this.state.selectedDotId), 6))
+                        new Date(DateHelper.getDiffDate(new Date(selectedDotId), 6))
                     )
                 return displayingDate
         }
@@ -326,7 +324,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         this.setState({ currentDate: date })
     }
 
-    onDotPress = (dotId: number) => {
+    onDotPress = (dotId: string) => {
         this.setState({
             selectedDotId: dotId,
             popupShown: true
@@ -355,7 +353,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
 
     getNoteForChartPopup() {
         let weekDayNotes = [];
-        let dayNotes = {};
+        let dayNotes: INoteList = {};
         let glucoseArray = [];
         let breadUnitsArray = [];
         let insulinArray = [];
@@ -365,11 +363,11 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 return this.props.noteList[this.state.selectedDotId]
             case ChartPeriodType.MONTH:
                 dayNotes = this.props.noteListByDay[this.state.selectedDotId];
-                dayNotes && Object.keys(dayNotes) && Object.keys(dayNotes).map(noteId => {
-                    dayNotes[noteId].glucose && glucoseArray.push(dayNotes[noteId].glucose);
-                    dayNotes[noteId].breadUnits && breadUnitsArray.push(dayNotes[noteId].breadUnits);
-                    dayNotes[noteId].insulin && insulinArray.push(dayNotes[noteId].insulin);
-                    dayNotes[noteId].longInsulin && longInsulinArray.push(dayNotes[noteId].longInsulin);
+                dayNotes && Object.values(dayNotes) && Object.values(dayNotes).map(note => {
+                    note.glucose && glucoseArray.push(note.glucose);
+                    note.breadUnits && breadUnitsArray.push(note.breadUnits);
+                    note.insulin && insulinArray.push(note.insulin);
+                    note.longInsulin && longInsulinArray.push(note.longInsulin);
                 })
                 return {
                     glucose: Math.round(getArrayAverage(glucoseArray) * 10) / 10,
@@ -382,11 +380,11 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 weekDayNotes = getWeekDaysNumbers(new Date(this.state.selectedDotId))
                     .map(weekDayNumber => {
                         dayNotes = this.props.noteListByDay[weekDayNumber];
-                        dayNotes && Object.keys(dayNotes) && Object.keys(dayNotes).map(noteId => {
-                            dayNotes[noteId].glucose && glucoseArray.push(dayNotes[noteId].glucose);
-                            dayNotes[noteId].breadUnits && breadUnitsArray.push(dayNotes[noteId].breadUnits);
-                            dayNotes[noteId].insulin && insulinArray.push(dayNotes[noteId].insulin);
-                            dayNotes[noteId].longInsulin && longInsulinArray.push(dayNotes[noteId].longInsulin);
+                        dayNotes && Object.values(dayNotes) && Object.values(dayNotes).map(note => {
+                            note.glucose && glucoseArray.push(note.glucose);
+                            note.breadUnits && breadUnitsArray.push(note.breadUnits);
+                            note.insulin && insulinArray.push(note.insulin);
+                            note.longInsulin && longInsulinArray.push(note.longInsulin);
                         })
                     })
                 return {
@@ -409,7 +407,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
 
 export const ChartConnect = connect(
     (state: IStorage) => ({
-        noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state.noteList),
+        noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state),
         noteList: state.noteList,
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
@@ -421,4 +419,3 @@ export const ChartConnect = connect(
         }
     }
 )(Chart)
-

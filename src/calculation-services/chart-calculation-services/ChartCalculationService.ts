@@ -51,11 +51,12 @@ export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
 
 function getGroundDots(props: ChartWrapProps, noteList: INoteList): IChartDot[] {
     let groundDots: IChartDot[] = [];
-    Object.keys(noteList).map(noteId => {
+    Object.values(noteList).map(note => {
         groundDots.push({
-            x: noteList[noteId as any].date,
-            y: noteList[noteId as any][props.type],
-            id: noteList[noteId as any].date
+            x: note.date,
+            y: note[props.type],
+            id: note.date,
+            noteId: note.id
         })
     })
     return groundDots
@@ -131,15 +132,16 @@ export function calculateMonthChartDots(props: ChartWrapProps): ChartDotsData {
     for (let i = 0; i <= DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0); i++) {
         let accumulator: number[] = [];
         const currentDayNotes: INoteList = props.noteListByDay[getDayAfterThatNumber(dateFinishedCalculation, i)] || {};
-        Object.keys(currentDayNotes).map(noteId => {
-            currentDayNotes[noteId][props.type] != 0 && accumulator.push(currentDayNotes[noteId][props.type])
+        Object.values(currentDayNotes).map(note => {
+            note[props.type] != 0 && accumulator.push(note[props.type])
         })
-        i + 1 <= DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0) &&
+        if (i + 1 <= DateHelper.getMaxDateOfDifferentMonth(props.currentDate, 0)) {
             dayAverages.push({
                 x: i + 1,
                 y: getArrayAverage(accumulator),
                 id: getDayAfterThatNumber(dateFinishedCalculation, i),
             })
+        }
     }
     result = adaptMonthDots(props, dayAverages)
     return result;
@@ -159,8 +161,8 @@ export function calculateThreeMonthChartDots(props: ChartWrapProps): ChartDotsDa
         let weekDaysIds = getWeekDaysNumbers(DateHelper.getDiffWeek(startWeekDate, -i))
             .sort((a, b) => a - b);
         weekDaysIds.map(weekDayId => {
-            props.noteListByDay[weekDayId] && Object.keys(props.noteListByDay[weekDayId]).map(noteId => {
-                props.noteList[noteId][props.type] && weekDotsValues.push(props.noteList[noteId][props.type])
+            props.noteListByDay[weekDayId] && Object.values(props.noteListByDay[weekDayId]).map(note => {
+                note[props.type] && weekDotsValues.push(note[props.type])
             })
         })
         weekAverages.push({

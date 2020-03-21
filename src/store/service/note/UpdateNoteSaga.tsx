@@ -14,27 +14,26 @@ interface UpdateNoteAction {
     type: 'UPDATE_NOTE_ACTION',
     payload: {
         note: INoteListNote,
-        prevDate?: number
     }
 }
 
-export function createUpdateNoteAction(note: INoteListNote, prevDate?: number): UpdateNoteAction {
+export function createUpdateNoteAction(note: INoteListNote): UpdateNoteAction {
     return {
         type: ACTION_TYPE,
         payload: {
             note,
-            prevDate
         }
     }
 }
 
 function* run({ payload }: UpdateNoteAction) {
     try {
-        yield put(createDeleteNoteInNoteListById(payload.prevDate));
+        // yield put(createDeleteNoteInNoteListById(payload.prevId));
         const state: IStorage = yield select(state => state);
+        const userId = state.user.id;
         const networkState: NetInfoState = yield call(NetInfo.fetch);
         if (networkState.isConnected) {
-            yield call(NoteApi.updateNote, payload.note, state.user.id, payload.prevDate);
+            yield call(NoteApi.updateNote, payload.note, userId);
         } else {
             // yield put(createOneLevelMergePendingNoteList({
             //     notes: {
@@ -46,7 +45,7 @@ function* run({ payload }: UpdateNoteAction) {
             //     }
             // }));
         }
-        yield put(createNoteListChangeNoteByIdAction(payload.note));
+        yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
     } catch (e) {
         alert(e.message);
     }
