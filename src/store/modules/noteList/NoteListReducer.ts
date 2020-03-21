@@ -11,12 +11,7 @@ export function noteListReducer(
     case NoteListActionType.CHANGE_NOTE_BY_ID:
       const noteId = action.payload.note.id ?
         action.payload.note.id :
-        uuidv1({
-          node: [0x01, 0x23, 0x45, 0x67, 0x89, 0xab],
-          clockseq: 0x1234,
-          msecs: new Date().getTime(),
-          nsecs: 5678
-        })
+        uuidv1()
       return {
         ...noteList,
         [noteId]: {
