@@ -30,20 +30,27 @@ export function noteListReducer(
       }
 
     case NoteListActionType.FDTUUID: {
-      const newList = Object
+      const newList: INoteList = Object
         .values(noteList)
         .reduce((prev, curr) => {
-          const newUUID = curr.id ? curr.id : uuidv1();
-          const noteId = curr.id ? curr.id : curr.date;
+          let noteId;
+          let noteIdToRewrite;
+          if (curr.id) {
+            noteId = curr.id;
+            noteIdToRewrite = curr.id;
+          } else {
+            noteIdToRewrite = curr.date;
+            noteId = uuidv1();
+          }
           return {
             ...prev,
-            [newUUID]: {
-              id: newUUID,
-              ...noteList[noteId],
+            [noteId]: {
+              ...noteList[noteIdToRewrite],
+              id: noteId,
               userId: action.payload.userId
             }
           }
-        }, {});
+        }, {} as INoteList);
       return newList;
     }
     default:

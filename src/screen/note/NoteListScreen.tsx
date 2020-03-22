@@ -3,7 +3,6 @@ import { View, Text, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { INoteListByDay, INoteListNote } from '../../model/INoteList';
-import { Action, Dispatch } from 'redux';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { Note } from '../../view/notes/note/Note';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
@@ -27,7 +26,7 @@ interface NoteListScreenStateTProps {
 
 interface NoteListScreenDispatchProps {
     selectNoteToEdit: (noteId: string) => void
-    fdtuuidAndSetAsMigrated?: () => void
+    // fdtuuidAndSetAsMigrated?: () => void
 }
 
 interface NoteListScreenProps {
@@ -44,7 +43,8 @@ class NoteListScreen extends React.PureComponent<FullProps>{
     }
 
     componentDidMount() {
-        this.props.fdtuuidAndSetAsMigrated();
+        // this.props.fdtuuidAndSetAsMigrated();
+        alert(JSON.stringify(this.props.noteListByDay))
     }
 
     render() {
@@ -194,16 +194,16 @@ export const NoteListScreenConnect = connect(
             creatingNoteMode: true
         }))
     }),
-    (stateProps, dispatchProps) => ({
-        ...stateProps,
-        ...dispatchProps,
-        fdtuuidAndSetAsMigrated: () => {
-            if (!stateProps.app.isNoteListMigrated) {
-                dispatchProps.dispatch(createFDTRUUIDAction(stateProps.user.id));
-                dispatchProps.dispatch(createChangeAppAction({
-                    isNoteListMigrated: true
-                }));
-            }
-        }
-    })
+    // (stateProps, dispatchProps) => ({
+    //     ...stateProps,
+    //     ...dispatchProps,
+    //     fdtuuidAndSetAsMigrated: () => {
+    //         if (!stateProps.app.isNoteListMigrated) {
+    //             dispatchProps.dispatch(createFDTRUUIDAction(stateProps.user.id));
+    //             dispatchProps.dispatch(createChangeAppAction({
+    //                 isNoteListMigrated: true
+    //             }));
+    //         }
+    //     }
+    // })
 )(NoteListScreen)
