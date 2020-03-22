@@ -8,6 +8,7 @@ import { watchCreateNote } from './service/note/CreateNoteSaga';
 import { watchUpdateNote } from './service/note/UpdateNoteSaga';
 import { watchDeleteNote } from './service/note/DeleteNoteSaga';
 import { watchAppPing } from './service/app/AppPingSaga';
+import { watchSyncNotes } from './service/note/SyncNotesSaga';
 
 export function* rootSaga() {
     yield all([
@@ -22,6 +23,7 @@ export function* rootSaga() {
         fork(watchCreateNote),
         fork(watchUpdateNote),
         fork(watchDeleteNote),
+        fork(watchSyncNotes),
         //APP
         fork(watchAppPing),
     ]);

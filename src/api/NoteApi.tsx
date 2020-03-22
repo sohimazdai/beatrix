@@ -22,4 +22,11 @@ export class NoteApi {
             userId
         })
     }
+
+    static syncNotes(notes: INoteListNote[], userId: string) {
+        return api.axios.post('note/sync', {
+            notes,
+            userId
+        })
+    }
 }

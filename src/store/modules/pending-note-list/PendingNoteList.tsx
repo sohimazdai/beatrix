@@ -30,9 +30,6 @@ export interface PendingNoteListOneLevelDeepMergeAction {
 
 export interface PendingNoteListClearAction {
     type: PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES,
-    payload: {
-        idsToRemove: number[]
-    }
 }
 
 export interface PendingNoteListDeleteNoteByIdAction {
@@ -69,12 +66,9 @@ export function createDeletePendingNoteById(id: number): PendingNoteListDeleteNo
     }
 }
 
-export function createClearPendingNoteList(idsToRemove: number[]): PendingNoteListClearAction {
+export function createClearPendingNoteList(): PendingNoteListClearAction {
     return {
         type: PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES,
-        payload: {
-            idsToRemove
-        }
     }
 }
 
@@ -91,7 +85,7 @@ export function pendingNoteListReducer(
         case PendingNoteListActionType.PENDING_NOTE_LIST_ONE_LEVEL_DEEP_MERGE:
             return {
                 ...module,
-                ...action.payload.noteList.notes,
+                ...action.payload.noteList,
                 notes: {
                     ...module.notes,
                     ...action.payload.noteList.notes
@@ -105,11 +99,9 @@ export function pendingNoteListReducer(
                 notes: newModuleNotes
             };
         case PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES:
-            const moduleNotesToClear = module.notes;
-            action.payload.idsToRemove.map(id => delete moduleNotesToClear[id]);
             return {
                 ...module,
-                notes: moduleNotesToClear
+                notes: {}
             }
         default: return module;
     }

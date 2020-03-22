@@ -16,15 +16,16 @@ interface Props {
 function Component(props: Props) {
     React.useEffect(() => {
         NetInfo.isConnected.fetch().then(isConnected => {
-            console.log('Phone is ' + (isConnected ? 'online' : 'offline'));
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();
+            console.log('Phone is ' + (isConnected ? 'online' : 'offline'));
         });
 
         function handleConnectivityChange(isConnected) {
-            console.log('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
             props.changeAppConnection(isConnected);
-            !isConnected && props.setServerNotAvailability()
+            !isConnected && props.setServerNotAvailability();
+            isConnected && props.pingServer();
+            console.log('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
         }
 
         NetInfo.isConnected.addEventListener('connectionChange', handleConnectivityChange);

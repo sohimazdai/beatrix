@@ -17,8 +17,6 @@ import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-p
 import { styles } from './Style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ProfileIcon } from '../../component/icon/ProfileIcon';
-import { createFDTRUUIDAction } from '../../store/modules/noteList/NoteListActionCreator';
-import { createChangeAppAction } from '../../store/modules/app/app';
 
 interface NoteListScreenStateTProps {
     noteListByDay: INoteListByDay,
@@ -26,7 +24,6 @@ interface NoteListScreenStateTProps {
 
 interface NoteListScreenDispatchProps {
     selectNoteToEdit: (noteId: string) => void
-    // fdtuuidAndSetAsMigrated?: () => void
 }
 
 interface NoteListScreenProps {
@@ -40,11 +37,6 @@ class NoteListScreen extends React.PureComponent<FullProps>{
         noteCreationShown: false,
         noteEditingShown: false,
         editingNoteId: null
-    }
-
-    componentDidMount() {
-        // this.props.fdtuuidAndSetAsMigrated();
-        alert(JSON.stringify(this.props.noteListByDay))
     }
 
     render() {
@@ -193,17 +185,5 @@ export const NoteListScreenConnect = connect(
             editingNoteId: noteId,
             creatingNoteMode: true
         }))
-    }),
-    // (stateProps, dispatchProps) => ({
-    //     ...stateProps,
-    //     ...dispatchProps,
-    //     fdtuuidAndSetAsMigrated: () => {
-    //         if (!stateProps.app.isNoteListMigrated) {
-    //             dispatchProps.dispatch(createFDTRUUIDAction(stateProps.user.id));
-    //             dispatchProps.dispatch(createChangeAppAction({
-    //                 isNoteListMigrated: true
-    //             }));
-    //         }
-    //     }
-    // })
+    })
 )(NoteListScreen)

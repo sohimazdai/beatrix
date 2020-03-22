@@ -1,17 +1,16 @@
 import { INoteList } from "../../../model/INoteList";
 import { NoteListActionType } from "./NoteListActionType";
-import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, FDTUUIDAction } from "./NoteListAction";
-import { v1 as uuidv1 } from 'react-native-uuid';
+import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, NoteListOneLevelDeepMerge } from "./NoteListAction";
 
 export function noteListReducer(
   noteList: INoteList = {},
-  action: NoteListChangeNoteByIdAction | NoteListDeleteNoteByIdAction | FDTUUIDAction,
+  action: NoteListChangeNoteByIdAction | NoteListDeleteNoteByIdAction | NoteListOneLevelDeepMerge,
 ): INoteList {
   switch (action.type) {
     case NoteListActionType.CHANGE_NOTE_BY_ID:
-      const noteId = action.payload.note.id ?
-        action.payload.note.id :
-        uuidv1()
+      const noteId = action.payload.generatedNoteId ?
+        action.payload.generatedNoteId :
+        action.payload.note.id
       return {
         ...noteList,
         [noteId]: {
@@ -29,30 +28,8 @@ export function noteListReducer(
         ...newNoteList
       }
 
-    case NoteListActionType.FDTUUID: {
-      const newList: INoteList = Object
-        .values(noteList)
-        .reduce((prev, curr) => {
-          let noteId;
-          let noteIdToRewrite;
-          if (curr.id) {
-            noteId = curr.id;
-            noteIdToRewrite = curr.id;
-          } else {
-            noteIdToRewrite = curr.date;
-            noteId = uuidv1();
-          }
-          return {
-            ...prev,
-            [noteId]: {
-              ...noteList[noteIdToRewrite],
-              id: noteId,
-              userId: action.payload.userId
-            }
-          }
-        }, {} as INoteList);
-      return newList;
-    }
+    case NoteListActionType.ONE_LEVEL_DEEP_MERGE:
+      return action.payload.noteList;
     default:
       return noteList;
   }
