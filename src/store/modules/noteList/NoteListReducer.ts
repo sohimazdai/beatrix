@@ -1,4 +1,4 @@
-import { INoteList, INoteListNote } from "../../../model/INoteList";
+import { INoteList } from "../../../model/INoteList";
 import { NoteListActionType } from "./NoteListActionType";
 import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, FDTUUIDAction } from "./NoteListAction";
 import { v1 as uuidv1 } from 'react-native-uuid';

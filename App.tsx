@@ -6,6 +6,7 @@ import { appStore, persistor } from './src/store/appStore';
 import { ModalContentConnect } from './src/component/modal-content/ModalContent';
 import { PersistGate } from 'redux-persist/integration/react';
 import { appStarter } from './src/app/AppStarter';
+import { AppConnection } from './src/app/AppConnection';
 
 interface State {
   appIsReady: boolean
@@ -33,6 +34,7 @@ export default class App extends React.Component<never, State> {
           >
             <AppNavigator />
             <ModalContentConnect />
+            <AppConnection />
           </PersistGate>
         </Provider>
         : (

@@ -1,10 +1,11 @@
 import * as Font from 'expo-font';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, StatusBar } from 'react-native';
 
 export const LAST_ACTIVE_USER_ID = "last_active_user_id"
 
 export function appStarter() {
     return new Promise((resolve, reject) => {
+        StatusBar.setBarStyle("light-content", true)
         Font.loadAsync({
             "Roboto": require('./../../assets/fonts/Roboto/Roboto-Regular.ttf')
         })

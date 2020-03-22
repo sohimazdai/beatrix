@@ -98,13 +98,19 @@ export function pendingNoteListReducer(
                 }
             }
         case PendingNoteListActionType.PENDING_NOTE_LIST_DELETE_NOTE_BY_ID:
-            const newModule = module;
-            delete newModule[action.payload.id]
-            return newModule;
+            const newModuleNotes = module.notes;
+            delete newModuleNotes[action.payload.id]
+            return {
+                ...module,
+                notes: newModuleNotes
+            };
         case PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES:
-            const moduleToClear = module;
-            action.payload.idsToRemove.map(id => delete moduleToClear[id]);
-            return moduleToClear
+            const moduleNotesToClear = module.notes;
+            action.payload.idsToRemove.map(id => delete moduleNotesToClear[id]);
+            return {
+                ...module,
+                notes: moduleNotesToClear
+            }
         default: return module;
     }
 }

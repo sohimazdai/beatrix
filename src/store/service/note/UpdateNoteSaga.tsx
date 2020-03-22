@@ -5,7 +5,6 @@ import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 import { createOneLevelMergePendingNoteList, createDeletePendingNoteById } from '../../modules/pending-note-list/PendingNoteList';
-import { PendingOperationType } from '../../../model/IPendingNoteList';
 import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 
 const ACTION_TYPE = 'UPDATE_NOTE_ACTION';
@@ -28,22 +27,19 @@ export function createUpdateNoteAction(note: INoteListNote): UpdateNoteAction {
 
 function* run({ payload }: UpdateNoteAction) {
     try {
-        // yield put(createDeleteNoteInNoteListById(payload.prevId));
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
-        const networkState: NetInfoState = yield call(NetInfo.fetch);
-        if (networkState.isConnected) {
+        if (state.app.serverAvailable) {
             yield call(NoteApi.updateNote, payload.note, userId);
         } else {
-            // yield put(createOneLevelMergePendingNoteList({
-            //     notes: {
-            //         [payload.note.date]: {
-            //             ...payload.note,
-            //             userId: state.user.id,
-            //             operation: PendingOperationType.UPDATE
-            //         }
-            //     }
-            // }));
+            yield put(createOneLevelMergePendingNoteList({
+                notes: {
+                    [payload.note.id]: {
+                        id: payload.note.id,
+                        userId: state.user.id
+                    }
+                }
+            }));
         }
         yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
     } catch (e) {

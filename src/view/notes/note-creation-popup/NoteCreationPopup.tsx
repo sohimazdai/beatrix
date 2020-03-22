@@ -298,9 +298,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     createNote = () => {
         let note: INoteListNote = this.noteFromState;
-        // console.log('before ' + this.props.note.id);
         if (this.props.note) {
-            // this.props.onNoteDelete(this.props.note.id);
             this.props.dispatch(createUpdateNoteAction({
                 ...note,
                 id: this.props.note.id
@@ -323,7 +321,6 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             }
             this.setInitialState();
         }
-        // console.log('after ' + this.props.note.id);
     }
 
     renderDeleteButton() {
@@ -358,7 +355,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     deleteNote = () => {
         this.props.onNoteDelete(this.props.note.id);
-        this.props.dispatch(createDeleteNoteAction(this.props.note.date))
+        this.props.dispatch(createDeleteNoteAction(this.props.note.id))
         this.props.hidePopup()
     }
 

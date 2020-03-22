@@ -187,7 +187,7 @@ export const NoteListScreenConnect = connect(
             noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state)
         }
     },
-    (dispatch: Dispatch<Action>) => ({
+    (dispatch) => ({
         dispatch,
         selectNoteToEdit: (noteId: string) => dispatch(createChangeInteractive({
             editingNoteId: noteId,

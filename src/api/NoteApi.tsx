@@ -16,9 +16,9 @@ export class NoteApi {
         })
     }
 
-    static deleteNote(date: number, userId: string) {
+    static deleteNote(id: string, userId: string) {
         return api.axios.post('note/delete', {
-            date,
+            id,
             userId
         })
     }
