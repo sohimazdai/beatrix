@@ -25,10 +25,10 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
             <KeyboardAvoidingView
                 style={styles.keyboardAvoidingView}
                 behavior="padding"
-                keyboardVerticalOffset={100}
+                // keyboardVerticalOffset={100}
             >
                 <ScrollView style={styles.profileView}>
-                    <Hat 
+                    <Hat
                         onBackPress={() => this.props.navigation.navigate('Profile')}
                         title={"Диабетический профиль"}
                     />

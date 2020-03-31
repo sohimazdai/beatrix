@@ -2,10 +2,11 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { UserApi } from '../../../api/userApi';
 import { IUser } from '../../../model/IUser';
-import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { IStorage } from '../../../model/IStorage';
-import { IPendingNoteList, IPendingNotes } from '../../../model/IPendingNoteList';
 import { createSyncNotesAction } from '../note/SyncNotesSaga';
+import { createOneLevelMergeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
+import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
+import { createUpdateUserSheduleAction } from './UpdateSheduleSaga';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -34,6 +35,8 @@ function* syncUser({ payload }: SyncUserAction) {
         const state: IStorage = yield select(state => state);
         if (state.app.serverAvailable) {
             const syncData = yield call(UserApi.syncUser, payload.user);
+            yield put(createOneLevelMergeUserPropertiesShedule(syncData.data.shedule));
+            yield put(createUserDiabetesPropertiesChangeAction(syncData.data.properties));
             yield put(createSyncNotesAction());
         }
 

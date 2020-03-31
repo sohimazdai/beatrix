@@ -11,6 +11,7 @@ import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { createOneLevelMergeUserPropertiesShedule } from '../../../store/modules/user-properties-shedule/UserPropertiesShedule';
 import { styles } from './Style';
+import { createUpdateUserSheduleAction } from '../../../store/service/user/UpdateSheduleSaga';
 
 interface Props {
     sheduleKey?: SheduleKeyType
@@ -293,10 +294,9 @@ export const ProfileUserPropertiesShedulePopupConnect = connect(
                 }))
             },
             onSaveShedule: (shedule: IUserPropertiesShedule) => {
-                dispatch(createOneLevelMergeUserPropertiesShedule(shedule));
+                console.log('sync shedule', shedule)
+                dispatch(createUpdateUserSheduleAction(shedule));
             }
         }
     }
 )(ProfileUserPropertiesShedulePopup)
-
-
