@@ -36,8 +36,8 @@ interface NoteListScreenProps {
 
 interface FullProps
   extends NoteListScreenProps,
-    NoteListScreenDispatchProps,
-    NoteListScreenStateTProps {}
+  NoteListScreenDispatchProps,
+  NoteListScreenStateTProps { }
 
 class NoteListScreen extends React.PureComponent<FullProps> {
   state = {
@@ -45,7 +45,6 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     noteEditingShown: false,
     editingNoteId: null,
     portionsToRender: 1,
-    showButton: false
   };
 
   render() {
@@ -53,31 +52,15 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       <View style={styles.screenView}>
         <BlockHat title={"Записи"} rightSideSlot={this.renderProfileIcon()} />
         {this.renderIconBar()}
-        <ScrollView style={styles.cardsView}>
-          {this.renderCards()}
-          {this.state.showButton ? (
-            <View style={styles.showMoreButtonWrapper}>
-              <TouchableOpacity
-                style={styles.showMoreButton}
-                onPress={() => this.showMorePosts()}
-              >
-                <Text style={styles.addNoteButtonText}>Показать больше</Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <Text></Text>
-          )}
-          <View style={styles.placeholder}></View>
-        </ScrollView>
-
+        {this.renderCards()}
         <View style={styles.addNoteButtonView}>
           <NoteCreationPopupButtonConnect />
         </View>
-      </View>
+      </View >
     );
   }
 
-  showMorePosts() {
+  showMorePosts = () => {
     this.setState({ portionsToRender: this.state.portionsToRender + 1 });
   }
 
@@ -105,37 +88,32 @@ class NoteListScreen extends React.PureComponent<FullProps> {
 
   renderCards() {
     var portionSize = 10;
-
-    const daysBeforeCut = Object.keys(this.props.noteListByDay).sort(
+    const sortedDays = Object.keys(this.props.noteListByDay).sort(
       (a, b) => parseInt(b) - parseInt(a)
     );
-    var daysAfterCut = daysBeforeCut.slice(
+    var daysToRender = sortedDays.slice(
       0,
       this.state.portionsToRender * portionSize
     );
-    return daysAfterCut.length !== 0 ? (
-      daysAfterCut.map(day => {
-        return (
-          <View key={day} style={styles.cardWrap}>
-            {this.renderDate(parseInt(day))}
-            {this.renderCard(this.props.noteListByDay[day])}
-            {daysBeforeCut.length > daysAfterCut.length
-              ? this.setState({ showButton: true })
-              : this.setState({ showButton: false })}
-          </View>
-          // {daysBeforeCut.length > daysAfterCut.length ? (
-          //     <Button
-          //       title="Show 10 more"
-          //       onPress={() => this.showMorePosts()}
-          //     />
-          //   ) : (
-          //     <Text>KEK</Text>
-          //   )}
-        );
-      })
+    var isButtonShowing = sortedDays.length !== daysToRender.length;
+    return daysToRender.length !== 0 ? (
+      <ScrollView style={styles.cardsView}>
+        {
+          daysToRender.map(day => {
+            return (
+              <View key={day} style={styles.cardWrap}>
+                {this.renderDate(parseInt(day))}
+                {this.renderCard(this.props.noteListByDay[day])}
+              </View>
+            )
+          })
+        }
+        {isButtonShowing && this.renderShowMoreButton()}
+        <View style={styles.noteListBottom}></View>
+      </ScrollView>
     ) : (
-      <Text style={styles.noNotesStub}>Записей не найдено!</Text>
-    );
+        <Text style={styles.noNotesStub}>Записей не найдено!</Text>
+      )
   }
 
   renderDate(day: number) {
@@ -184,7 +162,18 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       </View>
     );
   }
-
+  renderShowMoreButton() {
+    return (
+      <View style={styles.showMoreButtonWrapper}>
+        <TouchableOpacity
+          style={styles.showMoreButton}
+          onPress={this.showMorePosts}
+        >
+          <Text style={styles.addNoteButtonText}>Показать больше</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
   getMonthString(m: number) {
     switch (m) {
       case 0:

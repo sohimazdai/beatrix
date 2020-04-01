@@ -117,7 +117,7 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     ...shadowOptions
   },
-  placeholder: {
+  noteListBottom: {
       marginVertical: 35
   }
 });
