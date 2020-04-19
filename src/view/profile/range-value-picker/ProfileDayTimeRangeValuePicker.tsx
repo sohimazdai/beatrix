@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { ProfileTextInput } from '../ProfileTextInput';
 import { IUserDiabetesPropertiesDayTimeValue } from '../../../model/IUserDiabetesProperties';
 import { styles } from "./Style";
+import { BaseDecimalInput } from './BaseDecimalInput';
 
 interface Props {
     range?: IUserDiabetesPropertiesDayTimeValue
@@ -23,7 +24,6 @@ export default class ProfileDayTimeRangeValuePicker extends Component<Props, Sta
         to: this.props.range.to,
         value: this.props.range.value,
         isNeedToSave: this.props.range.needToSave,
-
         isErrored: false,
     }
 
@@ -74,21 +74,19 @@ export default class ProfileDayTimeRangeValuePicker extends Component<Props, Sta
                 </View>
                 <View style={styles.itemView}>
                     {this.state.isNeedToSave ? (
-                        <ProfileTextInput
+                        <BaseDecimalInput
                             value={String(this.state.value)}
                             onChangeText={value => {
                                 if (value.split('.').length > 0) {
-                                    value = value.split('.')[0] + '.' + 0
-                                } else if (value.split(',').length > 0) {
-                                    value = value.split(',')[0] + '.' + 0
+                                    value = value.split('.')[0] + '.' + value.split('.')[1]
                                 }
                                 this.setState({
                                     value: Number(value),
                                     isNeedToSave: true,
                                     isErrored: false
                                 })
-                            }}
-                        />) : (
+                            }} />
+                    ) : (
                             <Text style={styles.savedValue}>
                                 {this.state.value}
                             </Text>
