@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AuthButtonGoogle, AuthButtonGoogleConnect } from './button/AuthButtonGoogle';
 import { styles } from './Style';
@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { createEmailAuthAction } from '../../store/service/auth/EmailAuthSaga';
 import { createEmailSignUpAction } from '../../store/service/auth/EmailSignUpSaga';
+import { ScrollView } from 'react-native-gesture-handler';
 
 enum AuthFormMode {
     AUTH = 'auth',
@@ -22,6 +23,7 @@ enum AuthType {
 interface Props {
     user?: IUser
     loading?: boolean
+    isPasswordRestore?: boolean
 
     onEmailLogin?: (email: string, password: string) => void
     onEmailSignUp?: (email: string, password: string) => void
@@ -43,7 +45,7 @@ export class AuthForm extends React.Component<Props, State> {
         password: "",
         checkPassword: "",
         mode: AuthFormMode.AUTH,
-        authType: AuthType.GOOGLE
+        authType: AuthType.GOOGLE,
     }
 
     changeAuthType = () => {
@@ -106,6 +108,7 @@ export class AuthForm extends React.Component<Props, State> {
                     style={styles.authFormInputFormInput}
                     value={this.state.email}
                     keyboardType={'email-address'}
+                    textContentType={'emailAddress'}
                     placeholder={'Почта'}
                     onChangeText={(value) => this.setState({ email: value })}
                 />
@@ -127,7 +130,10 @@ export class AuthForm extends React.Component<Props, State> {
                     style={styles.authFormInputForget}
                 >
                     <Text style={styles.authFormInputForgetText}>
-                        {'Забыли пароль?'}
+                        {this.props.isPasswordRestore
+                            ? 'Проверьте почту. Отправить снова?'
+                            : 'Забыли пароль?'
+                        }
                     </Text>
                 </TouchableOpacity>
             ),

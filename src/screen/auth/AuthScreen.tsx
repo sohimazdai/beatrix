@@ -3,6 +3,7 @@ import {
     View,
     KeyboardAvoidingView,
     ActivityIndicator,
+    Platform,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
@@ -24,30 +25,39 @@ interface AuthScreenProps {
 
 interface AuthScreenState {
     restorePasswordPopupShown: boolean
+    passwordAlreadyRestore?: boolean
 }
 
 class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
     state = {
         restorePasswordPopupShown: false,
+        passwordAlreadyRestore: false,
     }
 
     render() {
         return (
-            <KeyboardAvoidingView behavior="padding" style={styles.AuthView}>
-                <ScrollView style={styles.AuthView}>
+            <View style={styles.AuthScreen}>
+                <KeyboardAvoidingView
+                    style={styles.avoidingView}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                >
                     {this.renderAuthForm()}
-                </ScrollView>
-
+                </KeyboardAvoidingView>
                 {this.state.restorePasswordPopupShown &&
                     <Fader hidden={!this.state.restorePasswordPopupShown} />}
                 <AuthRememberPasswordPopupConnect
-                    onRememberEnd={() => this.setState({ restorePasswordPopupShown: false })}
+                    onRememberEnd={() => {
+                        this.setState({
+                            restorePasswordPopupShown: false,
+                            passwordAlreadyRestore: true
+                        })
+                    }}
                     restorePasswordPopupShown={this.state.restorePasswordPopupShown}
                 />
                 {this.loading && <View style={styles.authFormLoading}>
                     <ActivityIndicator size="small" color="#000000" />
                 </View>}
-            </KeyboardAvoidingView>
+            </View>
         )
     }
 
@@ -73,6 +83,7 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
                 {this.renderBackgroundSun()}
                 {this.renderBackgroundMountains()}
                 <AuthFormConnect
+                    isPasswordRestore={this.state.passwordAlreadyRestore}
                     onForget={() => this.setState({ restorePasswordPopupShown: true })}
                 />
             </View >
