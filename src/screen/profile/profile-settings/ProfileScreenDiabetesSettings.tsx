@@ -25,13 +25,13 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
             <KeyboardAvoidingView
                 style={styles.keyboardAvoidingView}
                 behavior="padding"
-                // keyboardVerticalOffset={100}
+            // keyboardVerticalOffset={100}
             >
+                <Hat
+                    onBackPress={() => this.props.navigation.navigate('Profile')}
+                    title={"Диабетический профиль"}
+                />
                 <ScrollView style={styles.profileView}>
-                    <Hat
-                        onBackPress={() => this.props.navigation.navigate('Profile')}
-                        title={"Диабетический профиль"}
-                    />
                     {/* TODO: add change insulin type posibility */}
                     {/* <ProfileSettingsInsulinTypePickerConnect /> */}
                     <ProfileSettingsTargetGlycemiaPickerConnect />

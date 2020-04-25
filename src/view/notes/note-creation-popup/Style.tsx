@@ -3,6 +3,10 @@ import { shadowOptions } from "../../../constant/shadowOptions";
 import { ThemeColor } from "../../../constant/ThemeColor";
 
 export const styles = StyleSheet.create({
+    noteCreationViewScrollView: {
+        width: '100%',
+        height: '100%',
+    },
     noteCreationView: {
         flex: 1,
         width: '100%',
@@ -24,10 +28,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-    },
-    noteCreationViewScrollView: {
-        width: '100%',
-        height: '100%',
     },
     buttonsBlock: {
         width: '100%',

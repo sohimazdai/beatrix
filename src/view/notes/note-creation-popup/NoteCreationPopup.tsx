@@ -151,34 +151,32 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     render() {
         return (
-            <>
-                <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
-                    <ScrollView style={styles.noteCreationViewScrollView}>
-                        <KeyboardAvoidingView
-                            style={!this.props.note ?
-                                styles.noteCreationView :
-                                styles.noteEditingView
-                            }
-                            keyboardVerticalOffset={30}
-                            behavior='padding'
-                        >
-                            <View style={styles.scrollViewContent}>
-                                {this.renderPickerBlock()}
-                                <View style={styles.buttonsBlock}>
-                                    {this.props.note && this.renderDeleteButton()}
-                                    {this.renderSaveButton()}
-                                </View>
+            <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
+                <ScrollView style={styles.noteCreationViewScrollView}>
+                    <KeyboardAvoidingView
+                        style={!this.props.note ?
+                            styles.noteCreationView :
+                            styles.noteEditingView
+                        }
+                        keyboardVerticalOffset={30}
+                        behavior='padding'
+                    >
+                        <View style={styles.scrollViewContent}>
+                            {this.renderPickerBlock()}
+                            <View style={styles.buttonsBlock}>
+                                {this.props.note && this.renderDeleteButton()}
+                                {this.renderSaveButton()}
                             </View>
-                            <TouchableOpacity
-                                style={styles.hideTouchable}
-                                onPress={this.props.hidePopup}
-                            >
-                                <CloseIcon />
-                            </TouchableOpacity>
-                        </KeyboardAvoidingView>
-                    </ScrollView>
-                </BottomPopup>
-            </>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.hideTouchable}
+                            onPress={this.props.hidePopup}
+                        >
+                            <CloseIcon />
+                        </TouchableOpacity>
+                    </KeyboardAvoidingView>
+                </ScrollView>
+            </BottomPopup>
         )
     }
 

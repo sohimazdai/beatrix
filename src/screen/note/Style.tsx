@@ -106,16 +106,17 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   showMoreButton: {
-    padding: 5,
+    padding: 10,
+    paddingHorizontal: 20,
     margin: 5,
     paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: "rgba(250,250,250, 1)",
     borderRadius: 30,
-    ...shadowOptions
+    ...shadowOptions,
   },
   noteListBottom: {
     marginVertical: 35

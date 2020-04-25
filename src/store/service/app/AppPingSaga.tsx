@@ -17,6 +17,7 @@ function* ping() {
         if (state.app.networkConnected) {
             const isOk = yield call(AppApi.ping);
             if (isOk.data == 'ОК') {
+                console.log('Server is available')
                 yield put(createChangeAppAction({
                     serverAvailable: true
                 }))
@@ -24,6 +25,7 @@ function* ping() {
         }
     } catch (e) {
         console.log('ErrorCatched: ' + e.message)
+        console.log('Server is n/a')
         yield put(createChangeAppAction({
             serverAvailable: false
         }))

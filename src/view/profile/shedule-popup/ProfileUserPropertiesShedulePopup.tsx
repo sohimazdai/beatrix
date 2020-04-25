@@ -6,7 +6,7 @@ import { IStorage } from '../../../model/IStorage';
 import ProfileDayTimeRangeValuePicker from '../range-value-picker/ProfileDayTimeRangeValuePicker';
 import { IUserPropertiesShedule, SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 import { ScrollView } from 'react-native-gesture-handler';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View, KeyboardAvoidingView } from 'react-native';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { createOneLevelMergeUserPropertiesShedule } from '../../../store/modules/user-properties-shedule/UserPropertiesShedule';
@@ -50,7 +50,6 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         return state;
     }
 
-    //get
     get shedule() {
         return this.sheduleArrayFromAnObject;
     }
@@ -63,16 +62,26 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         return (
             <BottomPopup hidden={!this.props.shown}>
                 <ScrollView style={styles.scrollView}>
-                    <View style={styles.scrollViewContent}>
-                        {this.renderTitle()}
-                        {this.renderInputTitles()}
-                        {this.renderProfileDateTimePicker()}
-                        {this.renderAddButton()}
-                        {this.renderReangeThatNeedToFill()}
-                        {this.renderSaveButtonIfNeeded()}
-                    </View>
+                    <KeyboardAvoidingView
+                        style={styles.scrollViewContentWrap}
+                        keyboardVerticalOffset={0}
+                        behavior="padding"
+                    >
+                        <View style={styles.scrollViewContent}>
+                            {this.renderTitle()}
+                            <View style={styles.pickerBlock}>
+                                {this.renderInputTitles()}
+                                {this.renderProfileDateTimePicker()}
+                                {this.renderReangeThatNeedToFill()}
+                            </View>
+                            <View style={styles.bottomBlock}>
+                                {this.renderAddButton()}
+                                {this.renderSaveButtonIfNeeded()}
+                            </View>
+                        </View>
+                        {this.renderCloseButton()}
+                    </KeyboardAvoidingView>
                 </ScrollView>
-                {this.renderCloseButton()}
             </BottomPopup>
         )
     }
@@ -131,7 +140,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
     get rangeThatNeedToWriteMore(): string {
         let rangeThatNeedToWriteMore = "";
         let currentFrom = "";
-        for (let i = 0; i < 24; i++) {
+        for (let i = 0; i <= 24; i++) {
             const sheduleItem = this.state.newShedule[i];
             if (!currentFrom && (!sheduleItem || (sheduleItem && !sheduleItem[this.sheduleKey]))) {
                 currentFrom = "с " + i;
@@ -140,10 +149,10 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                     ", " + currentFrom + " до " + i :
                     " " + currentFrom + " до " + i;
                 currentFrom = "";
-            } else if (currentFrom && i === 23) {
+            } else if (currentFrom && i === 24) {
                 rangeThatNeedToWriteMore += rangeThatNeedToWriteMore ?
-                    ", " + currentFrom + " до " + (i + 1) :
-                    " " + currentFrom + " до " + (i + 1);
+                    ", " + currentFrom + " до " + (i) :
+                    " " + currentFrom + " до " + (i);
                 currentFrom = "";
             }
         }
@@ -213,17 +222,20 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
             </View>
         )
     }
+
     renderProfileDateTimePicker() {
-        return <View>
-            {this.shedule.map(item => {
-                return <ProfileDayTimeRangeValuePicker
-                    key={item.id}
-                    range={item}
-                    onApplyChange={this.onApplyChange}
-                    onDelete={this.onDeleteItem}
-                />
-            })}
-        </View>
+        return (
+            <View>
+                {this.shedule.map(item => {
+                    return <ProfileDayTimeRangeValuePicker
+                        key={item.id}
+                        range={item}
+                        onApplyChange={this.onApplyChange}
+                        onDelete={this.onDeleteItem}
+                    />
+                })}
+            </View>
+        )
     }
 
     renderAddButton() {
@@ -244,7 +256,6 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                 Необходимо заполнить временные промежутки:
                 {this.rangeThatNeedToWriteMore}
             </Text>
-
     }
 
     renderSaveButtonIfNeeded() {
@@ -294,7 +305,6 @@ export const ProfileUserPropertiesShedulePopupConnect = connect(
                 }))
             },
             onSaveShedule: (shedule: IUserPropertiesShedule) => {
-                console.log('sync shedule', shedule)
                 dispatch(createUpdateUserSheduleAction(shedule));
             }
         }

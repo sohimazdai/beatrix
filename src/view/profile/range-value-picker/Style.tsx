@@ -38,6 +38,23 @@ export const styles = StyleSheet.create({
     delete: {
         fontSize: 18,
     },
+    inputView: {
+        display: 'flex',
+
+        textAlign: 'center',
+
+        width: 50,
+        height: 30,
+
+        padding: 5,
+
+        borderRadius: 5,
+
+        backgroundColor: '#FFFFFF',
+        fontSize: 16,
+        borderColor: "#cecece",
+        borderWidth: 1,
+    },
     deleteItemView: {
         display: 'flex',
 
