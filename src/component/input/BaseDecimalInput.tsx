@@ -19,15 +19,14 @@ export function BaseDecimalInput(props: Props) {
             return;
         }
 
-        let natural = Number(value) || '0';
-
-        props.onChangeText(natural + '.0')
+        props.onChangeText(value)
     }
+
     return (
         <View>
             <TextInput
                 {...props}
-                value={props.value || '0.0'}
+                value={props.value}
                 onChangeText={(value) => handleChange(value)}
                 placeholder={props.placeholder || '0.0'}
                 keyboardType={props.keyboardType || 'numeric'}

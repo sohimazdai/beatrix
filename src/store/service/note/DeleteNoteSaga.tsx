@@ -4,6 +4,7 @@ import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
+import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 
 const ACTION_TYPE = 'DELETE_NOTE_ACTION';
 
@@ -26,6 +27,9 @@ export function createDeleteNoteAction(id: string): DeleteNoteAction {
 function* run({ payload }: DeleteNoteAction) {
     try {
         const state: IStorage = yield select(state => state);
+
+        yield put(createDeleteNoteInNoteListById(payload.id));
+
         if (state.app.serverAvailable) {
             yield call(NoteApi.deleteNote, payload.id, state.user.id);
         } else {
@@ -38,6 +42,7 @@ function* run({ payload }: DeleteNoteAction) {
                 }
             }));
         }
+        
         yield put(createUserChangeAction({
             loading: false,
             error: null

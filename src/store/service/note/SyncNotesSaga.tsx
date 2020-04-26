@@ -17,6 +17,7 @@ function* run() {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
         const notesToSync = Object.values(state.noteList).filter(note => note.userId === userId);
+        console.log('notesToSync', notesToSync)
         if (state.app.serverAvailable) {
             const syncedNotes = yield call(NoteApi.syncNotes, notesToSync, userId);
             yield put(createNoteListOneLevelDeepMerge(syncedNotes.data));

@@ -61,17 +61,17 @@ interface NoteCreationPopupState {
 }
 
 class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, NoteCreationPopupState>{
-    glucoseInputForSlider = 0.0;
-    breadUnitsInputForSlider = 0.0;
-    shortInsulinInputForSlider = 0.0;
-    longInsulinInputForSlider = 0.0;
+    glucoseInputForSlider = 0;
+    breadUnitsInputForSlider = 0;
+    shortInsulinInputForSlider = 0;
+    longInsulinInputForSlider = 0;
 
     state = {
         date: new Date(),
-        glucoseInput: "0.0",
-        breadUnitsInput: "0.0",
-        insulinInput: "0.0",
-        longInsulinInput: "0.0",
+        glucoseInput: "",
+        breadUnitsInput: "",
+        insulinInput: "",
+        longInsulinInput: "",
         commentary: "",
         currentValueType: NoteValueType.GLUCOSE,
         prevValueType: NoteValueType.GLUCOSE,
@@ -101,10 +101,10 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         } else if (!pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode) {
             this.setState({
                 date: new Date(),
-                glucoseInput: "0.0",
-                breadUnitsInput: "0.0",
-                insulinInput: "0.0",
-                longInsulinInput: "0.0",
+                glucoseInput: "",
+                breadUnitsInput: "",
+                insulinInput: "",
+                longInsulinInput: "",
                 commentary: "",
                 currentValueType: NoteValueType.GLUCOSE,
                 glucoseInputForSlider: 0.0,
@@ -352,7 +352,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     }
 
     deleteNote = () => {
-        this.props.onNoteDelete(this.props.note.id);
+        // this.props.onNoteDelete(this.props.note.id);
         this.props.dispatch(createDeleteNoteAction(this.props.note.id))
         this.props.hidePopup()
     }

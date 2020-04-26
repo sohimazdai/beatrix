@@ -4,7 +4,7 @@ import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
-import { v1 as uuidv1 } from 'react-native-uuid';
+import { v1 as uuidv1 } from 'uuid';
 
 const ACTION_TYPE = 'CREATE_NOTE_ACTION';
 
@@ -29,6 +29,9 @@ function* createNote({ payload }: CreateNoteAction) {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
         const noteId = uuidv1();
+
+        yield put(createNoteListChangeNoteByIdAction(payload.note, userId, noteId));
+        
         if (state.app.serverAvailable) {
             yield call(
                 NoteApi.createNote,
@@ -47,7 +50,6 @@ function* createNote({ payload }: CreateNoteAction) {
                 }
             }));
         }
-        yield put(createNoteListChangeNoteByIdAction(payload.note, userId, noteId));
     } catch (e) {
         alert(e.message);
     }
