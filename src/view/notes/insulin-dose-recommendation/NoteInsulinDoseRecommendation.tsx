@@ -21,10 +21,9 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
     render() {
         const recommendation = this.recommendation;
         if (!recommendation) return null;
-
         return <View style={styles.view}>
             <Text style={styles.viewText}>
-                {this.recommendation}
+                {recommendation}
             </Text>
         </View>
     }
@@ -33,29 +32,35 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
         const { note, userPropertiesShedule, userDiabetesProperties } = this.props;
         const currentHour = new Date(note.date).getHours();
         const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
-        if (!(sheduleItem.insulinSensitivityFactor || sheduleItem.carbohydrateRatio)) {
-            return Math.random() < 0.2 ?
-                'Заполните диабетический профиль для получения рекомендаций' :
-                ''
+        if (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio) {
+            return Math.random() < 0.2
+                ? 'Заполните диабетический профиль для получения рекомендаций'
+                : ''
         }
 
         const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
         const insulinToCorrectGlucose = glucoseValueToCorrect / sheduleItem.insulinSensitivityFactor;
         const insulinToCorrectBU = note.breadUnits * sheduleItem.carbohydrateRatio;
-        const insulinValue = Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose);
+        const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
+        console.log('glucoseValueToCorrect', glucoseValueToCorrect)
+        console.log('insulinToCorrectGlucose', insulinToCorrectGlucose)
+        console.log('insulinToCorrectBU', insulinToCorrectBU)
+        console.log('insulinValue', insulinValue)
+        console.log('sheduleItem', sheduleItem)
 
         if (note.glucose == 0 && note.breadUnits == 0) {
             return ''
         }
 
-        if (insulinValue <= 0) {
-            return "Вводить инсулин не рекомендуется";
-        }
 
         if (note.glucose === 0) {
             return 'Введите значение глюкозы, чтобы получить рекомендацию';
         }
 
+        if (parseFloat(insulinValue) <= 0) {
+            return "Вводить инсулин не рекомендуется";
+        }
+        
         if (note.glucose < 4 && note.glucose > 2) {
             return `Введите инсулин после еды. \nРекомендуемое значение инсулина: ${insulinValue}`;
         }
@@ -63,6 +68,7 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
         if (note.glucose <= 2) {
             return 'Сначала восстановите свой уровень глюкозы';
         }
+        
 
         return 'Рекомендуемое значение инсулина: ' + insulinValue;
 

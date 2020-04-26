@@ -6,7 +6,7 @@ export const Header = () => (
         
     </View>
 )
-
+//check TODO: remove this
 const styles = StyleSheet.create({
     header: {
         width: '100%',

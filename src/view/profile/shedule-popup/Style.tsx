@@ -1,36 +1,38 @@
 import { shadowOptions } from "../../../constant/shadowOptions";
 import { ThemeColor } from "../../../constant/ThemeColor";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 export const styles = StyleSheet.create({
     scrollView: {
-        position: 'relative',
-
-        width: "100%",
-        maxHeight: 400,
-        paddingTop: 20,
-        paddingBottom: 40,
-        backgroundColor: '#FDFFDE',
-
-        borderRadius: 25,
-        borderBottomRightRadius: 0,
-        borderBottomLeftRadius: 0,
+        width: '100%',
+        height: '100%',
+        maxHeight: Dimensions.get('window').height * 0.9,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+    },
+    scrollViewContentWrap: {
+        flex: 1,
+        width: '100%',
+        minHeight: 500,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        backgroundColor: "#FDFFDE",
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
     },
     scrollViewContent: {
+        flex: 1,
         width: '100%',
-
-        display: 'flex',
-
-        paddingBottom: 40,
-
+        height: '100%',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingBottom: 40,
     },
     popupTitle: {
         width: '70%',
         fontSize: 18,
-        marginBottom: 20,
-
+        marginTop: 20,
         textAlign: 'center',
 
         color: ThemeColor.TEXT_DARK_GRAY
@@ -58,7 +60,23 @@ export const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingTop: 10
     },
+    pickerBlock: {
+        flex: 1,
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
 
+        borderRadius: 25,
+
+        alignItems: 'center',
+    },
+    bottomBlock: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+    },
     addTouchable: {
         display: 'flex',
         justifyContent: 'center',
@@ -67,6 +85,7 @@ export const styles = StyleSheet.create({
         width: 120,
 
         margin: 10,
+        marginBottom: 20,
         padding: 10,
 
         backgroundColor: 'white',

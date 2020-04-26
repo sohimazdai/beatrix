@@ -1,5 +1,5 @@
 export enum NoteListActionType {
-    CHANGE_NOTE_BY_ID = "change-note-by-id",
-    DELETE_NOTE_BY_ID = "delete-note-by-id",
-    FDTUUID = 'fdtuuid-note'
+    CHANGE_NOTE_BY_ID = "CHANGE_NOTE_BY_ID",
+    DELETE_NOTE_BY_ID = "DELETE_NOTE_BY_ID_ACTION",
+    ONE_LEVEL_DEEP_MERGE = 'NOTE_ONE_LEVEL_DEEP_MERGE_ACTION'
 }

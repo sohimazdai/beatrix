@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     BottomPopupView: {
         position: 'absolute',
         bottom: 0,
-
+        overflow: 'visible',
         display: "flex",
         width: '100%',
 

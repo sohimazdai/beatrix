@@ -1,11 +1,12 @@
 import { NoteListActionType } from "./NoteListActionType";
-import { INoteListNote } from "../../../model/INoteList";
+import { INoteListNote, INoteList } from "../../../model/INoteList";
 
 export interface NoteListChangeNoteByIdAction {
     type: NoteListActionType.CHANGE_NOTE_BY_ID,
     payload: {
         note: INoteListNote,
-        userId: string
+        userId: string,
+        generatedNoteId?: string
     }
 }
 
@@ -16,9 +17,9 @@ export interface NoteListDeleteNoteByIdAction {
     }
 }
 
-export interface FDTUUIDAction {
-    type: NoteListActionType.FDTUUID,
+export interface NoteListOneLevelDeepMerge {
+    type: NoteListActionType.ONE_LEVEL_DEEP_MERGE
     payload: {
-        userId: string
+        noteList: INoteList
     }
 }

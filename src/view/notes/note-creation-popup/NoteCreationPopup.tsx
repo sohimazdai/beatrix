@@ -61,17 +61,17 @@ interface NoteCreationPopupState {
 }
 
 class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, NoteCreationPopupState>{
-    glucoseInputForSlider = 0.0;
-    breadUnitsInputForSlider = 0.0;
-    shortInsulinInputForSlider = 0.0;
-    longInsulinInputForSlider = 0.0;
+    glucoseInputForSlider = 0;
+    breadUnitsInputForSlider = 0;
+    shortInsulinInputForSlider = 0;
+    longInsulinInputForSlider = 0;
 
     state = {
         date: new Date(),
-        glucoseInput: "0.0",
-        breadUnitsInput: "0.0",
-        insulinInput: "0.0",
-        longInsulinInput: "0.0",
+        glucoseInput: "",
+        breadUnitsInput: "",
+        insulinInput: "",
+        longInsulinInput: "",
         commentary: "",
         currentValueType: NoteValueType.GLUCOSE,
         prevValueType: NoteValueType.GLUCOSE,
@@ -101,10 +101,10 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         } else if (!pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode) {
             this.setState({
                 date: new Date(),
-                glucoseInput: "0.0",
-                breadUnitsInput: "0.0",
-                insulinInput: "0.0",
-                longInsulinInput: "0.0",
+                glucoseInput: "",
+                breadUnitsInput: "",
+                insulinInput: "",
+                longInsulinInput: "",
                 commentary: "",
                 currentValueType: NoteValueType.GLUCOSE,
                 glucoseInputForSlider: 0.0,
@@ -151,34 +151,32 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     render() {
         return (
-            <>
-                <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
-                    <ScrollView style={styles.noteCreationViewScrollView}>
-                        <KeyboardAvoidingView
-                            style={!this.props.note ?
-                                styles.noteCreationView :
-                                styles.noteEditingView
-                            }
-                            keyboardVerticalOffset={30}
-                            behavior='padding'
-                        >
-                            <View style={styles.scrollViewContent}>
-                                {this.renderPickerBlock()}
-                                <View style={styles.buttonsBlock}>
-                                    {this.props.note && this.renderDeleteButton()}
-                                    {this.renderSaveButton()}
-                                </View>
+            <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
+                <ScrollView style={styles.noteCreationViewScrollView}>
+                    <KeyboardAvoidingView
+                        style={!this.props.note ?
+                            styles.noteCreationView :
+                            styles.noteEditingView
+                        }
+                        keyboardVerticalOffset={30}
+                        behavior='padding'
+                    >
+                        <View style={styles.scrollViewContent}>
+                            {this.renderPickerBlock()}
+                            <View style={styles.buttonsBlock}>
+                                {this.props.note && this.renderDeleteButton()}
+                                {this.renderSaveButton()}
                             </View>
-                            <TouchableOpacity
-                                style={styles.hideTouchable}
-                                onPress={this.props.hidePopup}
-                            >
-                                <CloseIcon />
-                            </TouchableOpacity>
-                        </KeyboardAvoidingView>
-                    </ScrollView>
-                </BottomPopup>
-            </>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.hideTouchable}
+                            onPress={this.props.hidePopup}
+                        >
+                            <CloseIcon />
+                        </TouchableOpacity>
+                    </KeyboardAvoidingView>
+                </ScrollView>
+            </BottomPopup>
         )
     }
 
@@ -298,9 +296,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     createNote = () => {
         let note: INoteListNote = this.noteFromState;
-        // console.log('before ' + this.props.note.id);
         if (this.props.note) {
-            // this.props.onNoteDelete(this.props.note.id);
             this.props.dispatch(createUpdateNoteAction({
                 ...note,
                 id: this.props.note.id
@@ -323,7 +319,6 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
             }
             this.setInitialState();
         }
-        // console.log('after ' + this.props.note.id);
     }
 
     renderDeleteButton() {
@@ -357,8 +352,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     }
 
     deleteNote = () => {
-        this.props.onNoteDelete(this.props.note.id);
-        this.props.dispatch(createDeleteNoteAction(this.props.note.date))
+        // this.props.onNoteDelete(this.props.note.id);
+        this.props.dispatch(createDeleteNoteAction(this.props.note.id))
         this.props.hidePopup()
     }
 

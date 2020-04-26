@@ -19,14 +19,23 @@ export function createGoogleAuthAction(): GoogleAuthAction {
 
 function* googleAuth() {
     try {
-        const googleUser: Google.LogInResult = yield Google.logInAsync(googleAuthConfig)
-
+        yield put(createUserChangeAction({
+            loading: true,
+            error: null
+        }));
+        
+        const googleUser: Google.LogInResult = yield Google.logInAsync(googleAuthConfig);
         let userData: IUser = {};
-        if (googleUser.type === 'success') {
+
+        if (googleUser.type === 'cancel') {
             yield put(createUserChangeAction({
-                loading: true,
+                loading: false,
                 error: null
             }));
+            return;
+        }
+        
+        if (googleUser.type === 'success') {
             userData = {
                 id: googleUser.user.id,
                 email: googleUser.user.email,

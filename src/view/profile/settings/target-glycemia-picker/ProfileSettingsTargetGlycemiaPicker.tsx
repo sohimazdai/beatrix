@@ -1,4 +1,3 @@
-import { isNumber } from "util";
 import React from 'react';
 import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, Slider, TextInput } from "react-native";
@@ -15,7 +14,7 @@ interface Props {
 
 function ProfileSettingsTargetGlycemiaPicker(props: Props) {
     const targetGlycemia = props.userDiabetesProperties.targetGlycemia;
-    const transformedValue = isNumber(targetGlycemia) ?
+    const transformedValue = !isNaN(targetGlycemia) ?
         String(Math.round(targetGlycemia * 10) / 10) :
         ""
 

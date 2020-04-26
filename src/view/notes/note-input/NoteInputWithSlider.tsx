@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, StyleSheet, View, Slider, Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { ThemeColor } from '../../../constant/ThemeColor';
+import { BaseDecimalInput } from '../../../component/input/BaseDecimalInput';
 
 interface Props {
     onChangeText: (text: string) => void;
@@ -17,19 +18,18 @@ interface Props {
 
 
 export function NoteInputWithSlider(props: Props) {
+    let natural = Number(String(props.defaultValue).split('.')[0] || 0);
+    let decimal = Number('.' + (String(props.defaultValue).split('.')[1] || 0));
+
     return (
         <View style={styles.view}>
             <View style={styles.inputView}>
                 <Text style={styles.inputTitleText}>
                     {props.inputTitle}
                 </Text>
-                <TextInput
+                <BaseDecimalInput
                     style={styles.input}
-                    onChangeText={(value) => {
-                        value.split('.')[0].length < 3 &&
-                            (!value.split('.')[1] || (value.split('.')[1] && value.split('.')[1].length < 2)) &&
-                            props.onChangeText(value)
-                    }}
+                    onChangeText={props.onChangeText}
                     placeholder={'0.0'}
                     value={props.value}
                     keyboardType={'numeric'}
@@ -43,7 +43,7 @@ export function NoteInputWithSlider(props: Props) {
                     </Text>
                     <Slider
                         style={styles.slider}
-                        value={props.defaultValue || 0.0}
+                        value={natural}
                         onValueChange={(value) => {
                             props.onNaturalSlide(value)
                         }}
@@ -59,12 +59,13 @@ export function NoteInputWithSlider(props: Props) {
                         {".0"}
                     </Text>
                     <Slider
+                        key={props.inputTitle}
                         style={styles.slider}
-                        value={props.defaultValue && parseFloat(0 + '.' + String(props.defaultValue).split('.')[1])}
+                        value={decimal}
                         onValueChange={(value) => {
                             value ?
                                 props.onDecimalSlide((Math.round(value * 10) / 10)) :
-                                props.onDecimalSlide('0.0')
+                                props.onDecimalSlide(.0)
                         }}
                         maximumValue={0.9}
                         step={0.1}

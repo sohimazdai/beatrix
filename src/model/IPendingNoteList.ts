@@ -1,14 +1,6 @@
-import { INoteListNote } from './INoteList';
-
-export enum PendingOperationType {
-    CREATE = 'create',
-    UPDATE = 'update',
-    DELETE = 'delete'
-}
-
-export interface IPendingNote extends INoteListNote {
-    userId: string,
-    operation: PendingOperationType
+export interface IPendingNote {
+    id: string
+    userId: string
 }
 
 export interface IPendingNotes {

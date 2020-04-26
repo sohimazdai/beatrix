@@ -28,8 +28,8 @@ class AuthRememberPasswordPopup extends React.Component<Props, State> {
             <Popup hidden={!this.props.restorePasswordPopupShown}>
                 <View style={styles.authScreenRestorePasswordView}>
                     <Text style={styles.authScreenRestorePasswordViewTitle}>
-                        Восстановление пароля
-                                </Text>
+                        Восстановление доступа
+                    </Text>
                     <TextInput
                         style={styles.input}
                         value={this.state.restorePasswordEmail}
@@ -39,12 +39,15 @@ class AuthRememberPasswordPopup extends React.Component<Props, State> {
                     />
                     <View style={styles.rememberButton}>
                         <TouchableOpacity
-                            onPress={() => this.props.rememberPassword(this.state.restorePasswordEmail)}
+                            onPress={() => {
+                                this.props.rememberPassword(this.state.restorePasswordEmail);
+                                this.props.onRememberEnd();
+                            }}
                             style={styles.rememberButtonTouchable}
                         >
                             <Text>
-                                Напомнить
-                                </Text>
+                                Сменить пароль
+                            </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.cancelRememberButton}>
@@ -53,7 +56,7 @@ class AuthRememberPasswordPopup extends React.Component<Props, State> {
                         >
                             <Text>
                                 Отмена
-                                </Text>
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

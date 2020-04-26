@@ -40,6 +40,9 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         textDecorationLine: 'underline'
     },
+    avoidingView: {
+        justifyContent: 'flex-end',
+    },
     authFormInputForm: {
         marginBottom: 15
     },
@@ -63,7 +66,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'center',
-        marginBottom: 30,
+        marginBottom: 0,
     },
     authFormButtonChangeMode: {
         padding: 10,

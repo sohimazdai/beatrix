@@ -3,12 +3,17 @@ import { StyleSheet } from "react-native";
 import { ThemeColor } from "../../constant/ThemeColor";
 
 export const styles = StyleSheet.create({
-    AuthView: {
-        display: "flex",
-        width: '100%',
+    AuthScreen: {
+        display: 'flex',
         height: '100%',
-        backgroundColor: '#F6F8FF',
-        flexDirection: "column-reverse",
+        width: '100%',
+        justifyContent: 'flex-end'
+    },
+    avoidingView: {
+        justifyContent: 'flex-end'
+    },
+    scrollView: {
+        display: 'flex',
     },
     BackgroundSun: {
         position: "absolute",

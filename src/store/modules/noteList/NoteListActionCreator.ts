@@ -1,13 +1,14 @@
-import { INoteListNote } from "../../../model/INoteList";
-import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, FDTUUIDAction } from "./NoteListAction";
+import { INoteListNote, INoteList } from "../../../model/INoteList";
+import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, NoteListOneLevelDeepMerge } from "./NoteListAction";
 import { NoteListActionType } from "./NoteListActionType";
 
-export function createNoteListChangeNoteByIdAction(note: INoteListNote, userId: string): NoteListChangeNoteByIdAction {
+export function createNoteListChangeNoteByIdAction(note: INoteListNote, userId: string, generatedNoteId?: string): NoteListChangeNoteByIdAction {
     return {
         type: NoteListActionType.CHANGE_NOTE_BY_ID,
         payload: {
             note,
-            userId
+            userId,
+            generatedNoteId
         }
     }
 }
@@ -21,11 +22,11 @@ export function createDeleteNoteInNoteListById(noteId: string): NoteListDeleteNo
     }
 }
 
-export function createFDTRUUIDAction(userId: string): FDTUUIDAction {
+export function createNoteListOneLevelDeepMerge(noteList: INoteList): NoteListOneLevelDeepMerge {
     return {
-        type: NoteListActionType.FDTUUID,
+        type: NoteListActionType.ONE_LEVEL_DEEP_MERGE,
         payload: {
-            userId
+            noteList
         }
     }
 }
