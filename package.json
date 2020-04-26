@@ -10,7 +10,6 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.9.0",
     "@react-native-community/netinfo": "~3.2.1",
-    "amplitude-js": "^6.1.0",
     "axios": "^0.19.2",
     "expo": "34.0.1",
     "expo-analytics-amplitude": "~6.0.0",
