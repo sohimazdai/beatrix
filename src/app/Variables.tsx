@@ -1,6 +1,6 @@
-import Constants from 'expo-constants';
+// import Constants from 'expo-constants';
 
-export const prodUrl = "3d0dc492-bd67-4182-9871-7cfbdbe16ad5.priv.cloud.scaleway.com";
+const prodUrl = "3d0dc492-bd67-4182-9871-7cfbdbe16ad5.pub.cloud.scaleway.com";
 
 const ENV = {
   dev: {
@@ -27,4 +27,9 @@ function getEnvVars(env = "") {
   if (env.indexOf("prod") !== -1) return ENV.prod;
 }
 
-export default getEnvVars(Constants.manifest.releaseChannel);
+// export default getEnvVars(Constants.manifest.releaseChannel);
+export default {
+  name: 'prod',
+  apiUrl: prodUrl,
+  amplitudeApiKey: '20820088c225ef74299a29a60a2afe34',
+}
