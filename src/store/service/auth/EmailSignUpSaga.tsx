@@ -1,9 +1,6 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
-import { batchActions } from 'redux-batched-actions';
+import { put, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
-import { LogInResult } from 'expo-google-app-auth';
 import { firebaseApp } from '../../../config/firebase-config';
-import { IUser } from '../../../model/IUser';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 
 const ACTION_TYPE = 'EMAIL_SIGN_UP_ACTION';

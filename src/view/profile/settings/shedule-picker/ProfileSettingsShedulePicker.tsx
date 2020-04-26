@@ -7,7 +7,6 @@ import { createChangeInteractive } from "../../../../store/modules/interactive/i
 import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from './Style';
-import * as lodash from 'lodash';
 import { createClearSheduleByKeyType } from '../../../../store/modules/user-properties-shedule/UserPropertiesShedule';
 
 interface Props {
@@ -21,7 +20,7 @@ interface Props {
 function ProfileSettingsShedulePicker(props: Props) {
     const { userPropertiesShedule, sheduleKey } = props;
     const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
-    lodash.values(userPropertiesShedule).map((prop, index, array) => {
+    Object.values(userPropertiesShedule).map((prop, index, array) => {
         if (prop[sheduleKey] > 0) {
             if (index === 0) {
                 shedule.push({

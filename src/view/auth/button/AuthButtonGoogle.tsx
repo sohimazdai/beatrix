@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
-import * as Google from 'expo-google-app-auth';
-import { googleAuthConfig } from '../../../config/googleAuthConfig';
 import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
 // import { createEmailAuthAction } from '../../../service/auth/AuthSaga';
 
