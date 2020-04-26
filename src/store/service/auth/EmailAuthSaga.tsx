@@ -4,6 +4,7 @@ import { firebaseApp } from '../../../config/firebase-config';
 import { IUser } from '../../../model/IUser';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 import { batchActions } from 'redux-batched-actions';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'EMAIL_AUTH_ACTION';
 
@@ -39,6 +40,8 @@ function* emailAuth(action?: EmailAuthAction) {
             isAuthed: true
         };
 
+        appAnalytics.sendEvent(appAnalytics.events.EMAIL_LOGIN);
+        
         yield put(createUserChangeAction({
             ...userData,
             loading: false,

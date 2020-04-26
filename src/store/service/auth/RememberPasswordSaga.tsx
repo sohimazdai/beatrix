@@ -1,6 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { firebaseApp } from '../../../config/firebase-config';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'REMEMBER_PASSWORD_ACTION';
 
@@ -25,7 +26,11 @@ function* rememberPassword(action?: RememberPasswordAction) {
             error: null
         }));
         const email = action.payload.email;
+
         yield firebaseApp.auth().sendPasswordResetEmail(email);
+
+        appAnalytics.sendEvent(appAnalytics.events.REMEMBER_PASSWORD);
+
         yield put(createUserChangeAction({
             loading: false,
             error: null

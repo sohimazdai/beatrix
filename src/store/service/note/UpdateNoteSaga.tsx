@@ -6,6 +6,7 @@ import { NoteApi } from '../../../api/NoteApi';
 import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 import { createOneLevelMergePendingNoteList, createDeletePendingNoteById } from '../../modules/pending-note-list/PendingNoteList';
 import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'UPDATE_NOTE_ACTION';
 
@@ -29,6 +30,9 @@ function* run({ payload }: UpdateNoteAction) {
     try {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
+
+        yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
+
         if (state.app.serverAvailable) {
             yield call(NoteApi.updateNote, payload.note, userId);
         } else {
@@ -41,7 +45,12 @@ function* run({ payload }: UpdateNoteAction) {
                 }
             }));
         }
-        yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
+
+        appAnalytics.sendEventWithProps(
+            appAnalytics.events.NOTE_UPDATED,
+            payload.note
+        );
+        
     } catch (e) {
         alert(e.message);
     }

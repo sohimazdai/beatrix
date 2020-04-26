@@ -2,6 +2,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { firebaseApp } from '../../../config/firebase-config';
 import { createSyncUserAction } from '../user/SyncUserSaga';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'EMAIL_SIGN_UP_ACTION';
 
@@ -36,6 +37,8 @@ function* emailSignUp(action?: EmailSignUpAction) {
             name: data.user.email.split('@')[0],
             isAuthed: true,
         }
+
+        appAnalytics.sendEvent(appAnalytics.events.EMAIL_SIGN_UP);
 
         yield put(createUserChangeAction({
             ...userData,

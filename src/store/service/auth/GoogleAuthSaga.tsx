@@ -4,6 +4,7 @@ import { IUser } from '../../../model/IUser';
 import * as Google from 'expo-google-app-auth';
 import { googleAuthConfig } from '../../../config/googleAuthConfig';
 import { createSyncUserAction } from '../user/SyncUserSaga';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'GOOGLE_AUTH_ACTION';
 
@@ -43,6 +44,8 @@ function* googleAuth() {
                 isAuthed: true
             };
         }
+
+        appAnalytics.sendEvent(appAnalytics.events.GOOGLE_SIGN_IN);
 
         yield put(createUserChangeAction({
             ...userData,

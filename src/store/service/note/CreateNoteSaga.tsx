@@ -5,6 +5,7 @@ import { NoteApi } from '../../../api/NoteApi';
 import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 import { v1 as uuidv1 } from 'uuid';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'CREATE_NOTE_ACTION';
 
@@ -31,7 +32,7 @@ function* createNote({ payload }: CreateNoteAction) {
         const noteId = uuidv1();
 
         yield put(createNoteListChangeNoteByIdAction(payload.note, userId, noteId));
-        
+
         if (state.app.serverAvailable) {
             yield call(
                 NoteApi.createNote,
@@ -50,6 +51,12 @@ function* createNote({ payload }: CreateNoteAction) {
                 }
             }));
         }
+
+        appAnalytics.sendEventWithProps(
+            appAnalytics.events.NOTE_CREATED,
+            payload.note
+        );
+
     } catch (e) {
         alert(e.message);
     }

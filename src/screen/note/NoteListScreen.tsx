@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, Button } from "react-native";
+import { View, Text, ScrollView, Button, Platform } from "react-native";
 import { connect } from "react-redux";
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay, INoteListNote } from "../../model/INoteList";
@@ -21,9 +21,12 @@ import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-p
 import { styles } from "./Style";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
+import { IUser } from '../../model/IUser';
+import { appAnalytics } from '../../app/Analytics';
 
 interface NoteListScreenStateTProps {
   noteListByDay: INoteListByDay;
+  user: IUser;
 }
 
 interface NoteListScreenDispatchProps {
@@ -46,6 +49,12 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     editingNoteId: null,
     portionsToRender: 1,
   };
+
+  componentDidMount() {
+    const { user } = this.props;
+    appAnalytics.setUser(user.id);
+    appAnalytics.sendEvent(appAnalytics.events.NOTELIST_SEEN);
+  }
 
   render() {
     return (

@@ -5,6 +5,7 @@ import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'DELETE_NOTE_ACTION';
 
@@ -42,7 +43,9 @@ function* run({ payload }: DeleteNoteAction) {
                 }
             }));
         }
-        
+
+        appAnalytics.sendEvent(appAnalytics.events.NOTE_DELETED);
+
         yield put(createUserChangeAction({
             loading: false,
             error: null

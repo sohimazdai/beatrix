@@ -10,6 +10,7 @@ import { NavigationParams, NavigationScreenProp } from 'react-navigation'
 import { NavigationState } from 'react-navigation'
 import { createChangeInteractive } from '../../store/modules/interactive/interactive'
 import { batchActions } from 'redux-batched-actions'
+import { appAnalytics } from '../../app/Analytics'
 
 interface Props {
     onLogOut?: () => void;
@@ -21,6 +22,10 @@ interface State {
 }
 
 class ProfileScreenComponent extends React.Component<Props, State> {
+    componentDidMount() {
+        appAnalytics.sendEvent(appAnalytics.events.PROFILE_SEEN);
+    }
+
     render() {
         return (
             <View style={styles.profileView}>
@@ -92,7 +97,7 @@ export const ProfileScreenConnect = connect(
                         }))
                     }
                 }))
-
+                appAnalytics.sendEvent(appAnalytics.events.LOG_OUT);
             }
         }
     }

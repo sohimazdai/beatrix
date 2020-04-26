@@ -58,7 +58,7 @@ export const ProfileSettingsTargetGlycemiaPickerConnect = connect(
     }),
     (dispatch) => ({
         onPropertiesChange: (properties: IUserDiabetesProperties) => {
-            dispatch(createUserDiabetesPropertiesChangeAction(properties))
+            dispatch(createUserDiabetesPropertiesChangeAction(properties));
         },
     })
 )(ProfileSettingsTargetGlycemiaPicker)

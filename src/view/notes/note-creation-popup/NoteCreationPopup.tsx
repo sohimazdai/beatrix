@@ -28,6 +28,7 @@ import { NoteInsulinDoseRecommendationConnect } from '../insulin-dose-recommenda
 import { createCreateNoteAction } from '../../../store/service/note/CreateNoteSaga';
 import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSaga';
 import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
+import { appAnalytics } from '../../../app/Analytics';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -180,25 +181,35 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         )
     }
 
+    onDateChange = (value) => {
+        this.setState({
+            date: new Date(
+                value.getFullYear(),
+                value.getMonth(),
+                value.getDate(),
+                this.state.date.getHours(),
+                this.state.date.getMinutes(),
+            )
+        })
+        appAnalytics.sendEvent(appAnalytics.events.NOTE_DATE_CHANGED);
+    }
+
+    onTimeChange = (value) => {
+        this.setState({ date: value });
+        appAnalytics.sendEvent(appAnalytics.events.NOTE_TIME_CHANGED);
+    }
+
     renderPickerBlock() {
         return (
             <View style={styles.inputBlock}>
                 <View style={styles.pickers}>
                     <NoteDatePickerConnect
                         date={this.state.date}
-                        onChange={(value) => this.setState({
-                            date: new Date(
-                                value.getFullYear(),
-                                value.getMonth(),
-                                value.getDate(),
-                                this.state.date.getHours(),
-                                this.state.date.getMinutes(),
-                            )
-                        })}
+                        onChange={this.onDateChange}
                     />
                     <NoteTimePickerConnect
                         date={this.state.date}
-                        onChange={(value) => this.setState({ date: value })}
+                        onChange={this.onTimeChange}
                     />
                 </View>
                 <ValueTypePicker

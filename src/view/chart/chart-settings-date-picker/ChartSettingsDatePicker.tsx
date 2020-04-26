@@ -8,6 +8,7 @@ import { ThemeColor } from '../../../constant/ThemeColor';
 import { CalendarIcon } from '../../../component/icon/CalendarIcon';
 import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
+import { appAnalytics } from '../../../app/Analytics';
 
 export interface ChartSettingsDatePickerProps {
     date: Date
@@ -50,7 +51,7 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
         try {
             const { action, year, month, day } = await (DatePickerAndroid as any).open(this.props.date);
             if (action !== DatePickerAndroid.dismissedAction) {
-                this.props.onChange(new Date(year, month, day))
+                this.onDateChange(new Date(year, month, day));
             }
         } catch ({ code, message }) {
             console.warn('Cannot open date android picker', message);
@@ -65,9 +66,14 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
                 date: this.props.date,
                 pickerType: IModalPickerType.DATE,
                 positiveButtonText: 'Обновить дату',
-                onPositiveClick: this.props.onChange,
+                onPositiveClick: this.onDateChange,
             }
         }))
+    }
+
+    onDateChange(date: Date) {
+        this.props.onChange(date);
+        appAnalytics.sendEvent(appAnalytics.events.CHART_CALENDAR_DATE_SET);
     }
 
     private getInputText = () => {

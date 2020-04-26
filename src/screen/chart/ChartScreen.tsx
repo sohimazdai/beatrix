@@ -18,6 +18,7 @@ import { BlockHat } from '../../component/hat/BlockHat';
 import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
 import { styles } from './Style';
 import { ChartConfig } from './config/ChartConfig';
+import { appAnalytics } from '../../app/Analytics';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
@@ -63,6 +64,44 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         return this.chartConfig.glucose.basicPadding;
     }
 
+    componentDidMount() {
+        appAnalytics.sendEventWithProps(
+            appAnalytics.events.CHARTS_SEEN,
+            { period: 'day' }
+        );
+    }
+
+    componentDidUpdate({ }, prevState: ChartState) {
+        if (this.state.selectedPeriod !== prevState.selectedPeriod) {
+            switch (this.state.selectedPeriod) {
+                case ChartPeriodType.DAY:
+                    appAnalytics.sendEventWithProps(
+                        appAnalytics.events.CHARTS_SEEN,
+                        { period: 'day' }
+                    );
+                    return;
+                case ChartPeriodType.MONTH:
+                    appAnalytics.sendEventWithProps(
+                        appAnalytics.events.CHARTS_SEEN,
+                        { period: 'month' }
+                    );
+                    return;
+                case ChartPeriodType.THREE_MONTH:
+                    appAnalytics.sendEventWithProps(
+                        appAnalytics.events.CHARTS_SEEN,
+                        { period: '3 month' }
+                    );
+                    return;
+            }
+        }
+        if (this.state.selectedDotId !== prevState.selectedDotId) {
+            appAnalytics.sendEvent(appAnalytics.events.CHART_DOT_SELECTED);
+        }
+        if (this.state.currentDate !== prevState.currentDate) {
+            appAnalytics.sendEvent(appAnalytics.events.ANOTHER_CHART_DATE_SEEN);
+        }
+    }
+
     render() {
         return (
             <View style={styles.view}>
@@ -78,7 +117,6 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                         {this.renderSettings()}
                     </View>
                 </ScrollView>
-                {/* <Fader hidden={!this.state.popupShown} /> */}
                 {this.state.selectedDotId && <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}

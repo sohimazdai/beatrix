@@ -38,7 +38,7 @@
     "android": {
       "package": "com.doq.beatrix"
     },
-    "description": "",
+    "description": "Diabetes visualization app",
     "githubUrl": "https://github.com/sohimazdai/beatrix"
   }
 }

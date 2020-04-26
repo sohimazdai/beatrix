@@ -39,7 +39,7 @@ function* syncUser({ payload }: SyncUserAction) {
             yield put(createUserDiabetesPropertiesChangeAction(syncData.data.properties));
             yield put(createSyncNotesAction());
         }
-
+        
         yield put(createUserChangeAction({
             loading: false,
             error: null

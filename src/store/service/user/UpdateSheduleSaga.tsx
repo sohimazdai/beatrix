@@ -4,6 +4,7 @@ import { UserApi } from "../../../api/userApi";
 import { IStorage } from "../../../model/IStorage";
 import { createOneLevelMergeUserPropertiesShedule } from "../../modules/user-properties-shedule/UserPropertiesShedule";
 import { IUserPropertiesShedule } from "../../../model/IUserPropertiesShedule";
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = "UPDATE_SHEDULE_ACTION";
 
@@ -42,6 +43,8 @@ function* run({ payload }: UpdateUserSheduleAction) {
                 state.userPropertiesShedule
             );
         }
+
+        appAnalytics.sendEvent(appAnalytics.events.SHEDULE_UPDATED);
 
         yield put(
             createUserChangeAction({
