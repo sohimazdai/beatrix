@@ -6,7 +6,7 @@ interface Props {
     header?: string
     title?: string
     description?: string
-    activeElement: JSX.Element
+    activeElement?: JSX.Element
     hint?: string
 }
 
@@ -25,9 +25,11 @@ export class ProfileItem extends React.Component<Props> {
                         {this.props.description}
                     </Text>}
                 </View>
-                <View style={styles.itemCardRight}>
-                    {this.props.activeElement}
-                </View>
+                {
+                    this.props.activeElement && <View style={styles.itemCardRight}>
+                        {this.props.activeElement}
+                    </View>
+                }
             </View>
             {this.props.hint && <Text style={styles.hint}>
                 {this.props.hint}

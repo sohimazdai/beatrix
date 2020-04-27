@@ -7,6 +7,7 @@ import { createSyncNotesAction } from '../note/SyncNotesSaga';
 import { createOneLevelMergeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { createUpdateUserSheduleAction } from './UpdateSheduleSaga';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -45,7 +46,7 @@ function* syncUser({ payload }: SyncUserAction) {
             error: null
         }));
     } catch (e) {
-        alert(e.message);
+        handleError(e, 'Ошибка синхронизации диабетического профиля с сервером');
         yield put(createUserChangeAction({
             loading: false,
             error: e

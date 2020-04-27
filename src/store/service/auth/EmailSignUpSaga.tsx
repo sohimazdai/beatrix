@@ -3,6 +3,7 @@ import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { firebaseApp } from '../../../config/firebase-config';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'EMAIL_SIGN_UP_ACTION';
 
@@ -47,7 +48,7 @@ function* emailSignUp(action?: EmailSignUpAction) {
         }));
         yield put(createSyncUserAction(userData));
     } catch (e) {
-        alert(e.message)
+        handleError(e, 'Не удалось зарегистрироваться');
         yield put(createUserChangeAction({
             loading: false,
             error: e.message

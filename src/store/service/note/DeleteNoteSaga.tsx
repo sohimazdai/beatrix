@@ -6,6 +6,7 @@ import { NoteApi } from '../../../api/NoteApi';
 import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'DELETE_NOTE_ACTION';
 
@@ -51,7 +52,7 @@ function* run({ payload }: DeleteNoteAction) {
             error: null
         }));
     } catch (e) {
-        alert(e.message);
+        handleError(e, 'Ошибка удаления записи с сервера');
     }
 };
 

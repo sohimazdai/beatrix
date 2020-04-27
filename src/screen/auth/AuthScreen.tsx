@@ -25,13 +25,11 @@ interface AuthScreenProps {
 
 interface AuthScreenState {
     restorePasswordPopupShown: boolean
-    passwordAlreadyRestore?: boolean
 }
 
 class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
     state = {
         restorePasswordPopupShown: false,
-        passwordAlreadyRestore: false,
     }
 
     render() {
@@ -48,8 +46,7 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
                 <AuthRememberPasswordPopupConnect
                     onRememberEnd={() => {
                         this.setState({
-                            restorePasswordPopupShown: false,
-                            passwordAlreadyRestore: true
+                            restorePasswordPopupShown: false
                         })
                     }}
                     restorePasswordPopupShown={this.state.restorePasswordPopupShown}
@@ -83,7 +80,6 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
                 {this.renderBackgroundSun()}
                 {this.renderBackgroundMountains()}
                 <AuthFormConnect
-                    isPasswordRestore={this.state.passwordAlreadyRestore}
                     onForget={() => this.setState({ restorePasswordPopupShown: true })}
                 />
             </View >

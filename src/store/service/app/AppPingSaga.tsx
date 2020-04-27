@@ -2,6 +2,7 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { IStorage } from '../../../model/IStorage';
 import { AppApi } from '../../../api/AppApi';
 import { createChangeAppAction } from '../../modules/app/app';
+import { logger } from '../../../app/Logger';
 
 const ACTION_TYPE = 'PING_APP_ACTION';
 
@@ -17,15 +18,15 @@ function* ping() {
         if (state.app.networkConnected) {
             const isOk = yield call(AppApi.ping);
             if (isOk.data == 'ОК') {
-                console.log('Server is available')
+                logger('Server is available')
                 yield put(createChangeAppAction({
                     serverAvailable: true
                 }))
             }
         }
     } catch (e) {
-        console.log('ErrorCatched: ' + e.message)
-        console.log('Server is n/a')
+        logger('ErrorCatched: ' + e.message)
+        logger('Server is n/a')
         yield put(createChangeAppAction({
             serverAvailable: false
         }))

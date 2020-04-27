@@ -6,6 +6,7 @@ import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-l
 import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 import { v1 as uuidv1 } from 'uuid';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'CREATE_NOTE_ACTION';
 
@@ -58,7 +59,7 @@ function* createNote({ payload }: CreateNoteAction) {
         );
 
     } catch (e) {
-        alert(e.message);
+        handleError(e, 'Ошибка сохранения записи на сервер');
     }
 };
 

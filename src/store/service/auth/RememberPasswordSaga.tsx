@@ -2,6 +2,9 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { firebaseApp } from '../../../config/firebase-config';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
+import { logger } from '../../../app/Logger';
+import { createChangeInteractive } from '../../modules/interactive/interactive';
 
 const ACTION_TYPE = 'REMEMBER_PASSWORD_ACTION';
 
@@ -29,14 +32,19 @@ function* rememberPassword(action?: RememberPasswordAction) {
 
         yield firebaseApp.auth().sendPasswordResetEmail(email);
 
-        appAnalytics.sendEvent(appAnalytics.events.REMEMBER_PASSWORD);
+        appAnalytics.sendEventWithProps(
+            appAnalytics.events.REMEMBER_PASSWORD,
+            { email }
+        );
+
+        yield put(createChangeInteractive({ isPasswordRestored: true }));
 
         yield put(createUserChangeAction({
             loading: false,
             error: null
         }));
     } catch (e) {
-        alert(e.message);
+        handleError(e, 'Ошибка восстановления пароля')
         yield put(createUserChangeAction({
             loading: false,
             error: e.message

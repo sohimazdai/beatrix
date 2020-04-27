@@ -1,41 +1,44 @@
 import * as Amplitude from 'expo-analytics-amplitude';
 import Variables from './Variables';
 import { Platform } from 'react-native';
+import { logger } from './Logger';
 
 export const appAnalytics = {
   init: (): Promise<void> => {
-    console.log('::amplitude initializing');
+    logger('::amplitude initializing');
 
     return Amplitude.initialize(Variables.amplitudeApiKey)
-      .then(() => console.log('::amplitude inited'))
-      .catch((e) => console.log('::amplitude initializing error: ', e.message))
+      .then(() => logger('::amplitude inited'))
+      .catch((e) => logger('::amplitude initializing error: ', e.message))
   },
   setUser: (userId: string) => {
-    console.log('::amplitude user is setting now');
+    logger('::amplitude user is setting now');
 
     Amplitude.setUserId(userId)
       .then(() => Amplitude.setUserProperties({
         'OS': Platform.OS
       }))
-      .then(() => console.log('::amplitude user setted'))
-      .catch((e) => console.log('::amplitude user error: ', e.message))
+      .then(() => logger('::amplitude user setted'))
+      .catch((e) => logger('::amplitude user error: ', e.message))
   },
   sendEvent: (eventName: string) => {
-    console.log('::amplitude trying to send event: ', eventName);
+    logger('::amplitude trying to send event: ', eventName);
 
     Amplitude.logEvent(eventName)
-      .then(() => console.log('::amplitude send event: ', eventName))
-      .catch((e) => console.log('::amplitude sending error: ', e.message))
+      .then(() => logger('::amplitude send event: ', eventName))
+      .catch((e) => logger('::amplitude sending error: ', e.message))
   },
   sendEventWithProps: (eventName: string, properties: any) => {
-    console.log('::amplitude trying to send event: ', eventName);
-    console.log('::amplitude event properties: ', properties);
+    logger('::amplitude trying to send event: ', eventName);
+    logger('::amplitude event properties: ', properties);
 
     Amplitude.logEventWithProperties(eventName, properties)
-      .then(() => console.log('::amplitude send event: ', eventName))
-      .catch((e) => console.log('::amplitude sending error: ', e.message))
+      .then(() => logger('::amplitude send event: ', eventName))
+      .catch((e) => logger('::amplitude sending error: ', e.message))
   },
   events: {
+    ERROR: 'Error',
+    
     EMAIL_LOGIN: 'Email login',
     EMAIL_SIGN_UP: 'Email sign up',
     GOOGLE_SIGN_IN: 'Google sign in',

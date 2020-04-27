@@ -7,7 +7,7 @@ class Api {
     constructor() {
         this.axios = axios.create({
             baseURL: appConfig.protocol + '://' + appConfig.apiAddress,
-        })
+        });
     }
 }
 

@@ -42,16 +42,10 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
         const insulinToCorrectGlucose = glucoseValueToCorrect / sheduleItem.insulinSensitivityFactor;
         const insulinToCorrectBU = note.breadUnits * sheduleItem.carbohydrateRatio;
         const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
-        console.log('glucoseValueToCorrect', glucoseValueToCorrect)
-        console.log('insulinToCorrectGlucose', insulinToCorrectGlucose)
-        console.log('insulinToCorrectBU', insulinToCorrectBU)
-        console.log('insulinValue', insulinValue)
-        console.log('sheduleItem', sheduleItem)
 
         if (note.glucose == 0 && note.breadUnits == 0) {
             return ''
         }
-
 
         if (note.glucose === 0) {
             return 'Введите значение глюкозы, чтобы получить рекомендацию';
@@ -69,9 +63,7 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
             return 'Сначала восстановите свой уровень глюкозы';
         }
         
-
         return 'Рекомендуемое значение инсулина: ' + insulinValue;
-
     }
 }
 

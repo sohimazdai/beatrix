@@ -5,6 +5,7 @@ import * as Google from 'expo-google-app-auth';
 import { googleAuthConfig } from '../../../config/googleAuthConfig';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'GOOGLE_AUTH_ACTION';
 
@@ -54,7 +55,7 @@ function* googleAuth() {
         }));
         yield put(createSyncUserAction(userData));
     } catch (e) {
-        alert(e.message)
+        handleError(e, 'Войти не удалось');
         yield put(createUserChangeAction({
             loading: false,
             error: e.message,

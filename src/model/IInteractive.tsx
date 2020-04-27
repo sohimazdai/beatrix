@@ -10,6 +10,8 @@ export interface IInteractive  {
     confirmPopupDescription?: string
 
     userPropertiesShedulePopupType?: SheduleKeyType
+
+    isPasswordRestored?: boolean
 }
 
 export enum InteractiveUserPropertiesShedulePopupType {

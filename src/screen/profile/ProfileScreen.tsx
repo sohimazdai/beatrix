@@ -11,9 +11,11 @@ import { NavigationState } from 'react-navigation'
 import { createChangeInteractive } from '../../store/modules/interactive/interactive'
 import { batchActions } from 'redux-batched-actions'
 import { appAnalytics } from '../../app/Analytics'
+import { IUser } from '../../model/IUser'
 
 interface Props {
     onLogOut?: () => void;
+    user?: IUser;
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
@@ -27,6 +29,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
     }
 
     render() {
+        const { user } = this.props;
         return (
             <View style={styles.profileView}>
                 <Hat
@@ -34,6 +37,10 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                     title={'Профиль'}
                 />
                 <ScrollView>
+                    <ProfileItem
+                        title={'email'}
+                        description={user.email}
+                    />
                     <ProfileItem
                         title={'Диабетический профиль'}
                         description={'Настройте ваши параметры и улучшите компенсацию'}
@@ -64,7 +71,9 @@ class ProfileScreenComponent extends React.Component<Props, State> {
 }
 
 export const ProfileScreenConnect = connect(
-    (state: IStorage) => ({}),
+    (state: IStorage) => ({
+        user: state.user
+    }),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {

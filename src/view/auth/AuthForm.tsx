@@ -23,7 +23,7 @@ enum AuthType {
 interface Props {
     user?: IUser
     loading?: boolean
-    isPasswordRestore?: boolean
+    isPasswordRestored?: boolean
 
     onEmailLogin?: (email: string, password: string) => void
     onEmailSignUp?: (email: string, password: string) => void
@@ -102,6 +102,7 @@ export class AuthForm extends React.Component<Props, State> {
 
     renderAuthForm() {
         const { mode } = this.state;
+        const { isPasswordRestored } = this.props;
         return [
             <View key={'email'} style={styles.authFormInputForm}>
                 <TextInput
@@ -130,7 +131,7 @@ export class AuthForm extends React.Component<Props, State> {
                     style={styles.authFormInputForget}
                 >
                     <Text style={styles.authFormInputForgetText}>
-                        {this.props.isPasswordRestore
+                        {isPasswordRestored
                             ? 'Проверьте почту. Отправить снова?'
                             : 'Забыли пароль?'
                         }
@@ -206,7 +207,10 @@ export class AuthForm extends React.Component<Props, State> {
 }
 
 export const AuthFormConnect = connect(
-    (state: IStorage) => ({ user: state.user }),
+    (state: IStorage) => ({
+        user: state.user,
+        isPasswordRestored: state.interactive.isPasswordRestored
+    }),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {

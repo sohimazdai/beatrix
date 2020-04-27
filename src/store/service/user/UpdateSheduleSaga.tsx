@@ -5,6 +5,7 @@ import { IStorage } from "../../../model/IStorage";
 import { createOneLevelMergeUserPropertiesShedule } from "../../modules/user-properties-shedule/UserPropertiesShedule";
 import { IUserPropertiesShedule } from "../../../model/IUserPropertiesShedule";
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = "UPDATE_SHEDULE_ACTION";
 
@@ -53,7 +54,7 @@ function* run({ payload }: UpdateUserSheduleAction) {
             })
         );
     } catch (e) {
-        alert(e.message);
+        handleError(e, 'Ошибка синхронизации расписания с сервером');
         yield put(
             createUserChangeAction({
                 loading: false,

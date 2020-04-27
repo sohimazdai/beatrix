@@ -7,6 +7,7 @@ import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 import { createOneLevelMergePendingNoteList, createDeletePendingNoteById } from '../../modules/pending-note-list/PendingNoteList';
 import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'UPDATE_NOTE_ACTION';
 
@@ -52,7 +53,7 @@ function* run({ payload }: UpdateNoteAction) {
         );
         
     } catch (e) {
-        alert(e.message);
+        handleError(e, 'Ошибка обновления записи на сервере');
     }
 };
 

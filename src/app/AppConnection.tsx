@@ -5,6 +5,7 @@ import { NetInfo } from 'react-native';
 import { createAppPingAction } from '../store/service/app/AppPingSaga';
 import { IStorage } from '../model/IStorage';
 import { IApp } from '../model/IApp';
+import { logger } from './Logger';
 
 interface Props {
     app?: IApp
@@ -18,14 +19,14 @@ function Component(props: Props) {
         NetInfo.isConnected.fetch().then(isConnected => {
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();
-            console.log('Phone is ' + (isConnected ? 'online' : 'offline'));
+            logger('Phone is ' + (isConnected ? 'online' : 'offline'));
         });
 
         function handleConnectivityChange(isConnected) {
             props.changeAppConnection(isConnected);
             !isConnected && props.setServerNotAvailability();
             isConnected && props.pingServer();
-            console.log('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
+            logger('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
         }
 
         NetInfo.isConnected.addEventListener('connectionChange', handleConnectivityChange);

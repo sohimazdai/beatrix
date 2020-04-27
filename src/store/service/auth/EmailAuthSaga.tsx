@@ -5,6 +5,7 @@ import { IUser } from '../../../model/IUser';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 import { batchActions } from 'redux-batched-actions';
 import { appAnalytics } from '../../../app/Analytics';
+import { handleError } from '../../../app/ErrorHandler';
 
 const ACTION_TYPE = 'EMAIL_AUTH_ACTION';
 
@@ -49,7 +50,7 @@ function* emailAuth(action?: EmailAuthAction) {
         }));
         yield put(createSyncUserAction(userData));
     } catch (e) {
-        alert(e.message)
+        handleError(e, 'Не удалось авторизоваться');
         yield put(createUserChangeAction({
             loading: false,
             error: e.message
