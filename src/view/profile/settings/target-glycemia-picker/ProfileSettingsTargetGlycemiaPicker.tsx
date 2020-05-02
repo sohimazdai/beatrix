@@ -6,6 +6,7 @@ import { IStorage } from "../../../../model/IStorage";
 import { IUserDiabetesProperties } from "../../../../model/IUserDiabetesProperties";
 import { createUserDiabetesPropertiesChangeAction } from "../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator";
 import { styles } from './Style';
+import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -13,9 +14,9 @@ interface Props {
 }
 
 function ProfileSettingsTargetGlycemiaPicker(props: Props) {
-    const targetGlycemia = props.userDiabetesProperties.targetGlycemia;
+    const targetGlycemia = props.userDiabetesProperties.targetGlycemia || 6;
     const transformedValue = !isNaN(targetGlycemia) ?
-        String(Math.round(targetGlycemia * 10) / 10) :
+        String(targetGlycemia) :
         ""
 
     return (
@@ -40,9 +41,9 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                 <Text style={styles.targetGlycemiaSliderLimitsText}>
                     8
                 </Text>
-                <TextInput
+                <BaseDecimalInput
                     value={transformedValue}
-                    onChangeText={(text) => props.onPropertiesChange({ targetGlycemia: Number(text) })}
+                    onChangeText={(text) => props.onPropertiesChange({ targetGlycemia: text })}
                     style={styles.glycemiaInput}
                     placeholder="6.0"
                     keyboardType={'numeric'}

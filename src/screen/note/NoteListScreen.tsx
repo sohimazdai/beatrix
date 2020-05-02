@@ -52,7 +52,6 @@ class NoteListScreen extends React.PureComponent<FullProps> {
 
   componentDidMount() {
     const { user } = this.props;
-    appAnalytics.setUser(user.id);
     appAnalytics.sendEvent(appAnalytics.events.NOTELIST_SEEN);
   }
 

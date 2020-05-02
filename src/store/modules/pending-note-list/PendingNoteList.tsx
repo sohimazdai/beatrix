@@ -1,74 +1,46 @@
-import { IPendingNoteList } from '../../../model/IPendingNoteList'
+import { IPendingNoteList, IPendingNotes } from '../../../model/IPendingNoteList'
 
 export enum PendingNoteListActionType {
-    PENDING_NOTE_LIST_UPLOAD = "PENDING_NOTE_LIST_UPLOAD",
-    PENDING_NOTE_LIST_ONE_LEVEL_DEEP_MERGE = "PENDING_NOTE_LIST_ONE_LEVEL_DEEP_MERGE",
-    PENDING_NOTE_LIST_CLEAR_PENDING_NOTES = 'PENDING_NOTE_LIST_CLEAR_PENDING_NOTES',
-    PENDING_NOTE_LIST_DELETE_NOTE_BY_ID = "PENDING_NOTE_LIST_DELETE_NOTE_BY_ID_ACTION"
+    PENDING_NOTE_LIST_CLEAR_BY_USER_ID_PENDING_NOTES = 'PENDING_NOTE_LIST_CLEAR_BY_USER_ID_PENDING_NOTES',
+    PENDING_NOTE_LIST_ADD_NOTE = "PENDING_NOTE_LIST_ADD_NOTE"
 }
 
 export type PendingNoteListActionTypes = (
-    PendingNoteListChangeAction |
-    PendingNoteListOneLevelDeepMergeAction |
-    PendingNoteListClearAction |
-    PendingNoteListDeleteNoteByIdAction
+    PendingNoteListClearByUserIdAction |
+    PendingNoteListAddNoteAction
 )
 
-export interface PendingNoteListChangeAction {
-    type: PendingNoteListActionType.PENDING_NOTE_LIST_UPLOAD,
+export interface PendingNoteListClearByUserIdAction {
+    type: PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_BY_USER_ID_PENDING_NOTES,
     payload: {
-        noteList: IPendingNoteList
+        userId: string
     }
 }
 
-export interface PendingNoteListOneLevelDeepMergeAction {
-    type: PendingNoteListActionType.PENDING_NOTE_LIST_ONE_LEVEL_DEEP_MERGE,
+export interface PendingNoteListAddNoteAction {
+    type: PendingNoteListActionType.PENDING_NOTE_LIST_ADD_NOTE,
     payload: {
-        noteList: IPendingNoteList
+        id: string,
+        userId: string
     }
 }
 
-export interface PendingNoteListClearAction {
-    type: PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES,
-}
-
-export interface PendingNoteListDeleteNoteByIdAction {
-    type: PendingNoteListActionType.PENDING_NOTE_LIST_DELETE_NOTE_BY_ID,
-    payload: {
-        id: number
-    }
-}
-
-export function createChangePendingNoteList(noteList: IPendingNoteList) {
+export function createAddNotePendingNoteList(id: string, userId: string): PendingNoteListAddNoteAction {
     return {
-        type: PendingNoteListActionType.PENDING_NOTE_LIST_UPLOAD,
+        type: PendingNoteListActionType.PENDING_NOTE_LIST_ADD_NOTE,
         payload: {
-            noteList
+            id,
+            userId
         }
     }
 }
 
-export function createOneLevelMergePendingNoteList(noteList: IPendingNoteList) {
+export function createClearPendingNoteListByUserId(userId: string): PendingNoteListClearByUserIdAction {
     return {
-        type: PendingNoteListActionType.PENDING_NOTE_LIST_ONE_LEVEL_DEEP_MERGE,
+        type: PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_BY_USER_ID_PENDING_NOTES,
         payload: {
-            noteList
+            userId
         }
-    }
-}
-
-export function createDeletePendingNoteById(id: number): PendingNoteListDeleteNoteByIdAction {
-    return {
-        type: PendingNoteListActionType.PENDING_NOTE_LIST_DELETE_NOTE_BY_ID,
-        payload: {
-            id
-        }
-    }
-}
-
-export function createClearPendingNoteList(): PendingNoteListClearAction {
-    return {
-        type: PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES,
     }
 }
 
@@ -77,31 +49,26 @@ export function pendingNoteListReducer(
     action: PendingNoteListActionTypes
 ): IPendingNoteList {
     switch (action.type) {
-        case PendingNoteListActionType.PENDING_NOTE_LIST_UPLOAD:
+        case PendingNoteListActionType.PENDING_NOTE_LIST_ADD_NOTE:
             return {
                 ...module,
-                ...action.payload.noteList
-            }
-        case PendingNoteListActionType.PENDING_NOTE_LIST_ONE_LEVEL_DEEP_MERGE:
-            return {
-                ...module,
-                ...action.payload.noteList,
                 notes: {
                     ...module.notes,
-                    ...action.payload.noteList.notes
+                    [action.payload.id]: {
+                        id: action.payload.id,
+                        userId: action.payload.userId,
+                    }
                 }
-            }
-        case PendingNoteListActionType.PENDING_NOTE_LIST_DELETE_NOTE_BY_ID:
-            const newModuleNotes = module.notes;
-            delete newModuleNotes[action.payload.id]
-            return {
-                ...module,
-                notes: newModuleNotes
             };
-        case PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_PENDING_NOTES:
+        case PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_BY_USER_ID_PENDING_NOTES:
+            const newNotes: IPendingNotes = { ...module.notes };
+            Object.values(module.notes).forEach(note => {
+                delete newNotes[note.id];
+            });
             return {
-                ...module,
-                notes: {}
+                notes: newNotes,
+                loading: false,
+                error: null
             }
         default: return module;
     }

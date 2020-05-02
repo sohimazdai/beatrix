@@ -29,7 +29,10 @@ export function noteListReducer(
       }
 
     case NoteListActionType.ONE_LEVEL_DEEP_MERGE:
-      return action.payload.noteList;
+      return {
+        ...noteList,
+        ...action.payload.noteList
+      };
     default:
       return noteList;
   }

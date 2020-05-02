@@ -6,6 +6,7 @@ import { createAppPingAction } from '../store/service/app/AppPingSaga';
 import { IStorage } from '../model/IStorage';
 import { IApp } from '../model/IApp';
 import { logger } from './Logger';
+import Variables from './Variables';
 
 interface Props {
     app?: IApp
@@ -16,6 +17,7 @@ interface Props {
 
 function Component(props: Props) {
     React.useEffect(() => {
+        logger('Environment: ', Variables);
         NetInfo.isConnected.fetch().then(isConnected => {
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();

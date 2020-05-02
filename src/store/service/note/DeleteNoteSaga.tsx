@@ -3,7 +3,7 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
-import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
+import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
@@ -35,14 +35,7 @@ function* run({ payload }: DeleteNoteAction) {
         if (state.app.serverAvailable) {
             yield call(NoteApi.deleteNote, payload.id, state.user.id);
         } else {
-            yield put(createOneLevelMergePendingNoteList({
-                notes: {
-                    [payload.id]: {
-                        id: payload.id,
-                        userId: state.user.id
-                    }
-                }
-            }));
+            yield put(createAddNotePendingNoteList(payload.id, state.user.id));
         }
 
         appAnalytics.sendEvent(appAnalytics.events.NOTE_DELETED);

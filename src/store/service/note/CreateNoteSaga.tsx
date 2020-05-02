@@ -2,7 +2,7 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { INoteListNote } from '../../../model/INoteList';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
-import { createOneLevelMergePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
+import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 import { v1 as uuidv1 } from 'uuid';
 import { appAnalytics } from '../../../app/Analytics';
@@ -43,14 +43,7 @@ function* createNote({ payload }: CreateNoteAction) {
                 },
                 userId);
         } else {
-            yield put(createOneLevelMergePendingNoteList({
-                notes: {
-                    [noteId]: {
-                        id: payload.note.id,
-                        userId: state.user.id,
-                    }
-                }
-            }));
+            yield put(createAddNotePendingNoteList(payload.note.id, state.user.id));
         }
 
         appAnalytics.sendEventWithProps(

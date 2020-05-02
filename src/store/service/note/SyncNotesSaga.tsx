@@ -4,6 +4,7 @@ import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
 import { handleError } from '../../../app/ErrorHandler';
+import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 
 const ACTION_TYPE = 'SYNC_NOTES_ACTION';
 
@@ -17,10 +18,32 @@ function* run() {
     try {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
-        const notesToSync = Object.values(state.noteList).filter(note => note.userId === userId);
+        const noteList = state.noteList;
+
+        const userPendingNotes = Object.values(state.pendingNoteList.notes)
+            .filter(note => note.userId === userId);
+        const notesToSync = userPendingNotes.reduce((notes, next) => {
+            if (next.id) {
+                return [
+                    ...notes,
+                    noteList[next.id]
+                        ? noteList[next.id]
+                        : {
+                            id: next.id,
+                            reason: 'delete'
+                        }
+                ];
+            }
+            return notes;
+        }, [])
+
         if (state.app.serverAvailable) {
-            const syncedNotes = yield call(NoteApi.syncNotes, notesToSync, userId);
-            yield put(createNoteListOneLevelDeepMerge(syncedNotes.data));
+            const response = yield call(NoteApi.syncNotes, notesToSync, userId);
+
+            if (response.status === 200) {
+                yield put(createNoteListOneLevelDeepMerge(response.data));
+                yield put(createClearPendingNoteListByUserId(userId));
+            }
         }
     } catch (e) {
         handleError(e, 'Ошибка синхронизации записей с сервера');

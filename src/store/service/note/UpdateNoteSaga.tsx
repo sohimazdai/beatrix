@@ -3,11 +3,10 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { INoteListNote } from '../../../model/INoteList';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
-import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
-import { createOneLevelMergePendingNoteList, createDeletePendingNoteById } from '../../modules/pending-note-list/PendingNoteList';
-import { createNoteListChangeNoteByIdAction, createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
+import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
+import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 
 const ACTION_TYPE = 'UPDATE_NOTE_ACTION';
 
@@ -37,14 +36,7 @@ function* run({ payload }: UpdateNoteAction) {
         if (state.app.serverAvailable) {
             yield call(NoteApi.updateNote, payload.note, userId);
         } else {
-            yield put(createOneLevelMergePendingNoteList({
-                notes: {
-                    [payload.note.id]: {
-                        id: payload.note.id,
-                        userId: state.user.id
-                    }
-                }
-            }));
+            yield put(createAddNotePendingNoteList(payload.note.id, state.user.id));
         }
 
         appAnalytics.sendEventWithProps(

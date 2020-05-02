@@ -3,13 +3,15 @@ import { IUserPropertiesShedule, SheduleKeyType } from "../../../model/IUserProp
 export enum UserPropertiesSheduleActionType {
     UPLOAD = "USER_PROPERTIES_SHEDULE_UPLOAD",
     ONE_LEVEL_DEEP_MERGE = "USER_PROPERTIES_SHEDULE_ONE_LEVEL_DEEP_MERGE",
-    CLEAR_SHEDULE_BY_KEY_TYPE = 'CLEAR_SHEDULE_BY_KEY_TYPE'
+    CLEAR_SHEDULE_BY_KEY_TYPE = 'CLEAR_SHEDULE_BY_KEY_TYPE',
+    REPLACE_SHEDULE = 'REPLACE_SHEDULE'
 }
 
 export type UserPropertiesSheduleActionTypes = (
     UserPropertiesSheduleChangeAction |
     UserPropertiesSheduleOneLevelDeepMergeAction |
-    UserPropertiesSheduleClearSheduleByKeyTypeAction
+    UserPropertiesSheduleClearSheduleByKeyTypeAction |
+    UserPropertiesSheduleReplceAction
 )
 
 export interface UserPropertiesSheduleChangeAction {
@@ -25,6 +27,13 @@ export interface UserPropertiesSheduleOneLevelDeepMergeAction {
 export interface UserPropertiesSheduleClearSheduleByKeyTypeAction {
     type: UserPropertiesSheduleActionType.CLEAR_SHEDULE_BY_KEY_TYPE,
     payload: string
+}
+
+export interface UserPropertiesSheduleReplceAction {
+    type: UserPropertiesSheduleActionType.REPLACE_SHEDULE,
+    payload: {
+        shedule: IUserPropertiesShedule
+    }
 }
 
 export function createChangeUserPropertiesShedule(shedule: IUserPropertiesShedule) {
@@ -45,6 +54,15 @@ export function createClearSheduleByKeyType(key: SheduleKeyType): UserProperties
     return {
         type: UserPropertiesSheduleActionType.CLEAR_SHEDULE_BY_KEY_TYPE,
         payload: key
+    }
+}
+
+export function createReplaceShedule(shedule: IUserPropertiesShedule): UserPropertiesSheduleReplceAction {
+    return {
+        type: UserPropertiesSheduleActionType.REPLACE_SHEDULE,
+        payload: {
+            shedule
+        }
     }
 }
 
@@ -84,6 +102,8 @@ export function userPropertiesSheduleReducer(
                 }
             }, {})
             return clearedModule
+        case UserPropertiesSheduleActionType.REPLACE_SHEDULE:
+            return action.payload.shedule
         default: return module;
     }
 }

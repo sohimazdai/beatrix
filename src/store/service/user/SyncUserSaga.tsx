@@ -4,10 +4,10 @@ import { UserApi } from '../../../api/userApi';
 import { IUser } from '../../../model/IUser';
 import { IStorage } from '../../../model/IStorage';
 import { createSyncNotesAction } from '../note/SyncNotesSaga';
-import { createOneLevelMergeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
+import { createReplaceShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
-import { createUpdateUserSheduleAction } from './UpdateSheduleSaga';
 import { handleError } from '../../../app/ErrorHandler';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -34,13 +34,16 @@ function* syncUser({ payload }: SyncUserAction) {
             error: null
         }));
         const state: IStorage = yield select(state => state);
+        
+        appAnalytics.setUser(payload.user.id);
+
         if (state.app.serverAvailable) {
             const syncData = yield call(UserApi.syncUser, payload.user);
-            yield put(createOneLevelMergeUserPropertiesShedule(syncData.data.shedule));
+            yield put(createReplaceShedule(syncData.data.shedule));
             yield put(createUserDiabetesPropertiesChangeAction(syncData.data.properties));
             yield put(createSyncNotesAction());
         }
-        
+
         yield put(createUserChangeAction({
             loading: false,
             error: null
