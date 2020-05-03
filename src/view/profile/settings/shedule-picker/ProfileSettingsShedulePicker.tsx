@@ -104,9 +104,9 @@ function ProfileSettingsShedulePicker(props: Props) {
     function getSettingTitle() {
         switch (props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return 'Фактор чувствительности к инсулину'
+                return 'Фактор чувствительности к инсулину (ФЧИ)'
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return 'Углеводный коэффициент'
+                return 'Углеводный коэффициент (УК)'
         }
     }
 
@@ -115,16 +115,16 @@ function ProfileSettingsShedulePicker(props: Props) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
                 return 'Показывает, насколько понизит сахар крови (в ммолях) 1 ед. короткого или ультракороткого инсулина';
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return 'Показывает количество единиц инсулина для усвоения 1 ХЕ';
+                return 'Показывает количество единиц инсулина необходимо для усвоения 1 ХЕ';
         }
     }
 
     function getHint() {
         switch (props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return 'Укажите ФЧИ для разных промежутков времени';
+                return 'Укажите ФЧИ для различных промежутков времени';
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return 'Укажите УК для разных промежутков времени';
+                return 'Укажите УК для различных промежутков времени';
         }
     }
 

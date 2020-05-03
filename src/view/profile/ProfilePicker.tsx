@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 
         marginBottom: 20,
         marginTop: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
     },
     itemCard: {
         display: 'flex',

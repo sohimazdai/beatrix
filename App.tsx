@@ -8,6 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { appStarter } from './src/app/AppStarter';
 import { AppConnection } from './src/app/AppConnection';
 import { handleError } from './src/app/ErrorHandler';
+import { DevStub } from './src/component/dev-stub/DevStub';
 
 interface State {
   appIsReady: boolean
@@ -37,6 +38,7 @@ export default class App extends React.Component<never, State> {
             <AppNavigator />
             <ModalContentConnect />
             <AppConnection />
+            <DevStub />
           </PersistGate>
         </Provider>
         : (
@@ -45,3 +47,4 @@ export default class App extends React.Component<never, State> {
     )
   }
 }
+

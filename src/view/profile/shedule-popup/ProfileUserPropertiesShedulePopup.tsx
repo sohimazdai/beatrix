@@ -6,7 +6,7 @@ import { IStorage } from '../../../model/IStorage';
 import ProfileDayTimeRangeValuePicker from '../range-value-picker/ProfileDayTimeRangeValuePicker';
 import { IUserPropertiesShedule, SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 import { ScrollView } from 'react-native-gesture-handler';
-import { TouchableOpacity, Text, View, KeyboardAvoidingView } from 'react-native';
+import { TouchableOpacity, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { createOneLevelMergeUserPropertiesShedule } from '../../../store/modules/user-properties-shedule/UserPropertiesShedule';
@@ -64,8 +64,7 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                 <ScrollView style={styles.scrollView}>
                     <KeyboardAvoidingView
                         style={styles.scrollViewContentWrap}
-                        keyboardVerticalOffset={0}
-                        behavior="padding"
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     >
                         <View style={styles.scrollViewContent}>
                             {this.renderTitle()}

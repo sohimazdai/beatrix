@@ -208,14 +208,14 @@ function getVerticalLineColor(props: ChartNetProps, dayOfMonth: number): string 
                 dayOfMonth
             ).getDay()
             switch (dayOfWeek) {
+                case 0:
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                case 5:
                     return 'rgba(102, 102, 102, 0.38)'
+                case 5:
                 case 6:
-                case 0:
                     return 'rgba(184, 2, 2, 0.38)'
             }
     }

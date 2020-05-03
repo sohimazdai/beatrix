@@ -47,6 +47,7 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                     style={styles.glycemiaInput}
                     placeholder="6.0"
                     keyboardType={'numeric'}
+                    editable={false}
                 />
             </View>
         </ProfilePicker>

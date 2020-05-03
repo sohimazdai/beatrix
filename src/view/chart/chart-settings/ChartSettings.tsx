@@ -189,17 +189,19 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: '100%',
 
-        margin: 20,
+        // margin: 20,
         paddingTop: 10,
-        padding: 25,
-        borderWidth: 1,
-
+        padding: 15,
+        paddingBottom: 40,
+        
         flexDirection: 'column',
-
+        
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "#2E3858",
+        
+        // borderWidth: 1,
+        // borderRadius: 15,
+        // borderColor: "#2E3858",
     },
     periodChangingBlock: {
         display: 'flex',
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
         width: '100%',
         display: 'flex',
 
-        paddingBottom: 5,
+        paddingBottom: 10,
 
         justifyContent: 'center',
         textAlign: 'center',

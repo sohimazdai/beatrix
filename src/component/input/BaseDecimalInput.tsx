@@ -26,10 +26,10 @@ export function BaseDecimalInput(props: Props) {
         <View>
             <TextInput
                 {...props}
-                value={props.value}
-                onChangeText={(value) => handleChange(value)}
+                value={props.value || ""}
+                onChangeText={handleChange}
                 placeholder={props.placeholder || '0.0'}
-                keyboardType={props.keyboardType || 'numeric'}
+                keyboardType={props.keyboardType || 'decimal-pad'}
                 returnKeyType={props.returnKeyType || 'done'}
             />
         </View>

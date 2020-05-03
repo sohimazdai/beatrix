@@ -35,13 +35,14 @@ export const styles = StyleSheet.create({
         height: 50,
         width: 70,
         marginLeft: 15,
-        borderWidth: 1.5,
-        borderColor: "#cecece",
-        backgroundColor: "white",
+        // borderWidth: 1.5,
+        // borderColor: "white",
+        backgroundColor: "#e0e0e0",
         borderRadius: 5,
 
         textAlign: 'center',
         fontSize: 18,
+        // opacity: 0.8,
     },
     shortInsulinTypePickerView: {
         display: 'flex',

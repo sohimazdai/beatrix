@@ -4,6 +4,7 @@ import { ProfileTextInput } from '../ProfileTextInput';
 import { IUserDiabetesPropertiesDayTimeValue } from '../../../model/IUserDiabetesProperties';
 import { styles } from "./Style";
 import { BaseDecimalInput } from '../../../component/input/BaseDecimalInput';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
     range?: IUserDiabetesPropertiesDayTimeValue
@@ -46,80 +47,80 @@ export default class ProfileDayTimeRangeValuePicker extends Component<Props, Sta
 
     render() {
         return (
-            <View
-                style={styles.view}
-            >
-                <View style={styles.itemView}>
-                    {this.state.isNeedToSave ? (
-                        <ProfileTextInput
-                            value={String(this.state.since)}
-                            onChangeText={value => this.setState({
-                                since: Number(value),
-                                isNeedToSave: true,
-                                isErrored: false
-                            })}
-                        />
-                    ) : (
-                            <Text style={styles.savedValue}>
-                                {String(this.state.since)}
-                            </Text>
-                        )}
-                </View>
-                <View style={styles.itemView}>
-                    {this.state.isNeedToSave ? (
-                        <ProfileTextInput
-                            value={String(this.state.to)}
-                            onChangeText={value => this.setState({
-                                to: Number(value),
-                                isNeedToSave: true,
-                                isErrored: false
-                            })}
-                        />) : (
-                            <Text style={styles.savedValue}>
-                                {this.state.to}
-                            </Text>
-                        )}
-                </View>
-                <View style={styles.itemView}>
-                    {this.state.isNeedToSave ? (
-                        <BaseDecimalInput
-                            style={styles.inputView}
-                            value={String(this.state.value || 0.0)}
-                            onChangeText={this.onRangeValueChange}
-                        />
-                    ) : (
-                            <Text style={styles.savedValue}>
-                                {this.state.value}
-                            </Text>
-                        )}
-                </View>
-                <View style={styles.buttonItemView}>
-                    {this.state.isNeedToSave ? (
-                        <View style={styles.applyItemView}>
-                            <TouchableOpacity
-                                onPress={this.onApplyPress}
-                                style={styles.deleteItemViewTouchable}
-                            >
-                                <Text style={styles.delete}>
-                                    {'+'}
+                <View
+                    style={styles.view}
+                >
+                    <View style={styles.itemView}>
+                        {this.state.isNeedToSave ? (
+                            <ProfileTextInput
+                                value={String(this.state.since)}
+                                onChangeText={value => this.setState({
+                                    since: Number(value),
+                                    isNeedToSave: true,
+                                    isErrored: false
+                                })}
+                            />
+                        ) : (
+                                <Text style={styles.savedValue}>
+                                    {String(this.state.since)}
                                 </Text>
-                            </TouchableOpacity>
-                        </View>
-                    ) : (
-                            <View style={styles.deleteItemView}>
+                            )}
+                    </View>
+                    <View style={styles.itemView}>
+                        {this.state.isNeedToSave ? (
+                            <ProfileTextInput
+                                value={String(this.state.to)}
+                                onChangeText={value => this.setState({
+                                    to: Number(value),
+                                    isNeedToSave: true,
+                                    isErrored: false
+                                })}
+                            />) : (
+                                <Text style={styles.savedValue}>
+                                    {this.state.to}
+                                </Text>
+                            )}
+                    </View>
+                    <View style={styles.itemView}>
+                        {this.state.isNeedToSave ? (
+                            <BaseDecimalInput
+                                style={styles.inputView}
+                                value={String(!!this.state.value ? this.state.value : "")}
+                                onChangeText={this.onRangeValueChange}
+                            />
+                        ) : (
+                                <Text style={styles.savedValue}>
+                                    {this.state.value}
+                                </Text>
+                            )}
+                    </View>
+                    <View style={styles.buttonItemView}>
+                        {this.state.isNeedToSave ? (
+                            <View style={styles.applyItemView}>
                                 <TouchableOpacity
-                                    onPress={() => this.props.onDelete(this.props.range)}
+                                    onPress={this.onApplyPress}
                                     style={styles.deleteItemViewTouchable}
                                 >
                                     <Text style={styles.delete}>
-                                        {'-'}
+                                        {'+'}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
-                        )
-                    }
+                        ) : (
+                                <View style={styles.deleteItemView}>
+                                    <TouchableOpacity
+                                        onPress={() => this.props.onDelete(this.props.range)}
+                                        style={styles.deleteItemViewTouchable}
+                                    >
+                                        <Text style={styles.delete}>
+                                            {'-'}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        }
+                    </View>
                 </View>
-            </View>
         )
     }
 

@@ -2,8 +2,6 @@ import React from 'react';
 import { BackArrowIcon } from '../icon/BackArrowIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet } from 'react-native';
-import { ThemeColor } from '../../constant/ThemeColor';
-import { shadowOptions } from '../../constant/shadowOptions';
 
 interface HatProps {
     onBackPress: () => void;
@@ -20,6 +18,7 @@ export function Hat(props: HatProps) {
                 style={styles.backArrow}
             >
                 <TouchableOpacity
+                    style={styles.backArrowTouchable}
                     onPress={() => props.onBackPress()}
                 >
                     <BackArrowIcon />
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
     hatView: {
         display: 'flex',
         width: '100%',
-        padding: 16,
+        padding: 11,
         paddingTop: 40,
 
         flexDirection: 'row',
@@ -50,6 +49,9 @@ const styles = StyleSheet.create({
     },
     backArrow: {
 
+    },
+    backArrowTouchable: {
+        padding: 5
     },
     title: {
         fontSize: 19,

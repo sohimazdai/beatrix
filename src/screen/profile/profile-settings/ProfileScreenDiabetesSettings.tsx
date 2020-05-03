@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { ProfileSettingsInsulinTypePickerConnect } from '../../../view/profile/settings/insulin-type-picker/ProfileSettingsInsulinTypePicker';
 import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
 import { ProfileSettingsShedulePickerConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsShedulePicker';
@@ -19,13 +19,10 @@ interface Props {
 
 export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
     render() {
-        const isFadeHidden = !!!this.props.interactive.userPropertiesShedulePopupType ||
-            this.props.interactive.userPropertiesShedulePopupType === SheduleKeyType.NONE;
         return (
             <KeyboardAvoidingView
                 style={styles.keyboardAvoidingView}
-                behavior="padding"
-            // keyboardVerticalOffset={100}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <Hat
                     onBackPress={() => this.props.navigation.navigate('Profile')}
