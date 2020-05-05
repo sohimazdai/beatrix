@@ -20,8 +20,11 @@ function* run() {
         const userId = state.user.id;
         const noteList = state.noteList;
 
-        const userPendingNotes = Object.values(state.pendingNoteList.notes)
-            .filter(note => note.userId === userId);
+        let userPendingNotes = [];
+        if (state.pendingNoteList.notes) {
+            Object.values(state.pendingNoteList.notes)
+                .filter(note => note.userId === userId);
+        }
         const notesToSync = userPendingNotes.reduce((notes, next) => {
             if (next.id) {
                 return [

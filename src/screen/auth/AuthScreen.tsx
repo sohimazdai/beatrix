@@ -13,25 +13,14 @@ import { IStorage } from '../../model/IStorage';
 import { Action } from 'redux';
 import { IUser } from '../../model/IUser';
 import { AuthFormConnect } from '../../view/auth/AuthForm';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Fader } from '../../component/Fader';
 import { styles } from './Style';
-import { AuthRememberPasswordPopupConnect } from '../../view/auth/password-recovery-popup/AuthPasswordRecoveryPopup';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     user?: IUser
 }
 
-interface AuthScreenState {
-    restorePasswordPopupShown: boolean
-}
-
-class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
-    state = {
-        restorePasswordPopupShown: false,
-    }
-
+class AuthScreen extends React.Component<AuthScreenProps> {
     render() {
         return (
             <View style={styles.AuthScreen}>
@@ -41,16 +30,6 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
                 >
                     {this.renderAuthForm()}
                 </KeyboardAvoidingView>
-                {this.state.restorePasswordPopupShown &&
-                    <Fader hidden={!this.state.restorePasswordPopupShown} />}
-                <AuthRememberPasswordPopupConnect
-                    onRememberEnd={() => {
-                        this.setState({
-                            restorePasswordPopupShown: false
-                        })
-                    }}
-                    restorePasswordPopupShown={this.state.restorePasswordPopupShown}
-                />
                 {this.loading && <View style={styles.authFormLoading}>
                     <ActivityIndicator size="small" color="#000000" />
                 </View>}
@@ -79,9 +58,7 @@ class AuthScreen extends React.Component<AuthScreenProps, AuthScreenState> {
             <View style={styles.AuthForm}>
                 {this.renderBackgroundSun()}
                 {this.renderBackgroundMountains()}
-                <AuthFormConnect
-                    onForget={() => this.setState({ restorePasswordPopupShown: true })}
-                />
+                <AuthFormConnect />
             </View >
         )
     }

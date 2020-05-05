@@ -1,6 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
-import { IUser } from '../../../model/IUser';
+import { IUser, AuthType } from '../../../model/IUser';
 import * as Google from 'expo-google-app-auth';
 import { googleAuthConfig } from '../../../config/googleAuthConfig';
 import { createSyncUserAction } from '../user/SyncUserSaga';
@@ -42,6 +42,7 @@ function* googleAuth() {
                 id: googleUser.user.id,
                 email: googleUser.user.email,
                 name: googleUser.user.name,
+                authType: AuthType.GOOGLE,
                 isAuthed: true
             };
         }

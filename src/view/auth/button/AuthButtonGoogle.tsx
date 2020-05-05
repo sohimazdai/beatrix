@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
 
     socialAuthButton: {
         width: 200,
-        marginBottom: 20,
         backgroundColor: "#FFFFFF",
         borderRadius: 5,
         ...shadowOptions

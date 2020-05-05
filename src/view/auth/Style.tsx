@@ -28,8 +28,8 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     socialButton: {
-        marginTop: 40,
-        marginBottom: 40
+        marginTop: 30,
+        marginBottom: 50
     },
     authOption: {
         margin: 20,
@@ -38,7 +38,6 @@ export const styles = StyleSheet.create({
         color: '#333333',
         fontSize: 16,
         textAlign: 'center',
-        textDecorationLine: 'underline'
     },
     avoidingView: {
         justifyContent: 'flex-end',
