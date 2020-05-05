@@ -21,8 +21,8 @@ function* run() {
         const noteList = state.noteList;
 
         let userPendingNotes = [];
-        if (state.pendingNoteList.notes) {
-            Object.values(state.pendingNoteList.notes)
+        if (state.pendingNoteList && state.pendingNoteList.notes) {
+            userPendingNotes = Object.values(state.pendingNoteList.notes)
                 .filter(note => note.userId === userId);
         }
         const notesToSync = userPendingNotes.reduce((notes, next) => {
@@ -40,7 +40,7 @@ function* run() {
             return notes;
         }, [])
 
-        if (state.app.serverAvailable) {
+        if (state.app.serverAvailable && state.app.networkConnected) {
             const response = yield call(NoteApi.syncNotes, notesToSync, userId);
 
             if (response.status === 200) {

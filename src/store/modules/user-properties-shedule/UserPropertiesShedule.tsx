@@ -104,6 +104,8 @@ export function userPropertiesSheduleReducer(
             return clearedModule
         case UserPropertiesSheduleActionType.REPLACE_SHEDULE:
             return action.payload.shedule
+                ? action.payload.shedule
+                : null;
         default: return module;
     }
 }

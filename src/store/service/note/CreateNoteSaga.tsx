@@ -34,7 +34,7 @@ function* createNote({ payload }: CreateNoteAction) {
 
         yield put(createNoteListChangeNoteByIdAction(payload.note, userId, noteId));
 
-        if (state.app.serverAvailable) {
+        if (state.app.serverAvailable && state.app.networkConnected) {
             yield call(
                 NoteApi.createNote,
                 {

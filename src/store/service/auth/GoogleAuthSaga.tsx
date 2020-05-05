@@ -25,7 +25,7 @@ function* googleAuth() {
             loading: true,
             error: null
         }));
-        
+
         const googleUser: Google.LogInResult = yield Google.logInAsync(googleAuthConfig);
         let userData: IUser = {};
 

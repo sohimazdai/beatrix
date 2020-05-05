@@ -32,10 +32,11 @@ function* run({ payload }: DeleteNoteAction) {
 
         yield put(createDeleteNoteInNoteListById(payload.id));
 
-        if (state.app.serverAvailable) {
+        if (state.app.serverAvailable && state.app.networkConnected) {
             yield call(NoteApi.deleteNote, payload.id, state.user.id);
         } else {
             yield put(createAddNotePendingNoteList(payload.id, state.user.id));
+            const nextState: IStorage = yield select(state => state);
         }
 
         appAnalytics.sendEvent(appAnalytics.events.NOTE_DELETED);

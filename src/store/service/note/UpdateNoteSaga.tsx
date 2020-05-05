@@ -33,7 +33,7 @@ function* run({ payload }: UpdateNoteAction) {
 
         yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
 
-        if (state.app.serverAvailable) {
+        if (state.app.serverAvailable && state.app.networkConnected) {
             yield call(NoteApi.updateNote, payload.note, userId);
         } else {
             yield put(createAddNotePendingNoteList(payload.note.id, state.user.id));
