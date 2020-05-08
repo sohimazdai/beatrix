@@ -71,7 +71,7 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
         }))
     }
 
-    onDateChange(date: Date) {
+    onDateChange = (date: Date) => {
         this.props.onChange(date);
         appAnalytics.sendEvent(appAnalytics.events.CHART_CALENDAR_DATE_SET);
     }

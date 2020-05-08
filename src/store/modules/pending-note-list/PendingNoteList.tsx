@@ -61,8 +61,10 @@ export function pendingNoteListReducer(
                 }
             };
         case PendingNoteListActionType.PENDING_NOTE_LIST_CLEAR_BY_USER_ID_PENDING_NOTES:
-            const newNotes: IPendingNotes = { ...module.notes };
-            Object.values(module.notes).forEach(note => {
+            const newNotes: IPendingNotes = module.notes
+                ? { ...module.notes }
+                : {};
+            Object.values(module.notes = {}).forEach(note => {
                 delete newNotes[note.id];
             });
             return {
