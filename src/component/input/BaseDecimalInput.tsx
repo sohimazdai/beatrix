@@ -31,6 +31,8 @@ export function BaseDecimalInput(props: Props) {
                 placeholder={props.placeholder || '0.0'}
                 keyboardType={props.keyboardType || 'decimal-pad'}
                 returnKeyType={props.returnKeyType || 'done'}
+                autoCompleteType="off"
+                contextMenuHidden={true}
             />
         </View>
     )
