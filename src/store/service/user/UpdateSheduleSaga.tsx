@@ -6,6 +6,7 @@ import { createOneLevelMergeUserPropertiesShedule } from "../../modules/user-pro
 import { IUserPropertiesShedule } from "../../../model/IUserPropertiesShedule";
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = "UPDATE_SHEDULE_ACTION";
 
@@ -16,26 +17,27 @@ interface UpdateUserSheduleAction {
     };
 }
 
-export function createUpdateUserSheduleAction(shedule: IUserPropertiesShedule): UpdateUserSheduleAction {
-    return {
-        type: ACTION_TYPE,
-        payload: {
-            shedule
+export function createUpdateUserSheduleAction(shedule: IUserPropertiesShedule) {
+    return batchActions([
+        createUserChangeAction({
+            loading: true,
+            error: null
+        }),
+        {
+            type: ACTION_TYPE,
+            payload: {
+                shedule
+            }
         }
-    };
+    ])
 }
 
 function* run({ payload }: UpdateUserSheduleAction) {
     try {
         yield put(
-            createUserChangeAction({
-                loading: true,
-                error: null
-            })
-        );
-        yield put(
             createOneLevelMergeUserPropertiesShedule(payload.shedule)
         );
+        
         const state: IStorage = yield select(state => state);
         if (state.app.serverAvailable) {
             yield call(

@@ -1,20 +1,36 @@
 
-import { put, call, takeLatest, select } from 'redux-saga/effects';
+import { put, call, takeLatest, select, actionChannel } from 'redux-saga/effects';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
 import { handleError } from '../../../app/ErrorHandler';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
+import { createUserChangeAction } from '../../modules/user/UserActionCreator';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = 'SYNC_NOTES_ACTION';
 
-export function createSyncNotesAction() {
-    return {
-        type: ACTION_TYPE
-    }
+export enum SyncReasonType {
+    JUST = "just",
+    SEND_PENDING = "send_pending",
 }
 
-function* run() {
+export function createSyncNotesAction(reason?: string) {
+    return batchActions([
+        createUserChangeAction({
+            syncLoading: true,
+            error: null,
+        }),
+        {
+            type: ACTION_TYPE,
+            payload: {
+                reason: reason || SyncReasonType.JUST
+            }
+        },
+    ])
+}
+
+function* run(action) {
     try {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
@@ -40,16 +56,34 @@ function* run() {
             return notes;
         }, [])
 
-        if (state.app.serverAvailable && state.app.networkConnected) {
+        const cond = action.payload.reason === SyncReasonType.SEND_PENDING
+            ? state.app.serverAvailable && state.app.networkConnected && notesToSync.length
+            : state.app.serverAvailable && state.app.networkConnected
+
+        if (cond) {
             const response = yield call(NoteApi.syncNotes, notesToSync, userId);
 
             if (response.status === 200) {
-                yield put(createNoteListOneLevelDeepMerge(response.data));
-                yield put(createClearPendingNoteListByUserId(userId));
+                yield put(
+                    batchActions([
+                        createNoteListOneLevelDeepMerge(response.data),
+                        createClearPendingNoteListByUserId(userId),
+                    ])
+                )
             }
         }
+
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: null
+        }));
     } catch (e) {
         handleError(e, 'Ошибка синхронизации записей с сервера');
+
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: e.message
+        }));
     }
 };
 

@@ -7,6 +7,8 @@ import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteL
 import { v1 as uuidv1 } from 'uuid';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
+import { createUserChangeAction } from '../../modules/user/UserActionCreator';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = 'CREATE_NOTE_ACTION';
 
@@ -17,42 +19,59 @@ interface CreateNoteAction {
     }
 }
 
-export function createCreateNoteAction(note: INoteListNote): CreateNoteAction {
-    return {
-        type: ACTION_TYPE,
-        payload: {
-            note
-        }
-    }
+export function createCreateNoteAction(note: INoteListNote) {
+    return batchActions([
+        createUserChangeAction({
+            syncLoading: true,
+            error: null,
+        }),
+        {
+            type: ACTION_TYPE,
+            payload: {
+                note
+            }
+        },
+    ])
 }
 
 function* createNote({ payload }: CreateNoteAction) {
     try {
+
         const state: IStorage = yield select(state => state);
+        const noteWithoutId = payload.note;
         const userId = state.user.id;
         const noteId = uuidv1();
 
-        yield put(createNoteListChangeNoteByIdAction(payload.note, userId, noteId));
+        yield put(createNoteListChangeNoteByIdAction(noteWithoutId, userId, noteId));
 
         if (state.app.serverAvailable && state.app.networkConnected) {
             yield call(
                 NoteApi.createNote,
                 {
-                    ...payload.note,
+                    ...noteWithoutId,
                     id: noteId
                 },
                 userId);
         } else {
-            yield put(createAddNotePendingNoteList(payload.note.id, state.user.id));
+            yield put(createAddNotePendingNoteList(noteId, state.user.id));
         }
 
         appAnalytics.sendEventWithProps(
             appAnalytics.events.NOTE_CREATED,
-            payload.note
+            noteWithoutId
         );
 
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: null,
+        }));
     } catch (e) {
         handleError(e, 'Ошибка сохранения записи на сервер');
+
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: e.message
+        }));
     }
 };
 

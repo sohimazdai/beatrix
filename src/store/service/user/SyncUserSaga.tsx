@@ -8,6 +8,7 @@ import { createReplaceShedule } from '../../modules/user-properties-shedule/User
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { handleError } from '../../../app/ErrorHandler';
 import { appAnalytics } from '../../../app/Analytics';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -18,30 +19,36 @@ interface SyncUserAction {
     }
 }
 
-export function createSyncUserAction(user: IUser): SyncUserAction {
-    return {
-        type: ACTION_TYPE,
-        payload: {
-            user
-        }
-    }
+export function createSyncUserAction(user: IUser) {
+    return batchActions([
+        createUserChangeAction({
+            loading: true,
+            error: null
+        }),
+        {
+            type: ACTION_TYPE,
+            payload: {
+                user
+            }
+        },
+    ])
 }
 
 function* syncUser({ payload }: SyncUserAction) {
     try {
-        yield put(createUserChangeAction({
-            loading: true,
-            error: null
-        }));
         const state: IStorage = yield select(state => state);
-        
+
         appAnalytics.setUser(payload.user.id);
 
         if (state.app.serverAvailable) {
             const syncData = yield call(UserApi.syncUser, payload.user);
-            yield put(createReplaceShedule(syncData.data.shedule));
-            yield put(createUserDiabetesPropertiesChangeAction(syncData.data.properties));
-            yield put(createSyncNotesAction());
+            yield put(
+                batchActions([
+                    createReplaceShedule(syncData.data.shedule),
+                    createUserDiabetesPropertiesChangeAction(syncData.data.properties),
+                    createSyncNotesAction()
+                ])
+            );
         }
 
         yield put(createUserChangeAction({

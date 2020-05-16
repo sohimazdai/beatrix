@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { shadowOptions } from '../../constant/shadowOptions'
 import { JsxElement } from 'typescript'
+import { ProgressBarConnect } from '../progress-bar/ProgressBar'
 
 interface Props {
     title?: string
@@ -15,12 +16,17 @@ interface State {
 export class BlockHat extends React.Component<Props, State> {
     render() {
         return (
-            <View style={styles.settingsView}>
-                <Text style={styles.title}>
-                    {this.props.title}
-                </Text>
-                <View style={styles.rightSideSlot}>
-                    {this.props.rightSideSlot}
+            <View style={styles.hatView}>
+                <View style={styles.settingsView}>
+                    <Text style={styles.title}>
+                        {this.props.title}
+                    </Text>
+                    <View style={styles.rightSideSlot}>
+                        {this.props.rightSideSlot}
+                    </View>
+                </View>
+                <View style={styles.progressBarContainer}>
+                    <ProgressBarConnect />
                 </View>
             </View>
         )
@@ -28,6 +34,9 @@ export class BlockHat extends React.Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
+    hatView: {
+        backgroundColor: "#2E3858",
+    },
     settingsView: {
         display: 'flex',
         width: '100%',
@@ -38,7 +47,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: 'center',
 
-        backgroundColor: "#2E3858",
     },
     title: {
         fontSize: 19,
@@ -46,8 +54,9 @@ const styles = StyleSheet.create({
         color: '#ffffff'
     },
     rightSideSlot: {
-        // fontWeight: '300',
-        // fontSize: 19,
-        // color: '#ffffff'
+    },
+    progressBarContainer: {
+        height: 3,
+        marginBottom: 2,
     }
 })

@@ -64,7 +64,6 @@ class ProfileScreenComponent extends React.Component<Props, State> {
         )
     }
 
-
     onProfileSettingsPress = () => {
         this.props.navigation.navigate('ProfileDiabetesSettings')
     }

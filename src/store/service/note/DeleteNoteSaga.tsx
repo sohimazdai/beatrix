@@ -3,10 +3,11 @@ import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
-import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
+import { createAddNotePendingNoteList, createDeleteNoteFromPendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = 'DELETE_NOTE_ACTION';
 
@@ -17,36 +18,55 @@ interface DeleteNoteAction {
     }
 }
 
-export function createDeleteNoteAction(id: string): DeleteNoteAction {
-    return {
-        type: ACTION_TYPE,
-        payload: {
-            id
-        }
-    }
+export function createDeleteNoteAction(id: string) {
+    return batchActions([
+        createUserChangeAction({
+            syncLoading: true,
+            error: null,
+        }),
+        {
+            type: ACTION_TYPE,
+            payload: {
+                id
+            }
+        },
+    ])
 }
 
 function* run({ payload }: DeleteNoteAction) {
     try {
         const state: IStorage = yield select(state => state);
+        const noteToDelete = state.noteList[payload.id];
+        const noteFromPendingList = state.pendingNoteList.notes[payload.id];
 
         yield put(createDeleteNoteInNoteListById(payload.id));
 
         if (state.app.serverAvailable && state.app.networkConnected) {
             yield call(NoteApi.deleteNote, payload.id, state.user.id);
+            if (noteFromPendingList) {
+                yield put(createDeleteNoteFromPendingNoteList(payload.id, state.user.id));
+            }
         } else {
-            yield put(createAddNotePendingNoteList(payload.id, state.user.id));
-            const nextState: IStorage = yield select(state => state);
+            if (noteToDelete) {
+                yield put(createAddNotePendingNoteList(payload.id, state.user.id));
+            } else {
+                yield put(createDeleteNoteFromPendingNoteList(payload.id, state.user.id));
+            }
         }
 
         appAnalytics.sendEvent(appAnalytics.events.NOTE_DELETED);
 
         yield put(createUserChangeAction({
-            loading: false,
+            syncLoading: false,
             error: null
         }));
     } catch (e) {
         handleError(e, 'Ошибка удаления записи с сервера');
+
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: e.message
+        }));
     }
 };
 

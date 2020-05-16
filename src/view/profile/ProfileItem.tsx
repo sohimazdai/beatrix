@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     },
     itemHeader: {
         margin: 10,
+        paddingRight: 5,
         marginBottom: 5,
         fontSize: 19,
         fontWeight: 'bold',
@@ -62,8 +63,7 @@ const styles = StyleSheet.create({
         ...shadowOptions
     },
     itemCardLeft: {
-        display: 'flex',
-        width: '80%',
+        flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
@@ -71,9 +71,10 @@ const styles = StyleSheet.create({
     itemCardRight: {
         display: 'flex',
         width: "20%",
+        minWidth: 60,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start',
+        alignItems: 'center',
     },
     itemCardTitle: {
         marginTop: 5,

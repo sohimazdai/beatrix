@@ -13,6 +13,7 @@ export const persistConfig: PersistConfig = {
             inboundState => inboundState,
             outboundState => {
                 if (outboundState.loading) outboundState.loading = false;
+                if (outboundState.syncLoading) outboundState.syncLoading = false;
                 if (outboundState.error) outboundState.error = null;
                 if (outboundState.serverAvailable) outboundState.serverAvailable = false;
                 if (outboundState.networkConnected) outboundState.networkConnected = false;

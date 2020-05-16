@@ -7,6 +7,8 @@ import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteL
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
+import { createUserChangeAction } from '../../modules/user/UserActionCreator';
+import { batchActions } from 'redux-batched-actions';
 
 const ACTION_TYPE = 'UPDATE_NOTE_ACTION';
 
@@ -17,13 +19,19 @@ interface UpdateNoteAction {
     }
 }
 
-export function createUpdateNoteAction(note: INoteListNote): UpdateNoteAction {
-    return {
-        type: ACTION_TYPE,
-        payload: {
-            note,
-        }
-    }
+export function createUpdateNoteAction(note: INoteListNote) {
+    return batchActions([
+        createUserChangeAction({
+            syncLoading: true,
+            error: null,
+        }),
+        {
+            type: ACTION_TYPE,
+            payload: {
+                note,
+            }
+        },
+    ])
 }
 
 function* run({ payload }: UpdateNoteAction) {
@@ -43,9 +51,18 @@ function* run({ payload }: UpdateNoteAction) {
             appAnalytics.events.NOTE_UPDATED,
             payload.note
         );
-        
+
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: null
+        }));
     } catch (e) {
         handleError(e, 'Ошибка обновления записи на сервере');
+
+        yield put(createUserChangeAction({
+            syncLoading: false,
+            error: e.message
+        }));
     }
 };
 

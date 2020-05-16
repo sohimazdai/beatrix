@@ -23,14 +23,18 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
+import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
+import { IApp } from '../../model/IApp';
 
 interface NoteListScreenStateTProps {
+  app: IApp;
   noteListByDay: INoteListByDay;
   user: IUser;
 }
 
 interface NoteListScreenDispatchProps {
   selectNoteToEdit: (noteId: string) => void;
+  syncNotes: () => void;
 }
 
 interface NoteListScreenProps {
@@ -51,8 +55,13 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   };
 
   componentDidMount() {
-    const { user } = this.props;
     appAnalytics.sendEvent(appAnalytics.events.NOTELIST_SEEN);
+  }
+
+  componentDidUpdate(pP: FullProps) {
+    if (!pP.app.serverAvailable && this.props.app.serverAvailable) {
+      this.props.syncNotes();
+    }
   }
 
   render() {
@@ -231,21 +240,19 @@ class NoteListScreen extends React.PureComponent<FullProps> {
 }
 
 export const NoteListScreenConnect = connect(
-  (state: IStorage) => {
-    return {
-      app: state.app,
-      user: state.user,
-      noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state)
-    };
-  },
+  (state: IStorage) => ({
+    app: state.app,
+    user: state.user,
+    noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state),
+  }),
   dispatch => ({
     dispatch,
-    selectNoteToEdit: (noteId: string) =>
-      dispatch(
-        createChangeInteractive({
-          editingNoteId: noteId,
-          creatingNoteMode: true
-        })
-      )
-  })
+    selectNoteToEdit: (noteId: string) => dispatch(
+      createChangeInteractive({
+        editingNoteId: noteId,
+        creatingNoteMode: true
+      })
+    ),
+    syncNotes: () => dispatch(createSyncNotesAction(SyncReasonType.SEND_PENDING)),
+  }),
 )(NoteListScreen);

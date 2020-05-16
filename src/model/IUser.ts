@@ -5,6 +5,7 @@ export interface IUser {
     authType?: AuthType
 
     loading?: boolean
+    syncLoading?: boolean
     error?: any
 
     isAuthed?: boolean

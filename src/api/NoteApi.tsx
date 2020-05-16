@@ -3,28 +3,28 @@ import { INoteListNote } from '../model/INoteList';
 
 export class NoteApi {
     static createNote(note: INoteListNote, userId: string) {
-        return api.axios.post('note/create', {
+        return api.post('note/create', {
             ...note,
             userId
         })
     }
 
     static updateNote(note: INoteListNote, userId: String) {
-        return api.axios.post('note/update', {
+        return api.post('note/update', {
             ...note,
             userId
         })
     }
 
     static deleteNote(id: string, userId: string) {
-        return api.axios.post('note/delete', {
+        return api.post('note/delete', {
             id,
             userId
         })
     }
 
     static syncNotes(notes: INoteListNote[], userId: string) {
-        return api.axios.post('note/sync', {
+        return api.post('note/sync', {
             notes,
             userId
         })
