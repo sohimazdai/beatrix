@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "beatrix",
+    "name": "Beatrix",
     "slug": "beatrix",
     "privacy": "public",
     "sdkVersion": "34.0.0",
@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -37,7 +37,7 @@
     },
     "android": {
       "package": "com.doq.beatrix",
-      "versionCode": 2
+      "versionCode": 3
     },
     "description": "Diabetes visualization app",
     "githubUrl": "https://github.com/sohimazdai/beatrix"
