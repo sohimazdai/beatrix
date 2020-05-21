@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { createChangeAppAction } from '../store/modules/app/app';
-import { NetInfo } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { createAppPingAction } from '../store/service/app/AppPingSaga';
 import { IStorage } from '../model/IStorage';
 import { IApp } from '../model/IApp';
@@ -18,7 +18,8 @@ interface Props {
 function Component(props: Props) {
     React.useEffect(() => {
         logger('Environment: ', Variables);
-        NetInfo.isConnected.fetch().then(isConnected => {
+        NetInfo.fetch().then(state => {
+            const isConnected = state.isConnected;
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();
             logger('Phone is ' + (isConnected ? 'online' : 'offline'));
@@ -31,11 +32,9 @@ function Component(props: Props) {
             logger('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
         }
 
-        NetInfo.isConnected.addEventListener('connectionChange', handleConnectivityChange);
-
-        return function cleanup() {
-            NetInfo.isConnected.removeEventListener('connectionChange', handleConnectivityChange);
-        }
+        NetInfo.addEventListener((state) => {
+            handleConnectivityChange(state.isConnected)
+        });
     }, [])
     return null;
 }
