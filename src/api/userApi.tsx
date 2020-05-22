@@ -7,7 +7,11 @@ export class UserApi {
         return api.post('user/sync', user)
     }
 
+    static getUserByInstallationId(installationId: string) {
+        return api.post('user/installation', { installationId })
+    }
+
     static updateShedule(userId: string, shedule: IUserPropertiesShedule) {
-        return api.post('user/shedule', {userId, shedule})
+        return api.post('user/shedule', { userId, shedule })
     }
 }

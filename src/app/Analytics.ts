@@ -44,6 +44,7 @@ export const appAnalytics = {
     GOOGLE_SIGN_IN: 'Google sign in',
     REMEMBER_PASSWORD: 'Remember password',
     LOG_OUT: 'Log out',
+    USER_BY_INSTALLATION_ID: 'User by installation id',
 
     NOTELIST_SEEN: 'NoteList seen',
     CHARTS_SEEN: 'Charts seen',

@@ -1,9 +1,11 @@
+import { Platform } from 'react-native';
+
 const prodUrl = "3d0dc492-bd67-4182-9871-7cfbdbe16ad5.pub.cloud.scaleway.com";
 
 const ENV = {
   dev: {
     name: 'dev',
-    apiUrl: "localhost:3001",
+    apiUrl: Platform.OS === 'android' ? '10.0.2.2:3001' : "localhost:3001",
     amplitudeApiKey: 'dde4db10f8b93d2909a30ddced3a44a8',
   },
   prod: {
@@ -14,8 +16,8 @@ const ENV = {
 };
 
 function getEnvVars() {
-  if (__DEV__)return ENV.dev;
-  
+  if (__DEV__) return ENV.dev;
+
   return ENV.prod;
 }
 

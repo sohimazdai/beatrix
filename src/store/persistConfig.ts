@@ -5,7 +5,8 @@ export const persistConfig: PersistConfig = {
     key: 'root',
     blacklist: [
         'modal',
-        'interactive'
+        'interactive',
+        // 'user'
     ],
     storage: AsyncStorage,
     transforms: [

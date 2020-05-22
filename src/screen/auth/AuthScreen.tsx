@@ -4,6 +4,7 @@ import {
     KeyboardAvoidingView,
     ActivityIndicator,
     Platform,
+    Dimensions,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
@@ -14,6 +15,7 @@ import { Action } from 'redux';
 import { IUser } from '../../model/IUser';
 import { AuthFormConnect } from '../../view/auth/AuthForm';
 import { styles } from './Style';
+import { LinearGradient } from 'expo-linear-gradient'
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -23,7 +25,10 @@ interface AuthScreenProps {
 class AuthScreen extends React.Component<AuthScreenProps> {
     render() {
         return (
-            <View style={styles.AuthScreen}>
+            <LinearGradient
+                colors={['#F6F8FF', '#FFEBEB']}
+                style={styles.AuthScreen}
+            >
                 <KeyboardAvoidingView
                     style={styles.avoidingView}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -33,14 +38,16 @@ class AuthScreen extends React.Component<AuthScreenProps> {
                 {this.loading && <View style={styles.authFormLoading}>
                     <ActivityIndicator size="small" color="#000000" />
                 </View>}
-            </View>
+            </LinearGradient>
         )
     }
 
     renderBackgroundSun() {
+        const width = Dimensions.get('screen').width;
+        const height = Dimensions.get('screen').height;
         return (
             <View style={styles.BackgroundSun}>
-                <BackgroundSunIcon />
+                <BackgroundSunIcon width={width} height={height} />
             </View>
         )
     }

@@ -4,6 +4,8 @@ export interface IUser {
     email?: string
     authType?: AuthType
 
+    installationId?: string
+
     loading?: boolean
     syncLoading?: boolean
     error?: any

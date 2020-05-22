@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
         height: '100%',
         width: '100%',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     avoidingView: {
         justifyContent: 'flex-end'
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     },
     BackgroundSun: {
         position: "absolute",
-        top: -300,
+        top: -400,
     },
     BackgroundMountains: {
         top: -100,

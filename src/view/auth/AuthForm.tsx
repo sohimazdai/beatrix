@@ -6,6 +6,7 @@ import { styles } from './Style';
 import { IUser } from '../../model/IUser';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
+import { AuthProblemResolver } from '../../screen/auth/auth-problem-resolver/AuthProblemResolver';
 
 enum AuthFormMode {
     AUTH = 'auth',
@@ -42,6 +43,7 @@ export class AuthForm extends React.Component<Props, State> {
                     style={styles.authFormGradient}
                 >
                     {this.renderTitleFormTitle()}
+                    <AuthProblemResolver />
                     {this.renderSocialButtons()}
                 </LinearGradient>
             </View>

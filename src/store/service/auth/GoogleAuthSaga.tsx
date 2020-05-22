@@ -6,6 +6,7 @@ import { googleAuthConfig } from '../../../config/googleAuthConfig';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
+import Constants from 'expo-constants';
 
 const ACTION_TYPE = 'GOOGLE_AUTH_ACTION';
 
@@ -19,7 +20,7 @@ export function createGoogleAuthAction(): GoogleAuthAction {
     }
 }
 
-function* googleAuth() {
+function* run() {
     try {
         yield put(createUserChangeAction({
             loading: true,
@@ -36,13 +37,14 @@ function* googleAuth() {
             }));
             return;
         }
-        
+
         if (googleUser.type === 'success') {
             userData = {
                 id: googleUser.user.id,
                 email: googleUser.user.email,
                 name: googleUser.user.name,
                 authType: AuthType.GOOGLE,
+                installationId: Constants.installationId,
                 isAuthed: true
             };
         }
@@ -67,5 +69,5 @@ function* googleAuth() {
 };
 
 export function* watchGoogleAuth() {
-    yield takeLatest(ACTION_TYPE, googleAuth);
+    yield takeLatest(ACTION_TYPE, run);
 };

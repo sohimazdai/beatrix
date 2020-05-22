@@ -13,3 +13,9 @@ export function handleError(e: Error, customMessage?: string) {
     message: message
   })
 }
+
+export function handleErrorSilently(message) {
+  appAnalytics.sendEventWithProps(appAnalytics.events.ERROR, {
+    message: message
+  })
+}
