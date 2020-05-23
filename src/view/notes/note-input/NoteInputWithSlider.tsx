@@ -86,37 +86,43 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     sliderView: {
-        flex: 1,
+        marginTop: 20,
+        display: 'flex',
+        height: 140,
         width: '100%',
-
         margin: 5,
 
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     sliderRow: {
         flex: 1,
         width: '100%',
-        height: 40,
+        height: 60,
         marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     sliderRowText: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         width: 25,
         fontSize: 19,
-        paddingTop: 10,
-
         textAlignVertical: 'center',
         textAlign: 'center',
     },
     slider: {
         flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     inputView: {
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     inputTitleText: {

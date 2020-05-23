@@ -1,16 +1,19 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { shadowOptions } from "../../../constant/shadowOptions";
 import { ThemeColor } from "../../../constant/ThemeColor";
 
 export const styles = StyleSheet.create({
     noteCreationViewScrollView: {
+        flex: 1,
         width: '100%',
-        height: '100%',
+        minHeight: Dimensions.get('screen').height * 0.8,
+        // height: Dimensions.get('screen').height - 100,
     },
     noteCreationView: {
         flex: 1,
         width: '100%',
-        minHeight: 500,
+        // minHeight: Dimensions.get('screen').height - 0.8,
+        height: Dimensions.get('screen').height * 0.8,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#D4EEFF",
@@ -21,7 +24,7 @@ export const styles = StyleSheet.create({
     noteEditingView: {
         flex: 1,
         width: '100%',
-        minHeight: 500,
+        height: Dimensions.get('screen').height * 0.8,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#FFE1DF",
@@ -45,7 +48,7 @@ export const styles = StyleSheet.create({
     },
 
     inputBlock: {
-        flex: 1,
+        flex: 2,
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -68,7 +71,7 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
     },
     inputView: {
-        flex: 1,
+        flex: 3,
         width: '100%',
         margin: 15,
         marginBottom: 0,

@@ -95,8 +95,8 @@ export class ValueTypePicker extends React.Component<Props> {
 
 const styles = StyleSheet.create({
     view: {
-        margin: 20,
         flex: 1,
+        margin: 20,
         width: 280,
 
         justifyContent: 'space-between',

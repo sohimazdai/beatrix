@@ -1,18 +1,18 @@
 import React from 'react'
 import { StyleSheet, View, Animated, Dimensions } from 'react-native'
 
-export interface BottomPopupProps {
+export interface TopPopupProps {
     hidden?: boolean;
     children: any
 }
 
-export const BottomPopup = (props: BottomPopupProps) => {
-    const [currentBottom] = React.useState(new Animated.Value(-Dimensions.get('screen').height))
+export const TopPopup = (props: TopPopupProps) => {
+    const [currentTop] = React.useState(new Animated.Value(-Dimensions.get('screen').height))
     const [children, setChildren] = React.useState(null)
 
     React.useEffect(() => {
         Animated.timing(
-            currentBottom,
+            currentTop,
             {
                 toValue: props.hidden ? -Dimensions.get('screen').height : 0,
                 duration: 300,
@@ -24,17 +24,17 @@ export const BottomPopup = (props: BottomPopupProps) => {
     }, [props.hidden, props.children])
 
     return <Animated.View style={{
-        ...styles.BottomPopupView,
-        bottom: currentBottom
+        ...styles.TopPopupView,
+        top: currentTop
     }}>
         {children}
     </Animated.View>
 }
 
 const styles = StyleSheet.create({
-    BottomPopupView: {
+    TopPopupView: {
         position: 'absolute',
-        bottom: 0,
+        top: 0,
         overflow: 'visible',
         display: "flex",
         width: '100%',
