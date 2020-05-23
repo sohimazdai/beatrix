@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { IUserDiabetesPropertiesDayTimeValue } from '../../../model/IUserDiabetesProperties';
-import { BottomPopup } from '../../../component/popup/BottomPopup';
+import { IUserDiabetesPropertiesDayTimeValue } from '../../../../../model/IUserDiabetesProperties';
 import { connect } from 'react-redux';
-import { IStorage } from '../../../model/IStorage';
-import ProfileDayTimeRangeValuePicker from '../range-value-picker/ProfileDayTimeRangeValuePicker';
-import { IUserPropertiesShedule, SheduleKeyType } from '../../../model/IUserPropertiesShedule';
-import { ScrollView } from 'react-native-gesture-handler';
+import { IStorage } from '../../../../../model/IStorage';
+import ProfileDayTimeRangeValuePicker from '../../../range-value-picker/ProfileDayTimeRangeValuePicker';
+import { IUserPropertiesShedule, SheduleKeyType } from '../../../../../model/IUserPropertiesShedule';
 import { TouchableOpacity, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
-import { CloseIcon } from '../../../component/icon/CloseIcon';
-import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
-import { createOneLevelMergeUserPropertiesShedule } from '../../../store/modules/user-properties-shedule/UserPropertiesShedule';
+import { CloseIcon } from '../../../../../component/icon/CloseIcon';
+import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { styles } from './Style';
-import { createUpdateUserSheduleAction } from '../../../store/service/user/UpdateSheduleSaga';
+import { createUpdateUserSheduleAction } from '../../../../../store/service/user/UpdateSheduleSaga';
 
 interface Props {
     sheduleKey?: SheduleKeyType
@@ -28,7 +25,7 @@ interface State {
     needToApply?: boolean
 }
 
-export default class ProfileUserPropertiesShedulePopup extends Component<Props, State> {
+export default class ProfileUserPropertiesShedulePickerActive extends Component<Props, State> {
     state = {
         newShedule: this.props.userPropertiesShedule || {},
         needToApply: false
@@ -60,28 +57,23 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
 
     render() {
         return (
-            <BottomPopup hidden={!this.props.shown}>
-                <ScrollView style={styles.scrollView}>
-                    <KeyboardAvoidingView
-                        style={styles.scrollViewContentWrap}
-                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    >
-                        <View style={styles.scrollViewContent}>
-                            {this.renderTitle()}
-                            <View style={styles.pickerBlock}>
-                                {this.renderInputTitles()}
-                                {this.renderProfileDateTimePicker()}
-                                {this.renderReangeThatNeedToFill()}
-                            </View>
-                            <View style={styles.bottomBlock}>
-                                {this.renderAddButton()}
-                                {this.renderSaveButtonIfNeeded()}
-                            </View>
-                        </View>
+            <KeyboardAvoidingView
+                style={styles.scrollViewContentWrap}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <View style={styles.scrollViewContent}>
+                    <View style={styles.pickerBlock}>
+                        {this.renderInputTitles()}
+                        {this.renderProfileDateTimePicker()}
+                        {this.renderReangeThatNeedToFill()}
+                    </View>
+                    <View style={styles.bottomBlock}>
+                        {this.renderAddButton()}
                         {this.renderCloseButton()}
-                    </KeyboardAvoidingView>
-                </ScrollView>
-            </BottomPopup>
+                        {this.renderSaveButtonIfNeeded()}
+                    </View>
+                </View>
+            </KeyboardAvoidingView>
         )
     }
 
@@ -201,16 +193,6 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
 
 
     //render
-    renderTitle() {
-        const { userPropertiesPopupType } = this.props;
-        return <Text style={styles.popupTitle}>
-            {userPropertiesPopupType == SheduleKeyType.INSULIN_SENSITIVITY_FACTOR ?
-                'Фактор чувствительности к инсулину' :
-                "Углеводный коэффициент"
-            }
-        </Text>
-    }
-
     renderInputTitles() {
         return this.shedule.length > 0 && (
             <View style={styles.pickersTitleView}>
@@ -249,6 +231,19 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
         </TouchableOpacity>
     }
 
+    renderCloseButton() {
+        return (
+            <TouchableOpacity
+                style={styles.closeTouchable}
+                onPress={this.props.onClose}
+            >
+                <Text style={{ fontSize: 16 }}>
+                    {'Отменить'}
+                </Text>
+            </TouchableOpacity>
+        )
+    }
+
     renderReangeThatNeedToFill() {
         return !!this.rangeThatNeedToWriteMore &&
             <Text style={styles.rangeThatNeedToWriteMore}>
@@ -268,18 +263,9 @@ export default class ProfileUserPropertiesShedulePopup extends Component<Props, 
                 </Text>
             </TouchableOpacity>
     }
-
-    renderCloseButton() {
-        return <TouchableOpacity
-            style={styles.closeButton}
-            onPress={this.props.onClose}
-        >
-            <CloseIcon />
-        </TouchableOpacity>
-    }
 }
 
-export const ProfileUserPropertiesShedulePopupConnect = connect(
+export const ProfileUserPropertiesShedulePickerActiveConnect = connect(
     (state: IStorage) => ({
         userPropertiesShedule: state.userPropertiesShedule || {},
         interactive: state.interactive
@@ -308,4 +294,4 @@ export const ProfileUserPropertiesShedulePopupConnect = connect(
             }
         }
     }
-)(ProfileUserPropertiesShedulePopup)
+)(ProfileUserPropertiesShedulePickerActive)

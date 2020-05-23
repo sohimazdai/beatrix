@@ -1,22 +1,20 @@
-import { shadowOptions } from "../../../constant/shadowOptions";
-import { ThemeColor } from "../../../constant/ThemeColor";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
+import { ThemeColor } from '../../../constant/ThemeColor';
+import { shadowOptions } from '../../../constant/shadowOptions';
 
 export const styles = StyleSheet.create({
     scrollView: {
         width: '100%',
         height: '100%',
-        maxHeight: Dimensions.get('window').height * 0.9,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
     },
     scrollViewContentWrap: {
         flex: 1,
         width: '100%',
-        minHeight: 500,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        backgroundColor: "#FDFFDE",
+        // backgroundColor: "#FDFFDE",
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
@@ -27,7 +25,6 @@ export const styles = StyleSheet.create({
         height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingBottom: 40,
     },
     popupTitle: {
         width: '70%',
@@ -88,7 +85,7 @@ export const styles = StyleSheet.create({
         marginBottom: 20,
         padding: 10,
 
-        backgroundColor: 'white',
+        backgroundColor: '#BEF1C6',
         borderRadius: 50,
         ...shadowOptions
     },

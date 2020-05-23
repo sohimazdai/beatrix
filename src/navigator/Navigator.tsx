@@ -14,9 +14,7 @@ import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
-import { ProfileUserPropertiesShedulePopupConnect } from '../view/profile/shedule-popup/ProfileUserPropertiesShedulePopup';
 import { Fader } from '../component/Fader';
-import { SheduleKeyType } from '../model/IUserPropertiesShedule';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
@@ -35,16 +33,13 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 
 const AuthedContainer = (props: AuthedContainerProps) => {
     const faded = props.interactive.confirmPopupShown ||
-        props.interactive.creatingNoteMode ||
-        (props.interactive.userPropertiesShedulePopupType &&
-            props.interactive.userPropertiesShedulePopupType !== SheduleKeyType.NONE)
+        props.interactive.creatingNoteMode
     return (
         <>
             <AuthedNavigatorContainer />
             <Fader hidden={!faded} />
             <NoteCreationPopupConnect />
             <ConfirmPopupConnect />
-            <ProfileUserPropertiesShedulePopupConnect />
         </>
     )
 }

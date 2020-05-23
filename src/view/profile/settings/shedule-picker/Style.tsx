@@ -73,10 +73,11 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     sensitivityFactorView: {
+        position: 'relative',
         display: 'flex',
 
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     insulinSensitiveFactorPickerTouchable: {
         display: 'flex',

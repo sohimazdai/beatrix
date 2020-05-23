@@ -8,10 +8,12 @@ import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from './Style';
 import { createClearSheduleByKeyType } from '../../../../store/modules/user-properties-shedule/UserPropertiesShedule';
+import { ProfileUserPropertiesShedulePickerActiveConnect } from './shedule-picker-active/ProfileUserPropertiesShedulePickerActive';
 
 interface Props {
     sheduleKey: SheduleKeyType
     userPropertiesShedule?: IUserPropertiesShedule
+    activeUserPropertiesShedulePopupType?: SheduleKeyType
 
     onShedulePopupCall?: (key: SheduleKeyType) => void
     clearShedule?: (sheduleKey: SheduleKeyType) => void
@@ -128,27 +130,35 @@ function ProfileSettingsShedulePicker(props: Props) {
         }
     }
 
-    return <ProfilePicker
-        title={getSettingTitle()}
-        description={getDescription()}
-        hint={getHint()}
-    >
-        <View>
-            <View style={styles.sensitivityFactorView}>
-                {sheduleTableTitle()}
-                {sheduleTable()}
-                <View style={styles.buttons}>
-                    {shedule.length > 0 && clearSheduleButton()}
-                    {openPopupButton()}
+    return (
+        <ProfilePicker
+            title={getSettingTitle()}
+            description={getDescription()}
+            hint={getHint()}
+        >
+            <View>
+                <View style={styles.sensitivityFactorView}>
+                    {props.activeUserPropertiesShedulePopupType !== props.sheduleKey
+                        ? <>
+                            {sheduleTableTitle()}
+                            {sheduleTable()}
+                            <View style={styles.buttons}>
+                                {shedule.length > 0 && clearSheduleButton()}
+                                {openPopupButton()}
+                            </View>
+                        </>
+                        : <ProfileUserPropertiesShedulePickerActiveConnect />
+                    }
                 </View>
             </View>
-        </View>
-    </ProfilePicker>
+        </ProfilePicker>
+    )
 }
 
 export const ProfileSettingsShedulePickerConnect = connect(
     (state: IStorage) => ({
-        userPropertiesShedule: state.userPropertiesShedule
+        userPropertiesShedule: state.userPropertiesShedule,
+        activeUserPropertiesShedulePopupType: state.interactive.userPropertiesShedulePopupType,
     }),
     (dispatch) => ({
         onShedulePopupCall: (sheduleKey: SheduleKeyType) => {
