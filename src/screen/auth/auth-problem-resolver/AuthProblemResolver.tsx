@@ -20,7 +20,6 @@ interface Props {
 class Component extends React.Component<Props> {
   componentDidMount() {
     const { user, pullUserIdByInstallationId } = this.props;
-
     if (!user.email || !user.id || typeof user.isAuthed !== 'boolean') {
       pullUserIdByInstallationId();
     }
