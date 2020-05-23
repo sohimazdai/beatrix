@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform, KeyboardAvoidingView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 interface Props {
@@ -10,30 +9,28 @@ interface Props {
 
 export function ProfileTextInput(props: Props) {
     return (
-        <KeyboardAvoidingView behavior="padding">
-            <TextInput
-                {...props}
-                keyboardType={'numeric'}
-                returnKeyType={'done'}
-                maxLength={2}
-                style={{
-                    display: 'flex',
+        <TextInput
+            {...props}
+            keyboardType={'numeric'}
+            returnKeyType={'done'}
+            maxLength={2}
+            style={{
+                display: 'flex',
 
-                    textAlign: 'center',
+                textAlign: 'center',
 
-                    width: 50,
-                    height: 30,
+                width: 50,
+                height: 30,
 
-                    padding: 5,
+                padding: 5,
 
-                    borderRadius: 5,
+                borderRadius: 5,
 
-                    backgroundColor: '#FFFFFF',
-                    fontSize: 16,
-                    borderColor: "#cecece",
-                    borderWidth: 1,
-                }}
-            />
-        </KeyboardAvoidingView>
+                backgroundColor: '#FFFFFF',
+                fontSize: 16,
+                borderColor: "#cecece",
+                borderWidth: 1,
+            }}
+        />
     )
 }

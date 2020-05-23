@@ -29,10 +29,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
-
-        ...shadowOptions,
     },
     chartView: {
         width: '100%',
@@ -128,9 +124,21 @@ export const styles = StyleSheet.create({
         color: "#333333",
         marginRight: 5
     },
+    headerTitleRightSide: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    headerTouchableView: {
+        width: 29,
+        height: 29,
+    },
+    headerTouchable: {
+    },
     rightTitle: {
+        backgroundColor: 'blue',
         fontWeight: '300',
         fontSize: 19,
-        color: '#ffffff'
+        color: '#ffffff',
+        marginRight: 5,
     }
 })

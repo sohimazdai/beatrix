@@ -7,7 +7,7 @@ interface Props {
     rightSideSlot?: ReactElement
 }
 
-export class BlockHat extends React.Component<Props, State> {
+export class BlockHat extends React.Component<Props> {
     render() {
         return (
             <View style={styles.hatView}>
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     },
     settingsView: {
         display: 'flex',
+        maxHeight: 80,
         width: '100%',
         padding: 16,
         paddingTop: 40,
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: 'center',
-
     },
     title: {
         fontSize: 19,

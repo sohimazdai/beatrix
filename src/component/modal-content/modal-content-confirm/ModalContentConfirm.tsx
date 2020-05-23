@@ -39,9 +39,6 @@ export function ModalContentConfirm(props: ModalContentConfirmProps) {
 
 const styles = StyleSheet.create({
     view: {
-        position: 'absolute',
-        bottom: 0,
-
         width: '100%',
 
         borderTopLeftRadius: 25,

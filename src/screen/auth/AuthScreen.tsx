@@ -1,9 +1,7 @@
 import React, { Dispatch } from 'react';
 import {
     View,
-    KeyboardAvoidingView,
     ActivityIndicator,
-    Platform,
     Dimensions,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -29,12 +27,7 @@ class AuthScreen extends React.Component<AuthScreenProps> {
                 colors={['#F6F8FF', '#FFEBEB']}
                 style={styles.AuthScreen}
             >
-                <KeyboardAvoidingView
-                    style={styles.avoidingView}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                >
-                    {this.renderAuthForm()}
-                </KeyboardAvoidingView>
+                {this.renderAuthForm()}
                 {this.loading && <View style={styles.authFormLoading}>
                     <ActivityIndicator size="small" color="#000000" />
                 </View>}

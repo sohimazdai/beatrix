@@ -2,11 +2,6 @@ import { StyleSheet } from "react-native";
 import { shadowOptions } from "../../../../constant/shadowOptions";
 
 export const styles = StyleSheet.create({
-    keyboardAvoidingView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
     profileView: {
         height: '100%',
         width: '100%',

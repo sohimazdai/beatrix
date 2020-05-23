@@ -2,11 +2,6 @@ import { StyleSheet } from "react-native";
 import { shadowOptions } from "../../../../constant/shadowOptions";
 
 export const styles = StyleSheet.create({
-    keyboardAvoidingView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
     profileView: {
         height: '100%',
         width: '100%',
@@ -35,14 +30,11 @@ export const styles = StyleSheet.create({
         height: 50,
         width: 70,
         marginLeft: 15,
-        // borderWidth: 1.5,
-        // borderColor: "white",
         backgroundColor: "#e0e0e0",
         borderRadius: 5,
 
         textAlign: 'center',
         fontSize: 18,
-        // opacity: 0.8,
     },
     shortInsulinTypePickerView: {
         display: 'flex',

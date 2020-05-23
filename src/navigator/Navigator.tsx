@@ -15,6 +15,7 @@ import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-setting
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { Fader } from '../component/Fader';
+import { ModalContentConnect } from '../component/modal-content/ModalContent';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
@@ -32,14 +33,18 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 }
 
 const AuthedContainer = (props: AuthedContainerProps) => {
-    const faded = props.interactive.confirmPopupShown ||
+    const faded = (
+        props.interactive.confirmPopupShown ||
         props.interactive.creatingNoteMode
+    );
+
     return (
         <>
             <AuthedNavigatorContainer />
             <Fader hidden={!faded} />
             <NoteCreationPopupConnect />
             <ConfirmPopupConnect />
+            <ModalContentConnect />
         </>
     )
 }

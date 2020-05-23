@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../../../model/IStorage';
 import ProfileDayTimeRangeValuePicker from '../../../range-value-picker/ProfileDayTimeRangeValuePicker';
 import { IUserPropertiesShedule, SheduleKeyType } from '../../../../../model/IUserPropertiesShedule';
-import { TouchableOpacity, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
-import { CloseIcon } from '../../../../../component/icon/CloseIcon';
+import { TouchableOpacity, Text, View } from 'react-native';
 import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { styles } from './Style';
 import { createUpdateUserSheduleAction } from '../../../../../store/service/user/UpdateSheduleSaga';
@@ -57,10 +56,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
 
     render() {
         return (
-            <KeyboardAvoidingView
-                style={styles.scrollViewContentWrap}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            >
+            <View style={styles.scrollViewContentWrap}>
                 <View style={styles.scrollViewContent}>
                     <View style={styles.pickerBlock}>
                         {this.renderInputTitles()}
@@ -73,7 +69,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
                         {this.renderSaveButtonIfNeeded()}
                     </View>
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         )
     }
 

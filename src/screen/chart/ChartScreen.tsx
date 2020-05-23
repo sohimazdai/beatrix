@@ -13,12 +13,13 @@ import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
 import { styles } from './Style';
 import { ChartConfig } from './config/ChartConfig';
 import { appAnalytics } from '../../app/Analytics';
+import InfoIcon from '../../component/icon/InfoIcon';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
@@ -191,9 +192,18 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 break;
         }
 
-        return <Text style={styles.rightTitle}>
-            {title}
-        </Text>
+        return (
+            <View style={styles.headerTitleRightSide}>
+                <Text style={styles.rightTitle}>
+                    {title}
+                </Text>
+                <View style={styles.headerTouchableView}>
+                    <TouchableOpacity style={styles.headerTouchable}>
+                        <InfoIcon />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
     }
 
     getChartPopupTitle() {

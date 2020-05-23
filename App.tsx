@@ -36,7 +36,6 @@ export default class App extends React.Component<never, State> {
             persistor={persistor}
           >
             <AppNavigator />
-            <ModalContentConnect />
             <AppConnection />
             <DevStub />
           </PersistGate>

@@ -2,12 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { IStorage } from "../../model/IStorage";
 import { IModal, ModalType, IModalConfirm } from "../../model/IModal";
-import { ModalContentHint } from "./modal-content-hint/ModalContentHint";
-import { View, StyleSheet } from "react-native";
 import { Action, Dispatch } from "redux";
 import { createModalChangeAction } from "../../store/modules/modal/ModalActionCreator";
 import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
 import { ModalContentIOsDatePicker } from "./modal-content-ios-date-picker/ModalContentIOsDatePicker";
+import { BottomPopup } from '../popup/BottomPopup';
 
 interface ModalContentProps {
     modal: IModal;
@@ -16,21 +15,15 @@ interface ModalContentProps {
 
 class ModalContent extends React.PureComponent<ModalContentProps> {
     render() {
-        return this.props.modal && this.props.modal.needToShow ? (
-            <View style={styles.modalContentView}>
+        return (
+            <BottomPopup hidden={!this.props.modal.needToShow}>
                 {this.modalToShow}
-            </View>
-        ) :
-            null;
+            </BottomPopup>
+        );
     }
 
     get modalToShow() {
         switch (this.props.modal.type) {
-            case ModalType.HINT:
-                return <ModalContentHint
-                    modal={this.props.modal}
-                    onResult={() => this.onClose()}
-                />
             case ModalType.CONFIRM:
                 return <ModalContentConfirm
                     modal={this.props.modal}
@@ -59,18 +52,3 @@ export const ModalContentConnect = connect(
     }),
     dispatch => ({ dispatch })
 )(ModalContent);
-
-const styles = StyleSheet.create({
-    modalContentView: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        flex: 1,
-        height: '100%',
-        width: '100%',
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    }
-})

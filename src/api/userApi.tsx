@@ -11,6 +11,10 @@ export class UserApi {
         return api.post('user/installation', { installationId })
     }
 
+    static clearInstallationId(userId: string) {
+        return api.post('/user/installation/clear', { userId })
+    }
+
     static updateShedule(userId: string, shedule: IUserPropertiesShedule) {
         return api.post('user/shedule', { userId, shedule })
     }

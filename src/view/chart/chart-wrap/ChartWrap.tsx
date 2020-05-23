@@ -13,6 +13,7 @@ import { ChartDot } from '../chart-svg/ChartDot';
 import { ThemeColor } from '../../../constant/ThemeColor';
 import { calculateDayChartDots, calculateMonthChartDots, calculateThreeMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { ChartAxisPair } from '../chart-svg/ChartAxisPair';
 
 export interface ChartWrapProps {
     config: IChartConfiguration
@@ -79,10 +80,7 @@ export function ChartWrap(props: ChartWrapProps) {
     ]
     return (
         <View style={styles.chartWrap}>
-            <ChartBox
-                config={config}
-                axisTypes={config.axisTypes}
-            >
+            <ChartBox config={config}>
                 <ChartNet
                     maxValue={polylineDotsData.maxValue}
                     minValue={polylineDotsData.minValue}
@@ -110,6 +108,7 @@ export function ChartWrap(props: ChartWrapProps) {
                     initGradientColor={isGradientNeeded() && config.initGradientColor}
                     stopGradientColor={isGradientNeeded() && config.stopGradientColor}
                 />
+                <ChartAxisPair config={config} />
                 {clickableDotsAvailable() && basicDotsData.dots.map(item => {
                     return <ChartDot
                         key={item.id}
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     yAxisTitleIcon: {
         position: 'absolute',

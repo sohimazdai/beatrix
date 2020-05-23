@@ -3,7 +3,6 @@ import {
     View,
     Text,
     TouchableOpacity,
-    KeyboardAvoidingView,
     TextInput,
     Keyboard,
 } from 'react-native';
@@ -154,13 +153,11 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         return (
             <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
                 <ScrollView style={styles.noteCreationViewScrollView}>
-                    <KeyboardAvoidingView
+                    <View
                         style={!this.props.note ?
                             styles.noteCreationView :
                             styles.noteEditingView
                         }
-                        keyboardVerticalOffset={30}
-                        behavior='padding'
                     >
                         <View style={styles.scrollViewContent}>
                             {this.renderPickerBlock()}
@@ -175,7 +172,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                         >
                             <CloseIcon />
                         </TouchableOpacity>
-                    </KeyboardAvoidingView>
+                    </View>
                 </ScrollView>
             </BottomPopup>
         )

@@ -55,9 +55,6 @@ export const ConfirmPopupConnect = connect(
 
 const styles = StyleSheet.create({
     view: {
-        position: 'absolute',
-        bottom: 0,
-
         width: '100%',
         maxWidth: 500,
 

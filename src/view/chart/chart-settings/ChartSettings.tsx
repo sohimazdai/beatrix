@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: '100%',
 
-        // margin: 20,
         paddingTop: 10,
         padding: 15,
         paddingBottom: 40,
@@ -198,10 +197,6 @@ const styles = StyleSheet.create({
         
         justifyContent: 'center',
         alignItems: 'center',
-        
-        // borderWidth: 1,
-        // borderRadius: 15,
-        // borderColor: "#2E3858",
     },
     periodChangingBlock: {
         display: 'flex',

@@ -5,13 +5,13 @@ import { IStorage } from '../../model/IStorage'
 import { View, StyleSheet, ScrollView, Text } from 'react-native'
 import { ProfileItem } from '../../view/profile/ProfileItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { createUserChangeAction } from '../../store/modules/user/UserActionCreator'
 import { NavigationParams, NavigationScreenProp } from 'react-navigation'
 import { NavigationState } from 'react-navigation'
-import { createChangeInteractive } from '../../store/modules/interactive/interactive'
-import { batchActions } from 'redux-batched-actions'
 import { appAnalytics } from '../../app/Analytics'
 import { IUser } from '../../model/IUser'
+import { IModalConfirm, ModalType } from '../../model/IModal'
+import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
+import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 
 interface Props {
     onLogOut?: () => void;
@@ -79,31 +79,19 @@ export const ProfileScreenConnect = connect(
             ...stateProps,
             ...ownProps,
             onLogOut() {
-                dispatch(createChangeInteractive({
-                    confirmPopupShown: true,
-                    confirmPopupDescription: "Вы уверены?",
-                    confirmPopupSuccessCallback: () => {
-                        batchActions([
-                            dispatch(createUserChangeAction({
-                                id: '',
-                                isAuthed: false
-                            })),
-                            dispatch(createChangeInteractive({
-                                confirmPopupShown: false,
-                                confirmPopupSuccessCallback: null,
-                                confirmPopupRejectCallback: null,
-                                confirmPopupDescription: null
-                            }))
-                        ])
-                    },
-                    confirmPopupRejectCallback: () => {
-                        dispatch(createChangeInteractive({
-                            confirmPopupShown: false,
-                            confirmPopupSuccessCallback: null,
-                            confirmPopupRejectCallback: null,
-                            confirmPopupDescription: null
-                        }))
+                const confirmData: IModalConfirm = {
+                    data: {
+                        questionText: 'Вы уверены, что хотите выйти?',
+                        positiveButtonText: 'Выйти',
+                        negativeButtonText: 'Остаться',
+
+                        onPositiveClick: () => dispatch(createClearInstallationIdAction()),
                     }
+                }
+                dispatch(createModalChangeAction({
+                    type: ModalType.CONFIRM,
+                    needToShow: true,
+                    ...confirmData
                 }))
                 appAnalytics.sendEvent(appAnalytics.events.LOG_OUT);
             }
