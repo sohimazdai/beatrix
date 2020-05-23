@@ -7,10 +7,6 @@ interface Props {
     rightSideSlot?: ReactElement
 }
 
-interface State {
-
-}
-
 export class BlockHat extends React.Component<Props, State> {
     render() {
         return (
