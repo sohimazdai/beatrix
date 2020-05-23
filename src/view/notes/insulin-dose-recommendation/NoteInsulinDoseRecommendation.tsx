@@ -17,23 +17,15 @@ interface Props {
     note?: INoteListNote
 }
 
-class NoteInsulinDoseRecommendation extends React.Component<Props> {
-    render() {
-        const recommendation = this.recommendation;
-        if (!recommendation) return null;
-        return <View style={styles.view}>
-            <Text style={styles.viewText}>
-                {recommendation}
-            </Text>
-        </View>
-    }
+function NoteInsulinDoseRecommendation(props: Props) {
+    const { note, userPropertiesShedule, userDiabetesProperties } = props;
 
-    get recommendation() {
-        const { note, userPropertiesShedule, userDiabetesProperties } = this.props;
+    function getRecommendation() {
         const currentHour = new Date(note.date).getHours();
         const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
         if (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio) {
-            return Math.random() < 0.2
+            const recommendIfNeededMemo = React.useMemo(() => Math.random() < 0.2, []);
+            return recommendIfNeededMemo
                 ? 'Заполните диабетический профиль для получения рекомендаций'
                 : ''
         }
@@ -54,7 +46,7 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
         if (parseFloat(insulinValue) <= 0) {
             return "Вводить инсулин не рекомендуется";
         }
-        
+
         if (note.glucose < 4 && note.glucose > 2) {
             return `Введите инсулин после еды. \nРекомендуемое значение инсулина: ${insulinValue}`;
         }
@@ -62,9 +54,19 @@ class NoteInsulinDoseRecommendation extends React.Component<Props> {
         if (note.glucose <= 2) {
             return 'Сначала восстановите свой уровень глюкозы';
         }
-        
+
         return 'Рекомендуемое значение инсулина: ' + insulinValue;
     }
+
+    const recommendation = getRecommendation();
+
+    if (!recommendation) return null;
+    
+    return <View style={styles.view}>
+        <Text style={styles.viewText}>
+            {recommendation}
+        </Text>
+    </View>
 }
 
 export const NoteInsulinDoseRecommendationConnect = connect(

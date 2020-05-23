@@ -68,8 +68,8 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
                         {this.renderReangeThatNeedToFill()}
                     </View>
                     <View style={styles.bottomBlock}>
-                        {this.renderAddButton()}
                         {this.renderCloseButton()}
+                        {this.renderAddButton()}
                         {this.renderSaveButtonIfNeeded()}
                     </View>
                 </View>

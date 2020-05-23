@@ -181,10 +181,10 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         let title = ""
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
-                title = 'Дневной';
+                title = 'День';
                 break;
             case ChartPeriodType.MONTH:
-                title = 'Месячный';
+                title = 'Месяц';
                 break;
             case ChartPeriodType.THREE_MONTH:
                 title = 'Три месяца';

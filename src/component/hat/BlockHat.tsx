@@ -1,7 +1,5 @@
 import React, { ReactElement } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { shadowOptions } from '../../constant/shadowOptions'
-import { JsxElement } from 'typescript'
 import { ProgressBarConnect } from '../progress-bar/ProgressBar'
 
 interface Props {
