@@ -9,15 +9,26 @@ export const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: ThemeColor.BG_COLOR
   },
+  cardsViewWrap: {
+    backgroundColor: "#E3EAFF",
+  },
   cardsView: {
-    paddingBottom: 70
+    paddingBottom: 70,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+    backgroundColor: ThemeColor.BG_COLOR
+  },
+  iconBarViewWrap: {
+    backgroundColor: "#2E3858",
   },
   iconBarView: {
     display: "flex",
     padding: 10,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#E3EAFF"
+    backgroundColor: "#E3EAFF",
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
   },
   iconBarIcon: {
     flex: 1,

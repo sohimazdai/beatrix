@@ -69,7 +69,9 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       <View style={styles.screenView}>
         <BlockHat title={"Записи"} rightSideSlot={this.renderProfileIcon()} />
         {this.renderIconBar()}
-        {this.renderCards()}
+        <View style={styles.cardsViewWrap}>
+          {this.renderCards()}
+        </View>
         <View style={styles.addNoteButtonView}>
           <NoteCreationPopupButtonConnect />
         </View>
@@ -93,12 +95,14 @@ class NoteListScreen extends React.PureComponent<FullProps> {
 
   renderIconBar() {
     return (
-      <View style={styles.iconBarView}>
-        <RoundClocksIcon style={styles.iconBarIcon} />
-        <GlucometerIcon style={styles.iconBarIcon} />
-        <VegetablesIcon style={styles.iconBarIcon} />
-        <ShortSyringeIcon style={styles.iconBarIcon} />
-        <LongSyringeIcon style={styles.iconBarIcon} />
+      <View style={styles.iconBarViewWrap}>
+        <View style={styles.iconBarView}>
+          <RoundClocksIcon style={styles.iconBarIcon} />
+          <GlucometerIcon style={styles.iconBarIcon} />
+          <VegetablesIcon style={styles.iconBarIcon} />
+          <ShortSyringeIcon style={styles.iconBarIcon} />
+          <LongSyringeIcon style={styles.iconBarIcon} />
+        </View>
       </View>
     );
   }
