@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
         color: '#333333',
     },
     periodChangingButtons: {
+        maxWidth: 280,
         display: 'flex',
         width: '100%',
 

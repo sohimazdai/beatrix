@@ -19,12 +19,15 @@ import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-p
 import { styles } from './Style';
 import { ChartConfig } from './config/ChartConfig';
 import { appAnalytics } from '../../app/Analytics';
-import InfoIcon from '../../component/icon/InfoIcon';
+import { InfoIcon } from '../../component/icon/InfoIcon';
+import { ModalType } from '../../model/IModal';
+import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
     noteList: INoteList
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    onInfoPress: (chartPeriodType: ChartPeriodType) => void
 }
 
 export interface ChartState {
@@ -179,8 +182,11 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
     }
 
     getHatTitle() {
+        const { onInfoPress } = this.props;
+        const { selectedPeriod } = this.state;
+
         let title = ""
-        switch (this.state.selectedPeriod) {
+        switch (selectedPeriod) {
             case ChartPeriodType.DAY:
                 title = 'День';
                 break;
@@ -197,26 +203,29 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 <Text style={styles.rightTitle}>
                     {title}
                 </Text>
-                <View style={styles.headerTouchableView}>
-                    <TouchableOpacity style={styles.headerTouchable}>
-                        <InfoIcon />
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    style={styles.headerTouchable}
+                    onPress={() => onInfoPress(selectedPeriod)}
+                >
+                    <InfoIcon />
+                </TouchableOpacity>
             </View>
         )
     }
 
     getChartPopupTitle() {
+        const { selectedPeriod } = this.state;
+
         let displayingDate = '';
         let selectedDotId = this.state.selectedDotId;
 
-        switch (this.state.selectedPeriod) {
+        switch (selectedPeriod) {
             case ChartPeriodType.DAY:
                 const note = this.props.noteList[selectedDotId];
                 displayingDate = note && DateHelper.makeTimewithDateWithMonthAsString(new Date(note.date));
                 return displayingDate
             case ChartPeriodType.MONTH:
-                selectedDotId = Number(this.state.selectedDotId);
+                selectedDotId = Number(selectedDotId);
                 if (selectedDotId === DateHelper.today()) {
                     return 'Сегодня'
                 }
@@ -226,7 +235,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                 displayingDate = DateHelper.makeDateWithMonthAsString(new Date(selectedDotId))
                 return displayingDate
             case ChartPeriodType.THREE_MONTH:
-                selectedDotId = Number(this.state.selectedDotId);
+                selectedDotId = Number(selectedDotId);
                 displayingDate = DateHelper.makeDateWithMonthAsNumber(new Date(selectedDotId)) +
                     ' - ' + DateHelper.makeDateWithMonthAsNumber(
                         new Date(DateHelper.getDiffDate(new Date(selectedDotId), 6))
@@ -464,6 +473,26 @@ export const ChartConnect = connect(
             ...stateProps,
             dispatch,
             ownProps,
+            onInfoPress(chartPeriodType: ChartPeriodType) {
+                dispatch(createModalChangeAction({
+                    type: ModalType.INFO,
+                    needToShow: true,
+                    data: {
+                        type: chartPeriodType
+                    }
+                }))
+                switch (chartPeriodType) {
+                    case ChartPeriodType.DAY:
+                        appAnalytics.sendEvent(appAnalytics.events.DAY_CHART_INFO_OPEN);
+                        break;
+                    case ChartPeriodType.MONTH:
+                        appAnalytics.sendEvent(appAnalytics.events.MONTH_CHART_INFO_OPEN);
+                        break;
+                    case ChartPeriodType.THREE_MONTH:
+                        appAnalytics.sendEvent(appAnalytics.events.THREE_MONTH_CHART_INFO_OPEN);
+                        break;
+                }
+            }
         }
     }
 )(Chart)

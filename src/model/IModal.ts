@@ -1,3 +1,5 @@
+import { ChartPeriodType } from './IChart';
+
 export interface IModal {
     type?: ModalType,
     needToShow?: boolean,
@@ -9,6 +11,7 @@ export interface IModal {
 export enum ModalType {
     CONFIRM = 'confirm',
     HINT = 'hint',
+    INFO = 'info',
     IOS_DATE_PICKER = 'ios-date-picker',
 }
 
@@ -29,6 +32,12 @@ export interface IModalConfirm extends IModal {
     }
 }
 
+export interface IModalInfo extends IModal {
+    data?: {
+        type: ChartPeriodType
+    }
+}
+
 export interface IModalIOsDatePicker extends IModal {
     data?: {
         date: Date
@@ -46,5 +55,6 @@ export enum IModalPickerType {
 export type IModalType = (
     IModalHint |
     IModalConfirm |
-    IModalIOsDatePicker
+    IModalIOsDatePicker |
+    IModalInfo
 )

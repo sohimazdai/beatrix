@@ -7,6 +7,7 @@ import { createModalChangeAction } from "../../store/modules/modal/ModalActionCr
 import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
 import { ModalContentIOsDatePicker } from "./modal-content-ios-date-picker/ModalContentIOsDatePicker";
 import { BottomPopup } from '../popup/BottomPopup';
+import { ModalContentInfo } from './modal-content-info/ModalContentInfo';
 
 interface ModalContentProps {
     modal: IModal;
@@ -24,6 +25,11 @@ class ModalContent extends React.PureComponent<ModalContentProps> {
 
     get modalToShow() {
         switch (this.props.modal.type) {
+            case ModalType.INFO:
+                return <ModalContentInfo
+                    modal={this.props.modal}
+                    onResult={() => this.onClose()}
+                />
             case ModalType.CONFIRM:
                 return <ModalContentConfirm
                     modal={this.props.modal}

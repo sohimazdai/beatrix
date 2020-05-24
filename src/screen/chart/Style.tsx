@@ -125,17 +125,14 @@ export const styles = StyleSheet.create({
         marginRight: 5
     },
     headerTitleRightSide: {
+        marginTop: 5,
         display: 'flex',
         flexDirection: 'row',
     },
-    headerTouchableView: {
-        width: 29,
-        height: 29,
-    },
     headerTouchable: {
+        marginTop: 5,
     },
     rightTitle: {
-        backgroundColor: 'blue',
         fontWeight: '300',
         fontSize: 19,
         color: '#ffffff',
