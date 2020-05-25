@@ -1,6 +1,5 @@
 import React from 'react'
-import { Modal, KeyboardAvoidingView, Platform } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { StyleSheet, Animated, Dimensions } from 'react-native'
 
 export interface BottomPopupProps {
     hidden?: boolean;
@@ -8,19 +7,38 @@ export interface BottomPopupProps {
 }
 
 export const BottomPopup = (props: BottomPopupProps) => {
-    const { children, hidden } = props;
+    const [currentBottom] = React.useState(new Animated.Value(-Dimensions.get('screen').height))
+    const [children, setChildren] = React.useState(null)
 
-    return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={!hidden}
-        >
-            <ScrollView style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                    {children}
-                </KeyboardAvoidingView>
-            </ScrollView>
-        </Modal>
-    )
+    React.useEffect(() => {
+        Animated.timing(
+            currentBottom,
+            {
+                toValue: props.hidden ? -Dimensions.get('screen').height : 0,
+                duration: 300,
+            }
+        ).start(() => {
+            props.hidden && setChildren(null)
+        });
+        !props.hidden && setChildren(props.children);
+    }, [props.hidden, props.children])
+
+    return <Animated.View style={{
+        ...styles.BottomPopupView,
+        bottom: currentBottom
+    }}>
+        {children}
+    </Animated.View>
 }
+
+const styles = StyleSheet.create({
+    BottomPopupView: {
+        position: 'absolute',
+        bottom: 0,
+        overflow: 'visible',
+        display: "flex",
+        width: '100%',
+
+        opacity: 1
+    }
+})

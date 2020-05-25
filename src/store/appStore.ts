@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import { persistStore, persistReducer } from 'redux-persist';
-import { enableBatching, batchDispatchMiddleware } from 'redux-batched-actions';
+import { batchDispatchMiddleware } from 'redux-batched-actions';
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './rootSaga';
 import { persistConfig } from './persistConfig';

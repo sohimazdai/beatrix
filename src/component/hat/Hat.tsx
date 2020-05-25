@@ -2,7 +2,7 @@ import React from 'react';
 import { BackArrowIcon } from '../icon/BackArrowIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View, Text, StyleSheet } from 'react-native';
-import { ProgressBarConnect } from '../progress-bar/ProgressBar';
+import { Loader } from '../loader/Loader';
 
 interface HatProps {
     onBackPress: () => void;
@@ -13,7 +13,6 @@ interface HatProps {
 export function Hat(props: HatProps) {
     return (
         <View style={styles.hatViewWrapper}>
-
             <View
                 style={styles.hatView}
             >
@@ -27,16 +26,15 @@ export function Hat(props: HatProps) {
                         <BackArrowIcon />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.title}>
-                    {props.title}
-                </Text>
-                <View>
+                <View style={{ flexDirection: 'row' }}>
 
+                    <Text style={styles.title}>
+                        {props.title}
+                    </Text>
+                    <Loader />
                 </View>
+                <View />
             </View >
-            <View style={styles.progressBarContainer}>
-                <ProgressBarConnect />
-            </View>
         </View>
     )
 }

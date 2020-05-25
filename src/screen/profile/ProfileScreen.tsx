@@ -11,7 +11,7 @@ import { appAnalytics } from '../../app/Analytics'
 import { IUser } from '../../model/IUser'
 import { IModalConfirm, ModalType } from '../../model/IModal'
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
-import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator'
 
 interface Props {
     onLogOut?: () => void;
@@ -85,7 +85,10 @@ export const ProfileScreenConnect = connect(
                         positiveButtonText: 'Выйти',
                         negativeButtonText: 'Остаться',
 
-                        onPositiveClick: () => dispatch(createClearInstallationIdAction()),
+                        onPositiveClick: () => dispatch(createUserChangeAction({
+                            id: '',
+                            isAuthed: false,
+                        })),
                     }
                 }
                 dispatch(createModalChangeAction({

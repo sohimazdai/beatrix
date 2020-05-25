@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { ProgressBarConnect } from '../progress-bar/ProgressBar'
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { Loader } from '../loader/Loader'
 
 interface Props {
     title?: string
@@ -12,15 +12,15 @@ export class BlockHat extends React.Component<Props> {
         return (
             <View style={styles.hatView}>
                 <View style={styles.settingsView}>
-                    <Text style={styles.title}>
-                        {this.props.title}
-                    </Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={styles.title}>
+                            {this.props.title}
+                        </Text>
+                        <Loader />
+                    </View>
                     <View style={styles.rightSideSlot}>
                         {this.props.rightSideSlot}
                     </View>
-                </View>
-                <View style={styles.progressBarContainer}>
-                    <ProgressBarConnect />
                 </View>
             </View>
         )

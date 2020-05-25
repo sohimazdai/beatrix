@@ -9,32 +9,34 @@ interface ModalContentConfirmProps {
 }
 
 export function ModalContentConfirm(props: ModalContentConfirmProps) {
-    return <View style={styles.view}>
-        <Text style={styles.questionText}>
-            {props.modal.data.questionText}
-        </Text>
-        <View style={styles.confirmButtons}>
-            <TouchableOpacity
-                onPress={() => props.onResult()}
-                style={styles.negativeButtonView}
-            >
-                <Text style={styles.negativeButtonText}>
-                    {props.modal.data.negativeButtonText}
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => {
-                    props.modal.data.onPositiveClick();
-                    props.onResult();
-                }}
-                style={styles.positiveButtonView}
-            >
-                <Text style={styles.positiveButtonText}>
-                    {props.modal.data.positiveButtonText}
-                </Text>
-            </TouchableOpacity>
+    return (
+        <View style={styles.view}>
+            <Text style={styles.questionText}>
+                {props.modal.data.questionText}
+            </Text>
+            <View style={styles.confirmButtons}>
+                <TouchableOpacity
+                    onPress={() => props.onResult()}
+                    style={styles.negativeButtonView}
+                >
+                    <Text style={styles.negativeButtonText}>
+                        {props.modal.data.negativeButtonText}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        props.modal.data.onPositiveClick();
+                        props.onResult();
+                    }}
+                    style={styles.positiveButtonView}
+                >
+                    <Text style={styles.positiveButtonText}>
+                        {props.modal.data.positiveButtonText}
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
-    </View>
+    )
 }
 
 const styles = StyleSheet.create({

@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     headerTouchable: {
-        marginTop: 5,
+        marginTop: 2,
     },
     rightTitle: {
         fontWeight: '300',

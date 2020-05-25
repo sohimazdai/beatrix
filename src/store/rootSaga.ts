@@ -7,15 +7,11 @@ import { watchDeleteNote } from './service/note/DeleteNoteSaga';
 import { watchAppPing } from './service/app/AppPingSaga';
 import { watchSyncNotes } from './service/note/SyncNotesSaga';
 import { watchUpdateUserShedule } from './service/user/UpdateSheduleSaga';
-import { watchGetUserByInstallationId } from './service/auth/GetUserByInstallationId';
-import { watchClearInstallationId } from './service/auth/ClearInstallationIdSaga';
 
 export function* rootSaga() {
     yield all([
         //AUTH
         fork(watchGoogleAuth),
-        fork(watchGetUserByInstallationId),
-        fork(watchClearInstallationId),
         //USER
         fork(watchSyncUser),
         //NOTES

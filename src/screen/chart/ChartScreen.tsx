@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { Dispatch, Action } from 'redux';
 import { View, Text } from 'react-native';
-import { INoteList, INoteListByDay, INoteListNote } from '../../model/INoteList';
+import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ChartValueType, ChartPeriodType, IChartConfiguration, ChartAveragePeriodType } from '../../model/IChart';
+import { ChartValueType, ChartPeriodType, ChartAveragePeriodType } from '../../model/IChart';
 import { NoteListSelector } from '../../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
@@ -279,64 +279,68 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                         highlightsTitles = [1, 5, 10, 15, 20, 25, 30];
                         newWidth = this.chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
-                        return <View
-                            style={{
-                                ...styles.highightTitlesView,
-                                width: newWidth + 5,
-                                paddingRight: DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0) === 30 ?
-                                    3 :
-                                    12
-                            }}
-                        >
-                            {highlightsTitles.map((title, index) => {
-                                return <Text
-                                    key={title}
-                                    style={{
-                                        ...styles.highightTitle,
-                                        width: index ?
-                                            titleWidth :
-                                            9,
-                                        paddingLeft: index ?
-                                            0 :
-                                            4.5,
-                                    }}
-                                >
-                                    {title}
-                                </Text>
-                            })}
-                        </View>
+                        return (
+                            <View
+                                style={{
+                                    ...styles.highightTitlesView,
+                                    width: newWidth + 5,
+                                    paddingRight: DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0) === 30 ?
+                                        3 :
+                                        12
+                                }}
+                            >
+                                {highlightsTitles.map((title, index) => {
+                                    return <Text
+                                        key={title}
+                                        style={{
+                                            ...styles.highightTitle,
+                                            width: index ?
+                                                titleWidth :
+                                                9,
+                                            paddingLeft: index ?
+                                                0 :
+                                                4.5,
+                                        }}
+                                    >
+                                        {title}
+                                    </Text>
+                                })}
+                            </View>
+                        )
                     case 28:
                     case 29:
                         highlightsNumber = 6;
                         highlightsTitles = [1, 5, 10, 15, 20, 25];
                         newWidth = this.chartConfig.breadUnits.boxWidth;
                         titleWidth = 20;
-                        return <View
-                            style={{
-                                ...styles.highightTitlesView,
-                                width: newWidth + 5,
-                                paddingRight: DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0) === 28 ?
-                                    36 :
-                                    45
-                            }}
-                        >
-                            {highlightsTitles.map((title, index) => {
-                                return <Text
-                                    key={title}
-                                    style={{
-                                        ...styles.highightTitle,
-                                        width: index ?
-                                            titleWidth :
-                                            9,
-                                        paddingLeft: index ?
-                                            0 :
-                                            4.5
-                                    }}
-                                >
-                                    {title}
-                                </Text>
-                            })}
-                        </View>
+                        return (
+                            <View
+                                style={{
+                                    ...styles.highightTitlesView,
+                                    width: newWidth + 5,
+                                    paddingRight: DateHelper.getMaxDateOfDifferentMonth(this.state.currentDate, 0) === 28 ?
+                                        36 :
+                                        45
+                                }}
+                            >
+                                {highlightsTitles.map((title, index) => {
+                                    return <Text
+                                        key={title}
+                                        style={{
+                                            ...styles.highightTitle,
+                                            width: index ?
+                                                titleWidth :
+                                                9,
+                                            paddingLeft: index ?
+                                                0 :
+                                                4.5
+                                        }}
+                                    >
+                                        {title}
+                                    </Text>
+                                })}
+                            </View>
+                        )
                 }
             case ChartPeriodType.THREE_MONTH:
                 highlightsNumber = 3;
@@ -369,11 +373,13 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         switch (this.state.selectedPeriod) {
             case ChartPeriodType.DAY:
                 const axiosName = 'ЧАС';
-                return <View style={styles.axisTitleView}>
-                    <Text style={styles.axisTitleText}>
-                        {axiosName}
-                    </Text>
-                </View>
+                return (
+                    <View style={styles.axisTitleView}>
+                        <Text style={styles.axisTitleText}>
+                            {axiosName}
+                        </Text>
+                    </View>
+                )
         }
     }
 

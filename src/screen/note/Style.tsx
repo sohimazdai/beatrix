@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   },
   cardsViewWrap: {
     backgroundColor: "#E3EAFF",
+    overflow: 'hidden',
   },
   cardsView: {
     paddingBottom: 70,
