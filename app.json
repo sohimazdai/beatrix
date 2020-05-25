@@ -3,7 +3,7 @@
     "name": "Beatrix",
     "slug": "beatrix",
     "privacy": "public",
-    "sdkVersion": "37.0.0",
+    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",
