@@ -27,10 +27,11 @@ export function Hat(props: HatProps) {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-
                     <Text style={styles.title}>
                         {props.title}
                     </Text>
+                </View>
+                <View>
                     <Loader />
                 </View>
                 <View />
