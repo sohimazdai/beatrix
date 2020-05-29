@@ -6,6 +6,7 @@ import { styles } from './Style';
 import { IUser } from '../../model/IUser';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
+import { AuthProblemResolver } from '../../screen/auth/AuthProblemResolver/AuthProblemResolver';
 
 enum AuthType {
     EMAIL = 'email',
@@ -15,6 +16,7 @@ enum AuthType {
 interface Props {
     user?: IUser
     loading?: boolean
+    installationLoading?: boolean
 }
 
 interface State {
@@ -37,6 +39,7 @@ export class AuthForm extends React.Component<Props, State> {
                     style={styles.authFormGradient}
                 >
                     {this.renderTitleFormTitle()}
+                    <AuthProblemResolver />
                     {this.renderSocialButtons()}
                 </LinearGradient>
             </View>
@@ -62,6 +65,7 @@ export const AuthFormConnect = connect(
     (state: IStorage) => ({
         user: state.user,
         isPasswordRestored: state.interactive.isPasswordRestored,
+        installationLoading: state.user.installationLoading,
     }),
     (dispatch) => ({ dispatch }),
     (stateProps, ownProps) => {

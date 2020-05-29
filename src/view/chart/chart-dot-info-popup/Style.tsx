@@ -70,13 +70,19 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         right: 20,
         top: 20,
-        ...shadowOptions
+        borderRadius: 50,
+        ...shadowOptions,
     },
-    editNoteIconTouchable: {
+    editNoteIconTouchableView: {
         position: 'absolute',
         left: 20,
         top: 20,
+        backgroundColor: "#fff",
+        borderRadius: 5,
         ...shadowOptions,
+    },
+    editNoteIconTouchable: {
+
     },
     editNoteIcon: {
         width: 30,

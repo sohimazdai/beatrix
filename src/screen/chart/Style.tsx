@@ -6,13 +6,24 @@ export const styles = StyleSheet.create({
     view: {
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: '#F6F8FF'
+        backgroundColor: '#F6F8FF',
+        paddingBottom: 80,
+    },
+    scrollViewWrapWrap: {
+        backgroundColor: "#2E3858",
+    },
+    scrollViewWrap: {
+        backgroundColor: "#2E3858",
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        overflow: 'hidden',
     },
     scrollView: {
-        flex: 1,
-        width: '100%',
         height: '100%',
+        paddingTop: 10,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        backgroundColor: "#003653",
     },
     viewGradient: {
         position: 'absolute',
@@ -36,8 +47,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
         backgroundColor: ThemeColor.LIGHT_BLUE,
 
         ...shadowOptions,
@@ -83,14 +92,20 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#eee',
     },
+    settingsViewWrap: {
+        backgroundColor: "#3E2626",
+    },
     settingsView: {
-        width: '100%',
+        overflow: 'hidden',
         display: 'flex',
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
 
-        padding: 20,
-        paddingRight: 28,
-        paddingBottom: 28,
+        backgroundColor: ThemeColor.BG_COLOR,
 
+        paddingTop: 20,
+        paddingHorizontal: 38,
+        paddingBottom: 35,
         justifyContent: 'center',
         alignItems: 'center',
     },

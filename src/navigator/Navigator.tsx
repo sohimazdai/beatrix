@@ -16,26 +16,30 @@ import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/Note
 import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { Fader } from '../component/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
+import { IModal } from '../model/IModal';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
     interactive?: IInteractive
+    modal?: IModal
 }
 
 interface AuthedContainerProps {
     interactive?: IInteractive
+    modal?: IModal
 }
 
 const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
     return props.user && props.user.isAuthed ?
-        <AuthedContainer interactive={props.interactive} /> :
+        <AuthedContainer interactive={props.interactive} modal={props.modal} /> :
         <AppUnknownNavigatorContainer />
 }
 
 const AuthedContainer = (props: AuthedContainerProps) => {
     const faded = (
         props.interactive.confirmPopupShown ||
-        props.interactive.creatingNoteMode
+        props.interactive.creatingNoteMode ||
+        props.modal.needToShow
     );
 
     return (
@@ -52,7 +56,8 @@ const AuthedContainer = (props: AuthedContainerProps) => {
 export const AppNavigator = connect(
     (state: IStorage) => ({
         user: state.user,
-        interactive: state.interactive
+        interactive: state.interactive,
+        modal: state.modal || {},
     })
 )(AppNavigatorComponent)
 

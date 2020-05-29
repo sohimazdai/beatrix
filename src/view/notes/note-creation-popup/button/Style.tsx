@@ -3,7 +3,6 @@ import { shadowOptions } from "../../../../constant/shadowOptions";
 
 export const styles = StyleSheet.create({
     addNoteButton: {
-        padding: 5,
         margin: 5,
         paddingLeft: 10,
         paddingRight: 10,
@@ -13,6 +12,7 @@ export const styles = StyleSheet.create({
         ...shadowOptions
     },
     addNoteButtonTouchable: {
+        padding: 10,
         display: 'flex',
 
         flexDirection: 'row',

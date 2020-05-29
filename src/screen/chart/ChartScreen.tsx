@@ -109,18 +109,24 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
     render() {
         return (
             <View style={styles.view}>
-                <ScrollView style={styles.scrollView}>
-                    <BlockHat
-                        title={"График"}
-                        rightSideSlot={this.getHatTitle()}
-                    />
-                    <View
-                        style={styles.ChartView}
-                    >
-                        {this.renderChat()}
-                        {this.renderSettings()}
+                <BlockHat
+                    title={"График"}
+                    rightSideSlot={this.getHatTitle()}
+                />
+                <View style={styles.scrollViewWrapWrap}>
+                    <View style={styles.scrollViewWrap}>
+                        <ScrollView style={styles.scrollView}>
+                            <View
+                                style={styles.ChartView}
+                            >
+                                {this.renderChat()}
+                                <View style={styles.settingsViewWrap}>
+                                    {this.renderSettings()}
+                                </View>
+                            </View>
+                        </ScrollView>
                     </View>
-                </ScrollView>
+                </View>
                 {this.state.selectedDotId && <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
                     shown={this.state.popupShown}
@@ -132,7 +138,6 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                     <NoteCreationPopupButtonConnect />
                 </View>}
             </View>
-
         )
     }
 
@@ -146,7 +151,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         return (
             <View style={styles.chartView}>
                 <LinearGradient
-                    colors={['#163B50', '#3E2626']}
+                    colors={['#003653', '#3E2626']}
                     style={styles.chartGradient}
                 >
                     {chartsToRender.map(type => {

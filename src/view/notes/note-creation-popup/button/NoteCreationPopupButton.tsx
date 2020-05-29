@@ -1,6 +1,6 @@
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { View, Text, StyleSheet } from "react-native";
-import { AddNoteIcon } from "../../../../component/icon/AddNoteIcon";
+import { AddNoteIconV2 } from "../../../../component/icon/AddNoteIcon";
 import { shadowOptions } from "../../../../constant/shadowOptions";
 import { connect } from "react-redux";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
@@ -20,7 +20,7 @@ const NoteCreationPopupButton = (props: Props) => (
             <Text style={styles.addNoteButtonText}>
                 Записать
                 </Text>
-            <AddNoteIcon />
+            <AddNoteIconV2 />
         </TouchableOpacity>
     </View>
 )

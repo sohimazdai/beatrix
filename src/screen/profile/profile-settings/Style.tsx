@@ -5,14 +5,20 @@ export const styles = StyleSheet.create({
     keyboardAvoidingView: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center'
     },
-    profileView: {
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-
-        flexDirection: 'column',
+    scrollViewWrapWrap: {
+        backgroundColor: "#2E3858",
+    },
+    scrollViewWrap: {
+        backgroundColor: "#2E3858",
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        overflow: 'hidden',
+    },
+    scrollView: {
+        paddingTop: 10,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
         backgroundColor: "#DDDDDD"
     },
     targetGlycemiaView: {

@@ -73,15 +73,19 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 >
                     <CloseIcon />
                 </TouchableOpacity>
-                {props.editable && <TouchableOpacity
-                    style={styles.editNoteIconTouchable}
-                    onPress={() => {
-                        props.openEditPopup(props.note.id);
-                        props.onClose();
-                    }}
-                >
-                    <EditNoteIcon style={styles.editNoteIcon} />
-                </TouchableOpacity>}
+                {props.editable && (
+                    <View style={styles.editNoteIconTouchableView}>
+                        <TouchableOpacity
+                            style={styles.editNoteIconTouchable}
+                            onPress={() => {
+                                props.openEditPopup(props.note.id);
+                                props.onClose();
+                            }}
+                        >
+                            <EditNoteIcon style={styles.editNoteIcon} />
+                        </TouchableOpacity>
+                    </View>
+                )}
             </LinearGradient>
         </View>
     </BottomPopup>

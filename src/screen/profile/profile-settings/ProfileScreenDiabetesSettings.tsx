@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { ProfileSettingsInsulinTypePickerConnect } from '../../../view/profile/settings/insulin-type-picker/ProfileSettingsInsulinTypePicker';
 import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
 import { ProfileSettingsShedulePickerConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsShedulePicker';
@@ -28,18 +28,22 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                     onBackPress={() => this.props.navigation.navigate('Profile')}
                     title={"Диабетический профиль"}
                 />
-                <ScrollView style={styles.profileView}>
-                    {/* TODO: add change insulin type posibility */}
-                    {/* <ProfileSettingsInsulinTypePickerConnect /> */}
-                    <ProfileSettingsTargetGlycemiaPickerConnect />
-                    <ProfileSettingsShedulePickerConnect
-                        sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
-                    />
-                    <ProfileSettingsShedulePickerConnect
-                        sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
-                    />
-                </ScrollView>
-            </KeyboardAvoidingView>
+                <View style={styles.scrollViewWrapWrap}>
+                    <View style={styles.scrollViewWrap}>
+                        <ScrollView style={styles.scrollView}>
+                            {/* TODO: add change insulin type posibility */}
+                            {/* <ProfileSettingsInsulinTypePickerConnect /> */}
+                            <ProfileSettingsTargetGlycemiaPickerConnect />
+                            <ProfileSettingsShedulePickerConnect
+                                sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
+                            />
+                            <ProfileSettingsShedulePickerConnect
+                                sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
+                            />
+                        </ScrollView>
+                    </View>
+                </View>
+            </KeyboardAvoidingView >
         )
     }
 }

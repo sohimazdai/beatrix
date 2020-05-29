@@ -12,7 +12,7 @@ export class BlockHat extends React.Component<Props> {
         return (
             <View style={styles.hatView}>
                 <View style={styles.settingsView}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.title}>
                             {this.props.title}
                         </Text>

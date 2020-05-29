@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     TextInput,
     Keyboard,
+    KeyboardAvoidingView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -152,13 +153,13 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     render() {
         return (
             <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
-                <ScrollView style={styles.noteCreationViewScrollView}>
-                    <View
-                        style={!this.props.note ?
-                            styles.noteCreationView :
-                            styles.noteEditingView
-                        }
-                    >
+                <KeyboardAvoidingView
+                    style={!this.props.note ?
+                        styles.noteCreationView :
+                        styles.noteEditingView
+                    }
+                >
+                    <ScrollView style={styles.noteCreationViewScrollView}>
                         <View style={styles.scrollViewContent}>
                             {this.renderPickerBlock()}
                             <View style={styles.buttonsBlock}>
@@ -172,8 +173,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                         >
                             <CloseIcon />
                         </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </KeyboardAvoidingView>
             </BottomPopup>
         )
     }

@@ -7,6 +7,7 @@ export interface IUser {
     installationId?: string
 
     loading?: boolean
+    installationLoading?: boolean
     syncLoading?: boolean
     error?: any
 

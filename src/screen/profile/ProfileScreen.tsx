@@ -11,7 +11,7 @@ import { appAnalytics } from '../../app/Analytics'
 import { IUser } from '../../model/IUser'
 import { IModalConfirm, ModalType } from '../../model/IModal'
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
-import { createUserChangeAction } from '../../store/modules/user/UserActionCreator'
+import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 
 interface Props {
     onLogOut?: () => void;
@@ -36,30 +36,34 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                     onBackPress={() => this.props.navigation.navigate('Main')}
                     title={'Профиль'}
                 />
-                <ScrollView>
-                    <ProfileItem
-                        title={'email'}
-                        description={user.email}
-                    />
-                    <ProfileItem
-                        title={'Диабетический профиль'}
-                        description={'Настройте ваши параметры и улучшите компенсацию'}
-                        activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
-                            <Text style={styles.activeElementToSettings}>
-                                {'Перейти'}
-                            </Text>
-                        </TouchableOpacity>}
-                    />
-                    <ProfileItem
-                        description={'Выйти из аккаунта'}
-                        hint={'Чтобы использовать ваши записи необходимо будет зайти снова в ваш аккаунт'}
-                        activeElement={<TouchableOpacity onPress={this.props.onLogOut}>
-                            <Text style={styles.activeElementExit}>
-                                {'Выйти'}
-                            </Text>
-                        </TouchableOpacity>}
-                    />
-                </ScrollView>
+                <View style={styles.scrollViewWrapWrap}>
+                    <View style={styles.scrollViewWrap}>
+                        <ScrollView style={styles.scrollView}>
+                            <ProfileItem
+                                title={'email'}
+                                description={user.email}
+                            />
+                            <ProfileItem
+                                title={'Диабетический профиль'}
+                                description={'Настройте ваши параметры и улучшите компенсацию'}
+                                activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
+                                    <Text style={styles.activeElementToSettings}>
+                                        {'Перейти'}
+                                    </Text>
+                                </TouchableOpacity>}
+                            />
+                            <ProfileItem
+                                description={'Выйти из аккаунта'}
+                                hint={'Чтобы использовать ваши записи необходимо будет зайти снова в ваш аккаунт'}
+                                activeElement={<TouchableOpacity onPress={this.props.onLogOut}>
+                                    <Text style={styles.activeElementExit}>
+                                        {'Выйти'}
+                                    </Text>
+                                </TouchableOpacity>}
+                            />
+                        </ScrollView>
+                    </View>
+                </View>
             </View>
         )
     }
@@ -85,10 +89,7 @@ export const ProfileScreenConnect = connect(
                         positiveButtonText: 'Выйти',
                         negativeButtonText: 'Остаться',
 
-                        onPositiveClick: () => dispatch(createUserChangeAction({
-                            id: '',
-                            isAuthed: false,
-                        })),
+                        onPositiveClick: () => dispatch(createClearInstallationIdAction()),
                     }
                 }
                 dispatch(createModalChangeAction({
@@ -110,6 +111,22 @@ const styles = StyleSheet.create({
 
         flexDirection: 'column',
         justifyContent: 'flex-start',
+        backgroundColor: "#DDDDDD"
+    },
+    scrollViewWrapWrap: {
+        backgroundColor: "#2E3858",
+    },
+    scrollViewWrap: {
+        backgroundColor: "#2E3858",
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        overflow: 'hidden',
+    },
+    scrollView: {
+        height: '100%',
+        paddingTop: 10,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
         backgroundColor: "#DDDDDD"
     },
     activeElementExit: {

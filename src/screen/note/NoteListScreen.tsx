@@ -69,8 +69,10 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       <View style={styles.screenView}>
         <BlockHat title={"Записи"} rightSideSlot={this.renderProfileIcon()} />
         {this.renderIconBar()}
-        <View style={styles.cardsViewWrap}>
-          {this.renderCards()}
+        <View style={styles.cardsViewWrapWrap}>
+          <View style={styles.cardsViewWrap}>
+            {this.renderCards()}
+          </View>
         </View>
         <View style={styles.addNoteButtonView}>
           <NoteCreationPopupButtonConnect />
