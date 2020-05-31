@@ -10,15 +10,18 @@ export const styles = StyleSheet.create({
     backgroundColor: Color.BG_COLOR,
   },
   cardsViewWrapWrap: {
+    height: '100%',
     backgroundColor: "#E3EAFF",
   },
   cardsViewWrap: {
+    height: '100%',
     overflow: 'hidden',
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     paddingBottom: 120,
   },
   cardsView: {
+    height: '100%',
     overflow: 'scroll',
     backgroundColor: Color.BG_COLOR
   },
