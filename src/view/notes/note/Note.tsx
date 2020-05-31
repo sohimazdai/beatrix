@@ -2,8 +2,6 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../model/INoteList';
 import { shadowOptions } from '../../../constant/shadowOptions';
-import { Color } from '../../../constant/Color';
-import { isThemeLight } from '../../../app/AppTheme';
 
 interface Props {
     note?: INoteListNote
@@ -18,7 +16,7 @@ export function Note(props: Props) {
             style={styles.touchableContainer}
             onPress={props.onPress}
         >
-            <Text style={styles.buttonText}>
+            <Text style={styles.text}>
                 {getTime(new Date(props.note.date))}
             </Text>
         </TouchableOpacity>
@@ -65,19 +63,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         ...shadowOptions
     },
-    buttonText: {
-        flex: 1,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-        fontSize: 18,
-        lineHeight: 21,
-
-        color: "#333",
-    },
     text: {
         flex: 1,
 
@@ -89,6 +74,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 21,
 
-        color: isThemeLight ? "#333" : Color.BG_COLOR,
+        color: '#333',
     }
 })

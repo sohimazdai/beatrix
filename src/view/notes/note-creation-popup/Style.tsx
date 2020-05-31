@@ -1,7 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { shadowOptions } from "../../../constant/shadowOptions";
-import { Color } from "../../../constant/Color";
-import { isThemeLight } from '../../../app/AppTheme';
+import { Color } from '../../../constant/Color';
 
 export const styles = StyleSheet.create({
     noteCreationViewScrollView: {
@@ -15,7 +14,7 @@ export const styles = StyleSheet.create({
         height: Dimensions.get('screen').height * 0.8,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        backgroundColor: isThemeLight ? "#D4EEFF" : '#0D0B23',
+        backgroundColor: "#D4EEFF",
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
