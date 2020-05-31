@@ -9,6 +9,7 @@ import { CalendarIcon } from '../../../component/icon/CalendarIcon';
 import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
 import { appAnalytics } from '../../../app/Analytics';
+import { shadowOptions } from '../../../constant/shadowOptions';
 
 export interface ChartSettingsDatePickerProps {
     date: Date
@@ -126,11 +127,9 @@ const styles = StyleSheet.create({
     view: {
         width: 170,
 
-        borderWidth: 1,
-
         borderRadius: 5,
         backgroundColor: ThemeColor.WHITE,
-        borderColor: "#2E3858"
+        ...shadowOptions,
     },
     viewWide: {
         width: 190,

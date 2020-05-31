@@ -6,6 +6,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
 import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
 import { DateHelper } from '../../../utils/DateHelper';
+import { MinusIcon } from '../../../component/icon/MinusIcon';
+import { PlusIcon } from '../../../component/icon/PlusIcon';
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
@@ -33,28 +35,28 @@ export function ChartSettings(props: ChartSettingsProps) {
                     style={styles.dateClickerTouchable}
                     onPress={() => props.onDateChange(setPreviousDateValueByChartPeriodType(props))}
                 >
-                    <Text style={styles.dateClickerText}>
-                        {'-'}
-                    </Text>
+                    <MinusIcon />
                 </TouchableOpacity>
             </View>
-
             <ChartSettingsDatePickerConnect
                 date={props.date}
                 selectedPeriod={props.selectedPeriod}
                 onChange={props.onDateChange}
             />
-            <View style={styles.dateClicker}>
+            <View
+                style={getNextDate(props.date) <= today
+                    ? styles.dateClicker
+                    : { ...styles.dateClicker, ...styles.dateClickerDisable }
+                }
+            >
                 <TouchableOpacity
                     style={styles.dateClickerTouchable}
-                    onPress={getNextDate(props.date) <= today ?
-                        () => props.onDateChange(setNextDateValueByChartPeriodType(props)) :
-                        () => { }
+                    onPress={getNextDate(props.date) <= today
+                        ? () => props.onDateChange(setNextDateValueByChartPeriodType(props))
+                        : () => { }
                     }
                 >
-                    <Text style={styles.dateClickerText}>
-                        {'+'}
-                    </Text>
+                    <PlusIcon />
                 </TouchableOpacity>
             </View>
         </View>
@@ -90,7 +92,7 @@ export function ChartSettings(props: ChartSettingsProps) {
                 </View>
             </View>
         </View>
-    </View>
+    </View >
 }
 
 function setPreviousDateValueByChartPeriodType(props: ChartSettingsProps) {
@@ -151,8 +153,6 @@ const styles = StyleSheet.create({
         width: '100%',
 
         paddingBottom: 10,
-        paddingLeft: 20,
-        paddingRight: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -160,14 +160,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         width: 45,
 
-        borderWidth: 1,
-
         justifyContent: 'center',
         alignItems: 'center',
         ...shadowOptions,
         borderRadius: 5,
         backgroundColor: ThemeColor.WHITE,
-        borderColor: '#2E3858',
     },
     dateClickerDisable: {
         opacity: 0.5,
@@ -192,9 +189,9 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         padding: 15,
         paddingBottom: 40,
-        
+
         flexDirection: 'column',
-        
+
         justifyContent: 'center',
         alignItems: 'center',
     },

@@ -3,6 +3,7 @@ import { AppLoading } from 'expo';
 import { AppNavigator } from './src/navigator/Navigator';
 import { Provider } from 'react-redux';
 import { appStore, persistor } from './src/store/appStore';
+import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import { PersistGate } from 'redux-persist/integration/react';
 import { appStarter } from './src/app/AppStarter';
 import { AppConnection } from './src/app/AppConnection';
@@ -34,9 +35,11 @@ export default class App extends React.Component<never, State> {
             loading={<AppLoading key={'AppLoading'} />}
             persistor={persistor}
           >
-            <AppNavigator />
-            <AppConnection />
-            <DevStub />
+            <AppearanceProvider>
+              <AppNavigator />
+              <AppConnection />
+              <DevStub />
+            </AppearanceProvider>
           </PersistGate>
         </Provider>
         : (

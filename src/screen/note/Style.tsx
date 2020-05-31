@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   },
   iconBarIcon: {
     flex: 1,
-    height: 30
+    height: 35
   },
   cardWrap: {
     width: "100%",
