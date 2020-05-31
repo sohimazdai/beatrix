@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.3.0",
+    "version": "1.3.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -38,7 +38,7 @@
     },
     "android": {
       "package": "com.doq.beatrix",
-      "versionCode": 4
+      "versionCode": 5
     },
     "description": "Diabetes visualization app",
     "githubUrl": "https://github.com/sohimazdai/beatrix"
