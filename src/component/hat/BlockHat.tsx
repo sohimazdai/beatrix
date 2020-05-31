@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native'
 import { Loader } from '../loader/Loader'
 
 interface Props {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         maxHeight: 80,
         width: '100%',
         padding: 16,
-        paddingTop: 40,
+        paddingTop: Platform.OS === 'ios' ? 40 : 20,
 
         flexDirection: 'row',
         justifyContent: "space-between",

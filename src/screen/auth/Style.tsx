@@ -164,6 +164,20 @@ export const styles = StyleSheet.create({
         color: '#333333',
         margin: 20,
     },
+    authFormInstallationLoading: {
+        position: 'absolute',
+        top: 30,
+        left: 16,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    authFormInstallationText: {
+        color: Color.TEXT_DARK_GRAY,
+        marginLeft: 8,
+        fontSize: 15,
+    },
     authFormLoading: {
         position: 'absolute',
         top: 0,

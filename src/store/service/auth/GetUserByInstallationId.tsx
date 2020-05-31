@@ -21,7 +21,7 @@ export function createGetUserByInstallationIdAction(): GetUserByInstallationIdAc
 function* run() {
   try {
     yield put(createUserChangeAction({
-      loading: true,
+      installationLoading: true,
       error: null
     }));
 
@@ -39,14 +39,14 @@ function* run() {
 
     yield put(createUserChangeAction({
       ...userData,
-      loading: false,
+      installationLoading: false,
       error: null,
     }));
   } catch (e) {
     handleErrorSilently('Не удалось подтянуть юзера по installationId');
 
     yield put(createUserChangeAction({
-      loading: false,
+      installationLoading: false,
       error: e.message,
 
       isAuthed: false

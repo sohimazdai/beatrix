@@ -10,17 +10,26 @@ import { shadowOptions } from '../../../constant/shadowOptions';
 import { createGetUserByInstallationIdAction } from '../../../store/service/auth/GetUserByInstallationId';
 import { createSyncUserAction } from '../../../store/service/user/SyncUserSaga';
 import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';
+import { IApp } from '../../../model/IApp';
 
 interface Props {
   user?: IUser
+  app?: IApp
   pullUserIdByInstallationId?: () => void
   syncUser?: () => void
 }
 
 class Component extends React.Component<Props> {
-  componentDidMount() {
-    const { user, pullUserIdByInstallationId } = this.props;
-    if (!user.email || !user.id || typeof user.isAuthed !== 'boolean') {
+  componentDidUpdate() {
+    const { app, user, pullUserIdByInstallationId } = this.props;
+    if (
+      (
+        !user.email ||
+        !user.id ||
+        typeof user.isAuthed !== 'boolean'
+      ) &&
+      app.networkConnected && app.serverAvailable
+    ) {
       pullUserIdByInstallationId();
     }
   }
@@ -54,6 +63,7 @@ class Component extends React.Component<Props> {
 export const AuthProblemResolver = connect(
   (state: IStorage) => ({
     user: state.user,
+    app: state.app,
   }),
   (dispatch) => ({
     dispatch,

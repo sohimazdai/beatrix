@@ -3,6 +3,7 @@ import {
     View,
     ActivityIndicator,
     Dimensions,
+    Text,
 } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { BackgroundSunIcon } from '../../component/icon/BackgroundSunIcon';
@@ -31,6 +32,14 @@ class AuthScreen extends React.Component<AuthScreenProps> {
                 {this.loading && <View style={styles.authFormLoading}>
                     <ActivityIndicator size="small" color="#000000" />
                 </View>}
+                {!this.loading && this.props.user.installationLoading && (
+                    <View style={styles.authFormInstallationLoading}>
+                        <ActivityIndicator size="small" color="#000000" />
+                        <Text style={styles.authFormInstallationText}>
+                            Ищем активный аккаунт
+                        </Text>
+                    </View>
+                )}
             </LinearGradient>
         )
     }

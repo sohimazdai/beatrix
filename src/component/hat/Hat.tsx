@@ -1,7 +1,7 @@
 import React from 'react';
 import { BackArrowIcon } from '../icon/BackArrowIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Loader } from '../loader/Loader';
 
 interface HatProps {
@@ -26,12 +26,12 @@ export function Hat(props: HatProps) {
                         <BackArrowIcon />
                     </TouchableOpacity>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={styles.title}>
                         {props.title}
                     </Text>
                 </View>
-                <View>
+                <View style={styles.rightSlot}>
                     <Loader />
                 </View>
                 <View />
@@ -48,14 +48,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         width: '100%',
         padding: 11,
-        paddingTop: 40,
+        paddingTop: Platform.OS === 'ios' ? 40 : 20,
 
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: 'center',
     },
     backArrow: {
-
+        width: 40,
     },
     backArrowTouchable: {
         padding: 5
@@ -68,5 +68,8 @@ const styles = StyleSheet.create({
     progressBarContainer: {
         height: 3,
         marginBottom: 2,
-    }
+    },
+    rightSlot: {
+        width: 40,
+    },
 })
