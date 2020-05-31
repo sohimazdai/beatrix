@@ -1,7 +1,7 @@
 import React from 'react';
 import { IChartDot, IChartConfiguration, ChartPeriodType } from '../../../model/IChart';
 import { Line } from 'react-native-svg';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 
 export interface ChartHighlightNetProps {
     dots: IChartDot[]

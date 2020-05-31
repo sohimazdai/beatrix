@@ -1,7 +1,7 @@
 import React from 'react';
 import { IModalConfirm } from '../../../model/IModal';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 
 interface ModalContentConfirmProps {
     modal: IModalConfirm
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: ThemeColor.LIGHT_PINK_RED,
+        backgroundColor: Color.LIGHT_PINK_RED,
     },
     questionText: {
         flex: 1,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 
         fontSize: 18,
         textAlign: 'center',
-        color: ThemeColor.TEXT_DARK_GRAY,
+        color: Color.TEXT_DARK_GRAY,
     },
     confirmButtons: {
         flex: 1,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: ThemeColor.BUTTON_STROKE_LIGHT_GRAY,
+        borderColor: Color.BUTTON_STROKE_LIGHT_GRAY,
         backgroundColor: 'white',
         textAlign: 'center',
         alignItems: 'center',
@@ -84,14 +84,14 @@ const styles = StyleSheet.create({
     },
     negativeButtonText: {
         fontSize: 16,
-        color: ThemeColor.DIMGRAY,
+        color: Color.DIMGRAY,
     },
     positiveButtonView: {
         width: '40%',
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: ThemeColor.INDIAN_RED,
+        borderColor: Color.INDIAN_RED,
         backgroundColor: 'white',
         textAlign: 'center',
         alignItems: 'center',
@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
 
     positiveButtonText: {
         fontSize: 16,
-        color: ThemeColor.DIMGRAY,
+        color: Color.DIMGRAY,
     }
 })

@@ -1,5 +1,5 @@
 import { shadowOptions } from "../../../constant/shadowOptions";
-import { ThemeColor } from "../../../constant/ThemeColor";
+import { Color } from "../../../constant/Color";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
         borderRadius: 25,
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden'
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
 
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
     },
     dateTitleView: {
         width: '100%',

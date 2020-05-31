@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { shadowOptions } from "../../../constant/shadowOptions";
-import { ThemeColor } from "../../../constant/ThemeColor";
+import { Color } from "../../../constant/Color";
+import { isThemeLight } from '../../../app/AppTheme';
 
 export const styles = StyleSheet.create({
     noteCreationViewScrollView: {
@@ -14,7 +15,7 @@ export const styles = StyleSheet.create({
         height: Dimensions.get('screen').height * 0.8,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        backgroundColor: "#D4EEFF",
+        backgroundColor: isThemeLight ? "#D4EEFF" : '#0D0B23',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
@@ -126,7 +127,7 @@ export const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 20,
         fontWeight: "bold",
-        color: ThemeColor.TEXT_DARK_GRAY
+        color: Color.TEXT_DARK_GRAY
     },
     commentViewTextArea: {
         backgroundColor: 'white',

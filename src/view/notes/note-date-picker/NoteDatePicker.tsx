@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalPickerType } from '../../../model/IModal';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { CalendarIcon } from '../../../component/icon/CalendarIcon';
 
 export interface NoteDatePickerProps {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
 
         borderRadius: 5,
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
         borderColor: '#DDDDDD'
     },
     touchable: {
@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         fontSize: 18,
-        color: ThemeColor.TEXT_DARK_GRAY,
+        color: Color.TEXT_DARK_GRAY,
     }
 })

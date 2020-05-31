@@ -1,7 +1,7 @@
 import React from 'react';
 import { IModalHint } from '../../../model/IModal';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 
 interface ModalContentHintProps {
     modal: IModalHint,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 25,
 
         alignItems: 'center',
-        backgroundColor: ThemeColor.LIGHT_GRAY,
+        backgroundColor: Color.LIGHT_GRAY,
     },
     questionText: {
         flex: 1,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
         fontSize: 18,
         textAlign: 'center',
-        color: ThemeColor.TEXT_DARK_GRAY,
+        color: Color.TEXT_DARK_GRAY,
     },
 
     buttonView: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: ThemeColor.BUTTON_STROKE_LIGHT_GRAY,
+        borderColor: Color.BUTTON_STROKE_LIGHT_GRAY,
         backgroundColor: 'white',
         textAlign: 'center',
         alignItems: 'center',
@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
 
     buttonText: {
         fontSize: 16,
-        color: ThemeColor.DIMGRAY,
+        color: Color.DIMGRAY,
     }
 })

@@ -1,13 +1,14 @@
 import { shadowOptions } from "../../constant/shadowOptions";
-import { ThemeColor } from "../../constant/ThemeColor";
+import { Color } from "../../constant/Color";
 import { StyleSheet } from "react-native";
+import { isThemeLight } from '../../app/AppTheme';
 
 export const styles = StyleSheet.create({
   screenView: {
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: ThemeColor.BG_COLOR
+    backgroundColor: Color.BG_COLOR,
   },
   cardsViewWrapWrap: {
     backgroundColor: "#E3EAFF",
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   cardsView: {
     overflow: 'scroll',
-    backgroundColor: ThemeColor.BG_COLOR
+    backgroundColor: isThemeLight ? Color.BG_COLOR : '#444E71'
   },
   iconBarViewWrap: {
     backgroundColor: "#2E3858",
@@ -58,7 +59,7 @@ export const styles = StyleSheet.create({
     fontSize: 19,
     lineHeight: 22,
 
-    color: "#555"
+    color: isThemeLight ? "#555" : Color.BG_COLOR,
   },
   dayNotes: {
     width: "100%",

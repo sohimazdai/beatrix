@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { shadowOptions } from "../../constant/shadowOptions";
-import { ThemeColor } from "../../constant/ThemeColor";
+import { Color } from "../../constant/Color";
 
 export const styles = StyleSheet.create({
     view: {
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: ThemeColor.LIGHT_BLUE,
+        backgroundColor: Color.LIGHT_BLUE,
 
         ...shadowOptions,
 
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 25,
 
-        backgroundColor: ThemeColor.LIGHT_BLUE,
+        backgroundColor: Color.LIGHT_BLUE,
         justifyContent: 'center',
         alignItems: 'center',
 
@@ -101,7 +101,7 @@ export const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
 
-        backgroundColor: ThemeColor.BG_COLOR,
+        backgroundColor: Color.BG_COLOR,
 
         paddingTop: 20,
         paddingHorizontal: 38,

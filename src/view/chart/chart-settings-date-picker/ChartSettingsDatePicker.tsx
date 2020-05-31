@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalPickerType } from '../../../model/IModal';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { CalendarIcon } from '../../../component/icon/CalendarIcon';
 import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         width: 170,
 
         borderRadius: 5,
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
         ...shadowOptions,
     },
     viewWide: {
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         fontSize: 17,
-        color: ThemeColor.DIMGRAY,
+        color: Color.DIMGRAY,
     },
     inputTextWide: {
         fontSize: 14,

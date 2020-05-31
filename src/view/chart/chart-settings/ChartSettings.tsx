@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         ...shadowOptions,
         borderRadius: 5,
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
     },
     dateClickerDisable: {
         opacity: 0.5,
@@ -235,9 +235,9 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: ThemeColor.WHITE,
-        backgroundColor: ThemeColor.WHITE,
-        color: ThemeColor.TEXT_DARK_GRAY,
+        borderColor: Color.WHITE,
+        backgroundColor: Color.WHITE,
+        color: Color.TEXT_DARK_GRAY,
     },
     periodButtonActive: {
         backgroundColor: "#2E3858",
@@ -282,9 +282,9 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: ThemeColor.WHITE,
-        backgroundColor: ThemeColor.WHITE,
-        color: ThemeColor.TEXT_DARK_GRAY,
+        borderColor: Color.WHITE,
+        backgroundColor: Color.WHITE,
+        color: Color.TEXT_DARK_GRAY,
     },
     dontDisplayButtonText: {
         fontSize: 14,

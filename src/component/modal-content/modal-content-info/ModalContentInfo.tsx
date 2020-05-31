@@ -1,7 +1,7 @@
 import React from 'react';
 import { IModalInfo } from '../../../model/IModal';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { ScrollView } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/shadowOptions';
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     flexDirection: 'column',
-    backgroundColor: ThemeColor.WHITE,
+    backgroundColor: Color.WHITE,
   },
   scrollView: {
     maxHeight: Dimensions.get('screen').height * 0.8,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 
     fontSize: 18,
     fontWeight: 'bold',
-    color: ThemeColor.TEXT_DARK_GRAY,
+    color: Color.TEXT_DARK_GRAY,
   },
   infoTextCards: {
     flex: 1,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
 
     fontSize: 15,
     textAlign: 'left',
-    color: ThemeColor.TEXT_DARK_GRAY,
+    color: Color.TEXT_DARK_GRAY,
   },
   infoCard: {
     backgroundColor: ColorType.DEFAULT,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
 
     fontSize: 16,
     textAlign: 'left',
-    color: ThemeColor.TEXT_DARK_GRAY,
+    color: Color.TEXT_DARK_GRAY,
   },
   okButtonView: {
     alignSelf: 'center',
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: ThemeColor.BUTTON_STROKE_LIGHT_GRAY,
+    borderColor: Color.BUTTON_STROKE_LIGHT_GRAY,
     backgroundColor: 'white',
     textAlign: 'center',
     alignItems: 'center',
@@ -193,6 +193,6 @@ const styles = StyleSheet.create({
   okButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: ThemeColor.TEXT_DARK_GRAY,
+    color: Color.TEXT_DARK_GRAY,
   },
 })

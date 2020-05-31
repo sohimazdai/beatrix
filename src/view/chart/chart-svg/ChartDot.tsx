@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Circle } from 'react-native-svg';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { IChartDot, ChartValueType } from '../../../model/IChart';
 
 export interface Props {

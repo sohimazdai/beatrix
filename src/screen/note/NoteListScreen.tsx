@@ -25,6 +25,7 @@ import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
+import { Appearance } from 'react-native-appearance';
 
 interface NoteListScreenStateTProps {
   app: IApp;

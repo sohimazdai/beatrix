@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { shadowOptions } from '../../../constant/shadowOptions';
 
 export const styles = StyleSheet.create({
@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
         marginTop: 20,
         textAlign: 'center',
 
-        color: ThemeColor.TEXT_DARK_GRAY
+        color: Color.TEXT_DARK_GRAY
     },
     closeButton: {
         position: 'absolute',

@@ -1,6 +1,6 @@
 import { shadowOptions } from "../../constant/shadowOptions";
 import { StyleSheet } from "react-native";
-import { ThemeColor } from "../../constant/ThemeColor";
+import { Color } from "../../constant/Color";
 
 export const styles = StyleSheet.create({
     AuthScreen: {
@@ -62,10 +62,10 @@ export const styles = StyleSheet.create({
 
         textAlign: 'left',
         fontSize: 16,
-        color: ThemeColor.TEXT_DARK_GRAY,
+        color: Color.TEXT_DARK_GRAY,
 
         borderColor: '#FFC19C',
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
     },
     rememberButton: {
         width: 150,
@@ -127,7 +127,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 15,
         borderColor: '#FFB4B4',
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
         justifyContent: 'center',
         ...shadowOptions
     },

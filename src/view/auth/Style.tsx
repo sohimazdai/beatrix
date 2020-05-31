@@ -1,5 +1,5 @@
 import { shadowOptions } from '../../constant/shadowOptions';
-import { ThemeColor } from '../../constant/ThemeColor';
+import { Color } from '../../constant/Color';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -54,10 +54,10 @@ export const styles = StyleSheet.create({
 
         textAlign: 'left',
         fontSize: 16,
-        color: ThemeColor.TEXT_DARK_GRAY,
+        color: Color.TEXT_DARK_GRAY,
 
         borderColor: '#FFC19C',
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
     },
     authFormButtons: {
         width: 280,

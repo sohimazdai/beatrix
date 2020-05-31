@@ -1,4 +1,4 @@
-export enum ThemeColor {
+export enum Color {
     BG_COLOR = "#F6F8FF",
     WHITE = "#FFFFFF",
     GRAY = '#E9E6DA',

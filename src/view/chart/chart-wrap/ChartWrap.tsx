@@ -10,7 +10,7 @@ import { BreadUnitsTextRotated } from '../../../component/icon/BreadUnitsTextRot
 import { GlucoseTextRotated } from '../../../component/icon/GlucoseTextRotated';
 import { INoteList, INoteListByDay } from '../../../model/INoteList';
 import { ChartDot } from '../chart-svg/ChartDot';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { calculateDayChartDots, calculateMonthChartDots, calculateThreeMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ChartAxisPair } from '../chart-svg/ChartAxisPair';
@@ -118,8 +118,8 @@ export function ChartWrap(props: ChartWrapProps) {
                         x={item.x}
                         y={item.y}
                         noteId={item.noteId}
-                        fill={ThemeColor.BRIGHT_RED}
-                        stroke={ThemeColor.WHITE}
+                        fill={Color.BRIGHT_RED}
+                        stroke={Color.WHITE}
                         selectedDotId={selectedDotId}
                         type={props.type}
                     />
@@ -133,8 +133,8 @@ export function ChartWrap(props: ChartWrapProps) {
                         x={item.x}
                         y={item.y}
                         noteId={item.noteId}
-                        fill={ThemeColor.WHITE}
-                        stroke={ThemeColor.INDIAN_RED}
+                        fill={Color.WHITE}
+                        stroke={Color.INDIAN_RED}
                         selectedDotId={selectedDotId}
                     />
                 })}

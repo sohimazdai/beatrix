@@ -2,7 +2,6 @@ import * as Font from 'expo-font';
 import { StatusBar } from 'react-native';
 import { appAnalytics } from './Analytics';
 import Variables from './Variables';
-import { handleError } from './ErrorHandler';
 import { logger } from './Logger';
 
 export const LAST_ACTIVE_USER_ID = "last_active_user_id"

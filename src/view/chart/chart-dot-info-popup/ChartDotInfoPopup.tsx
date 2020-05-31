@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { ChartDotInfoPopupValue } from './dot-info-popup-value/ChartDotInfoPopupValue';

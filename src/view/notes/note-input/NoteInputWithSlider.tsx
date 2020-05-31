@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, StyleSheet, View, Slider, Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { ThemeColor } from '../../../constant/ThemeColor';
+import { Color } from '../../../constant/Color';
 import { BaseDecimalInput } from '../../../component/input/BaseDecimalInput';
 
 interface Props {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 20,
         fontWeight: "bold",
-        color: ThemeColor.TEXT_DARK_GRAY
+        color: Color.TEXT_DARK_GRAY
     },
     input: {
         width: 70,
@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         fontSize: 20,
-        color: ThemeColor.TEXT_DARK_GRAY,
+        color: Color.TEXT_DARK_GRAY,
 
         borderColor: '#DDDDDD',
-        backgroundColor: ThemeColor.WHITE,
+        backgroundColor: Color.WHITE,
     },
 })
