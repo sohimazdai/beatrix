@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         width: '100%',
         padding: 11,
-        paddingTop: Platform.OS === 'ios' ? 40 : 20,
+        paddingTop: 40,
 
         flexDirection: 'row',
         justifyContent: "space-between",

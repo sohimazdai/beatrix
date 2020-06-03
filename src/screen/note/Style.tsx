@@ -15,15 +15,16 @@ export const styles = StyleSheet.create({
   },
   cardsViewWrap: {
     height: '100%',
+    width: '100%',
     overflow: 'hidden',
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
-    paddingBottom: 120,
   },
   cardsView: {
     height: '100%',
+    width: '100%',
     overflow: 'scroll',
-    backgroundColor: Color.BG_COLOR
+    backgroundColor: Color.BG_COLOR,
   },
   iconBarViewWrap: {
     backgroundColor: "#2E3858",
@@ -125,6 +126,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 120,
   },
   showMoreButton: {
     padding: 10,

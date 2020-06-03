@@ -19,18 +19,44 @@ interface Props {
   syncUser?: () => void
 }
 
-class Component extends React.Component<Props> {
-  componentDidUpdate() {
+interface State {
+  installationDone: boolean
+}
+
+class Component extends React.Component<Props, State> {
+  state = {
+    installationDone: false,
+  }
+
+  componentDidMount() {
     const { app, user, pullUserIdByInstallationId } = this.props;
-    if (
-      (
-        !user.email ||
-        !user.id ||
-        typeof user.isAuthed !== 'boolean'
-      ) &&
-      app.networkConnected && app.serverAvailable
-    ) {
+    if ((!user.email || !user.id || typeof user.isAuthed !== 'boolean') && app.serverAvailable) {
+
       pullUserIdByInstallationId();
+
+    }
+  }
+
+  componentDidUpdate(pP: Props) {
+    const { app, user, pullUserIdByInstallationId } = this.props;
+
+    if (
+      (!pP.user.email && user.email) ||
+      (!pP.user.email && user.email) ||
+      (typeof pP.user.isAuthed !== 'boolean' && typeof user.isAuthed === 'boolean') &&
+      !this.state.installationDone
+    ) {
+
+      this.setState({ installationDone: true })
+
+    } else if (
+      (!user.email || !user.id || typeof user.isAuthed !== 'boolean') &&
+      !pP.app.serverAvailable && app.serverAvailable &&
+      !this.state.installationDone
+    ) {
+
+      pullUserIdByInstallationId();
+
     }
   }
 

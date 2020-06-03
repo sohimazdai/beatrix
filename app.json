@@ -9,13 +9,13 @@
       "android",
       "web"
     ],
-    "version": "1.3.2",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F6F8FF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -37,7 +37,11 @@
     },
     "android": {
       "package": "com.doq.beatrix",
-      "versionCode": 5
+      "versionCode": 7,
+      "adaptiveIcon": {
+        "backgroundColor": "#FFE1DF",
+        "foregroundImage": "./assets/icon.png"
+      }
     },
     "description": "Diabetes visualization app",
     "githubUrl": "https://github.com/sohimazdai/beatrix"
