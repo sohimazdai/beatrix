@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Color } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { shadowOptions } from '../../../constant/shadowOptions';
+import { shadowOptions } from '../../../constant/ShadowOptions';
 import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
 import { DateHelper } from '../../../utils/DateHelper';
 import { MinusIcon } from '../../../component/icon/MinusIcon';

@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { shadowOptions } from "../../../constant/shadowOptions";
+import { shadowOptions } from "../../../constant/ShadowOptions";
 import { Color } from '../../../constant/Color';
 
 export const styles = StyleSheet.create({

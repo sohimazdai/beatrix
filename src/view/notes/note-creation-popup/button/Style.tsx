@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-import { shadowOptions } from "../../../../constant/shadowOptions";
+import { shadowOptions } from "../../../../constant/ShadowOptions";
+import { Color } from '../../../../constant/Color';
 
 export const styles = StyleSheet.create({
     addNoteButton: {
@@ -7,7 +8,7 @@ export const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
 
-        backgroundColor: 'rgba(250,250,250, 1)',
+        backgroundColor: Color.PRIMARY,
         borderRadius: 30,
         ...shadowOptions
     },
@@ -21,7 +22,8 @@ export const styles = StyleSheet.create({
     },
     addNoteButtonText: {
         fontSize: 18,
-        color: "#333333",
-        marginRight: 5
+        color: Color.WHITE,
+        fontWeight: '500',
+        marginRight: 5,
     }
 })

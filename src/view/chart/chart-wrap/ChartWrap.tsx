@@ -118,7 +118,7 @@ export function ChartWrap(props: ChartWrapProps) {
                         x={item.x}
                         y={item.y}
                         noteId={item.noteId}
-                        fill={Color.BRIGHT_RED}
+                        fill={Color.RED}
                         stroke={Color.WHITE}
                         selectedDotId={selectedDotId}
                         type={props.type}

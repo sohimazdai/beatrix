@@ -7,7 +7,7 @@ import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { ChartDotInfoPopupValue } from './dot-info-popup-value/ChartDotInfoPopupValue';
 import { ChartValueType } from '../../../model/IChart';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
-import { shadowOptions } from '../../../constant/shadowOptions';
+import { shadowOptions } from '../../../constant/ShadowOptions';
 import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';

@@ -1,4 +1,4 @@
-import { shadowOptions } from "../../constant/shadowOptions";
+import { shadowOptions } from "../../constant/ShadowOptions";
 import { Color } from "../../constant/Color";
 import { StyleSheet } from "react-native";
 
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: Color.BG_COLOR,
+    backgroundColor: Color.PRIMARY_BASE,
   },
   cardsViewWrapWrap: {
     height: '100%',
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     overflow: 'scroll',
-    backgroundColor: Color.BG_COLOR,
+    backgroundColor: Color.PRIMARY_BASE,
   },
   iconBarViewWrap: {
     backgroundColor: "#2E3858",

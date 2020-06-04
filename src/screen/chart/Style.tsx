@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { shadowOptions } from "../../constant/shadowOptions";
+import { shadowOptions } from "../../constant/ShadowOptions";
 import { Color } from "../../constant/Color";
 
 export const styles = StyleSheet.create({
@@ -101,7 +101,7 @@ export const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
 
-        backgroundColor: Color.BG_COLOR,
+        backgroundColor: Color.PRIMARY_BASE,
 
         paddingTop: 20,
         paddingHorizontal: 38,

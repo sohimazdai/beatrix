@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { shadowOptions } from '../../constant/shadowOptions'
+import { shadowOptions } from '../../constant/ShadowOptions'
 
 interface Props {
     title?: string

@@ -9,7 +9,7 @@ import { CalendarIcon } from '../../../component/icon/CalendarIcon';
 import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
 import { appAnalytics } from '../../../app/Analytics';
-import { shadowOptions } from '../../../constant/shadowOptions';
+import { shadowOptions } from '../../../constant/ShadowOptions';
 
 export interface ChartSettingsDatePickerProps {
     date: Date

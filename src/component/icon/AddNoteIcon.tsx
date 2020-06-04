@@ -1,5 +1,6 @@
 import React from 'react'
 import Svg, { G, Circle, Rect, Defs, Path } from 'react-native-svg'
+import { Color } from '../../constant/Color'
 
 export const AddNoteIcon = props => (
   <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" {...props}>
@@ -28,6 +29,19 @@ export const AddNoteIconV2 = props => (
       d="M12.5 19V6M6 12.5h13"
       stroke="#2E3858"
       strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+)
+
+export const AddNoteIcon_WHITE = props => (
+  <Svg width={25} height={25} viewBox="0 0 26 26" fill="none" {...props}>
+    <Circle cx={13} cy={13} r={12} stroke={Color.WHITE} strokeWidth={2} />
+    <Path
+      d="M13 19.5V6.5M6 13h14"
+      stroke={Color.WHITE}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     />

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Color } from '../../../constant/Color';
-import { shadowOptions } from '../../../constant/shadowOptions';
+import { shadowOptions } from '../../../constant/ShadowOptions';
 
 export const styles = StyleSheet.create({
     scrollView: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { IModalIOsDatePicker } from '../../../model/IModal';
 import { View, StyleSheet, DatePickerIOS, TouchableOpacity, Text } from 'react-native';
 import { Color } from '../../../constant/Color';
-import { shadowOptions } from '../../../constant/shadowOptions';
+import { shadowOptions } from '../../../constant/ShadowOptions';
 
 interface ModalContentIOsDatePickerProps {
     modal: IModalIOsDatePicker

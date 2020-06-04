@@ -29,6 +29,7 @@ import { createCreateNoteAction } from '../../../store/service/note/CreateNoteSa
 import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSaga';
 import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
 import { appAnalytics } from '../../../app/Analytics';
+import { NumberScroller } from '../number-scroller/NumberScroller';
 
 enum InputType {
     glucoseInput = 'Глюкоза',
@@ -162,6 +163,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     <ScrollView style={styles.noteCreationViewScrollView}>
                         <View style={styles.scrollViewContent}>
                             {this.renderPickerBlock()}
+                            <NumberScroller />
                             <View style={styles.buttonsBlock}>
                                 {this.props.note && this.renderDeleteButton()}
                                 {this.renderSaveButton()}
