@@ -7,6 +7,10 @@ import { IUser } from '../../model/IUser';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { AuthProblemResolver } from '../../screen/auth/AuthProblemResolver/AuthProblemResolver';
+import i18n from 'i18n-js';
+import translate from './Translate';
+
+translate();
 
 enum AuthType {
     EMAIL = 'email',
@@ -49,7 +53,7 @@ export class AuthForm extends React.Component<Props, State> {
     renderTitleFormTitle() {
         return (
             <Text style={styles.authFormTitle}>
-                {"Авторизация"}
+                {i18n.t('sign_in')}
             </Text>
         )
     }

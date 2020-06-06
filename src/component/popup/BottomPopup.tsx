@@ -33,6 +33,7 @@ export const BottomPopup = (props: BottomPopupProps) => {
 
 const styles = StyleSheet.create({
     BottomPopupView: {
+        flex: 1,
         position: 'absolute',
         bottom: 0,
         overflow: 'visible',

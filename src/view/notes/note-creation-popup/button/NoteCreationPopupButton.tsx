@@ -1,11 +1,14 @@
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { View, Text, StyleSheet } from "react-native";
-import { AddNoteIconV2, AddNoteIcon_WHITE } from "../../../../component/icon/AddNoteIcon";
-import { shadowOptions } from "../../../../constant/ShadowOptions";
+import { View, Text } from "react-native";
+import { AddNoteIcon_WHITE } from "../../../../component/icon/AddNoteIcon";
 import { connect } from "react-redux";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
 import * as React from 'react';
 import { styles } from './Style';
+import i18n from 'i18n-js';
+import translate from './Translate';
+
+translate();
 
 interface Props {
     openPopup: () => void;
@@ -18,7 +21,7 @@ const NoteCreationPopupButton = (props: Props) => (
             style={styles.addNoteButtonTouchable}
         >
             <Text style={styles.addNoteButtonText}>
-                Записать
+                {i18n.t('add')}
                 </Text>
             <AddNoteIcon_WHITE />
         </TouchableOpacity>
@@ -31,7 +34,7 @@ export const NoteCreationPopupButtonConnect = connect(
         openPopup: () => {
             dispatch(createChangeInteractive({
                 creatingNoteMode: true,
-                editingNoteId: ""
+                editingNoteId: "",
             }))
         }
     })

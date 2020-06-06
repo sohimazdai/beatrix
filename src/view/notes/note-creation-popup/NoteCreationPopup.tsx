@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { INoteListNote, NoteValueType } from '../../../model/INoteList';
 import { createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
-import { NoteInputWithSlider } from '../../../view/notes/note-input/NoteInputWithSlider';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalConfirm } from '../../../model/IModal';
 import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
@@ -30,125 +29,68 @@ import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSa
 import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
 import { appAnalytics } from '../../../app/Analytics';
 import { NumberScroller } from '../number-scroller/NumberScroller';
+import i18n from 'i18n-js';
+import translate from './Translate';
+import { Measures } from '../../../localisation/Measures';
+import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 
-enum InputType {
-    glucoseInput = 'Глюкоза',
-    breadUnitsInput = 'ХЕ',
-    insulinInput = 'Короткий',
-    longInsulinInput = 'Длинный',
-    COMMENT = 'Комментарий'
+translate();
+
+const InputType = {
+    glucose: i18n.t('glucose'),
+    breadUnits: i18n.t('breadUnits'),
+    insulin: i18n.t('shortInsulin'),
+    longInsulin: i18n.t('longInsulin'),
+    comment: i18n.t('comment'),
 }
 
-interface NoteCreationPopupProps {
+interface Props {
     interactive?: IInteractive
     note?: INoteListNote
+    userDiabetesProperties?: IUserDiabetesProperties
     dispatch?: (action: Action) => void
     hidePopup?: () => void
     onNoteDelete?: (noteId: string) => void;
 }
 
-interface NoteCreationPopupState {
+interface State {
     date: Date
-    glucoseInput: string
-    breadUnitsInput: string
-    insulinInput: string
-    longInsulinInput: string
-    currentValueType: NoteValueType
-    prevValueType?: NoteValueType
+    glucose: number
+    breadUnits: number
+    insulin: number
+    longInsulin: number
     commentary: string,
-    glucoseInputForSlider?: number,
-    breadUnitsInputForSlider?: number,
-    shortInsulinInputForSlider?: number,
-    longInsulinInputForSlider?: number
+    currentValueType: NoteValueType
 }
 
-class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, NoteCreationPopupState>{
-    glucoseInputForSlider = 0;
-    breadUnitsInputForSlider = 0;
-    shortInsulinInputForSlider = 0;
-    longInsulinInputForSlider = 0;
-
+class NoteCreationPopup extends React.PureComponent<Props, State>{
     state = {
         date: new Date(),
-        glucoseInput: "",
-        breadUnitsInput: "",
-        insulinInput: "",
-        longInsulinInput: "",
-        commentary: "",
+        glucose: 0,
+        breadUnits: 0,
+        insulin: 0,
+        longInsulin: 0,
+        commentary: '',
         currentValueType: NoteValueType.GLUCOSE,
-        prevValueType: NoteValueType.GLUCOSE,
-        glucoseInputForSlider: 0.0,
-        breadUnitsInputForSlider: 0.0,
-        shortInsulinInputForSlider: 0.0,
-        longInsulinInputForSlider: 0.0
     }
 
-    componentDidMount() {
-        if (!this.props.note) {
+    componentDidUpdate(pP: Props, pS: State) {
+        const { note, interactive } = this.props;
+
+        if (pP.interactive.creatingNoteMode && !interactive.creatingNoteMode) {
+            this.setInitialState();
+        };
+
+        if (!pP.note && note) {
             this.setState({
-                date: new Date()
-            })
-        }
-    }
-
-    componentDidUpdate = (pP: NoteCreationPopupProps, pS: NoteCreationPopupState) => {
-        if (!pP.note && this.props.note) {
-            this.setState({
-                ...this.noteFromProps,
-                glucoseInputForSlider: this.props.note && this.props.note.glucose,
-                breadUnitsInputForSlider: this.props.note && this.props.note.breadUnits,
-                shortInsulinInputForSlider: this.props.note && this.props.note.insulin,
-                longInsulinInputForSlider: this.props.note && this.props.note.longInsulin
-            })
-        } else if (!pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode) {
-            this.setState({
-                date: new Date(),
-                glucoseInput: "",
-                breadUnitsInput: "",
-                insulinInput: "",
-                longInsulinInput: "",
-                commentary: "",
-                currentValueType: NoteValueType.GLUCOSE,
-                glucoseInputForSlider: 0.0,
-                breadUnitsInputForSlider: 0.0,
-                shortInsulinInputForSlider: 0.0,
-                longInsulinInputForSlider: 0.0
-            })
-        }
-
-        if (
-            !pP.interactive.creatingNoteMode && this.props.interactive.creatingNoteMode &&
-            !this.props.interactive.editingNoteId
-        ) {
-            this.setState({ date: new Date() })
-        }
-    };
-
-    static getDerivedStateFromProps(p: NoteCreationPopupProps, s: NoteCreationPopupState) {
-        if (s.prevValueType !== s.currentValueType) {
-            return {
-                glucoseInputForSlider: Number(s.glucoseInput),
-                breadUnitsInputForSlider: Number(s.breadUnitsInput),
-                shortInsulinInputForSlider: Number(s.insulinInput),
-                longInsulinInputForSlider: Number(s.longInsulinInput),
-                prevValueType: s.currentValueType
-            }
-        }
-        return s
-    }
-
-    get noteFromProps() {
-        const { note } = this.props;
-        const newState: NoteCreationPopupState = {
-            date: new Date(note.date) || new Date(),
-            glucoseInput: String(note.glucose) || "0.0",
-            breadUnitsInput: String(note.breadUnits) || "0.0",
-            insulinInput: String(note.insulin) || "0.0",
-            longInsulinInput: String(note.longInsulin) || "0.0",
-            commentary: note.commentary || "",
-            currentValueType: NoteValueType.GLUCOSE
-        }
-        return newState
+                date: new Date(note.date),
+                glucose: note.glucose,
+                breadUnits: note.breadUnits,
+                insulin: note.insulin,
+                longInsulin: note.longInsulin,
+                commentary: note.commentary,
+            });
+        };
     }
 
     render() {
@@ -163,19 +105,18 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     <ScrollView style={styles.noteCreationViewScrollView}>
                         <View style={styles.scrollViewContent}>
                             {this.renderPickerBlock()}
-                            <NumberScroller />
                             <View style={styles.buttonsBlock}>
                                 {this.props.note && this.renderDeleteButton()}
                                 {this.renderSaveButton()}
                             </View>
                         </View>
-                        <TouchableOpacity
-                            style={styles.hideTouchable}
-                            onPress={this.props.hidePopup}
-                        >
-                            <CloseIcon />
-                        </TouchableOpacity>
                     </ScrollView>
+                    <TouchableOpacity
+                        style={styles.hideTouchable}
+                        onPress={this.props.hidePopup}
+                    >
+                        <CloseIcon />
+                    </TouchableOpacity>
                 </KeyboardAvoidingView>
             </BottomPopup>
         )
@@ -199,10 +140,12 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
         appAnalytics.sendEvent(appAnalytics.events.NOTE_TIME_CHANGED);
     }
 
+    onValueTypePickerSelect = (type) => this.setState({ currentValueType: type })
+
     renderPickerBlock() {
         return (
             <View style={styles.inputBlock}>
-                <View style={styles.pickers}>
+                <View style={styles.timePickers}>
                     <NoteDatePickerConnect
                         date={this.state.date}
                         onChange={this.onDateChange}
@@ -213,10 +156,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     />
                 </View>
                 <ValueTypePicker
-                    onSelect={(type) => this.setState({
-                        currentValueType: type,
-                        prevValueType: this.state.currentValueType
-                    })}
+                    onSelect={this.onValueTypePickerSelect}
                     selectedType={this.state.currentValueType}
                 />
                 {this.renderInputByValue()}
@@ -225,71 +165,73 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     }
 
     renderInputByValue() {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, currentValueType } = this.stateWithoutComma;
+        let { glucose, breadUnits, insulin, longInsulin, currentValueType } = this.state;
         const isCreating = this.props.interactive.creatingNoteMode && !this.props.interactive.editingNoteId;
         switch (currentValueType) {
             case NoteValueType.GLUCOSE:
-                return this.renderInputByType(this.state.glucoseInputForSlider, glucoseInput, 'glucoseInput', 18)
-            case NoteValueType.FOOD:
-                return this.renderInputByType(this.state.breadUnitsInputForSlider, breadUnitsInput, 'breadUnitsInput', 15)
+                return this.renderInputByType(NoteValueType.GLUCOSE, glucose)
+            case NoteValueType.BREAD_UNITS:
+                return this.renderInputByType(NoteValueType.BREAD_UNITS, breadUnits)
             case NoteValueType.SHORT_INSULIN:
                 return <>
-                    {this.renderInputByType(this.state.shortInsulinInputForSlider, insulinInput, 'insulinInput', 15)}
+                    {this.renderInputByType(NoteValueType.SHORT_INSULIN, insulin)}
                     <NoteInsulinDoseRecommendationConnect note={this.noteFromState} />
                 </>
             case NoteValueType.LONG_INSULIN:
-                return this.renderInputByType(this.state.longInsulinInputForSlider, longInsulinInput, 'longInsulinInput', 25)
+                return this.renderInputByType(NoteValueType.LONG_INSULIN, longInsulin)
             case NoteValueType.COMMENT:
-                return <View
-                    style={styles.commentInputView}
-                >
-                    <Text style={styles.inputViewTitle}>
-                        Комментарий
-                    </Text>
-                    <View
-                        style={styles.commentViewTextArea}
-                    >
-                        <TextInput
-                            autoFocus
-                            multiline
-                            blurOnSubmit
-                            style={{ maxHeight: 80 }}
-                            onChangeText={(text) => this.setState({ commentary: text })}
-                            defaultValue={isCreating ?
-                                this.state.commentary :
-                                this.props.note && this.props.note.commentary
-                            }
-                            keyboardType="default"
-                            returnKeyType="done"
-                            onSubmitEditing={() => { Keyboard.dismiss() }}
-                        />
+                return (
+                    <View style={styles.commentInputView}>
+                        <Text style={styles.inputViewTitle}>
+                            {InputType[NoteValueType.COMMENT]}
+                        </Text>
+                        <View style={styles.commentViewTextArea}>
+                            <TextInput
+                                autoFocus
+                                multiline
+                                blurOnSubmit
+                                style={{ maxHeight: 80 }}
+                                onChangeText={(text) => this.setState({ commentary: text })}
+                                defaultValue={isCreating ?
+                                    this.state.commentary :
+                                    this.props.note && this.props.note.commentary
+                                }
+                                keyboardType="default"
+                                returnKeyType="done"
+                                onSubmitEditing={() => { Keyboard.dismiss() }}
+                            />
+                        </View>
                     </View>
-                </View>
+                )
         }
     }
 
-    renderInputByType(defaultValue, inputValue, name, maxNum) {
+    renderInputByType(name, value) {
+        const { userDiabetesProperties } = this.props;
+
         const obj = { [`${name}`]: null }
-        return <View style={styles.inputView}>
-            <NoteInputWithSlider
-                defaultValue={defaultValue}
-                value={inputValue}
-                inputTitle={InputType[name]}
-                maximumNum={maxNum}
-                onChangeText={(value) => {
-                    obj[`${name}`] = value;
-                    this.setState(obj as any)
-                }}
-                onNaturalSlide={(value) => {
-                    obj[`${name}`] = value + '.' + inputValue.split('.')[1];
-                    this.setState(obj as any)//, 50
-                }}
-                onDecimalSlide={(value) => {
-                    obj[`${name}`] = inputValue.split('.')[0] + '.' + value.toString().split('.')[1];
-                    this.setState(obj as any)//, 50
-                }}
-            />
-        </View>
+        const displayedValue = value
+            ? ': ' + value
+            : ': ' + i18n.t('not_selected');
+
+        return (
+            <View style={styles.inputView}>
+                <Text style={styles.inputViewTitle}>
+                    {InputType[name]}{displayedValue}
+                </Text>
+                <View style={styles.numberScrollWrapper}>
+                    <NumberScroller
+                        key={name}
+                        selectedNumber={value}
+                        measuresOption={Measures.getMeasuresOption(name, userDiabetesProperties)}
+                        onNumberClick={(number) => {
+                            obj[`${name}`] = number;
+                            this.setState(obj as any)
+                        }}
+                    />
+                </View>
+            </View>
+        )
     }
 
     renderSaveButton() {
@@ -299,7 +241,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 onPress={this.createNote}
             >
                 <Text style={styles.saveButtonText}>
-                    {this.props.note ? 'Перезаписать' : 'Записать'}
+                    {this.props.note ? i18n.t('rewrite') : i18n.t('write')}
                 </Text>
             </TouchableOpacity>
         )
@@ -307,6 +249,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
 
     createNote = () => {
         let note: INoteListNote = this.noteFromState;
+
         if (this.props.note) {
             this.props.dispatch(createUpdateNoteAction({
                 ...note,
@@ -323,8 +266,8 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                     type: ModalType.HINT,
                     needToShow: true,
                     data: {
-                        questionText: 'Введите хотя бы один параметр',
-                        positiveButtonText: 'ОК',
+                        questionText: i18n.t('fill_at_least_one_parameter'),
+                        positiveButtonText: i18n.t('ok'),
                     },
                 }))
             }
@@ -339,7 +282,7 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
                 onPress={this.onDeleteClick}
             >
                 <Text style={styles.deleteButtonText}>
-                    Удалить
+                    {i18n.t('delete')}
                 </Text>
             </TouchableOpacity>
         )
@@ -348,9 +291,9 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     onDeleteClick = () => {
         const confirmData: IModalConfirm = {
             data: {
-                questionText: 'Вы уверены, что хотите удалить эту запись?',
-                positiveButtonText: 'Удалить',
-                negativeButtonText: 'Оставить',
+                questionText: i18n.t('are_you_sure'),
+                positiveButtonText: i18n.t('delete'),
+                negativeButtonText: i18n.t('cancel'),
 
                 onPositiveClick: () => this.deleteNote(),
             }
@@ -371,54 +314,29 @@ class NoteCreationPopup extends React.PureComponent<NoteCreationPopupProps, Note
     setInitialState() {
         this.setState({
             date: new Date(),
-            glucoseInput: "0.0",
-            breadUnitsInput: "0.0",
-            insulinInput: "0.0",
-            longInsulinInput: "0.0",
+            glucose: 0,
+            breadUnits: 0,
+            insulin: 0,
+            longInsulin: 0,
             commentary: "",
             currentValueType: NoteValueType.GLUCOSE
         })
     }
 
-    get stateWithoutComma() {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, commentary, currentValueType, date } = this.state;
-
-        return {
-            date,
-            glucoseInput: this.exceptComma(glucoseInput),
-            breadUnitsInput: this.exceptComma(breadUnitsInput),
-            insulinInput: this.exceptComma(insulinInput),
-            longInsulinInput: this.exceptComma(longInsulinInput),
-            commentary,
-            currentValueType
-        }
-    }
-
     get noteFromState() {
-        let { glucoseInput, breadUnitsInput, insulinInput, longInsulinInput, commentary, date } = this.state;
+        let { currentValueType, ...note } = this.state;
         return {
-            date: date.getTime(),
-            glucose: glucoseInput && parseFloat(glucoseInput) || 0,
-            breadUnits: breadUnitsInput && parseFloat(breadUnitsInput) || 0,
-            insulin: insulinInput && parseFloat(insulinInput) || 0,
-            longInsulin: longInsulinInput && parseFloat(longInsulinInput) || 0,
-            commentary: commentary || ""
-        }
-    }
-
-    exceptComma(input) {
-        return input.includes(',') ?
-            input.replace(/,/g, '.') :
-            input || input.includes('undefined') ?
-                input.replace(/undefined/g, '0') :
-                input;
+            ...note,
+            date: note.date.getTime(),
+        };
     }
 }
 
 export const NoteCreationPopupConnect = connect(
     (state: IStorage) => ({
         noteList: state.noteList,
-        interactive: state.interactive
+        interactive: state.interactive,
+        userDiabetesProperties: state.userDiabetesProperties
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps: any) => {

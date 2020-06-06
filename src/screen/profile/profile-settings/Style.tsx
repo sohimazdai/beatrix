@@ -14,12 +14,13 @@ export const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
         overflow: 'hidden',
+        paddingBottom: 80,
     },
     scrollView: {
         paddingTop: 10,
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
-        backgroundColor: "#DDDDDD"
+        backgroundColor: "#DDDDDD",
     },
     targetGlycemiaView: {
         display: 'flex',

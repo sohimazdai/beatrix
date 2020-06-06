@@ -34,13 +34,13 @@ export class ValueTypePicker extends React.Component<Props> {
             </View>
 
             <View
-                style={selectedType === NoteValueType.FOOD ?
+                style={selectedType === NoteValueType.BREAD_UNITS ?
                     { ...styles.iconButton, ...styles.iconButtonActive } :
                     styles.iconButton
                 }
             >
                 <TouchableOpacity
-                    onPress={() => this.props.onSelect(NoteValueType.FOOD)}
+                    onPress={() => this.props.onSelect(NoteValueType.BREAD_UNITS)}
                     style={styles.touchableView}
                 >
                     <VegetablesIcon style={styles.icon} />
@@ -95,9 +95,8 @@ export class ValueTypePicker extends React.Component<Props> {
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
-        margin: 20,
         width: 280,
+        marginTop: 20,
 
         justifyContent: 'space-between',
         alignItems: 'center',

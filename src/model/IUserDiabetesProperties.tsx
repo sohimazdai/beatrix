@@ -3,11 +3,15 @@ export enum ShortInsulinType {
     ULTRA_SHORT = 'ultra-short'
 }
 
-export enum GlycemiaType {
+export enum GlycemiaMeasuringType {
     MG_DL = 'mg/dL',
     MMOL_L = 'mmol/L'
-  };
-  
+};
+
+export enum BreadUnitsMeasuringType {
+    BREAD_UNITS = 'breadUnits',
+    CARBOHYDRATES = 'CARBOHYDRATES',
+}; 
 
 export interface IUserDiabetesPropertiesDayTimeValue {
     id?: number,
@@ -21,7 +25,7 @@ export interface IUserDiabetesPropertiesDayTimeValue {
 export interface IUserDiabetesProperties {
     targetGlycemia?: number;
     shortInsulinType?: ShortInsulinType
-    glycemiaType?: GlycemiaType
+    glycemiaMeasuringType?: GlycemiaMeasuringType
 }
 
 /*

@@ -2,6 +2,10 @@ import React from 'react';
 import { IChartDot, IChartConfiguration, ChartPeriodType, ChartValueType } from '../../../model/IChart';
 import { Line } from 'react-native-svg';
 import { DateHelper } from '../../../utils/DateHelper';
+import { Measures } from '../../../localisation/Measures';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../model/IStorage';
+import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 
 export interface ChartNetProps {
     maxValue?: number
@@ -19,15 +23,23 @@ export interface ChartNetProps {
     type?: ChartValueType
     currentDate: Date
     selectedPeriod: ChartPeriodType
+
+    userDiabetesProperties: IUserDiabetesProperties
 }
 
 const VERTICAL_DAY_LINES_COUNT = 8;
-const MIN_CRITICAL_DEFAULT = 4;
-const MAX_CRITICAL_DEFAULT = 8;
+
+let MIN_CRITICAL_DEFAULT = null;
+let MAX_CRITICAL_DEFAULT = null;
+
 const MAX_CRITICAL_COLOR_DEFAULT = '#FF6161';
 const MIN_CRITICAL_COLOR_DEFAULT = '#50ABFF';
 
-export function ChartNet(props: ChartNetProps) {
+export function Component(props: ChartNetProps) {
+    const { userDiabetesProperties: { glycemiaMeasuringType } } = props;
+    MIN_CRITICAL_DEFAULT = Measures.getCriticalGlycemia(glycemiaMeasuringType).min;
+    MAX_CRITICAL_DEFAULT = Measures.getCriticalGlycemia(glycemiaMeasuringType).max;
+
     let toRender = [];
     !props.noXX && toRender.push(verticalLines(props));
     !props.noYY && toRender.push(horizontalLines(props))
@@ -62,7 +74,7 @@ function renderCriticals(props: ChartNetProps) {
                 y1={minY}
                 y2={minY}
                 stroke={MIN_CRITICAL_COLOR_DEFAULT}
-                strokeDasharray={[1, 1]}
+                strokeDasharray={[2, 2]}
             />
         )
     }
@@ -75,13 +87,17 @@ function renderCriticals(props: ChartNetProps) {
                 y1={maxY}
                 y2={maxY}
                 stroke={MAX_CRITICAL_COLOR_DEFAULT}
-                strokeDasharray={[1, 1]}
+                strokeDasharray={[2, 2]}
             />
         )
     }
 
     return toRender
 }
+
+const mapState = (state: IStorage) => ({ userDiabetesProperties: state.userDiabetesProperties });
+
+export const ChartNet = connect(mapState)(Component)
 
 function verticalLines(props: ChartNetProps) {
     const firstX = props.cfg.basicPadding;

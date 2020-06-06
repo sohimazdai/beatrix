@@ -5,7 +5,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/ShadowOptions';
 import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
 import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
-// import { createEmailAuthAction } from '../../../service/auth/AuthSaga';
+import i18n from 'i18n-js';
+import translate from './Translate';
+
+translate();
 
 interface Props {
     onGoogleSignin?: () => void;
@@ -14,7 +17,7 @@ interface Props {
 
 export function AuthButtonGoogle(props: Props) {
     function renderDescription() {
-        return "Войти с Google"
+        return i18n.t('sign_in_with_google')
     }
 
     return (
@@ -48,7 +51,7 @@ export const AuthButtonGoogleConnect = connect(
 const styles = StyleSheet.create({
 
     socialAuthButton: {
-        width: 200,
+        minWidth: 200,
         backgroundColor: "#FFFFFF",
         borderRadius: 5,
         ...shadowOptions

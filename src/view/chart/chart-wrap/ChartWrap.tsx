@@ -23,6 +23,8 @@ export interface ChartWrapProps {
     currentDate?: Date
     noteList?: INoteList
     noteListByDay?: INoteListByDay
+    minCritical: number
+    maxCritical: number
     onDotPress?: (id: string) => void
 }
 
@@ -152,6 +154,11 @@ export function ChartWrap(props: ChartWrapProps) {
         for (let i = 0; i <= config.horizontalLineNumber; i++) {
             toRender.push(start + i * step);
         }
+        console.log('🤖🤖🤖🤖 type', props.type);
+
+        console.log('🤖🤖🤖🤖 range', range);
+        console.log('🤖🤖🤖🤖 start', start);
+        console.log('🤖🤖🤖🤖 toRender', toRender);
         return <View style={{
             ...styles.yNetTitlesView,
             height: config.boxHeight,
@@ -208,8 +215,8 @@ const styles = StyleSheet.create({
     },
     yNetTitlesView: {
         position: 'absolute',
-        width: 20,
-        left: -20,
+        width: 30,
+        left: -30,
         display: 'flex',
         flexDirection: 'column-reverse',
         justifyContent: 'space-between',

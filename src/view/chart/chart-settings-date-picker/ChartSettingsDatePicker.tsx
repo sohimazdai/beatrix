@@ -10,6 +10,10 @@ import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
 import { appAnalytics } from '../../../app/Analytics';
 import { shadowOptions } from '../../../constant/ShadowOptions';
+import translate from './Translate';
+import i18n from 'i18n-js';
+
+translate();
 
 export interface ChartSettingsDatePickerProps {
     date: Date
@@ -66,7 +70,7 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
             data: {
                 date: this.props.date,
                 pickerType: IModalPickerType.DATE,
-                positiveButtonText: 'Обновить дату',
+                positiveButtonText: i18n.t('chart_update_date'),
                 onPositiveClick: this.onDateChange,
             }
         }))
@@ -103,9 +107,9 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
             default:
                 let text = '';
                 if (DateHelper.today() === date.getTime()) {
-                    text = 'Сегодня'
+                    text = i18n.t('today')
                 } else if (DateHelper.yesterday() === date.getTime()) {
-                    text = 'Вчера'
+                    text = i18n.t('yesterday')
                 } else {
                     const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
                     const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));

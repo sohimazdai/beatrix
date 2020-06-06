@@ -8,19 +8,26 @@ import {
 } from "../../model/IChart";
 import { DateHelper } from "../../utils/DateHelper";
 
-export function adaptDayDots(props: ChartWrapProps, dots: IChartDot[], events?: IChartDot[], date?: Date): ChartDotsData {
+export function adaptDayDots(
+    props: ChartWrapProps,
+    dots: IChartDot[],
+    events?: IChartDot[],
+    date?: Date
+): ChartDotsData {
     let result: ChartDotsData = {};
     let ys = dots.map(d => d.y)
-    let maxValue = 0;
-    let minValue = ys.length ? 3 : 0;
+    let maxValue = props.maxCritical;
+    let minValue = props.minCritical < Math.min(...ys) 
+        ? props.minCritical
+        : Math.min(...ys);
     let newDots: IChartDot[] = [];
     let newEvents: IChartDot[] = [];
     dots.map(dot => {
         maxValue = dot.y > maxValue ? Math.ceil(dot.y) + 1 : Math.ceil(maxValue);
         if (props.type === ChartValueType.GLUCOSE) {
-            minValue = minValue && dot.y <= minValue ?
-                Math.floor(dot.y - 1) :
-                Math.floor(minValue);
+            minValue = minValue && dot.y <= minValue
+                ? Math.floor(dot.y - 1)
+                : Math.floor(minValue)
         } else {
             minValue = 0;
         }

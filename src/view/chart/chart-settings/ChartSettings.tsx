@@ -8,6 +8,10 @@ import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/Ch
 import { DateHelper } from '../../../utils/DateHelper';
 import { MinusIcon } from '../../../component/icon/MinusIcon';
 import { PlusIcon } from '../../../component/icon/PlusIcon';
+import translate from './Translate';
+import i18n from 'i18n-js';
+
+translate();
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
@@ -64,7 +68,7 @@ export function ChartSettings(props: ChartSettingsProps) {
 
             <View style={styles.periodChangingBlock}>
                 <Text style={styles.periodTitle}>
-                    Период
+                    {i18n.t('chart_period')}
                 </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
@@ -115,9 +119,9 @@ function setNextDateValueByChartPeriodType(props: ChartSettingsProps) {
 
 function getPeriodName(period: ChartPeriodType) {
     switch (period) {
-        case ChartPeriodType.DAY: return 'День';
-        case ChartPeriodType.MONTH: return 'Месяц';
-        case ChartPeriodType.THREE_MONTH: return '3 месяца';
+        case ChartPeriodType.DAY: return i18n.t('chart_period_day');
+        case ChartPeriodType.MONTH: return i18n.t('chart_period_month');
+        case ChartPeriodType.THREE_MONTH: return i18n.t('chart_period_3_month');
     }
 }
 

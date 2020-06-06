@@ -21,5 +21,6 @@ export enum Color {
     BLUE_BASE = "#D4EEFF",
     
     RED = '#FF5252',
+    RED_DARK = '#A50000',
     RED_BASE = "#FFE1DF",
 }

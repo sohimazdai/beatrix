@@ -11,6 +11,7 @@ import { IStorage } from '../../../model/IStorage';
 import { IInteractive } from '../../../model/IInteractive';
 import { Hat } from '../../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { GlycemiaTypePickerConnect } from '../../../view/profile/settings/glycemia-type-picker/GlycemiaTypePicker';
 
 interface Props {
     interactive: IInteractive
@@ -31,8 +32,6 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
                         <ScrollView style={styles.scrollView}>
-                            {/* TODO: add change insulin type posibility */}
-                            {/* <ProfileSettingsInsulinTypePickerConnect /> */}
                             <ProfileSettingsTargetGlycemiaPickerConnect />
                             <ProfileSettingsShedulePickerConnect
                                 sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
@@ -40,6 +39,7 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                             <ProfileSettingsShedulePickerConnect
                                 sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
                             />
+                            <GlycemiaTypePickerConnect />
                         </ScrollView>
                     </View>
                 </View>

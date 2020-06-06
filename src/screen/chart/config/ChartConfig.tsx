@@ -6,7 +6,7 @@ export class ChartConfig {
     TIME_STEP_MINUTES = 5;
     BASIC_PADDING = 5;
     DOT_RADIUS = 5;
-    WIDTH = Dimensions.get("screen").width * 0.85;
+    WIDTH = Dimensions.get("screen").width * 0.85 - 10;
 
     getConfigs() {
         return {

@@ -11,6 +11,10 @@ import { createGetUserByInstallationIdAction } from '../../../store/service/auth
 import { createSyncUserAction } from '../../../store/service/user/SyncUserSaga';
 import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';
 import { IApp } from '../../../model/IApp';
+import translate from './Translate';
+import i18n from 'i18n-js';
+
+translate();
 
 interface Props {
   user?: IUser
@@ -72,7 +76,7 @@ class Component extends React.Component<Props, State> {
     return (
       <View style={styles.resolverView}>
         <Text style={styles.resolverViewTitle}>
-          Продолжить как:
+          {i18n.t('continue_as')}
         </Text>
         <View style={styles.buttonView}>
           <TouchableOpacity onPress={syncUser}>

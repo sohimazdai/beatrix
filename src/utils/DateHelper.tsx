@@ -1,3 +1,5 @@
+import i18n from 'i18n-js';
+
 export class DateHelper {
     static today() {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
@@ -72,29 +74,29 @@ export class DateHelper {
     static getMonthStringPossesive(m: number) {
         switch (m) {
             case 0:
-                return 'января';
+                return i18n.t('january');
             case 1:
-                return 'февраля';
+                return i18n.t('february');
             case 2:
-                return 'марта';
+                return i18n.t('march');
             case 3:
-                return 'апреля';
+                return i18n.t('april');
             case 4:
-                return 'мая';
+                return i18n.t('may');
             case 5:
-                return 'июня';
+                return i18n.t('june');
             case 6:
-                return 'июля';
+                return i18n.t('jule');
             case 7:
-                return 'августа';
+                return i18n.t('august');
             case 8:
-                return 'сентября';
+                return i18n.t('september');
             case 9:
-                return 'октября';
+                return i18n.t('october');
             case 10:
-                return 'ноября';
+                return i18n.t('november');
             case 11:
-                return 'декабря';
+                return i18n.t('september');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }
@@ -103,29 +105,29 @@ export class DateHelper {
     static getMonthStringCommon(m: number) {
         switch (m) {
             case 0:
-                return 'Январь';
+                return i18n.t('january_capital_infinitive');
             case 1:
-                return 'Февраль';
+                return i18n.t('february_capital_infinitive');
             case 2:
-                return 'Март';
+                return i18n.t('march_capital_infinitive');
             case 3:
-                return 'Апрель';
+                return i18n.t('april_capital_infinitive');
             case 4:
-                return 'Май';
+                return i18n.t('may_capital_infinitive');
             case 5:
-                return 'Июнь';
+                return i18n.t('june_capital_infinitive');
             case 6:
-                return 'Июль';
+                return i18n.t('jule_capital_infinitive');
             case 7:
-                return 'Август';
+                return i18n.t('august_capital_infinitive');
             case 8:
-                return 'Сентябрь';
+                return i18n.t('september_capital_infinitive');
             case 9:
-                return 'Октябрь';
+                return i18n.t('october_capital_infinitive');
             case 10:
-                return 'Ноябрь';
+                return i18n.t('november_capital_infinitive');
             case 11:
-                return 'Декабрь';
+                return i18n.t('september_capital_infinitive');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }
@@ -134,29 +136,29 @@ export class DateHelper {
     static getMonthStringCommonShort(m: number) {
         switch (m) {
             case 0:
-                return 'Янв';
+                return i18n.t('january_capital_short');
             case 1:
-                return 'Фев';
+                return i18n.t('february_capital_short');
             case 2:
-                return 'Март';
+                return i18n.t('march_capital_short');
             case 3:
-                return 'Апр';
+                return i18n.t('april_capital_short');
             case 4:
-                return 'Май';
+                return i18n.t('may_capital_short');
             case 5:
-                return 'Июнь';
+                return i18n.t('june_capital_short');
             case 6:
-                return 'Июль';
+                return i18n.t('jule_capital_short');
             case 7:
-                return 'Авг';
+                return i18n.t('august_capital_short');
             case 8:
-                return 'Сент';
+                return i18n.t('september_capital_short');
             case 9:
-                return 'Окт';
+                return i18n.t('october_capital_short');
             case 10:
-                return 'Нояб';
+                return i18n.t('november_capital_short');
             case 11:
-                return 'Дек';
+                return i18n.t('september_capital_short');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }

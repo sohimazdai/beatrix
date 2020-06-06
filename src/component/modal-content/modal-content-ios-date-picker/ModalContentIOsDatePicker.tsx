@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.WHITE
     },
     buttonView: {
+
         height: 41,
         width: 234,
 
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
     },
 
     buttonText: {

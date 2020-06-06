@@ -1,20 +1,35 @@
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import { View, Text, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import Number from './Number';
+import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../model/IStorage';
+import { Dimensions } from 'react-native';
+import { IMeasuresOption } from '../../../localisation/Measures';
 
 const PORTION = 50;
+const LENGTH = 70;
+const LENGTH_WITH_SEPARATOR = 72;
+
+interface Props {
+  selectedNumber?: number;
+  onNumberClick: (number) => void;
+  userDiabetesProperties?: IUserDiabetesProperties,
+  measuresOption: IMeasuresOption
+}
 
 interface State {
   numbersCount: number,
   numbers: number[],
 }
 
-export class NumberScroller extends React.Component {
-  scrollViewRef;
+export class Component extends React.Component<Props, State> {
+  flatListRef;
 
   state = {
-    numbersCount: 200,
+    numbersCount: this.props.measuresOption.withDecimal
+      ? this.props.measuresOption.startIndex * 2 * 10
+      : this.props.measuresOption.startIndex * 2,
     numbers: [],
   }
 
@@ -29,26 +44,70 @@ export class NumberScroller extends React.Component {
     return numbers;
   }
 
-  onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  addNumbers = () => {
+    const { numbersCount } = this.state;
 
+    this.setState({ numbersCount: numbersCount + PORTION });
+  }
+
+  get initialIndex() {
+    const { selectedNumber, measuresOption } = this.props;
+    const { startIndex, withDecimal } = measuresOption;
+
+    const startIndexWithDecimal = withDecimal ? startIndex * 10 : startIndex;
+    const selectedNumberWithDecimal = withDecimal ? selectedNumber * 10 : selectedNumber;
+
+    const itemsOnScreen = Dimensions.get('screen').width / LENGTH_WITH_SEPARATOR;
+    const initialOfsset = Math.floor(itemsOnScreen / 2);
+
+    const isPossibleToApplyOffset = selectedNumberWithDecimal > initialOfsset;
+    const newSelectedNumber = isPossibleToApplyOffset && selectedNumberWithDecimal
+      ? selectedNumberWithDecimal - initialOfsset
+      : selectedNumberWithDecimal;
+
+
+    const initialIndex = newSelectedNumber
+      ? newSelectedNumber
+      : startIndexWithDecimal - initialOfsset;
+
+    return initialIndex;
   }
 
   render() {
-    return (
-      <ScrollView
+    const { onNumberClick, selectedNumber, measuresOption } = this.props;
+    const { withDecimal } = measuresOption;
 
-        onLayout={(e) => {
-          this.scrollViewRef.scrollTo({x: e.nativeEvent.layout.width * 15, y: 0, animated: false})
-        }}
-        showsHorizontalScrollIndicator={false}
-        ref={(sv) => this.scrollViewRef = sv}
-        onScroll={this.onScroll}
+    return (
+      <FlatList
         horizontal
-      >
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          {this.numbers.map((number) => <Number key={number} value={number} onClick={() => { }} />)}
-        </View>
-      </ScrollView>
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+
+        ref={(fl) => this.flatListRef = fl}
+
+        data={this.numbers}
+        renderItem={({ item }) => (
+          <Number
+            value={withDecimal ? item / 10 : item}
+            isSelected={selectedNumber === (withDecimal ? item / 10 : item)}
+            onClick={onNumberClick}
+          />
+        )}
+        keyExtractor={item => item.toString()}
+
+        getItemLayout={(data, index) => (
+          { length: LENGTH, offset: LENGTH_WITH_SEPARATOR * index, index }
+        )}
+        initialScrollIndex={this.initialIndex}
+        onEndReached={this.addNumbers}
+        onEndReachedThreshold={0.5}
+      />
     )
   }
 }
+
+export const NumberScroller = connect(
+  (state: IStorage) => ({
+    userDiabetesProperties: state.userDiabetesProperties
+  }),
+)(Component)

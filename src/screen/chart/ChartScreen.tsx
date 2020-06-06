@@ -22,11 +22,18 @@ import { appAnalytics } from '../../app/Analytics';
 import { InfoIcon } from '../../component/icon/InfoIcon';
 import { ModalType } from '../../model/IModal';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
+import translate from './Translate';
+import i18n from 'i18n-js';
+import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
+import { Measures } from '../../localisation/Measures';
+
+translate();
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
     noteList: INoteList
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    userDiabetesProperties: IUserDiabetesProperties
     onInfoPress: (chartPeriodType: ChartPeriodType) => void
 }
 
@@ -110,7 +117,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         return (
             <View style={styles.view}>
                 <BlockHat
-                    title={"График"}
+                    title={i18n.t('charts')}
                     rightSideSlot={this.getHatTitle()}
                 />
                 <View style={styles.scrollViewWrapWrap}>
@@ -148,6 +155,8 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
             ChartValueType.BREAD_UNITS
         ];
 
+        const {userDiabetesProperties: {glycemiaMeasuringType}} = this.props;
+
         return (
             <View style={styles.chartView}>
                 <LinearGradient
@@ -165,6 +174,8 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
                             noteList={this.props.noteList}
                             noteListByDay={this.props.noteListByDay}
                             onDotPress={this.onDotPress}
+                            minCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).min}
+                            maxCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).max}
                         />
                     })}
                     {this.renderNetXTitles()}
@@ -193,13 +204,13 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         let title = ""
         switch (selectedPeriod) {
             case ChartPeriodType.DAY:
-                title = 'День';
+                title = i18n.t('chart_period_day');
                 break;
             case ChartPeriodType.MONTH:
-                title = 'Месяц';
+                title = i18n.t('chart_period_month');
                 break;
             case ChartPeriodType.THREE_MONTH:
-                title = 'Три месяца';
+                title = i18n.t('chart_period_three_month');
                 break;
         }
 
@@ -232,10 +243,10 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
             case ChartPeriodType.MONTH:
                 selectedDotId = Number(selectedDotId);
                 if (selectedDotId === DateHelper.today()) {
-                    return 'Сегодня'
+                    return i18n.t('chart_today');
                 }
                 if (selectedDotId === DateHelper.yesterday()) {
-                    return 'Вчера';
+                    return i18n.t('chart_yesterday');
                 }
                 displayingDate = DateHelper.makeDateWithMonthAsString(new Date(selectedDotId))
                 return displayingDate
@@ -374,20 +385,6 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
         }
     }
 
-    renderAxisName() {
-        switch (this.state.selectedPeriod) {
-            case ChartPeriodType.DAY:
-                const axiosName = 'ЧАС';
-                return (
-                    <View style={styles.axisTitleView}>
-                        <Text style={styles.axisTitleText}>
-                            {axiosName}
-                        </Text>
-                    </View>
-                )
-        }
-    }
-
     onCurrentDateChange = (date: Date) => {
         this.setState({ currentDate: date })
     }
@@ -477,6 +474,7 @@ export const ChartConnect = connect(
     (state: IStorage) => ({
         noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state),
         noteList: state.noteList,
+        userDiabetesProperties: state.userDiabetesProperties,
     }),
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {

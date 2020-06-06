@@ -1,4 +1,4 @@
-import { IUserDiabetesProperties, ShortInsulinType, GlycemiaType } from "../../../model/IUserDiabetesProperties";
+import { IUserDiabetesProperties, ShortInsulinType, GlycemiaMeasuringType } from "../../../model/IUserDiabetesProperties";
 import { UserDiabetesPropertiesAction } from "./UserDiabetesPropertiesAction";
 import { UserDiabetesPropertiesActionType } from "./UserDiabetesPropertiesActionType";
 
@@ -6,7 +6,7 @@ export function userDiabetesPropertiesReducer(
   properties: IUserDiabetesProperties = {
     targetGlycemia: 6,
     shortInsulinType: ShortInsulinType.ULTRA_SHORT,
-    glycemiaType: GlycemiaType.MMOL_L,
+    glycemiaMeasuringType: GlycemiaMeasuringType.MMOL_L,
   },
   action: UserDiabetesPropertiesAction
 ): IUserDiabetesProperties {

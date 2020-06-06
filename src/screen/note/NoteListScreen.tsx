@@ -25,6 +25,10 @@ import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
+import translate from './Translate';
+import i18n from 'i18n-js';
+
+translate();
 
 interface NoteListScreenStateTProps {
   app: IApp;
@@ -67,7 +71,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   render() {
     return (
       <View style={styles.screenView}>
-        <BlockHat title={"Записи"} rightSideSlot={this.renderProfileIcon()} />
+        <BlockHat title={i18n.t('notes')} rightSideSlot={this.renderProfileIcon()} />
         {this.renderIconBar()}
         <View style={styles.cardsViewWrapWrap}>
           <View style={styles.cardsViewWrap}>
@@ -135,7 +139,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
         <View style={styles.noteListBottom}></View>
       </ScrollView>
     ) : (
-        <Text style={styles.noNotesStub}>Записей не найдено!</Text>
+        <Text style={styles.noNotesStub}>{i18n.t('notes_not_found')}</Text>
       )
   }
 
@@ -145,13 +149,13 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     let displayingDate = "";
     if (day === today) {
       displayingDate =
-        "Сегодня, " +
+        `${i18n.t('today')}, ` +
         `${new Date(day).getDate()} ${this.getMonthString(
           new Date(day).getMonth()
         )}`;
     } else if (day === yesterday) {
       displayingDate =
-        "Вчера, " +
+        `${i18n.t('yesterday')}, ` +
         `${new Date(day).getDate()} ${this.getMonthString(
           new Date(day).getMonth()
         )}`;
@@ -192,7 +196,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
           style={styles.showMoreButton}
           onPress={this.showMorePosts}
         >
-          <Text style={styles.addNoteButtonText}>Показать больше</Text>
+          <Text style={styles.addNoteButtonText}>{i18n.t('show_more')}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -200,29 +204,29 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   getMonthString(m: number) {
     switch (m) {
       case 0:
-        return "января";
+        return i18n.t('january');
       case 1:
-        return "февраля";
+        return i18n.t('february');
       case 2:
-        return "марта";
+        return i18n.t('march');
       case 3:
-        return "апреля";
+        return i18n.t('april');
       case 4:
-        return "мая";
+        return i18n.t('may');
       case 5:
-        return "июня";
+        return i18n.t('june');
       case 6:
-        return "июля";
+        return i18n.t('jule');
       case 7:
-        return "августа";
+        return i18n.t('august');
       case 8:
-        return "сентября";
+        return i18n.t('september');
       case 9:
-        return "октября";
+        return i18n.t('october');
       case 10:
-        return "ноября";
+        return i18n.t('november');
       case 11:
-        return "декабря";
+        return i18n.t('september');
       default:
         console.warn("12 month is ... ? I think it is error");
     }
