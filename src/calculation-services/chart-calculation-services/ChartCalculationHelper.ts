@@ -16,8 +16,10 @@ export function adaptDayDots(
 ): ChartDotsData {
     let result: ChartDotsData = {};
     let ys = dots.map(d => d.y)
-    let maxValue = props.maxCritical;
-    let minValue = props.minCritical < Math.min(...ys) 
+    let maxValue = props.type === ChartValueType.GLUCOSE
+        ? props.maxCritical
+        : 0;
+    let minValue = props.minCritical < Math.min(...ys)
         ? props.minCritical
         : Math.min(...ys);
     let newDots: IChartDot[] = [];
@@ -211,7 +213,9 @@ export function adaptMonthDots(props: ChartWrapProps, dots: IChartDot[]): ChartD
     let newDots: IChartDot[] = [];
     let ys = dots.map(d => d.y)
     let maxValue = 0;
-    let minValue = ys.length ? Math.min(...ys) : 0;
+    let minValue = props.minCritical < Math.min(...ys)
+        ? props.minCritical
+        : Math.min(...ys);
     dots.map(dot => {
         maxValue = dot.y > maxValue ? Math.ceil(dot.y) + 1 : Math.ceil(maxValue);
         minValue = minValue && dot.y <= minValue ?
@@ -259,7 +263,9 @@ export function adaptThreeMonthDots(props: ChartWrapProps, dots: IChartDot[]): C
     let newDots: IChartDot[] = [];
     let ys = dots.map(d => d.y)
     let maxValue = 0;
-    let minValue = ys.length ? Math.min(...ys) : 0;
+    let minValue = props.minCritical < Math.min(...ys)
+        ? props.minCritical
+        : Math.min(...ys);
     dots.map(dot => {
         maxValue = dot.y > maxValue ? Math.ceil(dot.y) + 1 : Math.ceil(maxValue);
         minValue = minValue && dot.y <= minValue ?

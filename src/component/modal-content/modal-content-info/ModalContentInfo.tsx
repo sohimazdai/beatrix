@@ -5,6 +5,10 @@ import { Color } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { ScrollView } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/ShadowOptions';
+import translate from './Translate';
+import i18n from 'i18n-js';
+
+translate();
 
 interface ModalContentInfoCardProps {
   color?: ColorType,
@@ -63,11 +67,11 @@ function ModalContentInfoCard(props: ModalContentInfoCardProps) {
 function getTitle(type: ChartPeriodType) {
   switch (type) {
     case ChartPeriodType.DAY:
-      return 'Дневной график';
+      return i18n.t('info_day_chart');
     case ChartPeriodType.MONTH:
-      return 'Месячный график';
+      return i18n.t('info_month_chart');
     case ChartPeriodType.THREE_MONTH:
-      return 'Трехмесячный график';
+      return i18n.t('info_three_month_chart');
   }
 }
 
@@ -77,43 +81,40 @@ function getCards(type: ChartPeriodType): ModalContentInfoCardProps[] {
       return [
         {
           color: ColorType.INSTRUCTION,
-          text: "Графики визуализируют распределение сахара крови, инсулина и ХЕ в течение дня. " +
-            "Как известно, сахар крови повышается с принятием пищи и понижается с введением инсулина.",
+          text: i18n.t('info_day_chart_part_1')
         },
         {
-          text: "График глюкозы крови(посередине) является показателем корректности подобранной дозы для каждого конкретного времени дня. " +
-            "Если вы замечаете систематически повторяющиеся скачки сахара крови - обратитесь к врачу для корректировки дозы короткого или пролонгированного инсулина.",
+          text: i18n.t('info_day_chart_part_2'),
         },
         {
-          text: "График инсулина(сверху) приблизительно отражает распределение короткого инсулина в организме в течение дня. В случае, когда с последней инъекции не прошло 4 часов, вы можете наблюдать механизм наложения введенного инсулина. " +
-            "При наложении действующих инсулинов повышается опасность возникновения гипокликемии! Так же узнайте у врача-эндкринолога вашу максимально приемлемую дозировку инсулина и старайтесь не превышать её, в том числе, в случая наложения.",
+          text: i18n.t('info_day_chart_part_3'),
         },
         {
           color: ColorType.ATTENTION,
-          text: "Значения графика инсулина отложены вниз, что отражает противонаправленность с графиком хлебных единиц",
+          text: i18n.t('info_day_chart_part_4'),
         },
         {
-          text: "График хлебных единиц(снизу) является усредненной картиной всасывания углеводов в кровь. Узнайте у врача-эндокринолога вашу максимальную порцию углеводов и старайтесь всегда укладываться в заданные рамки."
+          text: i18n.t('info_day_chart_part_5'),
         },
       ]
     case ChartPeriodType.MONTH:
       return [
         {
           color: ColorType.INSTRUCTION,
-          text: "На месячном графике точками показаны средние показатели сахара крови, иснулина и ХЕ за соотвествующий день.",
+          text: i18n.t('info_month_chart_part_1'),
         },
         {
-          text: "Красными линиями показаны выходные. Вы можете заметить систематические повышения и снижения сахара в различные дни недели и проанализировать причину таких скачков."
+          text: i18n.t('info_month_chart_part_2'),
         },
       ]
     case ChartPeriodType.THREE_MONTH:
       return [
         {
           color: ColorType.INSTRUCTION,
-          text: 'Точки - средние значения за единицу времени. На трехмесячном графике единицей времени является неделя.',
+          text: i18n.t('info_three_month_chart_part_1'),
         },
         {
-          text: 'Наблюдайте за сезонным харакетром распределения глюкозы в крови. Вы можете определить систематические скачки сахара и соотнести с определенным периодом жизни. Например, отпуском, болезнью, диетой или любым специфическим периодом жизни. В следующий раз вы сможете быть подготовленным к такой же ситуации немного лучше.'
+          text: i18n.t('info_three_month_chart_part_2'),
         },
       ];
   }

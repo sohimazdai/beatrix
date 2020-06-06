@@ -17,6 +17,7 @@ import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { Fader } from '../component/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
+import i18n from 'i18n-js';
 
 interface AppNavigatorComponentProps {
     user?: IUser,
@@ -79,19 +80,17 @@ const ProfileScreenStack = createStackNavigator(
 
 const AuthedMainNavigator = createBottomTabNavigator(
     {
-        'Записи': { screen: NoteListScreenConnect },
-        "Графики": { screen: ChartConnect },
+        [i18n.t('notes')]: { screen: NoteListScreenConnect },
+        [i18n.t('charts')]: { screen: ChartConnect },
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
             tabBarIcon: () => {
                 const { routeName } = navigation.state;
-                if (routeName === 'Записи') {
+                if (routeName === i18n.t('notes')) {
                     return <NotesIcon />
-                } else if (routeName === "Графики") {
+                } else if (routeName === i18n.t('charts')) {
                     return <ChartsIcon />
-                } else if (routeName === "Профиль") {
-                    return <ProfileIcon />
                 }
             },
         }),

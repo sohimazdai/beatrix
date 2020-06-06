@@ -12,6 +12,10 @@ import { IUser } from '../../model/IUser'
 import { IModalConfirm, ModalType } from '../../model/IModal'
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
+import translate from './Translate';
+import i18n from 'i18n-js';
+
+translate();
 
 interface Props {
     onLogOut?: () => void;
@@ -34,7 +38,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
             <View style={styles.profileView}>
                 <Hat
                     onBackPress={() => this.props.navigation.navigate('Main')}
-                    title={'Профиль'}
+                    title={i18n.t('profile')}
                 />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
@@ -44,20 +48,20 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                                 description={user.email}
                             />
                             <ProfileItem
-                                title={'Диабетический профиль'}
-                                description={'Настройте ваши параметры и улучшите компенсацию'}
+                                title={i18n.t('diabetes_profile')}
+                                description={i18n.t('about_diabetes_profile')}
                                 activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
                                     <Text style={styles.activeElementToSettings}>
-                                        {'Перейти'}
+                                        {i18n.t('go_to')}
                                     </Text>
                                 </TouchableOpacity>}
                             />
                             <ProfileItem
-                                description={'Выйти из аккаунта'}
-                                hint={'Чтобы использовать ваши записи необходимо будет зайти снова в ваш аккаунт'}
+                                description={i18n.t('log_out')}
+                                hint={i18n.t('log_out_hint')}
                                 activeElement={<TouchableOpacity onPress={this.props.onLogOut}>
                                     <Text style={styles.activeElementExit}>
-                                        {'Выйти'}
+                                        {i18n.t('leave')}
                                     </Text>
                                 </TouchableOpacity>}
                             />

@@ -154,11 +154,7 @@ export function ChartWrap(props: ChartWrapProps) {
         for (let i = 0; i <= config.horizontalLineNumber; i++) {
             toRender.push(start + i * step);
         }
-        console.log('🤖🤖🤖🤖 type', props.type);
 
-        console.log('🤖🤖🤖🤖 range', range);
-        console.log('🤖🤖🤖🤖 start', start);
-        console.log('🤖🤖🤖🤖 toRender', toRender);
         return <View style={{
             ...styles.yNetTitlesView,
             height: config.boxHeight,
