@@ -6,9 +6,6 @@ import { createChangeInteractive } from "../../../../store/modules/interactive/i
 import * as React from 'react';
 import { styles } from './Style';
 import i18n from 'i18n-js';
-import translate from './Translate';
-
-translate();
 
 interface Props {
     openPopup: () => void;

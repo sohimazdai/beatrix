@@ -1,5 +1,5 @@
 import React from 'react';
-import { IUserDiabetesPropertiesDayTimeValue } from "../../../../model/IUserDiabetesProperties";
+import { IUserDiabetesPropertiesDayTimeValue, IUserDiabetesProperties } from "../../../../model/IUserDiabetesProperties";
 import { connect } from "react-redux";
 import { IStorage } from "../../../../model/IStorage";
 import { IUserPropertiesShedule, SheduleKeyType } from "../../../../model/IUserPropertiesShedule";
@@ -9,10 +9,13 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from './Style';
 import { createClearSheduleByKeyType } from '../../../../store/modules/user-properties-shedule/UserPropertiesShedule';
 import { ProfileUserPropertiesShedulePickerActiveConnect } from './shedule-picker-active/ProfileUserPropertiesShedulePickerActive';
+import i18n from 'i18n-js';
+import { Measures } from '../../../../localisation/Measures';
 
 interface Props {
     sheduleKey: SheduleKeyType
     userPropertiesShedule?: IUserPropertiesShedule
+    userDiabetesProperties: IUserDiabetesProperties
     activeUserPropertiesShedulePopupType?: SheduleKeyType
 
     onShedulePopupCall?: (key: SheduleKeyType) => void
@@ -70,9 +73,9 @@ function ProfileSettingsShedulePicker(props: Props) {
     function sheduleTableTitle() {
         return shedule.length > 0 && (
             <View style={styles.sensitivityFactorTitleView}>
-                <Text style={styles.sensitivityFactorItemTitle}>С(часов)</Text>
-                <Text style={styles.sensitivityFactorItemTitle}>До(часов)</Text>
-                <Text style={styles.sensitivityFactorItemTitle}>Значение</Text>
+                <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_since')}</Text>
+                <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_until')}</Text>
+                <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_value')}</Text>
             </View>
         )
     }
@@ -84,7 +87,7 @@ function ProfileSettingsShedulePicker(props: Props) {
                 onPress={() => props.onShedulePopupCall(props.sheduleKey)}
             >
                 <Text style={{ fontSize: 16 }}>
-                    {shedule.length > 0 ? 'Изменить' : 'Добавить'}
+                    {shedule.length > 0 ? i18n.t('shedule_change') : i18n.t('shedule_add')}
                 </Text>
             </TouchableOpacity>
         )
@@ -97,7 +100,7 @@ function ProfileSettingsShedulePicker(props: Props) {
                 onPress={() => props.clearShedule(props.sheduleKey)}
             >
                 <Text style={{ fontSize: 16, color: 'white' }}>
-                    {'Очистить'}
+                    {i18n.t('shedule_clear')}
                 </Text>
             </TouchableOpacity>
         )
@@ -106,27 +109,36 @@ function ProfileSettingsShedulePicker(props: Props) {
     function getSettingTitle() {
         switch (props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return 'Фактор чувствительности к инсулину (ФЧИ)'
+                return i18n.t('insulin_sensitivity_factor')
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return 'Углеводный коэффициент (УК)'
+                return i18n.t('insulin_to_carb_rate');
         }
     }
 
     function getDescription() {
+        const { userDiabetesProperties: { glycemiaMeasuringType } } = props;
+        const glycemiaType = Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType);
+        const glycemiaTypeString = i18n.t(glycemiaType);
+        const glycemiaTypeStringLong = i18n.t(glycemiaType + '_long');
+
         switch (props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return 'Показывает, насколько понизит сахар крови (в ммолях) 1 ед. короткого или ультракороткого инсулина';
+                return i18n.t('insulin_sensitivity_factor_description')
+                    .replace(
+                        '%glycemia_type%',
+                        glycemiaTypeStringLong + '(' + glycemiaTypeString + ')'
+                    );
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return 'Показывает количество единиц инсулина необходимо для усвоения 1 ХЕ';
+                return i18n.t('insulin_to_carb_rate_description');
         }
     }
 
     function getHint() {
         switch (props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return 'Укажите ФЧИ для различных промежутков времени';
+                return i18n.t('insulin_sensitivity_factor_hint');
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return 'Укажите УК для различных промежутков времени';
+                return i18n.t('insulin_to_carb_rate_hint');
         }
     }
 
@@ -158,6 +170,7 @@ function ProfileSettingsShedulePicker(props: Props) {
 export const ProfileSettingsShedulePickerConnect = connect(
     (state: IStorage) => ({
         userPropertiesShedule: state.userPropertiesShedule,
+        userDiabetesProperties: state.userDiabetesProperties,
         activeUserPropertiesShedulePopupType: state.interactive.userPropertiesShedulePopupType,
     }),
     (dispatch) => ({

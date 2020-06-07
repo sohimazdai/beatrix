@@ -8,10 +8,7 @@ import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/Ch
 import { DateHelper } from '../../../utils/DateHelper';
 import { MinusIcon } from '../../../component/icon/MinusIcon';
 import { PlusIcon } from '../../../component/icon/PlusIcon';
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;

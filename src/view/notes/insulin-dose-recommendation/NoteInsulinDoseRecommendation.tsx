@@ -6,11 +6,8 @@ import { IStorage } from '../../../model/IStorage';
 import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../model/IUserPropertiesShedule';
 import { INoteListNote } from '../../../model/INoteList';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
-import translate from './Translate';
 import i18n from 'i18n-js';
 import { Measures } from '../../../localisation/Measures';
-
-translate();
 
 interface OwnProps {
     note?: INoteListNote

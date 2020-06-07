@@ -12,10 +12,7 @@ import { IUser } from '../../model/IUser'
 import { IModalConfirm, ModalType } from '../../model/IModal'
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 interface Props {
     onLogOut?: () => void;
@@ -48,7 +45,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                                 description={user.email}
                             />
                             <ProfileItem
-                                title={i18n.t('diabetes_profile')}
+                                title={i18n.t('diabetic_profile')}
                                 description={i18n.t('about_diabetes_profile')}
                                 activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
                                     <Text style={styles.activeElementToSettings}>
@@ -89,9 +86,9 @@ export const ProfileScreenConnect = connect(
             onLogOut() {
                 const confirmData: IModalConfirm = {
                     data: {
-                        questionText: 'Вы уверены, что хотите выйти?',
-                        positiveButtonText: 'Выйти',
-                        negativeButtonText: 'Остаться',
+                        questionText: i18n.t('are_you_sure'),
+                        positiveButtonText: i18n.t('leave'),
+                        negativeButtonText: i18n.t('cancel'),
 
                         onPositiveClick: () => dispatch(createClearInstallationIdAction()),
                     }

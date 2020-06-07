@@ -6,9 +6,6 @@ import { shadowOptions } from '../../../constant/ShadowOptions';
 import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
 import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
 import i18n from 'i18n-js';
-import translate from './Translate';
-
-translate();
 
 interface Props {
     onGoogleSignin?: () => void;

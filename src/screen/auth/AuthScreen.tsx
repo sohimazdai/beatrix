@@ -15,10 +15,7 @@ import { IUser } from '../../model/IUser';
 import { AuthFormConnect } from '../../view/auth/AuthForm';
 import { styles } from './Style';
 import { LinearGradient } from 'expo-linear-gradient'
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>

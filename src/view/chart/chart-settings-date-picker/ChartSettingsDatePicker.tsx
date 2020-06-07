@@ -10,10 +10,7 @@ import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
 import { appAnalytics } from '../../../app/Analytics';
 import { shadowOptions } from '../../../constant/ShadowOptions';
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 export interface ChartSettingsDatePickerProps {
     date: Date

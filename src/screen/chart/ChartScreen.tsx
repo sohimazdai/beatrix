@@ -22,12 +22,9 @@ import { appAnalytics } from '../../app/Analytics';
 import { InfoIcon } from '../../component/icon/InfoIcon';
 import { ModalType } from '../../model/IModal';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
-import translate from './Translate';
 import i18n from 'i18n-js';
 import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
 import { Measures } from '../../localisation/Measures';
-
-translate();
 
 export interface ChartProps {
     noteListByDay: INoteListByDay

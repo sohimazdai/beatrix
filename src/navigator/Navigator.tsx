@@ -17,7 +17,12 @@ import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { Fader } from '../component/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
+import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
+import translate from '../localisation/Translate';
+
+i18n.locale = Localization.locale.slice(0, 2);
+translate();
 
 interface AppNavigatorComponentProps {
     user?: IUser,

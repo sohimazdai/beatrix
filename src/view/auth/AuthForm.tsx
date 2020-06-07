@@ -8,9 +8,6 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { AuthProblemResolver } from '../../screen/auth/AuthProblemResolver/AuthProblemResolver';
 import i18n from 'i18n-js';
-import translate from './Translate';
-
-translate();
 
 enum AuthType {
     EMAIL = 'email',

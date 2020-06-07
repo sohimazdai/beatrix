@@ -27,10 +27,14 @@ export class Component extends React.Component<Props, State> {
   flatListRef;
 
   state = {
-    numbersCount: this.props.measuresOption.withDecimal
-      ? this.props.measuresOption.startIndex * 2 * 10
-      : this.props.measuresOption.startIndex * 2,
     numbers: [],
+    numbersCount: this.props.measuresOption.withDecimal
+      ? this.props.selectedNumber
+        ? this.props.selectedNumber * 2 * 10
+        : this.props.measuresOption.startIndex * 2 * 10
+      : this.props.selectedNumber
+        ? this.props.selectedNumber * 2
+        : this.props.measuresOption.startIndex * 2,
   }
 
   get numbers(): number[] {

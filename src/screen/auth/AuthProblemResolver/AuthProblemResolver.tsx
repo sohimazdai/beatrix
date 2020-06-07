@@ -11,10 +11,7 @@ import { createGetUserByInstallationIdAction } from '../../../store/service/auth
 import { createSyncUserAction } from '../../../store/service/user/SyncUserSaga';
 import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';
 import { IApp } from '../../../model/IApp';
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 interface Props {
   user?: IUser

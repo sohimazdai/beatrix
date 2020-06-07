@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, Button, Platform } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay, INoteListNote } from "../../model/INoteList";
@@ -25,10 +25,7 @@ import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 interface NoteListScreenStateTProps {
   app: IApp;

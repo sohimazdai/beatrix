@@ -30,19 +30,8 @@ import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSa
 import { appAnalytics } from '../../../app/Analytics';
 import { NumberScroller } from '../number-scroller/NumberScroller';
 import i18n from 'i18n-js';
-import translate from './Translate';
 import { Measures } from '../../../localisation/Measures';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
-
-translate();
-
-const InputType = {
-    glucose: i18n.t('glucose'),
-    breadUnits: i18n.t('breadUnits'),
-    insulin: i18n.t('shortInsulin'),
-    longInsulin: i18n.t('longInsulin'),
-    comment: i18n.t('comment'),
-}
 
 interface Props {
     interactive?: IInteractive
@@ -183,7 +172,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 return (
                     <View style={styles.commentInputView}>
                         <Text style={styles.inputViewTitle}>
-                            {InputType[NoteValueType.COMMENT]}
+                            {i18n.t(NoteValueType.COMMENT)}
                         </Text>
                         <View style={styles.commentViewTextArea}>
                             <TextInput
@@ -217,7 +206,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
         return (
             <View style={styles.inputView}>
                 <Text style={styles.inputViewTitle}>
-                    {InputType[name]}{displayedValue}
+                    {i18n.t(name)}{displayedValue}
                 </Text>
                 <View style={styles.numberScrollWrapper}>
                     <NumberScroller

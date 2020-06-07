@@ -2,17 +2,19 @@ import { GlycemiaMeasuringType, IUserDiabetesProperties, BreadUnitsMeasuringType
 import i18n from 'i18n-js';
 import { NoteValueType } from '../model/INoteList';
 
-const MMOL_L_NORMAL_SUGAR = 6;
-const MG_DL_NORMAL_SUGAR = 105;
 const NORMAL_BREAD_UNITS_MEAL = 5;
 const NORMAL_CARBOHYDRATES_MEAL = 50;
+
 const NORMAL_SHORT_INSULIN_DOSE = 5;
 const NORMAL_LONG_INSULIN_DOSE = 15;
 
 const CRITICAL_MIN_GLUCOSE_MMOL_L = 4;
 const CRITICAL_MAX_GLUCOSE_MMOL_L = 8;
+const NORMAL_GLUCOSE_MMOL_L = 6;
+
 const CRITICAL_MIN_GLUCOSE_MG_DL = 80;
 const CRITICAL_MAX_GLUCOSE_MG_DL = 130;
+const NORMAL_GLUCOSE_MG_DL = 105;
 
 export interface IMeasuresOption {
   withDecimal: boolean,
@@ -20,6 +22,18 @@ export interface IMeasuresOption {
 };
 
 export class Measures {
+  static getNormalGlycemia(
+    existingGlycemiaMeasuringType?: GlycemiaMeasuringType
+  ) {
+    const glycemiaMeasuringType = this.getDefaultGlucoseMeasuringType(existingGlycemiaMeasuringType);
+
+    if (glycemiaMeasuringType === GlycemiaMeasuringType.MMOL_L) {
+      return NORMAL_GLUCOSE_MMOL_L;
+    }
+
+    return NORMAL_GLUCOSE_MG_DL;
+  }
+
   static getCriticalGlycemia(
     glycemiaMeasuringType: GlycemiaMeasuringType
   ) {
@@ -79,8 +93,8 @@ export class Measures {
         const glucoseMeasuringType = this.getDefaultGlucoseMeasuringType(existingGlycemiaMeasuringType)
 
         return glucoseMeasuringType === GlycemiaMeasuringType.MMOL_L
-          ? MMOL_L_NORMAL_SUGAR
-          : MG_DL_NORMAL_SUGAR;
+          ? NORMAL_GLUCOSE_MMOL_L
+          : NORMAL_GLUCOSE_MG_DL;
 
       case NoteValueType.BREAD_UNITS:
         const breadUnitsMeasuringType = this.getDefaultBreadUnitsMeasuringType()

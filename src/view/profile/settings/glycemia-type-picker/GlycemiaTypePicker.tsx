@@ -5,6 +5,7 @@ import { IUserDiabetesProperties, GlycemiaMeasuringType } from '../../../../mode
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
 import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
+import i18n from 'i18n-js';
 
 interface Props {
   userDiabetesProperties?: IUserDiabetesProperties;
@@ -16,20 +17,20 @@ function GlycemiaTypePicker(props: Props) {
 
   return (
     <ProfilePicker
-      title={'Система измерений глюкометра'}
-      description={'Укажите какой системой измерений сахара крови вы пользуетесь'}
+      title={i18n.t('glycemia_unit')}
+      description={i18n.t('glycemia_unit_description')}
     >
       <Picker
         selectedValue={userDiabetesProperties.glycemiaMeasuringType}
         onValueChange={(value) => onPropertiesChange({ glycemiaMeasuringType: value })}
       >
         <Picker.Item
-          label={GlycemiaMeasuringType.MG_DL} 
-          value={GlycemiaMeasuringType.MG_DL} 
+          label={GlycemiaMeasuringType.MG_DL}
+          value={GlycemiaMeasuringType.MG_DL}
         />
         <Picker.Item
-          label={GlycemiaMeasuringType.MMOL_L} 
-          value={GlycemiaMeasuringType.MMOL_L} 
+          label={GlycemiaMeasuringType.MMOL_L}
+          value={GlycemiaMeasuringType.MMOL_L}
         />
       </Picker>
     </ProfilePicker>

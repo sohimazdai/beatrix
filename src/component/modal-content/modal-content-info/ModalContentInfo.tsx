@@ -5,10 +5,7 @@ import { Color } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { ScrollView } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/ShadowOptions';
-import translate from './Translate';
 import i18n from 'i18n-js';
-
-translate();
 
 interface ModalContentInfoCardProps {
   color?: ColorType,
@@ -46,8 +43,8 @@ export function ModalContentInfo(props: ModalContentInfoProps) {
           style={styles.okButtonView}
         >
           <Text style={styles.okButtonText}>
-            ОК
-        </Text>
+            {i18n.t('ok')}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

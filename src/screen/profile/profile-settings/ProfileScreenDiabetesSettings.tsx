@@ -12,6 +12,7 @@ import { IInteractive } from '../../../model/IInteractive';
 import { Hat } from '../../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { GlycemiaTypePickerConnect } from '../../../view/profile/settings/glycemia-type-picker/GlycemiaTypePicker';
+import i18n from 'i18n-js';
 
 interface Props {
     interactive: IInteractive
@@ -27,19 +28,19 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
             >
                 <Hat
                     onBackPress={() => this.props.navigation.navigate('Profile')}
-                    title={"Диабетический профиль"}
+                    title={i18n.t('diabetic_profile')}
                 />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
                         <ScrollView style={styles.scrollView}>
                             <ProfileSettingsTargetGlycemiaPickerConnect />
+                            <GlycemiaTypePickerConnect />
                             <ProfileSettingsShedulePickerConnect
                                 sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
                             />
                             <ProfileSettingsShedulePickerConnect
                                 sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
                             />
-                            <GlycemiaTypePickerConnect />
                         </ScrollView>
                     </View>
                 </View>
