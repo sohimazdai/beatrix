@@ -31,7 +31,7 @@ import { appAnalytics } from '../../../app/Analytics';
 import { NumberScroller } from '../number-scroller/NumberScroller';
 import i18n from 'i18n-js';
 import { Measures } from '../../../localisation/Measures';
-import { IUserDiabetesProperties, CarbMeasuringType } from '../../../model/IUserDiabetesProperties';
+import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 
 interface Props {
     interactive?: IInteractive
@@ -196,15 +196,15 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
     }
 
     renderInputByType(name, value) {
-        const { userDiabetesProperties: { glycemiaMeasuringType, carbMeasuringType } } = this.props;
+        const { userDiabetesProperties: { glycemiaMeasuringType, carbsMeasuringType } } = this.props;
         let postfix = '';
         if (name === NoteValueType.GLUCOSE) {
             postfix = ' ' + Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType)
         }
 
         if (name === NoteValueType.BREAD_UNITS) {
-            const carbMeasureType = Measures.getDefaultCarbMeasuringType(carbMeasuringType);
-            const carbUnits = carbMeasureType === CarbMeasuringType.BREAD_UNITS
+            const carbMeasureType = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
+            const carbUnits = carbMeasureType === CarbsMeasuringType.BREAD_UNITS
                 ? i18n.t('carb_units')
                 : i18n.t('carb_gram')
             postfix = ' ' + carbUnits;
@@ -227,7 +227,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                         measuresOption={Measures.getMeasuresOption(
                             name,
                             glycemiaMeasuringType,
-                            carbMeasuringType,
+                            carbsMeasuringType,
                         )}
                         onNumberClick={(number) => {
                             obj[`${name}`] = number;
@@ -253,6 +253,10 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
     }
 
     createNote = () => {
+        const { userDiabetesProperties: {
+            glycemiaMeasuringType, carbsMeasuringType, carbsUnitWeightType
+        } } = this.props;
+
         let note: INoteListNote = this.noteFromState;
 
         if (this.props.note) {
@@ -264,7 +268,11 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
         }
         else {
             if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
-                this.props.dispatch(createCreateNoteAction(note));
+                this.props.dispatch(createCreateNoteAction({
+                    ...note,
+                    glycemiaType: Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType),
+                    carbsMeasuringType: Measures.getDefaultCarbsMeasuringType(carbsMeasuringType),
+                }));
                 this.props.hidePopup()
             } else {
                 this.props.dispatch(createModalChangeAction({

@@ -128,7 +128,16 @@ export default function translate() {
     target_glycemia_description: 'Enter your blood sugar target',
 
     glycemia_unit: 'Glycemia unit',
-    glycemia_unit_description: 'Indicate which blood sugar measurement system you use',
+    glycemia_unit_description: 'Select which blood sugar measurement system you use',
+
+    carb_unit_title: 'Carbohydrates unit',
+    carb_unit_description: 'Indicate which carbohydrate counting system you use',
+
+    breadUnits_measuring: 'Carbs unit (10-12 grams)',
+    carbohydrates_measuring: 'Carbohydrates in grams',
+
+    carb_unit_weight_title: 'Amount of carbohydrates in carbs unit',
+    carb_unit_weight_description: 'Select the weight of the carbs unit of the system you are using',
 
     shedule_since: 'Since(h)',
     shedule_until: 'Until(h)',
@@ -152,12 +161,6 @@ export default function translate() {
     need_to_fill_time_period: 'Time gaps required',
 
     profile_change: 'change',
-
-    carb_unit_title: 'Carbohydrates unit',
-    carb_unit_description: 'Indicate which carbohydrate counting system you use',
-
-    breadUnits_measuring: 'Carbs unit (10-12 grams)',
-    carbohydrates_measuring: 'Carbohydrates in grams',
 
     glycemia_settings: 'Glycemia settings',
     glycemia_settings_description: 'Change your target glycemia and type of measurement for your meter',
@@ -306,6 +309,9 @@ export default function translate() {
 
     carb_unit_title: 'Система подсчета углеводов',
     carb_unit_description: 'Укажите какой системой подсчета углеводов вы пользуетесь',
+
+    carb_unit_weight_title: 'Количество углеводов в ХЕ',
+    carb_unit_weight_description: 'Укажите количесво углеводов в ХЕ, которые вы используете при подсчете',
 
     breadUnits_measuring: 'ХЕ',
     carbohydrates_measuring: 'Углеводы в граммах',

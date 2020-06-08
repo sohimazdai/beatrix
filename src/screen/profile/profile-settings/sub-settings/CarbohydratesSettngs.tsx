@@ -8,6 +8,7 @@ import { IInteractive } from '../../../../model/IInteractive';
 import { Hat } from '../../../../component/hat/Hat';
 import { IStorage } from '../../../../model/IStorage';
 import { CarbsTypeSelectPickerConnect } from '../../../../view/profile/settings/select-picker/CarbsTypeSelectPicker';
+import { CarbsUnitWeightSelectPickerConnect } from '../../../../view/profile/settings/select-picker/CarbsUnitWightSelectPicker';
 
 interface Props {
   interactive: IInteractive
@@ -29,6 +30,7 @@ export class CarbohydratesSettngsComponent extends Component<Props> {
           <View style={styles.scrollViewWrap}>
             <ScrollView style={styles.scrollView}>
               <CarbsTypeSelectPickerConnect />
+              <CarbsUnitWeightSelectPickerConnect />
             </ScrollView>
           </View>
         </View>

@@ -6,7 +6,6 @@ export const persistConfig: PersistConfig = {
     blacklist: [
         'modal',
         'interactive',
-        // 'user'
     ],
     storage: AsyncStorage,
     transforms: [

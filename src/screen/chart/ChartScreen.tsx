@@ -44,7 +44,7 @@ export interface ChartState {
     editingNoteId?: number
 }
 
-class Chart extends React.PureComponent<ChartProps, ChartState> {
+class Chart extends React.Component<ChartProps, ChartState> {
     state = {
         currentDate: new Date(
             new Date().getFullYear(),
@@ -152,7 +152,7 @@ class Chart extends React.PureComponent<ChartProps, ChartState> {
             ChartValueType.BREAD_UNITS
         ];
 
-        const {userDiabetesProperties: {glycemiaMeasuringType}} = this.props;
+        const {userDiabetesProperties, userDiabetesProperties: {glycemiaMeasuringType}} = this.props;
 
         return (
             <View style={styles.chartView}>

@@ -8,7 +8,8 @@ export function userDiabetesPropertiesReducer(
     targetGlycemia: Measures.getNormalGlycemia(),
     shortInsulinType: ShortInsulinType.ULTRA_SHORT,
     glycemiaMeasuringType: Measures.getDefaultGlucoseMeasuringType(),
-    carbMeasuringType: Measures.getDefaultCarbMeasuringType(),
+    carbsMeasuringType: Measures.getDefaultCarbsMeasuringType(),
+    carbsUnitWeightType: Measures.getDefaultCarbsUnitWeightType(),
   },
 
   action: UserDiabetesPropertiesAction

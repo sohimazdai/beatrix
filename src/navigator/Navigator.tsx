@@ -23,6 +23,7 @@ import translate from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
+import { UserPropertiesChangesWatcher } from '../app/UserPropertiesWatcher';
 
 i18n.locale = Localization.locale.slice(0, 2);
 translate();

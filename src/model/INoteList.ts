@@ -1,3 +1,5 @@
+import { GlycemiaMeasuringType, CarbsUnitWeightType, CarbsMeasuringType } from './IUserDiabetesProperties';
+
 export interface INoteList {
     [id: string]: INoteListNote
 }
@@ -11,6 +13,9 @@ export interface INoteListNote {
     insulin?: number,
     longInsulin?: number,
     commentary?: string
+    glycemiaType?: GlycemiaMeasuringType,
+    carbsUnitWeight?: CarbsUnitWeightType
+    carbsMeasuringType?: CarbsMeasuringType
 }
 
 export interface INoteListByDay {

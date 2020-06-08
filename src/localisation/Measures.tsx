@@ -1,4 +1,4 @@
-import { GlycemiaMeasuringType, CarbMeasuringType } from '../model/IUserDiabetesProperties'
+import { GlycemiaMeasuringType, CarbsMeasuringType, CarbsUnitWeightType } from '../model/IUserDiabetesProperties'
 import i18n from 'i18n-js';
 import { NoteValueType } from '../model/INoteList';
 
@@ -66,17 +66,27 @@ export class Measures {
     }
   }
 
-  static getDefaultCarbMeasuringType(
-    existingCarbMeasuringType?: CarbMeasuringType
+  static getDefaultCarbsUnitWeightType(
+    existingCarbsUnitWeightType?: CarbsUnitWeightType
   ) {
-    if (existingCarbMeasuringType) return existingCarbMeasuringType;
+    if (existingCarbsUnitWeightType) return existingCarbsUnitWeightType;
+
+    if (i18n.locale === 'ru') return CarbsUnitWeightType.TWELVE;
+
+    return CarbsUnitWeightType.TEN;
+  }
+
+  static getDefaultCarbsMeasuringType(
+    existingCarbsMeasuringType?: CarbsMeasuringType
+  ) {
+    if (existingCarbsMeasuringType) return existingCarbsMeasuringType;
 
     if (
       i18n.locale === 'ru' ||
       i18n.locale === 'de'
-    ) return CarbMeasuringType.BREAD_UNITS;
+    ) return CarbsMeasuringType.BREAD_UNITS;
 
-    return CarbMeasuringType.CARBOHYDRATES;
+    return CarbsMeasuringType.CARBOHYDRATES;
   }
 
   static getDefaultGlucoseMeasuringType = (
@@ -93,7 +103,7 @@ export class Measures {
   static getStartIndex(
     valueKey: NoteValueType,
     existingGlycemiaMeasuringType?: GlycemiaMeasuringType,
-    existingCarbMeasuringType?: CarbMeasuringType
+    existingCarbsMeasuringType?: CarbsMeasuringType
   ) {
     switch (valueKey) {
       case NoteValueType.GLUCOSE:
@@ -104,9 +114,9 @@ export class Measures {
           : NORMAL_GLUCOSE_MG_DL;
 
       case NoteValueType.BREAD_UNITS:
-        const carbMeasuringType = this.getDefaultCarbMeasuringType(existingCarbMeasuringType);
+        const carbsMeasuringType = this.getDefaultCarbsMeasuringType(existingCarbsMeasuringType);
 
-        return carbMeasuringType === CarbMeasuringType.BREAD_UNITS
+        return carbsMeasuringType === CarbsMeasuringType.BREAD_UNITS
           ? NORMAL_BREAD_UNITS_MEAL
           : NORMAL_CARBOHYDRATES_MEAL;
     }
@@ -115,7 +125,7 @@ export class Measures {
   static getMeasuresOption(
     valueKey: NoteValueType,
     glycemiaMeasuringType: GlycemiaMeasuringType,
-    carbMeasuringType: CarbMeasuringType,
+    carbsMeasuringType: CarbsMeasuringType,
   ): IMeasuresOption {
 
     switch (valueKey) {
@@ -128,11 +138,11 @@ export class Measures {
         };
 
       case NoteValueType.BREAD_UNITS:
-        const buMeasuringType = this.getDefaultCarbMeasuringType(carbMeasuringType);
+        const buMeasuringType = this.getDefaultCarbsMeasuringType(carbsMeasuringType);
 
         return {
-          withDecimal: buMeasuringType === CarbMeasuringType.BREAD_UNITS,
-          startIndex: this.getStartIndex(valueKey, glycemiaMeasuringType, carbMeasuringType),
+          withDecimal: buMeasuringType === CarbsMeasuringType.BREAD_UNITS,
+          startIndex: this.getStartIndex(valueKey, glycemiaMeasuringType, carbsMeasuringType),
         }
 
       case NoteValueType.SHORT_INSULIN:

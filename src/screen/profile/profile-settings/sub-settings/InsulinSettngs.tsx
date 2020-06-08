@@ -24,7 +24,7 @@ export class InsulinSettingsComponent extends Component<Props> {
       >
         <Hat
           onBackPress={() => this.props.navigation.navigate('ProfileDiabetesSettings')}
-          title={i18n.t('carbohydrates_settings')}
+          title={i18n.t('insulin_settings')}
         />
         <View style={styles.scrollViewWrapWrap}>
           <View style={styles.scrollViewWrap}>

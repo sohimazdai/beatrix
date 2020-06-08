@@ -64,7 +64,7 @@ function GlycemiaTypeSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {GlycemiaMeasuringType.MG_DL}
+                                        {i18n.t(GlycemiaMeasuringType.MG_DL)}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -87,7 +87,7 @@ function GlycemiaTypeSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {GlycemiaMeasuringType.MMOL_L}
+                                        {i18n.t(GlycemiaMeasuringType.MMOL_L)}
                                     </Text>
                                 </TouchableOpacity>
                             </View>

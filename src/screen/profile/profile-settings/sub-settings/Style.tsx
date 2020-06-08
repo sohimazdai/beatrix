@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
         overflow: 'hidden',
+        paddingBottom: 80,
     },
     scrollView: {
         height: '100%',

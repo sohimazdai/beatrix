@@ -35,7 +35,7 @@ export function ChartWrap(props: ChartWrapProps) {
         currentDate,
         noteList,
         selectedDotId,
-        config
+        config,
     } = props;
 
     let basicDotsData: ChartDotsData = React.useMemo(
