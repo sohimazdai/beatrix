@@ -20,6 +20,9 @@ import { IModal } from '../model/IModal';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translate from '../localisation/Translate';
+import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
+import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
+import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
 
 i18n.locale = Localization.locale.slice(0, 2);
 translate();
@@ -74,7 +77,16 @@ const ProfileScreenStack = createStackNavigator(
         },
         ProfileDiabetesSettings: {
             screen: ProfileScreenDiabetesSettings,
-        }
+        },
+        GlycemiaSettings: {
+            screen: GlycemiaSettings,
+        },
+        CarbohydratesSettings: {
+            screen: CarbohydratesSettngs,
+        },
+        InsulinSettings: {
+            screen: InsulinSettings,
+        },
     },
     {
         headerMode: 'none'

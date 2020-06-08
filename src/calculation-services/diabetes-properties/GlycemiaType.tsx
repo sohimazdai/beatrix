@@ -1,4 +1,4 @@
-export const MGDLtoMMOLrelation = 18.15;
+export const MGDLtoMMOLrelation = 18.015;
 
 export function convertMGDLtoMMOLL(mgdl) {
   return mgdl / MGDLtoMMOLrelation;

@@ -31,7 +31,7 @@ import { appAnalytics } from '../../../app/Analytics';
 import { NumberScroller } from '../number-scroller/NumberScroller';
 import i18n from 'i18n-js';
 import { Measures } from '../../../localisation/Measures';
-import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
+import { IUserDiabetesProperties, CarbMeasuringType } from '../../../model/IUserDiabetesProperties';
 
 interface Props {
     interactive?: IInteractive
@@ -196,11 +196,23 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
     }
 
     renderInputByType(name, value) {
-        const { userDiabetesProperties } = this.props;
+        const { userDiabetesProperties: { glycemiaMeasuringType, carbMeasuringType } } = this.props;
+        let postfix = '';
+        if (name === NoteValueType.GLUCOSE) {
+            postfix = ' ' + Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType)
+        }
+
+        if (name === NoteValueType.BREAD_UNITS) {
+            const carbMeasureType = Measures.getDefaultCarbMeasuringType(carbMeasuringType);
+            const carbUnits = carbMeasureType === CarbMeasuringType.BREAD_UNITS
+                ? i18n.t('carb_units')
+                : i18n.t('carb_gram')
+            postfix = ' ' + carbUnits;
+        }
 
         const obj = { [`${name}`]: null }
         const displayedValue = value
-            ? ': ' + value
+            ? ': ' + value + postfix
             : ': ' + i18n.t('not_selected');
 
         return (
@@ -212,7 +224,11 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                     <NumberScroller
                         key={name}
                         selectedNumber={value}
-                        measuresOption={Measures.getMeasuresOption(name, userDiabetesProperties)}
+                        measuresOption={Measures.getMeasuresOption(
+                            name,
+                            glycemiaMeasuringType,
+                            carbMeasuringType,
+                        )}
                         onNumberClick={(number) => {
                             obj[`${name}`] = number;
                             this.setState(obj as any)

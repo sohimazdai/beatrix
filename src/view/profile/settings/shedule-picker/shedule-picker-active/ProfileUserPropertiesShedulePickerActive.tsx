@@ -8,6 +8,7 @@ import { TouchableOpacity, Text, View } from 'react-native';
 import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { styles } from './Style';
 import { createUpdateUserSheduleAction } from '../../../../../store/service/user/UpdateSheduleSaga';
+import i18n from 'i18n-js';
 
 interface Props {
     sheduleKey?: SheduleKeyType
@@ -130,16 +131,16 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
         for (let i = 0; i <= 24; i++) {
             const sheduleItem = this.state.newShedule[i];
             if (!currentFrom && (!sheduleItem || (sheduleItem && !sheduleItem[this.sheduleKey]))) {
-                currentFrom = "с " + i;
+                currentFrom = i18n.t('since') + ' ' + i;
             } else if (currentFrom && sheduleItem && sheduleItem[this.sheduleKey]) {
                 rangeThatNeedToWriteMore += rangeThatNeedToWriteMore ?
-                    ", " + currentFrom + " до " + i :
-                    " " + currentFrom + " до " + i;
+                    ", " + currentFrom + " " + i18n.t('until') + " " + i :
+                    " " + currentFrom + " " + i18n.t('until') + " " + i;
                 currentFrom = "";
             } else if (currentFrom && i === 24) {
                 rangeThatNeedToWriteMore += rangeThatNeedToWriteMore ?
-                    ", " + currentFrom + " до " + (i) :
-                    " " + currentFrom + " до " + (i);
+                    ", " + currentFrom + " " + i18n.t('until') + " " + (i) :
+                    " " + currentFrom + " " + i18n.t('until') + " " + (i);
                 currentFrom = "";
             }
         }
@@ -192,9 +193,9 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
     renderInputTitles() {
         return this.shedule.length > 0 && (
             <View style={styles.pickersTitleView}>
-                <Text style={styles.pickersItemTitle}>{'С(часов)'}</Text>
-                <Text style={styles.pickersItemTitle}>{'До(часов)'}</Text>
-                <Text style={styles.pickersItemTitle}>Значение</Text>
+                <Text style={styles.pickersItemTitle}>{i18n.t('shedule_since')}</Text>
+                <Text style={styles.pickersItemTitle}>{i18n.t('shedule_until')}</Text>
+                <Text style={styles.pickersItemTitle}>{i18n.t('shedule_value')}</Text>
                 <Text style={styles.pickersItemTitle}></Text>
             </View>
         )
@@ -222,7 +223,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
             onPress={this.onAddPress}
         >
             <Text style={{ fontSize: 16 }}>
-                {'Добавить'}
+                {i18n.t('add')}
             </Text>
         </TouchableOpacity>
     }
@@ -234,7 +235,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
                 onPress={this.props.onClose}
             >
                 <Text style={{ fontSize: 16 }}>
-                    {'Отменить'}
+                    {i18n.t('cancel')}
                 </Text>
             </TouchableOpacity>
         )
@@ -243,7 +244,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
     renderReangeThatNeedToFill() {
         return !!this.rangeThatNeedToWriteMore &&
             <Text style={styles.rangeThatNeedToWriteMore}>
-                Необходимо заполнить временные промежутки:
+                {i18n.t('need_to_fill_time_period') + ': '}
                 {this.rangeThatNeedToWriteMore}
             </Text>
     }
@@ -255,7 +256,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
                 onPress={this.onSaveSheduleClick}
             >
                 <Text style={{ fontSize: 16 }}>
-                    {'Сохранить'}
+                    {i18n.t('save')}
                 </Text>
             </TouchableOpacity>
     }

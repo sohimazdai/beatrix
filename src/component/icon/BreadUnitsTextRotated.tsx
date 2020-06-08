@@ -1,6 +1,5 @@
 import React from 'react'
 import Svg, { Path } from 'react-native-svg'
-import { Measures } from '../../localisation/Measures'
 import i18n from 'i18n-js';
 
 export const BreadUnitsTextRotated = props => {

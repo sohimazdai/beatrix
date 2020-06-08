@@ -2,12 +2,29 @@ import { StyleSheet } from "react-native";
 import { shadowOptions } from "../../../../constant/ShadowOptions";
 
 export const styles = StyleSheet.create({
-    profileView: {
+    keyboardAvoidingView: {
         height: '100%',
         width: '100%',
         display: 'flex',
 
         flexDirection: 'column',
+        justifyContent: 'flex-start',
+        backgroundColor: "#DDDDDD"
+    },
+    scrollViewWrapWrap: {
+        backgroundColor: "#2E3858",
+    },
+    scrollViewWrap: {
+        backgroundColor: "#2E3858",
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        overflow: 'hidden',
+    },
+    scrollView: {
+        height: '100%',
+        paddingTop: 10,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
         backgroundColor: "#DDDDDD"
     },
     targetGlycemiaView: {

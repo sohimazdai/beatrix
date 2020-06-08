@@ -8,9 +8,9 @@ export enum GlycemiaMeasuringType {
     MMOL_L = 'mmol/L'
 };
 
-export enum BreadUnitsMeasuringType {
+export enum CarbMeasuringType {
     BREAD_UNITS = 'breadUnits',
-    CARBOHYDRATES = 'CARBOHYDRATES',
+    CARBOHYDRATES = 'carbohydrates',
 }; 
 
 export interface IUserDiabetesPropertiesDayTimeValue {
@@ -26,4 +26,5 @@ export interface IUserDiabetesProperties {
     targetGlycemia?: number;
     shortInsulinType?: ShortInsulinType
     glycemiaMeasuringType?: GlycemiaMeasuringType
+    carbMeasuringType?: CarbMeasuringType
 }

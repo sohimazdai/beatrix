@@ -1,6 +1,7 @@
 import i18n from 'i18n-js';
 
 export default function translate() {
+  /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
   i18n.translations.en = {
     // AUTH
     looking_for_active_session: 'Looking for active session',
@@ -75,6 +76,9 @@ export default function translate() {
     fill_at_least_one_parameter: 'Fill at least one parameter',
     delete: 'Delete',
 
+    carb_gram: 'grams',
+    carb_units: 'units',
+
     // CHARTS
     charts: 'Charts',
     chart_period_day: 'Day',
@@ -135,12 +139,32 @@ export default function translate() {
     shedule_clear: 'Clear',
 
     insulin_sensitivity_factor: 'Insulin sensitivity factor (ISF)',
-    insulin_sensitivity_factor_description: 'Insulin sensitivity factor, or correction factor, refers to the number of %glycemia_type% by which blood sugar levels fall when a person takes 1 unit of insulin.',
+    insulin_sensitivity_factor_description: 'Insulin sensitivity factor, or correction factor, refers to the number of %glycemia_type% by which blood sugar levels fall when a person takes 1 unit of insulin',
     insulin_sensitivity_factor_hint: 'Define IFS for various time periods',
 
     insulin_to_carb_rate: 'Insulin-to-carb ratio',
-    insulin_to_carb_rate_description: 'The insulin-to-carb ratio means you will take 1 unit of insulin for a certain amount of carbohydrate.',
-    insulin_to_carb_rate_hint: 'Define insulin-ration-carb for various time periods',
+    insulin_to_carb_rate_description: 'The insulin-to-carb ratio means you will take 1 unit of insulin for a certain amount of carbohydrate',
+    insulin_to_carb_rate_hint: 'Define insulin-to-carb for various time periods',
+
+    since: 'since',
+    until: 'until',
+    save: 'Save',
+    need_to_fill_time_period: 'Time gaps required',
+
+    profile_change: 'change',
+
+    carb_unit_title: 'Carbohydrates unit',
+    carb_unit_description: 'Indicate which carbohydrate counting system you use',
+
+    breadUnits_measuring: 'Carbs unit (10-12 grams)',
+    carbohydrates_measuring: 'Carbohydrates in grams',
+
+    glycemia_settings: 'Glycemia settings',
+    glycemia_settings_description: 'Change your target glycemia and type of measurement for your meter',
+    carbohydrates_settings: 'Carbs settings',
+    carbohydrates_settings_description: 'Indicate how you count carbohydrates',
+    insulin_settings: 'Insulin parameters',
+    insulin_settings_description: "Fill out and use your doctor's recommended dosage of insulin when creating notes",
 
     // GENERAL
     cancel: 'Cancel',
@@ -148,6 +172,9 @@ export default function translate() {
     are_you_sure: 'Are you sure?',
     ok: 'OK',
   };
+  /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
+
+  /* 🇷🇺 */
   i18n.translations.ru = {
     // AUTH
     looking_for_active_session: 'Поиск активной сессии',
@@ -222,6 +249,9 @@ export default function translate() {
     fill_at_least_one_parameter: 'Введите хотя бы один параметр',
     delete: 'Удалить',
 
+    carb_gram: 'грамм',
+    carb_units: 'ХЕ',
+
     //CHARTS
     charts: 'Графики',
     chart_period_day: 'День',
@@ -274,6 +304,12 @@ export default function translate() {
     glycemia_unit: 'Система измерений глюкометра',
     glycemia_unit_description: 'Укажите какой системой измерений сахара крови вы пользуетесь',
 
+    carb_unit_title: 'Система подсчета углеводов',
+    carb_unit_description: 'Укажите какой системой подсчета углеводов вы пользуетесь',
+
+    breadUnits_measuring: 'ХЕ',
+    carbohydrates_measuring: 'Углеводы в граммах',
+
     shedule_since: 'С(часов)',
     shedule_until: 'До(часов)',
     shedule_value: 'Значение',
@@ -290,10 +326,25 @@ export default function translate() {
     insulin_to_carb_rate_description: 'Показывает количество единиц инсулина необходимого для усвоения %breadUnits_type%',
     insulin_to_carb_rate_hint: 'Укажите ваш УК для различных промежутков времени',
 
+    since: 'с',
+    until: 'до',
+    save: 'Сохранить',
+    need_to_fill_time_period: 'Необходимо заполнить временные промежутки',
+
+    profile_change: 'Изменить',
+
+    glycemia_settings: 'Настройки сахара крови',
+    glycemia_settings_description: 'Измените целевую гликемию и тип измерений вашего глюкометра',
+    carbohydrates_settings: 'Параметры учета углеводов',
+    carbohydrates_settings_description: 'Укажите как вы считаете углеводы',
+    insulin_settings: 'Параметры инсулина',
+    insulin_settings_description: 'Укажите ваш рекомендуемый инсулин "на понижение" и "на еду"',
+
     // GENERAL
     cancel: 'Отмена',
     not_selected: 'не выбрано',
     are_you_sure: 'Вы уверены?',
     ok: 'OK',
   }
+  /* 🇷🇺 */
 } 
