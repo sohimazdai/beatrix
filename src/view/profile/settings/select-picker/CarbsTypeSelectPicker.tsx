@@ -116,8 +116,7 @@ export const CarbsTypeSelectPickerConnect = connect(
         onPropertiesChange: (
             properties: IUserDiabetesProperties,
         ) => {
-            dispatch(createUserDiabetesPropertiesChangeAction(properties));
-            dispatch(createUpdateUserDiabetesPropertiesAction(stateProps.userDiabetesProperties));
+            dispatch(createUpdateUserDiabetesPropertiesAction(properties));
         },
     })
 

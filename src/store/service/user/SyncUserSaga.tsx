@@ -1,11 +1,12 @@
 import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
-import { UserApi } from '../../../api/userApi';
+import { UserApi } from '../../../api/UserApi';
 import { IUser } from '../../../model/IUser';
 import { IStorage } from '../../../model/IStorage';
 import { createSyncNotesAction } from '../note/SyncNotesSaga';
 import { createReplaceShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
+import { createUpdateUserDiabetesPropertiesAction } from './UpdateUserDiabetesPropertiesSaga'
 import { handleError } from '../../../app/ErrorHandler';
 import { appAnalytics } from '../../../app/Analytics';
 import { batchActions } from 'redux-batched-actions';
@@ -41,14 +42,9 @@ function* syncUser({ payload }: SyncUserAction) {
         appAnalytics.setUser(payload.user.id);
 
         if (state.app.serverAvailable) {
-            const syncData = yield call(UserApi.syncUser, payload.user);
-            yield put(
-                batchActions([
-                    createReplaceShedule(syncData.data.shedule),
-                    createUserDiabetesPropertiesChangeAction(syncData.data.properties),
-                    createSyncNotesAction()
-                ])
-            );
+            yield call(UserApi.syncUser, payload.user);
+            yield put(createSyncNotesAction());
+            yield put(createUpdateUserDiabetesPropertiesAction());
         }
 
         yield put(createUserChangeAction({

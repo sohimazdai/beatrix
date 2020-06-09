@@ -7,6 +7,7 @@ import { IStorage } from '../../../../model/IStorage';
 import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { styles } from './Style';
 import i18n from 'i18n-js';
+import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -105,7 +106,7 @@ export const GlycemiaTypeSelectPickerConnect = connect(
     }),
     (dispatch) => ({
         onPropertiesChange: (properties: IUserDiabetesProperties) => {
-            dispatch(createUserDiabetesPropertiesChangeAction(properties))
+            dispatch(createUpdateUserDiabetesPropertiesAction(properties));
         },
     })
 )(GlycemiaTypeSelectPicker)

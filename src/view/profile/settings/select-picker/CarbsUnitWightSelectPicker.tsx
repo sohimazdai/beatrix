@@ -8,6 +8,7 @@ import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modu
 import { styles } from './Style';
 import i18n from 'i18n-js';
 import { Measures } from '../../../../localisation/Measures';
+import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -132,7 +133,7 @@ export const CarbsUnitWeightSelectPickerConnect = connect(
     }),
     (dispatch) => ({
         onPropertiesChange: (properties: IUserDiabetesProperties) => {
-            dispatch(createUserDiabetesPropertiesChangeAction(properties))
+            dispatch(createUpdateUserDiabetesPropertiesAction(properties));
         },
     })
 )(CarbsUnitWeightSelectPicker)

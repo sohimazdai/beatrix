@@ -1,7 +1,7 @@
 import { put, takeLatest, call, select } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { handleErrorSilently } from '../../../app/ErrorHandler';
-import { UserApi } from '../../../api/userApi';
+import { UserApi } from '../../../api/UserApi';
 import { IStorage } from '../../../model/IStorage';
 
 const ACTION_TYPE = 'CLEAR_INSTALLATION_ID';
