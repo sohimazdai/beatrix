@@ -7,7 +7,7 @@ import i18n from 'i18n-js';
 import { IInteractive } from '../../../../model/IInteractive';
 import { Hat } from '../../../../component/hat/Hat';
 import { IStorage } from '../../../../model/IStorage';
-import { ProfileSettingsShedulePickerConnect } from '../../../../view/profile/settings/shedule-picker/ProfileSettingsShedulePicker';
+import { ProfileSettingsSheduleTableConnect } from '../../../../view/profile/settings/shedule-picker/ProfileSettingsSheduleTable';
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
 
 interface Props {
@@ -29,10 +29,10 @@ export class InsulinSettingsComponent extends Component<Props> {
         <View style={styles.scrollViewWrapWrap}>
           <View style={styles.scrollViewWrap}>
             <ScrollView style={styles.scrollView}>
-              <ProfileSettingsShedulePickerConnect
+              <ProfileSettingsSheduleTableConnect
                 sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
               />
-              <ProfileSettingsShedulePickerConnect
+              <ProfileSettingsSheduleTableConnect
                 sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
               />
             </ScrollView>

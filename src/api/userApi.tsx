@@ -20,7 +20,12 @@ export class UserApi {
         return api.post('user/shedule', { userId, shedule })
     }
 
-    static syncUserProperties(userId: string, properties: IUserDiabetesProperties, idsToConvert: string[]) {
-        return api.post('/user/properties/sync', { userId, properties, idsToConvert })
+    static syncUserProperties(
+        userId: string, 
+        properties: IUserDiabetesProperties, 
+        idsToConvert: string[],
+        shedule: IUserPropertiesShedule,
+    ) {
+        return api.post('/user/properties/sync', { userId, properties, idsToConvert, shedule })
     }
 }

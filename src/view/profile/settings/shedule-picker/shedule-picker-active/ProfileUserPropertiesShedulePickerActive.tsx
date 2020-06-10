@@ -9,6 +9,7 @@ import { createChangeInteractive } from '../../../../../store/modules/interactiv
 import { styles } from './Style';
 import { createUpdateUserSheduleAction } from '../../../../../store/service/user/UpdateSheduleSaga';
 import i18n from 'i18n-js';
+import { InteractiveUserPropertiesShedulePopupType } from '../../../../../model/IInteractive';
 
 interface Props {
     sheduleKey?: SheduleKeyType
@@ -75,7 +76,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
     }
 
     onDeleteItem = (range: IUserDiabetesPropertiesDayTimeValue) => {
-        const editedShedule = this.state.newShedule;
+        const editedShedule = { ...this.state.newShedule };
         for (var i = range.since; i < range.to; i++) {
             delete editedShedule[i];
         }
@@ -85,7 +86,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
     }
 
     onApplyChange = (range: IUserDiabetesPropertiesDayTimeValue) => {
-        const newShedule = this.state.newShedule;
+        const newShedule = { ...this.state.newShedule };
         for (var i = range.since; i < range.to; i++) {
             newShedule[i] = {
                 id: i,

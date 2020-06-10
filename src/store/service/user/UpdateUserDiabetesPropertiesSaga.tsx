@@ -11,6 +11,7 @@ import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteList
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { createSyncNotesAction } from '../note/SyncNotesSaga';
+import { createChangeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
 
 const ACTION_TYPE = "UPDATE_USER_DIABETES_PROPERTIES";
 
@@ -55,11 +56,16 @@ function* run(action) {
       const result = yield call(
         UserApi.syncUserProperties,
         state.user.id,
-        userDiabetesProperties,
+        {
+          ...state.userDiabetesProperties,
+          ...userDiabetesProperties
+        },
         idsToConvert,
+        state.userPropertiesShedule,
       );
 
-      yield put(createNoteListOneLevelDeepMerge(result.data));
+      yield put(createNoteListOneLevelDeepMerge(result.data.notes));
+      yield put(createChangeUserPropertiesShedule(result.data.shedule));
       yield put(createUserDiabetesPropertiesChangeAction(userDiabetesProperties));
       yield put(
         createUserChangeAction({

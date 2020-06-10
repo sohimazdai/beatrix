@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, KeyboardAvoidingView, Platform, View, Text } from 'react-native';
 import { GlycemiaTypeSelectPickerConnect } from '../../../view/profile/settings/select-picker/GlycemiaTypeSelectPicker';
 import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
-import { ProfileSettingsShedulePickerConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsShedulePicker';
+import { ProfileSettingsSheduleTableConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsSheduleTable';
 import { styles } from './Style';
 import { SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 import { Fader } from '../../../component/Fader';

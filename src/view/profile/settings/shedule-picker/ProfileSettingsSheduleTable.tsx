@@ -22,12 +22,30 @@ interface Props {
     clearShedule?: (sheduleKey: SheduleKeyType) => void
 }
 
-function ProfileSettingsShedulePicker(props: Props) {
-    const { userPropertiesShedule, sheduleKey } = props;
-    const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
-    Object.values(userPropertiesShedule).map((prop, index, array) => {
-        if (prop[sheduleKey] > 0) {
-            if (index === 0) {
+class ProfileSettingsSheduleTable extends React.Component<Props> {
+    get shedule() {
+        const { userPropertiesShedule, sheduleKey } = this.props;
+
+        const shedule: IUserDiabetesPropertiesDayTimeValue[] = [];
+
+        Object.values(userPropertiesShedule).map((prop, index, array) => {
+            if (prop[sheduleKey] > 0) {
+                if (index === 0) {
+                    shedule.push({
+                        since: prop.id,
+                        to: prop.id + 1,
+                        value: prop[sheduleKey],
+                        id: prop.id,
+                        needToSave: prop[sheduleKey] > 0 ? false : true
+                    })
+                    return;
+                }
+                if (prop[sheduleKey] === array[index - 1][sheduleKey] &&
+                    prop.id === array[index - 1].id + 1) {
+                    shedule[shedule.length - 1].to = prop.id + 1;
+                    return;
+                }
+
                 shedule.push({
                     since: prop.id,
                     to: prop.id + 1,
@@ -37,30 +55,18 @@ function ProfileSettingsShedulePicker(props: Props) {
                 })
                 return;
             }
-            if (prop[sheduleKey] === array[index - 1][sheduleKey] &&
-                prop.id === array[index - 1].id + 1) {
-                shedule[shedule.length - 1].to = prop.id + 1;
-                return;
-            }
+        });
 
-            shedule.push({
-                since: prop.id,
-                to: prop.id + 1,
-                value: prop[sheduleKey],
-                id: prop.id,
-                needToSave: prop[sheduleKey] > 0 ? false : true
-            })
-            return;
-        }
-    });
-
-    function sheduleTable() {
-        return shedule
-            .sort((a, b) => a.since - b.since)
-            .map(sheduleRow)
+        return shedule;
     }
 
-    function sheduleRow(sheduleItem: IUserDiabetesPropertiesDayTimeValue) {
+    renderSheduleTable() {
+        return this.shedule
+            .sort((a, b) => a.since - b.since)
+            .map(this.renderSheduleRow)
+    }
+
+    renderSheduleRow = (sheduleItem: IUserDiabetesPropertiesDayTimeValue) => {
         return (
             <View style={styles.sensitivityFactorTitleView} key={sheduleItem.id}>
                 <Text style={styles.sensitivityFactorItemTitle}>{sheduleItem.since}</Text>
@@ -70,8 +76,8 @@ function ProfileSettingsShedulePicker(props: Props) {
         )
     }
 
-    function sheduleTableTitle() {
-        return shedule.length > 0 && (
+    renderSheduleTableTitles = () => {
+        return this.shedule.length > 0 && (
             <View style={styles.sensitivityFactorTitleView}>
                 <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_since')}</Text>
                 <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_until')}</Text>
@@ -80,24 +86,24 @@ function ProfileSettingsShedulePicker(props: Props) {
         )
     }
 
-    function openPopupButton() {
+    renderChangeButton = () => {
         return (
             <TouchableOpacity
                 style={styles.insulinSensitiveFactorPickerTouchable}
-                onPress={() => props.onShedulePopupCall(props.sheduleKey)}
+                onPress={() => this.props.onShedulePopupCall(this.props.sheduleKey)}
             >
                 <Text style={{ fontSize: 16 }}>
-                    {shedule.length > 0 ? i18n.t('shedule_change') : i18n.t('shedule_add')}
+                    {this.shedule.length > 0 ? i18n.t('shedule_change') : i18n.t('shedule_add')}
                 </Text>
             </TouchableOpacity>
         )
     }
 
-    function clearSheduleButton() {
+    renderClearSheduleButton() {
         return (
             <TouchableOpacity
                 style={styles.clearSheduleButton}
-                onPress={() => props.clearShedule(props.sheduleKey)}
+                onPress={() => this.props.clearShedule(this.props.sheduleKey)}
             >
                 <Text style={{ fontSize: 16, color: 'white' }}>
                     {i18n.t('shedule_clear')}
@@ -106,8 +112,8 @@ function ProfileSettingsShedulePicker(props: Props) {
         )
     }
 
-    function getSettingTitle() {
-        switch (props.sheduleKey) {
+    get settingTitle() {
+        switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
                 return i18n.t('insulin_sensitivity_factor')
             case SheduleKeyType.CARBOHYDRATE_RATIO:
@@ -115,13 +121,13 @@ function ProfileSettingsShedulePicker(props: Props) {
         }
     }
 
-    function getDescription() {
-        const { userDiabetesProperties: { glycemiaMeasuringType } } = props;
+    get description() {
+        const { userDiabetesProperties: { glycemiaMeasuringType } } = this.props;
         const glycemiaType = Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType);
         const glycemiaTypeString = i18n.t(glycemiaType);
         const glycemiaTypeStringLong = i18n.t(glycemiaType + '_long');
 
-        switch (props.sheduleKey) {
+        switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
                 return i18n.t('insulin_sensitivity_factor_description')
                     .replace(
@@ -133,41 +139,44 @@ function ProfileSettingsShedulePicker(props: Props) {
         }
     }
 
-    function getHint() {
-        switch (props.sheduleKey) {
+    get hint() {
+        switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
                 return i18n.t('insulin_sensitivity_factor_hint');
             case SheduleKeyType.CARBOHYDRATE_RATIO:
                 return i18n.t('insulin_to_carb_rate_hint');
         }
     }
+    render() {
+        const { activeUserPropertiesShedulePopupType, sheduleKey } = this.props;
 
-    return (
-        <ProfilePicker
-            title={getSettingTitle()}
-            description={getDescription()}
-            hint={getHint()}
-        >
-            <View>
-                <View style={styles.sensitivityFactorView}>
-                    {props.activeUserPropertiesShedulePopupType !== props.sheduleKey
-                        ? <>
-                            {sheduleTableTitle()}
-                            {sheduleTable()}
-                            <View style={styles.buttons}>
-                                {shedule.length > 0 && clearSheduleButton()}
-                                {openPopupButton()}
-                            </View>
-                        </>
-                        : <ProfileUserPropertiesShedulePickerActiveConnect />
-                    }
+        return (
+            <ProfilePicker
+                title={this.settingTitle}
+                description={this.description}
+                hint={this.hint}
+            >
+                <View>
+                    <View style={styles.sensitivityFactorView}>
+                        {activeUserPropertiesShedulePopupType !== sheduleKey
+                            ? <>
+                                {this.renderSheduleTableTitles()}
+                                {this.renderSheduleTable()}
+                                <View style={styles.buttons}>
+                                    {this.shedule.length > 0 && this.renderClearSheduleButton()}
+                                    {this.renderChangeButton()}
+                                </View>
+                            </>
+                            : <ProfileUserPropertiesShedulePickerActiveConnect />
+                        }
+                    </View>
                 </View>
-            </View>
-        </ProfilePicker>
-    )
+            </ProfilePicker>
+        )
+    }
 }
 
-export const ProfileSettingsShedulePickerConnect = connect(
+export const ProfileSettingsSheduleTableConnect = connect(
     (state: IStorage) => ({
         userPropertiesShedule: state.userPropertiesShedule,
         userDiabetesProperties: state.userDiabetesProperties,
@@ -183,4 +192,4 @@ export const ProfileSettingsShedulePickerConnect = connect(
             dispatch(createClearSheduleByKeyType(sheduleKey))
         }
     })
-)(ProfileSettingsShedulePicker)
+)(ProfileSettingsSheduleTable)
