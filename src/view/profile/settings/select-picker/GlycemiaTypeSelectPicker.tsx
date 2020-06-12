@@ -10,6 +10,7 @@ import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/serv
 import { i18nGet } from '../../../../localisation/Translate';
 import { Measures } from '../../../../localisation/Measures';
 import { Color } from '../../../../constant/Color';
+import { callSyncParametersAlert } from '../../modules/call-sync-parameters-alert';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -107,7 +108,9 @@ export const GlycemiaTypeSelectPickerConnect = connect(
     }),
     (dispatch) => ({
         onPropertiesChange: (properties: IUserDiabetesProperties) => {
-            dispatch(createUpdateUserDiabetesPropertiesAction(properties));
+            callSyncParametersAlert(
+                () => dispatch(createUpdateUserDiabetesPropertiesAction(properties))
+            );
         },
     })
 )(GlycemiaTypeSelectPicker)

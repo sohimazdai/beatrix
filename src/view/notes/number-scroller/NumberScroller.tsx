@@ -4,12 +4,16 @@ import Number from './Number';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
-import { Dimensions } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { IMeasuresOption } from '../../../localisation/Measures';
 
 const PORTION = 50;
 const LENGTH = 70;
 const LENGTH_WITH_SEPARATOR = 72;
+
+const DECIMAL_LENGTH = 40;
+const DECIMAL_LENGTH_WITH_SEPARATOR = 42;
+const DECIMAL_MIDDLE_NUMBER_INDEX = 5;
 
 interface Props {
   selectedNumber?: number;
@@ -28,13 +32,9 @@ export class Component extends React.Component<Props, State> {
 
   state = {
     numbers: [],
-    numbersCount: this.props.measuresOption.withDecimal
-      ? this.props.selectedNumber
-        ? this.props.selectedNumber * 2 * 10
-        : this.props.measuresOption.startIndex * 2 * 10
-      : this.props.selectedNumber
-        ? this.props.selectedNumber * 2
-        : this.props.measuresOption.startIndex * 2,
+    numbersCount: this.props.selectedNumber
+      ? this.props.selectedNumber * 2 * 10
+      : this.props.measuresOption.startIndex * 2 * 10
   }
 
   get numbers(): number[] {
@@ -48,6 +48,32 @@ export class Component extends React.Component<Props, State> {
     return numbers;
   }
 
+  get decimalNumbers(): number[] {
+    let numbers = [];
+    for (let i = 0; i <= 9; i++) {
+      numbers.push(i / 10);
+    }
+
+    return numbers;
+  }
+
+  get selectedDecimal() {
+    const { selectedNumber } = this.props;
+
+    const decimalSelected = Math.round((selectedNumber - Math.floor(selectedNumber)) * 10) / 10;
+
+    return decimalSelected;
+  }
+
+  get selectedNatural() {
+    const { selectedNumber } = this.props;
+
+    const naturalSelected = selectedNumber - this.selectedDecimal;
+
+    return naturalSelected;
+  }
+
+
   addNumbers = () => {
     const { numbersCount } = this.state;
 
@@ -56,56 +82,126 @@ export class Component extends React.Component<Props, State> {
 
   get initialIndex() {
     const { selectedNumber, measuresOption } = this.props;
-    const { startIndex, withDecimal } = measuresOption;
-
-    const startIndexWithDecimal = withDecimal ? startIndex * 10 : startIndex;
-    const selectedNumberWithDecimal = withDecimal ? selectedNumber * 10 : selectedNumber;
+    const { startIndex } = measuresOption;
 
     const itemsOnScreen = Dimensions.get('screen').width / LENGTH_WITH_SEPARATOR;
     const initialOfsset = Math.floor(itemsOnScreen / 2);
 
-    const isPossibleToApplyOffset = selectedNumberWithDecimal > initialOfsset;
-    const newSelectedNumber = isPossibleToApplyOffset && selectedNumberWithDecimal
-      ? selectedNumberWithDecimal - initialOfsset
-      : selectedNumberWithDecimal;
+    const isPossibleToApplyOffset = selectedNumber > initialOfsset;
+    const newSelectedNumber = isPossibleToApplyOffset && selectedNumber
+      ? selectedNumber - initialOfsset
+      : selectedNumber;
 
 
     const initialIndex = newSelectedNumber
       ? newSelectedNumber
-      : startIndexWithDecimal - initialOfsset;
+      : startIndex - initialOfsset;
 
     return initialIndex;
   }
 
+  get initialDecimalIndex() {
+    const { selectedNumber } = this.props;
+
+    const decimalSelected = Math.round((selectedNumber - Math.floor(selectedNumber)) * 10) / 10;
+
+    const itemsOnScreen = Dimensions.get('screen').width / DECIMAL_LENGTH_WITH_SEPARATOR;
+    const initialOfsset = Math.floor(itemsOnScreen / 2);
+
+    const isPossibleToApplyOffset = decimalSelected > initialOfsset;
+    const newSelectedNumber = isPossibleToApplyOffset && decimalSelected
+      ? decimalSelected - initialOfsset
+      : decimalSelected;
+
+
+    const initialIndex = newSelectedNumber
+      ? newSelectedNumber
+      : DECIMAL_MIDDLE_NUMBER_INDEX - initialOfsset;
+
+    return initialIndex;
+  }
+
+  onDecimalNumberClick(decimal: number) {
+    const { onNumberClick } = this.props;
+
+    if (this.selectedDecimal === decimal) {
+      onNumberClick(this.selectedNatural);
+
+      return;
+    }
+
+    onNumberClick(this.selectedNatural + decimal);
+  }
+
+  onNaturalNumberClick(natural: number) {
+    const { onNumberClick } = this.props;
+
+    if (this.selectedNatural === natural) {
+      onNumberClick(0);
+
+      return;
+    }
+
+    onNumberClick(this.selectedDecimal + natural);
+  }
+
+
   render() {
-    const { onNumberClick, selectedNumber, measuresOption } = this.props;
+    const { onNumberClick, measuresOption } = this.props;
     const { withDecimal } = measuresOption;
 
     return (
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
+      <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
 
-        ref={(fl) => this.flatListRef = fl}
+          ref={(fl) => this.flatListRef = fl}
 
-        data={this.numbers}
-        renderItem={({ item }) => (
-          <Number
-            value={withDecimal ? item / 10 : item}
-            isSelected={selectedNumber === (withDecimal ? item / 10 : item)}
-            onClick={onNumberClick}
+          data={this.numbers}
+          renderItem={({ item }) => (
+            <Number
+              value={item}
+              isSelected={this.selectedNatural === (item)}
+              onClick={() => this.onNaturalNumberClick(item)}
+            />
+          )}
+          keyExtractor={item => item.toString()}
+
+          getItemLayout={(data, index) => (
+            { length: LENGTH, offset: LENGTH_WITH_SEPARATOR * index, index }
+          )}
+          initialScrollIndex={this.initialIndex}
+          onEndReached={this.addNumbers}
+          onEndReachedThreshold={0.5}
+        />
+        {withDecimal && (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            bounces={false}
+
+            ref={(fl) => this.flatListRef = fl}
+
+            data={this.decimalNumbers}
+            renderItem={({ item }) => (
+              <Number
+                isDecimal
+                value={item}
+                isSelected={this.selectedDecimal === item}
+                onClick={() => this.onDecimalNumberClick(item)}
+              />
+            )}
+            keyExtractor={item => item.toString()}
+
+            getItemLayout={(data, index) => (
+              { length: DECIMAL_LENGTH, offset: DECIMAL_LENGTH_WITH_SEPARATOR * index, index }
+            )}
+            initialScrollIndex={this.initialDecimalIndex}
           />
         )}
-        keyExtractor={item => item.toString()}
-
-        getItemLayout={(data, index) => (
-          { length: LENGTH, offset: LENGTH_WITH_SEPARATOR * index, index }
-        )}
-        initialScrollIndex={this.initialIndex}
-        onEndReached={this.addNumbers}
-        onEndReachedThreshold={0.5}
-      />
+      </View>
     )
   }
 }

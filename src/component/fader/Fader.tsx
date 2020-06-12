@@ -1,12 +1,23 @@
 import React from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import { Color } from '../../constant/Color';
+import { i18nGet } from '../../localisation/Translate';
+import { Loader } from '../loader/Loader';
+
+export enum FaderType {
+    SYNC = 'sync',
+    EMPTY = 'empty',
+}
 
 export interface FaderProps {
     hidden?: boolean;
-    children?: any
+    children?: any;
+    type?: FaderType;
 }
 
 export const Fader = (props: FaderProps) => {
+    const { type } = props;
+
     const [opacity] = React.useState(new Animated.Value(0));
     const [isDisplay, setDisplay] = React.useState(false);
 
@@ -29,7 +40,11 @@ export const Fader = (props: FaderProps) => {
                 ...styles.FaderView,
                 opacity: opacity,
             }}
-        />
+        >
+            {props.type !== FaderType.EMPTY && (
+                <Loader />
+            )}
+        </Animated.View>
     ) || null;
 }
 
@@ -46,5 +61,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    }
+        padding: 16,
+    },
 })

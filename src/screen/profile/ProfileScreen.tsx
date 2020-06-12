@@ -2,7 +2,7 @@ import React from 'react'
 import { Hat } from '../../component/hat/Hat'
 import { connect } from 'react-redux'
 import { IStorage } from '../../model/IStorage'
-import { View, StyleSheet, ScrollView, Text } from 'react-native'
+import { View, StyleSheet, ScrollView, Text, Alert } from 'react-native'
 import { ProfileItem } from '../../view/profile/ProfileItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { NavigationParams, NavigationScreenProp } from 'react-navigation'
@@ -84,20 +84,20 @@ export const ProfileScreenConnect = connect(
             ...stateProps,
             ...ownProps,
             onLogOut() {
-                const confirmData: IModalConfirm = {
-                    data: {
-                        questionText: i18nGet('are_you_sure'),
-                        positiveButtonText: i18nGet('leave'),
-                        negativeButtonText: i18nGet('cancel'),
+                Alert.alert(
+                    i18nGet('are_you_sure'),
+                    '',
+                    [
+                        {
+                            text: i18nGet('leave'),
+                            onPress: () => dispatch(createClearInstallationIdAction()),
+                        },
+                        {
+                            text: i18nGet('cancel'),
+                        },
+                    ]
+                );
 
-                        onPositiveClick: () => dispatch(createClearInstallationIdAction()),
-                    }
-                }
-                dispatch(createModalChangeAction({
-                    type: ModalType.CONFIRM,
-                    needToShow: true,
-                    ...confirmData
-                }))
                 appAnalytics.sendEvent(appAnalytics.events.LOG_OUT);
             }
         }

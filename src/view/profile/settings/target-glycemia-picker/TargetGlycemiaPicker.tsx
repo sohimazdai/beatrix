@@ -1,15 +1,17 @@
 import React from 'react';
+import { connect } from "react-redux";
+
 import { ProfilePicker } from "../../ProfilePicker";
 import { View, Text, Slider, Button } from "react-native";
-import { connect } from "react-redux";
+import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
 import { IStorage } from "../../../../model/IStorage";
 import { IUserDiabetesProperties, GlycemiaMeasuringType } from "../../../../model/IUserDiabetesProperties";
-import { styles } from './Style';
-import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
-import { Measures } from '../../../../localisation/Measures';
+
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 import { i18nGet } from '../../../../localisation/Translate';
+import { styles } from './Style';
 import { Color } from '../../../../constant/Color';
+import { Measures } from '../../../../localisation/Measures';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -28,13 +30,13 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
     const [blocked, setBlocked] = React.useState(true);
     const [targetGlycemiaInput, setTargetGlycemiaInput] = React.useState(targetGlycemia);
 
+    const isMounted = React.useRef(false);
+
     React.useEffect(() => {
-        if (glycemiaMeasuringType === GlycemiaMeasuringType.MMOL_L) {
+        if (isMounted) {
             onPropertiesChange({ targetGlycemia: normalGlycemia });
-        }
-        else if (glycemiaMeasuringType === GlycemiaMeasuringType.MG_DL) {
-            onPropertiesChange({ targetGlycemia: normalGlycemia });
-        }
+            setTargetGlycemiaInput(normalGlycemia);
+        } else isMounted.current = true;
     }, [glycemiaMeasuringType]);
 
     return (
@@ -45,10 +47,8 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
             {blocked
                 ? (
                     <View style={styles.blockedView}>
-                        <Text
-                            style={styles.shortInsulinTypePickerItemTextBlockedSelected}
-                        >
-                            {targetGlycemia}
+                        <Text style={styles.shortInsulinTypePickerItemTextBlockedSelected}>
+                            {targetGlycemia + ' ' + i18nGet(glycemiaMeasuringType)}
                         </Text>
                         <View
                             style={styles.changeButton}
@@ -61,7 +61,6 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                     </View>
                 ) : (
                     <View>
-
                         <View style={styles.targetGlycemiaView}>
                             <Text style={styles.targetGlycemiaSliderLimitsText}>
                                 {criticalGlycemia.min}
@@ -94,7 +93,7 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                                     setBlocked(true);
                                     onPropertiesChange({
                                         targetGlycemia: targetGlycemiaInput,
-                                    })
+                                    });
                                 }}
                             />
                         </View>

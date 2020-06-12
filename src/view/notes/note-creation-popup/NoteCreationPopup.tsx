@@ -6,13 +6,12 @@ import {
     TextInput,
     Keyboard,
     KeyboardAvoidingView,
+    Alert,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { INoteListNote, NoteValueType } from '../../../model/INoteList';
 import { createDeleteNoteInNoteListById } from '../../../store/modules/noteList/NoteListActionCreator';
-import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
-import { ModalType, IModalConfirm } from '../../../model/IModal';
 import { NoteDatePickerConnect } from '../../../view/notes/note-date-picker/NoteDatePicker';
 import { NoteTimePickerConnect } from '../../../view/notes/note-date-picker/NoteTimePicker';
 import { ValueTypePicker } from '../../../view/notes/value-type-picker/ValueTypePicker';
@@ -254,7 +253,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
 
     createNote = () => {
         const { userDiabetesProperties: {
-            glycemiaMeasuringType, carbsMeasuringType, carbsUnitWeightType
+            glycemiaMeasuringType, carbsMeasuringType
         } } = this.props;
 
         let note: INoteListNote = this.noteFromState;
@@ -275,15 +274,11 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 }));
                 this.props.hidePopup()
             } else {
-                this.props.dispatch(createModalChangeAction({
-                    type: ModalType.HINT,
-                    needToShow: true,
-                    data: {
-                        questionText: i18nGet('fill_at_least_one_parameter'),
-                        positiveButtonText: i18nGet('ok'),
-                    },
-                }))
+                Alert.alert(
+                    i18nGet('fill_at_least_one_parameter'),
+                )
             }
+
             this.setInitialState();
         }
     }
@@ -302,20 +297,19 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
     }
 
     onDeleteClick = () => {
-        const confirmData: IModalConfirm = {
-            data: {
-                questionText: i18nGet('are_you_sure'),
-                positiveButtonText: i18nGet('delete'),
-                negativeButtonText: i18nGet('cancel'),
-
-                onPositiveClick: () => this.deleteNote(),
-            }
-        }
-        this.props.dispatch(createModalChangeAction({
-            type: ModalType.CONFIRM,
-            needToShow: true,
-            ...confirmData
-        }))
+        Alert.alert(
+            i18nGet('are_you_sure'),
+            '',
+            [
+                {
+                    text: i18nGet('delete'),
+                    onPress: () => this.deleteNote(),
+                },
+                {
+                    text: i18nGet('cancel'),
+                },
+            ],
+        )
     }
 
     deleteNote = () => {

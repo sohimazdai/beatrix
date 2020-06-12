@@ -5,6 +5,8 @@ import { Color } from '../../../constant/Color';
 export const styles = StyleSheet.create({
     noteCreationView: {
         flex: 1,
+        maxHeight: Dimensions.get('screen').height * 0.8,
+        height: '100%',
         width: '100%',
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
@@ -15,6 +17,8 @@ export const styles = StyleSheet.create({
     },
     noteEditingView: {
         flex: 1,
+        maxHeight: Dimensions.get('screen').height * 0.8,
+        height: '100%',
         width: '100%',
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
@@ -121,7 +125,8 @@ export const styles = StyleSheet.create({
         color: Color.TEXT_DARK_GRAY
     },
     numberScrollWrapper: {
-        height: 200,
+        marginTop: 40,
+        height: 150,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',

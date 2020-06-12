@@ -176,6 +176,9 @@ export default function translate() {
     insulin_settings: 'Insulin parameters',
     insulin_settings_description: "Fill out and use your doctor's recommended dosage of insulin when creating notes",
 
+    we_will_recalculating_your_notes: 'We recalculate your data to fit the new measurement system',
+    please_do_not_close_app: 'Please do not close the application! It does not take much time',
+
     // GENERAL
     cancel: 'Cancel',
     not_selected: 'not selected',
@@ -183,6 +186,7 @@ export default function translate() {
 
     ok: 'OK',
     yes: 'Yes',
+    got_it: 'Ok. Got it',
 
     active_network_needed: 'You need to connect to the internet',
     server_is_not_available_try_to_restart_app: 'Server is currently unavailable. Try restarting the application.',
@@ -371,6 +375,8 @@ export default function translate() {
     insulin_settings: 'Параметры инсулина',
     insulin_settings_description: 'Укажите ваш рекомендуемый инсулин "на понижение" и "на еду"',
 
+    we_will_recalculating_your_notes: 'Мы пересчитаем ваши данные для соответствия новой системе измерений',
+    please_do_not_close_app: 'Пожалуйста, не закрывайте приложение! Это не займет много времени',
     // GENERAL
     cancel: 'Отмена',
     not_selected: 'не выбрано',
@@ -378,6 +384,7 @@ export default function translate() {
 
     ok: 'OK',
     yes: 'Да',
+    got_it: 'Ок, понятно',
 
     active_network_needed: 'Необходимо интернет-соединение',
     server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',

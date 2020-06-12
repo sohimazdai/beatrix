@@ -14,7 +14,7 @@ import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
-import { Fader } from '../component/Fader';
+import { Fader, FaderType } from '../component/fader/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
 import * as Localization from 'expo-localization';
@@ -23,7 +23,6 @@ import translate, { i18nGet } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
-import { UserPropertiesChangesWatcher } from '../app/UserPropertiesWatcher';
 
 i18n.locale = Localization.locale.slice(0, 2);
 translate();
@@ -54,10 +53,14 @@ const AuthedContainer = (props: AuthedContainerProps) => {
         props.user.syncLoading
     );
 
+    const faderType = props.user.syncLoading
+        ? FaderType.SYNC
+        : FaderType.EMPTY;
+
     return (
         <>
             <AuthedNavigatorContainer />
-            <Fader hidden={!faded} />
+            <Fader hidden={!faded} type={faderType} />
             <NoteCreationPopupConnect />
             <ConfirmPopupConnect />
             <ModalContentConnect />

@@ -12,6 +12,7 @@ import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/serv
 import { userDiabetesPropertiesReducer } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesReducer';
 import { i18nGet } from '../../../../localisation/Translate';
 import { IUser } from '../../../../model/IUser';
+import { callSyncParametersAlert } from '../../modules/call-sync-parameters-alert';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -46,7 +47,6 @@ function CarbsTypeSelectPicker(props: Props) {
                                 <Button
                                     title={i18nGet('profile_change')}
                                     onPress={() => setBlocked(false)}
-                                    disabled={props.syncLoading}
                                 />
                             </View>
                         </View>
@@ -113,10 +113,10 @@ export const CarbsTypeSelectPickerConnect = connect(
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => ({
         userDiabetesProperties: stateProps.userDiabetesProperties,
-        onPropertiesChange: (
-            properties: IUserDiabetesProperties,
-        ) => {
-            dispatch(createUpdateUserDiabetesPropertiesAction(properties));
+        onPropertiesChange: (properties: IUserDiabetesProperties) => {
+            callSyncParametersAlert(
+                () => dispatch(createUpdateUserDiabetesPropertiesAction(properties))
+            );
         },
     })
 

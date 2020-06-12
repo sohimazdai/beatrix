@@ -4,11 +4,11 @@ import { View, TouchableOpacity, Text, Button } from 'react-native';
 import { IUserDiabetesProperties, CarbsUnitWeightType, CarbsMeasuringType } from '../../../../model/IUserDiabetesProperties';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
-import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { styles } from './Style';
 import { Measures } from '../../../../localisation/Measures';
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 import { i18nGet } from '../../../../localisation/Translate';
+import { callSyncParametersAlert } from '../../modules/call-sync-parameters-alert';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -130,7 +130,9 @@ export const CarbsUnitWeightSelectPickerConnect = connect(
     }),
     (dispatch) => ({
         onPropertiesChange: (properties: IUserDiabetesProperties) => {
-            dispatch(createUpdateUserDiabetesPropertiesAction(properties));
+            callSyncParametersAlert(
+                () => dispatch(createUpdateUserDiabetesPropertiesAction(properties))
+            );
         },
     })
 )(CarbsUnitWeightSelectPicker)
