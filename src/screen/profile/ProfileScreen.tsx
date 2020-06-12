@@ -12,7 +12,7 @@ import { IUser } from '../../model/IUser'
 import { IModalConfirm, ModalType } from '../../model/IModal'
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
-import i18n from 'i18n-js';
+import { i18nGet } from '../../localisation/Translate'
 
 interface Props {
     onLogOut?: () => void;
@@ -35,7 +35,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
             <View style={styles.profileView}>
                 <Hat
                     onBackPress={() => this.props.navigation.navigate('Main')}
-                    title={i18n.t('profile')}
+                    title={i18nGet('profile')}
                 />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
@@ -45,20 +45,20 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                                 description={user.email}
                             />
                             <ProfileItem
-                                title={i18n.t('diabetic_profile')}
-                                description={i18n.t('about_diabetes_profile')}
+                                title={i18nGet('diabetic_profile')}
+                                description={i18nGet('about_diabetes_profile')}
                                 activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
                                     <Text style={styles.activeElementToSettings}>
-                                        {i18n.t('go_to')}
+                                        {i18nGet('go_to')}
                                     </Text>
                                 </TouchableOpacity>}
                             />
                             <ProfileItem
-                                description={i18n.t('log_out')}
-                                hint={i18n.t('log_out_hint')}
+                                description={i18nGet('log_out')}
+                                hint={i18nGet('log_out_hint')}
                                 activeElement={<TouchableOpacity onPress={this.props.onLogOut}>
                                     <Text style={styles.activeElementExit}>
-                                        {i18n.t('leave')}
+                                        {i18nGet('leave')}
                                     </Text>
                                 </TouchableOpacity>}
                             />
@@ -86,9 +86,9 @@ export const ProfileScreenConnect = connect(
             onLogOut() {
                 const confirmData: IModalConfirm = {
                     data: {
-                        questionText: i18n.t('are_you_sure'),
-                        positiveButtonText: i18n.t('leave'),
-                        negativeButtonText: i18n.t('cancel'),
+                        questionText: i18nGet('are_you_sure'),
+                        positiveButtonText: i18nGet('leave'),
+                        negativeButtonText: i18nGet('cancel'),
 
                         onPositiveClick: () => dispatch(createClearInstallationIdAction()),
                     }

@@ -6,8 +6,10 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
 import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { styles } from './Style';
-import i18n from 'i18n-js';
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
+import { i18nGet } from '../../../../localisation/Translate';
+import { Measures } from '../../../../localisation/Measures';
+import { Color } from '../../../../constant/Color';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -17,12 +19,14 @@ interface Props {
 function GlycemiaTypeSelectPicker(props: Props) {
     const [blocked, setBlocked] = React.useState(true);
 
-    const selectedGlycemia = props.userDiabetesProperties.glycemiaMeasuringType;
+    const selectedGlycemia = Measures.getDefaultGlucoseMeasuringType(
+        props.userDiabetesProperties.glycemiaMeasuringType
+    )
 
     return (
         <ProfilePicker
-            title={i18n.t('glycemia_unit')}
-            description={i18n.t('glycemia_unit_description')}
+            title={i18nGet('glycemia_unit')}
+            description={i18nGet('glycemia_unit_description')}
         >
             <View style={styles.shortInsulinTypePickerView}>
                 {blocked
@@ -31,13 +35,13 @@ function GlycemiaTypeSelectPicker(props: Props) {
                             <Text
                                 style={styles.shortInsulinTypePickerItemTextBlockedSelected}
                             >
-                                {i18n.t(selectedGlycemia)}
+                                {i18nGet(selectedGlycemia)}
                             </Text>
                             <View
                                 style={styles.changeButton}
                             >
                                 <Button
-                                    title={i18n.t('profile_change')}
+                                    title={i18nGet('profile_change')}
                                     onPress={() => setBlocked(false)}
                                 />
                             </View>
@@ -62,7 +66,7 @@ function GlycemiaTypeSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {i18n.t(GlycemiaMeasuringType.MG_DL)}
+                                        {i18nGet(GlycemiaMeasuringType.MG_DL)}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -85,7 +89,7 @@ function GlycemiaTypeSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {i18n.t(GlycemiaMeasuringType.MMOL_L)}
+                                        {i18nGet(GlycemiaMeasuringType.MMOL_L)}
                                     </Text>
                                 </TouchableOpacity>
                             </View>

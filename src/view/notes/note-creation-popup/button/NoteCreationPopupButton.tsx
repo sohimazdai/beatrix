@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
 import * as React from 'react';
 import { styles } from './Style';
-import i18n from 'i18n-js';
+import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
     openPopup: () => void;
@@ -18,7 +18,7 @@ const NoteCreationPopupButton = (props: Props) => (
             style={styles.addNoteButtonTouchable}
         >
             <Text style={styles.addNoteButtonText}>
-                {i18n.t('add')}
+                {i18nGet('add')}
                 </Text>
             <AddNoteIcon_WHITE />
         </TouchableOpacity>

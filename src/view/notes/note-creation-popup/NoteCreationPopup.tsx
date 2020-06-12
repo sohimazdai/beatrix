@@ -29,9 +29,9 @@ import { createUpdateNoteAction } from '../../../store/service/note/UpdateNoteSa
 import { createDeleteNoteAction } from '../../../store/service/note/DeleteNoteSaga';
 import { appAnalytics } from '../../../app/Analytics';
 import { NumberScroller } from '../number-scroller/NumberScroller';
-import i18n from 'i18n-js';
 import { Measures } from '../../../localisation/Measures';
 import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
+import { i18nGet } from '../../../localisation/Translate';
 
 interface Props {
     interactive?: IInteractive
@@ -172,7 +172,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 return (
                     <View style={styles.commentInputView}>
                         <Text style={styles.inputViewTitle}>
-                            {i18n.t(NoteValueType.COMMENT)}
+                            {i18nGet(NoteValueType.COMMENT)}
                         </Text>
                         <View style={styles.commentViewTextArea}>
                             <TextInput
@@ -205,26 +205,26 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
         if (name === NoteValueType.BREAD_UNITS) {
             const carbMeasureType = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
             const carbUnits = carbMeasureType === CarbsMeasuringType.BREAD_UNITS
-                ? i18n.t('carbs_units')
-                : i18n.t('carb_gram')
+                ? ''
+                : i18nGet('carb_gram')
             postfix = ' ' + carbUnits;
         }
 
         const obj = { [`${name}`]: null }
         const displayedValue = value
             ? ': ' + value + postfix
-            : ': ' + i18n.t('not_selected');
+            : ': ' + i18nGet('not_selected');
 
         return (
             <View style={styles.inputView}>
                 <Text style={styles.inputViewTitle}>
-                    {i18n.t(name)}{displayedValue}
+                    {i18nGet(name)}{displayedValue}
                 </Text>
                 <View style={styles.numberScrollWrapper}>
                     <NumberScroller
                         key={name}
                         selectedNumber={value}
-                        measuresOption={Measures.getMeasuresOption(
+                        measuresOption={Measures.getNoteMeasuresOption(
                             name,
                             glycemiaMeasuringType,
                             carbsMeasuringType,
@@ -246,7 +246,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 onPress={this.createNote}
             >
                 <Text style={styles.saveButtonText}>
-                    {this.props.note ? i18n.t('rewrite') : i18n.t('write')}
+                    {this.props.note ? i18nGet('rewrite') : i18nGet('write')}
                 </Text>
             </TouchableOpacity>
         )
@@ -279,8 +279,8 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                     type: ModalType.HINT,
                     needToShow: true,
                     data: {
-                        questionText: i18n.t('fill_at_least_one_parameter'),
-                        positiveButtonText: i18n.t('ok'),
+                        questionText: i18nGet('fill_at_least_one_parameter'),
+                        positiveButtonText: i18nGet('ok'),
                     },
                 }))
             }
@@ -295,7 +295,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 onPress={this.onDeleteClick}
             >
                 <Text style={styles.deleteButtonText}>
-                    {i18n.t('delete')}
+                    {i18nGet('delete')}
                 </Text>
             </TouchableOpacity>
         )
@@ -304,9 +304,9 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
     onDeleteClick = () => {
         const confirmData: IModalConfirm = {
             data: {
-                questionText: i18n.t('are_you_sure'),
-                positiveButtonText: i18n.t('delete'),
-                negativeButtonText: i18n.t('cancel'),
+                questionText: i18nGet('are_you_sure'),
+                positiveButtonText: i18nGet('delete'),
+                negativeButtonText: i18nGet('cancel'),
 
                 onPositiveClick: () => this.deleteNote(),
             }

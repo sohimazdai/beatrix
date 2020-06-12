@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../../../model/IStorage';
 import ProfileDayTimeRangeValuePicker from '../../../range-value-picker/ProfileDayTimeRangeValuePicker';
 import { IUserPropertiesShedule, SheduleKeyType } from '../../../../../model/IUserPropertiesShedule';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View, Button } from 'react-native';
 import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { styles } from './Style';
 import { createUpdateUserSheduleAction } from '../../../../../store/service/user/UpdateSheduleSaga';
-import i18n from 'i18n-js';
 import { InteractiveUserPropertiesShedulePopupType } from '../../../../../model/IInteractive';
+import { i18nGet } from '../../../../../localisation/Translate';
+import { Color } from '../../../../../constant/Color';
 
 interface Props {
     sheduleKey?: SheduleKeyType
@@ -132,16 +133,16 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
         for (let i = 0; i <= 24; i++) {
             const sheduleItem = this.state.newShedule[i];
             if (!currentFrom && (!sheduleItem || (sheduleItem && !sheduleItem[this.sheduleKey]))) {
-                currentFrom = i18n.t('since') + ' ' + i;
+                currentFrom = i18nGet('since') + ' ' + i;
             } else if (currentFrom && sheduleItem && sheduleItem[this.sheduleKey]) {
                 rangeThatNeedToWriteMore += rangeThatNeedToWriteMore ?
-                    ", " + currentFrom + " " + i18n.t('until') + " " + i :
-                    " " + currentFrom + " " + i18n.t('until') + " " + i;
+                    ", " + currentFrom + " " + i18nGet('until') + " " + i :
+                    " " + currentFrom + " " + i18nGet('until') + " " + i;
                 currentFrom = "";
             } else if (currentFrom && i === 24) {
                 rangeThatNeedToWriteMore += rangeThatNeedToWriteMore ?
-                    ", " + currentFrom + " " + i18n.t('until') + " " + (i) :
-                    " " + currentFrom + " " + i18n.t('until') + " " + (i);
+                    ", " + currentFrom + " " + i18nGet('until') + " " + (i) :
+                    " " + currentFrom + " " + i18nGet('until') + " " + (i);
                 currentFrom = "";
             }
         }
@@ -194,9 +195,9 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
     renderInputTitles() {
         return this.shedule.length > 0 && (
             <View style={styles.pickersTitleView}>
-                <Text style={styles.pickersItemTitle}>{i18n.t('shedule_since')}</Text>
-                <Text style={styles.pickersItemTitle}>{i18n.t('shedule_until')}</Text>
-                <Text style={styles.pickersItemTitle}>{i18n.t('shedule_value')}</Text>
+                <Text style={styles.pickersItemTitle}>{i18nGet('shedule_since')}</Text>
+                <Text style={styles.pickersItemTitle}>{i18nGet('shedule_until')}</Text>
+                <Text style={styles.pickersItemTitle}>{i18nGet('shedule_value')}</Text>
                 <Text style={styles.pickersItemTitle}></Text>
             </View>
         )
@@ -224,42 +225,40 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
             onPress={this.onAddPress}
         >
             <Text style={{ fontSize: 16 }}>
-                {i18n.t('add')}
+                {i18nGet('add')}
             </Text>
         </TouchableOpacity>
     }
 
     renderCloseButton() {
         return (
-            <TouchableOpacity
-                style={styles.closeTouchable}
-                onPress={this.props.onClose}
-            >
-                <Text style={{ fontSize: 16 }}>
-                    {i18n.t('cancel')}
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.closeTouchable}>
+                <Button
+                    title={i18nGet('cancel')}
+                    onPress={this.props.onClose}
+                />
+            </View>
         )
     }
 
     renderReangeThatNeedToFill() {
         return !!this.rangeThatNeedToWriteMore &&
             <Text style={styles.rangeThatNeedToWriteMore}>
-                {i18n.t('need_to_fill_time_period') + ': '}
+                {i18nGet('need_to_fill_time_period') + ': '}
                 {this.rangeThatNeedToWriteMore}
             </Text>
     }
 
     renderSaveButtonIfNeeded() {
-        return !!!this.rangeThatNeedToWriteMore &&
-            <TouchableOpacity
-                style={styles.addTouchable}
-                onPress={this.onSaveSheduleClick}
-            >
-                <Text style={{ fontSize: 16 }}>
-                    {i18n.t('save')}
-                </Text>
-            </TouchableOpacity>
+        return !!!this.rangeThatNeedToWriteMore && (
+            <View style={styles.addTouchable}>
+                <Button
+                    title={i18nGet('save')}
+                    onPress={this.onSaveSheduleClick}
+                    color={Color.GREEN_DARK}
+                />
+            </View>
+        )
     }
 }
 

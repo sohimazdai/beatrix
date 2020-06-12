@@ -70,30 +70,16 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        width: 120,
-
         margin: 10,
         marginBottom: 20,
-        padding: 10,
-
-        backgroundColor: '#BEF1C6',
-        borderRadius: 50,
-        ...shadowOptions
     },
     closeTouchable: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
 
-        width: 120,
-
         margin: 10,
         marginBottom: 20,
-        padding: 10,
-
-        backgroundColor: '#F1DDBE',
-        borderRadius: 50,
-        ...shadowOptions
     },
 
     rangeThatNeedToWriteMore: {

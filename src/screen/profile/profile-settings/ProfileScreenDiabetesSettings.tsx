@@ -6,9 +6,9 @@ import { IStorage } from '../../../model/IStorage';
 import { IInteractive } from '../../../model/IInteractive';
 import { Hat } from '../../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import i18n from 'i18n-js';
 import { ProfileItem } from '../../../view/profile/ProfileItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { i18nGet } from '../../../localisation/Translate';
 
 interface Props {
     interactive: IInteractive
@@ -33,35 +33,35 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
             <View style={styles.keyboardAvoidingView}>
                 <Hat
                     onBackPress={() => this.props.navigation.navigate('Profile')}
-                    title={i18n.t('diabetic_profile')}
+                    title={i18nGet('diabetic_profile')}
                 />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
                         <ScrollView style={styles.scrollView}>
                             <ProfileItem
-                                title={i18n.t('glycemia_settings')}
-                                description={i18n.t('glycemia_settings_description')}
+                                title={i18nGet('glycemia_settings')}
+                                description={i18nGet('glycemia_settings_description')}
                                 activeElement={<TouchableOpacity onPress={this.onGlycemiaSettingsGoToPress}>
                                     <Text style={styles.activeElementToSettings}>
-                                        {i18n.t('go_to')}
+                                        {i18nGet('go_to')}
                                     </Text>
                                 </TouchableOpacity>}
                             />
                             <ProfileItem
-                                title={i18n.t('carbohydrates_settings')}
-                                description={i18n.t('carbohydrates_settings_description')}
+                                title={i18nGet('carbohydrates_settings')}
+                                description={i18nGet('carbohydrates_settings_description')}
                                 activeElement={<TouchableOpacity onPress={this.onCarbsSettingsGoToPress}>
                                     <Text style={styles.activeElementToSettings}>
-                                        {i18n.t('go_to')}
+                                        {i18nGet('go_to')}
                                     </Text>
                                 </TouchableOpacity>}
                             />
                             <ProfileItem
-                                title={i18n.t('insulin_settings')}
-                                description={i18n.t('insulin_settings_description')}
+                                title={i18nGet('insulin_settings')}
+                                description={i18nGet('insulin_settings_description')}
                                 activeElement={<TouchableOpacity onPress={this.onInsulinSettingsGoToPress}>
                                     <Text style={styles.activeElementToSettings}>
-                                        {i18n.t('go_to')}
+                                        {i18nGet('go_to')}
                                     </Text>
                                 </TouchableOpacity>}
                             />

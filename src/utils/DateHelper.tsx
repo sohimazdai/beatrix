@@ -1,4 +1,4 @@
-import i18n from 'i18n-js';
+import { i18nGet } from '../localisation/Translate';
 
 export class DateHelper {
     static today() {
@@ -74,29 +74,29 @@ export class DateHelper {
     static getMonthStringPossesive(m: number) {
         switch (m) {
             case 0:
-                return i18n.t('january');
+                return i18nGet('january');
             case 1:
-                return i18n.t('february');
+                return i18nGet('february');
             case 2:
-                return i18n.t('march');
+                return i18nGet('march');
             case 3:
-                return i18n.t('april');
+                return i18nGet('april');
             case 4:
-                return i18n.t('may');
+                return i18nGet('may');
             case 5:
-                return i18n.t('june');
+                return i18nGet('june');
             case 6:
-                return i18n.t('jule');
+                return i18nGet('jule');
             case 7:
-                return i18n.t('august');
+                return i18nGet('august');
             case 8:
-                return i18n.t('september');
+                return i18nGet('september');
             case 9:
-                return i18n.t('october');
+                return i18nGet('october');
             case 10:
-                return i18n.t('november');
+                return i18nGet('november');
             case 11:
-                return i18n.t('september');
+                return i18nGet('september');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }
@@ -105,29 +105,29 @@ export class DateHelper {
     static getMonthStringCommon(m: number) {
         switch (m) {
             case 0:
-                return i18n.t('january_capital_infinitive');
+                return i18nGet('january_capital_infinitive');
             case 1:
-                return i18n.t('february_capital_infinitive');
+                return i18nGet('february_capital_infinitive');
             case 2:
-                return i18n.t('march_capital_infinitive');
+                return i18nGet('march_capital_infinitive');
             case 3:
-                return i18n.t('april_capital_infinitive');
+                return i18nGet('april_capital_infinitive');
             case 4:
-                return i18n.t('may_capital_infinitive');
+                return i18nGet('may_capital_infinitive');
             case 5:
-                return i18n.t('june_capital_infinitive');
+                return i18nGet('june_capital_infinitive');
             case 6:
-                return i18n.t('jule_capital_infinitive');
+                return i18nGet('jule_capital_infinitive');
             case 7:
-                return i18n.t('august_capital_infinitive');
+                return i18nGet('august_capital_infinitive');
             case 8:
-                return i18n.t('september_capital_infinitive');
+                return i18nGet('september_capital_infinitive');
             case 9:
-                return i18n.t('october_capital_infinitive');
+                return i18nGet('october_capital_infinitive');
             case 10:
-                return i18n.t('november_capital_infinitive');
+                return i18nGet('november_capital_infinitive');
             case 11:
-                return i18n.t('september_capital_infinitive');
+                return i18nGet('september_capital_infinitive');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }
@@ -136,29 +136,29 @@ export class DateHelper {
     static getMonthStringCommonShort(m: number) {
         switch (m) {
             case 0:
-                return i18n.t('january_capital_short');
+                return i18nGet('january_capital_short');
             case 1:
-                return i18n.t('february_capital_short');
+                return i18nGet('february_capital_short');
             case 2:
-                return i18n.t('march_capital_short');
+                return i18nGet('march_capital_short');
             case 3:
-                return i18n.t('april_capital_short');
+                return i18nGet('april_capital_short');
             case 4:
-                return i18n.t('may_capital_short');
+                return i18nGet('may_capital_short');
             case 5:
-                return i18n.t('june_capital_short');
+                return i18nGet('june_capital_short');
             case 6:
-                return i18n.t('jule_capital_short');
+                return i18nGet('jule_capital_short');
             case 7:
-                return i18n.t('august_capital_short');
+                return i18nGet('august_capital_short');
             case 8:
-                return i18n.t('september_capital_short');
+                return i18nGet('september_capital_short');
             case 9:
-                return i18n.t('october_capital_short');
+                return i18nGet('october_capital_short');
             case 10:
-                return i18n.t('november_capital_short');
+                return i18nGet('november_capital_short');
             case 11:
-                return i18n.t('september_capital_short');
+                return i18nGet('september_capital_short');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }

@@ -22,6 +22,7 @@ export interface IMeasuresOption {
 };
 
 export class Measures {
+  //GLYCEMIA
   static getNormalGlycemia(
     existingGlycemiaMeasuringType?: GlycemiaMeasuringType
   ) {
@@ -66,6 +67,18 @@ export class Measures {
     }
   }
 
+  static getDefaultGlucoseMeasuringType = (
+    existingGlycemiaMeasuringType?: GlycemiaMeasuringType
+  ) => {
+
+    if (existingGlycemiaMeasuringType) return existingGlycemiaMeasuringType;
+
+    if (i18n.locale === 'ru') return GlycemiaMeasuringType.MMOL_L;
+
+    return GlycemiaMeasuringType.MG_DL;
+  }
+
+  //CARBS
   static getDefaultCarbsUnitWeightType(
     existingCarbsUnitWeightType?: CarbsUnitWeightType
   ) {
@@ -89,17 +102,7 @@ export class Measures {
     return CarbsMeasuringType.CARBOHYDRATES;
   }
 
-  static getDefaultGlucoseMeasuringType = (
-    existingGlycemiaMeasuringType?: GlycemiaMeasuringType
-  ) => {
-
-    if (existingGlycemiaMeasuringType) return existingGlycemiaMeasuringType;
-
-    if (i18n.locale === 'ru') return GlycemiaMeasuringType.MMOL_L;
-
-    return GlycemiaMeasuringType.MG_DL;
-  }
-
+  //OTHER
   static getStartIndex(
     valueKey: NoteValueType,
     existingGlycemiaMeasuringType?: GlycemiaMeasuringType,
@@ -122,7 +125,7 @@ export class Measures {
     }
   }
 
-  static getMeasuresOption(
+  static getNoteMeasuresOption(
     valueKey: NoteValueType,
     glycemiaMeasuringType: GlycemiaMeasuringType,
     carbsMeasuringType: CarbsMeasuringType,

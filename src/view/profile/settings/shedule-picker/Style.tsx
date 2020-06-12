@@ -79,14 +79,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        width: 100,
-
-        padding: 10,
         margin: 10,
-
-        backgroundColor: 'white',
-        borderRadius: 50,
-        ...shadowOptions
     },
     insulinSensitiveFactorPickerListItemTextInput: {
 
@@ -119,11 +112,6 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        padding: 10,
         margin: 10,
-
-        backgroundColor: 'crimson',
-        borderRadius: 50,
-        ...shadowOptions
     }
 })

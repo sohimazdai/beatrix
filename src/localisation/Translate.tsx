@@ -180,7 +180,9 @@ export default function translate() {
     cancel: 'Cancel',
     not_selected: 'not selected',
     are_you_sure: 'Are you sure?',
+
     ok: 'OK',
+    yes: 'Yes',
 
     active_network_needed: 'You need to connect to the internet',
     server_is_not_available_try_to_restart_app: 'Server is currently unavailable. Try restarting the application.',
@@ -263,7 +265,7 @@ export default function translate() {
 
     glucose: 'Глюкоза',
     breadUnits: 'ХЕ',
-    shortInsulin: 'Короткий',
+    insulin: 'Короткий',
     longInsulin: 'Длинный',
     comment: 'Комментарий',
 
@@ -345,7 +347,7 @@ export default function translate() {
     shedule_clear: 'Стереть',
 
     insulin_sensitivity_factor: 'Фактор чувствительности к инсулину (ФЧИ)',
-    insulin_sensitivity_factor_description: 'Показывает, насколько понизит число %glycemia_type% 1 ед. ультракороткого инсулина',
+    insulin_sensitivity_factor_description: 'Показывает, насколько %glycemia_type% понизится глюкоза крови при введении 1 ед. ультракороткого инсулина',
     insulin_sensitivity_factor_hint: 'Укажите ФЧИ для различных промежутков времени',
 
     insulin_to_carb_rate: 'Углеводный коэффициент (УК)',
@@ -373,7 +375,10 @@ export default function translate() {
     cancel: 'Отмена',
     not_selected: 'не выбрано',
     are_you_sure: 'Вы уверены?',
+
     ok: 'OK',
+    yes: 'Да',
+
     active_network_needed: 'Необходимо интернет-соединение',
     server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',
 

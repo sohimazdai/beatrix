@@ -6,8 +6,8 @@ import { IStorage } from '../../../model/IStorage';
 import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../model/IUserPropertiesShedule';
 import { INoteListNote } from '../../../model/INoteList';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
-import i18n from 'i18n-js';
 import { Measures } from '../../../localisation/Measures';
+import { i18nGet } from '../../../localisation/Translate';
 
 interface OwnProps {
     note?: INoteListNote
@@ -29,7 +29,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
         if (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio) {
             const recommendIfNeededMemo = React.useMemo(() => Math.random() < 0.2, []);
             return recommendIfNeededMemo
-                ? i18n.t('fill_out_your_diabetes_profile_for_recommendations')
+                ? i18nGet('fill_out_your_diabetes_profile_for_recommendations')
                 : ''
         }
 
@@ -44,25 +44,25 @@ function NoteInsulinDoseRecommendation(props: Props) {
         }
 
         if (note.glucose === 0) {
-            return i18n.t('enter_blood_glucose_value_to_get_recommendation');
+            return i18nGet('enter_blood_glucose_value_to_get_recommendation');
         }
 
         if (parseFloat(insulinValue) <= 0) {
-            return i18n.t('insulin_is_not_recommended')
+            return i18nGet('insulin_is_not_recommended')
         }
 
         if (
             note.glucose < Measures.getCriticalGlycemia(glycemiaMeasuringType).min &&
             note.glucose > Measures.getCriticalGlycemia(glycemiaMeasuringType).min / 2
         ) {
-            return i18n.t('inject_insulin_after_meal') + ': ' + insulinValue;
+            return i18nGet('inject_insulin_after_meal') + ': ' + insulinValue;
         }
 
         if (note.glucose < Measures.getCriticalGlycemia(glycemiaMeasuringType).min / 2) {
-            return i18n.t('restore_your_glucose_level_first');
+            return i18nGet('restore_your_glucose_level_first');
         }
 
-        return i18n.t('recommended_insulin_value') + ': ' + insulinValue;
+        return i18nGet('recommended_insulin_value') + ': ' + insulinValue;
     }
 
     const recommendation = getRecommendation();

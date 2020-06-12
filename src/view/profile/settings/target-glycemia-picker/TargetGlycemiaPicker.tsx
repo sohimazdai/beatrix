@@ -4,13 +4,12 @@ import { View, Text, Slider, Button } from "react-native";
 import { connect } from "react-redux";
 import { IStorage } from "../../../../model/IStorage";
 import { IUserDiabetesProperties, GlycemiaMeasuringType } from "../../../../model/IUserDiabetesProperties";
-import { createUserDiabetesPropertiesChangeAction } from "../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator";
 import { styles } from './Style';
 import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
-import i18n from 'i18n-js';
 import { Measures } from '../../../../localisation/Measures';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
+import { i18nGet } from '../../../../localisation/Translate';
+import { Color } from '../../../../constant/Color';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -31,17 +30,17 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
 
     React.useEffect(() => {
         if (glycemiaMeasuringType === GlycemiaMeasuringType.MMOL_L) {
-            onPropertiesChange({ targetGlycemia: normalGlycemia })
+            onPropertiesChange({ targetGlycemia: normalGlycemia });
         }
         else if (glycemiaMeasuringType === GlycemiaMeasuringType.MG_DL) {
-            onPropertiesChange({ targetGlycemia: normalGlycemia })
+            onPropertiesChange({ targetGlycemia: normalGlycemia });
         }
     }, [glycemiaMeasuringType]);
 
     return (
         <ProfilePicker
-            title={i18n.t('target_glycemia')}
-            description={i18n.t('target_glycemia_description')}
+            title={i18nGet('target_glycemia')}
+            description={i18nGet('target_glycemia_description')}
         >
             {blocked
                 ? (
@@ -55,7 +54,7 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                             style={styles.changeButton}
                         >
                             <Button
-                                title={i18n.t('profile_change')}
+                                title={i18nGet('profile_change')}
                                 onPress={() => setBlocked(false)}
                             />
                         </View>
@@ -81,7 +80,7 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                                 {criticalGlycemia.max}
                             </Text>
                             <BaseDecimalInput
-                                value={String(targetGlycemia)}
+                                value={String(targetGlycemiaInput)}
                                 style={styles.glycemiaInput}
                                 placeholder={String(normalGlycemia)}
                                 editable={false}
@@ -89,7 +88,8 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                         </View>
                         <View style={styles.applyButton}>
                             <Button
-                                title={i18n.t('profile_apply')}
+                                color={Color.GREEN_DARK}
+                                title={i18nGet('profile_apply')}
                                 onPress={() => {
                                     setBlocked(true);
                                     onPropertiesChange({

@@ -16,23 +16,46 @@ export enum SyncReasonType {
     SEND_PENDING = "send_pending",
 }
 
-export function createSyncNotesAction(reason?: string) {
-    return batchActions([
-        createUserChangeAction({
-            syncLoading: true,
-            error: null,
-        }),
+interface Payload {
+    noLoading?: boolean,
+    reason?: SyncReasonType
+}
+
+interface Action {
+    type: 'SYNC_NOTES_ACTION',
+    payload: Payload
+}
+
+export function createSyncNotesAction(payload?: Payload) {
+    if (!payload) payload = {};
+    const { reason, noLoading } = payload;
+
+    const actions: any[] = [
         {
             type: ACTION_TYPE,
             payload: {
+                noLoading,
                 reason: reason || SyncReasonType.JUST
             }
         },
-    ])
+    ];
+
+    if (!noLoading) {
+        actions.push(
+            createUserChangeAction({
+                syncLoading: true,
+                error: null,
+            })
+        )
+    }
+
+    return batchActions(actions);
 }
 
-function* run(action) {
+function* run(action: Action) {
     try {
+        const { noLoading, reason } = action.payload;
+
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
         const noteList = state.noteList;
@@ -57,7 +80,7 @@ function* run(action) {
             return notes;
         }, [])
 
-        const cond = action.payload.reason === SyncReasonType.SEND_PENDING
+        const cond = reason === SyncReasonType.SEND_PENDING
             ? state.app.serverAvailable && state.app.networkConnected && notesToSync.length
             : state.app.serverAvailable && state.app.networkConnected
 
@@ -74,10 +97,12 @@ function* run(action) {
             }
         }
 
-        yield put(createUserChangeAction({
-            syncLoading: false,
-            error: null
-        }));
+        if (!noLoading) {
+            yield put(createUserChangeAction({
+                syncLoading: false,
+                error: null
+            }));
+        }
     } catch (e) {
         handleError(e, i18nGet('notes_sync_error'));
 

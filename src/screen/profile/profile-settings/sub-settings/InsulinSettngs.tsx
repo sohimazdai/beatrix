@@ -3,12 +3,12 @@ import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { connect } from 'react-redux';
 import { styles } from './Style';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import i18n from 'i18n-js';
 import { IInteractive } from '../../../../model/IInteractive';
 import { Hat } from '../../../../component/hat/Hat';
 import { IStorage } from '../../../../model/IStorage';
 import { ProfileSettingsSheduleTableConnect } from '../../../../view/profile/settings/shedule-picker/ProfileSettingsSheduleTable';
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
+import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
   interactive: IInteractive
@@ -24,7 +24,7 @@ export class InsulinSettingsComponent extends Component<Props> {
       >
         <Hat
           onBackPress={() => this.props.navigation.navigate('ProfileDiabetesSettings')}
-          title={i18n.t('insulin_settings')}
+          title={i18nGet('insulin_settings')}
         />
         <View style={styles.scrollViewWrapWrap}>
           <View style={styles.scrollViewWrap}>

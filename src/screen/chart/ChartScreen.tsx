@@ -22,9 +22,9 @@ import { appAnalytics } from '../../app/Analytics';
 import { InfoIcon } from '../../component/icon/InfoIcon';
 import { ModalType } from '../../model/IModal';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
-import i18n from 'i18n-js';
 import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
 import { Measures } from '../../localisation/Measures';
+import { i18nGet } from '../../localisation/Translate';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
@@ -114,7 +114,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
         return (
             <View style={styles.view}>
                 <BlockHat
-                    title={i18n.t('charts')}
+                    title={i18nGet('charts')}
                     rightSideSlot={this.getHatTitle()}
                 />
                 <View style={styles.scrollViewWrapWrap}>
@@ -201,13 +201,13 @@ class Chart extends React.Component<ChartProps, ChartState> {
         let title = ""
         switch (selectedPeriod) {
             case ChartPeriodType.DAY:
-                title = i18n.t('chart_period_day');
+                title = i18nGet('chart_period_day');
                 break;
             case ChartPeriodType.MONTH:
-                title = i18n.t('chart_period_month');
+                title = i18nGet('chart_period_month');
                 break;
             case ChartPeriodType.THREE_MONTH:
-                title = i18n.t('chart_period_three_month');
+                title = i18nGet('chart_period_three_month');
                 break;
         }
 
@@ -240,10 +240,10 @@ class Chart extends React.Component<ChartProps, ChartState> {
             case ChartPeriodType.MONTH:
                 selectedDotId = Number(selectedDotId);
                 if (selectedDotId === DateHelper.today()) {
-                    return i18n.t('chart_today');
+                    return i18nGet('chart_today');
                 }
                 if (selectedDotId === DateHelper.yesterday()) {
-                    return i18n.t('chart_yesterday');
+                    return i18nGet('chart_yesterday');
                 }
                 displayingDate = DateHelper.makeDateWithMonthAsString(new Date(selectedDotId))
                 return displayingDate

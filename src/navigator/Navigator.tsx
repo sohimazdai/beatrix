@@ -19,7 +19,7 @@ import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-import translate from '../localisation/Translate';
+import translate, { i18nGet } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
@@ -37,11 +37,12 @@ interface AppNavigatorComponentProps {
 interface AuthedContainerProps {
     interactive?: IInteractive
     modal?: IModal
+    user?: IUser
 }
 
 const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
     return props.user && props.user.isAuthed ?
-        <AuthedContainer interactive={props.interactive} modal={props.modal} /> :
+        <AuthedContainer {...props} /> :
         <AppUnknownNavigatorContainer />
 }
 
@@ -49,7 +50,8 @@ const AuthedContainer = (props: AuthedContainerProps) => {
     const faded = (
         props.interactive.confirmPopupShown ||
         props.interactive.creatingNoteMode ||
-        props.modal.needToShow
+        props.modal.needToShow ||
+        props.user.syncLoading
     );
 
     return (
@@ -98,16 +100,16 @@ const ProfileScreenStack = createStackNavigator(
 
 const AuthedMainNavigator = createBottomTabNavigator(
     {
-        [i18n.t('notes')]: { screen: NoteListScreenConnect },
-        [i18n.t('charts')]: { screen: ChartConnect },
+        [i18nGet('notes')]: { screen: NoteListScreenConnect },
+        [i18nGet('charts')]: { screen: ChartConnect },
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
             tabBarIcon: () => {
                 const { routeName } = navigation.state;
-                if (routeName === i18n.t('notes')) {
+                if (routeName === i18nGet('notes')) {
                     return <NotesIcon />
-                } else if (routeName === i18n.t('charts')) {
+                } else if (routeName === i18nGet('charts')) {
                     return <ChartsIcon />
                 }
             },

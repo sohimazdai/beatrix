@@ -5,7 +5,7 @@ import { Color } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { ScrollView } from 'react-native-gesture-handler';
 import { shadowOptions } from '../../../constant/ShadowOptions';
-import i18n from 'i18n-js';
+import { i18nGet } from '../../../localisation/Translate';
 
 interface ModalContentInfoCardProps {
   color?: ColorType,
@@ -43,7 +43,7 @@ export function ModalContentInfo(props: ModalContentInfoProps) {
           style={styles.okButtonView}
         >
           <Text style={styles.okButtonText}>
-            {i18n.t('ok')}
+            {i18nGet('ok')}
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -64,11 +64,11 @@ function ModalContentInfoCard(props: ModalContentInfoCardProps) {
 function getTitle(type: ChartPeriodType) {
   switch (type) {
     case ChartPeriodType.DAY:
-      return i18n.t('info_day_chart');
+      return i18nGet('info_day_chart');
     case ChartPeriodType.MONTH:
-      return i18n.t('info_month_chart');
+      return i18nGet('info_month_chart');
     case ChartPeriodType.THREE_MONTH:
-      return i18n.t('info_three_month_chart');
+      return i18nGet('info_three_month_chart');
   }
 }
 
@@ -78,40 +78,40 @@ function getCards(type: ChartPeriodType): ModalContentInfoCardProps[] {
       return [
         {
           color: ColorType.INSTRUCTION,
-          text: i18n.t('info_day_chart_part_1')
+          text: i18nGet('info_day_chart_part_1')
         },
         {
-          text: i18n.t('info_day_chart_part_2'),
+          text: i18nGet('info_day_chart_part_2'),
         },
         {
-          text: i18n.t('info_day_chart_part_3'),
+          text: i18nGet('info_day_chart_part_3'),
         },
         {
           color: ColorType.ATTENTION,
-          text: i18n.t('info_day_chart_part_4'),
+          text: i18nGet('info_day_chart_part_4'),
         },
         {
-          text: i18n.t('info_day_chart_part_5'),
+          text: i18nGet('info_day_chart_part_5'),
         },
       ]
     case ChartPeriodType.MONTH:
       return [
         {
           color: ColorType.INSTRUCTION,
-          text: i18n.t('info_month_chart_part_1'),
+          text: i18nGet('info_month_chart_part_1'),
         },
         {
-          text: i18n.t('info_month_chart_part_2'),
+          text: i18nGet('info_month_chart_part_2'),
         },
       ]
     case ChartPeriodType.THREE_MONTH:
       return [
         {
           color: ColorType.INSTRUCTION,
-          text: i18n.t('info_three_month_chart_part_1'),
+          text: i18nGet('info_three_month_chart_part_1'),
         },
         {
-          text: i18n.t('info_three_month_chart_part_2'),
+          text: i18nGet('info_three_month_chart_part_2'),
         },
       ];
   }

@@ -15,7 +15,7 @@ import { IUser } from '../../model/IUser';
 import { AuthFormConnect } from '../../view/auth/AuthForm';
 import { styles } from './Style';
 import { LinearGradient } from 'expo-linear-gradient'
-import i18n from 'i18n-js';
+import { i18nGet } from '../../localisation/Translate';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -37,7 +37,7 @@ class AuthScreen extends React.Component<AuthScreenProps> {
                     <View style={styles.authFormInstallationLoading}>
                         <ActivityIndicator size="small" color="#000000" />
                         <Text style={styles.authFormInstallationText}>
-                            {i18n.t('looking_for_active_session')}
+                            {i18nGet('looking_for_active_session')}
                         </Text>
                     </View>
                 )}

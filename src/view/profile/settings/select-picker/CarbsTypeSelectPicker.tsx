@@ -6,15 +6,17 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
 import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { styles } from './Style';
-import i18n from 'i18n-js';
 import { Measures } from '../../../../localisation/Measures';
 import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../../model/IUserPropertiesShedule';
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 import { userDiabetesPropertiesReducer } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesReducer';
+import { i18nGet } from '../../../../localisation/Translate';
+import { IUser } from '../../../../model/IUser';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
     onPropertiesChange?: (properties: IUserDiabetesProperties) => void;
+    syncLoading?: boolean
 }
 
 function CarbsTypeSelectPicker(props: Props) {
@@ -26,8 +28,8 @@ function CarbsTypeSelectPicker(props: Props) {
 
     return (
         <ProfilePicker
-            title={i18n.t('carb_unit_title')}
-            description={i18n.t('carb_unit_description')}
+            title={i18nGet('carb_unit_title')}
+            description={i18nGet('carb_unit_description')}
         >
             <View style={styles.shortInsulinTypePickerView}>
                 {blocked
@@ -36,14 +38,15 @@ function CarbsTypeSelectPicker(props: Props) {
                             <Text
                                 style={styles.shortInsulinTypePickerItemTextBlockedSelected}
                             >
-                                {i18n.t(selectedCarbs + '_measuring')}
+                                {i18nGet(selectedCarbs + '_measuring')}
                             </Text>
                             <View
                                 style={styles.changeButton}
                             >
                                 <Button
-                                    title={i18n.t('profile_change')}
+                                    title={i18nGet('profile_change')}
                                     onPress={() => setBlocked(false)}
+                                    disabled={props.syncLoading}
                                 />
                             </View>
                         </View>
@@ -67,7 +70,7 @@ function CarbsTypeSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {i18n.t(CarbsMeasuringType.BREAD_UNITS + '_measuring')}
+                                        {i18nGet(CarbsMeasuringType.BREAD_UNITS + '_measuring')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -76,7 +79,6 @@ function CarbsTypeSelectPicker(props: Props) {
                                     { ...styles.shortInsulinTypeButton, ...styles.shortInsulinTypeButtonActive } :
                                     styles.shortInsulinTypeButton}
                             >
-
                                 <TouchableOpacity
                                     onPress={() => {
                                         props.onPropertiesChange({
@@ -90,7 +92,7 @@ function CarbsTypeSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {i18n.t(CarbsMeasuringType.CARBOHYDRATES + '_measuring')}
+                                        {i18nGet(CarbsMeasuringType.CARBOHYDRATES + '_measuring')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -106,6 +108,7 @@ export const CarbsTypeSelectPickerConnect = connect(
     (state: IStorage) => ({
         userDiabetesProperties: state.userDiabetesProperties,
         userPropertiesShedule: state.userPropertiesShedule,
+        syncLoading: state.user.syncLoading || state.user.loading,
     }),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => ({

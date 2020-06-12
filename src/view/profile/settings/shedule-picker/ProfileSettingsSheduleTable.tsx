@@ -5,12 +5,13 @@ import { IStorage } from "../../../../model/IStorage";
 import { IUserPropertiesShedule, SheduleKeyType } from "../../../../model/IUserPropertiesShedule";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
 import { ProfilePicker } from "../../ProfilePicker";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Button, Alert } from "react-native";
 import { styles } from './Style';
 import { createClearSheduleByKeyType } from '../../../../store/modules/user-properties-shedule/UserPropertiesShedule';
 import { ProfileUserPropertiesShedulePickerActiveConnect } from './shedule-picker-active/ProfileUserPropertiesShedulePickerActive';
-import i18n from 'i18n-js';
 import { Measures } from '../../../../localisation/Measures';
+import { i18nGet } from '../../../../localisation/Translate';
+import { Color } from '../../../../constant/Color';
 
 interface Props {
     sheduleKey: SheduleKeyType
@@ -79,66 +80,84 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
     renderSheduleTableTitles = () => {
         return this.shedule.length > 0 && (
             <View style={styles.sensitivityFactorTitleView}>
-                <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_since')}</Text>
-                <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_until')}</Text>
-                <Text style={styles.sensitivityFactorItemTitle}>{i18n.t('shedule_value')}</Text>
+                <Text style={styles.sensitivityFactorItemTitle}>{i18nGet('shedule_since')}</Text>
+                <Text style={styles.sensitivityFactorItemTitle}>{i18nGet('shedule_until')}</Text>
+                <Text style={styles.sensitivityFactorItemTitle}>{i18nGet('shedule_value')}</Text>
             </View>
         )
     }
 
     renderChangeButton = () => {
         return (
-            <TouchableOpacity
-                style={styles.insulinSensitiveFactorPickerTouchable}
-                onPress={() => this.props.onShedulePopupCall(this.props.sheduleKey)}
-            >
-                <Text style={{ fontSize: 16 }}>
-                    {this.shedule.length > 0 ? i18n.t('shedule_change') : i18n.t('shedule_add')}
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.insulinSensitiveFactorPickerTouchable}>
+                <Button
+                    title={
+                        this.shedule.length > 0
+                            ? i18nGet('shedule_change')
+                            : i18nGet('shedule_add')
+                    }
+                    onPress={() => this.props.onShedulePopupCall(this.props.sheduleKey)}
+                />
+            </View>
         )
     }
 
     renderClearSheduleButton() {
         return (
-            <TouchableOpacity
-                style={styles.clearSheduleButton}
-                onPress={() => this.props.clearShedule(this.props.sheduleKey)}
-            >
-                <Text style={{ fontSize: 16, color: 'white' }}>
-                    {i18n.t('shedule_clear')}
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.clearSheduleButton}>
+                <Button
+                    color={Color.CRIMSON_RED}
+                    title={i18nGet('shedule_clear')}
+                    onPress={() => {
+                        Alert.alert(
+                            i18nGet('are_you_sure'),
+                            '',
+                            [
+                                {
+                                    text: i18nGet('cancel'),
+                                    onPress: () => { },
+                                    style: 'cancel',
+                                },
+                                {
+                                    text: i18nGet('yes'),
+                                    onPress: () => this.props.clearShedule(this.props.sheduleKey),
+                                    style: 'cancel',
+                                },
+                            ]
+                        )
+                    }}
+                />
+            </View>
         )
     }
 
     get settingTitle() {
         switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return i18n.t('insulin_sensitivity_factor')
+                return i18nGet('insulin_sensitivity_factor')
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return i18n.t('insulin_to_carb_rate');
+                return i18nGet('insulin_to_carb_rate');
         }
     }
 
     get description() {
         const { userDiabetesProperties: { glycemiaMeasuringType, carbsMeasuringType } } = this.props;
         const glycemiaType = Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType);
-        const glycemiaTypeString = i18n.t(glycemiaType);
-        const glycemiaTypeStringLong = i18n.t(glycemiaType + '_long');
+        const glycemiaTypeString = i18nGet(glycemiaType);
+        const glycemiaTypeStringLong = i18nGet(glycemiaType + '_long');
 
         const carbohydratesType = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
-        const breadUnitsParentCase = i18n.t(carbohydratesType + '_parent_case');
+        const breadUnitsParentCase = i18nGet(carbohydratesType + '_parent_case');
 
         switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return i18n.t('insulin_sensitivity_factor_description')
+                return i18nGet('insulin_sensitivity_factor_description')
                     .replace(
                         '%glycemia_type%',
                         glycemiaTypeStringLong + '(' + glycemiaTypeString + ')'
                     );
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return i18n.t('insulin_to_carb_rate_description')
+                return i18nGet('insulin_to_carb_rate_description')
                     .replace(
                         '%breadUnits_type%',
                         breadUnitsParentCase
@@ -149,9 +168,9 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
     get hint() {
         switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
-                return i18n.t('insulin_sensitivity_factor_hint');
+                return i18nGet('insulin_sensitivity_factor_hint');
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return i18n.t('insulin_to_carb_rate_hint');
+                return i18nGet('insulin_to_carb_rate_hint');
         }
     }
     render() {

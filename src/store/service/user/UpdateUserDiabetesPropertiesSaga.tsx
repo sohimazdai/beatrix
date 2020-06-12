@@ -6,7 +6,6 @@ import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { Alert } from 'react-native';
-import i18n from 'i18n-js';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
@@ -52,7 +51,7 @@ function* run(action) {
         error: null,
       }));
 
-      yield put(createSyncNotesAction());
+      yield put(createSyncNotesAction({ noLoading: true }));
 
       const idsToConvert = Object.values(state.noteList)
         .filter(note => note.userId === state.user.id)

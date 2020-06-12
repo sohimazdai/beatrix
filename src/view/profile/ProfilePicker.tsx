@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         padding: 10,
-        ...shadowOptions
     },
     itemHeader: {
         display: 'flex',

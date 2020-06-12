@@ -25,7 +25,7 @@ import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
-import i18n from 'i18n-js';
+import { i18nGet } from '../../localisation/Translate';
 
 interface NoteListScreenStateTProps {
   app: IApp;
@@ -68,7 +68,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   render() {
     return (
       <View style={styles.screenView}>
-        <BlockHat title={i18n.t('notes')} rightSideSlot={this.renderProfileIcon()} />
+        <BlockHat title={i18nGet('notes')} rightSideSlot={this.renderProfileIcon()} />
         {this.renderIconBar()}
         <View style={styles.cardsViewWrapWrap}>
           <View style={styles.cardsViewWrap}>
@@ -136,7 +136,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
         <View style={styles.noteListBottom}></View>
       </ScrollView>
     ) : (
-        <Text style={styles.noNotesStub}>{i18n.t('notes_not_found')}</Text>
+        <Text style={styles.noNotesStub}>{i18nGet('notes_not_found')}</Text>
       )
   }
 
@@ -146,13 +146,13 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     let displayingDate = "";
     if (day === today) {
       displayingDate =
-        `${i18n.t('today')}, ` +
+        `${i18nGet('today')}, ` +
         `${new Date(day).getDate()} ${this.getMonthString(
           new Date(day).getMonth()
         )}`;
     } else if (day === yesterday) {
       displayingDate =
-        `${i18n.t('yesterday')}, ` +
+        `${i18nGet('yesterday')}, ` +
         `${new Date(day).getDate()} ${this.getMonthString(
           new Date(day).getMonth()
         )}`;
@@ -193,7 +193,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
           style={styles.showMoreButton}
           onPress={this.showMorePosts}
         >
-          <Text style={styles.addNoteButtonText}>{i18n.t('show_more')}</Text>
+          <Text style={styles.addNoteButtonText}>{i18nGet('show_more')}</Text>
         </TouchableOpacity>
       </View>
     )
@@ -201,29 +201,29 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   getMonthString(m: number) {
     switch (m) {
       case 0:
-        return i18n.t('january');
+        return i18nGet('january');
       case 1:
-        return i18n.t('february');
+        return i18nGet('february');
       case 2:
-        return i18n.t('march');
+        return i18nGet('march');
       case 3:
-        return i18n.t('april');
+        return i18nGet('april');
       case 4:
-        return i18n.t('may');
+        return i18nGet('may');
       case 5:
-        return i18n.t('june');
+        return i18nGet('june');
       case 6:
-        return i18n.t('jule');
+        return i18nGet('jule');
       case 7:
-        return i18n.t('august');
+        return i18nGet('august');
       case 8:
-        return i18n.t('september');
+        return i18nGet('september');
       case 9:
-        return i18n.t('october');
+        return i18nGet('october');
       case 10:
-        return i18n.t('november');
+        return i18nGet('november');
       case 11:
-        return i18n.t('september');
+        return i18nGet('september');
       default:
         console.warn("12 month is ... ? I think it is error");
     }
@@ -260,6 +260,6 @@ export const NoteListScreenConnect = connect(
         creatingNoteMode: true
       })
     ),
-    syncNotes: () => dispatch(createSyncNotesAction(SyncReasonType.SEND_PENDING)),
+    syncNotes: () => dispatch(createSyncNotesAction({ reason: SyncReasonType.SEND_PENDING })),
   }),
 )(NoteListScreen);

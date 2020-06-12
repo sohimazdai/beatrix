@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
 import { createUserDiabetesPropertiesChangeAction } from '../../../../store/modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { styles } from './Style';
-import i18n from 'i18n-js';
 import { Measures } from '../../../../localisation/Measures';
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
+import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
@@ -27,8 +27,8 @@ function CarbsUnitWeightSelectPicker(props: Props) {
 
     return selectedCarbsMeasuringType === CarbsMeasuringType.BREAD_UNITS && (
         <ProfilePicker
-            title={i18n.t('carb_unit_weight_title')}
-            description={i18n.t('carb_unit_weight_description')}
+            title={i18nGet('carb_unit_weight_title')}
+            description={i18nGet('carb_unit_weight_description')}
         >
             <View style={styles.shortInsulinTypePickerView}>
                 {blocked
@@ -37,13 +37,13 @@ function CarbsUnitWeightSelectPicker(props: Props) {
                             <Text
                                 style={styles.shortInsulinTypePickerItemTextBlockedSelected}
                             >
-                                {selectedCarbsUnitWeight + ' ' + i18n.t('carb_gram')}
+                                {selectedCarbsUnitWeight + ' ' + i18nGet('carb_gram')}
                             </Text>
                             <View
                                 style={styles.changeButton}
                             >
                                 <Button
-                                    title={i18n.t('profile_change')}
+                                    title={i18nGet('profile_change')}
                                     onPress={() => setBlocked(false)}
                                 />
                             </View>
@@ -68,7 +68,7 @@ function CarbsUnitWeightSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {CarbsUnitWeightType.TEN + ' ' + i18n.t('carb_gram')}
+                                        {CarbsUnitWeightType.TEN + ' ' + i18nGet('carb_gram')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -90,7 +90,7 @@ function CarbsUnitWeightSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {CarbsUnitWeightType.ELEVEN + ' ' + i18n.t('carb_gram')}
+                                        {CarbsUnitWeightType.ELEVEN + ' ' + i18nGet('carb_gram')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -112,7 +112,7 @@ function CarbsUnitWeightSelectPicker(props: Props) {
                                             { ...styles.shortInsulinTypePickerItemText, ...styles.shortInsulinTypePickerItemTextActive } :
                                             styles.shortInsulinTypePickerItemText}
                                     >
-                                        {CarbsUnitWeightType.TWELVE + ' ' + i18n.t('carb_gram')}
+                                        {CarbsUnitWeightType.TWELVE + ' ' + i18nGet('carb_gram')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
