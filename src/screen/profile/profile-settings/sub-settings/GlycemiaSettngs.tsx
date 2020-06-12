@@ -6,7 +6,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import i18n from 'i18n-js';
 import { IInteractive } from '../../../../model/IInteractive';
 import { Hat } from '../../../../component/hat/Hat';
-import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
+import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../../view/profile/settings/target-glycemia-picker/TargetGlycemiaPicker';
 import { GlycemiaTypeSelectPickerConnect } from '../../../../view/profile/settings/select-picker/GlycemiaTypeSelectPicker';
 import { IStorage } from '../../../../model/IStorage';
 

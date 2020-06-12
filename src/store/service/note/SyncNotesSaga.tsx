@@ -7,6 +7,7 @@ import { handleError } from '../../../app/ErrorHandler';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = 'SYNC_NOTES_ACTION';
 
@@ -78,7 +79,7 @@ function* run(action) {
             error: null
         }));
     } catch (e) {
-        handleError(e, 'Ошибка синхронизации записей с сервера');
+        handleError(e, i18nGet('notes_sync_error'));
 
         yield put(createUserChangeAction({
             syncLoading: false,

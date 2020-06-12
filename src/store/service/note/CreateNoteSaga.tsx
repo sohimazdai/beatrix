@@ -9,6 +9,7 @@ import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = 'CREATE_NOTE_ACTION';
 
@@ -66,7 +67,7 @@ function* createNote({ payload }: CreateNoteAction) {
             error: null,
         }));
     } catch (e) {
-        handleError(e, 'Ошибка сохранения записи на сервер');
+        handleError(e, i18nGet('notes_creating_error'));
 
         yield put(createUserChangeAction({
             syncLoading: false,

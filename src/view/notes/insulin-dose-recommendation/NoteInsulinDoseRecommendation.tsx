@@ -33,13 +33,14 @@ function NoteInsulinDoseRecommendation(props: Props) {
                 : ''
         }
 
+        const insulinToCarbRatio = sheduleItem.carbohydrateRatio;
         const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
         const insulinToCorrectGlucose = glucoseValueToCorrect / sheduleItem.insulinSensitivityFactor;
-        const insulinToCorrectBU = note.breadUnits * sheduleItem.carbohydrateRatio;
+        const insulinToCorrectBU = note.breadUnits / insulinToCarbRatio;
         const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
 
         if (note.glucose == 0 && note.breadUnits == 0) {
-            return ''
+            return '';
         }
 
         if (note.glucose === 0) {

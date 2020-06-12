@@ -7,6 +7,7 @@ import { IUserPropertiesShedule } from "../../../model/IUserPropertiesShedule";
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = "UPDATE_SHEDULE_ACTION";
 
@@ -39,7 +40,7 @@ function* run({ payload }: UpdateUserSheduleAction) {
         );
 
         console.log('🤖🤖🤖🤖 pl', payload.shedule);
-        
+
         const state: IStorage = yield select(state => state);
         if (state.app.serverAvailable) {
             yield call(
@@ -58,7 +59,7 @@ function* run({ payload }: UpdateUserSheduleAction) {
             })
         );
     } catch (e) {
-        handleError(e, 'Ошибка синхронизации расписания с сервером');
+        handleError(e, i18nGet('shedule_sync_error'));
         yield put(
             createUserChangeAction({
                 loading: false,

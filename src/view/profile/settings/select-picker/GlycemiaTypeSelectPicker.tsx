@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProfilePicker } from '../../ProfilePicker';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Button } from 'react-native';
 import { ShortInsulinType, IUserDiabetesProperties, GlycemiaMeasuringType } from '../../../../model/IUserDiabetesProperties';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
@@ -34,15 +34,12 @@ function GlycemiaTypeSelectPicker(props: Props) {
                                 {i18n.t(selectedGlycemia)}
                             </Text>
                             <View
-                                style={styles.shortInsulinTypeButton}
+                                style={styles.changeButton}
                             >
-                                <TouchableOpacity
+                                <Button
+                                    title={i18n.t('profile_change')}
                                     onPress={() => setBlocked(false)}
-                                >
-                                    <Text style={styles.shortInsulinTypePickerItemTextChange}>
-                                        {i18n.t('profile_change')}
-                                    </Text>
-                                </TouchableOpacity>
+                                />
                             </View>
                         </View>
                     ) : (

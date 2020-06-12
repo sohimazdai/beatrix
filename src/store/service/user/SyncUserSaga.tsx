@@ -10,6 +10,7 @@ import { createUpdateUserDiabetesPropertiesAction } from './UpdateUserDiabetesPr
 import { handleError } from '../../../app/ErrorHandler';
 import { appAnalytics } from '../../../app/Analytics';
 import { batchActions } from 'redux-batched-actions';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -52,7 +53,7 @@ function* syncUser({ payload }: SyncUserAction) {
             error: null
         }));
     } catch (e) {
-        handleError(e, 'Ошибка синхронизации диабетического профиля с сервером');
+        handleError(e, i18nGet('user_sync_error'));
         yield put(createUserChangeAction({
             loading: false,
             error: e

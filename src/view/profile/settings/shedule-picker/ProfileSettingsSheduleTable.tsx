@@ -122,10 +122,13 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
     }
 
     get description() {
-        const { userDiabetesProperties: { glycemiaMeasuringType } } = this.props;
+        const { userDiabetesProperties: { glycemiaMeasuringType, carbsMeasuringType } } = this.props;
         const glycemiaType = Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType);
         const glycemiaTypeString = i18n.t(glycemiaType);
         const glycemiaTypeStringLong = i18n.t(glycemiaType + '_long');
+
+        const carbohydratesType = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
+        const breadUnitsParentCase = i18n.t(carbohydratesType + '_parent_case');
 
         switch (this.props.sheduleKey) {
             case SheduleKeyType.INSULIN_SENSITIVITY_FACTOR:
@@ -135,7 +138,11 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
                         glycemiaTypeStringLong + '(' + glycemiaTypeString + ')'
                     );
             case SheduleKeyType.CARBOHYDRATE_RATIO:
-                return i18n.t('insulin_to_carb_rate_description');
+                return i18n.t('insulin_to_carb_rate_description')
+                    .replace(
+                        '%breadUnits_type%',
+                        breadUnitsParentCase
+                    );
         }
     }
 

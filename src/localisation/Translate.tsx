@@ -1,5 +1,9 @@
 import i18n from 'i18n-js';
 
+export function i18nGet(key: string) {
+  return i18n.t(key);
+}
+
 export default function translate() {
   /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
   i18n.translations.en = {
@@ -77,7 +81,7 @@ export default function translate() {
     delete: 'Delete',
 
     carb_gram: 'grams',
-    carb_units: 'units',
+    carbs_units: 'units',
 
     // CHARTS
     charts: 'Charts',
@@ -152,15 +156,18 @@ export default function translate() {
     insulin_sensitivity_factor_hint: 'Define IFS for various time periods',
 
     insulin_to_carb_rate: 'Insulin-to-carb ratio',
-    insulin_to_carb_rate_description: 'The insulin-to-carb ratio means you will take 1 unit of insulin for a certain amount of carbohydrate',
+    insulin_to_carb_rate_description: 'The coefficient shows the amount of %breadUnits_type% absorbed by 1 unit of insulin',
     insulin_to_carb_rate_hint: 'Define insulin-to-carb for various time periods',
+    carbohydrates_parent_case: 'carbohydrates',
+    breadUnits_parent_case: 'carbs units',
 
     since: 'since',
     until: 'until',
     save: 'Save',
     need_to_fill_time_period: 'Time gaps required',
 
-    profile_change: 'change',
+    profile_change: 'Change',
+    profile_apply: 'Apply',
 
     glycemia_settings: 'Glycemia settings',
     glycemia_settings_description: 'Change your target glycemia and type of measurement for your meter',
@@ -174,6 +181,19 @@ export default function translate() {
     not_selected: 'not selected',
     are_you_sure: 'Are you sure?',
     ok: 'OK',
+
+    active_network_needed: 'You need to connect to the internet',
+    server_is_not_available_try_to_restart_app: 'Server is currently unavailable. Try restarting the application.',
+
+    //ERROR
+    user_properties_changing_error: 'Error changing user settings',
+    shedule_sync_error: 'Error synchronizing schedule with server',
+    sync_error: 'Error synchronizing with server',
+    note_updating_error: 'Error updating record on server',
+    notes_sync_error: 'Error synchronizing records with the server',
+    notes_deleting_error: 'Error deleting record from server',
+    notes_creating_error: 'Error creating server record',
+    google_auth_error: 'Login failed',
   };
   /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
 
@@ -253,7 +273,7 @@ export default function translate() {
     delete: 'Удалить',
 
     carb_gram: 'грамм',
-    carb_units: 'ХЕ',
+    carbs_units: 'ХЕ',
 
     //CHARTS
     charts: 'Графики',
@@ -311,7 +331,7 @@ export default function translate() {
     carb_unit_description: 'Укажите какой системой подсчета углеводов вы пользуетесь',
 
     carb_unit_weight_title: 'Количество углеводов в ХЕ',
-    carb_unit_weight_description: 'Укажите количесво углеводов в ХЕ, которые вы используете при подсчете',
+    carb_unit_weight_description: 'Укажите количество углеводов в ХЕ, которые вы используете при подсчете',
 
     breadUnits_measuring: 'ХЕ',
     carbohydrates_measuring: 'Углеводы в граммах',
@@ -329,8 +349,10 @@ export default function translate() {
     insulin_sensitivity_factor_hint: 'Укажите ФЧИ для различных промежутков времени',
 
     insulin_to_carb_rate: 'Углеводный коэффициент (УК)',
-    insulin_to_carb_rate_description: 'Показывает количество единиц инсулина необходимого для усвоения %breadUnits_type%',
+    insulin_to_carb_rate_description: 'Показывает количество %breadUnits_type%, усваиваемых 1 единицей инсулина',
     insulin_to_carb_rate_hint: 'Укажите ваш УК для различных промежутков времени',
+    carbohydrates_parent_case: 'углеводов',
+    breadUnits_parent_case: 'ХЕ',
 
     since: 'с',
     until: 'до',
@@ -338,6 +360,7 @@ export default function translate() {
     need_to_fill_time_period: 'Необходимо заполнить временные промежутки',
 
     profile_change: 'Изменить',
+    profile_apply: 'Применить',
 
     glycemia_settings: 'Настройки сахара крови',
     glycemia_settings_description: 'Измените целевую гликемию и тип измерений вашего глюкометра',
@@ -351,6 +374,18 @@ export default function translate() {
     not_selected: 'не выбрано',
     are_you_sure: 'Вы уверены?',
     ok: 'OK',
+    active_network_needed: 'Необходимо интернет-соединение',
+    server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',
+
+    //ERROR
+    user_properties_changing_error: 'Ошибка при изменении параметров пользователя',
+    shedule_sync_error: 'Ошибка синхронизации расписания с сервером',
+    sync_error: 'Ошибка при синхронизации с сервером',
+    note_updating_error: 'Ошибка обновления записи на сервере',
+    notes_sync_error: 'Ошибка синхронизации записей с сервером',
+    notes_deleting_error: 'Ошибка удаления записи с сервера',
+    notes_creating_error: 'Ошибка создания записи на сервер',
+    google_auth_error: 'Войти не удалось',
   }
   /* 🇷🇺 */
 } 

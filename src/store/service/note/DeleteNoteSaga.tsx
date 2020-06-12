@@ -8,6 +8,7 @@ import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListA
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = 'DELETE_NOTE_ACTION';
 
@@ -61,7 +62,7 @@ function* run({ payload }: DeleteNoteAction) {
             error: null
         }));
     } catch (e) {
-        handleError(e, 'Ошибка удаления записи с сервера');
+        handleError(e, i18nGet('notes_deleting_error'));
 
         yield put(createUserChangeAction({
             syncLoading: false,

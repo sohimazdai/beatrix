@@ -3,6 +3,13 @@ import Variables from './Variables';
 import { Platform } from 'react-native';
 import { logger } from './Logger';
 import Constants from 'expo-constants';
+import { CarbsMeasuringType, GlycemiaMeasuringType, CarbsUnitWeightType } from '../model/IUserDiabetesProperties';
+
+export interface IAmplitudeUserProperties {
+  glycemiaMeasuringType: GlycemiaMeasuringType,
+  carbsMeasuringType: CarbsMeasuringType,
+  carbsUnitWeightType: CarbsUnitWeightType,
+};
 
 export const appAnalytics = {
   init: (): Promise<void> => {
@@ -38,6 +45,15 @@ export const appAnalytics = {
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
+
+  setUserProperties: (properties: IAmplitudeUserProperties) => {
+    logger('::amplitude user properties is setting now');
+
+    Amplitude.setUserProperties(properties)
+      .then(() => logger('::amplitude user properties setted'))
+      .catch((e) => logger('::amplitude user properties error: ', e.message))
+  },
+
   events: {
     ERROR: 'Error',
 
@@ -52,7 +68,7 @@ export const appAnalytics = {
     //PROFILE
     PROFILE_SEEN: 'Profile seen',
     SHEDULE_UPDATED: 'Shedule updated',
-    TARGET_GLYCEMIA_UPDATED: 'Target glycemia updated',
+    USER_DIABETES_PROPERTIES_UPDATED: 'User diabetes properties updated',
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',
@@ -67,6 +83,7 @@ export const appAnalytics = {
     NOTE_DELETED: 'Note deleted',
     NOTE_DATE_CHANGED: 'Note date changed',
     NOTE_TIME_CHANGED: 'Note time changed',
-
+    //HANDLED ERRORS
+    SERVER_IS_NOT_AVAILABLE: 'Server is not available',
   }
 }

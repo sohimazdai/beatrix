@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProfilePicker } from '../../ProfilePicker';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Button } from 'react-native';
 import { IUserDiabetesProperties, CarbsUnitWeightType, CarbsMeasuringType } from '../../../../model/IUserDiabetesProperties';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
@@ -25,7 +25,7 @@ function CarbsUnitWeightSelectPicker(props: Props) {
         props.userDiabetesProperties.carbsMeasuringType
     );
 
-    return selectedCarbsMeasuringType === CarbsMeasuringType.BREAD_UNITS && ( 
+    return selectedCarbsMeasuringType === CarbsMeasuringType.BREAD_UNITS && (
         <ProfilePicker
             title={i18n.t('carb_unit_weight_title')}
             description={i18n.t('carb_unit_weight_description')}
@@ -40,15 +40,12 @@ function CarbsUnitWeightSelectPicker(props: Props) {
                                 {selectedCarbsUnitWeight + ' ' + i18n.t('carb_gram')}
                             </Text>
                             <View
-                                style={styles.shortInsulinTypeButton}
+                                style={styles.changeButton}
                             >
-                                <TouchableOpacity
+                                <Button
+                                    title={i18n.t('profile_change')}
                                     onPress={() => setBlocked(false)}
-                                >
-                                    <Text style={styles.shortInsulinTypePickerItemTextChange}>
-                                        {i18n.t('profile_change')}
-                                    </Text>
-                                </TouchableOpacity>
+                                />
                             </View>
                         </View>
                     ) : (

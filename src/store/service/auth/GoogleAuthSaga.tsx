@@ -7,6 +7,7 @@ import { createSyncUserAction } from '../user/SyncUserSaga';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import Constants from 'expo-constants';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = 'GOOGLE_AUTH_ACTION';
 
@@ -58,7 +59,8 @@ function* run() {
         }));
         yield put(createSyncUserAction(userData));
     } catch (e) {
-        handleError(e, 'Войти не удалось');
+        handleError(e, i18nGet('google_auth_error'));
+
         yield put(createUserChangeAction({
             loading: false,
             error: e.message,

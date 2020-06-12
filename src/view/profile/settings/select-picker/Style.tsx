@@ -68,6 +68,9 @@ export const styles = StyleSheet.create({
         borderRadius: 5,
         ...shadowOptions
     },
+    changeButton: {
+        margin: 10,
+    },
     shortInsulinTypeButtonActive: {
         borderColor: "#2E3858",
         borderWidth: 2,

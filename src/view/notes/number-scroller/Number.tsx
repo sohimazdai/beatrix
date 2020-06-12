@@ -4,6 +4,7 @@ import { Text, StyleSheet } from 'react-native';
 import { Color } from '../../../constant/Color';
 
 interface Props {
+  isDecimal?: boolean;
   value: number;
   isSelected: boolean;
   onClick: (value) => void;
@@ -11,7 +12,19 @@ interface Props {
 
 export default class Number extends React.Component<Props> {
   render() {
-    const { value, onClick, isSelected } = this.props;
+    const { value, onClick, isSelected, isDecimal } = this.props;
+
+    const selectedTextStyle = { ...styles.text, ...styles.textSelected };
+    const regularTextStyle = styles.text;
+    const decimalTextStyle = styles.decimalText;
+
+    const textStyle = isSelected
+      ? isDecimal
+        ? { ...selectedTextStyle, ...decimalTextStyle }
+        : selectedTextStyle
+      : isDecimal
+        ? { ...regularTextStyle, ...decimalTextStyle }
+        : regularTextStyle;
 
     return (
       <TouchableOpacity
@@ -23,11 +36,7 @@ export default class Number extends React.Component<Props> {
         }}
       >
         <Text
-          style={
-            isSelected
-              ? { ...styles.text, ...styles.textSelected }
-              : styles.text
-          }
+          style={textStyle}
         >
           {value}
         </Text>
@@ -54,5 +63,9 @@ const styles = StyleSheet.create({
   textSelected: {
     backgroundColor: Color.PRIMARY,
     color: Color.WHITE,
-  }
+  },
+  decimalText: {
+    width: 40,
+    fontSize: 15,
+  },
 })

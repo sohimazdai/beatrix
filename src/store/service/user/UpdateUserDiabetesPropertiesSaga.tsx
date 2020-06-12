@@ -12,6 +12,7 @@ import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties'
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
 import { createSyncNotesAction } from '../note/SyncNotesSaga';
 import { createChangeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = "UPDATE_USER_DIABETES_PROPERTIES";
 
@@ -33,15 +34,19 @@ function* run(action) {
     const userDiabetesProperties = action.payload.newProperties || state.userDiabetesProperties;
 
     if (!state.app.networkConnected) {
-      Alert.alert(i18n.t('active_network_needed'));
+      Alert.alert(i18nGet('active_network_needed'));
     };
 
-    if (!state.app.serverAvailable) {
-      // appAnalytics.sendEvent(appAnalytics.events.SHEDULE_UPDATED);
-      Alert.alert(i18n.t('server_is_not_available_try_to_restart_app'));
+    if (state.app.networkConnected) {
+      if (!state.app.serverAvailable) {
+        appAnalytics.sendEvent(appAnalytics.events.SERVER_IS_NOT_AVAILABLE);
+        Alert.alert(i18nGet('server_is_not_available_try_to_restart_app'));
+      }
     }
 
     if (state.app.serverAvailable) {
+      appAnalytics.setUser(appAnalytics.events.SERVER_IS_NOT_AVAILABLE);
+
       yield put(createUserChangeAction({
         syncLoading: true,
         error: null,
@@ -73,12 +78,13 @@ function* run(action) {
           error: null,
         })
       );
+
+      appAnalytics.sendEvent(appAnalytics.events.USER_DIABETES_PROPERTIES_UPDATED);
+      appAnalytics.setUserProperties(userDiabetesProperties);
+
     }
-
-    // appAnalytics.sendEvent(appAnalytics.events.SHEDULE_UPDATED);
-
   } catch (e) {
-    handleError(e, 'Ошибка при изменении параметров пользователя');
+    handleError(e, i18nGet('user_properties_changing_error'));
     yield put(
       createUserChangeAction({
         syncLoading: false,

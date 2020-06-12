@@ -205,7 +205,7 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
         if (name === NoteValueType.BREAD_UNITS) {
             const carbMeasureType = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
             const carbUnits = carbMeasureType === CarbsMeasuringType.BREAD_UNITS
-                ? i18n.t('carb_units')
+                ? i18n.t('carbs_units')
                 : i18n.t('carb_gram')
             postfix = ' ' + carbUnits;
         }

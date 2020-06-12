@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from '../../../../constant/Color';
 import { shadowOptions } from "../../../../constant/ShadowOptions";
 
 export const styles = StyleSheet.create({
@@ -42,13 +43,21 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     shortInsulinTypeButton: {
+        maxWidth: 100,
         padding: 10,
         margin: 5,
         backgroundColor: "white",
         borderColor: "white",
         borderWidth: 2,
         borderRadius: 5,
+        alignSelf: 'center',
         ...shadowOptions
+    },
+    applyButton: {
+        margin: 10,
+    },
+    changeButton: {
+        margin: 10,
     },
     shortInsulinTypeButtonActive: {
         borderColor: "#2E3858",
@@ -90,5 +99,30 @@ export const styles = StyleSheet.create({
         padding: 20,
         paddingBottom: 10,
         paddingTop: 10
-    }
+    },
+    blockedView: {
+        padding: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    pickerContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    shortInsulinTypePickerItemTextBlockedSelected: {
+        color: Color.PRIMARY,
+        fontWeight: '500',
+        fontSize: 18,
+        margin: 5,
+    },
+    shortInsulinTypePickerItemTextChange: {
+        color: Color.PRIMARY_LIGHT,
+        fontWeight: '500',
+        fontSize: 16,
+    },
 })
+

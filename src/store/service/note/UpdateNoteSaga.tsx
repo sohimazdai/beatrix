@@ -9,6 +9,7 @@ import { handleError } from '../../../app/ErrorHandler';
 import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
+import { i18nGet } from '../../../localisation/Translate';
 
 const ACTION_TYPE = 'UPDATE_NOTE_ACTION';
 
@@ -57,7 +58,7 @@ function* run({ payload }: UpdateNoteAction) {
             error: null
         }));
     } catch (e) {
-        handleError(e, 'Ошибка обновления записи на сервере');
+        handleError(e, i18nGet('note_updating_error'));
 
         yield put(createUserChangeAction({
             syncLoading: false,

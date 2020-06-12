@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform, View, Text } from 'react-native';
-import { GlycemiaTypeSelectPickerConnect } from '../../../view/profile/settings/select-picker/GlycemiaTypeSelectPicker';
-import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../view/profile/settings/target-glycemia-picker/ProfileSettingsTargetGlycemiaPicker';
-import { ProfileSettingsSheduleTableConnect } from '../../../view/profile/settings/shedule-picker/ProfileSettingsSheduleTable';
+import { ScrollView, View, Text } from 'react-native';
 import { styles } from './Style';
-import { SheduleKeyType } from '../../../model/IUserPropertiesShedule';
-import { Fader } from '../../../component/Fader';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IInteractive } from '../../../model/IInteractive';
 import { Hat } from '../../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { GlycemiaTypePickerConnect } from '../../../view/profile/settings/glycemia-type-picker/GlycemiaTypePicker';
 import i18n from 'i18n-js';
-import { CarbsTypeSelectPickerConnect } from '../../../view/profile/settings/select-picker/CarbsTypeSelectPicker';
-import { ProfilePicker } from '../../../view/profile/ProfilePicker';
 import { ProfileItem } from '../../../view/profile/ProfileItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
