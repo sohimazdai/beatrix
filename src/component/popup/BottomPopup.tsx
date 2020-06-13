@@ -28,16 +28,12 @@ export const BottomPopup = (props: BottomPopupProps) => {
     }, [props.hidden, props.children])
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={!hidden}
-            
-        >
-            <View style={{ flex: 1, flexDirection: 'column-reverse' }}>
-                {children}
-            </View>
-        </Modal>
+        <Animated.View style={{
+            ...styles.BottomPopupView,
+            bottom: currentBottom
+        }}>
+            {children}
+        </Animated.View>
     )
 }
 

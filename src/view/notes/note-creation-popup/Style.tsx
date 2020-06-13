@@ -3,11 +3,15 @@ import { shadowOptions } from "../../../constant/ShadowOptions";
 import { Color } from '../../../constant/Color';
 
 export const styles = StyleSheet.create({
+    noteCreationViewScrollView: {
+        flex: 1,
+        width: '100%',
+        minHeight: Dimensions.get('screen').height * 0.8,
+    },
     noteCreationView: {
         flex: 1,
-        maxHeight: Dimensions.get('screen').height * 0.8,
-        height: '100%',
         width: '100%',
+        height: Dimensions.get('screen').height * 0.8,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#D4EEFF",
@@ -17,20 +21,14 @@ export const styles = StyleSheet.create({
     },
     noteEditingView: {
         flex: 1,
-        maxHeight: Dimensions.get('screen').height * 0.8,
-        height: '100%',
         width: '100%',
+        height: Dimensions.get('screen').height * 0.8,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#FFE1DF",
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-    },
-    noteCreationViewScrollView: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
     },
     scrollViewContent: {
         flex: 1,
