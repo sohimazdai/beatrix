@@ -9,13 +9,15 @@ import { Alert } from 'react-native';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
-import { createSyncNotesAction } from '../note/SyncNotesSaga';
 import { createChangeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
 import { i18nGet } from '../../../localisation/Translate';
+import { INoteList } from '../../../model/INoteList';
+import { syncNotes } from '../../service-helper/sync-notes';
+import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 
 const ACTION_TYPE = "UPDATE_USER_DIABETES_PROPERTIES";
 
-export function createUpdateUserDiabetesPropertiesAction(newProperties?: IUserDiabetesProperties) {
+export function createUpdateUserDiabetesPropertiesAction(newProperties: IUserDiabetesProperties) {
   return batchActions([
 
     {
@@ -30,7 +32,11 @@ export function createUpdateUserDiabetesPropertiesAction(newProperties?: IUserDi
 function* run(action) {
   try {
     const state: IStorage = yield select(state => state);
-    const userDiabetesProperties = action.payload.newProperties || state.userDiabetesProperties;
+    const userId = state.user.id;
+    const userDiabetesProperties: IUserDiabetesProperties = {
+      ...state.userDiabetesProperties,
+      ...action.payload.newProperties,
+    };
 
     if (!state.app.networkConnected) {
       Alert.alert(i18nGet('active_network_needed'));
@@ -44,26 +50,29 @@ function* run(action) {
     }
 
     if (state.app.serverAvailable) {
-      appAnalytics.setUser(appAnalytics.events.SERVER_IS_NOT_AVAILABLE);
-
       yield put(createUserChangeAction({
         syncLoading: true,
         error: null,
       }));
 
-      yield put(createSyncNotesAction({ noLoading: true }));
+      //SYNC NOTES
+      const syncedNotes: INoteList = yield call(syncNotes, state);
+      yield put(
+        batchActions([
+          createNoteListOneLevelDeepMerge(syncedNotes),
+          createClearPendingNoteListByUserId(userId),
+        ])
+      )
+      //END SYNC NOTES
 
-      const idsToConvert = Object.values(state.noteList)
-        .filter(note => note.userId === state.user.id)
+      const idsToConvert = Object.values(syncedNotes)
+        .filter(note => note.userId === userId)
         .map(note => note.id);
 
       const result = yield call(
         UserApi.syncUserProperties,
-        state.user.id,
-        {
-          ...state.userDiabetesProperties,
-          ...userDiabetesProperties
-        },
+        userId,
+        userDiabetesProperties,
         idsToConvert,
         state.userPropertiesShedule,
       );
@@ -80,7 +89,6 @@ function* run(action) {
 
       appAnalytics.sendEvent(appAnalytics.events.USER_DIABETES_PROPERTIES_UPDATED);
       appAnalytics.setUserProperties(userDiabetesProperties);
-
     }
   } catch (e) {
     handleError(e, i18nGet('user_properties_changing_error'));

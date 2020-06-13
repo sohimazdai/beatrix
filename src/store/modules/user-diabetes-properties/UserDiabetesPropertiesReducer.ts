@@ -6,7 +6,6 @@ import { Measures } from '../../../localisation/Measures';
 export function userDiabetesPropertiesReducer(
   properties: IUserDiabetesProperties = {
     targetGlycemia: Measures.getNormalGlycemia(),
-    shortInsulinType: ShortInsulinType.ULTRA_SHORT,
     glycemiaMeasuringType: Measures.getDefaultGlucoseMeasuringType(),
     carbsMeasuringType: Measures.getDefaultCarbsMeasuringType(),
     carbsUnitWeightType: Measures.getDefaultCarbsUnitWeightType(),

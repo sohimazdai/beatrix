@@ -70,11 +70,9 @@ export class Measures {
   static getDefaultGlucoseMeasuringType = (
     existingGlycemiaMeasuringType?: GlycemiaMeasuringType
   ) => {
-
     if (existingGlycemiaMeasuringType) return existingGlycemiaMeasuringType;
 
     if (i18n.locale === 'ru') return GlycemiaMeasuringType.MMOL_L;
-
     return GlycemiaMeasuringType.MG_DL;
   }
 

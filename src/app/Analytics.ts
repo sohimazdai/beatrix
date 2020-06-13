@@ -3,13 +3,9 @@ import Variables from './Variables';
 import { Platform } from 'react-native';
 import { logger } from './Logger';
 import Constants from 'expo-constants';
-import { CarbsMeasuringType, GlycemiaMeasuringType, CarbsUnitWeightType } from '../model/IUserDiabetesProperties';
+import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
 
-export interface IAmplitudeUserProperties {
-  glycemiaMeasuringType: GlycemiaMeasuringType,
-  carbsMeasuringType: CarbsMeasuringType,
-  carbsUnitWeightType: CarbsUnitWeightType,
-};
+export interface IAmplitudeUserProperties extends IUserDiabetesProperties { };
 
 export const appAnalytics = {
   init: (): Promise<void> => {
