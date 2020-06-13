@@ -18,7 +18,6 @@ import { Fader, FaderType } from '../component/fader/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
 import * as Localization from 'expo-localization';
-import i18n from 'i18n-js';
 import translate, { i18nGet, setLocale } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';

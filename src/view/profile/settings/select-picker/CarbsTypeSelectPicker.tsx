@@ -17,7 +17,6 @@ import { callSyncParametersAlert } from '../../modules/call-sync-parameters-aler
 interface Props {
     userDiabetesProperties?: IUserDiabetesProperties;
     onPropertiesChange?: (properties: IUserDiabetesProperties) => void;
-    syncLoading?: boolean
 }
 
 function CarbsTypeSelectPicker(props: Props) {
@@ -108,7 +107,6 @@ export const CarbsTypeSelectPickerConnect = connect(
     (state: IStorage) => ({
         userDiabetesProperties: state.userDiabetesProperties,
         userPropertiesShedule: state.userPropertiesShedule,
-        syncLoading: state.user.syncLoading || state.user.loading,
     }),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => ({

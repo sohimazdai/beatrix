@@ -22,7 +22,7 @@ interface DeleteNoteAction {
 export function createDeleteNoteAction(id: string) {
     return batchActions([
         createUserChangeAction({
-            syncLoading: true,
+            loading: true,
             error: null,
         }),
         {
@@ -58,14 +58,14 @@ function* run({ payload }: DeleteNoteAction) {
         appAnalytics.sendEvent(appAnalytics.events.NOTE_DELETED);
 
         yield put(createUserChangeAction({
-            syncLoading: false,
+            loading: false,
             error: null
         }));
     } catch (e) {
         handleError(e, i18nGet('notes_deleting_error'));
 
         yield put(createUserChangeAction({
-            syncLoading: false,
+            loading: false,
             error: e.message
         }));
     }

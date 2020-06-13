@@ -220,14 +220,15 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
 
     renderAddButton() {
         const { needToApply } = this.state;
-        return !!this.rangeThatNeedToWriteMore && !needToApply && <TouchableOpacity
-            style={styles.addTouchable}
-            onPress={this.onAddPress}
-        >
-            <Text style={{ fontSize: 16 }}>
-                {i18nGet('add')}
-            </Text>
-        </TouchableOpacity>
+        return !!this.rangeThatNeedToWriteMore && !needToApply && (
+            <View style={styles.addTouchable}>
+                <Button
+                    title={i18nGet('add')}
+                    onPress={this.onAddPress}
+                    color={Color.PRIMARY}
+                />
+            </View>
+        )
     }
 
     renderCloseButton() {

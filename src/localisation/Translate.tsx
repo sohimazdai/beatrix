@@ -180,7 +180,8 @@ export default function translate() {
     insulin_settings: 'Insulin parameters',
     insulin_settings_description: "Fill out and use your doctor's recommended dosage of insulin when creating notes",
 
-    we_will_recalculating_your_notes: 'We recalculate your data to fit the new measurement system',
+    we_will_recalculating_your_notes: 'App will recalculate your data',
+    its_need_to_fit: 'It is need to fit the new measurement system',
     please_do_not_close_app: 'Please do not close the application! It does not take much time',
 
     // GENERAL
@@ -379,7 +380,8 @@ export default function translate() {
     insulin_settings: 'Параметры инсулина',
     insulin_settings_description: 'Укажите ваш рекомендуемый инсулин "на понижение" и "на еду"',
 
-    we_will_recalculating_your_notes: 'Мы пересчитаем ваши данные для соответствия новой системе измерений',
+    we_will_recalculating_your_notes: 'Мы пересчитаем ваши данные',
+    its_need_to_fit: 'Это необходимо для соответствия новой системе измерений',
     please_do_not_close_app: 'Пожалуйста, не закрывайте приложение! Это не займет много времени',
     // GENERAL
     cancel: 'Отмена',

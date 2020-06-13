@@ -43,7 +43,7 @@ export function createSyncNotesAction(payload?: Payload) {
     if (!noLoading) {
         actions.push(
             createUserChangeAction({
-                syncLoading: true,
+                loading: true,
                 error: null,
             })
         )
@@ -99,7 +99,7 @@ function* run(action: Action) {
 
         if (!noLoading) {
             yield put(createUserChangeAction({
-                syncLoading: false,
+                loading: false,
                 error: null
             }));
         }
@@ -107,7 +107,7 @@ function* run(action: Action) {
         handleError(e, i18nGet('notes_sync_error'));
 
         yield put(createUserChangeAction({
-            syncLoading: false,
+            loading: false,
             error: e.message
         }));
     }

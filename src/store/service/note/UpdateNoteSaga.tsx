@@ -23,7 +23,7 @@ interface UpdateNoteAction {
 export function createUpdateNoteAction(note: INoteListNote) {
     return batchActions([
         createUserChangeAction({
-            syncLoading: true,
+            loading: true,
             error: null,
         }),
         {
@@ -54,14 +54,14 @@ function* run({ payload }: UpdateNoteAction) {
         );
 
         yield put(createUserChangeAction({
-            syncLoading: false,
+            loading: false,
             error: null
         }));
     } catch (e) {
         handleError(e, i18nGet('note_updating_error'));
 
         yield put(createUserChangeAction({
-            syncLoading: false,
+            loading: false,
             error: e.message
         }));
     }
