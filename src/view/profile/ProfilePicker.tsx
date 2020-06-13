@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { shadowOptions } from '../../constant/ShadowOptions'
 
 interface Props {
     title?: string
@@ -24,11 +23,17 @@ export class ProfilePicker extends React.Component<Props> {
                 </Text>}
             </View>
             {this.props.children}
-            {!!this.props.hint && <Text
-                style={this.props.hintCritical ? { ...styles.hint, ...styles.hintCritical } : styles.hint}
-            >
-                {this.props.hint}
-            </Text>}
+            {!!this.props.hint && (
+                <Text
+                    style={
+                        this.props.hintCritical
+                            ? { ...styles.hint, ...styles.hintCritical }
+                            : styles.hint
+                    }
+                >
+                    {this.props.hint}
+                </Text>
+            )}
         </View>
     }
 }

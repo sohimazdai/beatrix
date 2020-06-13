@@ -33,7 +33,7 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
     const isMounted = React.useRef(false);
 
     React.useEffect(() => {
-        if (isMounted) {
+        if (isMounted.current) {
             onPropertiesChange({ targetGlycemia: normalGlycemia });
             setTargetGlycemiaInput(normalGlycemia);
         } else isMounted.current = true;

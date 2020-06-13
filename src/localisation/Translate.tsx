@@ -1,5 +1,9 @@
 import i18n from 'i18n-js';
 
+export function setLocale(countryCode) {
+  i18n.locale = countryCode === 'ru' ? 'ru' : 'en';
+}
+
 export function i18nGet(key: string) {
   return i18n.t(key);
 }
