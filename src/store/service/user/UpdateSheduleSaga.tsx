@@ -39,8 +39,6 @@ function* run({ payload }: UpdateUserSheduleAction) {
             createOneLevelMergeUserPropertiesShedule(payload.shedule)
         );
 
-        console.log('🤖🤖🤖🤖 pl', payload.shedule);
-
         const state: IStorage = yield select(state => state);
         if (state.app.serverAvailable) {
             yield call(

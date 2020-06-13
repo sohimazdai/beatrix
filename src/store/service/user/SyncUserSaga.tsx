@@ -60,7 +60,6 @@ function* syncUser({ payload }: SyncUserAction) {
             } = yield call(UserApi.syncUser, payload.user);
             const properties: IUserDiabetesProperties = userData.data.properties;
             const shedule: IUserPropertiesShedule = userData.data.shedule || {};
-            console.log('🤖🤖🤖🤖 userFromBack', userData.data);
 
             if (!properties.glycemiaMeasuringType) {
                 properties.glycemiaMeasuringType = Measures.getDefaultGlucoseMeasuringType(
@@ -96,9 +95,6 @@ function* syncUser({ payload }: SyncUserAction) {
                     createChangeUserPropertiesShedule(shedule),
                 ])
             );
-            console.log('🤖🤖🤖🤖 properties', properties);
-            console.log('🤖🤖🤖🤖 shedule', shedule);
-            console.log('🤖🤖🤖🤖 newProperties', newProperties);
 
             // SYNC NOTES
             const syncedNotes: INoteList = yield call(syncNotes, state);
