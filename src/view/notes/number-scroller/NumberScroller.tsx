@@ -68,7 +68,7 @@ export class Component extends React.Component<Props, State> {
   get selectedNatural() {
     const { selectedNumber } = this.props;
 
-    const naturalSelected = selectedNumber - this.selectedDecimal;
+    const naturalSelected = Math.round(selectedNumber - this.selectedDecimal);
 
     return naturalSelected;
   }
@@ -167,7 +167,7 @@ export class Component extends React.Component<Props, State> {
               onClick={() => this.onNaturalNumberClick(item)}
             />
           )}
-          keyExtractor={item => item.toString()}
+          keyExtractor={item => item && item.toString() || (Math.random() * 1000000000).toString()}
 
           getItemLayout={(data, index) => (
             { length: LENGTH, offset: LENGTH_WITH_SEPARATOR * index, index }
@@ -193,7 +193,7 @@ export class Component extends React.Component<Props, State> {
                 onClick={() => this.onDecimalNumberClick(item)}
               />
             )}
-            keyExtractor={item => item.toString()}
+            keyExtractor={item => item && item.toString() || (Math.random() * 1000000000).toString()}
 
             getItemLayout={(data, index) => (
               { length: DECIMAL_LENGTH, offset: DECIMAL_LENGTH_WITH_SEPARATOR * index, index }
