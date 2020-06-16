@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Animated, Dimensions, Modal, View, Easing } from 'react-native'
+import { StyleSheet, Animated, Dimensions, Easing } from 'react-native'
 
 export interface BottomPopupProps {
     hidden?: boolean;
@@ -9,7 +9,6 @@ export interface BottomPopupProps {
 export const BottomPopup = (props: BottomPopupProps) => {
     const [currentBottom] = React.useState(new Animated.Value(-Dimensions.get('screen').height))
     const [children, setChildren] = React.useState(null)
-    const [hidden, setHidden] = React.useState(true)
 
     React.useEffect(() => {
         Animated.timing(
@@ -17,14 +16,13 @@ export const BottomPopup = (props: BottomPopupProps) => {
             {
                 toValue: props.hidden ? -Dimensions.get('screen').height : 0,
                 duration: 300,
-                easing: Easing.linear
             }
-        ).start(() => {
-            props.hidden && setChildren(null)
-            props.hidden && setHidden(true)
+        ).start((BottomPopupProps) => {
+            BottomPopupProps.finished && props.hidden && setChildren(null);
         });
+
         !props.hidden && setChildren(props.children);
-        !props.hidden && setHidden(false);
+
     }, [props.hidden, props.children])
 
     return (

@@ -131,13 +131,13 @@ class Chart extends React.Component<ChartProps, ChartState> {
                         </ScrollView>
                     </View>
                 </View>
-                {this.state.selectedDotId && <ChartDotInfoPopupConnect
+                <ChartDotInfoPopupConnect
                     dateTitle={this.getChartPopupTitle()}
-                    shown={this.state.popupShown}
+                    shown={this.state.popupShown && this.state.selectedDotId}
                     onClose={this.onPopupClose}
                     note={this.getNoteForChartPopup()}
                     editable={this.state.selectedPeriod === ChartPeriodType.DAY}
-                />}
+                />
                 {!this.state.popupShown && <View style={styles.addNoteButtonView}>
                     <NoteCreationPopupButtonConnect />
                 </View>}
@@ -152,7 +152,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
             ChartValueType.BREAD_UNITS
         ];
 
-        const {userDiabetesProperties, userDiabetesProperties: {glycemiaMeasuringType}} = this.props;
+        const { userDiabetesProperties, userDiabetesProperties: { glycemiaMeasuringType } } = this.props;
 
         return (
             <View style={styles.chartView}>

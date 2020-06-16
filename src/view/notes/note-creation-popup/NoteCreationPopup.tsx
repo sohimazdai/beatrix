@@ -79,6 +79,10 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 commentary: note.commentary,
             });
         };
+
+        if (!pP.interactive.creatingNoteMode && interactive.creatingNoteMode) {
+            this.setInitialState();
+        };
     }
 
     render() {
