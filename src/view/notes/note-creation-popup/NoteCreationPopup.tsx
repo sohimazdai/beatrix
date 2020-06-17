@@ -80,7 +80,10 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
             });
         };
 
-        if (!pP.interactive.creatingNoteMode && interactive.creatingNoteMode) {
+        if (
+            !pP.interactive.creatingNoteMode && interactive.creatingNoteMode &&
+            !interactive.editingNoteId
+        ) {
             this.setInitialState();
         };
     }
