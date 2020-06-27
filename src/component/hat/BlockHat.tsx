@@ -1,10 +1,13 @@
 import React, { ReactElement } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native'
 import { Loader } from '../loader/Loader'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { BackArrowIcon } from '../icon/BackArrowIcon'
 
 interface Props {
     title?: string
     rightSideSlot?: ReactElement
+    onBackPress?: () => void;
 }
 
 export class BlockHat extends React.Component<Props> {
@@ -12,7 +15,17 @@ export class BlockHat extends React.Component<Props> {
         return (
             <View style={styles.hatView}>
                 <View style={styles.settingsView}>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={styles.leftSide}>
+                        {this.props.onBackPress && <View
+                            style={styles.backArrow}
+                        >
+                            <TouchableOpacity
+                                style={styles.backArrowTouchable}
+                                onPress={() => this.props.onBackPress()}
+                            >
+                                <BackArrowIcon />
+                            </TouchableOpacity>
+                        </View>}
                         <Text style={styles.title}>
                             {this.props.title}
                         </Text>
@@ -30,17 +43,29 @@ export class BlockHat extends React.Component<Props> {
 const styles = StyleSheet.create({
     hatView: {
         backgroundColor: "#2E3858",
+        paddingTop: 20,
+    },
+    leftSide: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     settingsView: {
         display: 'flex',
-        maxHeight: 80,
         width: '100%',
-        padding: 16,
-        paddingTop: 40,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
 
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: 'center',
+    },
+    backArrow: {
+        width: 40,
+    },
+    backArrowTouchable: {
+        padding: 5
     },
     title: {
         fontSize: 19,

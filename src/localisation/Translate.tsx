@@ -189,6 +189,10 @@ export default function translate() {
     last_notes: 'Recent notes',
     no_recent_notes_today: 'No notes yet today',
     glucose_chart: 'Glucose chart',
+    rest_active_insulin: 'Attention! Active insulin',
+    expires_in: 'Expires in',
+    minutes_short: 'min',
+    hours_short: 'h',
 
     // GENERAL
     cancel: 'Cancel',
@@ -393,8 +397,13 @@ export default function translate() {
     // DASHBOARD
     compensation: 'Компенсация',
     last_notes: 'Последние записи',
-    no_recent_notes_today: 'Нет записей за прошедшие сутки',
+    no_recent_notes_today: 'Нет записей за сегодняшний день',
     glucose_chart: 'График глюкозы',
+    rest_active_insulin: 'Действующий инсулин',
+    expires_in: 'Истекает через',
+    minutes_short: 'мин',
+    hours_short: 'ч',
+
     // GENERAL
     cancel: 'Отмена',
     not_selected: 'не выбрано',

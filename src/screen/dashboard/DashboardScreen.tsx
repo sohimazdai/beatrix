@@ -22,6 +22,7 @@ import { LastNotesConnected } from '../../view/dashboard/last-notes/LastNotes/La
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../../utils/DateHelper';
+import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/ActiveInsulinInfo';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -70,6 +71,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
           <ScrollView style={styles.scrollView}>
             <LastNotesConnected onNotesPress={() => navigation.navigate('Notes')} />
             <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
+            <ActiveInsulinInfoConnected />
             <View style={styles.stub} />
           </ScrollView>
         </View>

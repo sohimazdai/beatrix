@@ -44,9 +44,9 @@ export class ChartConfig {
         return {
             isAlone: true,
             width: this.WIDTH - 30,
-            height: Dimensions.get("screen").width / 2,
+            height: Dimensions.get("screen").width / 3,
             boxWidth: this.WIDTH -30,
-            boxHeight: Dimensions.get("screen").width / 2,
+            boxHeight: Dimensions.get("screen").width / 3,
             axisWidth: 2,
             axisColor: '#666666',
             netColor: '#999999',

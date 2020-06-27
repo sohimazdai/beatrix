@@ -57,12 +57,15 @@ export function Hat(props: HatProps) {
 const styles = StyleSheet.create({
     hatViewWrapper: {
         backgroundColor: "#2E3858",
+        paddingTop: 20,
     },
     hatView: {
         display: 'flex',
         width: '100%',
-        padding: 11,
-        paddingTop: 40,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+
+        maxHeight: 48,
 
         flexDirection: 'row',
         justifyContent: "space-between",

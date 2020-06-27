@@ -116,10 +116,10 @@ class Chart extends React.Component<ChartProps, ChartState> {
 
         return (
             <View style={styles.view}>
-                <Hat
+                <BlockHat
                     onBackPress={() => navigation.navigate('Dashboard')}
                     title={i18nGet('charts')}
-                    titleElement={this.getHatTitle()}
+                    rightSideSlot={this.getHatTitle()}
                 />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>

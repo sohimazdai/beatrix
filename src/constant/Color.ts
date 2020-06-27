@@ -11,6 +11,7 @@ export enum Color {
     BUTTON_STROKE_LIGHT_GRAY = '#cecece',
 
     TEXT_DARK_GRAY = '#333333',
+    TEXT_BLACK = '#000',
 
     PRIMARY = "#2E3858",
     PRIMARY_LIGHT = "#444E71",

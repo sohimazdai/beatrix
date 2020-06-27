@@ -9,6 +9,10 @@ export class DateHelper {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1).getTime();
     }
 
+    static getDiffBetweenInHours(old: number, actual: number) {
+        return (actual - old) / 1000 / 60 / 60;
+    }
+
     static getPreviousMonthNumber(date_: Date | number) {
         let date = date_;
         if (typeof date != 'string') {
