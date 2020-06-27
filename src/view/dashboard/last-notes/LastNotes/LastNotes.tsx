@@ -30,7 +30,9 @@ class LastNotes extends React.Component<Props> {
     let notesToRender = [];
 
     if (!noteListToday) isNoteListEmpty = true;
-    else notesToRender = Object.values(noteListToday).slice(-4).reverse();
+    else notesToRender = Object.values(noteListToday).slice(-4).sort(
+      (noteA, noteB) => noteB.date - noteA.date
+    );
 
     return (
       <DashboardCard>

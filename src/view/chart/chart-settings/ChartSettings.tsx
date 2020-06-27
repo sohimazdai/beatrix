@@ -9,12 +9,15 @@ import { DateHelper } from '../../../utils/DateHelper';
 import { MinusIcon } from '../../../component/icon/MinusIcon';
 import { PlusIcon } from '../../../component/icon/PlusIcon';
 import { i18nGet } from '../../../localisation/Translate';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../model/IStorage';
+import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
     onDateChange: (date: Date) => void;
     date: Date;
-    selectedPeriod: ChartPeriodType;
+    selectedChartPeriod: ChartPeriodType;
 }
 
 const PERIODS = [
@@ -23,7 +26,7 @@ const PERIODS = [
     ChartPeriodType.THREE_MONTH
 ]
 
-export function ChartSettings(props: ChartSettingsProps) {
+export function Comp(props: ChartSettingsProps) {
     const today = new Date(
         new Date().getFullYear(),
         new Date().getMonth(),
@@ -41,7 +44,7 @@ export function ChartSettings(props: ChartSettingsProps) {
             </View>
             <ChartSettingsDatePickerConnect
                 date={props.date}
-                selectedPeriod={props.selectedPeriod}
+                selectedPeriod={props.selectedChartPeriod}
                 onChange={props.onDateChange}
             />
             <View
@@ -69,10 +72,10 @@ export function ChartSettings(props: ChartSettingsProps) {
                 </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
-                        let buttonStyle = period === props.selectedPeriod ?
+                        let buttonStyle = period === props.selectedChartPeriod ?
                             { ...styles.periodButton, ...styles.periodButtonActive } :
                             styles.periodButton;
-                        let buttonTextStyle = period === props.selectedPeriod ?
+                        let buttonTextStyle = period === props.selectedChartPeriod ?
                             { ...styles.periodButtonText, ...styles.periodButtonTextActive } :
                             styles.periodButtonText;
                         return <View
@@ -82,7 +85,7 @@ export function ChartSettings(props: ChartSettingsProps) {
                         >
                             <TouchableOpacity
                                 style={styles.periodButtonTouchable}
-                                onPress={() => props.selectedPeriod != period && props.onChangingPeriod(period)}
+                                onPress={() => props.selectedChartPeriod != period && props.onChangingPeriod(period)}
                             >
                                 <Text style={buttonTextStyle}>
                                     {getPeriodName(period)}
@@ -96,8 +99,19 @@ export function ChartSettings(props: ChartSettingsProps) {
     </View >
 }
 
+export const ChartSettings = connect(
+    (state: IStorage) => ({
+        selectedChartPeriod: state.interactive.selectedChartPeriod
+    }),
+    (dispatch) => ({
+        onChangingPeriod: (period: ChartPeriodType) => dispatch(createChangeInteractive({
+            selectedChartPeriod: period
+        }))
+    })
+)(Comp)
+
 function setPreviousDateValueByChartPeriodType(props: ChartSettingsProps) {
-    switch (props.selectedPeriod) {
+    switch (props.selectedChartPeriod) {
         case ChartPeriodType.MONTH:
         case ChartPeriodType.THREE_MONTH:
             return DateHelper.getDifferentMonthDate(props.date, - 1)
@@ -106,7 +120,7 @@ function setPreviousDateValueByChartPeriodType(props: ChartSettingsProps) {
 }
 
 function setNextDateValueByChartPeriodType(props: ChartSettingsProps) {
-    switch (props.selectedPeriod) {
+    switch (props.selectedChartPeriod) {
         case ChartPeriodType.MONTH:
         case ChartPeriodType.THREE_MONTH:
             return DateHelper.getDifferentMonthDate(props.date, 1)

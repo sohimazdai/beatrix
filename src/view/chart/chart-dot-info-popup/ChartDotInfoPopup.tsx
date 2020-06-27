@@ -1,33 +1,64 @@
 import React from 'react';
-import { View, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Color } from '../../../constant/Color';
 import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
 import { ChartDotInfoPopupValue } from './dot-info-popup-value/ChartDotInfoPopupValue';
-import { ChartValueType } from '../../../model/IChart';
+import { ChartValueType, ChartPeriodType } from '../../../model/IChart';
 import { CloseIcon } from '../../../component/icon/CloseIcon';
-import { shadowOptions } from '../../../constant/ShadowOptions';
 import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from './Style';
+import { DateHelper } from '../../../utils/DateHelper';
+import { i18nGet } from '../../../localisation/Translate';
 
 export interface ChartDotInfoPopupProps {
-    shown?: boolean
-    dateTitle?: string
     note?: INoteListNote
-    editable?: boolean
+    selectedDotId?: string
+    selectedChartPeriod?: string
 
-    onClose?: () => void
-    //TODO: open popups with real ids not fake date ids
     openEditPopup?: (noteId) => void
+    closePopup?: () => void;
 }
 
 export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
-    return <BottomPopup hidden={!props.shown}>
+    const { selectedChartPeriod = ChartPeriodType.DAY, selectedDotId, note } = props;
+
+    const editable = selectedChartPeriod == ChartPeriodType.DAY;
+
+    function getChartPopupTitle() {
+
+        let displayingDate = '';
+
+        switch (selectedChartPeriod) {
+            case ChartPeriodType.DAY:
+                displayingDate = note && DateHelper.makeTimewithDateWithMonthAsString(new Date(note.date));
+                return displayingDate
+            case ChartPeriodType.MONTH:
+                console.log('🤖🤖🤖🤖 note date', note.date);
+                console.log('🤖🤖🤖🤖 DateHelper.today()', DateHelper.today());
+                console.log('🤖🤖🤖🤖 DateHelper.getDiffDate(new Date(note.date), 0)', DateHelper.getDiffDate(new Date(note.date), 0));
+                if (DateHelper.getDiffDate(new Date(note.date), 0) === DateHelper.today()) {
+                    return i18nGet('chart_today');
+                }
+                if (note.date === DateHelper.yesterday()) {
+                    return i18nGet('chart_yesterday');
+                }
+                displayingDate = DateHelper.makeDateWithMonthAsString(new Date(note.date))
+                return displayingDate
+            case ChartPeriodType.THREE_MONTH:
+                displayingDate = DateHelper.makeDateWithMonthAsNumber(new Date(Number(note.date))) +
+                    ' - ' + DateHelper.makeDateWithMonthAsNumber(
+                        new Date(DateHelper.getDiffDate(new Date(note.date), 6))
+                    )
+                return displayingDate
+        }
+    }
+
+    return <BottomPopup hidden={!props.note}>
         <View style={styles.animatedView}>
             <LinearGradient
                 style={styles.popupGradient}
@@ -36,7 +67,7 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 {props.note && <>
                     <View style={styles.dateTitleView}>
                         <Text style={styles.dateTitle}>
-                            {props.dateTitle}
+                            {getChartPopupTitle()}
                         </Text>
                     </View>
                     <View style={styles.upperValues}>
@@ -69,17 +100,17 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 </>}
                 <TouchableOpacity
                     style={styles.closeTouchable}
-                    onPress={props.onClose}
+                    onPress={props.closePopup}
                 >
                     <CloseIcon />
                 </TouchableOpacity>
-                {props.editable && (
+                {editable && (
                     <View style={styles.editNoteIconTouchableView}>
                         <TouchableOpacity
                             style={styles.editNoteIconTouchable}
                             onPress={() => {
                                 props.openEditPopup(props.note.id);
-                                props.onClose();
+                                props.closePopup();
                             }}
                         >
                             <EditNoteIcon style={styles.editNoteIcon} />
@@ -91,18 +122,31 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
     </BottomPopup>
 }
 
+
+
+
 export const ChartDotInfoPopupConnect = connect(
-    (state: IStorage) => ({}),
+    (state: IStorage) => ({
+        selectedDotId: state.interactive.selectedDotId,
+        selectedChartPeriod: state.interactive.selectedChartPeriod,
+        note: state.noteList[state.interactive.selectedDotId] || null,
+    }),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {
+            ...stateProps,
             ...ownProps,
             openEditPopup: (noteId) => {
                 dispatch(createChangeInteractive({
                     creatingNoteMode: true,
-                    editingNoteId: noteId
-                }))
-            }
+                    editingNoteId: noteId,
+                }));
+            },
+            closePopup: () => {
+                dispatch(createChangeInteractive({
+                    selectedDotId: null,
+                }));
+            },
         }
     }
 )(ChartDotInfoPopup)

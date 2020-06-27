@@ -25,6 +25,7 @@ import { createModalChangeAction } from '../../store/modules/modal/ModalActionCr
 import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
 import { Measures } from '../../localisation/Measures';
 import { i18nGet } from '../../localisation/Translate';
+import { Hat } from '../../component/hat/Hat';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
@@ -111,11 +112,14 @@ class Chart extends React.Component<ChartProps, ChartState> {
     }
 
     render() {
+        const { navigation } = this.props;
+
         return (
             <View style={styles.view}>
-                <BlockHat
+                <Hat
+                    onBackPress={() => navigation.navigate('Dashboard')}
                     title={i18nGet('charts')}
-                    rightSideSlot={this.getHatTitle()}
+                    titleElement={this.getHatTitle()}
                 />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
@@ -123,7 +127,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
                             <View
                                 style={styles.ChartView}
                             >
-                                {this.renderChat()}
+                                {this.renderChart()}
                                 <View style={styles.settingsViewWrap}>
                                     {this.renderSettings()}
                                 </View>
@@ -131,13 +135,6 @@ class Chart extends React.Component<ChartProps, ChartState> {
                         </ScrollView>
                     </View>
                 </View>
-                <ChartDotInfoPopupConnect
-                    dateTitle={this.getChartPopupTitle()}
-                    shown={this.state.popupShown && this.state.selectedDotId}
-                    onClose={this.onPopupClose}
-                    note={this.getNoteForChartPopup()}
-                    editable={this.state.selectedPeriod === ChartPeriodType.DAY}
-                />
                 {!this.state.popupShown && <View style={styles.addNoteButtonView}>
                     <NoteCreationPopupButtonConnect />
                 </View>}
@@ -145,7 +142,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
         )
     }
 
-    renderChat() {
+    renderChart() {
         const chartsToRender = [
             ChartValueType.INSULIN,
             ChartValueType.GLUCOSE,
@@ -165,8 +162,6 @@ class Chart extends React.Component<ChartProps, ChartState> {
                             key={type}
                             type={type}
                             config={this.chartConfig[type]}
-                            selectedPeriod={this.state.selectedPeriod}
-                            selectedDotId={this.state.selectedDotId}
                             currentDate={this.state.currentDate}
                             noteList={this.props.noteList}
                             noteListByDay={this.props.noteListByDay}
@@ -187,8 +182,6 @@ class Chart extends React.Component<ChartProps, ChartState> {
                 <ChartSettings
                     onDateChange={this.onCurrentDateChange}
                     date={this.state.currentDate}
-                    onChangingPeriod={this.onChangingPeriod}
-                    selectedPeriod={this.state.selectedPeriod}
                 />
             </View>
         )
@@ -476,9 +469,9 @@ export const ChartConnect = connect(
     (dispatch: Dispatch<Action>) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {
+            ...ownProps,
             ...stateProps,
             dispatch,
-            ownProps,
             onInfoPress(chartPeriodType: ChartPeriodType) {
                 dispatch(createModalChangeAction({
                     type: ModalType.INFO,

@@ -14,8 +14,11 @@ import { Color } from '../../../constant/Color';
 import { calculateDayChartDots, calculateMonthChartDots, calculateThreeMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ChartAxisPair } from '../chart-svg/ChartAxisPair';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../model/IStorage';
 
 export interface ChartWrapProps {
+    isAlone?: boolean
     config: IChartConfiguration
     type: ChartValueType
     selectedPeriod: ChartPeriodType
@@ -28,7 +31,7 @@ export interface ChartWrapProps {
     onDotPress?: (id: string) => void
 }
 
-export function ChartWrap(props: ChartWrapProps) {
+export function Comp(props: ChartWrapProps) {
     const {
         type,
         selectedPeriod,
@@ -107,6 +110,7 @@ export function ChartWrap(props: ChartWrapProps) {
                     polylineType={props.selectedPeriod === ChartPeriodType.DAY ? config.polylineType : PolylineType.REGULAR}
                     dots={polylineDotsData.dots}
                     chartPeriodType={props.selectedPeriod}
+                    polylineColor={props.config.polylineColor}
                     initGradientColor={isGradientNeeded() && config.initGradientColor}
                     stopGradientColor={isGradientNeeded() && config.stopGradientColor}
                 />
@@ -116,11 +120,11 @@ export function ChartWrap(props: ChartWrapProps) {
                         key={item.id}
                         id={item.id}
                         r={config.dotRadius}
-                        onPress={props.onDotPress}
                         x={item.x}
                         y={item.y}
                         noteId={item.noteId}
-                        fill={Color.RED}
+                        fill={config.dotFillColor ? config.dotFillColor : Color.RED}
+                        dotStrokeColor={config.dotStrokeColor}
                         stroke={Color.WHITE}
                         selectedDotId={selectedDotId}
                         type={props.type}
@@ -131,11 +135,10 @@ export function ChartWrap(props: ChartWrapProps) {
                         key={item.id}
                         id={item.id}
                         r={config.dotRadius}
-                        onPress={props.onDotPress}
                         x={item.x}
                         y={item.y}
                         noteId={item.noteId}
-                        fill={Color.WHITE}
+                        fill={config.dotFillColor ? config.dotFillColor : Color.WHITE}
                         stroke={Color.INDIAN_RED}
                         selectedDotId={selectedDotId}
                     />
@@ -165,7 +168,10 @@ export function ChartWrap(props: ChartWrapProps) {
             {toRender.map((step, index) => (
                 <Text
                     key={index}
-                    style={styles.yNetTitlesText}
+                    style={{
+                        ...styles.yNetTitlesText,
+                        color: props.config.yNetTitlesColor || styles.yNetTitlesText.color,
+                    }}
                 >
                     {Math.round(step * 10) / 10 || ''}
                 </Text>
@@ -181,6 +187,13 @@ export function ChartWrap(props: ChartWrapProps) {
         return props.selectedPeriod === ChartPeriodType.DAY;
     }
 }
+
+export const ChartWrap = connect(
+    (state: IStorage) => ({
+        selectedDotId: state.interactive.selectedDotId,
+        selectedPeriod: state.interactive.selectedChartPeriod || ChartPeriodType.DAY,
+    })
+)(Comp)
 
 function yAxisTitle(type: ChartValueType) {
     switch (type) {

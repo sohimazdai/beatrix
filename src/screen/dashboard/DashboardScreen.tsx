@@ -20,6 +20,8 @@ import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
 import { LastNotesConnected } from '../../view/dashboard/last-notes/LastNotes/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { DateHelper } from '../../utils/DateHelper';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -68,6 +70,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
           <ScrollView style={styles.scrollView}>
             <LastNotesConnected onNotesPress={() => navigation.navigate('Notes')} />
             <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
+            <View style={styles.stub} />
           </ScrollView>
         </View>
         <View style={styles.addNoteButtonView}>
@@ -79,11 +82,13 @@ class DashboardScreen extends React.PureComponent<FullProps> {
 
   renderProfileIcon() {
     return (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("Profile")}
-      >
-        <ProfileIcon fill={"white"} />
-      </TouchableOpacity>
+      <View style={styles.profileIconView}>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate("Profile")}
+        >
+          <ProfileIcon fill={"white"} />
+        </TouchableOpacity>
+      </View>
     );
   }
 }

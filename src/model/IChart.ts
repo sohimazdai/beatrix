@@ -55,6 +55,8 @@ export interface IChartConfiguration {
     axisTypes: ChartAxisType[]
     axisWidth?: number
     axisColor?: string
+    netColor?: string
+    yNetTitlesColor?: string
     initGradientColor?: string
     stopGradientColor?: string
     basicPadding?: number
@@ -69,6 +71,10 @@ export interface IChartConfiguration {
     paddingTop?: boolean
     paddingBottom?: boolean
     polylineType?: PolylineType
+    polylineColor?: string
+    dotFillColor?: string
+    dotStrokeColor?: string
+    isAlone?: boolean
 }
 
 export interface IChartTrain {

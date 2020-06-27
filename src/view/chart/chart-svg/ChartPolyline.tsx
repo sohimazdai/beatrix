@@ -10,6 +10,7 @@ export enum PolylineType {
 export interface ChartPolylineProps {
     dots: IChartDot[];
     polylineType: PolylineType
+    polylineColor?: string
     initGradientColor?: string;
     stopGradientColor?: string;
     chartPeriodType?: ChartPeriodType
@@ -30,7 +31,7 @@ function renderPolyline(props: ChartPolylineProps) {
         {props.polylineType === PolylineType.BEZIER ?
             <Path
                 d={points}
-                stroke="rgba(255, 255, 255, 0.64)"
+                stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
                 strokeWidth={2}
                 strokeLinecap='round'
                 strokeLinejoin='round'
@@ -39,7 +40,7 @@ function renderPolyline(props: ChartPolylineProps) {
             :
             <Polyline
                 points={points}
-                stroke="rgba(255, 255, 255, 0.64)"
+                stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
                 strokeWidth={2}
                 strokeLinecap='round'
                 strokeLinejoin='round'

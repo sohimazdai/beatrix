@@ -20,14 +20,11 @@ export function ChartHighlightNet(props: ChartHighlightNetProps) {
     // let toRender = [];
     // !props.noXX && toRender.push(verticalLines());
     // !props.noYY && toRender.push(horizontalLines(props));
+
+    if (props.cfg.isAlone) return null;
+
     function isSelectedDot(dot: IChartDot) {
         return props.selectedDotId == String(dot.id) || props.selectedDotId == dot.noteId
-    }
-
-    function horizontalLines() {
-        switch (props.type) {
-
-        }
     }
 
     function verticalLines() {

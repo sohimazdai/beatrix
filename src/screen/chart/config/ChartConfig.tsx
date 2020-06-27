@@ -1,6 +1,7 @@
-import { ChartAxisType } from "../../../model/IChart"
+import { ChartAxisType, IChartConfiguration } from "../../../model/IChart"
 import { Dimensions } from "react-native"
 import { PolylineType } from "../../../view/chart/chart-svg/ChartPolyline";
+import { Color } from '../../../constant/Color';
 
 export class ChartConfig {
     TIME_STEP_MINUTES = 5;
@@ -11,8 +12,9 @@ export class ChartConfig {
     getConfigs() {
         return {
             glucose: this.getGlucoseConfig(),
+            glucosePreview: this.getGlucosePreviewConfig(),
             breadUnits: this.getBreadUnitsConfig(),
-            insulin: this.getInsulinConfig(), 
+            insulin: this.getInsulinConfig(),
         }
     }
 
@@ -37,7 +39,37 @@ export class ChartConfig {
             polylineType: PolylineType.BEZIER
         }
     }
-    
+
+    getGlucosePreviewConfig(): IChartConfiguration {
+        return {
+            isAlone: true,
+            width: this.WIDTH - 30,
+            height: Dimensions.get("screen").width / 2,
+            boxWidth: this.WIDTH -30,
+            boxHeight: Dimensions.get("screen").width / 2,
+            axisWidth: 2,
+            axisColor: '#666666',
+            netColor: '#999999',
+            yNetTitlesColor: '#666666',
+            polylineColor: Color.PRIMARY_LIGHT,
+            dotStrokeColor: Color.PRIMARY_LIGHT,
+            dotFillColor: Color.RED_LIGHT,
+            paddingTop: true,
+            paddingBottom: true,
+            basicPadding: this.BASIC_PADDING,
+            yPadding: 1,
+            dotRadius: this.DOT_RADIUS,
+            reversedY: false,
+            timeStepMinutes: this.TIME_STEP_MINUTES,
+            horizontalLineNumber: 6,
+            axisTypes: [
+                ChartAxisType.OX,
+                ChartAxisType.OY
+            ],
+            polylineType: PolylineType.BEZIER
+        }
+    }
+
     getInsulinConfig() {
         return {
             width: this.WIDTH,

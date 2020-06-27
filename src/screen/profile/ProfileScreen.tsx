@@ -34,7 +34,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
         return (
             <View style={styles.profileView}>
                 <Hat
-                    onBackPress={() => this.props.navigation.navigate('Main')}
+                    onBackPress={() => this.props.navigation.navigate('Dashboard')}
                     title={i18nGet('profile')}
                 />
                 <View style={styles.scrollViewWrapWrap}>

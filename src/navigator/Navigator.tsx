@@ -23,6 +23,7 @@ import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-set
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
 import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
+import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -62,6 +63,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
         <>
             <AuthedNavigatorContainer />
             <Fader hidden={!faded} type={faderType} />
+            <ChartDotInfoPopupConnect />
             <NoteCreationPopupConnect />
             <ConfirmPopupConnect />
             <ModalContentConnect />

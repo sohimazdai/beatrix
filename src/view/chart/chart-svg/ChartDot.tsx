@@ -2,9 +2,11 @@ import * as React from 'react';
 import Svg, { Circle } from 'react-native-svg';
 import { Color } from '../../../constant/Color';
 import { IChartDot, ChartValueType } from '../../../model/IChart';
+import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
+import { connect } from 'react-redux';
 
 export interface Props {
-    onPress: (dotId: string) => void
+    onPress?: (dotId: string) => void
 
     r: number
     x: number
@@ -15,20 +17,34 @@ export interface Props {
     stroke: string
     selectedDotId?: string
     type?: ChartValueType
+    dotFillColor?: string
+    dotStrokeColor?: string
 }
 
-export const ChartDot = (props: Props) => (
+const mapDispatchToProps = (dispatch) => ({
+    onPress: (noteId: string) => dispatch(createChangeInteractive({
+        selectedDotId: noteId
+    }))
+})
+
+const Component = (props: Props) => (
     <>
         <Circle
             r={getDotRadius(props)}
-            stroke={props.selectedDotId == (props.noteId ? props.noteId : String(props.id)) ? props.stroke : 'transparent'}
+            stroke={
+                props.selectedDotId == (props.noteId ? props.noteId : String(props.id))
+                    ? props.stroke
+                    : props.dotStrokeColor
+                        ? props.dotStrokeColor
+                        : 'transparent'
+            }
             strokeWidth={2}
             x={props.x}
             y={props.y}
             fill={getDotColor(props)}
         />
         <Circle
-            onPress={() => onPress(props)}
+            onPress={() => props.onPress && onPress(props)}
             r={getDotRadius(props) * 2}
             stroke={'transparent'}
             strokeWidth={2}
@@ -67,3 +83,8 @@ function onPress(props: Props) {
 
     props.onPress(String(props.id))
 }
+
+export const ChartDot = connect(
+    null,
+    mapDispatchToProps
+)(Component);

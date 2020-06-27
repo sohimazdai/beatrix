@@ -125,7 +125,7 @@ function verticalLines(props: ChartNetProps) {
                     y1={dot.y}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={'rgba(102, 102, 102, 0.38)'}
+                    stroke={props.cfg.netColor || 'rgba(102, 102, 102, 0.38)'}
                     strokeWidth={1}
                 />
             })
@@ -167,7 +167,7 @@ function verticalLines(props: ChartNetProps) {
                     y1={dot.y}
                     x2={dot.x}
                     y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                    stroke={'rgba(102, 102, 102, 0.38)'}
+                    stroke={props.cfg.netColor || 'rgba(102, 102, 102, 0.38)'}
                     strokeWidth={1}
                 />
             })
@@ -202,7 +202,7 @@ function horizontalLines(props: ChartNetProps) {
                     y1={dot.y}
                     x2={props.cfg.boxWidth - 2 * props.cfg.basicPadding}
                     y2={dot.y}
-                    stroke={'rgba(102, 102, 102, 0.38)'}
+                    stroke={props.cfg.netColor || 'rgba(102, 102, 102, 0.38)'}
                     strokeWidth={1}
                 />
             })
@@ -216,7 +216,7 @@ function getAvailableZone(parameter, props: ChartNetProps) {
 function getVerticalLineColor(props: ChartNetProps, dayOfMonth: number): string {
     switch (props.selectedPeriod) {
         case ChartPeriodType.DAY:
-            return 'rgba(102, 102, 102, 0.38)';
+            return props.cfg.netColor || 'rgba(102, 102, 102, 0.38)';
         case ChartPeriodType.MONTH:
             const dayOfWeek = new Date(
                 props.currentDate.getFullYear(),
@@ -229,7 +229,7 @@ function getVerticalLineColor(props: ChartNetProps, dayOfMonth: number): string 
                 case 2:
                 case 3:
                 case 4:
-                    return 'rgba(102, 102, 102, 0.38)'
+                    return props.cfg.netColor || 'rgba(102, 102, 102, 0.38)';
                 case 5:
                 case 6:
                     return 'rgba(184, 2, 2, 0.38)'

@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     maxWidth: 420,
   },
   scrollViewWrapper: {
-    backgroundColor: Color.PRIMARY
+    backgroundColor: Color.PRIMARY,
   },
   scrollView: {
     height: '100%',
@@ -25,5 +25,16 @@ export const styles = StyleSheet.create({
     bottom: 5,
     width: '100%',
     ...shadowOptions
+  },
+  profileIconView: {
+    width: 30,
+    height: 30,
+    padding: 3,
+    borderRadius: 5,
+    backgroundColor: Color.PRIMARY_WHITE,
+    ...shadowOptions,
+  },
+  stub: {
+    marginTop: 152,
   },
 });

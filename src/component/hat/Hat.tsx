@@ -1,12 +1,13 @@
 import React from 'react';
 import { BackArrowIcon } from '../icon/BackArrowIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Loader } from '../loader/Loader';
 
 interface HatProps {
     onBackPress: () => void;
     title?: string;
+    titleElement?: React.ReactNode;
     hatColor?: string;
 }
 
@@ -26,17 +27,30 @@ export function Hat(props: HatProps) {
                         <BackArrowIcon />
                     </TouchableOpacity>
                 </View>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={styles.title}>
-                        {props.title}
-                    </Text>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    {
+                        props.titleElement
+                            ? (
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={styles.title}>
+                                        {`${props.title} - `}
+                                    </Text>
+                                    {props.titleElement}
+                                </View>
+                            )
+                            : (
+                                <Text style={styles.title}>
+                                    {props.title}
+                                </Text>
+                            )
+                    }
                 </View>
                 <View style={styles.rightSlot}>
                     <Loader />
                 </View>
                 <View />
             </View >
-        </View>
+        </View >
     )
 }
 

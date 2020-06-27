@@ -1,8 +1,11 @@
 import { SheduleKeyType } from "./IUserPropertiesShedule";
 
-export interface IInteractive  {
+export interface IInteractive {
     creatingNoteMode?: boolean
     editingNoteId?: string
+
+    selectedDotId?: string
+    selectedChartPeriod?: string
 
     confirmPopupShown?: boolean
     confirmPopupSuccessCallback?: Function
