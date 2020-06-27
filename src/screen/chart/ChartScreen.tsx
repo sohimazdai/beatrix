@@ -6,7 +6,7 @@ import { View, Text } from 'react-native';
 import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChartValueType, ChartPeriodType, ChartAveragePeriodType } from '../../model/IChart';
-import { NoteListSelector } from '../../store/selector/NoteListSelector';
+import { convertFlatNoteListToNoteListByDay } from '../../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
@@ -469,7 +469,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
 
 export const ChartConnect = connect(
     (state: IStorage) => ({
-        noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state),
+        noteListByDay: convertFlatNoteListToNoteListByDay(state),
         noteList: state.noteList,
         userDiabetesProperties: state.userDiabetesProperties,
     }),

@@ -1,13 +1,17 @@
-import { INoteListByDay } from "../../model/INoteList";
+import { INoteListByDay, INoteList } from "../../model/INoteList";
 import { IStorage } from '../../model/IStorage';
+import { createSelector } from 'reselect';
 
-export class NoteListSelector {
-    static convertFlatNoteListToNoteListByDay(
-        { noteList, user }: IStorage
-    ): INoteListByDay {
+const noteListSelector = (state: IStorage) => Object.values(state.noteList);
+const userSelector = (state: IStorage) => state.user;
+
+export const convertFlatNoteListToNoteListByDay = createSelector(
+    noteListSelector,
+    userSelector,
+    (notes, user): INoteListByDay => {
         const notesByDay: INoteListByDay = {};
 
-        Object.values(noteList).map(note => {
+        notes.map(note => {
             const dayDate = new Date(
                 new Date(note.date).getFullYear(),
                 new Date(note.date).getMonth(),
@@ -24,4 +28,4 @@ export class NoteListSelector {
 
         return notesByDay
     }
-}
+);

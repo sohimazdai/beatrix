@@ -37,6 +37,7 @@
     "redux-batched-actions": "^0.4.1",
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.5",
+    "reselect": "^4.0.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

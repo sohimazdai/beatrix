@@ -22,6 +22,7 @@ import translate, { i18nGet, setLocale } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
+import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -127,7 +128,9 @@ const AuthedMainNavigator = createBottomTabNavigator(
 
 const AuthedNavigator = createStackNavigator(
     {
-        Main: { screen: AuthedMainNavigator },
+        Dashboard: { screen: DashboardScreenConnect },
+        Notes: { screen: NoteListScreenConnect },
+        Charts: { screen: ChartConnect },
         Profile: { screen: ProfileScreenStack },
     },
     {

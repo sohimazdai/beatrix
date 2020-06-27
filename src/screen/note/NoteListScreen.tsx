@@ -8,14 +8,13 @@ import {
   NavigationScreenProp,
   NavigationState
 } from "react-navigation";
-import { Note } from "../../view/notes/note/Note";
-import { NoteListSelector } from "../../store/selector/NoteListSelector";
+import { Note } from "../../view/shared/Note/Note";
+import { convertFlatNoteListToNoteListByDay } from "../../store/selector/NoteListSelector";
 import { RoundClocksIcon } from "../../component/icon/RoundClocksIcon";
 import { VegetablesIcon } from "../../component/icon/value-icons/VegetablesIcon";
 import { GlucometerIcon } from "../../component/icon/value-icons/GlucometerIcon";
 import { ShortSyringeIcon } from "../../component/icon/value-icons/ShortSyringeIcon";
 import { LongSyringeIcon } from "../../component/icon/value-icons/LongSyringeIcon";
-import { BlockHat } from "../../component/hat/BlockHat";
 import { createChangeInteractive } from "../../store/modules/interactive/interactive";
 import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-popup/button/NoteCreationPopupButton";
 import { styles } from "./Style";
@@ -26,6 +25,7 @@ import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
+import { Hat } from '../../component/hat/Hat';
 
 interface NoteListScreenStateTProps {
   app: IApp;
@@ -66,9 +66,14 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   }
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <View style={styles.screenView}>
-        <BlockHat title={i18nGet('notes')} rightSideSlot={this.renderProfileIcon()} />
+        <Hat
+          onBackPress={() => navigation.navigate('Dashboard')}
+          title={i18nGet('notes')}
+        />
         {this.renderIconBar()}
         <View style={styles.cardsViewWrapWrap}>
           <View style={styles.cardsViewWrap}>
@@ -78,7 +83,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
         <View style={styles.addNoteButtonView}>
           <NoteCreationPopupButtonConnect />
         </View>
-      </View >
+      </View>
     );
   }
 
@@ -250,7 +255,7 @@ export const NoteListScreenConnect = connect(
   (state: IStorage) => ({
     app: state.app,
     user: state.user,
-    noteListByDay: NoteListSelector.convertFlatNoteListToNoteListByDay(state),
+    noteListByDay: convertFlatNoteListToNoteListByDay(state),
   }),
   dispatch => ({
     dispatch,

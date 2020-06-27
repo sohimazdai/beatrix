@@ -59,6 +59,8 @@ export const appAnalytics = {
     REMEMBER_PASSWORD: 'Remember password',
     LOG_OUT: 'Log out',
     USER_BY_INSTALLATION_ID: 'User by installation id',
+    //DASHBOARD
+    DASHBOARD_SEEN: 'Dashboard seen',
     //NOTELIST
     NOTELIST_SEEN: 'NoteList seen',
     //PROFILE

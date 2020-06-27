@@ -184,6 +184,12 @@ export default function translate() {
     its_need_to_fit: 'It is need to fit the new measurement system',
     please_do_not_close_app: 'Please do not close the application! It does not take much time',
 
+    // DASHBOARD
+    compensation: 'Compensation',
+    last_notes: 'Recent notes',
+    no_recent_notes_today: 'No notes yet today',
+    glucose_chart: 'Glucose chart',
+
     // GENERAL
     cancel: 'Cancel',
     not_selected: 'not selected',
@@ -383,6 +389,12 @@ export default function translate() {
     we_will_recalculating_your_notes: 'Мы пересчитаем ваши данные',
     its_need_to_fit: 'Это необходимо для соответствия новой системе измерений',
     please_do_not_close_app: 'Пожалуйста, не закрывайте приложение! Это не займет много времени',
+
+    // DASHBOARD
+    compensation: 'Компенсация',
+    last_notes: 'Последние записи',
+    no_recent_notes_today: 'Нет записей за прошедшие сутки',
+    glucose_chart: 'График глюкозы',
     // GENERAL
     cancel: 'Отмена',
     not_selected: 'не выбрано',

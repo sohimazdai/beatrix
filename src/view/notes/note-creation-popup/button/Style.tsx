@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         paddingRight: 10,
 
         backgroundColor: Color.PRIMARY,
-        borderRadius: 30,
+        borderRadius: 10,
         ...shadowOptions
     },
     addNoteButtonTouchable: {
