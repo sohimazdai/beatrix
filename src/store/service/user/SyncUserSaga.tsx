@@ -98,7 +98,6 @@ function* syncUser({ payload }: SyncUserAction) {
 
             // SYNC NOTES
             const syncedNotes: INoteList = yield call(syncNotes, state);
-            console.log('🤖🤖🤖🤖 syncedNotes', syncedNotes);
             yield put(
                 batchActions([
                     createNoteListOneLevelDeepMerge(syncedNotes),

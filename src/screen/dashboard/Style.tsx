@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 16,
     backgroundColor: Color.PRIMARY_WHITE,
   },
   addNoteButtonView: {

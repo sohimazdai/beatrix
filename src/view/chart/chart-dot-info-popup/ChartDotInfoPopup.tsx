@@ -38,9 +38,6 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 displayingDate = note && DateHelper.makeTimewithDateWithMonthAsString(new Date(note.date));
                 return displayingDate
             case ChartPeriodType.MONTH:
-                console.log('🤖🤖🤖🤖 note date', note.date);
-                console.log('🤖🤖🤖🤖 DateHelper.today()', DateHelper.today());
-                console.log('🤖🤖🤖🤖 DateHelper.getDiffDate(new Date(note.date), 0)', DateHelper.getDiffDate(new Date(note.date), 0));
                 if (DateHelper.getDiffDate(new Date(note.date), 0) === DateHelper.today()) {
                     return i18nGet('chart_today');
                 }

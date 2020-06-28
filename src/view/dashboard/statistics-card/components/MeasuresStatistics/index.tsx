@@ -1,0 +1,83 @@
+import React from 'react';
+import { connect } from 'react-redux';
+
+import { View, Text, StyleSheet } from 'react-native';
+import { NoteValueType } from '../../../../../model/INoteList';
+import { IStorage } from '../../../../../model/IStorage';
+import { StatisticsType } from '../../entities';
+import { selectMeasuresStatisticsValue } from '../../selectors/select-measures-statistics-value';
+import { GlucometerIcon } from '../../../../../component/icon/value-icons/GlucometerIcon';
+import { VegetablesIcon } from '../../../../../component/icon/value-icons/VegetablesIcon';
+import { ShortSyringeIcon } from '../../../../../component/icon/value-icons/ShortSyringeIcon';
+import { LongSyringeIcon } from '../../../../../component/icon/value-icons/LongSyringeIcon';
+
+interface Props {
+  measuresType: NoteValueType,
+  value: number;
+};
+
+const ICONS = {
+  [NoteValueType.GLUCOSE]: (style) => <GlucometerIcon style={style} />,
+  [NoteValueType.BREAD_UNITS]: (style) => <VegetablesIcon style={style} />,
+  [NoteValueType.SHORT_INSULIN]: (style) => <ShortSyringeIcon style={style} />,
+  [NoteValueType.LONG_INSULIN]: (style) => <LongSyringeIcon style={style} />,
+}
+
+class MeasuresStatistics extends React.Component<Props> {
+  render() {
+    const { measuresType, value } = this.props;
+
+    const getIcon = ICONS[measuresType];
+    return (
+      <View style={styles.row}>
+        {getIcon(styles.icon)}
+        <Text style={styles.text}>
+          {value || '-'}
+        </Text>
+      </View>
+    );
+  }
+}
+
+export const MeasuresStatisticsConnected = connect(
+  (state: IStorage) => state,
+  () => ({}),
+  (
+    sP,
+    { },
+    ownProps: {
+      measuresType: NoteValueType,
+      statisticsType: StatisticsType
+    }
+  ) => ({
+    measuresType: ownProps.measuresType,
+    value: selectMeasuresStatisticsValue(
+      sP,
+      ownProps.measuresType,
+      ownProps.statisticsType,
+    )
+  })
+)(MeasuresStatistics);
+
+const styles = StyleSheet.create({
+  row: {
+    display: 'flex',
+    marginLeft: 16,
+    height: 20,
+
+    marginTop: 8,
+    flexDirection: 'row'
+  },
+  icon: {
+    height: 20,
+    width: 20,
+  },
+  text: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    lineHeight: 19,
+    fontSize: 16,
+    marginLeft: 8,
+  }
+})

@@ -11,7 +11,7 @@ import {
 import { BlockHat } from "../../component/hat/BlockHat";
 import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-popup/button/NoteCreationPopupButton";
 import { styles } from "./Style";
-import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity, ScrollView, FlatList } from "react-native-gesture-handler";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
@@ -20,9 +20,9 @@ import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
 import { LastNotesConnected } from '../../view/dashboard/last-notes/LastNotes/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
-import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
-import { DateHelper } from '../../utils/DateHelper';
 import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/ActiveInsulinInfo';
+import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
+import { StatisticsType } from '../../view/dashboard/statistics-card/entities';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -69,9 +69,31 @@ class DashboardScreen extends React.PureComponent<FullProps> {
         <BlockHat title={i18nGet('compensation')} rightSideSlot={this.renderProfileIcon()} />
         <View style={styles.scrollViewWrapper}>
           <ScrollView style={styles.scrollView}>
-            <LastNotesConnected onNotesPress={() => navigation.navigate('Notes')} />
-            <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
-            <ActiveInsulinInfoConnected />
+            <View style={{ padding: 16, paddingBottom: 0 }}>
+              <LastNotesConnected onNotesPress={() => navigation.navigate('Notes')} />
+              <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
+              <ActiveInsulinInfoConnected />
+            </View>
+            <ScrollView
+              style={{ paddingHorizontal: 16, overflow: 'visible' }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
+              <View style={{ width: 8 }} />
+              <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
+              <View style={{ width: 32 }} />
+            </ScrollView>
+            <ScrollView
+              style={{ paddingHorizontal: 16, overflow: 'visible' }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
+              <View style={{ width: 8 }} />
+              <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
+              <View style={{ width: 32 }} />
+            </ScrollView>
             <View style={styles.stub} />
           </ScrollView>
         </View>

@@ -130,7 +130,7 @@ export function Comp(props: ChartWrapProps) {
                         type={props.type}
                     />
                 })}
-                {clickableDotsAvailable() && basicDotsData.events.map(item => {
+                {!config.isAlone && clickableDotsAvailable() && basicDotsData.events.map(item => {
                     return <ChartDot
                         key={item.id}
                         id={item.id}

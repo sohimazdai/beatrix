@@ -31,10 +31,40 @@ class ActiveInsulinInfo extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    const { lastNote, lastYesterdayNote } = this.props;
+    if (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) {
+      this.setInitialState();
+      return;
+    }
+
     this.timer();
 
-    var intervalId = setInterval(this.timer, 60 * 1000);
+    const intervalId = setInterval(this.timer, 60 * 1000);
     this.setState({ intervalId: intervalId });
+  }
+
+  componentDidUpdate(pP: Props) {
+    const { lastNote, lastYesterdayNote } = this.props;
+
+    if (
+      (checkThatInsulinIsActive(lastNote) || checkThatInsulinIsActive(lastYesterdayNote)) &&
+      (!checkThatInsulinIsActive(pP.lastNote) && !checkThatInsulinIsActive(pP.lastYesterdayNote))
+    ) {
+      clearInterval(this.state.intervalId);
+      this.timer();
+
+      const intervalId = setInterval(this.timer, 60 * 1000);
+      this.setState({ intervalId: intervalId });
+    }
+
+    if (
+      (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) &&
+      (checkThatInsulinIsActive(pP.lastNote) || checkThatInsulinIsActive(pP.lastYesterdayNote))
+    ) {
+      clearInterval(this.state.intervalId);
+      this.setState({ intervalId: null });
+      this.setInitialState();
+    }
   }
 
   componentWillUnmount = () => {
@@ -43,12 +73,8 @@ class ActiveInsulinInfo extends React.Component<Props, State> {
 
   timer = () => {
     const { lastNote, lastYesterdayNote } = this.props;
-
     if (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) {
-      this.setState({
-        minutes: 0,
-        hours: 0,
-      })
+      this.setInitialState();
       return;
     }
 
@@ -58,6 +84,13 @@ class ActiveInsulinInfo extends React.Component<Props, State> {
       ...expiresIn,
     });
   };
+
+  setInitialState = () => {
+    this.setState({
+      minutes: 0,
+      hours: 0,
+    })
+  }
 
   render() {
     const { minutes, hours } = this.state;
@@ -86,10 +119,12 @@ export const ActiveInsulinInfoConnected = connect(
     lastNote: Object.values(
       convertFlatNoteListToNoteListByDay(state)[DateHelper.today()] || {}
     )
+      .filter(note => !!note.insulin)
       .sort((noteA, noteB) => noteB.date - noteA.date)[0],
     lastYesterdayNote: Object.values(
       convertFlatNoteListToNoteListByDay(state)[DateHelper.yesterday()] || {}
     )
+      .filter(note => !!note.insulin)
       .sort((noteA, noteB) => noteB.date - noteA.date)[0],
   })
 )(ActiveInsulinInfo);

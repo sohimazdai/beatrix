@@ -11,14 +11,11 @@ export const styles = StyleSheet.create({
   },
   cardsViewWrapWrap: {
     height: '100%',
-    backgroundColor: "#E3EAFF",
   },
   cardsViewWrap: {
     height: '100%',
     width: '100%',
     overflow: 'hidden',
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
   },
   cardsView: {
     height: '100%',
@@ -31,16 +28,18 @@ export const styles = StyleSheet.create({
   },
   iconBarView: {
     display: "flex",
-    padding: 10,
+    paddingVertical: 10,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#E3EAFF",
+    justifyContent: 'space-evenly',
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
+    backgroundColor: Color.PRIMARY_BASE,
   },
   iconBarIcon: {
     flex: 1,
-    height: 35
+    height: 35,
+    width: 35,
   },
   cardWrap: {
     width: "100%",

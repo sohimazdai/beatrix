@@ -193,6 +193,10 @@ export default function translate() {
     expires_in: 'Expires in',
     minutes_short: 'min',
     hours_short: 'h',
+    statistics_today: 'Today',
+    statistics_yesterday: 'Yesterday',
+    statistics_last_month: 'Last month',
+    statistics_last_three_month: 'Last three month',
 
     // GENERAL
     cancel: 'Cancel',
@@ -403,6 +407,10 @@ export default function translate() {
     expires_in: 'Истекает через',
     minutes_short: 'мин',
     hours_short: 'ч',
+    statistics_today: 'Сегодня',
+    statistics_yesterday: 'Вчера',
+    statistics_last_month: 'Последний месяц',
+    statistics_last_three_month: 'Последние три месяца',
 
     // GENERAL
     cancel: 'Отмена',
@@ -415,6 +423,8 @@ export default function translate() {
 
     active_network_needed: 'Необходимо интернет-соединение',
     server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',
+
+    glucose_icon_tooltip: 'Глюкоза крови. Измеряется в %measure%. Целевая гликемия указана как %target% %measure%. Норма в пределах от %min% до %max%.',
 
     //ERROR
     user_properties_changing_error: 'Ошибка при изменении параметров пользователя',

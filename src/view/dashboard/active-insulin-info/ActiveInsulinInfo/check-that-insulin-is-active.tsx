@@ -6,7 +6,7 @@ export default function checkThatInsulinIsActive(lastNote: INoteListNote): boole
 
   if (!lastNote.insulin) return false;
 
-  if (DateHelper.getDiffBetweenInHours(lastNote.date, Date.now()) > 4) return false;
+  if (DateHelper.getDiffBetweenInHours(lastNote.date, Date.now()) >= 4) return false;
 
   return true;
 }

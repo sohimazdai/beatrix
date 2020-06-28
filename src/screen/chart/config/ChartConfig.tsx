@@ -36,7 +36,7 @@ export class ChartConfig {
                 ChartAxisType.OX,
                 ChartAxisType.OY
             ],
-            polylineType: PolylineType.BEZIER
+            polylineType: PolylineType.BEZIER,
         }
     }
 
@@ -66,7 +66,7 @@ export class ChartConfig {
                 ChartAxisType.OX,
                 ChartAxisType.OY
             ],
-            polylineType: PolylineType.BEZIER
+            polylineType: PolylineType.BEZIER,
         }
     }
 
