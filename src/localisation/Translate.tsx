@@ -209,6 +209,7 @@ export default function translate() {
 
     active_network_needed: 'You need to connect to the internet',
     server_is_not_available_try_to_restart_app: 'Server is currently unavailable. Try restarting the application.',
+    no_data_for_the_period: 'There is no data for the period',
 
     //ERROR
     user_properties_changing_error: 'Error changing user settings',
@@ -299,6 +300,14 @@ export default function translate() {
 
     carb_gram: 'грамм',
     carbs_units: 'ХЕ',
+
+    breadUnits_long: 'Хлебные единицы',
+    carbohydrates_long: 'Углеводы',
+    one_bread_unit_contents: 'Одна ХЕ содержит %number% грамм углеводов.',
+
+    hypoglycemia_count: 'Гипогликемия',
+    hyperglycemia_count: 'Гипергликемия',
+    normalglycemia_count: 'Норма',
 
     //CHARTS
     charts: 'Графики',
@@ -424,8 +433,12 @@ export default function translate() {
     active_network_needed: 'Необходимо интернет-соединение',
     server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',
 
-    glucose_icon_tooltip: 'Глюкоза крови. Измеряется в %measure%. Целевая гликемия указана как %target% %measure%. Норма в пределах от %min% до %max%.',
-
+    glucose_icon_tooltip: 'Глюкоза крови. Измеряется в %measure%.\nЦелевая гликемия указана как %target% %measure%.\nНорма в пределах от %min% до %max%.',
+    breadunits_icon_tooltip: '%type%.\n%for_bu%',
+    note_date_and_time: 'Время записи',
+    short_insulin_icon_tooltip: 'Инсулин ультракороткого действия',
+    long_insulin_icon_tooltip: 'Инсулин пролонгированного действия',
+    no_data_for_the_period: 'Нет данных за данный период',
     //ERROR
     user_properties_changing_error: 'Ошибка при изменении параметров пользователя',
     shedule_sync_error: 'Ошибка синхронизации расписания с сервером',

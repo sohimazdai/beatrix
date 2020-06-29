@@ -6,10 +6,10 @@ import { NoteValueType } from '../../../../../model/INoteList';
 import { IStorage } from '../../../../../model/IStorage';
 import { StatisticsType } from '../../entities';
 import { selectMeasuresStatisticsValue } from '../../selectors/select-measures-statistics-value';
-import { GlucometerIcon } from '../../../../../component/icon/value-icons/GlucometerIcon';
-import { VegetablesIcon } from '../../../../../component/icon/value-icons/VegetablesIcon';
-import { ShortSyringeIcon } from '../../../../../component/icon/value-icons/ShortSyringeIcon';
-import { LongSyringeIcon } from '../../../../../component/icon/value-icons/LongSyringeIcon';
+import { GlycemiaIconConnected } from '../../../../../component/icon/tooltiped/GlycemiaIcon';
+import { BreadUnitsIconConnected } from '../../../../../component/icon/tooltiped/BreadUnitsIcon';
+import { ShortInsulinIconConnected } from '../../../../../component/icon/tooltiped/ShortInsulinIcon';
+import { LongInsulinIconConnected } from '../../../../../component/icon/tooltiped/LongInsulinIcon';
 
 interface Props {
   measuresType: NoteValueType,
@@ -17,10 +17,10 @@ interface Props {
 };
 
 const ICONS = {
-  [NoteValueType.GLUCOSE]: (style) => <GlucometerIcon style={style} />,
-  [NoteValueType.BREAD_UNITS]: (style) => <VegetablesIcon style={style} />,
-  [NoteValueType.SHORT_INSULIN]: (style) => <ShortSyringeIcon style={style} />,
-  [NoteValueType.LONG_INSULIN]: (style) => <LongSyringeIcon style={style} />,
+  [NoteValueType.GLUCOSE]: (style) => <GlycemiaIconConnected style={style} />,
+  [NoteValueType.BREAD_UNITS]: (style) => <BreadUnitsIconConnected style={style} />,
+  [NoteValueType.SHORT_INSULIN]: (style) => <ShortInsulinIconConnected style={style} />,
+  [NoteValueType.LONG_INSULIN]: (style) => <LongInsulinIconConnected style={style} />,
 }
 
 class MeasuresStatistics extends React.Component<Props> {

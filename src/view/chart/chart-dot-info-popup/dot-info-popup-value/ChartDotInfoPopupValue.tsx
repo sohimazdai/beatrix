@@ -1,11 +1,11 @@
 import React from 'react'
 import { ChartValueType } from '../../../../model/IChart'
 import { View, StyleSheet, Text } from 'react-native'
-import { LongSyringeIcon } from '../../../../component/icon/value-icons/LongSyringeIcon'
-import { ShortSyringeIcon } from '../../../../component/icon/value-icons/ShortSyringeIcon'
 import { MinusSignIcon } from '../../../../component/icon/MinusSignIcon'
-import { VegetablesIcon } from '../../../../component/icon/value-icons/VegetablesIcon'
-import { GlucometerIcon } from '../../../../component/icon/value-icons/GlucometerIcon'
+import { GlycemiaIconConnected } from '../../../../component/icon/tooltiped/GlycemiaIcon'
+import { ShortInsulinIconConnected } from '../../../../component/icon/tooltiped/ShortInsulinIcon'
+import { BreadUnitsIconConnected } from '../../../../component/icon/tooltiped/BreadUnitsIcon'
+import { LongInsulinIconConnected } from '../../../../component/icon/tooltiped/LongInsulinIcon'
 
 export interface ChartDotInfoPopupValueProps {
     type: string
@@ -16,12 +16,12 @@ export const ChartDotInfoPopupValue = (props: ChartDotInfoPopupValueProps) => {
     return <View style={styles.view}>
         {renderIcon(props)}
         <View style={styles.value}>
-        {props.value ?
-            <Text style={styles.valueText}>
-                {props.value}
-            </Text> :
-            <MinusSignIcon />
-        }
+            {props.value ?
+                <Text style={styles.valueText}>
+                    {props.value}
+                </Text> :
+                <MinusSignIcon />
+            }
         </View>
     </View>
 }
@@ -29,13 +29,13 @@ export const ChartDotInfoPopupValue = (props: ChartDotInfoPopupValueProps) => {
 function renderIcon(props: ChartDotInfoPopupValueProps) {
     switch (props.type) {
         case ChartValueType.INSULIN:
-            return <ShortSyringeIcon style={styles.icon}/>
+            return <ShortInsulinIconConnected style={styles.icon} />
         case ChartValueType.BREAD_UNITS:
-            return <VegetablesIcon style={styles.icon}/>
+            return <BreadUnitsIconConnected style={styles.icon} />
         case ChartValueType.LONG_INSULIN:
-            return <LongSyringeIcon style={styles.icon}/>
+            return <LongInsulinIconConnected style={styles.icon} />
         default:
-            return <GlucometerIcon style={styles.icon}/>
+            return <GlycemiaIconConnected style={styles.icon} />
     }
 }
 
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     icon: {
         flex: 1,
         height: 30,
+        width: 30,
     },
     value: {
         display: "flex",

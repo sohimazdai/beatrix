@@ -9,7 +9,7 @@ interface Props {
   isPercent: boolean
 };
 
-export function PieLegendItem(props) {
+export function PieLegendItem(props: Props) {
   const { value, title, isPercent } = props;
 
   return (

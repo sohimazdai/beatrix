@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: Color.PRIMARY_BASE,
+    backgroundColor: Color.PRIMARY_WHITE,
   },
   cardsViewWrapWrap: {
     height: '100%',
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     overflow: 'scroll',
-    backgroundColor: Color.PRIMARY_BASE,
+    backgroundColor: Color.PRIMARY_WHITE,
   },
   iconBarViewWrap: {
     backgroundColor: "#2E3858",
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
-    backgroundColor: Color.PRIMARY_BASE,
+    backgroundColor: Color.PRIMARY_WHITE,
   },
   iconBarIcon: {
     flex: 1,

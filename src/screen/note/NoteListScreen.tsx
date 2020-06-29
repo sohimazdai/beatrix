@@ -10,11 +10,6 @@ import {
 } from "react-navigation";
 import { Note } from "../../view/shared/Note/Note";
 import { convertFlatNoteListToNoteListByDay } from "../../store/selector/NoteListSelector";
-import { RoundClocksIcon } from "../../component/icon/RoundClocksIcon";
-import { VegetablesIcon } from "../../component/icon/value-icons/VegetablesIcon";
-import { GlucometerIcon } from "../../component/icon/value-icons/GlucometerIcon";
-import { ShortSyringeIcon } from "../../component/icon/value-icons/ShortSyringeIcon";
-import { LongSyringeIcon } from "../../component/icon/value-icons/LongSyringeIcon";
 import { createChangeInteractive } from "../../store/modules/interactive/interactive";
 import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-popup/button/NoteCreationPopupButton";
 import { styles } from "./Style";
@@ -26,6 +21,11 @@ import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/
 import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
 import { Hat } from '../../component/hat/Hat';
+import { GlycemiaIconConnected } from '../../component/icon/tooltiped/GlycemiaIcon';
+import { ClocsIconTooltipedConnected } from '../../component/icon/tooltiped/ClocsIconTooltiped';
+import { BreadUnitsIconConnected } from '../../component/icon/tooltiped/BreadUnitsIcon';
+import { LongInsulinIconConnected } from '../../component/icon/tooltiped/LongInsulinIcon';
+import { ShortInsulinIconConnected } from '../../component/icon/tooltiped/ShortInsulinIcon';
 
 interface NoteListScreenStateTProps {
   app: IApp;
@@ -105,11 +105,11 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     return (
       <View style={styles.iconBarViewWrap}>
         <View style={styles.iconBarView}>
-          <RoundClocksIcon style={styles.iconBarIcon} />
-          <GlucometerIcon style={styles.iconBarIcon} />
-          <VegetablesIcon style={styles.iconBarIcon} />
-          <ShortSyringeIcon style={styles.iconBarIcon} />
-          <LongSyringeIcon style={styles.iconBarIcon} />
+          <ClocsIconTooltipedConnected style={styles.iconBarIcon} />
+          <GlycemiaIconConnected style={styles.iconBarIcon} />
+          <BreadUnitsIconConnected style={styles.iconBarIcon} />
+          <ShortInsulinIconConnected style={styles.iconBarIcon} />
+          <LongInsulinIconConnected style={styles.iconBarIcon} />
         </View>
       </View>
     );

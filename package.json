@@ -15,9 +15,6 @@
   },
   "dependencies": {
     "@react-native-community/netinfo": "5.5.1",
-    "@types/expo-localization": "^3.0.0",
-    "@types/i18n-js": "^3.0.3",
-    "@types/react-native-svg-charts": "^5.0.3",
     "axios": "^0.19.2",
     "expo": "35.0.1",
     "expo-analytics-amplitude": "~7.0.0",
@@ -40,10 +37,12 @@
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.5",
     "reselect": "^4.0.0",
-    "rn-tooltip": "^2.0.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "@types/expo-localization": "^3.0.0",
+    "@types/i18n-js": "^3.0.3",
+    "@types/react-native-svg-charts": "^5.0.3",
     "@types/expo": "^32.0.13",
     "@types/firebase": "^3.2.1",
     "@types/react": "^16.9.1",

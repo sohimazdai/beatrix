@@ -81,6 +81,8 @@ export const appAnalytics = {
     NOTE_DELETED: 'Note deleted',
     NOTE_DATE_CHANGED: 'Note date changed',
     NOTE_TIME_CHANGED: 'Note time changed',
+    //TOOLTIPS
+    TOOLTIP_SHOWN: 'Tooltip shown',
     //HANDLED ERRORS
     SERVER_IS_NOT_AVAILABLE: 'Server is not available',
   }

@@ -80,7 +80,6 @@ class DashboardScreen extends React.PureComponent<FullProps> {
               showsHorizontalScrollIndicator={false}
             >
               <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
-              <View style={{ width: 8 }} />
               <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
               <View style={{ width: 32 }} />
             </ScrollView>
@@ -90,7 +89,6 @@ class DashboardScreen extends React.PureComponent<FullProps> {
               showsHorizontalScrollIndicator={false}
             >
               <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
-              <View style={{ width: 8 }} />
               <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
               <View style={{ width: 32 }} />
             </ScrollView>

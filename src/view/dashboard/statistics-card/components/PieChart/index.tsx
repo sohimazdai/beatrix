@@ -10,6 +10,8 @@ import { selectStatisticsPieParts } from '../../selectors/select-statistics-pie-
 import { PieChart } from 'react-native-svg-charts'
 import { Switch } from 'react-native-gesture-handler';
 import { PieLegendItem } from '../PieLegendItem';
+import Tooltip from '../../../../../component/tooltip/Tooltip';
+import { PieToolTipItem } from '../PieToolTipItem';
 
 interface Props {
   viewType: StatisticsViewType
@@ -45,7 +47,22 @@ class PieChartComponent extends React.Component<Props, State> {
     return (
       <View>
         <View style={styles.pieWithLegend}>
-          <PieChart style={{ height: 90, width: 90 }} data={pieData} />
+          <Tooltip
+            actionType='press'
+            popover={(
+              <View>
+                {parts.map((part, index) => (
+                  <PieToolTipItem
+                    isFirst={!index}
+                    key={part.title}
+                    title={part.title}
+                  />
+                ))}
+              </View>
+            )}
+          >
+            <PieChart style={{ height: 90, width: 90 }} data={pieData} />
+          </Tooltip>
           <View>
             {parts.map((part) => (
               <PieLegendItem

@@ -9,9 +9,13 @@ import { Color } from '../../../../../constant/Color';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { MeasuresStatisticsConnected } from '../MeasuresStatistics';
 import { NoteValueType } from '../../../../../model/INoteList';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../../../model/IStorage';
+import { selectStatisticsAvailibility } from '../../selectors/select-statistics-availibility';
 
 interface Props {
   statisticsType: StatisticsType
+  isStatisticsAvailable: boolean
 };
 
 const TITLES = {
@@ -21,12 +25,14 @@ const TITLES = {
   [StatisticsType.LAST_THREE_MONTH]: 'statistics_last_three_month',
 }
 
-export class StatisticsCardConnected extends React.Component<Props> {
+export class StatisticsCard extends React.Component<Props> {
   render() {
-    const { statisticsType } = this.props;
+    const { statisticsType, isStatisticsAvailable } = this.props;
+
+    if (!isStatisticsAvailable) return null;
 
     return (
-      <DashboardCard>
+      <DashboardCard withRightMargin>
         <Text style={styles.cardTitle}>
           {i18nGet(TITLES[statisticsType])}
         </Text>
@@ -44,6 +50,15 @@ export class StatisticsCardConnected extends React.Component<Props> {
   }
 }
 
+export const StatisticsCardConnected = connect(
+  (state: IStorage) => state,
+  () => ({}),
+  (sP, { }, ownProps: { statisticsType: StatisticsType }) => ({
+    ...ownProps,
+    isStatisticsAvailable: selectStatisticsAvailibility(sP, ownProps.statisticsType),
+  })
+)(StatisticsCard);
+
 const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 19,
@@ -55,5 +70,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 8,
     alignItems: 'center',
-  }
+  },
 })

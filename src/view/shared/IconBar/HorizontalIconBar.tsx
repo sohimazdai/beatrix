@@ -1,21 +1,21 @@
 import React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import { RoundClocksIcon } from '../../../component/icon/RoundClocksIcon';
-import { GlucometerIcon } from '../../../component/icon/value-icons/GlucometerIcon';
-import { VegetablesIcon } from '../../../component/icon/value-icons/VegetablesIcon';
-import { ShortSyringeIcon } from '../../../component/icon/value-icons/ShortSyringeIcon';
-import { LongSyringeIcon } from '../../../component/icon/value-icons/LongSyringeIcon';
+import { ClocsIconTooltipedConnected } from '../../../component/icon/tooltiped/ClocsIconTooltiped';
+import { GlycemiaIconConnected } from '../../../component/icon/tooltiped/GlycemiaIcon';
+import { BreadUnitsIconConnected } from '../../../component/icon/tooltiped/BreadUnitsIcon';
+import { ShortInsulinIconConnected } from '../../../component/icon/tooltiped/ShortInsulinIcon';
+import { LongInsulinIconConnected } from '../../../component/icon/tooltiped/LongInsulinIcon';
 
 export function HorizontalIconBar() {
   return (
-      <View style={styles.iconBarView}>
-        <RoundClocksIcon style={styles.iconBarIcon} />
-        <GlucometerIcon style={styles.iconBarIcon} />
-        <VegetablesIcon style={styles.iconBarIcon} />
-        <ShortSyringeIcon style={styles.iconBarIcon} />
-        <LongSyringeIcon style={styles.iconBarIcon} />
-      </View>
+    <View style={styles.iconBarView}>
+      <ClocsIconTooltipedConnected style={styles.iconBarIcon} />
+      <GlycemiaIconConnected style={styles.iconBarIcon} />
+      <BreadUnitsIconConnected style={styles.iconBarIcon} />
+      <ShortInsulinIconConnected style={styles.iconBarIcon} />
+      <LongInsulinIconConnected style={styles.iconBarIcon} />
+    </View>
   );
 }
 
@@ -24,9 +24,12 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
   iconBarIcon: {
     flex: 1,
-    height: 30
+    height: 30,
+    width: 30,
   },
 })
