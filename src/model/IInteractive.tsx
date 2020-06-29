@@ -4,7 +4,7 @@ export interface IInteractive {
     creatingNoteMode?: boolean
     editingNoteId?: string
 
-    selectedDotId?: string
+    selectedDotId?: number
     selectedChartPeriod?: string
 
     confirmPopupShown?: boolean

@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { Color } from '../../../../constant/Color';
-import { shadowOptions } from '../../../../constant/ShadowOptions';
 import { i18nGet } from '../../../../localisation/Translate';
-import { NotesIcon } from '../../../../component/icon/NotesIcon';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IStorage } from '../../../../model/IStorage';
 import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/NoteListSelector';
@@ -16,6 +14,7 @@ import { Note } from '../../../shared/Note/Note';
 import { HorizontalIconBar } from '../../../shared/IconBar/HorizontalIconBar';
 import { createChangeInteractive } from '../../../../store/modules/interactive/interactive';
 import { DashboardCard } from '../../../shared/DashboardCard';
+import { NotesIcon } from '../../../../component/icon/NotesIcon';
 
 interface Props {
   noteListToday: INoteList

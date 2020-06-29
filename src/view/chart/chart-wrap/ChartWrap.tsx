@@ -22,7 +22,7 @@ export interface ChartWrapProps {
     config: IChartConfiguration
     type: ChartValueType
     selectedPeriod: ChartPeriodType
-    selectedDotId?: string
+    selectedDotId?: number
     currentDate?: Date
     noteList?: INoteList
     noteListByDay?: INoteListByDay
@@ -122,12 +122,13 @@ export function Comp(props: ChartWrapProps) {
                         r={config.dotRadius}
                         x={item.x}
                         y={item.y}
-                        noteId={item.noteId}
+                        noteId={item.id}
                         fill={config.dotFillColor ? config.dotFillColor : Color.RED}
                         dotStrokeColor={config.dotStrokeColor}
                         stroke={Color.WHITE}
                         selectedDotId={selectedDotId}
                         type={props.type}
+                        isAlone={config.isAlone}
                     />
                 })}
                 {!config.isAlone && clickableDotsAvailable() && basicDotsData.events.map(item => {
@@ -137,10 +138,11 @@ export function Comp(props: ChartWrapProps) {
                         r={config.dotRadius}
                         x={item.x}
                         y={item.y}
-                        noteId={item.noteId}
+                        noteId={item.id}
                         fill={config.dotFillColor ? config.dotFillColor : Color.WHITE}
                         stroke={Color.INDIAN_RED}
                         selectedDotId={selectedDotId}
+                        isAlone={config.isAlone}
                     />
                 })}
             </ChartBox>

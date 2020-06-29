@@ -1,23 +1,24 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { INoteListNote } from '../../../model/INoteList';
-import { BottomPopup } from '../../../component/popup/BottomPopup';
-import { ChartDotInfoPopupValue } from './dot-info-popup-value/ChartDotInfoPopupValue';
-import { ChartValueType, ChartPeriodType } from '../../../model/IChart';
-import { CloseIcon } from '../../../component/icon/CloseIcon';
-import { EditNoteIcon } from '../../../component/icon/EditNoteIcon';
+import { INoteListNote } from '../../../../../model/INoteList';
+import { BottomPopup } from '../../../../../component/popup/BottomPopup';
+import { ChartDotInfoPopupValue } from '../dot-info-popup-value/ChartDotInfoPopupValue';
+import { ChartValueType, ChartPeriodType } from '../../../../../model/IChart';
+import { CloseIcon } from '../../../../../component/icon/CloseIcon';
+import { EditNoteIcon } from '../../../../../component/icon/EditNoteIcon';
 import { connect } from 'react-redux';
-import { IStorage } from '../../../model/IStorage';
-import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
+import { IStorage } from '../../../../../model/IStorage';
+import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from './Style';
-import { DateHelper } from '../../../utils/DateHelper';
-import { i18nGet } from '../../../localisation/Translate';
+import { DateHelper } from '../../../../../utils/DateHelper';
+import { i18nGet } from '../../../../../localisation/Translate';
+import { selectAverageValue } from '../../selectors/select-value-average';
 
 export interface ChartDotInfoPopupProps {
     note?: INoteListNote
-    selectedDotId?: string
+    selectedDotId?: number
     selectedChartPeriod?: string
 
     openEditPopup?: (noteId) => void
@@ -27,21 +28,20 @@ export interface ChartDotInfoPopupProps {
 export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
     componentDidMount() {
         const { closePopup } = this.props;
-        BackHandler.addEventListener('hardwareBackPress', function () {
+        BackHandler.addEventListener('hardwareBackPress', function close() {
             closePopup();
         });
     }
 
     componentWillUnmount() {
         const { closePopup } = this.props;
-        BackHandler.removeEventListener('hardwareBackPress', function () {
+        BackHandler.removeEventListener('hardwareBackPress', function close() {
             closePopup();
         });
     }
 
     getChartPopupTitle = () => {
         const { selectedChartPeriod = ChartPeriodType.DAY, note } = this.props;
-
         let displayingDate = '';
 
         switch (selectedChartPeriod) {
@@ -146,6 +146,7 @@ export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
 
 export const ChartDotInfoPopupConnect = connect(
     (state: IStorage) => ({
+        state,
         selectedDotId: state.interactive.selectedDotId,
         selectedChartPeriod: state.interactive.selectedChartPeriod,
         note: state.noteList[state.interactive.selectedDotId] || null,
@@ -155,6 +156,11 @@ export const ChartDotInfoPopupConnect = connect(
         return {
             ...stateProps,
             ...ownProps,
+            note: stateProps.selectedDotId && selectAverageValue(
+                stateProps.state,
+                stateProps.selectedChartPeriod,
+                stateProps.selectedDotId
+            ) || null,
             openEditPopup: (noteId) => {
                 dispatch(createChangeInteractive({
                     creatingNoteMode: true,

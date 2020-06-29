@@ -1,11 +1,11 @@
 import React from 'react'
-import { ChartValueType } from '../../../../model/IChart'
+import { ChartValueType } from '../../../../../model/IChart'
 import { View, StyleSheet, Text } from 'react-native'
-import { MinusSignIcon } from '../../../../component/icon/MinusSignIcon'
-import { GlycemiaIconConnected } from '../../../../component/icon/tooltiped/GlycemiaIcon'
-import { ShortInsulinIconConnected } from '../../../../component/icon/tooltiped/ShortInsulinIcon'
-import { BreadUnitsIconConnected } from '../../../../component/icon/tooltiped/BreadUnitsIcon'
-import { LongInsulinIconConnected } from '../../../../component/icon/tooltiped/LongInsulinIcon'
+import { MinusSignIcon } from '../../../../../component/icon/MinusSignIcon'
+import { GlycemiaIconConnected } from '../../../../../component/icon/tooltiped/GlycemiaIcon'
+import { ShortInsulinIconConnected } from '../../../../../component/icon/tooltiped/ShortInsulinIcon'
+import { BreadUnitsIconConnected } from '../../../../../component/icon/tooltiped/BreadUnitsIcon'
+import { LongInsulinIconConnected } from '../../../../../component/icon/tooltiped/LongInsulinIcon'
 
 export interface ChartDotInfoPopupValueProps {
     type: string

@@ -1,37 +1,27 @@
-import React from 'react'
-import Svg, { Path, Rect } from 'react-native-svg'
+import * as React from "react"
+import Svg, { Rect, Path } from "react-native-svg"
 
-export const NotesIcon = props => (
-  <Svg width={24} height={23} viewBox="0 0 24 23" fill="none" {...props}>
-    <Rect
-      x={7.636}
-      y={6.545}
-      width={16.364}
-      height={16.364}
-      rx={2}
-      fill="#2E3858"
-    />
-    <Rect
-      x={4.364}
-      y={3.273}
-      width={17.454}
-      height={17.454}
-      rx={2}
-      fill="#8076EB"
-    />
-    <Rect width={18.546} height={18.546} rx={2} fill="#FF8E8E" />
-    <Path
-      d="M12 5.455H3.273M15.273 12H8.727"
-      stroke="#2E3858"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-    />
-    <Path
-      d="M15.273 8.727h-12"
-      stroke="#2E3858"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeDasharray="3 3"
-    />
-  </Svg>
-)
+export function NotesIcon(props) {
+  return (
+    <Svg width={24} height={23} viewBox="0 0 24 23" fill="none" {...props}>
+      <Path
+        d="M7.636 8.545a2 2 0 012-2H22a2 2 0 012 2V20.91a2 2 0 01-2 2H9.636a2 2 0 01-2-2V8.545z"
+        fill="#2E3858"
+      />
+      <Path
+        d="M4.364 5.273a2 2 0 012-2h13.454a2 2 0 012 2v13.454a2 2 0 01-2 2H6.364a2 2 0 01-2-2V5.273z"
+        fill="#8076EB"
+      />
+      <Path
+        d="M0 2a2 2 0 012-2h14.546a2 2 0 012 2v14.546a2 2 0 01-2 2H2a2 2 0 01-2-2V2z"
+        fill="#FF8E8E"
+      />
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2.523 5.455a.75.75 0 01.75-.75H12a.75.75 0 010 1.5H3.273a.75.75 0 01-.75-.75zM7.977 12a.75.75 0 01.75-.75h6.546a.75.75 0 110 1.5H8.727a.75.75 0 01-.75-.75zM2.523 8.727a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.5 0a.75.75 0 01.75-.75h3a.75.75 0 010 1.5h-3a.75.75 0 01-.75-.75zm6 0a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75z"
+        fill="#2E3858"
+      />
+    </Svg>
+  )
+}

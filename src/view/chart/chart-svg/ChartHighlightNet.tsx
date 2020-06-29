@@ -13,7 +13,7 @@ export interface ChartHighlightNetProps {
     noYY?: boolean
     paddingTop?: boolean
     paddingBottom?: boolean
-    selectedDotId: string
+    selectedDotId: number
 }
 
 export function ChartHighlightNet(props: ChartHighlightNetProps) {
@@ -24,7 +24,7 @@ export function ChartHighlightNet(props: ChartHighlightNetProps) {
     if (props.cfg.isAlone) return null;
 
     function isSelectedDot(dot: IChartDot) {
-        return props.selectedDotId == String(dot.id) || props.selectedDotId == dot.noteId
+        return props.selectedDotId == dot.id || String(props.selectedDotId) == dot.noteId
     }
 
     function verticalLines() {

@@ -6,23 +6,24 @@ import { createChangeInteractive } from '../../../store/modules/interactive/inte
 import { connect } from 'react-redux';
 
 export interface Props {
-    onPress?: (dotId: string) => void
+    onPress?: (dotId: number) => void
 
     r: number
     x: number
     y: number
     id: number,
-    noteId?: string
+    noteId?: number
     fill: string
     stroke: string
-    selectedDotId?: string
+    selectedDotId?: number
     type?: ChartValueType
     dotFillColor?: string
     dotStrokeColor?: string
+    isAlone?: boolean
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onPress: (noteId: string) => dispatch(createChangeInteractive({
+    onPress: (noteId: number) => dispatch(createChangeInteractive({
         selectedDotId: noteId
     }))
 })
@@ -31,13 +32,7 @@ const Component = (props: Props) => (
     <>
         <Circle
             r={getDotRadius(props)}
-            stroke={
-                props.selectedDotId == (props.noteId ? props.noteId : String(props.id))
-                    ? props.stroke
-                    : props.dotStrokeColor
-                        ? props.dotStrokeColor
-                        : 'transparent'
-            }
+            stroke={getStroke(props)}
             strokeWidth={2}
             x={props.x}
             y={props.y}
@@ -56,6 +51,20 @@ const Component = (props: Props) => (
     </>
 )
 
+function getStroke(props: Props) {
+    if (props.selectedDotId == (props.noteId ? props.noteId : String(props.id))) {
+        if (props.isAlone) {
+            return Color.RED_BASE;
+        }
+        return props.stroke;
+    }
+
+    if (props.dotStrokeColor) {
+        return props.dotStrokeColor;
+    }
+
+    return 'transparent';
+}
 function getDotColor(props: Props) {
     switch (props.type) {
         case ChartValueType.INSULIN:
@@ -76,12 +85,8 @@ function getDotRadius(props: Props) {
 }
 
 function onPress(props: Props) {
-    if (props.noteId) {
-        props.onPress(props.noteId)
-        return;
-    }
 
-    props.onPress(String(props.id))
+    props.onPress(props.id)
 }
 
 export const ChartDot = connect(

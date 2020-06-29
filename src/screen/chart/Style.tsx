@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         backgroundColor: '#F6F8FF',
-        paddingBottom: 80,
     },
     scrollViewWrapWrap: {
         backgroundColor: "#2E3858",
@@ -19,7 +18,6 @@ export const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     scrollView: {
-        height: '100%',
         paddingTop: 10,
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
@@ -105,7 +103,6 @@ export const styles = StyleSheet.create({
 
         paddingTop: 20,
         paddingHorizontal: 38,
-        paddingBottom: 35,
         justifyContent: 'center',
         alignItems: 'center',
     },

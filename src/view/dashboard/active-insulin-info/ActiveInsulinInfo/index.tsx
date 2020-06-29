@@ -73,12 +73,14 @@ class ActiveInsulinInfo extends React.Component<Props, State> {
 
   timer = () => {
     const { lastNote, lastYesterdayNote } = this.props;
+    const noteToUpdate = lastNote || lastYesterdayNote;
+
     if (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) {
       this.setInitialState();
       return;
     }
 
-    const expiresIn = calculateActiveInsulinTime(lastNote.date || lastYesterdayNote.date);
+    const expiresIn = calculateActiveInsulinTime(noteToUpdate.date);
 
     this.setState({
       ...expiresIn,

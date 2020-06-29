@@ -20,6 +20,7 @@ export enum Color {
     PRIMARY_WHITE = "#FFFFFF",
 
     BLUE_BASE = "#D4EEFF",
+    BLUE = "#6659FF",
 
     RED = '#FF5252',
     CRIMSON_RED = '#990000',

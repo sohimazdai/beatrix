@@ -10,7 +10,7 @@ import { convertFlatNoteListToNoteListByDay } from '../../store/selector/NoteLis
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
-import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { DateHelper } from '../../utils/DateHelper';
 import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ import { createModalChangeAction } from '../../store/modules/modal/ModalActionCr
 import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
 import { Measures } from '../../localisation/Measures';
 import { i18nGet } from '../../localisation/Translate';
-import { Hat } from '../../component/hat/Hat';
+import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
@@ -33,6 +33,7 @@ export interface ChartProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     userDiabetesProperties: IUserDiabetesProperties
     onInfoPress: (chartPeriodType: ChartPeriodType) => void
+    clearSelectedPeriod: () => void
 }
 
 export interface ChartState {
@@ -59,6 +60,10 @@ class Chart extends React.Component<ChartProps, ChartState> {
         glucoseAverageShown: false,
         noteCreationShown: false,
         editingNoteId: null
+    }
+
+    componentWillUnmount() {
+        this.props.clearSelectedPeriod()
     }
 
     get chartConfig() {
@@ -497,7 +502,10 @@ export const ChartConnect = connect(
                         appAnalytics.sendEvent(appAnalytics.events.THREE_MONTH_CHART_INFO_OPEN);
                         break;
                 }
-            }
+            },
+            clearSelectedPeriod: () => dispatch(
+                createChangeInteractive({ selectedChartPeriod: ChartPeriodType.DAY })
+            )
         }
     }
 )(Chart)

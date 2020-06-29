@@ -1,8 +1,6 @@
-import { INoteListByDay, INoteList, INoteListNote, NoteValueType } from '../../../../model/INoteList';
+import { INoteListByDay, INoteListNote, NoteValueType } from '../../../../model/INoteList';
 import { StatisticsType } from '../entities';
 import { DateHelper } from '../../../../utils/DateHelper';
-import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
-import { Measures } from '../../../../localisation/Measures';
 import { createSelector } from 'reselect';
 import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/NoteListSelector';
 import { IStorage } from '../../../../model/IStorage';
@@ -37,6 +35,7 @@ function getValue(
     averageValue += note[measuresType]
   });
   const listLength = noteList.filter(note => !!note[measuresType]).length;
+
   return Number((averageValue / listLength).toFixed(1));
 }
 

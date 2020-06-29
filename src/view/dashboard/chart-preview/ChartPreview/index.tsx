@@ -25,6 +25,35 @@ interface Props {
 };
 
 class ChartPreview extends React.Component<Props> {
+  renderNetXTitles = () => {
+    const chartConfig = new ChartConfig().getConfigs().glucosePreview;
+
+    let highlightsNumber;
+    let highlightsTitles = [];
+    let newWidth = chartConfig.boxWidth - 3 * chartConfig.basicPadding;
+    let titleWidth;
+    highlightsNumber = 10;
+    highlightsTitles = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+    newWidth = chartConfig.boxWidth;
+    titleWidth = 20;
+    return <View
+      style={{
+        ...styles.highightTitlesView,
+        width: newWidth + 5,
+        paddingRight: 3
+      }}
+    >
+      {highlightsTitles.map(title => {
+        return <Text
+          key={title}
+          style={{ ...styles.highightTitle, width: titleWidth }}
+        >
+          {title}
+        </Text>
+      })}
+    </View>
+  }
+
   render() {
     const {
       onChartIconPress,
@@ -37,33 +66,6 @@ class ChartPreview extends React.Component<Props> {
     if (!noteListToday) isChartEmpty = true;
 
     const chartConfig = new ChartConfig().getConfigs().glucosePreview;
-
-    function renderNetXTitles() {
-      let highlightsNumber;
-      let highlightsTitles = [];
-      let newWidth = chartConfig.boxWidth - 3 * chartConfig.basicPadding;
-      let titleWidth;
-      highlightsNumber = 10;
-      highlightsTitles = [0, 3, 6, 9, 12, 15, 18, 21, 24];
-      newWidth = chartConfig.boxWidth;
-      titleWidth = 20;
-      return <View
-        style={{
-          ...styles.highightTitlesView,
-          width: newWidth + 5,
-          paddingRight: 3
-        }}
-      >
-        {highlightsTitles.map(title => {
-          return <Text
-            key={title}
-            style={{ ...styles.highightTitle, width: titleWidth }}
-          >
-            {title}
-          </Text>
-        })}
-      </View>
-    }
 
     return (
       <DashboardCard>
@@ -94,7 +96,7 @@ class ChartPreview extends React.Component<Props> {
                   minCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).min}
                   maxCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).max}
                 />
-                {renderNetXTitles()}
+                {this.renderNetXTitles()}
               </View>
             )}
         </View>

@@ -45,21 +45,21 @@ const styles = StyleSheet.create({
         backgroundColor: "#2E3858",
         paddingTop: 20,
     },
+    settingsView: {
+        display: 'flex',
+        width: '100%',
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        alignItems: 'center',
+    },
     leftSide: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
-    },
-    settingsView: {
-        display: 'flex',
-        width: '100%',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        alignItems: 'center',
     },
     backArrow: {
         width: 40,

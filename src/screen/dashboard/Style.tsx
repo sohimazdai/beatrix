@@ -19,6 +19,13 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: Color.PRIMARY_WHITE,
   },
+  statisticsScrollView: {
+    display: 'flex',
+    marginTop: -8,
+    marginLeft: -8,
+    paddingHorizontal: 16,
+    overflow: 'visible',
+  },
   addNoteButtonView: {
     position: "absolute",
     bottom: 5,

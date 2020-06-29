@@ -11,14 +11,14 @@ import {
 import { BlockHat } from "../../component/hat/BlockHat";
 import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-popup/button/NoteCreationPopupButton";
 import { styles } from "./Style";
-import { TouchableOpacity, ScrollView, FlatList } from "react-native-gesture-handler";
+import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { IUser } from '../../model/IUser';
 import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
-import { LastNotesConnected } from '../../view/dashboard/last-notes/LastNotes/LastNotes';
+import { LastNotesConnected } from '../../view/dashboard/last-notes/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
 import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/ActiveInsulinInfo';
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
@@ -69,19 +69,21 @@ class DashboardScreen extends React.PureComponent<FullProps> {
               <ActiveInsulinInfoConnected />
             </View>
             <ScrollView
-              style={{ paddingHorizontal: 16, overflow: 'visible' }}
+              style={styles.statisticsScrollView}
               horizontal
               showsHorizontalScrollIndicator={false}
             >
+              <View style={{ width: 8 }} />
               <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
               <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
               <View style={{ width: 32 }} />
             </ScrollView>
             <ScrollView
-              style={{ paddingHorizontal: 16, overflow: 'visible' }}
+              style={styles.statisticsScrollView}
               horizontal
               showsHorizontalScrollIndicator={false}
             >
+              <View style={{ width: 8 }} />
               <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
               <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
               <View style={{ width: 32 }} />

@@ -7,9 +7,6 @@ import { IUser } from '../model/IUser';
 import { connect } from 'react-redux';
 import { IStorage } from '../model/IStorage';
 import { ProfileScreenConnect } from '../screen/profile/ProfileScreen';
-import { NotesIcon } from '../component/icon/NotesIcon';
-import { ChartsIcon } from '../component/icon/ChartsIcon';
-import { ProfileIcon } from '../component/icon/ProfileIcon';
 import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
 import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
@@ -18,12 +15,12 @@ import { Fader, FaderType } from '../component/fader/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
 import * as Localization from 'expo-localization';
-import translate, { i18nGet, setLocale } from '../localisation/Translate';
+import translate, { setLocale } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
 import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
-import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/ChartDotInfoPopup';
+import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -99,32 +96,6 @@ const ProfileScreenStack = createStackNavigator(
     },
     {
         headerMode: 'none'
-    }
-)
-
-
-
-const AuthedMainNavigator = createBottomTabNavigator(
-    {
-        [i18nGet('notes')]: { screen: NoteListScreenConnect },
-        [i18nGet('charts')]: { screen: ChartConnect },
-    },
-    {
-        defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: () => {
-                const { routeName } = navigation.state;
-                if (routeName === i18nGet('notes')) {
-                    return <NotesIcon />
-                } else if (routeName === i18nGet('charts')) {
-                    return <ChartsIcon />
-                }
-            },
-        }),
-        tabBarOptions: {
-            activeTintColor: 'black',
-            inactiveTintColor: 'black',
-            inactiveBackgroundColor: "#E3EAFF",
-        },
     }
 )
 
