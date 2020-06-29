@@ -119,34 +119,8 @@ const getTooltipCoordinate = (
 
   return {
     x: constraintX(newX, qIndex, center[0], ScreenWidth, tooltipWidth),
-    y: constraintY(newY, qIndex, tooltipHeight),
+    y: newY,
   };
-};
-
-const constraintY = (
-  newY: number,
-  qIndex: number,
-  tooltipHeight: number,
-): number => {
-  switch (qIndex) {
-    // 0 and 3 are the left side quadrants.
-    case 0:
-    case 1: {
-      const maxHeight = newY > ScreenHeight ? ScreenHeight - 10 : newY;
-      return newY < 1 ? 10 : maxHeight;
-    }
-    // 1 and 2 are the right side quadrants
-    case 2:
-    case 3: {
-      const topOverSpace = ScreenHeight - newY;
-      return topOverSpace >= tooltipHeight
-        ? newY
-        : newY - (topOverSpace -tooltipHeight + 10);
-    }
-    default: {
-      return 0;
-    }
-  }
 };
 
 const constraintX = (
