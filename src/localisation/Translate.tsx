@@ -184,20 +184,6 @@ export default function translate() {
     its_need_to_fit: 'It is need to fit the new measurement system',
     please_do_not_close_app: 'Please do not close the application! It does not take much time',
 
-    // DASHBOARD
-    compensation: 'Compensation',
-    last_notes: 'Recent notes',
-    no_recent_notes_today: 'No notes yet today',
-    glucose_chart: 'Glucose chart',
-    rest_active_insulin: 'Attention! Active insulin',
-    expires_in: 'Expires in',
-    minutes_short: 'min',
-    hours_short: 'h',
-    statistics_today: 'Today',
-    statistics_yesterday: 'Yesterday',
-    statistics_last_month: 'Last month',
-    statistics_last_three_month: 'Last three month',
-
     // GENERAL
     cancel: 'Cancel',
     not_selected: 'not selected',
@@ -220,6 +206,34 @@ export default function translate() {
     notes_deleting_error: 'Error deleting record from server',
     notes_creating_error: 'Error creating server record',
     google_auth_error: 'Login failed',
+
+    // DASHBOARD
+    compensation: 'Compensation',
+    last_notes: 'Recent notes',
+    no_recent_notes_today: 'No notes yet today',
+    glucose_chart: 'Glucose chart',
+    rest_active_insulin: 'Active insulin',
+    expires_in: 'Expires in',
+    minutes_short: 'min',
+    hours_short: 'h',
+    statistics_today: 'Today',
+    statistics_yesterday: 'Yesterday',
+    statistics_last_month: 'Last month',
+    statistics_last_three_month: 'Last three month',
+
+    breadUnits_long: 'Carbs units',
+    carbohydrates_long: 'Carbohydrates',
+    one_bread_unit_contents: 'Carbs unit contents %number% grams of carbohydrates.',
+
+    hypoglycemia_count: 'Hypoglycemia',
+    hyperglycemia_count: 'Hyperglycemia',
+    normalglycemia_count: 'Normal sugar',
+
+    glucose_icon_tooltip: 'Blood glucose. Measured in %measure%.\nTarget glycemia is %target% %measure%.\nNormal sugar is between %min% and %max%.',
+    breadunits_icon_tooltip: '%type%.\n%for_bu%',
+    note_date_and_time: 'Note time',
+    short_insulin_icon_tooltip: 'Ultra short-acting Insulin',
+    long_insulin_icon_tooltip: 'Long-acting insulin',
   };
   /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
 
@@ -301,13 +315,7 @@ export default function translate() {
     carb_gram: 'грамм',
     carbs_units: 'ХЕ',
 
-    breadUnits_long: 'Хлебные единицы',
-    carbohydrates_long: 'Углеводы',
-    one_bread_unit_contents: 'Одна ХЕ содержит %number% грамм углеводов.',
 
-    hypoglycemia_count: 'Гипогликемия',
-    hyperglycemia_count: 'Гипергликемия',
-    normalglycemia_count: 'Норма',
 
     //CHARTS
     charts: 'Графики',
@@ -407,6 +415,29 @@ export default function translate() {
     its_need_to_fit: 'Это необходимо для соответствия новой системе измерений',
     please_do_not_close_app: 'Пожалуйста, не закрывайте приложение! Это не займет много времени',
 
+    // GENERAL
+    cancel: 'Отмена',
+    not_selected: 'не выбрано',
+    are_you_sure: 'Вы уверены?',
+
+    ok: 'OK',
+    yes: 'Да',
+    got_it: 'Ок, понятно',
+
+    active_network_needed: 'Необходимо интернет-соединение',
+    server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',
+    no_data_for_the_period: 'Нет данных за данный период',
+
+    //ERROR
+    user_properties_changing_error: 'Ошибка при изменении параметров пользователя',
+    shedule_sync_error: 'Ошибка синхронизации расписания с сервером',
+    sync_error: 'Ошибка при синхронизации с сервером',
+    note_updating_error: 'Ошибка обновления записи на сервере',
+    notes_sync_error: 'Ошибка синхронизации записей с сервером',
+    notes_deleting_error: 'Ошибка удаления записи с сервера',
+    notes_creating_error: 'Ошибка создания записи на сервер',
+    google_auth_error: 'Войти не удалось',
+
     // DASHBOARD
     compensation: 'Компенсация',
     last_notes: 'Последние записи',
@@ -421,33 +452,19 @@ export default function translate() {
     statistics_last_month: 'Последний месяц',
     statistics_last_three_month: 'Последние три месяца',
 
-    // GENERAL
-    cancel: 'Отмена',
-    not_selected: 'не выбрано',
-    are_you_sure: 'Вы уверены?',
+    breadUnits_long: 'Хлебные единицы',
+    carbohydrates_long: 'Углеводы',
+    one_bread_unit_contents: 'Одна ХЕ содержит %number% грамм углеводов.',
 
-    ok: 'OK',
-    yes: 'Да',
-    got_it: 'Ок, понятно',
-
-    active_network_needed: 'Необходимо интернет-соединение',
-    server_is_not_available_try_to_restart_app: 'В данный момент сервер недоступен. Попробуйте перезапустить приложение.',
+    hypoglycemia_count: 'Гипогликемия',
+    hyperglycemia_count: 'Гипергликемия',
+    normalglycemia_count: 'Норма',
 
     glucose_icon_tooltip: 'Глюкоза крови. Измеряется в %measure%.\nЦелевая гликемия указана как %target% %measure%.\nНорма в пределах от %min% до %max%.',
     breadunits_icon_tooltip: '%type%.\n%for_bu%',
     note_date_and_time: 'Время записи',
     short_insulin_icon_tooltip: 'Инсулин ультракороткого действия',
     long_insulin_icon_tooltip: 'Инсулин пролонгированного действия',
-    no_data_for_the_period: 'Нет данных за данный период',
-    //ERROR
-    user_properties_changing_error: 'Ошибка при изменении параметров пользователя',
-    shedule_sync_error: 'Ошибка синхронизации расписания с сервером',
-    sync_error: 'Ошибка при синхронизации с сервером',
-    note_updating_error: 'Ошибка обновления записи на сервере',
-    notes_sync_error: 'Ошибка синхронизации записей с сервером',
-    notes_deleting_error: 'Ошибка удаления записи с сервера',
-    notes_creating_error: 'Ошибка создания записи на сервер',
-    google_auth_error: 'Войти не удалось',
   }
   /* 🇷🇺 */
 } 

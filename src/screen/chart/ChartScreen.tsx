@@ -104,10 +104,16 @@ class Chart extends React.Component<ChartProps, ChartState> {
             }
         }
         if (this.state.selectedDotId !== prevState.selectedDotId) {
-            appAnalytics.sendEvent(appAnalytics.events.CHART_DOT_SELECTED);
+            appAnalytics.sendEventWithProps(
+                appAnalytics.events.CHART_DOT_SELECTED,
+                { selectedPeriod: this.state.selectedPeriod }
+            );
         }
         if (this.state.currentDate !== prevState.currentDate) {
-            appAnalytics.sendEvent(appAnalytics.events.ANOTHER_CHART_DATE_SEEN);
+            appAnalytics.sendEventWithProps(
+                appAnalytics.events.ANOTHER_CHART_DATE_SEEN,
+                { selectedPeriod: this.state.selectedPeriod }
+            );
         }
     }
 

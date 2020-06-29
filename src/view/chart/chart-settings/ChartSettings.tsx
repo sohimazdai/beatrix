@@ -27,6 +27,7 @@ const PERIODS = [
 ]
 
 export function Comp(props: ChartSettingsProps) {
+    const { selectedChartPeriod = ChartPeriodType.DAY } = props;
     const today = new Date(
         new Date().getFullYear(),
         new Date().getMonth(),
@@ -44,7 +45,7 @@ export function Comp(props: ChartSettingsProps) {
             </View>
             <ChartSettingsDatePickerConnect
                 date={props.date}
-                selectedPeriod={props.selectedChartPeriod}
+                selectedPeriod={selectedChartPeriod}
                 onChange={props.onDateChange}
             />
             <View
@@ -72,10 +73,10 @@ export function Comp(props: ChartSettingsProps) {
                 </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
-                        let buttonStyle = period === props.selectedChartPeriod ?
+                        let buttonStyle = period === selectedChartPeriod ?
                             { ...styles.periodButton, ...styles.periodButtonActive } :
                             styles.periodButton;
-                        let buttonTextStyle = period === props.selectedChartPeriod ?
+                        let buttonTextStyle = period === selectedChartPeriod ?
                             { ...styles.periodButtonText, ...styles.periodButtonTextActive } :
                             styles.periodButtonText;
                         return <View
@@ -85,7 +86,7 @@ export function Comp(props: ChartSettingsProps) {
                         >
                             <TouchableOpacity
                                 style={styles.periodButtonTouchable}
-                                onPress={() => props.selectedChartPeriod != period && props.onChangingPeriod(period)}
+                                onPress={() => selectedChartPeriod != period && props.onChangingPeriod(period)}
                             >
                                 <Text style={buttonTextStyle}>
                                     {getPeriodName(period)}

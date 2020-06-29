@@ -7,6 +7,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Alert,
+    BackHandler,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, Action } from 'redux';
@@ -60,6 +61,20 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
         longInsulin: 0,
         commentary: '',
         currentValueType: NoteValueType.GLUCOSE,
+    }
+
+    componentDidMount() {
+        const { hidePopup } = this.props;
+        BackHandler.addEventListener('hardwareBackPress', function () {
+            hidePopup();
+        });
+    }
+
+    componentWillUnmount() {
+        const { hidePopup } = this.props;
+        BackHandler.removeEventListener('hardwareBackPress', function () {
+            hidePopup();
+        });
     }
 
     componentDidUpdate(pP: Props, pS: State) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { INoteListNote } from '../../../model/INoteList';
 import { BottomPopup } from '../../../component/popup/BottomPopup';
@@ -24,12 +24,23 @@ export interface ChartDotInfoPopupProps {
     closePopup?: () => void;
 }
 
-export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
-    const { selectedChartPeriod = ChartPeriodType.DAY, selectedDotId, note } = props;
+export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
+    componentDidMount() {
+        const { closePopup } = this.props;
+        BackHandler.addEventListener('hardwareBackPress', function () {
+            closePopup();
+        });
+    }
 
-    const editable = selectedChartPeriod == ChartPeriodType.DAY;
+    componentWillUnmount() {
+        const { closePopup } = this.props;
+        BackHandler.removeEventListener('hardwareBackPress', function () {
+            closePopup();
+        });
+    }
 
-    function getChartPopupTitle() {
+    getChartPopupTitle = () => {
+        const { selectedChartPeriod = ChartPeriodType.DAY, note } = this.props;
 
         let displayingDate = '';
 
@@ -54,69 +65,80 @@ export function ChartDotInfoPopup(props: ChartDotInfoPopupProps) {
                 return displayingDate
         }
     }
+    render() {
+        const {
+            selectedChartPeriod = ChartPeriodType.DAY,
+            note,
+            openEditPopup,
+            closePopup,
+        } = this.props;
 
-    return <BottomPopup hidden={!props.note}>
-        <View style={styles.animatedView}>
-            <LinearGradient
-                style={styles.popupGradient}
-                colors={['#DFF2FF', '#F6F8FF']}
-            >
-                {props.note && <>
-                    <View style={styles.dateTitleView}>
-                        <Text style={styles.dateTitle}>
-                            {getChartPopupTitle()}
-                        </Text>
-                    </View>
-                    <View style={styles.upperValues}>
-                        <ChartDotInfoPopupValue
-                            type={ChartValueType.GLUCOSE}
-                            value={props.note[ChartValueType.GLUCOSE]}
-                        />
-                        <ChartDotInfoPopupValue
-                            type={ChartValueType.INSULIN}
-                            value={props.note[ChartValueType.INSULIN]}
-                        />
-                    </View>
-                    <View style={styles.bottomValues}>
-                        <ChartDotInfoPopupValue
-                            type={ChartValueType.BREAD_UNITS}
-                            value={props.note[ChartValueType.BREAD_UNITS]}
-                        />
-                        <ChartDotInfoPopupValue
-                            type={ChartValueType.LONG_INSULIN}
-                            value={props.note[ChartValueType.LONG_INSULIN]}
-                        />
-                    </View>
-                    {!!props.note.commentary && <ScrollView style={styles.commentValue}>
-                        <View>
-                            <Text style={styles.commentValueText}>
-                                {props.note.commentary}
+        const editable = selectedChartPeriod == ChartPeriodType.DAY;
+
+
+        return <BottomPopup hidden={!note}>
+            <View style={styles.animatedView}>
+                <LinearGradient
+                    style={styles.popupGradient}
+                    colors={['#DFF2FF', '#F6F8FF']}
+                >
+                    {note && <>
+                        <View style={styles.dateTitleView}>
+                            <Text style={styles.dateTitle}>
+                                {this.getChartPopupTitle()}
                             </Text>
                         </View>
-                    </ScrollView>}
-                </>}
-                <TouchableOpacity
-                    style={styles.closeTouchable}
-                    onPress={props.closePopup}
-                >
-                    <CloseIcon />
-                </TouchableOpacity>
-                {editable && (
-                    <View style={styles.editNoteIconTouchableView}>
-                        <TouchableOpacity
-                            style={styles.editNoteIconTouchable}
-                            onPress={() => {
-                                props.openEditPopup(props.note.id);
-                                props.closePopup();
-                            }}
-                        >
-                            <EditNoteIcon style={styles.editNoteIcon} />
-                        </TouchableOpacity>
-                    </View>
-                )}
-            </LinearGradient>
-        </View>
-    </BottomPopup>
+                        <View style={styles.upperValues}>
+                            <ChartDotInfoPopupValue
+                                type={ChartValueType.GLUCOSE}
+                                value={note[ChartValueType.GLUCOSE]}
+                            />
+                            <ChartDotInfoPopupValue
+                                type={ChartValueType.INSULIN}
+                                value={note[ChartValueType.INSULIN]}
+                            />
+                        </View>
+                        <View style={styles.bottomValues}>
+                            <ChartDotInfoPopupValue
+                                type={ChartValueType.BREAD_UNITS}
+                                value={note[ChartValueType.BREAD_UNITS]}
+                            />
+                            <ChartDotInfoPopupValue
+                                type={ChartValueType.LONG_INSULIN}
+                                value={note[ChartValueType.LONG_INSULIN]}
+                            />
+                        </View>
+                        {!!note.commentary && <ScrollView style={styles.commentValue}>
+                            <View>
+                                <Text style={styles.commentValueText}>
+                                    {note.commentary}
+                                </Text>
+                            </View>
+                        </ScrollView>}
+                    </>}
+                    <TouchableOpacity
+                        style={styles.closeTouchable}
+                        onPress={closePopup}
+                    >
+                        <CloseIcon />
+                    </TouchableOpacity>
+                    {editable && (
+                        <View style={styles.editNoteIconTouchableView}>
+                            <TouchableOpacity
+                                style={styles.editNoteIconTouchable}
+                                onPress={() => {
+                                    openEditPopup(note.id);
+                                    closePopup();
+                                }}
+                            >
+                                <EditNoteIcon style={styles.editNoteIcon} />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                </LinearGradient>
+            </View>
+        </BottomPopup>
+    }
 }
 
 
