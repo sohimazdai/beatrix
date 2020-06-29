@@ -5,10 +5,8 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import Tooltip from '../../tooltip/Tooltip';
-import { Measures } from '../../../localisation/Measures';
 import { Color } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
-import { VegetablesIcon } from '../value-icons/VegetablesIcon';
 import { ShortSyringeIcon } from '../value-icons/ShortSyringeIcon';
 
 interface Props {
@@ -22,7 +20,7 @@ const ShortInsulinIconComponent = (props: Props) => {
   return (
     <Tooltip
       onOpen={() => appAnalytics.sendEventWithProps(
-        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'glycemiaType' }
+        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'shortInsulin' }
       )}
       actionType={'press'}
       popover={(

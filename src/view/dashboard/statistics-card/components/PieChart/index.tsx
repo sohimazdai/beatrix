@@ -12,6 +12,7 @@ import { Switch } from 'react-native-gesture-handler';
 import { PieLegendItem } from '../PieLegendItem';
 import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { PieToolTipItem } from '../PieToolTipItem';
+import { appAnalytics } from '../../../../../app/Analytics';
 
 interface Props {
   viewType: StatisticsViewType
@@ -48,6 +49,9 @@ class PieChartComponent extends React.Component<Props, State> {
       <View>
         <View style={styles.pieWithLegend}>
           <Tooltip
+            onOpen={() => appAnalytics.sendEventWithProps(
+              appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'statisticsPie' }
+            )}
             actionType='press'
             popover={(
               <View>

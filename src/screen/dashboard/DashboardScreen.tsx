@@ -45,12 +45,6 @@ interface FullProps
   DashboardScreenStateTProps { }
 
 class DashboardScreen extends React.PureComponent<FullProps> {
-  state = {
-    noteCreationShown: false,
-    noteEditingShown: false,
-    editingNoteId: null,
-  };
-
   componentDidMount() {
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
   }

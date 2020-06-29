@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import Tooltip from '../../tooltip/Tooltip';
-import { Measures } from '../../../localisation/Measures';
 import { Color } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
 import { VegetablesIcon } from '../value-icons/VegetablesIcon';
@@ -26,7 +25,7 @@ const BreadUnitsIconComponent = (props: Props) => {
   return (
     <Tooltip
       onOpen={() => appAnalytics.sendEventWithProps(
-        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'glycemiaType' }
+        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'breadUnits' }
       )}
       actionType={'press'}
       popover={(
