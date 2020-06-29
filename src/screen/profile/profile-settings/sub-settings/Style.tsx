@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "#2E3858",
     },
     scrollViewWrap: {
-        backgroundColor: "#2E3858",
+        backgroundColor: "#DDDDDD",
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
         overflow: 'hidden',

@@ -62,10 +62,9 @@ const styles = StyleSheet.create({
     hatView: {
         display: 'flex',
         width: '100%',
-        paddingVertical: 8,
+        paddingVertical: 16,
         paddingHorizontal: 16,
-
-        maxHeight: 48,
+        paddingBottom: 8,
 
         flexDirection: 'row',
         justifyContent: "space-between",
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
     },
     backArrow: {
         width: 40,
+        height: 30,
     },
     backArrowTouchable: {
         padding: 5
