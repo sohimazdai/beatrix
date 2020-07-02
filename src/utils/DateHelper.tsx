@@ -90,7 +90,7 @@ export class DateHelper {
             case 5:
                 return i18nGet('june');
             case 6:
-                return i18nGet('jule');
+                return i18nGet('july');
             case 7:
                 return i18nGet('august');
             case 8:
@@ -121,7 +121,7 @@ export class DateHelper {
             case 5:
                 return i18nGet('june_capital_infinitive');
             case 6:
-                return i18nGet('jule_capital_infinitive');
+                return i18nGet('july_capital_infinitive');
             case 7:
                 return i18nGet('august_capital_infinitive');
             case 8:
@@ -152,7 +152,7 @@ export class DateHelper {
             case 5:
                 return i18nGet('june_capital_short');
             case 6:
-                return i18nGet('jule_capital_short');
+                return i18nGet('july_capital_short');
             case 7:
                 return i18nGet('august_capital_short');
             case 8:

@@ -218,7 +218,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       case 5:
         return i18nGet('june');
       case 6:
-        return i18nGet('jule');
+        return i18nGet('july');
       case 7:
         return i18nGet('august');
       case 8:

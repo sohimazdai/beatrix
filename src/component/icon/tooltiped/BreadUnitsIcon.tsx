@@ -3,11 +3,12 @@ import { Text, View, StyleSheet } from 'react-native';
 import { i18nGet } from '../../../localisation/Translate';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
-import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
+import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 import Tooltip from '../../tooltip/Tooltip';
 import { Color } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
 import { VegetablesIcon } from '../value-icons/VegetablesIcon';
+import { Measures } from '../../../localisation/Measures';
 
 interface Props {
   style: any
@@ -17,10 +18,15 @@ interface Props {
 const BreadUnitsIconComponent = (props: Props) => {
   const { userDiabetesProperties } = props;
 
+  const isBreadUnitsMeasuring = Measures.getDefaultCarbsMeasuringType(
+    userDiabetesProperties.carbsMeasuringType
+  ) === CarbsMeasuringType.BREAD_UNITS;
+  const carbsUnitWeight = Measures.getDefaultCarbsUnitWeightType(userDiabetesProperties.carbsUnitWeightType);
+
   const text = i18nGet('breadunits_icon_tooltip')
     .replace('%type%', i18nGet(userDiabetesProperties.carbsMeasuringType + '_long'))
-    .replace('%for_bu%', i18nGet('one_bread_unit_contents'))
-    .replace('%number%', userDiabetesProperties.carbsUnitWeightType + '');
+    .replace('%for_bu%', isBreadUnitsMeasuring ? i18nGet('one_bread_unit_contents') : '')
+    .replace('%number%', isBreadUnitsMeasuring ? carbsUnitWeight + '' : '');
 
   return (
     <Tooltip

@@ -49,7 +49,7 @@ class HBA1CCalculator extends React.Component<Props, State> {
     const { isCalculating, calculated } = this.state;
     const { days, hba1c } = this.props;
 
-    const calculationAttention = days < 30
+    const calculationAttention = days < 20
       ? 'too_little_data_for_advanced_analys'
       : '';
 
@@ -75,7 +75,7 @@ class HBA1CCalculator extends React.Component<Props, State> {
             </View>
             {calculated && (
               <Text style={styles.cardTitleValue}>
-                {hba1c}
+                {hba1c + '%'}
               </Text>
             )}
           </View>

@@ -18,7 +18,7 @@ import { appAnalytics } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
-import { LastNotesConnected } from '../../view/dashboard/last-notes/LastNotes';
+import { LastNotesConnected } from '../../view/dashboard/last-notes/components/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
 import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/ActiveInsulinInfo';
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
@@ -72,7 +72,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
               <ActiveInsulinInfoConnected />
             </View>
             <ScrollView
-              style={styles.statisticsScrollView}
+              style={styles.statisticsScrollViewTop}
               horizontal
               showsHorizontalScrollIndicator={false}
             >

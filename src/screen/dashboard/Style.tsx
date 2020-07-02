@@ -19,10 +19,16 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: Color.PRIMARY_WHITE,
   },
-  statisticsScrollView: {
+  statisticsScrollViewTop: {
     display: 'flex',
     marginTop: -8,
-    paddingTop: 8,
+    marginLeft: -8,
+    marginBottom: -8,
+    paddingHorizontal: 16,
+    overflow: 'visible',
+  },
+  statisticsScrollView: {
+    display: 'flex',
     marginLeft: -8,
     paddingHorizontal: 16,
     overflow: 'visible',
