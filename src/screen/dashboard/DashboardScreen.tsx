@@ -23,11 +23,14 @@ import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartP
 import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/ActiveInsulinInfo';
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
 import { StatisticsType } from '../../view/dashboard/statistics-card/entities';
+import { HBA1CCalculatorConnected } from '../../view/dashboard/hba1c-calculator/components/HBA1CCalculator';
+import { Fader } from '../../component/fader/Fader';
 
 interface DashboardScreenStateTProps {
   app: IApp;
   noteListByDay: INoteListByDay;
   user: IUser;
+  selectedDotId: number;
 }
 
 interface DashboardScreenDispatchProps {
@@ -76,7 +79,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
               <View style={{ width: 8 }} />
               <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
               <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
-              <View style={{ width: 32 }} />
+              <View style={{ width: 24 }} />
             </ScrollView>
             <ScrollView
               style={styles.statisticsScrollView}
@@ -86,14 +89,18 @@ class DashboardScreen extends React.PureComponent<FullProps> {
               <View style={{ width: 8 }} />
               <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
               <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
-              <View style={{ width: 32 }} />
+              <View style={{ width: 24 }} />
             </ScrollView>
+            <View style={{ padding: 16, paddingTop: 0 }}>
+              <HBA1CCalculatorConnected />
+            </View>
             <View style={styles.stub} />
           </ScrollView>
         </View>
         <View style={styles.addNoteButtonView}>
           <NoteCreationPopupButtonConnect />
         </View>
+        <Fader hidden={!this.props.selectedDotId} />
       </View >
     );
   }
@@ -115,6 +122,7 @@ export const DashboardScreenConnect = connect(
   (state: IStorage) => ({
     app: state.app,
     user: state.user,
+    selectedDotId: state.interactive.selectedDotId,
   }),
   dispatch => ({
     dispatch,

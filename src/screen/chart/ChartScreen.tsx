@@ -34,6 +34,7 @@ export interface ChartProps {
     userDiabetesProperties: IUserDiabetesProperties
     onInfoPress: (chartPeriodType: ChartPeriodType) => void
     clearSelectedPeriod: () => void
+    clearSelectedDotId: () => void
 }
 
 export interface ChartState {
@@ -63,7 +64,8 @@ class Chart extends React.Component<ChartProps, ChartState> {
     }
 
     componentWillUnmount() {
-        this.props.clearSelectedPeriod()
+        this.props.clearSelectedPeriod();
+        this.props.clearSelectedDotId();
     }
 
     get chartConfig() {
@@ -505,6 +507,9 @@ export const ChartConnect = connect(
             },
             clearSelectedPeriod: () => dispatch(
                 createChangeInteractive({ selectedChartPeriod: ChartPeriodType.DAY })
+            ),
+            clearSelectedDotId: () => dispatch(
+                createChangeInteractive({ selectedDotId: null })
             )
         }
     }

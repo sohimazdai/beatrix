@@ -3,6 +3,7 @@ import { IUserDiabetesProperties, GlycemiaMeasuringType, CarbsMeasuringType } fr
 import { Measures } from '../../localisation/Measures';
 
 export const MGDLtoMMOLrelation = 18.015;
+export const MMOL_LToHBA1C = 1.12;
 
 export function convertMGDLtoMMOLL(mgdl) {
   return mgdl / MGDLtoMMOLrelation;

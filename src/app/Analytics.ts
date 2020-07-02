@@ -61,6 +61,7 @@ export const appAnalytics = {
     USER_BY_INSTALLATION_ID: 'User by installation id',
     //DASHBOARD
     DASHBOARD_SEEN: 'Dashboard seen',
+    HBA1C_CALCULATED: 'HBA1C calculated',
     //NOTELIST
     NOTELIST_SEEN: 'NoteList seen',
     //PROFILE

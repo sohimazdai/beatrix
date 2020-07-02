@@ -83,5 +83,6 @@ function getNoteList(noteListByDay: INoteListByDay, type: StatisticsType): INote
       }
       break;
   }
-  return noteList;
+
+  return noteList.filter((note => !!note.glucose));
 }

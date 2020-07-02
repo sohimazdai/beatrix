@@ -13,6 +13,8 @@ import { PieLegendItem } from '../PieLegendItem';
 import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { PieToolTipItem } from '../PieToolTipItem';
 import { appAnalytics } from '../../../../../app/Analytics';
+import { i18nGet } from '../../../../../localisation/Translate';
+import { Color } from '../../../../../constant/Color';
 
 interface Props {
   viewType: StatisticsViewType
@@ -31,13 +33,28 @@ class PieChartComponent extends React.Component<Props, State> {
   render() {
     const { parts } = this.props;
     const { viewType } = this.state;
-    const isPercent = viewType !== StatisticsViewType.PERCENT;
+    const isPercent = true;
     const totalValue = parts.reduce((acc, curr) => acc + curr.value, 0);
+
+    const isThereNoParts = !parts.filter(part => !!part.value).length;
+
+    if (isThereNoParts) {
+      return (
+        <Text style={{
+          maxWidth: 160,
+          textAlign: 'center',
+          fontSize: 15,
+          color: Color.TEXT_DARK_GRAY
+        }}>
+          {i18nGet('glucose_not_found_for_diagram')}
+        </Text>
+      );
+    };
 
     const pieData = parts
       .map((part, index) => ({
         value: isPercent
-          ? (part.value / totalValue) * 100
+          ? totalValue ? (part.value / totalValue) * 100 : 0
           : part.value,
         svg: {
           fill: PieColors[part.title],
@@ -73,7 +90,7 @@ class PieChartComponent extends React.Component<Props, State> {
                 key={part.title}
                 title={part.title}
                 value={isPercent
-                  ? (part.value / totalValue) * 100
+                  ? totalValue ? (part.value / totalValue) * 100 : 0
                   : part.value}
                 isPercent={isPercent}
               />
