@@ -16,8 +16,9 @@ function getRecentNoteListByDay(noteListByDay: INoteListByDay): INoteListByDay {
   for (let i = 0; i < daysInDepth; i++) {
     const currentDate = DateHelper.getDiffDate(new Date(), -i);
     const currentNoteList: INoteList = noteListByDay[currentDate] || {};
+    const sortedNoteList = Object.values(currentNoteList).sort((noteA, noteB) => noteB.date - noteA.date)
 
-    Object.values(currentNoteList).forEach((note) => {
+    sortedNoteList.forEach((note) => {
       if (notesCount < 4) {
         if (!recentNoteListByDay[currentDate]) recentNoteListByDay[currentDate] = {};
         recentNoteListByDay[currentDate] = {
