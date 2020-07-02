@@ -53,59 +53,60 @@ class HBA1CCalculator extends React.Component<Props, State> {
       ? 'too_little_data_for_advanced_analys'
       : '';
 
-    return (
-      <DashboardCard>
-        <View style={styles.cardTitleView}>
-          <Text style={styles.cardTitle}>
-            {i18nGet('your_hba1c')}
-          </Text>
-          <Tooltip
-            actionType="press"
-            popover={(
-              <Text style={styles.tooltipText}>
-                {i18nGet('glycated_hemoglobin')}
+    return hba1c
+      ? (
+        <DashboardCard>
+          <View style={styles.cardTitleView}>
+            <Text style={styles.cardTitle}>
+              {i18nGet('your_hba1c')}
+            </Text>
+            <Tooltip
+              actionType="press"
+              popover={(
+                <Text style={styles.tooltipText}>
+                  {i18nGet('glycated_hemoglobin')}
+                </Text>
+              )}
+            >
+              <InfoIcon roundFill={Color.PRIMARY_LIGHT} textColor={Color.PRIMARY_WHITE} />
+            </Tooltip>
+            <View style={styles.cardTitleLoader}>
+              <Loader isManaged isManagedLoading={isCalculating} />
+            </View>
+            {calculated && (
+              <Text style={styles.cardTitleValue}>
+                {hba1c}
               </Text>
             )}
-          >
-            <InfoIcon roundFill={Color.PRIMARY_LIGHT} textColor={Color.PRIMARY_WHITE} />
-          </Tooltip>
-          <View style={styles.cardTitleLoader}>
-            <Loader isManaged isManagedLoading={isCalculating} />
           </View>
-          {calculated && (
-            <Text style={styles.cardTitleValue}>
-              {hba1c}
-            </Text>
-          )}
-        </View>
-        <View style={styles.cardContent}>
-          <View>
-            {calculated && (
-              <>
-                <Text style={styles.contentText}>
-                  {i18nGet('calculated_days') + ': ' + days}
-                </Text>
-                {!!calculationAttention && (
+          <View style={styles.cardContent}>
+            <View>
+              {calculated && (
+                <>
                   <Text style={styles.contentText}>
-                    {i18nGet(calculationAttention)}
+                    {i18nGet('calculated_days') + ': ' + days}
                   </Text>
-                )}
-              </>
-            )}
-            {!calculated && (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.handleCalculate}
-              >
-                <Text style={styles.buttonText}>
-                  {i18nGet('calculate')}
-                </Text>
-              </TouchableOpacity>
-            )}
+                  {!!calculationAttention && (
+                    <Text style={styles.contentText}>
+                      {i18nGet(calculationAttention)}
+                    </Text>
+                  )}
+                </>
+              )}
+              {!calculated && (
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={this.handleCalculate}
+                >
+                  <Text style={styles.buttonText}>
+                    {i18nGet('calculate')}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        </View>
-      </DashboardCard>
-    );
+        </DashboardCard>
+      ) : null;
   }
 }
 
