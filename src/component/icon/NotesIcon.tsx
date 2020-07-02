@@ -3,18 +3,18 @@ import Svg, { Rect, Path } from "react-native-svg"
 
 export function NotesIcon(props) {
   return (
-    <Svg width={24} height={23} viewBox="0 0 24 23" fill="none" {...props}>
+    <Svg width={25} height={24} viewBox="0 0 25 24" fill="none" {...props}>
       <Path
-        d="M7.636 8.545a2 2 0 012-2H22a2 2 0 012 2V20.91a2 2 0 01-2 2H9.636a2 2 0 01-2-2V8.545z"
+        d="M8 9.078C8 7.93 8.93 7 10.078 7h12.844C24.07 7 25 7.93 25 9.078v12.844C25 23.07 24.07 24 22.922 24H10.078A2.078 2.078 0 018 21.922V9.078z"
         fill="#2E3858"
       />
       <Path
-        d="M4.364 5.273a2 2 0 012-2h13.454a2 2 0 012 2v13.454a2 2 0 01-2 2H6.364a2 2 0 01-2-2V5.273z"
-        fill="#8076EB"
+        d="M4 5.063C4 3.923 4.923 3 6.063 3h13.875C21.076 3 22 3.923 22 5.063v13.875C22 20.076 21.077 21 19.937 21H6.063A2.062 2.062 0 014 18.937V5.063z"
+        fill="#8075FF"
       />
       <Path
         d="M0 2a2 2 0 012-2h14.546a2 2 0 012 2v14.546a2 2 0 01-2 2H2a2 2 0 01-2-2V2z"
-        fill="#FF8E8E"
+        fill="#FF8383"
       />
       <Path
         fillRule="evenodd"
