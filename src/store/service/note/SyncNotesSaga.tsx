@@ -3,7 +3,7 @@ import { put, call, takeLatest, select, actionChannel } from 'redux-saga/effects
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
-import { handleError } from '../../../app/ErrorHandler';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
@@ -104,7 +104,7 @@ function* run(action: Action) {
             }));
         }
     } catch (e) {
-        handleError(e, i18nGet('notes_sync_error'));
+        handleErrorSilently(e, i18nGet('notes_sync_error'));
 
         yield put(createUserChangeAction({
             loading: false,

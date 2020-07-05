@@ -80,10 +80,6 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
     componentDidUpdate(pP: Props, pS: State) {
         const { note, interactive } = this.props;
 
-        if (pP.interactive.creatingNoteMode && !interactive.creatingNoteMode) {
-            this.setInitialState();
-        };
-
         if (!pP.note && note) {
             this.setState({
                 date: new Date(note.date),
@@ -94,18 +90,14 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                 commentary: note.commentary,
             });
         };
-
-        if (
-            !pP.interactive.creatingNoteMode && interactive.creatingNoteMode &&
-            !interactive.editingNoteId
-        ) {
-            this.setInitialState();
-        };
     }
 
     render() {
         return (
-            <BottomPopup hidden={!this.props.interactive.creatingNoteMode}>
+            <BottomPopup
+                hidden={!this.props.interactive.creatingNoteMode}
+                onPopupClosed={() => this.setInitialState()}
+            >
                 <KeyboardAvoidingView
                     style={!this.props.note ?
                         styles.noteCreationView :
@@ -300,8 +292,6 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
                     i18nGet('fill_at_least_one_parameter'),
                 )
             }
-
-            this.setInitialState();
         }
     }
 

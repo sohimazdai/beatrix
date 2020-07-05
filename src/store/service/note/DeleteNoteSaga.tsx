@@ -6,7 +6,7 @@ import { NoteApi } from '../../../api/NoteApi';
 import { createAddNotePendingNoteList, createDeleteNoteFromPendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createDeleteNoteInNoteListById } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
-import { handleError } from '../../../app/ErrorHandler';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 
@@ -35,11 +35,11 @@ export function createDeleteNoteAction(id: string) {
 }
 
 function* run({ payload }: DeleteNoteAction) {
-    try {
-        const state: IStorage = yield select(state => state);
-        const noteToDelete = state.noteList[payload.id];
-        const noteFromPendingList = state.pendingNoteList.notes[payload.id];
+    const state: IStorage = yield select(state => state);
+    const noteToDelete = state.noteList[payload.id];
+    const noteFromPendingList = state.pendingNoteList.notes[payload.id];
 
+    try {
         yield put(createDeleteNoteInNoteListById(payload.id));
 
         if (state.app.serverAvailable && state.app.networkConnected) {
@@ -62,7 +62,9 @@ function* run({ payload }: DeleteNoteAction) {
             error: null
         }));
     } catch (e) {
-        handleError(e, i18nGet('notes_deleting_error'));
+        handleErrorSilently(e, i18nGet('notes_deleting_error'));
+
+        yield put(createAddNotePendingNoteList(payload.id, state.user.id));
 
         yield put(createUserChangeAction({
             loading: false,

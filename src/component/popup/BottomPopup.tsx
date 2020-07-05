@@ -4,9 +4,12 @@ import { StyleSheet, Animated, Dimensions, Easing } from 'react-native'
 export interface BottomPopupProps {
     hidden?: boolean;
     children: any
+    onPopupClosed?: Function
 }
 
 export const BottomPopup = (props: BottomPopupProps) => {
+    const { onPopupClosed } = props;
+
     const [currentBottom] = React.useState(new Animated.Value(-Dimensions.get('screen').height))
     const [children, setChildren] = React.useState(null)
 
@@ -19,6 +22,7 @@ export const BottomPopup = (props: BottomPopupProps) => {
             }
         ).start((BottomPopupProps) => {
             BottomPopupProps.finished && props.hidden && setChildren(null);
+            BottomPopupProps.finished && props.hidden && onPopupClosed && onPopupClosed();
         });
 
         !props.hidden && setChildren(props.children);

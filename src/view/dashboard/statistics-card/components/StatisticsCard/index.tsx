@@ -32,7 +32,7 @@ export class StatisticsCard extends React.Component<Props> {
     if (!isStatisticsAvailable) return null;
 
     return (
-      <DashboardCard withRightMargin withTopMargin>
+      <DashboardCard withRightMargin>
         <Text style={styles.cardTitle}>
           {i18nGet(TITLES[statisticsType])}
         </Text>

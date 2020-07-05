@@ -6,7 +6,7 @@ import { createAddNotePendingNoteList } from '../../modules/pending-note-list/Pe
 import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 import { v1 as uuidv1 } from 'uuid';
 import { appAnalytics } from '../../../app/Analytics';
-import { handleError } from '../../../app/ErrorHandler';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
@@ -36,13 +36,12 @@ export function createCreateNoteAction(note: INoteListNote) {
 }
 
 function* createNote({ payload }: CreateNoteAction) {
+    const state: IStorage = yield select(state => state);
+    const noteWithoutId = payload.note;
+    const userId = state.user.id;
+    const noteId = uuidv1();
+
     try {
-
-        const state: IStorage = yield select(state => state);
-        const noteWithoutId = payload.note;
-        const userId = state.user.id;
-        const noteId = uuidv1();
-
         yield put(createNoteListChangeNoteByIdAction(noteWithoutId, userId, noteId));
 
         if (state.app.serverAvailable && state.app.networkConnected) {
@@ -67,7 +66,9 @@ function* createNote({ payload }: CreateNoteAction) {
             error: null,
         }));
     } catch (e) {
-        handleError(e, i18nGet('notes_creating_error'));
+        handleErrorSilently(e, i18nGet('notes_creating_error'));
+
+        yield put(createAddNotePendingNoteList(noteId, state.user.id));
 
         yield put(createUserChangeAction({
             loading: false,

@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.PRIMARY_WHITE,
     borderRadius: 10,
     marginBottom: 8,
+    overflow: 'visible',  
     ...shadowOptions,
   },
 

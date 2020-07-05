@@ -5,7 +5,7 @@ import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
 import { createNoteListChangeNoteByIdAction } from '../../modules/noteList/NoteListActionCreator';
 import { appAnalytics } from '../../../app/Analytics';
-import { handleError } from '../../../app/ErrorHandler';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { createAddNotePendingNoteList } from '../../modules/pending-note-list/PendingNoteList';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
@@ -36,10 +36,10 @@ export function createUpdateNoteAction(note: INoteListNote) {
 }
 
 function* run({ payload }: UpdateNoteAction) {
-    try {
-        const state: IStorage = yield select(state => state);
-        const userId = state.user.id;
+    const state: IStorage = yield select(state => state);
+    const userId = state.user.id;
 
+    try {
         yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
 
         if (state.app.serverAvailable && state.app.networkConnected) {
@@ -58,7 +58,9 @@ function* run({ payload }: UpdateNoteAction) {
             error: null
         }));
     } catch (e) {
-        handleError(e, i18nGet('note_updating_error'));
+        handleErrorSilently(e, i18nGet('note_updating_error'));
+
+        yield put(createAddNotePendingNoteList(payload.note.id, state.user.id));
 
         yield put(createUserChangeAction({
             loading: false,
