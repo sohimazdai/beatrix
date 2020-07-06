@@ -21,14 +21,16 @@ export const styles = StyleSheet.create({
   },
   statisticsScrollViewTop: {
     display: 'flex',
+    marginTop: -8,
     marginLeft: -8,
-    paddingHorizontal: 24,
+    marginBottom: -8,
+    paddingHorizontal: 16,
     overflow: 'visible',
   },
   statisticsScrollView: {
     display: 'flex',
     marginLeft: -8,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     overflow: 'visible',
   },
   addNoteButtonView: {
