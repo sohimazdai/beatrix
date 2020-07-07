@@ -242,6 +242,13 @@ export default function translate() {
     too_little_data_for_advanced_analys: 'Too little data for accurate analysis.',
     glucose_not_found_for_diagram: 'No glucose data to display diagram',
 
+    // EXPORT
+    export_data: 'Data export',
+    export_data_description: 'Create report about your diabetes in the .XLSX extention. Open it with EXCEL',
+    export_error: 'Export error',
+    export_data_settings: 'Export settings',
+    export_data_create_xlsx: 'Create xlsx file',
+
   };
   /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
 
@@ -717,6 +724,14 @@ export default function translate() {
     calculate: 'Рассчитать',
     too_little_data_for_advanced_analys: 'Слишком мало данных для точного анализа.',
     glucose_not_found_for_diagram: 'Нет данных для глюкозы, чтобы отобразить диаграмму',
+
+    // EXPORT
+    export_data: 'Экспорт данных',
+    export_data_description: 'Создавайте отчеты о записях в формате .XLSX. Открывайте их в EXCEL',
+    export_error: 'Ошибка экспорта',
+    export_data_settings: 'Настройки экспорта',
+    export_data_create_xlsx: 'Создать файл',
+
   }
   /* 🇷🇺 */
 }

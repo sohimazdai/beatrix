@@ -10,6 +10,7 @@ import { watchUpdateUserShedule } from './service/user/UpdateSheduleSaga';
 import { watchGetUserByInstallationId } from './service/auth/GetUserByInstallationId';
 import { watchClearInstallationId } from './service/auth/ClearInstallationIdSaga';
 import { watchUpdateUserDiabetesProperties } from './service/user/UpdateUserDiabetesPropertiesSaga';
+import { watchExportData } from './service/export/ExportDataSaga';
 
 export function* rootSaga() {
     yield all([
@@ -28,5 +29,7 @@ export function* rootSaga() {
         fork(watchUpdateUserShedule),
         //APP
         fork(watchAppPing),
+        //EXPORT
+        fork(watchExportData),
     ]);
 };

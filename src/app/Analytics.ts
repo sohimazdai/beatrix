@@ -68,6 +68,7 @@ export const appAnalytics = {
     PROFILE_SEEN: 'Profile seen',
     SHEDULE_UPDATED: 'Shedule updated',
     USER_DIABETES_PROPERTIES_UPDATED: 'User diabetes properties updated',
+    EXPORT_DATA: "EXPORT DATA",
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',

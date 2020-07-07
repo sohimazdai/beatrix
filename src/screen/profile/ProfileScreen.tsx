@@ -9,8 +9,6 @@ import { NavigationParams, NavigationScreenProp } from 'react-navigation'
 import { NavigationState } from 'react-navigation'
 import { appAnalytics } from '../../app/Analytics'
 import { IUser } from '../../model/IUser'
-import { IModalConfirm, ModalType } from '../../model/IModal'
-import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 import { i18nGet } from '../../localisation/Translate'
 
@@ -54,6 +52,15 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                                 </TouchableOpacity>}
                             />
                             <ProfileItem
+                                title={i18nGet('export_data')}
+                                description={i18nGet('export_data_description')}
+                                activeElement={<TouchableOpacity onPress={this.onExportDataPress}>
+                                    <Text style={styles.activeElementToSettings}>
+                                        {i18nGet('go_to')}
+                                    </Text>
+                                </TouchableOpacity>}
+                            />
+                            <ProfileItem
                                 description={i18nGet('log_out')}
                                 hint={i18nGet('log_out_hint')}
                                 activeElement={<TouchableOpacity onPress={this.props.onLogOut}>
@@ -71,6 +78,10 @@ class ProfileScreenComponent extends React.Component<Props, State> {
 
     onProfileSettingsPress = () => {
         this.props.navigation.navigate('ProfileDiabetesSettings')
+    }
+
+    onExportDataPress = () => {
+        this.props.navigation.navigate('ExportDataSettings')
     }
 }
 

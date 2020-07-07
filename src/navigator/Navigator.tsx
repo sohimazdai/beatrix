@@ -21,6 +21,7 @@ import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-setting
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
 import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
 import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
+import { ExportDataSettings } from '../screen/profile/profile-settings/sub-settings/ExportDataSettings';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -93,6 +94,9 @@ const ProfileScreenStack = createStackNavigator(
         InsulinSettings: {
             screen: InsulinSettings,
         },
+        ExportDataSettings: {
+            screen: ExportDataSettings,
+        }
     },
     {
         headerMode: 'none'
