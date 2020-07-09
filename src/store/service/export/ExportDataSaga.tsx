@@ -16,6 +16,7 @@ import { selectDailyAverage } from './selectors/select-daily-average';
 import { selectTotalNotesCount } from './selectors/select-total-notes';
 import Variables from '../../../app/Variables';
 import * as Sharing from 'expo-sharing';
+import XLSX from 'xlsx';
 
 const ACTION_TYPE = "EXPORT_DATA_ACTION";
 
@@ -48,7 +49,6 @@ function* run({ payload: { from, to } }: ExportDataAction) {
     const state: IStorage = yield select(state => state);
     const userDiabetesProperties: IUserDiabetesProperties = state.userDiabetesProperties;
     if (state.app.serverAvailable) {
-
       const stats = {
         averageGlucose: selectAverage(state, from, to, NoteValueType.GLUCOSE),
         dailyAverageBreadUnits: selectDailyAverage(state, from, to, NoteValueType.BREAD_UNITS),
