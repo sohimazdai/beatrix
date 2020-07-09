@@ -32,6 +32,7 @@ export interface ChartProps {
     noteList: INoteList
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
     userDiabetesProperties: IUserDiabetesProperties
+    selectedPeriod: ChartPeriodType
     onInfoPress: (chartPeriodType: ChartPeriodType) => void
     clearSelectedPeriod: () => void
     clearSelectedDotId: () => void
@@ -40,7 +41,6 @@ export interface ChartProps {
 export interface ChartState {
     currentDate: Date,
     selectedDotId: string,
-    selectedPeriod: ChartPeriodType,
     popupShown?: boolean,
     glucoseAverageShown?: boolean
     noteCreationShown?: boolean,
@@ -54,7 +54,6 @@ class Chart extends React.Component<ChartProps, ChartState> {
             new Date().getMonth(),
             new Date().getDate()
         ),
-        selectedPeriod: ChartPeriodType.DAY,
         selectedAveragePeriod: ChartAveragePeriodType.MONTH,
         selectedDotId: null,
         popupShown: false,
@@ -87,9 +86,9 @@ class Chart extends React.Component<ChartProps, ChartState> {
         );
     }
 
-    componentDidUpdate({ }, prevState: ChartState) {
-        if (this.state.selectedPeriod !== prevState.selectedPeriod) {
-            switch (this.state.selectedPeriod) {
+    componentDidUpdate(pP: ChartProps, prevState: ChartState) {
+        if (this.props.selectedPeriod !== pP.selectedPeriod) {
+            switch (this.props.selectedPeriod) {
                 case ChartPeriodType.DAY:
                     appAnalytics.sendEventWithProps(
                         appAnalytics.events.CHARTS_SEEN,
@@ -113,13 +112,13 @@ class Chart extends React.Component<ChartProps, ChartState> {
         if (this.state.selectedDotId !== prevState.selectedDotId) {
             appAnalytics.sendEventWithProps(
                 appAnalytics.events.CHART_DOT_SELECTED,
-                { selectedPeriod: this.state.selectedPeriod }
+                { selectedPeriod: this.props.selectedPeriod }
             );
         }
         if (this.state.currentDate !== prevState.currentDate) {
             appAnalytics.sendEventWithProps(
                 appAnalytics.events.ANOTHER_CHART_DATE_SEEN,
-                { selectedPeriod: this.state.selectedPeriod }
+                { selectedPeriod: this.props.selectedPeriod }
             );
         }
     }
@@ -202,7 +201,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
 
     getHatTitle() {
         const { onInfoPress } = this.props;
-        const { selectedPeriod } = this.state;
+        const { selectedPeriod } = this.props;
 
         let title = ""
         switch (selectedPeriod) {
@@ -233,7 +232,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
     }
 
     getChartPopupTitle() {
-        const { selectedPeriod } = this.state;
+        const { selectedPeriod } = this.props;
 
         let displayingDate = '';
         let selectedDotId = this.state.selectedDotId;
@@ -268,7 +267,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
         let highlightsTitles = [];
         let newWidth = this.chartConfig.breadUnits.boxWidth - 3 * this.chartConfig.breadUnits.basicPadding;
         let titleWidth;
-        switch (this.state.selectedPeriod) {
+        switch (this.props.selectedPeriod) {
             case ChartPeriodType.DAY:
                 highlightsNumber = 10;
                 highlightsTitles = [0, 3, 6, 9, 12, 15, 18, 21, 24];
@@ -402,17 +401,17 @@ class Chart extends React.Component<ChartProps, ChartState> {
     onChangingPeriod = (period: ChartPeriodType) => {
         let toStateSet: any = { selectedPeriod: period };
         if (
-            (this.state.selectedPeriod === ChartPeriodType.THREE_MONTH ||
-                this.state.selectedPeriod === ChartPeriodType.MONTH) && period === ChartPeriodType.DAY
+            (this.props.selectedPeriod === ChartPeriodType.THREE_MONTH ||
+                this.props.selectedPeriod === ChartPeriodType.MONTH) && period === ChartPeriodType.DAY
         ) {
             if (this.state.currentDate.getTime() > DateHelper.today()) {
                 toStateSet.currentDate = new Date(DateHelper.today());
             }
-        } else if (this.state.selectedPeriod === ChartPeriodType.DAY && period === ChartPeriodType.MONTH) {
+        } else if (this.props.selectedPeriod === ChartPeriodType.DAY && period === ChartPeriodType.MONTH) {
             toStateSet.currentDate = DateHelper.getDifferentMonthDate(this.state.currentDate, 0)
         }
 
-        if (this.state.selectedPeriod !== period) {
+        if (this.props.selectedPeriod !== period) {
             toStateSet.popupShown = false;
             toStateSet.selectedDotId = null;
         }
@@ -426,7 +425,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
         let breadUnitsArray = [];
         let insulinArray = [];
         let longInsulinArray = [];
-        switch (this.state.selectedPeriod) {
+        switch (this.props.selectedPeriod) {
             case ChartPeriodType.DAY:
                 return this.props.noteList[this.state.selectedDotId]
             case ChartPeriodType.MONTH:
@@ -475,6 +474,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
 
 export const ChartConnect = connect(
     (state: IStorage) => ({
+        selectedPeriod: state.interactive.selectedChartPeriod || ChartPeriodType.DAY,
         noteListByDay: convertFlatNoteListToNoteListByDay(state),
         noteList: state.noteList,
         userDiabetesProperties: state.userDiabetesProperties,

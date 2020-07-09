@@ -66,13 +66,13 @@ class DashboardScreen extends React.PureComponent<FullProps> {
         <BlockHat title={i18nGet('compensation')} rightSideSlot={this.renderProfileIcon()} />
         <View style={styles.scrollViewWrapper}>
           <ScrollView style={styles.scrollView}>
-            <View style={{ padding: 16, paddingBottom: 0 }}>
+            <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
               <LastNotesConnected onNotesPress={() => navigation.navigate('Notes')} />
               <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
               <ActiveInsulinInfoConnected />
             </View>
             <ScrollView
-              style={styles.statisticsScrollViewTop}
+              style={styles.statisticsScrollView}
               horizontal
               showsHorizontalScrollIndicator={false}
             >

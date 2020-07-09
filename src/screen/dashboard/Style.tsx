@@ -21,9 +21,7 @@ export const styles = StyleSheet.create({
   },
   statisticsScrollViewTop: {
     display: 'flex',
-    marginTop: -8,
     marginLeft: -8,
-    marginBottom: -8,
     paddingHorizontal: 16,
     overflow: 'visible',
   },

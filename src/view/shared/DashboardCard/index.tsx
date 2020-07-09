@@ -11,13 +11,12 @@ interface Props {
 
 export class DashboardCard extends React.Component<Props> {
   render() {
-    const { children, withRightMargin, withTopMargin } = this.props;
+    const { children, withRightMargin } = this.props;
 
     return (
       <View style={{
         ...styles.card,
         marginRight: withRightMargin ? 8 : 0,
-        marginTop: withTopMargin ? 8 : 0,
       }}>
         {children}
       </View>
@@ -27,10 +26,11 @@ export class DashboardCard extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   card: {
+    overflow: 'visible',
     padding: 16,
     backgroundColor: Color.PRIMARY_WHITE,
     borderRadius: 10,
-    marginBottom: 8,
+    marginVertical: 4,
     ...shadowOptions,
   },
 })
