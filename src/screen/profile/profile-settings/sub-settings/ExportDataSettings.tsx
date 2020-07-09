@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform, View, Button } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { connect } from 'react-redux';
 import { styles } from './Style';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
@@ -22,7 +22,7 @@ export class ExportDataSettingsComponent extends Component<Props> {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <Hat
-          onBackPress={() => this.props.navigation.navigate('ProfileDiabetesSettings')}
+          onBackPress={() => this.props.navigation.navigate('Profile')}
           title={i18nGet('export_data')}
         />
         <View style={styles.scrollViewWrapWrap}>

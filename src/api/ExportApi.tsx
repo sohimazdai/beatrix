@@ -6,7 +6,8 @@ export class ExportApi {
         titles: { [key: string]: string },
         from: number,
         to: number,
+        stats: any,
     ) {
-        return api.post('export', { userId, titles, from, to });
+        return api.post('export', { userId, titles, from, to, stats });
     }
 }
