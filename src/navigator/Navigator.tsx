@@ -50,7 +50,8 @@ const AuthedContainer = (props: AuthedContainerProps) => {
         props.interactive.confirmPopupShown ||
         props.interactive.creatingNoteMode ||
         props.modal.needToShow ||
-        props.user.syncLoading
+        props.user.syncLoading ||
+        props.user.exportLoading
     );
 
     const faderType = props.user.syncLoading

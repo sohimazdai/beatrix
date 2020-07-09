@@ -85,7 +85,7 @@ function* run({ payload: { from, to } }: ExportDataAction) {
           userDiabetesProperties.carbsMeasuringType === CarbsMeasuringType.BREAD_UNITS
             ? (
               '(' + Measures.getDefaultCarbsUnitWeightType(userDiabetesProperties.carbsUnitWeightType)
-              + ' ' + i18nGet('gram') + ')'
+              + ' ' + i18nGet('carb_gram') + ')'
             ) : ''
         ),
         dailyAverageInsulin: i18nGet('export_data_titles_average_insulin'),
@@ -115,7 +115,7 @@ function* run({ payload: { from, to } }: ExportDataAction) {
         comment: i18nGet('exports_titles_comment'),
       };
 
-      const { data } = yield call(
+      yield call(
         ExportApi.exportNotes,
         state.user.id,
         titles,
@@ -123,37 +123,37 @@ function* run({ payload: { from, to } }: ExportDataAction) {
         to,
         stats,
       );
+
+      appAnalytics.sendEvent(appAnalytics.events.EXPORT_DATA);
+
+      const result = yield call(
+        FileSystem.downloadAsync,
+        'http://' + Variables.apiUrl + `/export/download?userId=${state.user.id}&key=h4NIt1NS`,
+        FileSystem.documentDirectory + 'diabetes_' + new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getFullYear()) + '.xlsx',
+      )
+
+      yield call(
+        Sharing.shareAsync,
+        result.uri,
+        {
+          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          dialogTitle: 'My diabetes data',
+          UTI: 'com.microsoft.excel.xlsx',
+        }
+      );
+
+      yield call(
+        ExportApi.finishExport,
+        state.user.id
+      );
+
+      yield put(
+        createUserChangeAction({
+          exportLoading: false,
+          error: null
+        })
+      )
     }
-
-    appAnalytics.sendEvent(appAnalytics.events.EXPORT_DATA);
-
-    const result = yield call(
-      FileSystem.downloadAsync,
-      'http://' + Variables.apiUrl + `/export/download?userId=${state.user.id}&key=h4NIt1NS`,
-      FileSystem.documentDirectory + 'diabetes_' + new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getFullYear()) + '.xlsx',
-    )
-
-    yield call(
-      Sharing.shareAsync,
-      result.uri,
-      {
-        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        dialogTitle: 'My diabetes data',
-        UTI: 'com.microsoft.excel.xlsx',
-      }
-    );
-
-    yield call(
-      ExportApi.finishExport,
-      state.user.id
-    );
-
-    yield put(
-      createUserChangeAction({
-        exportLoading: false,
-        error: null
-      })
-    )
   } catch (e) {
     handleError(e, i18nGet('export_error'));
 

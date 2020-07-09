@@ -32,7 +32,8 @@ export const Loader = connect(
       loading: (
         state.user.loading ||
         state.user.syncLoading ||
-        state.pendingNoteList.loading
+        state.pendingNoteList.loading ||
+        state.user.exportLoading
       )
     }
   }

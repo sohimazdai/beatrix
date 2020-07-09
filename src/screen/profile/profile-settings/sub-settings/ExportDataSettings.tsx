@@ -8,14 +8,18 @@ import { Hat } from '../../../../component/hat/Hat';
 import { IStorage } from '../../../../model/IStorage';
 import { i18nGet } from '../../../../localisation/Translate';
 import { ExportDataConnect } from '../../../../view/profile/settings/export-data-picker/components/ExportDataPicker';
+import { Fader } from '../../../../component/fader/Fader';
+import { IUser } from '../../../../model/IUser';
 
 interface Props {
   interactive: IInteractive
+  user: IUser
   navigation: NavigationScreenProp<NavigationState, NavigationParams>
 }
 
 export class ExportDataSettingsComponent extends Component<Props> {
   render() {
+    const { user } = this.props;
     return (
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
@@ -32,6 +36,7 @@ export class ExportDataSettingsComponent extends Component<Props> {
             </ScrollView>
           </View>
         </View>
+        <Fader hidden={!user.exportLoading} />
       </KeyboardAvoidingView >
     )
   }
@@ -39,6 +44,7 @@ export class ExportDataSettingsComponent extends Component<Props> {
 
 export const ExportDataSettings = connect(
   (state: IStorage) => ({
-    interactive: state.interactive
+    interactive: state.interactive,
+    user: state.user,
   })
 )(ExportDataSettingsComponent)
