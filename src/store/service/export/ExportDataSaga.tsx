@@ -7,16 +7,15 @@ import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { ExportApi } from '../../../api/ExportApi';
 import * as FileSystem from 'expo-file-system';
-import { IUserDiabetesProperties, CarbsMeasuringType, CarbsUnitWeightType } from '../../../model/IUserDiabetesProperties';
+import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 import { Measures } from '../../../localisation/Measures';
-import { selectMeasuresStatisticsValue } from '../../../view/dashboard/statistics-card/selectors/select-measures-statistics-value';
 import { selectAverage } from './selectors/select-average';
 import { NoteValueType } from '../../../model/INoteList';
 import { selectDailyAverage } from './selectors/select-daily-average';
 import { selectTotalNotesCount } from './selectors/select-total-notes';
 import Variables from '../../../app/Variables';
 import * as Sharing from 'expo-sharing';
-import XLSX from 'xlsx';
+import { Alert } from 'react-native';
 
 const ACTION_TYPE = "EXPORT_DATA_ACTION";
 
@@ -31,7 +30,7 @@ interface ExportDataAction {
 export function createExportDataAction(from?: number, to?: number) {
   return batchActions([
     createUserChangeAction({
-      loading: true,
+      exportLoading: true,
       error: null
     }),
     {
@@ -48,6 +47,20 @@ function* run({ payload: { from, to } }: ExportDataAction) {
   try {
     const state: IStorage = yield select(state => state);
     const userDiabetesProperties: IUserDiabetesProperties = state.userDiabetesProperties;
+
+    if (!state.app.serverAvailable) {
+      Alert.alert(i18nGet('active_network_needed'));
+
+      yield put(
+        createUserChangeAction({
+          exportLoading: false,
+          error: null
+        })
+      )
+
+      return;
+    }
+
     if (state.app.serverAvailable) {
       const stats = {
         averageGlucose: selectAverage(state, from, to, NoteValueType.GLUCOSE),
@@ -120,9 +133,7 @@ function* run({ payload: { from, to } }: ExportDataAction) {
       FileSystem.documentDirectory + 'diabetes_' + new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getFullYear()) + '.xlsx',
     )
 
-    console.log('🤖🤖🤖🤖 result', result);
-
-    const sharingResult = yield call(
+    yield call(
       Sharing.shareAsync,
       result.uri,
       {
@@ -132,19 +143,23 @@ function* run({ payload: { from, to } }: ExportDataAction) {
       }
     );
 
-    console.log('🤖🤖🤖🤖 sharingResult', sharingResult);
+    yield call(
+      ExportApi.finishExport,
+      state.user.id
+    );
 
     yield put(
       createUserChangeAction({
-        loading: false,
+        exportLoading: false,
         error: null
       })
     )
   } catch (e) {
     handleError(e, i18nGet('export_error'));
+
     yield put(
       createUserChangeAction({
-        loading: false,
+        exportLoading: false,
         error: e
       })
     );

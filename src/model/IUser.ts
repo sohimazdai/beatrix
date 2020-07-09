@@ -9,6 +9,7 @@ export interface IUser {
     loading?: boolean
     installationLoading?: boolean
     syncLoading?: boolean
+    exportLoading?: boolean
     error?: any
 
     isAuthed?: boolean

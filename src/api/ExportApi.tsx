@@ -10,4 +10,8 @@ export class ExportApi {
     ) {
         return api.post('export', { userId, titles, from, to, stats });
     }
+
+    static finishExport(userId: string) {
+        return api.post('export/unlink', { userId });
+    }
 }
