@@ -9,7 +9,7 @@ export function i18nGet(key: string) {
 }
 
 export default function translate() {
-  /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
+  /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENGLISH */
   i18n.translations.en = {
     // AUTH
     looking_for_active_session: 'Looking for active session',
@@ -245,7 +245,244 @@ export default function translate() {
   };
   /* 🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁥󠁮󠁧󠁿 */
 
+  /* 🇷🇺 ESPANOL*/
+  i18n.translations.es = {
+    // AUTH
+    looking_for_active_session: 'Buscando sesión activa',
+    continue_as: 'Continuar como:',
+    sign_in_with_google: 'Entrar con Google',
+    sign_in: 'Iniciar sesión',
+
+    // NOTES
+    notes: 'Notas',
+    today: 'Hoy',
+    yesterday: 'Ayer',
+
+    january: 'enero',
+    february: 'febrero',
+    march: 'marzo',
+    april: 'abril',
+    may: 'mayo',
+    june: 'junio',
+    jule: 'julio',
+    august: 'agosto',
+    september: 'septiembre',
+    october: 'octubre',
+    november: 'noviembre',
+    december: 'diciembre',
+
+    january_capital_infinitive: 'Enero',
+    february_capital_infinitive: 'Febrero',
+    march_capital_infinitive: 'Marzo',
+    april_capital_infinitive: 'Abril',
+    may_capital_infinitive: 'Mayo',
+    june_capital_infinitive: 'Junio',
+    jule_capital_infinitive: 'Julio',
+    august_capital_infinitive: 'Agosto',
+    september_capital_infinitive: 'Septiembre',
+    october_capital_infinitive: 'Octubre',
+    november_capital_infinitive: 'Noviembre',
+    december_capital_infinitive: 'Diciembre',
+
+    january_capital_short: 'ene',
+    february_capital_short: 'feb',
+    march_capital_short: 'mar',
+    april_capital_short: 'abr',
+    may_capital_short: 'may',
+    june_capital_short: 'jun',
+    jule_capital_short: 'jul',
+    august_capital_short: 'ago',
+    september_capital_short: 'sept',
+    october_capital_short: 'oct',
+    november_capital_short: 'nov',
+    december_capital_short: 'dic',
+
+    show_more: 'Mostrar más',
+    notes_not_found: 'Sin notas',
+
+    fill_out_your_diabetes_profile_for_recommendations: 'Complete su perfil de diabetes para obtener recomendaciones',
+    enter_blood_glucose_value_to_get_recommendation: 'Ingrese el valor de glucosa para obtener la recomendación',
+    insulin_is_not_recommended: 'No se recomienda inyectar insulina',
+    inject_insulin_after_meal: 'Inyecta insulina después de la comida. \nValor recomendado de insulina',
+    restore_your_glucose_level_first: 'Primero restaure su nivel de glucosa',
+    recommended_insulin_value: 'Valor recomendado de insulina',
+
+    add: 'Añadir',
+
+    glucose: 'Glucosa',
+    breadUnits: 'Racion de HC',
+    insulin: 'Insulina ultra rápida',
+    longInsulin: 'Insulina prolongada',
+    comment: 'Сomentarios',
+
+    write: 'Escribir',
+    rewrite: 'Sobrescribir',
+    fill_at_least_one_parameter: 'Ingrese al menos un parámetro',
+    delete: 'Eliminar',
+
+    carb_gram: 'gramos',
+    carbs_units: 'Racion de HC',
+
+    //CHARTS
+    charts: 'Gráficos',
+    chart_period_day: 'Día',
+    chart_period_month: 'Mes',
+    chart_period_three_month: 'Tres meses',
+    chart_today: 'Hoy',
+    chart_yesterday: 'Ayer',
+    chart_period: 'Período',
+    chart_period_3_month: '3 meses',
+    chart_update_date: 'Cambiar fecha',
+
+    info_day_chart: 'Gráfico del dia',
+    info_month_chart: 'Gráfico del mes',
+    info_three_month_chart: 'Gráfico de tres meses',
+
+    info_day_chart_part_1: "Los gráficos visualizan la distribución de azúcar en sangre, insulina y Racion de HC a lo largo del día. " +
+      "Como saben, el azúcar en la sangre aumenta con la ingesta de alimentos y disminuye con la insulina..",
+    info_day_chart_part_2: "El gráfico de glucosa en sangre (en el medio) es un indicador de la exactitud de la dosis seleccionada para cada momento específico del día. " +
+      "Si nota un aumento sistemático repetido en el azúcar en la sangre, consulte a su médico para ajustar la dosis de insulina corta o larga.",
+    info_day_chart_part_3: "El gráfico de insulina (arriba) refleja aproximadamente la distribución de insulina corta en el cuerpo durante el día. En el caso de que no hayan pasado 4 horas desde la última inyección, puede observar el mecanismo de aplicación de insulina." +
+      "Al aplicar insulinas activas, ¡aumenta el riesgo de hipoclucemia! También solicite a su endocrinólogo la dosis máxima aceptable de insulina y trate de no excederla, incluso en el caso de la aplicación.",
+    info_day_chart_part_4: 'Los valores del gráfico de insulina se presionan hacia abajo, lo que refleja la dirección opuesta con el gráfico de unidades de pan',
+    info_day_chart_part_5: 'El gráfico de Racion de HC (abajo) muestra promedio de la absorción de carbohidratos en la sangre.Consulte con su endocrinólogo cuál es la porción máxima de carbohidratos y siempre trate de mantenerse dentro de los límites prescritos',
+
+    info_month_chart_part_1: "En el gráfico mensual, los puntos muestran el promedio de azúcar en sangre, isulina y Racion de HC para el día correspondiente.",
+    info_month_chart_part_2: "Las líneas verticales rojas indican los fines de semana. Puede notar aumentos y disminuciones sistemáticos de azúcar en diferentes días de la semana y analizar la causa de tales saltos.",
+
+    info_three_month_chart_part_1: 'Los puntos son valores promedio por unidad de tiempo. En un gráfico de tres meses, la unidad de tiempo es una semana.',
+    info_three_month_chart_part_2: 'Observe el patrón estacional de distribución de glucosa en sangre. Puede determinar los saltos sistemáticos en el azúcar y correlacionarlos con un cierto período de vida. Por ejemplo, vacaciones, enfermedad, dieta o cualquier período específico de la vida. La próxima vez puede estar un poco mejor preparado para la misma situación.',
+
+    // PROFILE
+    profile: 'Perfil',
+    diabetic_profile: 'Perfil diabético',
+    about_diabetes_profile: 'Ajuste su configuración y mejore la compensación',
+
+    log_out: 'Cerrar sesión',
+    log_out_hint: 'Para usar sus notas, deberá iniciar sesión nuevamente en su cuenta.',
+    leave: 'Salir',
+
+    ['mg/dL']: 'mg/dL',
+    ['mg/dL_long']: 'miligramo por decilitro',
+    ['mmol/L']: 'ммоль/л',//TODO:!!!
+    ['mmol/L_long']: 'milimoles por litro',
+
+    go_to: 'ir',
+
+    target_glycemia: 'Glucemia objetivo',
+    target_glycemia_description: "Indica tu objetivo de azúcar en sangre",
+
+
+    glycemi_unit: 'Unidad de glucemia',
+    glycemia_unit_description: 'Indique qué sistema de medición de azúcar en la sangre usa.',
+
+    carb_unit_title: 'Sistema de conteo de carbohidratos',
+    carb_unit_description: 'Indique qué sistema de conteo de carbohidratos usa',
+
+    carb_unit_weight_title: 'Cantidad de carbohidratos en Racion de HC',
+    carb_unit_weight_description: 'Especifique la cantidad de carbohidratos en Racion de HC que usa al calcular',
+
+    breadUnits_measuring: 'Racion de HC',
+    carbohydrates_measuring: 'carbohidratos en gramos',
+
+    shedule_since: 'De (horas)',
+    shedule_until: 'Hasta (horas)',
+    shedule_value: 'Valor:',
+
+    shedule_change: 'Editar',
+    shedule_add: 'Añadir',
+    shedule_clear: 'Borrar',
+
+    insulin_sensitivity_factor: 'Factor de sensibilidad a la insulina (FSI)',
+    insulin_sensitivity_factor_description: 'Muestra cuántos  %glycemia_type%  de glucosa en sangre disminuirá con la introducción de 1 unidad. insulina ultrarrápida ',
+    insulin_sensitivity_factor_hint: 'Especifique el FSI para varios períodos de tiempo',
+
+    insulin_to_carb_rate: 'Relación insulina a carbohidratos',
+    insulin_to_carb_rate_description: 'Muestra la cantidad de %breadUnits_type% absorbidos por 1 unidad de insulina.',
+    insulin_to_carb_rate_hint: 'Indique su relación insulina a carbohidratos durante varios períodos de tiempo.',
+    carbohydrates_parent_case: 'carbohidratos',
+    breadUnits_parent_case: 'Racion de HC',
+
+    since: 'de',
+    until: 'antes de',
+    save: 'Guardar',
+    need_to_fill_time_period: 'Rellene los espacios de tiempo',
+
+    profile_change: 'Editar',
+    profile_apply: 'Aplicar',
+
+    glycemia_settings: 'Configuraciones de glucemia',
+    glycemia_settings_description: 'Cambie su glucemia objetivo y el tipo de medida para su medidor',
+    carbohydrates_settings: 'Сonfiguraciones de contabilidad de carbohidratos',
+    carbohydrates_settings_description: 'Indica como cuentas los carbohidratos',
+    insulin_settings: 'Parámetros de insulina',
+    insulin_settings_description: 'Indica su insulina recomendada "para bajar el azúcar en la sangre" и "cantidad para comer"',
+
+    we_will_recalculating_your_notes: 'Contamos sus datos',
+    its_need_to_fit: 'Esto es necesario para cumplir con el nuevo sistema de medición.',
+    please_do_not_close_app: '¡Por favor no cierre la aplicación! No toma mucho tiempo',
+    // GENERAL
+    cancel: 'Cancelar',
+    not_selected: 'No seleccionado',
+    are_you_sure: 'Está seguro?',
+
+    ok: 'OK',
+    yes: 'Si',
+    got_it: 'Entendido',
+
+    active_network_needed: 'se necesita red activa',
+    server_is_not_available_try_to_restart_app: ' El servidor no está disponible actualmente. Intenta reiniciar la aplicación.',
+
+    //ERROR
+    user_properties_changing_error: 'Error al cambiar la configuración del usuario',
+    shedule_sync_error: 'Error al sincronizar la programación con el servidor',
+    sync_error: 'Error al sincronizar con el servidor',
+    note_updating_error: 'Error al actualizar el registro en el servidor',
+    notes_sync_error: 'Error al sincronizar registros con el servidor',
+    notes_deleting_error: 'Error al eliminar el registro del servidor',
+    notes_creating_error: 'Error al crear el registro del servidor',
+    google_auth_error: 'Error de inicio de sesion',
+
+    // DASHBOARD
+    compensation: 'Компенсация',
+    last_notes: 'Последние записи',
+    no_recent_notes_today: 'Нет записей за сегодняшний день',
+    glucose_chart: 'График глюкозы',
+    rest_active_insulin: 'Действующий инсулин',
+    expires_in: 'Истекает через',
+    minutes_short: 'мин',
+    hours_short: 'ч',
+    statistics_today: 'Сегодня',
+    statistics_yesterday: 'Вчера',
+    statistics_last_month: 'Последний месяц',
+    statistics_last_three_month: 'Последние три месяца',
+
+    breadUnits_long: 'Хлебные единицы',
+    carbohydrates_long: 'Углеводы',
+    one_bread_unit_contents: 'Одна ХЕ содержит %number% грамм углеводов.',
+
+    hypoglycemia_count: 'Гипогликемия',
+    hyperglycemia_count: 'Гипергликемия',
+    normalglycemia_count: 'Норма',
+
+    glucose_icon_tooltip: 'Глюкоза крови. Измеряется в %measure%.\nЦелевая гликемия указана как %target% %measure%.\nНорма в пределах от %min% до %max%.',
+    breadunits_icon_tooltip: '%type%.\n%for_bu%',
+    note_date_and_time: 'Время записи',
+    short_insulin_icon_tooltip: 'Инсулин ультракороткого действия',
+    long_insulin_icon_tooltip: 'Инсулин пролонгированного действия',
+
+    your_hba1c: 'HbA1c',
+    glycated_hemoglobin: 'Гликированный гемоглобин',
+    calculated_days: 'Количество дней',
+    calculate: 'Рассчитать',
+    too_little_data_for_advanced_analys: 'Слишком мало данных для точного анализа.',
+    glucose_not_found_for_diagram: 'Нет данных для глюкозы, чтобы отобразить диаграмму',
+  }
+  /* ES */
+
   /* 🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺🇷🇺 */
+
+  /* 🇷🇺 RUSSO*/
   i18n.translations.ru = {
     // AUTH
     looking_for_active_session: 'Поиск активной сессии',
@@ -395,7 +632,7 @@ export default function translate() {
     shedule_clear: 'Стереть',
 
     insulin_sensitivity_factor: 'Фактор чувствительности к инсулину (ФЧИ)',
-    insulin_sensitivity_factor_description: 'Показывает, насколько %glycemia_type% понизится глюкоза крови при введении 1 ед. ультракороткого инсулина',
+    insulin_sensitivity_factor_description: 'Показывает, на сколько %glycemia_type% понизится глюкоза крови при введении 1 ед. ультракороткого инсулина',
     insulin_sensitivity_factor_hint: 'Укажите ФЧИ для различных промежутков времени',
 
     insulin_to_carb_rate: 'Углеводный коэффициент (УК)',
@@ -482,4 +719,4 @@ export default function translate() {
     glucose_not_found_for_diagram: 'Нет данных для глюкозы, чтобы отобразить диаграмму',
   }
   /* 🇷🇺 */
-} 
+}
