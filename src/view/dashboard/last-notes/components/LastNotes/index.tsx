@@ -16,6 +16,7 @@ import { createChangeInteractive } from '../../../../../store/modules/interactiv
 import { DashboardCard } from '../../../../shared/DashboardCard';
 import { NotesIcon } from '../../../../../component/icon/NotesIcon';
 import { selectRecentNoteListByDay } from '../../selectors/select-recent-note-list-by-day';
+import { shadowOptions } from '../../../../../constant/ShadowOptions';
 
 interface Props {
   recentNoteListByDay: INoteListByDay
@@ -107,7 +108,7 @@ class LastNotes extends React.Component<Props> {
           <Text style={styles.cardTitle}>
             {i18nGet('last_notes')}
           </Text>
-          <TouchableOpacity onPress={onNotesPress}>
+          <TouchableOpacity style={styles.touchable} onPress={onNotesPress}>
             <NotesIcon />
           </TouchableOpacity>
         </View>
@@ -159,6 +160,9 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     paddingTop: 16,
+  },
+  touchable: {
+    ...shadowOptions,
   },
   iconBarWrap: {
     marginBottom: 8,

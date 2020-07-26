@@ -17,6 +17,7 @@ import { ChartWrap } from '../../../chart/chart-wrap/ChartWrap';
 import { ChartValueType } from '../../../../model/IChart';
 import { INoteList } from '../../../../model/INoteList';
 import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
+import { shadowOptions } from '../../../../constant/ShadowOptions';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties,
@@ -73,7 +74,7 @@ class ChartPreview extends React.Component<Props> {
           <Text style={styles.cardTitle}>
             {i18nGet('glucose_chart')}
           </Text>
-          <TouchableOpacity onPress={onChartIconPress}>
+          <TouchableOpacity style={styles.touchable} onPress={onChartIconPress}>
             <ChartsIcon />
           </TouchableOpacity>
         </View>
@@ -126,6 +127,9 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     paddingTop: 16,
+  },
+  touchable: {
+    ...shadowOptions,
   },
   iconBarWrap: {
     marginBottom: 8,
