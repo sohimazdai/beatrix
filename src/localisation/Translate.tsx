@@ -1117,4 +1117,46 @@ const translateStore = {
     es: 'Fecha de finalización del informe',
     ru: 'Дата окончания отчета',
   },
+
+  //ONBOARDING
+  continue: {
+    en: 'Continue',
+    es: 'Continuar',
+    ru: 'Продолжить',
+  },
+  skip: {
+    en: 'Skip',
+    es: 'Omitir',
+    ru: 'Пропустить',
+  },
+  fill_information_about_yourself: {
+    en: 'Fill in information about yourself',
+    es: 'Complete la información sobre usted',
+    ru: 'Заполните информацию о себе',
+  },
+  do_you_use_insulin: {
+    'en': 'I use insulin',
+    'es': 'Yo uso insulina',
+    'ru': 'Я использую инсулин',
+  },
+  select_insulin_type_you_use: {
+    'en': 'Choose the type of action of your insulin',
+    'es': 'Elige el tipo de acción de tu insulina',
+    'ru': 'Выберите тип действия вашего инсулина',
+  },
+  short_insulin: {
+    'en': 'Short-acting insulin',
+    'es': 'Insulina rápida',
+    'ru': 'Инсулин короткого действия',
+  },
+  ultra_short_insulin: {
+    'en': 'Rapid-acting insulin',
+    'es': 'Insulina ultrarápida',
+    'ru': 'Инсулин ультракороткого действия',
+  },
+  you_can_change_it_later: {
+    'en': 'You can change these parameters later in the settings',
+    'es': 'Puede cambiar estos parámetros más adelante en la configuración',
+    'ru': 'Вы можете изменить эти параметры позже в настройках',
+  },
 }

@@ -22,6 +22,7 @@ import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings
 import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
 import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { ExportDataSettings } from '../screen/profile/profile-settings/sub-settings/ExportDataSettings';
+import { OnboardingConnected } from '../screen/onboarding/Onboarding';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -46,6 +47,8 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 }
 
 const AuthedContainer = (props: AuthedContainerProps) => {
+    const { user: { isOnboardingCompleted } } = props;
+
     const faded = (
         props.interactive.confirmPopupShown ||
         props.interactive.creatingNoteMode ||
@@ -58,16 +61,17 @@ const AuthedContainer = (props: AuthedContainerProps) => {
         ? FaderType.SYNC
         : FaderType.EMPTY;
 
-    return (
-        <>
-            <AuthedNavigatorContainer />
-            <Fader hidden={!faded} type={faderType} />
-            <ChartDotInfoPopupConnect />
-            <NoteCreationPopupConnect />
-            <ConfirmPopupConnect />
-            <ModalContentConnect />
-        </>
-    )
+    return isOnboardingCompleted
+        ? (
+            <>
+                <AuthedNavigatorContainer />
+                <Fader hidden={!faded} type={faderType} />
+                <ChartDotInfoPopupConnect />
+                <NoteCreationPopupConnect />
+                <ConfirmPopupConnect />
+                <ModalContentConnect />
+            </>
+        ) : <OnboardingConnected />
 }
 
 export const AppNavigator = connect(
