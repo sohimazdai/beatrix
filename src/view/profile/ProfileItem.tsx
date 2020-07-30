@@ -41,7 +41,6 @@ export class ProfileItem extends React.Component<Props> {
 const styles = StyleSheet.create({
     profileItemView: {
         display: 'flex',
-
         marginTop: 10,
         marginBottom: 10,
     },
