@@ -515,9 +515,9 @@ const translateStore = {
   },
 
   ['mg/dL']: {
-    en: 'mg/dL',
-    es: 'mg/dL',
-    ru: 'мг/дл',
+    en: 'mg\u2060/\u2060dL',
+    es: 'mg\u2060/\u2060dL',
+    ru: 'мг\u2060/\u2060дл',
   },
   ['mg/dL_long']: {
     en: 'milligrams per deciliter',
@@ -525,9 +525,9 @@ const translateStore = {
     ru: 'миллиграмм на децилитр',
   },
   ['mmol/L']: {
-    en: 'mmol/L',
-    es: 'mmol/l',
-    ru: 'ммоль/л',
+    en: 'mmol\u2060/\u2060L',
+    es: 'mmol\u2060/\u2060l',
+    ru: 'ммоль\u2060/\u2060л',
   },
   ['mmol/L_long']: {
     en: 'millimole per liter',
