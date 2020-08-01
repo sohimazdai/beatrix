@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Button, StyleSheet, Text } from 'react-native';
+import { View, Button, StyleSheet, Text, StatusBar } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
 import { i18nGet } from '../../../localisation/Translate';
@@ -11,6 +11,7 @@ import { Color } from '../../../constant/Color';
 import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 import { shadowOptions } from '../../../constant/ShadowOptions';
 import { Measures } from '../../../localisation/Measures';
+import { BlockHat } from '../../../component/hat/BlockHat';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties
@@ -70,10 +71,10 @@ class Onboarding extends React.Component<Props, State> {
 
     return (
       <View style={styles.onboardingScreen}>
-        <ScrollView >
-          <Text style={styles.header}>
-            {i18nGet('fill_information_about_yourself')}
-          </Text>
+        <BlockHat
+          title={i18nGet('fill_information_about_yourself')}
+        />
+        <ScrollView style={styles.scrollView}>
           {this.renderInsulinBlock()}
           {this.renderGlucoseBlock()}
           {this.renderCarbsBlock()}
@@ -82,6 +83,7 @@ class Onboarding extends React.Component<Props, State> {
           </Text>
           <Button title={i18nGet('continue')} onPress={completeOnboarding} />
           <Button title={i18nGet('skip')} onPress={() => {/*TODO:*/ }} color={Color.TEXT_DARK_GRAY} />
+          <View style={{ height: 100 }} />
         </ScrollView>
       </View>
     );
@@ -249,12 +251,12 @@ export const OnboardingConnected = connect(
 
 const styles = StyleSheet.create({
   onboardingScreen: {
+    backgroundColor: Color.PRIMARY,
   },
-  header: {
-    marginLeft: 16,
-    marginTop: 16,
-    fontSize: 18,
-    color: Color.TEXT_BLACK,
+  scrollView: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: Color.WHITE,
   },
   insulinPickerView: {
     borderRadius: 10,
