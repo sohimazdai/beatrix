@@ -49,13 +49,14 @@ function* syncUser({ payload }: SyncUserAction) {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
 
-        appAnalytics.setUser(payload.user.id);
+        // appAnalytics.setUser(payload.user.id); TODO: this analytics now is in auth
 
         if (state.app.serverAvailable) {
             const userData: {
                 data: {
                     properties: IUserDiabetesProperties,
                     shedule: IUserPropertiesShedule,
+                    isOnboardingCompleted: boolean,
                 }
             } = yield call(UserApi.syncUser, payload.user);
             const properties: IUserDiabetesProperties = userData.data.properties;
@@ -93,6 +94,9 @@ function* syncUser({ payload }: SyncUserAction) {
                 batchActions([
                     createUserDiabetesPropertiesChangeAction(newProperties),
                     createChangeUserPropertiesShedule(shedule),
+                    createUserChangeAction({
+                        isOnboardingCompleted: userData.data.isOnboardingCompleted
+                    }),
                 ])
             );
 

@@ -30,7 +30,7 @@ export interface IUserDiabetesPropertiesDayTimeValue {
 
 export interface IUserDiabetesProperties {
     targetGlycemia?: number;
-    // shortInsulinType?: ShortInsulinType
+    shortInsulinType?: ShortInsulinType
     glycemiaMeasuringType?: GlycemiaMeasuringType
     carbsMeasuringType?: CarbsMeasuringType
     carbsUnitWeightType?: CarbsUnitWeightType

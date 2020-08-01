@@ -51,6 +51,7 @@ function* run() {
         }
 
         appAnalytics.sendEvent(appAnalytics.events.GOOGLE_SIGN_IN);
+        appAnalytics.setUser(googleUser.user.id);
 
         yield put(createUserChangeAction({
             ...userData,

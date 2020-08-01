@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Button, StyleSheet, Text, StatusBar } from 'react-native';
+import { View, Button, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
 import { i18nGet } from '../../../localisation/Translate';
@@ -12,10 +12,13 @@ import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, Carbs
 import { shadowOptions } from '../../../constant/ShadowOptions';
 import { Measures } from '../../../localisation/Measures';
 import { BlockHat } from '../../../component/hat/BlockHat';
+import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
+import { appAnalytics } from '../../../app/Analytics';
+import { IUser } from '../../../model/IUser';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties
-  completeOnboarding: () => void
+  completeOnboarding: (diabetesProperties?: IUserDiabetesProperties) => void
 };
 
 interface State {
@@ -35,7 +38,7 @@ class Onboarding extends React.Component<Props, State> {
     selectedCarbsMeasuringType: Measures.getDefaultCarbsMeasuringType(
       this.props.userDiabetesProperties.carbsMeasuringType
     ),
-  }
+  };
 
   checkUsingInsulin = () => {
     const { isUserUsingInsulin, selectedInsulinType } = this.state;
@@ -66,9 +69,41 @@ class Onboarding extends React.Component<Props, State> {
     });
   }
 
-  render() {
-    const { completeOnboarding } = this.props;
+  completeOnboarding = () => {
+    const { completeOnboarding, userDiabetesProperties } = this.props;
+    const {
+      isUserUsingInsulin,
+      selectedInsulinType,
+      selectedGlycemiaMeasuringType,
+      selectedCarbsMeasuringType,
+    } = this.state;
 
+    const diabetesProperties: IUserDiabetesProperties = {
+      shortInsulinType: selectedInsulinType,
+      glycemiaMeasuringType: selectedGlycemiaMeasuringType,
+      carbsMeasuringType: selectedCarbsMeasuringType,
+      carbsUnitWeightType: Measures.getDefaultCarbsUnitWeightType(
+        userDiabetesProperties.carbsUnitWeightType,
+      ),
+    };
+
+    if (isUserUsingInsulin && !selectedInsulinType) {
+      alert(i18nGet('select_insulin_type_you_use'));
+
+      appAnalytics.sendEventWithProps(
+        appAnalytics.events.ONBOARDING_COMPLETED_UNSUCCESSFUL,
+        diabetesProperties,
+      )
+    } else {
+      completeOnboarding(diabetesProperties);
+    }
+  }
+
+  skipOnboarding = () => {
+    const { completeOnboarding } = this.props;
+    completeOnboarding();
+  }
+  render() {
     return (
       <View style={styles.onboardingScreen}>
         <BlockHat
@@ -81,8 +116,15 @@ class Onboarding extends React.Component<Props, State> {
           <Text style={styles.note}>
             {i18nGet('you_can_change_it_later')}
           </Text>
-          <Button title={i18nGet('continue')} onPress={completeOnboarding} />
-          <Button title={i18nGet('skip')} onPress={() => {/*TODO:*/ }} color={Color.TEXT_DARK_GRAY} />
+          <Button
+            title={i18nGet('continue')}
+            onPress={this.completeOnboarding}
+          />
+          <Button
+            title={i18nGet('skip')}
+            onPress={this.skipOnboarding}
+            color={Color.TEXT_DARK_GRAY}
+          />
           <View style={{ height: 100 }} />
         </ScrollView>
       </View>
@@ -243,9 +285,9 @@ export const OnboardingConnected = connect(
     userDiabetesProperties: state.userDiabetesProperties,
   }),
   (dispatch) => ({
-    completeOnboarding: () => dispatch(createUserChangeAction({
-      isOnboardingCompleted: false //TODO:
-    }))
+    completeOnboarding: (diabetesProperties?: IUserDiabetesProperties) => {
+      dispatch(createCompleteOnboardingAction(diabetesProperties))
+    }
   })
 )(Onboarding);
 

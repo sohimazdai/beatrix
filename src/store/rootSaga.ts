@@ -11,6 +11,7 @@ import { watchGetUserByInstallationId } from './service/auth/GetUserByInstallati
 import { watchClearInstallationId } from './service/auth/ClearInstallationIdSaga';
 import { watchUpdateUserDiabetesProperties } from './service/user/UpdateUserDiabetesPropertiesSaga';
 import { watchExportData } from './service/export/ExportDataSaga';
+import { watchCompleteOnboarding } from './service/onboarding/CompleteOnboardingSaga';
 
 export function* rootSaga() {
     yield all([
@@ -18,6 +19,8 @@ export function* rootSaga() {
         fork(watchGoogleAuth),
         fork(watchGetUserByInstallationId),
         fork(watchClearInstallationId),
+        //ONBOARDING
+        fork(watchCompleteOnboarding),
         //USER
         fork(watchSyncUser),
         fork(watchUpdateUserDiabetesProperties),

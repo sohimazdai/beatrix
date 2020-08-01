@@ -848,6 +848,11 @@ const translateStore = {
     es: 'Error de exportación',
     ru: 'Ошибка экспорта',
   },
+  onboarding_complete_error: {
+    'en': 'An error occurred while saving the entered data. You can try again in settings. We apologize',
+    'es': 'Se produjo un error al guardar los datos ingresados. Puedes volver a intentarlo en la configuración. Pedimos disculpas',
+    'ru': 'Произошла ошибка при сохранении введенных данных. Вы можете повторить загрузку в настройках. Приносим свои извинения',
+  },
 
   // DASHBOARD
   compensation: {
