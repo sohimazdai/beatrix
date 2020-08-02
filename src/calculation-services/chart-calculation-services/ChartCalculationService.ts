@@ -15,6 +15,7 @@ import {
     adaptThreeMonthDots,
 } from "./ChartCalculationHelper";
 import { DateHelper } from "../../utils/DateHelper";
+import { shortInsulinDistributionStepNumber, getShortInsulinDistributionValueByTimeStep } from '../short-insulin-distribution';
 
 export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
     const {
@@ -30,7 +31,15 @@ export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
             currentDate.getDate() - 1
         ).getTime()
     ] || {};
-    const currentDayNotes: INoteList = noteListByDay[currentDate.getTime()] || {};
+
+    const currentDayNotes: INoteList = noteListByDay[
+        new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate(),
+        ).getTime()
+    ] || {};
+
     const currentGroundDots = getGroundDots(props, currentDayNotes)
     let dots = getDotsAndEvents(currentGroundDots);
     let groundAdaptedData = adaptDayDots(props, dots.dots, dots.events, currentDate);
@@ -63,30 +72,54 @@ function getGroundDots(props: ChartWrapProps, noteList: INoteList): IChartDot[] 
 }
 
 function calculateDotEffect(props: ChartWrapProps, dot: IChartDot, train: IChartTrain, date: Date) {
-    const { config } = props;
+    const { config, shortInsulinType } = props;
     const id = getTrainItemId(props, dot, date);
 
-    const increaseStepNumber = config.increaseTime / config.timeStepMinutes,
-        flatStepNumber = config.flatTime / config.timeStepMinutes,
-        decreaseStepNumber = config.decreaseTime / config.timeStepMinutes,
-        increaseStepValue = dot.y / increaseStepNumber,
-        decreaseStepValue = dot.y / decreaseStepNumber;
-    let ownCurrentY = 0;
-    let ownCurrentId = id;
+    if (props.type === ChartValueType.INSULIN) {
+        const stepNumber = shortInsulinDistributionStepNumber[shortInsulinType];
 
-    let trainYValue = train[id] && train[id].y ?
-        ownCurrentY + train[id].y :
-        ownCurrentY
-    train[ownCurrentId] = {
-        y: trainYValue,
-        x: ownCurrentId,
-        id: ownCurrentId,
+        let ownCurrentY = 0;
+        let ownCurrentId = id;
+
+        let trainYValue = train[id] && train[id].y ?
+            ownCurrentY + train[id].y :
+            ownCurrentY;
+
+        train[ownCurrentId] = {
+            y: trainYValue,
+            x: ownCurrentId,
+            id: ownCurrentId,
+        };
+
+        for (let i = 1; i < stepNumber; i++) {
+            let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+                ownCurrentY + train[ownCurrentId].y :
+                ownCurrentY;
+
+            train[ownCurrentId] = {
+                y: trainYValue,
+                x: ownCurrentId,
+                id: ownCurrentId,
+            }
+            ownCurrentY += getShortInsulinDistributionValueByTimeStep(i, shortInsulinType) * dot.y;
+            ownCurrentId++;
+            if (ownCurrentId > getMaxTrainItemId(props, date)) return
+        }
+
+        return;
     }
-    ownCurrentY += increaseStepValue;
-    ownCurrentId++;
-    for (let i = 1; i < increaseStepNumber; i++) {
-        let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
-            ownCurrentY + train[ownCurrentId].y :
+
+    if (props.type === ChartValueType.BREAD_UNITS) {
+        const increaseStepNumber = config.increaseTime / config.timeStepMinutes,
+            flatStepNumber = config.flatTime / config.timeStepMinutes,
+            decreaseStepNumber = config.decreaseTime / config.timeStepMinutes,
+            increaseStepValue = dot.y / increaseStepNumber,
+            decreaseStepValue = dot.y / decreaseStepNumber;
+        let ownCurrentY = 0;
+        let ownCurrentId = id;
+
+        let trainYValue = train[id] && train[id].y ?
+            ownCurrentY + train[id].y :
             ownCurrentY
         train[ownCurrentId] = {
             y: trainYValue,
@@ -95,32 +128,44 @@ function calculateDotEffect(props: ChartWrapProps, dot: IChartDot, train: IChart
         }
         ownCurrentY += increaseStepValue;
         ownCurrentId++;
-        if (ownCurrentId > getMaxTrainItemId(props, date)) return
-    }
-    for (let i = 0; i < flatStepNumber; i++) {
-        let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
-            ownCurrentY + train[ownCurrentId].y :
-            ownCurrentY
-        train[ownCurrentId] = {
-            y: trainYValue,
-            x: ownCurrentId,
-            id: ownCurrentId,
+        for (let i = 1; i < increaseStepNumber; i++) {
+            let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+                ownCurrentY + train[ownCurrentId].y :
+                ownCurrentY
+            train[ownCurrentId] = {
+                y: trainYValue,
+                x: ownCurrentId,
+                id: ownCurrentId,
+            }
+            ownCurrentY += increaseStepValue;
+            ownCurrentId++;
+            if (ownCurrentId > getMaxTrainItemId(props, date)) return
         }
-        ownCurrentId++;
-        if (ownCurrentId > getMaxTrainItemId(props, date)) return
-    }
-    for (let i = 0; i < decreaseStepNumber + 1; i++) {
-        let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
-            ownCurrentY + train[ownCurrentId].y :
-            ownCurrentY
-        train[ownCurrentId] = {
-            y: trainYValue,
-            x: ownCurrentId,
-            id: ownCurrentId,
+        for (let i = 0; i < flatStepNumber; i++) {
+            let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+                ownCurrentY + train[ownCurrentId].y :
+                ownCurrentY
+            train[ownCurrentId] = {
+                y: trainYValue,
+                x: ownCurrentId,
+                id: ownCurrentId,
+            }
+            ownCurrentId++;
+            if (ownCurrentId > getMaxTrainItemId(props, date)) return
         }
-        ownCurrentY = ownCurrentY - decreaseStepValue
-        ownCurrentId++;
-        if (ownCurrentId > getMaxTrainItemId(props, date)) return
+        for (let i = 0; i < decreaseStepNumber + 1; i++) {
+            let trainYValue = train[ownCurrentId] && train[ownCurrentId].y ?
+                ownCurrentY + train[ownCurrentId].y :
+                ownCurrentY
+            train[ownCurrentId] = {
+                y: trainYValue,
+                x: ownCurrentId,
+                id: ownCurrentId,
+            }
+            ownCurrentY = ownCurrentY - decreaseStepValue
+            ownCurrentId++;
+            if (ownCurrentId > getMaxTrainItemId(props, date)) return
+        }
     }
 }
 

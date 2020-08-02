@@ -16,6 +16,7 @@ import { initialPadding } from '../../../calculation-services/chart-calculation-
 import { ChartAxisPair } from '../chart-svg/ChartAxisPair';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
+import { ShortInsulinType } from '../../../model/IUserDiabetesProperties';
 
 export interface ChartWrapProps {
     isAlone?: boolean
@@ -28,6 +29,7 @@ export interface ChartWrapProps {
     noteListByDay?: INoteListByDay
     minCritical: number
     maxCritical: number
+    shortInsulinType: ShortInsulinType
     onDotPress?: (id: string) => void
 }
 
@@ -194,6 +196,7 @@ export const ChartWrap = connect(
     (state: IStorage) => ({
         selectedDotId: state.interactive.selectedDotId,
         selectedPeriod: state.interactive.selectedChartPeriod || ChartPeriodType.DAY,
+        shortInsulinType: state.userDiabetesProperties.shortInsulinType || ShortInsulinType.ULTRA_SHORT,
     })
 )(Comp)
 

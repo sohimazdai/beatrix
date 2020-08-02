@@ -15,6 +15,7 @@ export class ChartConfig {
             glucosePreview: this.getGlucosePreviewConfig(),
             breadUnits: this.getBreadUnitsConfig(),
             insulin: this.getInsulinConfig(),
+            activeInsulin: this.getActiveInsulinConfig(),
         }
     }
 
@@ -45,7 +46,7 @@ export class ChartConfig {
             isAlone: true,
             width: this.WIDTH - 30,
             height: Dimensions.get("screen").width / 3,
-            boxWidth: this.WIDTH -30,
+            boxWidth: this.WIDTH - 30,
             boxHeight: Dimensions.get("screen").width / 3,
             axisWidth: 2,
             axisColor: '#666666',
@@ -92,6 +93,31 @@ export class ChartConfig {
             axisTypes: [
                 ChartAxisType.OX_UPSIDE,
                 ChartAxisType.OY_REVERSE,
+            ],
+            paddingTop: true,
+            polylineType: PolylineType.REGULAR
+        }
+    }
+
+    getActiveInsulinConfig(): IChartConfiguration {
+        return {
+            width: this.WIDTH,
+            height: Dimensions.get("screen").width / 4,
+            boxWidth: this.WIDTH,
+            boxHeight: Dimensions.get("screen").width / 4,
+            axisWidth: 2,
+            axisColor: '#AAAAAA',
+            basicPadding: this.BASIC_PADDING,
+            yPadding: 1,
+            dotRadius: this.DOT_RADIUS,
+            reversedY: false,
+            timeStepMinutes: this.TIME_STEP_MINUTES,
+            horizontalLineNumber: 1,
+            initGradientColor: '#7C3869',
+            stopGradientColor: '#7C89FF',
+            axisTypes: [
+                ChartAxisType.OX,
+                ChartAxisType.OY,
             ],
             paddingTop: true,
             polylineType: PolylineType.REGULAR

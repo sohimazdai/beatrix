@@ -20,7 +20,7 @@ import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
 import { LastNotesConnected } from '../../view/dashboard/last-notes/components/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
-import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/ActiveInsulinInfo';
+import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/components/ActiveInsulinInfo';
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
 import { StatisticsType } from '../../view/dashboard/statistics-card/entities';
 import { HBA1CCalculatorConnected } from '../../view/dashboard/hba1c-calculator/components/HBA1CCalculator';

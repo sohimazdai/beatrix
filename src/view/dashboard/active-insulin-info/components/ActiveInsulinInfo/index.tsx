@@ -2,15 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Text, StyleSheet } from 'react-native';
-import { IStorage } from '../../../../model/IStorage';
-import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/NoteListSelector';
-import { DateHelper } from '../../../../utils/DateHelper';
-import { INoteListNote } from '../../../../model/INoteList';
-import { DashboardCard } from '../../../shared/DashboardCard';
-import { i18nGet } from '../../../../localisation/Translate';
-import { Color } from '../../../../constant/Color';
+import { IStorage } from '../../../../../model/IStorage';
+import { convertFlatNoteListToNoteListByDay } from '../../../../../store/selector/NoteListSelector';
+import { DateHelper } from '../../../../../utils/DateHelper';
+import { INoteListNote } from '../../../../../model/INoteList';
+import { DashboardCard } from '../../../../shared/DashboardCard';
+import { i18nGet } from '../../../../../localisation/Translate';
+import { Color } from '../../../../../constant/Color';
 import calculateActiveInsulinTime from './calculate-active-insulin-time';
 import checkThatInsulinIsActive from './check-that-insulin-is-active';
+import { ActiveInsulinChartConnected } from '../InsulinChart';
 
 interface Props {
   lastNote?: INoteListNote,
@@ -108,6 +109,7 @@ class ActiveInsulinInfo extends React.Component<Props, State> {
         <Text style={styles.cardTitle}>
           {i18nGet('rest_active_insulin')}
         </Text>
+        <ActiveInsulinChartConnected />
         <Text style={styles.cardText}>
           {message}
         </Text>

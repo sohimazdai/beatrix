@@ -17,12 +17,9 @@ export interface ChartPolylineProps {
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    return renderPolyline(props);
-}
-
-function renderPolyline(props: ChartPolylineProps) {
     const thereIsGradient = props.initGradientColor && props.stopGradientColor;
     const points = getPoints(props);
+
     return <>
         {!!points && thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
             <Stop offset="0%" stopColor={props.initGradientColor} stopOpacity="1" />

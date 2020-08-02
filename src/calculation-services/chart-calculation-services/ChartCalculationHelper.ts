@@ -33,7 +33,7 @@ export function adaptDayDots(
         } else {
             minValue = 0;
         }
-    })
+    });
     maxValue = calculateNewMaxAndMin(props, maxValue, minValue);
     dots.map(dot => {
         dot.id === 0 && newDots.push({

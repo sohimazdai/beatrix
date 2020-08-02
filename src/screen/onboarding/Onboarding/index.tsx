@@ -6,7 +6,6 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
 import { i18nGet } from '../../../localisation/Translate';
 import { IStorage } from '../../../model/IStorage';
-import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';
 import { Color } from '../../../constant/Color';
 import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 import { shadowOptions } from '../../../constant/ShadowOptions';
@@ -14,7 +13,6 @@ import { Measures } from '../../../localisation/Measures';
 import { BlockHat } from '../../../component/hat/BlockHat';
 import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
 import { appAnalytics } from '../../../app/Analytics';
-import { IUser } from '../../../model/IUser';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties
