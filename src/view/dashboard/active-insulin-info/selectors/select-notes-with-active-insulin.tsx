@@ -1,9 +1,13 @@
 import { createSelector } from 'reselect';
 import { IStorage } from '../../../../model/IStorage';
 import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/NoteListSelector';
-import { INoteListByDay, INoteList, INoteListNote } from '../../../../model/INoteList';
+import { INoteListByDay, INoteListNote } from '../../../../model/INoteList';
 import { ShortInsulinType } from '../../../../model/IUserDiabetesProperties';
 import { DateHelper } from '../../../../utils/DateHelper';
+import { shortInsulinDistributionStepNumber } from '../../../../calculation-services/short-insulin-distribution';
+import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
+
+const DAILY_TIME_STEPS = 24 * 60 / 5; // количество пятименуток в сутках;
 
 export const selectNoteWithActiveInsulin = createSelector(
   (state: IStorage) => convertFlatNoteListToNoteListByDay(state),
@@ -11,10 +15,14 @@ export const selectNoteWithActiveInsulin = createSelector(
   getActiveInsulinNoteList
 )
 
+
 function getActiveInsulinNoteList(
   noteListByDay: INoteListByDay,
   shortInsulinType: ShortInsulinType
-): INoteListByDay {
+): {
+  noteListByDay: INoteListByDay,
+  widthRelation: number
+} {
   const offset = shortInsulinType === ShortInsulinType.SHORT
     ? 8.5 * 2
     : 4 * 2;
@@ -23,45 +31,21 @@ function getActiveInsulinNoteList(
   const startDate = new Date();
   startDate.setHours(new Date().getHours() - offset);
 
-  const activeInsulinNoteList: INoteListByDay = {};
-
-  if (noteListByDay[DateHelper.today()]) {
-    Object.keys(noteListByDay[DateHelper.today()]).forEach(noteKey => {
-      const note: INoteListNote = noteListByDay[DateHelper.today()][noteKey];
-
-      if (
-        note.date > startDate.getMilliseconds() && note.date < currentDate.getMilliseconds() &&
-        note.insulin > 0
-      ) {
-        if (!activeInsulinNoteList[DateHelper.today()]) activeInsulinNoteList[DateHelper.today()] = {};
-        activeInsulinNoteList[DateHelper.today()][noteKey] = note;
-      }
-    })
-  }
-
-  if (noteListByDay[DateHelper.yesterday()]) {
-
-    Object.keys(noteListByDay[DateHelper.yesterday()]).forEach(noteKey => {
-      const note: INoteListNote = noteListByDay[DateHelper.yesterday()][noteKey];
-
-      if (
-        note.date > startDate.getTime() && note.date < currentDate.getTime() &&
-        note.insulin > 0
-      ) {
-        if (!activeInsulinNoteList[DateHelper.yesterday()]) activeInsulinNoteList[DateHelper.yesterday()] = {};
-        activeInsulinNoteList[DateHelper.yesterday()][noteKey] = note;
-      }
-    });
-  }
-
   const notes: INoteListNote[] = [
-    ...Object.values(activeInsulinNoteList[DateHelper.yesterday()] || {}),
-    ...Object.values(activeInsulinNoteList[DateHelper.today()] || {}),
+    ...Object.values(noteListByDay[DateHelper.yesterday()] || {}),
+    ...Object.values(noteListByDay[DateHelper.today()] || {}),
   ];
 
-  let oldestNote = notes.sort((note1, note2) => note1.date - note2.date)[0].date;
+  const filteredNotes = notes.filter(note => {
+    return note.date > startDate.getTime() && note.date < currentDate.getTime()
+  });
 
-  const noteList = notes.map(note => {
+  if (filteredNotes.length === 0) return { widthRelation: 0, noteListByDay: null };
+
+  let sortedNotes = filteredNotes.sort((note1, note2) => note1.date - note2.date);
+  let oldestNote = sortedNotes[0] && sortedNotes[0].date;
+
+  const notesWithNewDate = sortedNotes.map(note => {
     const newDate = new Date(note.date);
     newDate.setHours(new Date(note.date).getHours() - new Date(oldestNote).getHours());
     newDate.setDate(new Date().getDate());
@@ -70,7 +54,8 @@ function getActiveInsulinNoteList(
       ...note,
       date: newDate,
     }
-  }).reduce((acc, curr) => {
+  })
+  const noteList = notesWithNewDate.reduce((acc, curr) => {
     return {
       ...acc,
       [curr.id]: curr
@@ -81,5 +66,16 @@ function getActiveInsulinNoteList(
     [DateHelper.today()]: noteList
   };
 
-  return newNoteListByDay;
+  const chartConfig = new ChartConfig().getConfigs().activeInsulin;
+  const activeHours = notesWithNewDate[notesWithNewDate.length - 1].date.getHours() * 60;
+  const activeMinutes = notesWithNewDate[notesWithNewDate.length - 1].date.getMinutes();
+  const activeSteps = (activeHours + activeMinutes) / chartConfig.timeStepMinutes;
+
+  const widthRelation =
+    (activeSteps + shortInsulinDistributionStepNumber[shortInsulinType]) / DAILY_TIME_STEPS;
+
+  return {
+    noteListByDay: newNoteListByDay,
+    widthRelation,
+  };
 }

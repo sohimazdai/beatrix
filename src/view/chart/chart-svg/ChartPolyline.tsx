@@ -14,36 +14,43 @@ export interface ChartPolylineProps {
     initGradientColor?: string;
     stopGradientColor?: string;
     chartPeriodType?: ChartPeriodType
+    widthRelation?: number
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
+    const { widthRelation } = props;
+
     const thereIsGradient = props.initGradientColor && props.stopGradientColor;
     const points = getPoints(props);
+    const transform = 'scale(' + 1 / widthRelation + ', 1)';
 
-    return <>
-        {!!points && thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
-            <Stop offset="0%" stopColor={props.initGradientColor} stopOpacity="1" />
-            <Stop offset="100%" stopColor={props.stopGradientColor} stopOpacity="1" />
-        </LinearGradient>}
-        {props.polylineType === PolylineType.BEZIER ?
-            <Path
-                d={points}
-                stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
-                strokeWidth={2}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                fill="transparent"
-            />
-            :
-            <Polyline
-                points={points}
-                stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
-                strokeWidth={2}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                fill={props.chartPeriodType === ChartPeriodType.DAY ? "url(#grad)" : "transparent"}
-            />}
-    </>
+    return (
+        <>
+            {!!points && thereIsGradient && <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="100%">
+                <Stop offset="0%" stopColor={props.initGradientColor} stopOpacity="1" />
+                <Stop offset="100%" stopColor={props.stopGradientColor} stopOpacity="1" />
+            </LinearGradient>}
+            {props.polylineType === PolylineType.BEZIER ?
+                <Path
+                    d={points}
+                    stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
+                    strokeWidth={widthRelation ? 0 : 2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    fill="transparent"
+                />
+                :
+                <Polyline
+                    points={points}
+                    stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
+                    strokeWidth={widthRelation ? 0 : 2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    fill={props.chartPeriodType === ChartPeriodType.DAY ? "url(#grad)" : "transparent"}
+                    transform={transform}
+                />}
+        </>
+    )
 }
 
 function getPoints(props: ChartPolylineProps) {

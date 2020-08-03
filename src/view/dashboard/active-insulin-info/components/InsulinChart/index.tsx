@@ -17,21 +17,19 @@ import { calculateDayChartDots } from '../../../../../calculation-services/chart
 import { selectNoteWithActiveInsulin } from '../../selectors/select-notes-with-active-insulin';
 
 interface Props {
-  userDiabetesProperties: IUserDiabetesProperties,
-  noteList: INoteList
   activeInsulinNoteListByDay: INoteListByDay
+  widthRelation: number
+  userDiabetesProperties: IUserDiabetesProperties,
 };
 
 function ActiveInsulinChart(props: Props) {
   const {
-    userDiabetesProperties: { shortInsulinType },
-    noteList,
     activeInsulinNoteListByDay,
+    widthRelation,
+    userDiabetesProperties: { shortInsulinType },
   } = props;
 
-  let isChartEmpty = false;
-
-  if (!noteList) isChartEmpty = true;
+  if (!activeInsulinNoteListByDay) return null;
 
   const chartConfig = new ChartConfig().getConfigs().activeInsulin;
 
@@ -53,7 +51,9 @@ function ActiveInsulinChart(props: Props) {
     <View style={styles.cardContent}>
       <View style={styles.chartView}>
         <ChartBox config={chartConfig}>
+
           <ChartPolyline
+            widthRelation={widthRelation}
             polylineType={chartConfig.polylineType}
             dots={polylineDotsData.dots}
             chartPeriodType={ChartPeriodType.DAY}
@@ -68,11 +68,15 @@ function ActiveInsulinChart(props: Props) {
 }
 
 export const ActiveInsulinChartConnected = connect(
-  (state: IStorage) => ({
-    activeInsulinNoteListByDay: selectNoteWithActiveInsulin(state),
-    userDiabetesProperties: state.userDiabetesProperties,
-    noteList: state.noteList,
-  }),
+  (state: IStorage) => {
+    const activeInsulinChartProps = selectNoteWithActiveInsulin(state);
+
+    return {
+      activeInsulinNoteListByDay: activeInsulinChartProps.noteListByDay,
+      widthRelation: activeInsulinChartProps.widthRelation,
+      userDiabetesProperties: state.userDiabetesProperties,
+    }
+  },
 )(ActiveInsulinChart);
 
 
