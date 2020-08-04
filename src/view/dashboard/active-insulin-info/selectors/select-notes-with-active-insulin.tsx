@@ -7,8 +7,6 @@ import { DateHelper } from '../../../../utils/DateHelper';
 import { shortInsulinDistributionStepNumber } from '../../../../calculation-services/short-insulin-distribution';
 import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
 
-const DAILY_TIME_STEPS = 24 * 60 / 5; // количество пятименуток в сутках;
-
 export const selectNoteWithActiveInsulin = createSelector(
   (state: IStorage) => convertFlatNoteListToNoteListByDay(state),
   (state: IStorage) => state.userDiabetesProperties.shortInsulinType,
@@ -19,10 +17,7 @@ export const selectNoteWithActiveInsulin = createSelector(
 function getActiveInsulinNoteList(
   noteListByDay: INoteListByDay,
   shortInsulinType: ShortInsulinType
-): {
-  noteListByDay: INoteListByDay,
-  widthRelation: number
-} {
+): INoteListByDay {
   const offset = shortInsulinType === ShortInsulinType.SHORT
     ? 8.5 * 2
     : 4 * 2;
@@ -40,7 +35,7 @@ function getActiveInsulinNoteList(
     return note.date > startDate.getTime() && note.date < currentDate.getTime()
   });
 
-  if (filteredNotes.length === 0) return { widthRelation: 0, noteListByDay: null };
+  if (filteredNotes.length === 0) return null;
 
   let sortedNotes = filteredNotes.sort((note1, note2) => note1.date - note2.date);
   let oldestNote = sortedNotes[0] && sortedNotes[0].date;
@@ -66,16 +61,5 @@ function getActiveInsulinNoteList(
     [DateHelper.today()]: noteList
   };
 
-  const chartConfig = new ChartConfig().getConfigs().activeInsulin;
-  const activeHours = notesWithNewDate[notesWithNewDate.length - 1].date.getHours() * 60;
-  const activeMinutes = notesWithNewDate[notesWithNewDate.length - 1].date.getMinutes();
-  const activeSteps = (activeHours + activeMinutes) / chartConfig.timeStepMinutes;
-
-  const widthRelation =
-    (activeSteps + shortInsulinDistributionStepNumber[shortInsulinType]) / DAILY_TIME_STEPS;
-
-  return {
-    noteListByDay: newNoteListByDay,
-    widthRelation,
-  };
+  return newNoteListByDay;
 }

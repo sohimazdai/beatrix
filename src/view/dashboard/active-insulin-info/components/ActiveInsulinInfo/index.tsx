@@ -12,10 +12,13 @@ import { Color } from '../../../../../constant/Color';
 import calculateActiveInsulinTime from './calculate-active-insulin-time';
 import checkThatInsulinIsActive from './check-that-insulin-is-active';
 import { ActiveInsulinChartConnected } from '../InsulinChart';
+import { selectActiveInsulinDuration } from '../../selectors/select-active-insulin-duration';
+import { OXTimeTitles } from '../OXTimeTitles';
 
 interface Props {
   lastNote?: INoteListNote,
   lastYesterdayNote?: INoteListNote,
+  hoursOfinsulinDuration: number,
 };
 
 interface State {
@@ -110,6 +113,7 @@ class ActiveInsulinInfo extends React.Component<Props, State> {
           {i18nGet('rest_active_insulin')}
         </Text>
         <ActiveInsulinChartConnected />
+        <OXTimeTitles hoursOfinsulinDuration={this.props.hoursOfinsulinDuration} />
         <Text style={styles.cardText}>
           {message}
         </Text>
@@ -130,6 +134,7 @@ export const ActiveInsulinInfoConnected = connect(
     )
       .filter(note => !!note.insulin)
       .sort((noteA, noteB) => noteB.date - noteA.date)[0],
+    hoursOfinsulinDuration: selectActiveInsulinDuration(state),
   })
 )(ActiveInsulinInfo);
 

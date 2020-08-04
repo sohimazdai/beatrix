@@ -15,23 +15,29 @@ import { ChartBox } from '../../../../chart/chart-svg/ChartBox';
 import { ChartPolyline } from '../../../../chart/chart-svg/ChartPolyline';
 import { calculateDayChartDots } from '../../../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { selectNoteWithActiveInsulin } from '../../selectors/select-notes-with-active-insulin';
+import { selectActiveInsulinDuration } from '../../selectors/select-active-insulin-duration';
+import { ChartAxisPair } from '../../../../chart/chart-svg/ChartAxisPair';
+import { OXTimeTitles } from '../OXTimeTitles';
+
+const TIMESTEPS_AT_DAY = 24 * 60 / 5; // h * m / timeStep
 
 interface Props {
   activeInsulinNoteListByDay: INoteListByDay
-  widthRelation: number
+  hoursOfinsulinDuration: number
   userDiabetesProperties: IUserDiabetesProperties,
 };
 
 function ActiveInsulinChart(props: Props) {
   const {
     activeInsulinNoteListByDay,
-    widthRelation,
+    hoursOfinsulinDuration,
     userDiabetesProperties: { shortInsulinType },
   } = props;
 
   if (!activeInsulinNoteListByDay) return null;
 
   const chartConfig = new ChartConfig().getConfigs().activeInsulin;
+  const widthRelation = (hoursOfinsulinDuration * 60 / chartConfig.timeStepMinutes) / TIMESTEPS_AT_DAY;
 
   let polylineDotsData: ChartDotsData = React.useMemo(
     () => calculateDayChartDots({
@@ -51,7 +57,6 @@ function ActiveInsulinChart(props: Props) {
     <View style={styles.cardContent}>
       <View style={styles.chartView}>
         <ChartBox config={chartConfig}>
-
           <ChartPolyline
             widthRelation={widthRelation}
             polylineType={chartConfig.polylineType}
@@ -61,6 +66,7 @@ function ActiveInsulinChart(props: Props) {
             initGradientColor={chartConfig.initGradientColor}
             stopGradientColor={chartConfig.stopGradientColor}
           />
+          <ChartAxisPair config={chartConfig} />
         </ChartBox>
       </View>
     </View>
@@ -68,15 +74,11 @@ function ActiveInsulinChart(props: Props) {
 }
 
 export const ActiveInsulinChartConnected = connect(
-  (state: IStorage) => {
-    const activeInsulinChartProps = selectNoteWithActiveInsulin(state);
-
-    return {
-      activeInsulinNoteListByDay: activeInsulinChartProps.noteListByDay,
-      widthRelation: activeInsulinChartProps.widthRelation,
-      userDiabetesProperties: state.userDiabetesProperties,
-    }
-  },
+  (state: IStorage) => ({
+    activeInsulinNoteListByDay: selectNoteWithActiveInsulin(state),
+    hoursOfinsulinDuration: selectActiveInsulinDuration(state),
+    userDiabetesProperties: state.userDiabetesProperties,
+  }),
 )(ActiveInsulinChart);
 
 

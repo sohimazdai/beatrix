@@ -18,7 +18,7 @@ export interface ChartPolylineProps {
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    const { widthRelation } = props;
+    const { widthRelation = 1 } = props;
 
     const thereIsGradient = props.initGradientColor && props.stopGradientColor;
     const points = getPoints(props);
@@ -34,7 +34,7 @@ export function ChartPolyline(props: ChartPolylineProps) {
                 <Path
                     d={points}
                     stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
-                    strokeWidth={widthRelation ? 0 : 2}
+                    strokeWidth={widthRelation !== 1 ? 0 : 2}
                     strokeLinecap='round'
                     strokeLinejoin='round'
                     fill="transparent"
@@ -43,7 +43,7 @@ export function ChartPolyline(props: ChartPolylineProps) {
                 <Polyline
                     points={points}
                     stroke={props.polylineColor || "rgba(255, 255, 255, 0.64)"}
-                    strokeWidth={widthRelation ? 0 : 2}
+                    strokeWidth={widthRelation !== 1 ? 0 : 2}
                     strokeLinecap='round'
                     strokeLinejoin='round'
                     fill={props.chartPeriodType === ChartPeriodType.DAY ? "url(#grad)" : "transparent"}

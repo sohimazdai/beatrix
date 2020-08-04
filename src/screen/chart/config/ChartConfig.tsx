@@ -101,12 +101,12 @@ export class ChartConfig {
 
     getActiveInsulinConfig(): IChartConfiguration {
         return {
-            width: this.WIDTH,
+            width: this.WIDTH - 20,
             height: Dimensions.get("screen").width / 4,
             boxWidth: this.WIDTH,
             boxHeight: Dimensions.get("screen").width / 4,
             axisWidth: 2,
-            axisColor: '#AAAAAA',
+            axisColor: '#666666',
             basicPadding: this.BASIC_PADDING,
             yPadding: 1,
             dotRadius: this.DOT_RADIUS,
@@ -117,7 +117,6 @@ export class ChartConfig {
             stopGradientColor: '#7C89FF',
             axisTypes: [
                 ChartAxisType.OX,
-                ChartAxisType.OY,
             ],
             paddingTop: true,
             polylineType: PolylineType.REGULAR
