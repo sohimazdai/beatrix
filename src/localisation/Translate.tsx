@@ -1164,4 +1164,19 @@ const translateStore = {
     'es': 'Puede cambiar estos parámetros más adelante en la configuración',
     'ru': 'Вы можете изменить эти параметры позже в настройках',
   },
+  active_insulin_counter_description: {
+    'en': 'Remaining insulin from the last injection. This is an approximate value',
+    'es': 'Insulina restante de la última inyección. Este es un valor aproximado',
+    'ru': 'Оставшийся инсулин после последней инъекции. Это приблизительное значение',
+  },
+  to_observe_your_active_insuline_select_your_short_insulin_type_please: {
+    'en': 'To track insulin distribution over time, select your short insulin type',
+    'es': 'Para rastrear la distribución de insulina a lo largo del tiempo, seleccione el tipo de insulina corta',
+    'ru': 'Чтобы отслеживать распределение инсулина с течением времени, выберите короткий тип инсулина',
+  },
+  set_insulin_type: {
+    'en': 'Specify type',
+    'es': 'Especifique el tipo',
+    'ru': 'Указать тип',
+  },
 }

@@ -16,6 +16,19 @@ interface Props {
 }
 
 export class InsulinSettingsComponent extends Component<Props> {
+  onBack = () => {
+    const { navigation } = this.props;
+
+    const backPage =
+      navigation &&
+      navigation.state &&
+      navigation.state.params &&
+      navigation.state.params.backPage ||
+      'ProfileDiabetesSettings';
+
+    navigation.navigate(backPage);
+  };
+
   render() {
     return (
       <KeyboardAvoidingView
@@ -23,7 +36,7 @@ export class InsulinSettingsComponent extends Component<Props> {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <Hat
-          onBackPress={() => this.props.navigation.navigate('ProfileDiabetesSettings')}
+          onBackPress={this.onBack}
           title={i18nGet('insulin_settings')}
         />
         <View style={styles.scrollViewWrapWrap}>

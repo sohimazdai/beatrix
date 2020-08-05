@@ -26,6 +26,7 @@ export class DashboardCard extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   card: {
+    position: 'relative',
     overflow: 'visible',
     padding: 16,
     backgroundColor: Color.PRIMARY_WHITE,
