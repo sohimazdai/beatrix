@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { View, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
-import { DashboardCard } from '../../../shared/DashboardCard';
+import { DashboardCard } from '../../../shared/components/DashboardCard';
 
 import { IStorage } from '../../../../model/IStorage';
 import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/NoteListSelector';

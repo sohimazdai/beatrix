@@ -45,7 +45,7 @@ function getSHORTShortInsulinDistributionValue(stepFromStart: number) {
   return currentValue;
 }
 
-const shortInsulinDistribution = {
+export const shortInsulinDistribution = {
   [ShortInsulinType.ULTRA_SHORT]: [ //step by 5 minutes; 4 hours
     0, //0
     39 / 159, //5

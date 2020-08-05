@@ -41,6 +41,7 @@ export function Comp(props: ChartWrapProps) {
         noteList,
         selectedDotId,
         config,
+        noteListByDay
     } = props;
 
     let basicDotsData: ChartDotsData = React.useMemo(

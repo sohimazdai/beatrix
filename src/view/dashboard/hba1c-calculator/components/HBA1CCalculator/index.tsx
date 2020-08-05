@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Text, Button, StyleSheet, View } from 'react-native';
-import { DashboardCard } from '../../../../shared/DashboardCard';
+import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { Color } from '../../../../../constant/Color';
 import Tooltip from '../../../../../component/tooltip/Tooltip';

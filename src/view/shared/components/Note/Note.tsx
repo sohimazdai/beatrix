@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { INoteListNote } from '../../../model/INoteList';
-import { shadowOptions } from '../../../constant/ShadowOptions';
+import { INoteListNote } from '../../../../model/INoteList';
+import { shadowOptions } from '../../../../constant/ShadowOptions';
 
 interface Props {
     note?: INoteListNote

@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { IStorage } from '../../../../../model/IStorage';
-import { convertFlatNoteListToNoteListByDay } from '../../../../../store/selector/NoteListSelector';
 import { Color } from '../../../../../constant/Color';
 import { IUserDiabetesProperties } from '../../../../../model/IUserDiabetesProperties';
 import { ChartValueType, ChartPeriodType, ChartDotsData } from '../../../../../model/IChart';
-import { INoteList, INoteListByDay } from '../../../../../model/INoteList';
+import { INoteListByDay } from '../../../../../model/INoteList';
 import { ChartConfig } from '../../../../../screen/chart/config/ChartConfig';
 import { shadowOptions } from '../../../../../constant/ShadowOptions';
 import { ChartBox } from '../../../../chart/chart-svg/ChartBox';
@@ -17,7 +16,10 @@ import { calculateDayChartDots } from '../../../../../calculation-services/chart
 import { selectNoteWithActiveInsulin } from '../../selectors/select-notes-with-active-insulin';
 import { selectActiveInsulinDuration } from '../../selectors/select-active-insulin-duration';
 import { ChartAxisPair } from '../../../../chart/chart-svg/ChartAxisPair';
-import { OXTimeTitles } from '../OXTimeTitles';
+import { ChartNowLine } from '../ChartNowLine';
+import { ChartNet } from '../../../../chart/chart-svg/ChartNet';
+import { getWidthShiftLeft } from './get-width-shift-left';
+import { ActiveInsulinCounterConnected } from '../ActiveInsulinCounter';
 
 const TIMESTEPS_AT_DAY = 24 * 60 / 5; // h * m / timeStep
 
@@ -25,6 +27,7 @@ interface Props {
   activeInsulinNoteListByDay: INoteListByDay
   hoursOfinsulinDuration: number
   userDiabetesProperties: IUserDiabetesProperties,
+  oldestActiveInsulinDate: number,
 };
 
 function ActiveInsulinChart(props: Props) {
@@ -32,12 +35,18 @@ function ActiveInsulinChart(props: Props) {
     activeInsulinNoteListByDay,
     hoursOfinsulinDuration,
     userDiabetesProperties: { shortInsulinType },
+    oldestActiveInsulinDate
   } = props;
 
   if (!activeInsulinNoteListByDay) return null;
 
   const chartConfig = new ChartConfig().getConfigs().activeInsulin;
   const widthRelation = (hoursOfinsulinDuration * 60 / chartConfig.timeStepMinutes) / TIMESTEPS_AT_DAY;
+  const widthShiftLeft = getWidthShiftLeft(
+    hoursOfinsulinDuration,
+    oldestActiveInsulinDate,
+    chartConfig
+  )
 
   let polylineDotsData: ChartDotsData = React.useMemo(
     () => calculateDayChartDots({
@@ -57,8 +66,21 @@ function ActiveInsulinChart(props: Props) {
     <View style={styles.cardContent}>
       <View style={styles.chartView}>
         <ChartBox config={chartConfig}>
+          <ChartNet
+            cfg={chartConfig}
+            maxValue={polylineDotsData.maxValue}
+            minValue={polylineDotsData.minValue}
+            type={ChartValueType.INSULIN}
+            periodType={ChartPeriodType.PARTICULAR}
+            paddingTop={chartConfig.paddingTop}
+            paddingBottom={chartConfig.paddingBottom}
+            renderCritical={false}
+            selectedPeriod={ChartPeriodType.PARTICULAR}
+            currentDate={new Date()}
+          />
           <ChartPolyline
             widthRelation={widthRelation}
+            widthShiftLeft={widthShiftLeft}
             polylineType={chartConfig.polylineType}
             dots={polylineDotsData.dots}
             chartPeriodType={ChartPeriodType.DAY}
@@ -66,6 +88,7 @@ function ActiveInsulinChart(props: Props) {
             initGradientColor={chartConfig.initGradientColor}
             stopGradientColor={chartConfig.stopGradientColor}
           />
+          <ChartNowLine cfg={chartConfig} />
           <ChartAxisPair config={chartConfig} />
         </ChartBox>
       </View>
@@ -75,7 +98,8 @@ function ActiveInsulinChart(props: Props) {
 
 export const ActiveInsulinChartConnected = connect(
   (state: IStorage) => ({
-    activeInsulinNoteListByDay: selectNoteWithActiveInsulin(state),
+    activeInsulinNoteListByDay: selectNoteWithActiveInsulin(state).noteListByDay,
+    oldestActiveInsulinDate: selectNoteWithActiveInsulin(state).oldestNoteTime,
     hoursOfinsulinDuration: selectActiveInsulinDuration(state),
     userDiabetesProperties: state.userDiabetesProperties,
   }),
@@ -108,8 +132,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-
-    overflow: 'hidden'
   },
   emptyListText: {
     fontSize: 16,

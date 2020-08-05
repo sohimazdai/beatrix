@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import { ClocsIconTooltipedConnected } from '../../../component/icon/tooltiped/ClocsIconTooltiped';
-import { GlycemiaIconConnected } from '../../../component/icon/tooltiped/GlycemiaIcon';
-import { BreadUnitsIconConnected } from '../../../component/icon/tooltiped/BreadUnitsIcon';
-import { ShortInsulinIconConnected } from '../../../component/icon/tooltiped/ShortInsulinIcon';
-import { LongInsulinIconConnected } from '../../../component/icon/tooltiped/LongInsulinIcon';
+import { ClocsIconTooltipedConnected } from '../../../../component/icon/tooltiped/ClocsIconTooltiped';
+import { GlycemiaIconConnected } from '../../../../component/icon/tooltiped/GlycemiaIcon';
+import { BreadUnitsIconConnected } from '../../../../component/icon/tooltiped/BreadUnitsIcon';
+import { ShortInsulinIconConnected } from '../../../../component/icon/tooltiped/ShortInsulinIcon';
+import { LongInsulinIconConnected } from '../../../../component/icon/tooltiped/LongInsulinIcon';
 
 export function HorizontalIconBar() {
   return (

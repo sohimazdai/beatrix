@@ -4,8 +4,6 @@ import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/N
 import { INoteListByDay, INoteListNote } from '../../../../model/INoteList';
 import { ShortInsulinType } from '../../../../model/IUserDiabetesProperties';
 import { DateHelper } from '../../../../utils/DateHelper';
-import { shortInsulinDistributionStepNumber } from '../../../../calculation-services/short-insulin-distribution';
-import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
 
 export const selectNoteWithActiveInsulin = createSelector(
   (state: IStorage) => convertFlatNoteListToNoteListByDay(state),
@@ -16,8 +14,11 @@ export const selectNoteWithActiveInsulin = createSelector(
 
 function getActiveInsulinNoteList(
   noteListByDay: INoteListByDay,
-  shortInsulinType: ShortInsulinType
-): INoteListByDay {
+  shortInsulinType: ShortInsulinType,
+): {
+  noteListByDay: INoteListByDay,
+  oldestNoteTime: number,
+} {
   const offset = shortInsulinType === ShortInsulinType.SHORT
     ? 8.5 * 2
     : 4 * 2;
@@ -35,7 +36,12 @@ function getActiveInsulinNoteList(
     return note.date > startDate.getTime() && note.date < currentDate.getTime()
   });
 
-  if (filteredNotes.length === 0) return null;
+  if (filteredNotes.length === 0) {
+    return {
+      noteListByDay: {},
+      oldestNoteTime: 0,
+    };
+  }
 
   let sortedNotes = filteredNotes.sort((note1, note2) => note1.date - note2.date);
   let oldestNote = sortedNotes[0] && sortedNotes[0].date;
@@ -61,5 +67,8 @@ function getActiveInsulinNoteList(
     [DateHelper.today()]: noteList
   };
 
-  return newNoteListByDay;
+  return {
+    noteListByDay: newNoteListByDay,
+    oldestNoteTime: oldestNote,
+  }
 }

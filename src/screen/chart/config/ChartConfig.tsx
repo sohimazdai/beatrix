@@ -102,13 +102,12 @@ export class ChartConfig {
     getActiveInsulinConfig(): IChartConfiguration {
         return {
             width: this.WIDTH - 20,
-            height: Dimensions.get("screen").width / 4,
+            height: Dimensions.get("screen").width / 5,
             boxWidth: this.WIDTH,
-            boxHeight: Dimensions.get("screen").width / 4,
+            boxHeight: Dimensions.get("screen").width / 5,
             axisWidth: 2,
             axisColor: '#666666',
-            basicPadding: this.BASIC_PADDING,
-            yPadding: 1,
+            netColor: '#999999',
             dotRadius: this.DOT_RADIUS,
             reversedY: false,
             timeStepMinutes: this.TIME_STEP_MINUTES,
@@ -117,7 +116,11 @@ export class ChartConfig {
             stopGradientColor: '#7C89FF',
             axisTypes: [
                 ChartAxisType.OX,
+                ChartAxisType.OY,
             ],
+            basicPadding: this.BASIC_PADDING,
+            yPadding: 1,
+            paddingBottom: false,
             paddingTop: true,
             polylineType: PolylineType.REGULAR
         }

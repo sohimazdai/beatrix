@@ -6,6 +6,8 @@ import { Measures } from '../../../localisation/Measures';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
+import { selectActiveInsulinDuration } from '../../dashboard/active-insulin-info/selectors/select-active-insulin-duration';
+import getTitlesNumber from '../../shared/modules/active-insulin/get-titles-number';
 
 export interface ChartNetProps {
     maxValue?: number
@@ -23,7 +25,7 @@ export interface ChartNetProps {
     type?: ChartValueType
     currentDate: Date
     selectedPeriod: ChartPeriodType
-
+    hoursOfInsulinDuration: number
     userDiabetesProperties: IUserDiabetesProperties
 }
 
@@ -95,13 +97,18 @@ function renderCriticals(props: ChartNetProps) {
     return toRender
 }
 
-const mapState = (state: IStorage) => ({ userDiabetesProperties: state.userDiabetesProperties });
+const mapState = (state: IStorage) => ({
+    userDiabetesProperties: state.userDiabetesProperties,
+    hoursOfInsulinDuration: selectActiveInsulinDuration(state),
+});
 
 export const ChartNet = connect(mapState)(Component)
 
 function verticalLines(props: ChartNetProps) {
-    const firstX = props.cfg.basicPadding;
-    const firstY = props.paddingTop ? props.cfg.basicPadding : 0;
+    const { hoursOfInsulinDuration, cfg } = props;
+
+    const firstX = cfg.basicPadding;
+    const firstY = props.paddingTop ? cfg.basicPadding : 0;
     let lapStep: number = 0;
     let res: IChartDot[] = [{
         x: firstX,
@@ -109,6 +116,30 @@ function verticalLines(props: ChartNetProps) {
         id: 0
     }];
     switch (props.periodType) {
+        case ChartPeriodType.PARTICULAR:
+            const verticalLinesCount = getTitlesNumber(hoursOfInsulinDuration);
+            lapStep = getAvailableZone(props.cfg.boxWidth, props) / verticalLinesCount;
+
+            for (let i = 0; i < VERTICAL_DAY_LINES_COUNT; i++) {
+                res.push({
+                    x: res[res.length - 1].x + lapStep,
+                    y: res[res.length - 1].y,
+                    id: res[res.length - 1].id + lapStep
+                })
+            }
+
+            return res.map((dot, index) => {
+                return index != 0 && <Line
+                    key={dot.id}
+                    x1={dot.x}
+                    y1={dot.y}
+                    x2={dot.x}
+                    y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
+                    stroke={props.cfg.netColor || 'rgba(102, 102, 102, 0.38)'}
+                    strokeWidth={1}
+                />
+            });
+
         case ChartPeriodType.DAY:
             lapStep = getAvailableZone(props.cfg.boxWidth, props) / VERTICAL_DAY_LINES_COUNT;
             for (let i = 0; i < VERTICAL_DAY_LINES_COUNT; i++) {

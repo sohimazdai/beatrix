@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DashboardCard } from '../../../../shared/DashboardCard';
+import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { PieChartConnected } from '../PieChart';
 
 import { StatisticsType, StatisticsViewType } from '../../entities';

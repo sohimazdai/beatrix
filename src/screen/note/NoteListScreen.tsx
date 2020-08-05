@@ -8,7 +8,7 @@ import {
   NavigationScreenProp,
   NavigationState
 } from "react-navigation";
-import { Note } from "../../view/shared/Note/Note";
+import { Note } from "../../view/shared/components/Note/Note";
 import { convertFlatNoteListToNoteListByDay } from "../../store/selector/NoteListSelector";
 import { createChangeInteractive } from "../../store/modules/interactive/interactive";
 import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-popup/button/NoteCreationPopupButton";

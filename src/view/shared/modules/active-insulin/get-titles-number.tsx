@@ -1,7 +1,7 @@
 export default function getTitlesNumber(hours: number) {
   if (hours <= 6) return hours;
 
-  if (hours > 12) return hours / 4;
+  if (hours > 12) return hours / 3;
 
-  return hours / 2;
+  return hours / 3;
 }

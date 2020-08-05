@@ -60,7 +60,7 @@ export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
 
 function getGroundDots(props: ChartWrapProps, noteList: INoteList): IChartDot[] {
     let groundDots: IChartDot[] = [];
-    Object.values(noteList).map(note => {
+    noteList && Object.values(noteList).map(note => {
         groundDots.push({
             x: note.date,
             y: note[props.type],

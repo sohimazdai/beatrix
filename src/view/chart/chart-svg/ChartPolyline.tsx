@@ -15,14 +15,16 @@ export interface ChartPolylineProps {
     stopGradientColor?: string;
     chartPeriodType?: ChartPeriodType
     widthRelation?: number
+    widthShiftLeft?: number
 }
 
 export function ChartPolyline(props: ChartPolylineProps) {
-    const { widthRelation = 1 } = props;
+    const { widthRelation = 1, widthShiftLeft = 0 } = props;
 
     const thereIsGradient = props.initGradientColor && props.stopGradientColor;
     const points = getPoints(props);
-    const transform = 'scale(' + 1 / widthRelation + ', 1)';
+    const transform = `scale(${1 / widthRelation}, 1)`
+    const translateX = -widthShiftLeft;
 
     return (
         <>
@@ -48,6 +50,7 @@ export function ChartPolyline(props: ChartPolylineProps) {
                     strokeLinejoin='round'
                     fill={props.chartPeriodType === ChartPeriodType.DAY ? "url(#grad)" : "transparent"}
                     transform={transform}
+                    translateX={translateX}
                 />}
         </>
     )

@@ -8,16 +8,19 @@ import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
 import { selectNoteWithActiveInsulin } from './select-notes-with-active-insulin';
 
 export const selectActiveInsulinDuration = createSelector(
-  (state: IStorage) => selectNoteWithActiveInsulin(state),
+  (state: IStorage) => selectNoteWithActiveInsulin(state).noteListByDay,
   (state: IStorage) => state.userDiabetesProperties.shortInsulinType,
-  getWidthRelation
+  getActiveInsulinDuration
 )
 
 
-function getWidthRelation(
+function getActiveInsulinDuration(
   activeInsulinNotesByDay: INoteListByDay,
   shortInsulinType: ShortInsulinType,
 ): number {
+
+  if (!activeInsulinNotesByDay) return 0;
+
   let lastNoteHour = 0;
 
   const chartConfig = new ChartConfig().getConfigs().activeInsulin;
@@ -25,7 +28,7 @@ function getWidthRelation(
   const insulinActionTimeStepsNumber = shortInsulinDistributionStepNumber[shortInsulinType];
   const insulinActionHours = insulinActionTimeStepsNumber * chartConfig.timeStepMinutes / 60;
 
-  Object.values(activeInsulinNotesByDay[DateHelper.today()]).forEach((note) => {
+  activeInsulinNotesByDay[DateHelper.today()] && Object.values(activeInsulinNotesByDay[DateHelper.today()]).forEach((note) => {
     const noteDatePlusInsulin = new Date(note.date);
     noteDatePlusInsulin.setHours(noteDatePlusInsulin.getHours() + insulinActionHours);
 
@@ -39,10 +42,8 @@ function getWidthRelation(
       : hourTop
   });
 
-  if (lastNoteHour % 4 !== 0) lastNoteHour++;
-  if (lastNoteHour % 4 !== 0) lastNoteHour++;
-  if (lastNoteHour % 4 !== 0) lastNoteHour++;
-  if (lastNoteHour % 4 !== 0) lastNoteHour++;
+  if (lastNoteHour % 3 !== 0) lastNoteHour++;
+  if (lastNoteHour % 3 !== 0) lastNoteHour++;
 
   return lastNoteHour;
 }
