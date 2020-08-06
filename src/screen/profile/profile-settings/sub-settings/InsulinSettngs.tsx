@@ -9,6 +9,7 @@ import { IStorage } from '../../../../model/IStorage';
 import { ProfileSettingsSheduleTableConnect } from '../../../../view/profile/settings/shedule-picker/ProfileSettingsSheduleTable';
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
 import { i18nGet } from '../../../../localisation/Translate';
+import { ShortInsulinTypePickerConnect } from '../../../../view/profile/settings/select-picker/ShortInsulinTypePicker';
 
 interface Props {
   interactive: IInteractive
@@ -42,6 +43,7 @@ export class InsulinSettingsComponent extends Component<Props> {
         <View style={styles.scrollViewWrapWrap}>
           <View style={styles.scrollViewWrap}>
             <ScrollView style={styles.scrollView}>
+              <ShortInsulinTypePickerConnect />
               <ProfileSettingsSheduleTableConnect
                 sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
               />

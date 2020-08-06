@@ -119,7 +119,7 @@ class ActiveInsulinCardContent extends React.Component<Props, State> {
     const initialHour = new Date(oldestNoteTime).getHours();
 
     return (
-      <DashboardCard>
+      <>
         <ActiveInsulinCardHeader />
         <ActiveInsulinChartConnected />
         <OXTimeTitles
@@ -130,7 +130,7 @@ class ActiveInsulinCardContent extends React.Component<Props, State> {
           {message}
         </Text>
         <ActiveInsulinCounterConnected now={now} />
-      </DashboardCard>
+      </>
     );
   }
 }

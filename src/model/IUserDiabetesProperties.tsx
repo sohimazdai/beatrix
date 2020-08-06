@@ -1,6 +1,6 @@
 export enum ShortInsulinType {
     SHORT = 'short',
-    ULTRA_SHORT = 'ultra-short'
+    ULTRA_SHORT = 'ultra_short'
 }
 
 export enum GlycemiaMeasuringType {

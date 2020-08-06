@@ -10,6 +10,7 @@ import { InsulinSettingsLink } from '../InsulinSettingsLink';
 import ActiveInsulinCardHeader from '../ActiveInsulinCardHeader';
 import { ActiveInsulinCardContentConnected } from '../ActiveInsulinCardContent';
 import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-navigation';
+import { DateHelper } from '../../../../../utils/DateHelper';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -21,14 +22,16 @@ function ActiveInsulinInfo(props: Props) {
 
   const { activeInsulinNoteListByDay, userDiabetesProperties, navigation } = props;
 
-  if (!activeInsulinNoteListByDay) return null;
+  if (!activeInsulinNoteListByDay[DateHelper.today()]) return null;
 
   return (
     <DashboardCard>
-      <ActiveInsulinCardHeader />
       {userDiabetesProperties.shortInsulinType
         ? <ActiveInsulinCardContentConnected />
-        : <InsulinSettingsLink navigation={navigation} />
+        : <>
+          <ActiveInsulinCardHeader />
+          <InsulinSettingsLink navigation={navigation} />
+        </>
       }
     </DashboardCard>
   );

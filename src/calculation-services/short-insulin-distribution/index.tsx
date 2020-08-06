@@ -29,20 +29,9 @@ function getUltraShortInsulinDistributionValueChange(stepFromStart: number) {
 
 
 function getSHORTShortInsulinDistributionValue(stepFromStart: number) {
-  const timeStep = shortInsulinDistributionStep[ShortInsulinType.SHORT];
-  const nearestFloorArrayIndex = Math.floor(stepFromStart * 5 / timeStep);
-  const nearestCeilArrayIndex = nearestFloorArrayIndex + 1;
   const distribution = shortInsulinDistribution[ShortInsulinType.SHORT];
 
-  const range: number =
-    distribution[nearestCeilArrayIndex] - distribution[nearestFloorArrayIndex];
-  const stepTimeValue: number
-    = range / timeStep / 5;
-  const periodPart: number = (stepFromStart / timeStep) - Math.floor(stepFromStart / timeStep);
-  const currentValue: number =
-    distribution[nearestFloorArrayIndex] + periodPart * stepTimeValue;
-
-  return currentValue;
+  return distribution[stepFromStart] - distribution[stepFromStart - 1];
 }
 
 export const shortInsulinDistribution = {
@@ -100,7 +89,12 @@ export const shortInsulinDistribution = {
     2 / 159, //235
     0, //240
   ],
-  [ShortInsulinType.SHORT]: [ //step by 30 minutes; 8,5 hours
+  [ShortInsulinType.SHORT]: convertShortDistributionFormat(),
+}
+
+
+function convertShortDistributionFormat() {
+  const shortDistribution = [ //step by 30 minutes; 8,5 hours
     0, //0
     7 / 104, //30
     33 / 104, //60
@@ -119,5 +113,24 @@ export const shortInsulinDistribution = {
     7 / 104, //450
     4 / 104, //480
     0, //510
-  ]
+  ];
+  let result: number[] = [];
+
+  shortDistribution.forEach((value, index) => {
+    if (!index) {
+      result.push(value);
+      return;
+    }
+
+    const prevValue = shortDistribution[index - 1];
+    const range = value - prevValue;
+
+    const step = range / 5;
+    for (let i = 0; i < 5; i++) {
+      result.push(prevValue + i * step);
+    }
+  })
+
+  return result;
 }
+

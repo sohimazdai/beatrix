@@ -1179,4 +1179,37 @@ const translateStore = {
     'es': 'Especifique el tipo',
     'ru': 'Указать тип',
   },
+  it_needs_to_show_charts_and_calculating_active_insulin: {
+    'en': 'This is necessary for calculating active insulin and charts',
+    'es': 'Esto es necesario para calcular la insulina activa y los gráficos',
+    'ru': 'Это необходимо для расчета активного инсулина и графиков',
+  },
+  short_insulin_brief: {
+    'en':
+      'The onset of action is usually 30-60 minutes.\n' +
+      'The maximum effect occurs in 2-4 hours.\n' +
+      'The total duration of action is up to 6-8 hours',
+    'es':
+      'El inicio de acción suele ser de 30 a 60 minutos.\n' +
+      'El efecto máximo ocurre en 2-4 horas.\n' +
+      'La duración total de la acción es de hasta 6-8 horas.',
+    'ru':
+      'Начало действия обычно составляет 30-60 минут.\n' +
+      'Максимальный эффект наступает через 2-4 часа.\n' +
+      'Общая продолжительность действия до 6-8 часов',
+  },
+  ultra_short_insulin_brief: {
+    'en':
+      'The onset of action is usually 10-20 minutes.\n' +
+      'The maximum effect occurs in 1-2 hours.\n' +
+      'The total duration of action is up to 4-5 hours',
+    'es':
+      'El inicio de acción suele ser de 10 a 20 minutos.' +
+      'El efecto máximo ocurre en 1-2 horas.' +
+      'La duración total de la acción es de hasta 4-5 horas',
+    'ru':
+      'Начало действия обычно составляет 10-20 минут.\n' +
+      'Максимальный эффект наступает через 1-2 часа.\n' +
+      'Общая продолжительность действия до 4-5 часов',
+  },
 }

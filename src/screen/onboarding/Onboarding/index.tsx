@@ -13,6 +13,8 @@ import { Measures } from '../../../localisation/Measures';
 import { BlockHat } from '../../../component/hat/BlockHat';
 import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
 import { appAnalytics } from '../../../app/Analytics';
+import Tooltip from '../../../component/tooltip/Tooltip';
+import { InfoIcon } from '../../../component/icon/InfoIcon';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties
@@ -132,10 +134,6 @@ class Onboarding extends React.Component<Props, State> {
   renderInsulinBlock = () => {
     const { selectedInsulinType, isUserUsingInsulin } = this.state;
 
-    const touchableStyle = isUserUsingInsulin
-      ? { ...styles.checkboxTouchable, ...styles.checkboxTouchableActive }
-      : { ...styles.checkboxTouchable };
-
     const shortStyles = selectedInsulinType === ShortInsulinType.SHORT
       ? { ...styles.typePickerItem, ...styles.typePickerItemActive }
       : { ...styles.typePickerItem };
@@ -146,42 +144,51 @@ class Onboarding extends React.Component<Props, State> {
 
     return (
       <View style={styles.insulinPickerView}>
-        <View style={styles.checkboxView}>
-          <TouchableOpacity onPress={this.checkUsingInsulin} style={touchableStyle} />
-          <Text style={styles.checkboxText}>
-            {i18nGet('do_you_use_insulin')}
+        <View style={styles.insulinPickerHeader}>
+          <Text style={styles.label}>
+            {i18nGet('select_insulin_type_you_use')}
           </Text>
+          <Tooltip
+            actionType="press"
+            popover={(
+              <View>
+                <Text style={styles.tooltipText}>
+                  {i18nGet('short_insulin') + ':\n'}
+                  {i18nGet('short_insulin_brief')}
+                </Text>
+                <Text style={{ ...styles.tooltipText, paddingTop: 8 }}>
+                  {i18nGet('ultra_short_insulin') + ':\n'}
+                  {i18nGet('ultra_short_insulin_brief')}
+                </Text>
+              </View>
+            )}
+          >
+            <InfoIcon textColor={Color.PRIMARY_WHITE} roundFill={Color.PRIMARY} />
+          </Tooltip>
         </View>
-        {isUserUsingInsulin && (
-          <>
-            <Text style={styles.label}>
-              {i18nGet('select_insulin_type_you_use')}
-            </Text>
-            <View style={styles.typePicker}>
-              <View style={shadowOptions}>
-                <TouchableOpacity
-                  onPress={() => this.selectInsulinType(ShortInsulinType.SHORT)}
-                  style={shortStyles}
-                >
-                  <Text style={styles.typePickerItemText}>
-                    {i18nGet('short_insulin')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={shadowOptions}>
-                <TouchableOpacity
-                  onPress={() => this.selectInsulinType(ShortInsulinType.ULTRA_SHORT)}
-                  style={ultraShortStyles}
-                >
-                  <Text style={styles.typePickerItemText}>
-                    {i18nGet('ultra_short_insulin')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </>
-        )}
-      </View>
+        <View style={styles.typePicker}>
+          <View style={styles.insulinPickerItem}>
+            <TouchableOpacity
+              onPress={() => this.selectInsulinType(ShortInsulinType.SHORT)}
+              style={shortStyles}
+            >
+              <Text style={styles.typePickerItemText}>
+                {i18nGet('short_insulin')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.insulinPickerItem}>
+            <TouchableOpacity
+              onPress={() => this.selectInsulinType(ShortInsulinType.ULTRA_SHORT)}
+              style={ultraShortStyles}
+            >
+              <Text style={styles.typePickerItemText}>
+                {i18nGet('ultra_short_insulin')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View >
     );
   }
 
@@ -306,10 +313,16 @@ const styles = StyleSheet.create({
     backgroundColor: Color.WHITE,
     ...shadowOptions,
   },
-  checkboxView: {
+  insulinPickerHeader: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+  },
+  tooltipText: {
+    fontSize: 15,
+    color: Color.PRIMARY_WHITE,
+  },
+  insulinPickerItem: {
+    ...shadowOptions,
   },
   checkboxTouchable: {
     borderRadius: 3,
@@ -346,7 +359,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   label: {
-    marginTop: 16,
     fontSize: 16,
     color: Color.TEXT_DARK_GRAY,
   },
