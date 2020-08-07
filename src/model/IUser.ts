@@ -15,7 +15,7 @@ export interface IUser {
     isAuthed?: boolean
     isPendingVerification?: boolean
 
-    isOnboardingCompleted?: boolean
+    isNeedToShowOnboarding?: boolean
 }
 
 export enum AuthType {

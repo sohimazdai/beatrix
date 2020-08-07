@@ -10,26 +10,11 @@ export const shortInsulinDistributionStepNumber = {
   [ShortInsulinType.SHORT]: 102,
 };
 
-export const getShortInsulinDistributionValueByTimeStep = (
-  stepFromStart: number, type: ShortInsulinType
-): number => {
-  switch (type) {
-    case ShortInsulinType.ULTRA_SHORT:
-      return getUltraShortInsulinDistributionValueChange(stepFromStart);
-    case ShortInsulinType.SHORT:
-      return getSHORTShortInsulinDistributionValue(stepFromStart);
-  }
-};
-
-function getUltraShortInsulinDistributionValueChange(stepFromStart: number) {
-  const distribution = shortInsulinDistribution[ShortInsulinType.ULTRA_SHORT];
-
-  return distribution[stepFromStart] - distribution[stepFromStart - 1];
-}
-
-
-function getSHORTShortInsulinDistributionValue(stepFromStart: number) {
-  const distribution = shortInsulinDistribution[ShortInsulinType.SHORT];
+export function getShortInsulinDistributionValueByTimeStep(
+  stepFromStart: number,
+  type: ShortInsulinType
+) {
+  const distribution = shortInsulinDistribution[type];
 
   return distribution[stepFromStart] - distribution[stepFromStart - 1];
 }

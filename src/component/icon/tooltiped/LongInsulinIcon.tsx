@@ -20,9 +20,7 @@ const LongInsulinIconComponent = (props: Props) => {
 
   return (
     <Tooltip
-      onOpen={() => appAnalytics.sendEventWithProps(
-        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'longInsulin' }
-      )}
+      analyticsKeyOnOpen="longInsulin"
       actionType={'press'}
       popover={(
         <View>

@@ -11,6 +11,7 @@ import Triangle from './Triangle';
 import { ScreenWidth, ScreenHeight, isIOS } from './helpers';
 import getTooltipCoordinate from './getTooltipCoordinate';
 import { Color } from '../../constant/Color';
+import { appAnalytics } from '../../app/Analytics';
 
 const defaultProps = {
   pointerColor: Color.PRIMARY,
@@ -38,6 +39,7 @@ interface State {
 
 interface Props {
   onOpen?: () => void
+  analyticsKeyOnOpen: string
   popover: React.ReactNode,
   actionType: 'press' | 'longPress' | 'none',
 };
@@ -53,6 +55,16 @@ class Tooltip extends React.Component<Props, State> {
 
   renderedElement;
   timeout;
+
+  handleOpen = () => {
+    const { onOpen, analyticsKeyOnOpen } = this.props;
+
+    appAnalytics.sendEventWithProps(appAnalytics.events.TOOLTIP_SHOWN, {
+      tooltipName: analyticsKeyOnOpen
+    });
+
+    onOpen && onOpen();
+  }
 
   toggleTooltip = () => {
     const { onClose } = defaultProps;
@@ -208,7 +220,6 @@ class Tooltip extends React.Component<Props, State> {
   render() {
     const { isVisible } = this.state;
     const { onClose, withOverlay, overlayColor } = defaultProps;
-    const { onOpen } = this.props;
 
     return (
       <View collapsable={false} ref={e => (this.renderedElement = e)}>
@@ -218,7 +229,7 @@ class Tooltip extends React.Component<Props, State> {
           visible={isVisible}
           transparent
           onDismiss={onClose}
-          onShow={onOpen}
+          onShow={this.handleOpen}
           onRequestClose={onClose}
         >
           <TouchableOpacity

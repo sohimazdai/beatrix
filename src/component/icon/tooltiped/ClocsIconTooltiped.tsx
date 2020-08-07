@@ -16,9 +16,7 @@ const ClocsIconTooltipedComponent = (props: Props) => {
 
   return (
     <Tooltip
-      onOpen={() => appAnalytics.sendEventWithProps(
-        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'clocks' }
-      )}
+      analyticsKeyOnOpen="clocks"
       actionType={'press'}
       popover={(
         <View>

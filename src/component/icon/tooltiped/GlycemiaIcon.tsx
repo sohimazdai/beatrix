@@ -32,9 +32,7 @@ const GlucometerIconComponent = (props: Props) => {
     )
   return (
     <Tooltip
-      onOpen={() => appAnalytics.sendEventWithProps(
-        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'glycemia' }
-      )}
+      analyticsKeyOnOpen="glycemia"
       actionType={'press'}
       popover={(
         <View>

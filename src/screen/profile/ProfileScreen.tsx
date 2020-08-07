@@ -45,29 +45,44 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                             <ProfileItem
                                 title={i18nGet('diabetic_profile')}
                                 description={i18nGet('about_diabetes_profile')}
-                                activeElement={<TouchableOpacity onPress={this.onProfileSettingsPress}>
-                                    <Text style={styles.activeElementToSettings}>
-                                        {i18nGet('go_to')}
-                                    </Text>
-                                </TouchableOpacity>}
+                                activeElement={(
+                                    <TouchableOpacity
+                                        style={styles.touchable}
+                                        onPress={this.onProfileSettingsPress}
+                                    >
+                                        <Text style={styles.activeElementToSettings}>
+                                            {i18nGet('go_to')}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
                             />
                             <ProfileItem
                                 title={i18nGet('export_data')}
                                 description={i18nGet('export_data_description')}
-                                activeElement={<TouchableOpacity onPress={this.onExportDataPress}>
-                                    <Text style={styles.activeElementToSettings}>
-                                        {i18nGet('go_to')}
-                                    </Text>
-                                </TouchableOpacity>}
+                                activeElement={(
+                                    <TouchableOpacity
+                                        style={styles.touchable}
+                                        onPress={this.onExportDataPress}
+                                    >
+                                        <Text style={styles.activeElementToSettings}>
+                                            {i18nGet('go_to')}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
                             />
                             <ProfileItem
                                 description={i18nGet('log_out')}
                                 hint={i18nGet('log_out_hint')}
-                                activeElement={<TouchableOpacity onPress={this.props.onLogOut}>
-                                    <Text style={styles.activeElementExit}>
-                                        {i18nGet('leave')}
-                                    </Text>
-                                </TouchableOpacity>}
+                                activeElement={(
+                                    <TouchableOpacity
+                                        onPress={this.props.onLogOut}
+                                        style={styles.touchable}
+                                    >
+                                        <Text style={styles.activeElementExit}>
+                                            {i18nGet('leave')}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
                             />
                         </ScrollView>
                     </View>
@@ -148,5 +163,12 @@ const styles = StyleSheet.create({
     activeElementToSettings: {
         fontSize: 16,
         color: '#2E3858'
+    },
+    touchable: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
     }
 })

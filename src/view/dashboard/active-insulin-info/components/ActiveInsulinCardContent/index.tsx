@@ -17,6 +17,7 @@ import { ActiveInsulinCounterConnected } from '../ActiveInsulinCounter';
 import ActiveInsulinCardHeader from '../ActiveInsulinCardHeader';
 import checkThatInsulinIsActive from './check-that-insulin-is-active';
 import calculateActiveInsulinTime from './calculate-active-insulin-time';
+import { IUserDiabetesProperties } from '../../../../../model/IUserDiabetesProperties';
 
 interface Props {
   lastNote?: INoteListNote,
@@ -24,6 +25,7 @@ interface Props {
   hoursOfinsulinDuration: number,
   oldestNoteTime: number
   activeInsulinNoteListByDay: INoteListByDay
+  userDiabetesProperties: IUserDiabetesProperties
 };
 
 interface State {
@@ -83,7 +85,8 @@ class ActiveInsulinCardContent extends React.Component<Props, State> {
   };
 
   timer = () => {
-    const { lastNote, lastYesterdayNote } = this.props;
+    const { lastNote, lastYesterdayNote, userDiabetesProperties } = this.props;
+    const { shortInsulinType } = userDiabetesProperties;
     const noteToUpdate = lastNote || lastYesterdayNote;
 
     if (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) {
@@ -91,7 +94,7 @@ class ActiveInsulinCardContent extends React.Component<Props, State> {
       return;
     }
 
-    const expiresIn = calculateActiveInsulinTime(noteToUpdate.date);
+    const expiresIn = calculateActiveInsulinTime(noteToUpdate.date, shortInsulinType);
 
     this.setState({
       ...expiresIn,
@@ -150,6 +153,7 @@ export const ActiveInsulinCardContentConnected = connect(
     hoursOfinsulinDuration: selectActiveInsulinDuration(state),
     oldestNoteTime: selectNoteWithActiveInsulin(state).oldestNoteTime,
     activeInsulinNoteListByDay: selectNoteWithActiveInsulin(state).noteListByDay,
+    userDiabetesProperties: state.userDiabetesProperties,
   })
 )(ActiveInsulinCardContent);
 

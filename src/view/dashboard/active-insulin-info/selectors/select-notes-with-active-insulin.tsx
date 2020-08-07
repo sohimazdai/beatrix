@@ -20,8 +20,8 @@ function getActiveInsulinNoteList(
   oldestNoteTime: number,
 } {
   const offset = shortInsulinType === ShortInsulinType.SHORT
-    ? 8.5 * 2
-    : 4 * 2;
+    ? 8.5
+    : 4;
 
   const currentDate = new Date();
   const startDate = new Date();
@@ -32,9 +32,11 @@ function getActiveInsulinNoteList(
     ...Object.values(noteListByDay[DateHelper.today()] || {}),
   ];
 
-  const filteredNotes = notes.filter(note => {
-    return note.date > startDate.getTime() && note.date < currentDate.getTime()
-  });
+  const filteredNotes = notes
+    .filter(note => !!note.insulin)
+    .filter(note => {
+      return note.date > startDate.getTime() && note.date < currentDate.getTime()
+    });
 
   if (filteredNotes.length === 0) {
     return {

@@ -22,7 +22,6 @@ interface Props {
 };
 
 interface State {
-  isUserUsingInsulin: boolean,
   selectedInsulinType?: ShortInsulinType
   selectedGlycemiaMeasuringType?: GlycemiaMeasuringType
   selectedCarbsMeasuringType?: CarbsMeasuringType
@@ -44,7 +43,6 @@ class Onboarding extends React.Component<Props, State> {
     const { isUserUsingInsulin, selectedInsulinType } = this.state;
 
     this.setState({
-      isUserUsingInsulin: !isUserUsingInsulin,
       selectedInsulinType: isUserUsingInsulin
         ? null
         : selectedInsulinType,
@@ -72,7 +70,6 @@ class Onboarding extends React.Component<Props, State> {
   completeOnboarding = () => {
     const { completeOnboarding, userDiabetesProperties } = this.props;
     const {
-      isUserUsingInsulin,
       selectedInsulinType,
       selectedGlycemiaMeasuringType,
       selectedCarbsMeasuringType,
@@ -87,22 +84,14 @@ class Onboarding extends React.Component<Props, State> {
       ),
     };
 
-    if (isUserUsingInsulin && !selectedInsulinType) {
-      alert(i18nGet('select_insulin_type_you_use'));
-
-      appAnalytics.sendEventWithProps(
-        appAnalytics.events.ONBOARDING_COMPLETED_UNSUCCESSFUL,
-        diabetesProperties,
-      )
-    } else {
-      completeOnboarding(diabetesProperties);
-    }
+    completeOnboarding(diabetesProperties);
   }
 
   skipOnboarding = () => {
     const { completeOnboarding } = this.props;
     completeOnboarding();
   }
+
   render() {
     return (
       <View style={styles.onboardingScreen}>
@@ -132,7 +121,7 @@ class Onboarding extends React.Component<Props, State> {
   }
 
   renderInsulinBlock = () => {
-    const { selectedInsulinType, isUserUsingInsulin } = this.state;
+    const { selectedInsulinType } = this.state;
 
     const shortStyles = selectedInsulinType === ShortInsulinType.SHORT
       ? { ...styles.typePickerItem, ...styles.typePickerItemActive }
@@ -149,6 +138,7 @@ class Onboarding extends React.Component<Props, State> {
             {i18nGet('select_insulin_type_you_use')}
           </Text>
           <Tooltip
+            analyticsKeyOnOpen="shortInsulinType"
             actionType="press"
             popover={(
               <View>
@@ -234,6 +224,9 @@ class Onboarding extends React.Component<Props, State> {
             </TouchableOpacity>
           </View>
         </View>
+        <Text style={styles.defaultText}>
+          {`${i18nGet('default_selection')}: ${Measures.getDefaultGlucoseMeasuringType()}`}
+        </Text>
       </View>
     );
   }
@@ -280,6 +273,9 @@ class Onboarding extends React.Component<Props, State> {
             </TouchableOpacity>
           </View>
         </View>
+        <Text style={styles.defaultText}>
+          {`${i18nGet('default_selection')}: ${i18nGet(Measures.getDefaultCarbsMeasuringType() + '_measuring')}`}
+        </Text>
       </View>
     );
   }
@@ -369,6 +365,11 @@ const styles = StyleSheet.create({
   note: {
     padding: 16,
     fontSize: 15,
+    color: Color.TEXT_DARK_GRAY,
+  },
+  defaultText: {
+    paddingTop: 16,
+    fontSize: 16,
     color: Color.TEXT_DARK_GRAY,
   },
 })

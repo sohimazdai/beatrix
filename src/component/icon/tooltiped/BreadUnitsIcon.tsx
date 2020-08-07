@@ -30,9 +30,7 @@ const BreadUnitsIconComponent = (props: Props) => {
 
   return (
     <Tooltip
-      onOpen={() => appAnalytics.sendEventWithProps(
-        appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'breadUnits' }
-      )}
+      analyticsKeyOnOpen="breadUnits"
       actionType={'press'}
       popover={(
         <View>

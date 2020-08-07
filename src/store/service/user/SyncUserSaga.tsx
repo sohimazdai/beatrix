@@ -56,7 +56,7 @@ function* syncUser({ payload }: SyncUserAction) {
                 data: {
                     properties: IUserDiabetesProperties,
                     shedule: IUserPropertiesShedule,
-                    isOnboardingCompleted: boolean,
+                    isNeedToShowOnboarding: boolean,
                 }
             } = yield call(UserApi.syncUser, payload.user);
             const properties: IUserDiabetesProperties = userData.data.properties;
@@ -95,7 +95,7 @@ function* syncUser({ payload }: SyncUserAction) {
                     createUserDiabetesPropertiesChangeAction(newProperties),
                     createChangeUserPropertiesShedule(shedule),
                     createUserChangeAction({
-                        isOnboardingCompleted: userData.data.isOnboardingCompleted
+                        isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding
                     }),
                 ])
             );

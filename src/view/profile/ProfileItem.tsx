@@ -26,9 +26,11 @@ export class ProfileItem extends React.Component<Props> {
                     </Text>}
                 </View>
                 {
-                    this.props.activeElement && <View style={styles.itemCardRight}>
-                        {this.props.activeElement}
-                    </View>
+                    this.props.activeElement && (
+                        <View style={styles.itemCardRight}>
+                            {this.props.activeElement}
+                        </View>
+                    )
                 }
             </View>
             {this.props.hint && <Text style={styles.hint}>
@@ -71,6 +73,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         width: "20%",
         minWidth: 60,
+        marginLeft: 8,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',

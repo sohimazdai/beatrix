@@ -117,5 +117,12 @@ export const styles = StyleSheet.create({
     activeElementToSettings: {
         fontSize: 16,
         color: '#2E3858'
+    },
+    touchable: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     }
 })

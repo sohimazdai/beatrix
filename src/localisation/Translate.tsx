@@ -1212,4 +1212,9 @@ const translateStore = {
       'Максимальный эффект наступает через 1-2 часа.\n' +
       'Общая продолжительность действия до 4-5 часов',
   },
+  default_selection: {
+    'en': 'Default selection',
+    'es': 'Selección predeterminada',
+    'ru': 'Выбор по умолчанию',
+  },
 }

@@ -138,10 +138,9 @@ const styles = StyleSheet.create({
     width: '100%',
 
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
 
-    overflow: 'hidden'
   },
   emptyListText: {
     fontSize: 16,

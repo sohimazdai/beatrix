@@ -47,7 +47,7 @@ const AppNavigatorComponent = (props: AppNavigatorComponentProps) => {
 }
 
 const AuthedContainer = (props: AuthedContainerProps) => {
-    const { user: { isOnboardingCompleted } } = props;
+    const { user: { isNeedToShowOnboarding } } = props;
 
     const faded = (
         props.interactive.confirmPopupShown ||
@@ -61,7 +61,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
         ? FaderType.SYNC
         : FaderType.EMPTY;
 
-    return isOnboardingCompleted
+    return isNeedToShowOnboarding
         ? (
             <>
                 <AuthedNavigatorContainer />

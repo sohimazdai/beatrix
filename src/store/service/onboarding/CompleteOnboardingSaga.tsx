@@ -57,7 +57,7 @@ function* run({ payload: { diabetesProperties } }: CompleteOnboardingAction) {
             createUserChangeAction({
                 loading: false,
                 error: null,
-                isOnboardingCompleted: true,
+                isNeedToShowOnboarding: true,
             })
         );
     } catch (e) {
@@ -66,7 +66,7 @@ function* run({ payload: { diabetesProperties } }: CompleteOnboardingAction) {
             createUserChangeAction({
                 loading: false,
                 error: e,
-                isOnboardingCompleted: true,
+                isNeedToShowOnboarding: true,
             })
         );
     }

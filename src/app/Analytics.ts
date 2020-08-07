@@ -60,8 +60,8 @@ export const appAnalytics = {
     LOG_OUT: 'Log out',
     USER_BY_INSTALLATION_ID: 'User by installation id',
     //ONBOARDING
+    ONBOARDING_SEEN: 'Onboarding seen',
     ONBOARDING_COMPLETED: 'Onboarding completed',
-    ONBOARDING_COMPLETED_UNSUCCESSFUL: 'Onboarding completed unsuccessful',
     //DASHBOARD
     DASHBOARD_SEEN: 'Dashboard seen',
     HBA1C_CALCULATED: 'HBA1C calculated',

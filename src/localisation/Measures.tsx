@@ -89,7 +89,7 @@ export class Measures {
 
   static getDefaultCarbsMeasuringType(
     existingCarbsMeasuringType?: CarbsMeasuringType
-  ) {
+  ): CarbsMeasuringType {
     if (existingCarbsMeasuringType) return existingCarbsMeasuringType;
 
     if (
