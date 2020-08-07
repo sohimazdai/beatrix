@@ -3,18 +3,14 @@ import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { UserApi } from '../../../api/UserApi';
 import { IUser } from '../../../model/IUser';
 import { IStorage } from '../../../model/IStorage';
-import { createSyncNotesAction } from '../note/SyncNotesSaga';
-import { createReplaceShedule, createChangeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
+import { createChangeUserPropertiesShedule } from '../../modules/user-properties-shedule/UserPropertiesShedule';
 import { createUserDiabetesPropertiesChangeAction } from '../../modules/user-diabetes-properties/UserDiabetesPropertiesActionCreator';
-import { createUpdateUserDiabetesPropertiesAction } from './UpdateUserDiabetesPropertiesSaga'
 import { handleError } from '../../../app/ErrorHandler';
-import { appAnalytics } from '../../../app/Analytics';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
-import { IUserPropertiesSheduleItem, IUserPropertiesShedule } from '../../../model/IUserPropertiesShedule';
+import { IUserPropertiesShedule } from '../../../model/IUserPropertiesShedule';
 import { Measures } from '../../../localisation/Measures';
-import { NoteApi } from '../../../api/NoteApi';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 import { syncNotes } from '../../service-helper/sync-notes';
@@ -59,8 +55,10 @@ function* syncUser({ payload }: SyncUserAction) {
                     isNeedToShowOnboarding: boolean,
                 }
             } = yield call(UserApi.syncUser, payload.user);
+
             const properties: IUserDiabetesProperties = userData.data.properties;
             const shedule: IUserPropertiesShedule = userData.data.shedule || {};
+            const isNeedToShowOnboarding: boolean = userData.data.isNeedToShowOnboarding || false;
 
             if (!properties.glycemiaMeasuringType) {
                 properties.glycemiaMeasuringType = Measures.getDefaultGlucoseMeasuringType(
@@ -117,20 +115,25 @@ function* syncUser({ payload }: SyncUserAction) {
                 [],
                 shedule,
             );
-
-            yield put(createNoteListOneLevelDeepMerge(result.data.notes));
-            yield put(createChangeUserPropertiesShedule(result.data.shedule));
+            yield put(
+                batchActions([
+                    createNoteListOneLevelDeepMerge(result.data.notes),
+                    createChangeUserPropertiesShedule(result.data.shedule),
+                    createUserChangeAction({ isNeedToShowOnboarding }),
+                ])
+            )
         }
 
         yield put(createUserChangeAction({
             syncLoading: false,
-            error: null
+            error: null,
         }));
     } catch (e) {
         handleError(e, i18nGet('user_sync_error'));
         yield put(createUserChangeAction({
             syncLoading: false,
-            error: e
+            error: e,
+            isNeedToShowOnboarding: false,
         }));
     }
 };

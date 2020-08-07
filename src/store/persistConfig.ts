@@ -6,9 +6,9 @@ export const persistConfig: PersistConfig = {
     blacklist: [
         'modal',
         'interactive',
-        //'userDiabetesProperties',
+        // 'userDiabetesProperties',
         // 'noteList',
-        // 'user'
+        // 'user',
         // 'userPropertiesShedule',
     ],
     storage: AsyncStorage,

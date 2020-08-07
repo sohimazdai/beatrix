@@ -62,7 +62,8 @@ const AuthedContainer = (props: AuthedContainerProps) => {
         : FaderType.EMPTY;
 
     return isNeedToShowOnboarding
-        ? (
+        ? <OnboardingConnected />
+        : (
             <>
                 <AuthedNavigatorContainer />
                 <Fader hidden={!faded} type={faderType} />
@@ -71,7 +72,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
                 <ConfirmPopupConnect />
                 <ModalContentConnect />
             </>
-        ) : <OnboardingConnected />
+        )
 }
 
 export const AppNavigator = connect(
