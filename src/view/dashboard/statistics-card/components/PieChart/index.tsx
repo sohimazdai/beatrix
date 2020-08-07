@@ -66,9 +66,7 @@ class PieChartComponent extends React.Component<Props, State> {
       <View>
         <View style={styles.pieWithLegend}>
           <Tooltip
-            onOpen={() => appAnalytics.sendEventWithProps(
-              appAnalytics.events.TOOLTIP_SHOWN, { tooltipName: 'statisticsPie' }
-            )}
+            analyticsKeyOnOpen="statisticsPie"
             actionType='press'
             popover={(
               <View>

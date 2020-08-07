@@ -5,7 +5,9 @@ import { logger } from './Logger';
 import Constants from 'expo-constants';
 import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
 
-export interface IAmplitudeUserProperties extends IUserDiabetesProperties { };
+export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
+  locale?: string
+};
 
 export const appAnalytics = {
   init: (): Promise<void> => {
@@ -69,9 +71,12 @@ export const appAnalytics = {
     NOTELIST_SEEN: 'NoteList seen',
     //PROFILE
     PROFILE_SEEN: 'Profile seen',
+    DIABETES_PROFILE_SEEN: 'Profile diabetes seen',
+    SETTINGS_SEEN: 'Settings seen',
     SHEDULE_UPDATED: 'Shedule updated',
     USER_DIABETES_PROPERTIES_UPDATED: 'User diabetes properties updated',
-    EXPORT_DATA: "EXPORT DATA",
+    EXPORT_DATA: "Export data",
+    EXPORT_SEEN: 'Export seen',
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',
@@ -90,5 +95,10 @@ export const appAnalytics = {
     TOOLTIP_SHOWN: 'Tooltip shown',
     //HANDLED ERRORS
     SERVER_IS_NOT_AVAILABLE: 'Server is not available',
+    //AUTH
+    AUTH_SCREEN_SEEN: 'Auth screen seen',
+    GOOGLE_SIGN_IN_PRESSED: 'Google sign in pressed',
+    //LINK OPENED
+    SETTINGS_INSULIN_LINK_OPENED: 'Settings insulin link opened',
   }
 }

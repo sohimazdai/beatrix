@@ -6,12 +6,12 @@ export const styles = StyleSheet.create({
     noteCreationViewScrollView: {
         flex: 1,
         width: '100%',
-        minHeight: Dimensions.get('screen').height * 0.8,
+        minHeight: Dimensions.get('screen').height * 0.9,
     },
     noteCreationView: {
         flex: 1,
         width: '100%',
-        height: Dimensions.get('screen').height * 0.8,
+        height: Dimensions.get('screen').height * 0.9,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#D4EEFF",
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     noteEditingView: {
         flex: 1,
         width: '100%',
-        height: Dimensions.get('screen').height * 0.8,
+        height: Dimensions.get('screen').height * 0.9,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         backgroundColor: "#FFE1DF",
@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     },
     scrollViewContent: {
         flex: 1,
-        height: Dimensions.get('screen').height * 0.8,
+        height: Dimensions.get('screen').height * 0.9,
         width: '100%',
         flexDirection: 'column',
         alignItems: 'center',

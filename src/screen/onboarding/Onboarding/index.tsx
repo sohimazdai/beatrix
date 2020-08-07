@@ -138,7 +138,7 @@ class Onboarding extends React.Component<Props, State> {
             {i18nGet('select_insulin_type_you_use')}
           </Text>
           <Tooltip
-            analyticsKeyOnOpen="shortInsulinType"
+            analyticsKeyOnOpen="shortInsulinTypeInfo"
             actionType="press"
             popover={(
               <View>

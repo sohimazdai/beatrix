@@ -10,6 +10,7 @@ import { ProfileSettingsSheduleTableConnect } from '../../../../view/profile/set
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
 import { i18nGet } from '../../../../localisation/Translate';
 import { ShortInsulinTypePickerConnect } from '../../../../view/profile/settings/select-picker/ShortInsulinTypePicker';
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
   interactive: IInteractive
@@ -17,6 +18,12 @@ interface Props {
 }
 
 export class InsulinSettingsComponent extends Component<Props> {
+  componentDidMount() {
+    appAnalytics.sendEventWithProps(appAnalytics.events.SETTINGS_SEEN,{
+      screenName: 'Insulin'
+    });
+  }
+
   onBack = () => {
     const { navigation } = this.props;
 

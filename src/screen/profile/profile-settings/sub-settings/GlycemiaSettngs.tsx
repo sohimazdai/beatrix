@@ -9,6 +9,7 @@ import { ProfileSettingsTargetGlycemiaPickerConnect } from '../../../../view/pro
 import { GlycemiaTypeSelectPickerConnect } from '../../../../view/profile/settings/select-picker/GlycemiaTypeSelectPicker';
 import { IStorage } from '../../../../model/IStorage';
 import { i18nGet } from '../../../../localisation/Translate';
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
   interactive: IInteractive
@@ -16,6 +17,12 @@ interface Props {
 }
 
 export class GlycemiaSettingsComponent extends Component<Props> {
+  componentDidMount() {
+    appAnalytics.sendEventWithProps(appAnalytics.events.SETTINGS_SEEN, {
+      screenName: 'Glycemia'
+    });
+  }
+
   render() {
     return (
       <KeyboardAvoidingView

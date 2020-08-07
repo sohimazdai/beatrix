@@ -15,7 +15,8 @@ import { IUser } from '../../model/IUser';
 import { AuthFormConnect } from '../../view/auth/AuthForm';
 import { styles } from './Style';
 import { LinearGradient } from 'expo-linear-gradient'
-import { i18nGet } from '../../localisation/Translate';
+import { i18nGet, getLocale } from '../../localisation/Translate';
+import { appAnalytics } from '../../app/Analytics';
 
 interface AuthScreenProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>
@@ -23,6 +24,14 @@ interface AuthScreenProps {
 }
 
 class AuthScreen extends React.Component<AuthScreenProps> {
+    componentDidMount() {
+        appAnalytics.sendEvent(appAnalytics.events.AUTH_SCREEN_SEEN);
+
+        appAnalytics.setUserProperties({
+            locale: getLocale(),
+        });
+    }
+
     render() {
         return (
             <LinearGradient

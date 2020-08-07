@@ -6,6 +6,7 @@ import { shadowOptions } from '../../../constant/ShadowOptions';
 import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
 import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
 import { i18nGet } from '../../../localisation/Translate';
+import { appAnalytics } from '../../../app/Analytics';
 
 interface Props {
     onGoogleSignin?: () => void;
@@ -40,7 +41,10 @@ export const AuthButtonGoogleConnect = connect(
         return {
             ...stateProps,
             ...ownProps,
-            onGoogleSignin: () => dispatch(createGoogleAuthAction())
+            onGoogleSignin: () => {
+                appAnalytics.sendEvent(appAnalytics.events.GOOGLE_SIGN_IN_PRESSED);
+                dispatch(createGoogleAuthAction())
+            }
         }
     }
 )(AuthButtonGoogle)

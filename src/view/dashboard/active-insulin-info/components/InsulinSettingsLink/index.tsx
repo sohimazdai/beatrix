@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { i18nGet } from '../../../../../localisation/Translate';
+import { appAnalytics } from '../../../../../app/Analytics';
 
 interface Props {
   navigation?: NavigationScreenProp<NavigationState, NavigationParams>
@@ -18,6 +19,13 @@ export function InsulinSettingsLink(props: Props) {
       <View style={styles.buttonView}>
         <Button
           onPress={() => {
+            appAnalytics.sendEventWithProps(
+              appAnalytics.events.SETTINGS_INSULIN_LINK_OPENED,
+              {
+                from: 'active-insulin'
+              },
+            );
+
             navigation.navigate(
               'InsulinSettings',
               {

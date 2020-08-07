@@ -10,6 +10,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 import { ExportDataConnect } from '../../../../view/profile/settings/export-data-picker/components/ExportDataPicker';
 import { Fader } from '../../../../component/fader/Fader';
 import { IUser } from '../../../../model/IUser';
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
   interactive: IInteractive
@@ -18,6 +19,10 @@ interface Props {
 }
 
 export class ExportDataSettingsComponent extends Component<Props> {
+  componentDidMount() {
+    appAnalytics.sendEvent(appAnalytics.events.EXPORT_DATA);
+  }
+
   render() {
     const { user } = this.props;
     return (

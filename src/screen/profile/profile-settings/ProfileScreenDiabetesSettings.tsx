@@ -9,6 +9,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import { ProfileItem } from '../../../view/profile/ProfileItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../localisation/Translate';
+import { appAnalytics } from '../../../app/Analytics';
 
 interface Props {
     interactive: IInteractive
@@ -16,6 +17,10 @@ interface Props {
 }
 
 export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
+    componentDidMount() {
+        appAnalytics.sendEvent(appAnalytics.events.DIABETES_PROFILE_SEEN);
+    }
+
     onGlycemiaSettingsGoToPress = () => {
         this.props.navigation.navigate('GlycemiaSettings')
     }

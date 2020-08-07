@@ -14,6 +14,7 @@ export default function ActiveInsulinCardHeader() {
         {i18nGet('rest_active_insulin')}
       </Text>
       <Tooltip
+        analyticsKeyOnOpen={'activeInsulinInfo'}
         actionType='press'
         popover={(
           <Text style={styles.tooltipText}>

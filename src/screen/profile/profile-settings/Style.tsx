@@ -122,7 +122,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-around',
         alignItems: 'center',
     }
 })

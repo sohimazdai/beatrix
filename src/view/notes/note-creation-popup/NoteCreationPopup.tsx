@@ -32,6 +32,7 @@ import { NumberScroller } from '../number-scroller/NumberScroller';
 import { Measures } from '../../../localisation/Measures';
 import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 import { i18nGet } from '../../../localisation/Translate';
+import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 
 interface Props {
     interactive?: IInteractive
@@ -40,6 +41,7 @@ interface Props {
     dispatch?: (action: Action) => void
     hidePopup?: () => void
     onNoteDelete?: (noteId: string) => void;
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 interface State {
@@ -168,7 +170,11 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
 
     renderInputByValue() {
         let { glucose, breadUnits, insulin, longInsulin, currentValueType } = this.state;
-        const isCreating = this.props.interactive.creatingNoteMode && !this.props.interactive.editingNoteId;
+        const { navigation } = this.props;
+
+        const isCreating =
+            this.props.interactive.creatingNoteMode && !this.props.interactive.editingNoteId;
+
         switch (currentValueType) {
             case NoteValueType.GLUCOSE:
                 return this.renderInputByType(NoteValueType.GLUCOSE, glucose)
@@ -177,7 +183,10 @@ class NoteCreationPopup extends React.PureComponent<Props, State>{
             case NoteValueType.SHORT_INSULIN:
                 return <>
                     {this.renderInputByType(NoteValueType.SHORT_INSULIN, insulin)}
-                    <NoteInsulinDoseRecommendationConnect note={this.noteFromState} />
+                    <NoteInsulinDoseRecommendationConnect
+                        note={this.noteFromState}
+                        navigation={navigation}
+                    />
                 </>
             case NoteValueType.LONG_INSULIN:
                 return this.renderInputByType(NoteValueType.LONG_INSULIN, longInsulin)
@@ -361,6 +370,7 @@ export const NoteCreationPopupConnect = connect(
     (stateProps, { dispatch }, ownProps: any) => {
         const noteId = stateProps.interactive.editingNoteId || "";
         return {
+            ...ownProps,
             ...stateProps,
             dispatch,
             note: stateProps.noteList[noteId] || null,

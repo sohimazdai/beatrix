@@ -9,6 +9,7 @@ import { IStorage } from '../../../../model/IStorage';
 import { CarbsTypeSelectPickerConnect } from '../../../../view/profile/settings/select-picker/CarbsTypeSelectPicker';
 import { CarbsUnitWeightSelectPickerConnect } from '../../../../view/profile/settings/select-picker/CarbsUnitWightSelectPicker';
 import { i18nGet } from '../../../../localisation/Translate';
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
   interactive: IInteractive
@@ -16,6 +17,12 @@ interface Props {
 }
 
 export class CarbohydratesSettngsComponent extends Component<Props> {
+  componentDidMount() {
+    appAnalytics.sendEventWithProps(appAnalytics.events.SETTINGS_SEEN, {
+      screenName: 'Carbohydrates'
+    });
+  }
+
   render() {
     return (
       <KeyboardAvoidingView
