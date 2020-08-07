@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../model/IUserPropertiesShedule';
@@ -10,7 +10,6 @@ import { i18nGet } from '../../../localisation/Translate';
 import { selectActiveInsulinValue } from '../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
 import { Color } from '../../../constant/Color';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { appAnalytics } from '../../../app/Analytics';
 
 interface OwnProps {
     note?: INoteListNote
@@ -34,21 +33,23 @@ function NoteInsulinDoseRecommendation(props: Props) {
     } = props;
     const { glycemiaMeasuringType } = userDiabetesProperties;
 
+    const currentHour = new Date(note.date).getHours();
+    const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
+    const insulinToCarbRatio = sheduleItem.carbohydrateRatio;
+    const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
+    const insulinToCorrectGlucose = glucoseValueToCorrect / sheduleItem.insulinSensitivityFactor;
+    const insulinToCorrectBU = note.breadUnits / insulinToCarbRatio;
+    const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
+
+    const isFormUnfilled = !sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio;
+
     function getRecommendation() {
-        const currentHour = new Date(note.date).getHours();
-        const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
-        if (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio) {
+        if (isFormUnfilled) {
             const recommendIfNeededMemo = React.useMemo(() => Math.random() < 0.4, []);
             return recommendIfNeededMemo
                 ? i18nGet('fill_out_your_diabetes_profile_for_recommendations')
                 : ''
         }
-
-        const insulinToCarbRatio = sheduleItem.carbohydrateRatio;
-        const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
-        const insulinToCorrectGlucose = glucoseValueToCorrect / sheduleItem.insulinSensitivityFactor;
-        const insulinToCorrectBU = note.breadUnits / insulinToCarbRatio;
-        const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
 
         if (note.glucose == 0 && note.breadUnits == 0) {
             return '';
@@ -78,18 +79,18 @@ function NoteInsulinDoseRecommendation(props: Props) {
 
     const recommendation = getRecommendation();
 
-    if (!recommendation && !activeInsulinValue) return null;
+    if (!recommendation && isFormUnfilled) return null;
 
     return (
         <View style={styles.view}>
-            {!!activeInsulinValue && (
-                <Text style={styles.activeInsulinText}>
-                    {`${i18nGet('rest_active_insulin')}: ${activeInsulinValue.toFixed(1)}`}
-                </Text>
-            )}
             {!!recommendation && (
                 <Text style={styles.recommendation}>
                     {recommendation}
+                </Text>
+            )}
+            {!!activeInsulinValue && (
+                <Text style={styles.activeInsulinText}>
+                    {`${i18nGet('rest_active_insulin')}: ${activeInsulinValue.toFixed(1)}`}
                 </Text>
             )}
         </View>
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: Color.RED_DARK,
-        paddingBottom: 8,
+        paddingTop: 8,
     },
     recommendation: {
         fontSize: 16,
