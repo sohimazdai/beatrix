@@ -28,19 +28,21 @@ function getActiveInsulinDuration(
   const insulinActionTimeStepsNumber = shortInsulinDistributionStepNumber[shortInsulinType];
   const insulinActionHours = insulinActionTimeStepsNumber * chartConfig.timeStepMinutes / 60;
 
-  activeInsulinNotesByDay[DateHelper.today()] && Object.values(activeInsulinNotesByDay[DateHelper.today()]).forEach((note) => {
-    const noteDatePlusInsulin = new Date(note.date);
-    noteDatePlusInsulin.setHours(noteDatePlusInsulin.getHours() + insulinActionHours);
+  activeInsulinNotesByDay[DateHelper.today()] &&
+    Object.values(activeInsulinNotesByDay[DateHelper.today()])
+      .forEach((note) => {
+        const noteDatePlusInsulin = new Date(note.date);
+        noteDatePlusInsulin.setHours(noteDatePlusInsulin.getHours() + insulinActionHours);
 
-    const hourTop = noteDatePlusInsulin.getMinutes() === 0
-      ? noteDatePlusInsulin.getHours()
-      : noteDatePlusInsulin.getHours() + 1;
+        const hourTop = noteDatePlusInsulin.getMinutes() === 0
+          ? noteDatePlusInsulin.getHours()
+          : noteDatePlusInsulin.getHours() + 1;
 
 
-    lastNoteHour = lastNoteHour > hourTop
-      ? lastNoteHour
-      : hourTop
-  });
+        lastNoteHour = lastNoteHour > hourTop
+          ? lastNoteHour
+          : hourTop
+      });
 
   if (lastNoteHour % 3 !== 0) lastNoteHour++;
   if (lastNoteHour % 3 !== 0) lastNoteHour++;

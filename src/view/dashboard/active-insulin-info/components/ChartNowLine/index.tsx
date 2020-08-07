@@ -64,6 +64,7 @@ export class Component extends React.Component<Props> {
         x2={x + cfg.basicPadding}
         y2={cfg.boxHeight - cfg.basicPadding}
         stroke={'crimson'}
+        strokeDasharray={[4, 2]}
         strokeWidth={2}
       >
       </Line>

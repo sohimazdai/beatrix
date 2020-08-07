@@ -121,8 +121,6 @@ const AuthedNavigator = createStackNavigator(
     }
 )
 
-
-
 const UnknownMainNavigator = createStackNavigator(
     {
         Auth: { screen: AuthScreenConnect },

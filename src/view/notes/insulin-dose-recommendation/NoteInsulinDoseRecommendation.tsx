@@ -31,22 +31,14 @@ function NoteInsulinDoseRecommendation(props: Props) {
         userPropertiesShedule,
         userDiabetesProperties,
         activeInsulinValue,
-        navigation,
     } = props;
     const { glycemiaMeasuringType } = userDiabetesProperties;
-
-    function needToShowLink() {
-        const currentHour = new Date(note.date).getHours();
-        const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
-
-        return (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio);
-    }
 
     function getRecommendation() {
         const currentHour = new Date(note.date).getHours();
         const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
-        if (needToShowLink) {
-            const recommendIfNeededMemo = React.useMemo(() => Math.random() < 0.2, []);
+        if (!sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio) {
+            const recommendIfNeededMemo = React.useMemo(() => Math.random() < 0.4, []);
             return recommendIfNeededMemo
                 ? i18nGet('fill_out_your_diabetes_profile_for_recommendations')
                 : ''
@@ -96,30 +88,9 @@ function NoteInsulinDoseRecommendation(props: Props) {
                 </Text>
             )}
             {!!recommendation && (
-                <>
-                    <Text style={styles.recommendation}>
-                        {recommendation}
-                    </Text>
-                    {needToShowLink && (
-                        <Button
-                            onPress={() => {
-                                appAnalytics.sendEventWithProps(
-                                    appAnalytics.events.SETTINGS_INSULIN_LINK_OPENED,
-                                    {
-                                        from: 'insulin-recommendation'
-                                    },
-                                );
-                                navigation.navigate(
-                                    'InsulinSettings',
-                                    {
-                                        backPage: 'Dashboard'
-                                    }
-                                )
-                            }}
-                            title={i18nGet('set_insulin_type')}
-                        />
-                    )}
-                </>
+                <Text style={styles.recommendation}>
+                    {recommendation}
+                </Text>
             )}
         </View>
     )
