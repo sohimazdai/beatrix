@@ -48,7 +48,6 @@ function ActiveInsulinChart(props: Props) {
     chartConfig
   );
 
-  console.log('🤖🤖🤖🤖 widthShiftLeft', widthShiftLeft);
 
   let polylineDotsData: ChartDotsData = React.useMemo(
     () => calculateDayChartDots({

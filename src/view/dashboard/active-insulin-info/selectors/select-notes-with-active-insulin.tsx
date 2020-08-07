@@ -69,7 +69,6 @@ function getActiveInsulinNoteList(
     [DateHelper.today()]: noteList
   };
 
-  console.log('🤖🤖🤖🤖 noteListByDay', noteListByDay);
   return {
     noteListByDay: newNoteListByDay,
     oldestNoteTime: oldestNote,
