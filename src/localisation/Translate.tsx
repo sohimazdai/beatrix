@@ -14,7 +14,6 @@ export function setLocale(countryCode) {
 }
 
 export function getLocale() {
-  console.log('🤖🤖🤖🤖 i18n.locale;', i18n.locale);
   return i18n.locale;
 }
 
