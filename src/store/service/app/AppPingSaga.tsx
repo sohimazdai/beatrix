@@ -18,7 +18,7 @@ function* ping() {
         if (state.app.networkConnected) {
             const isOk = yield call(AppApi.ping);
             if (isOk.data == 'ОК') {
-                logger('Server is available')
+                logger('Server is available');
                 yield put(createChangeAppAction({
                     serverAvailable: true
                 }))

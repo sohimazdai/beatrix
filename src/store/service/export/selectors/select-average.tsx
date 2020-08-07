@@ -24,7 +24,8 @@ function selectNoteList(noteListByDay: INoteListByDay, from: number, to: number)
       acc.push(...currentDateNoteList);
       return acc;
     }, []
-  )
+  );
+
   return noteList;
 };
 

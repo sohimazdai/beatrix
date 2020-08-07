@@ -38,6 +38,8 @@ export function createUpdateNoteAction(note: INoteListNote) {
 function* run({ payload }: UpdateNoteAction) {
     const state: IStorage = yield select(state => state);
     const userId = state.user.id;
+    const oldNote = state.noteList && state.noteList[payload.note.id];
+    const newNote = payload.note;
 
     try {
         yield put(createNoteListChangeNoteByIdAction(payload.note, userId));
@@ -50,7 +52,10 @@ function* run({ payload }: UpdateNoteAction) {
 
         appAnalytics.sendEventWithProps(
             appAnalytics.events.NOTE_UPDATED,
-            payload.note
+            {
+                newNote,
+                oldNote,
+            }
         );
 
         yield put(createUserChangeAction({

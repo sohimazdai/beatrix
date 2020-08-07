@@ -22,7 +22,7 @@ export function getShortInsulinDistributionValueByTimeStep(
 export const shortInsulinDistribution = {
   [ShortInsulinType.ULTRA_SHORT]: [ //step by 5 minutes; 4 hours
     0, //0
-    0,
+    5 / 159,
     39 / 159, //5
     75 / 159, //10
     108 / 159, //15

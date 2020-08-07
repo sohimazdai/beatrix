@@ -19,7 +19,6 @@ const ACTION_TYPE = "UPDATE_USER_DIABETES_PROPERTIES";
 
 export function createUpdateUserDiabetesPropertiesAction(newProperties: IUserDiabetesProperties) {
   return batchActions([
-
     {
       type: ACTION_TYPE,
       payload: {
@@ -87,7 +86,9 @@ function* run(action) {
         })
       );
 
-      appAnalytics.sendEvent(appAnalytics.events.USER_DIABETES_PROPERTIES_UPDATED);
+      appAnalytics.sendEventWithProps(appAnalytics.events.USER_DIABETES_PROPERTIES_UPDATED,
+        userDiabetesProperties
+      );
       appAnalytics.setUserProperties(userDiabetesProperties);
     }
   } catch (e) {

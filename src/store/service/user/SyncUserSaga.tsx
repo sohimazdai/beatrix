@@ -15,6 +15,7 @@ import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteList
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 import { syncNotes } from '../../service-helper/sync-notes';
 import { INoteList } from '../../../model/INoteList';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -123,6 +124,8 @@ function* syncUser({ payload }: SyncUserAction) {
                 ])
             )
         }
+
+        appAnalytics.sendEvent(appAnalytics.events.USER_SYNCED);
 
         yield put(createUserChangeAction({
             syncLoading: false,

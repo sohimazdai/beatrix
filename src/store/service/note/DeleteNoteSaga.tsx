@@ -55,7 +55,7 @@ function* run({ payload }: DeleteNoteAction) {
             }
         }
 
-        appAnalytics.sendEvent(appAnalytics.events.NOTE_DELETED);
+        appAnalytics.sendEventWithProps(appAnalytics.events.NOTE_DELETED, noteToDelete);
 
         yield put(createUserChangeAction({
             loading: false,

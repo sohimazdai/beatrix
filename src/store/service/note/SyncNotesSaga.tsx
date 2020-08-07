@@ -8,6 +8,7 @@ import { createClearPendingNoteListByUserId } from '../../modules/pending-note-l
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'SYNC_NOTES_ACTION';
 
@@ -78,7 +79,7 @@ function* run(action: Action) {
                 ];
             }
             return notes;
-        }, [])
+        }, []);
 
         const cond = reason === SyncReasonType.SEND_PENDING
             ? state.app.serverAvailable && state.app.networkConnected && notesToSync.length
@@ -95,6 +96,8 @@ function* run(action: Action) {
                     ])
                 )
             }
+
+            appAnalytics.sendEvent(appAnalytics.events.NOTES_SYNCED);
         }
 
         if (!noLoading) {

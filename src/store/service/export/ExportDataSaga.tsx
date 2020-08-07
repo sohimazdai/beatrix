@@ -124,7 +124,7 @@ function* run({ payload: { from, to } }: ExportDataAction) {
         stats,
       );
 
-      appAnalytics.sendEvent(appAnalytics.events.EXPORT_DATA);
+      appAnalytics.sendEventWithProps(appAnalytics.events.EXPORT_DATA, stats);
 
       const result = yield call(
         FileSystem.downloadAsync,

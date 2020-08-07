@@ -48,7 +48,12 @@ function* run({ payload }: UpdateUserSheduleAction) {
             );
         }
 
-        appAnalytics.sendEvent(appAnalytics.events.SHEDULE_UPDATED);
+        appAnalytics.sendEventWithProps(
+            appAnalytics.events.SHEDULE_UPDATED,
+            state.userPropertiesShedule
+        );
+
+        appAnalytics.setUserProperties({ shedule: state.userPropertiesShedule })
 
         yield put(
             createUserChangeAction({

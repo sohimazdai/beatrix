@@ -1,11 +1,16 @@
 import * as Amplitude from 'expo-analytics-amplitude';
-import Variables from './Variables';
 import { Platform } from 'react-native';
-import { logger } from './Logger';
+
 import Constants from 'expo-constants';
+import { IUserPropertiesShedule } from '../model/IUserPropertiesShedule';
 import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
 
+import Variables from './Variables';
+import { logger } from './Logger';
+
 export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
+  shedule?: IUserPropertiesShedule
+
   locale?: string
 };
 
@@ -61,6 +66,8 @@ export const appAnalytics = {
     REMEMBER_PASSWORD: 'Remember password',
     LOG_OUT: 'Log out',
     USER_BY_INSTALLATION_ID: 'User by installation id',
+    //USER
+    USER_SYNCED: 'User synced',
     //ONBOARDING
     ONBOARDING_SEEN: 'Onboarding seen',
     ONBOARDING_COMPLETED: 'Onboarding completed',
@@ -91,6 +98,7 @@ export const appAnalytics = {
     NOTE_DELETED: 'Note deleted',
     NOTE_DATE_CHANGED: 'Note date changed',
     NOTE_TIME_CHANGED: 'Note time changed',
+    NOTES_SYNCED: 'Notes synced',
     //TOOLTIPS
     TOOLTIP_SHOWN: 'Tooltip shown',
     //HANDLED ERRORS
