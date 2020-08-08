@@ -4,6 +4,7 @@ import { Color } from '../../../constant/Color';
 import { IChartDot, ChartValueType } from '../../../model/IChart';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { connect } from 'react-redux';
+import { appAnalytics } from '../../../app/Analytics';
 
 export interface Props {
     onPress?: (dotId: number) => void
@@ -23,9 +24,13 @@ export interface Props {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    onPress: (noteId: number) => dispatch(createChangeInteractive({
-        selectedDotId: noteId
-    }))
+    onPress: (noteId: number) => {
+        dispatch(createChangeInteractive({
+            selectedDotId: noteId
+        }));
+
+        appAnalytics.sendEvent(appAnalytics.events.CHART_DOT_CLICKED);
+    }
 })
 
 const Component = (props: Props) => (

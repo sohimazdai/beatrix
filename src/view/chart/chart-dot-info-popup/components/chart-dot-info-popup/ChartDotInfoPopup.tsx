@@ -15,6 +15,7 @@ import { styles } from './Style';
 import { DateHelper } from '../../../../../utils/DateHelper';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { selectAverageValue } from '../../selectors/select-value-average';
+import { appAnalytics } from '../../../../../app/Analytics';
 
 export interface ChartDotInfoPopupProps {
     note?: INoteListNote
@@ -31,6 +32,12 @@ export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
         BackHandler.addEventListener('hardwareBackPress', function close() {
             closePopup();
         });
+    }
+
+    componentDidUpdate(pP: ChartDotInfoPopupProps) {
+        if (!pP.note && this.props.note) {
+            appAnalytics.sendEvent(appAnalytics.events.CHART_DOT_SELECTED);
+        }
     }
 
     componentWillUnmount() {

@@ -12,7 +12,7 @@ import { shadowOptions } from '../../../constant/ShadowOptions';
 import { Measures } from '../../../localisation/Measures';
 import { BlockHat } from '../../../component/hat/BlockHat';
 import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
-import { appAnalytics } from '../../../app/Analytics';
+import { appAnalytics, AnalyticsSections } from '../../../app/Analytics';
 import Tooltip from '../../../component/tooltip/Tooltip';
 import { InfoIcon } from '../../../component/icon/InfoIcon';
 
@@ -38,6 +38,11 @@ class Onboarding extends React.Component<Props, State> {
       this.props.userDiabetesProperties.carbsMeasuringType
     ),
   };
+
+  componentDidMount() {
+    appAnalytics.setSection(AnalyticsSections.ONBOARDING);
+    appAnalytics.sendEvent(appAnalytics.events.ONBOARDING_SEEN);
+  }
 
   checkUsingInsulin = () => {
     const { isUserUsingInsulin, selectedInsulinType } = this.state;

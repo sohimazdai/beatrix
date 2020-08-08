@@ -18,7 +18,7 @@ import { BlockHat } from '../../component/hat/BlockHat';
 import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
 import { styles } from './Style';
 import { ChartConfig } from './config/ChartConfig';
-import { appAnalytics } from '../../app/Analytics';
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { InfoIcon } from '../../component/icon/InfoIcon';
 import { ModalType } from '../../model/IModal';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
@@ -80,6 +80,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
     }
 
     componentDidMount() {
+        appAnalytics.setSection(AnalyticsSections.CHARTS);
         appAnalytics.sendEventWithProps(
             appAnalytics.events.CHARTS_SEEN,
             { period: 'day' }

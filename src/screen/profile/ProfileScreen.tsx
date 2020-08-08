@@ -7,7 +7,7 @@ import { ProfileItem } from '../../view/profile/ProfileItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { NavigationParams, NavigationScreenProp } from 'react-navigation'
 import { NavigationState } from 'react-navigation'
-import { appAnalytics } from '../../app/Analytics'
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics'
 import { IUser } from '../../model/IUser'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 import { i18nGet } from '../../localisation/Translate'
@@ -24,6 +24,7 @@ interface State {
 
 class ProfileScreenComponent extends React.Component<Props, State> {
     componentDidMount() {
+        appAnalytics.setSection(AnalyticsSections.PROFILE);
         appAnalytics.sendEvent(appAnalytics.events.PROFILE_SEEN);
     }
 

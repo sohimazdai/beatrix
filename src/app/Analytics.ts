@@ -15,6 +15,10 @@ export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
 };
 
 export const appAnalytics = {
+  staticProperties: {
+    section: '',
+  },
+
   init: (): Promise<void> => {
     logger('::amplitude initializing');
 
@@ -36,7 +40,7 @@ export const appAnalytics = {
   sendEvent: (eventName: string) => {
     logger('::amplitude trying to send event: ', eventName);
 
-    Amplitude.logEvent(eventName)
+    Amplitude.logEventWithProperties(eventName, appAnalytics.staticProperties)
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
@@ -44,7 +48,10 @@ export const appAnalytics = {
     logger('::amplitude trying to send event: ', eventName);
     logger('::amplitude event properties: ', properties);
 
-    Amplitude.logEventWithProperties(eventName, properties)
+    Amplitude.logEventWithProperties(eventName, {
+      ...properties,
+      ...appAnalytics.staticProperties,
+    })
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
@@ -55,6 +62,14 @@ export const appAnalytics = {
     Amplitude.setUserProperties(properties)
       .then(() => logger('::amplitude user properties setted'))
       .catch((e) => logger('::amplitude user properties error: ', e.message))
+  },
+
+  setSection: (sectionName: AnalyticsSections) => {
+    logger('::amplitude old section: ', appAnalytics.staticProperties.section);
+
+    appAnalytics.staticProperties.section = sectionName;
+
+    logger('::amplitude new section: ', appAnalytics.staticProperties.section);
   },
 
   events: {
@@ -87,6 +102,7 @@ export const appAnalytics = {
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',
+    CHART_DOT_CLICKED: 'Chart dot clicked',
     ANOTHER_CHART_DATE_SEEN: 'Another chart date seen',
     CHART_CALENDAR_DATE_SET: 'Chart calendar date set',
     DAY_CHART_INFO_OPEN: 'Day chart info open',
@@ -110,3 +126,13 @@ export const appAnalytics = {
     SETTINGS_INSULIN_LINK_OPENED: 'Settings insulin link opened',
   }
 }
+
+
+export enum AnalyticsSections {
+  AUTH = 'auth',
+  ONBOARDING = 'onboarding',
+  DASHBOARD = 'dashboard',
+  PROFILE = 'profile',
+  NOTES = 'notes',
+  CHARTS = 'charts',
+} 

@@ -16,7 +16,7 @@ import { styles } from "./Style";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { IUser } from '../../model/IUser';
-import { appAnalytics } from '../../app/Analytics';
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { IApp } from '../../model/IApp';
 import { i18nGet } from '../../localisation/Translate';
@@ -56,6 +56,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   };
 
   componentDidMount() {
+    appAnalytics.setSection(AnalyticsSections.NOTES);
     appAnalytics.sendEvent(appAnalytics.events.NOTELIST_SEEN);
   }
 
