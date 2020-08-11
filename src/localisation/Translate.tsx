@@ -809,7 +809,7 @@ const translateStore = {
   user_properties_changing_error: {
     en: 'Error changing user settings',
     es: 'Error al cambiar la configuración del usuario',
-    user_properties_changing_error: 'Ошибка при изменении параметров пользователя',
+    ru: 'Ошибка при изменении параметров пользователя',
   },
   shedule_sync_error: {
     en: 'Error synchronizing schedule with server',

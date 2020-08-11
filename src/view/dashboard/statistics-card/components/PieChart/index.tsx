@@ -8,11 +8,9 @@ import { IStorage } from '../../../../../model/IStorage';
 import { convertFlatNoteListToNoteListByDay } from '../../../../../store/selector/NoteListSelector';
 import { selectStatisticsPieParts } from '../../selectors/select-statistics-pie-parts';
 import { PieChart } from 'react-native-svg-charts'
-import { Switch } from 'react-native-gesture-handler';
 import { PieLegendItem } from '../PieLegendItem';
 import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { PieToolTipItem } from '../PieToolTipItem';
-import { appAnalytics } from '../../../../../app/Analytics';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { Color } from '../../../../../constant/Color';
 

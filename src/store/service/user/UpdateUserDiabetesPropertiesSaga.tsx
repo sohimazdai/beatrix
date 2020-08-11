@@ -87,7 +87,10 @@ function* run(action) {
       );
 
       appAnalytics.sendEventWithProps(appAnalytics.events.USER_DIABETES_PROPERTIES_UPDATED,
-        userDiabetesProperties
+        {
+          new: userDiabetesProperties,
+          prev: state.userDiabetesProperties,
+        }
       );
       appAnalytics.setUserProperties(userDiabetesProperties);
     }

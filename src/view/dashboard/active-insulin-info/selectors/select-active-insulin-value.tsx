@@ -13,6 +13,7 @@ export const selectActiveInsulinValue = createSelector(
   (state: IStorage) => selectNoteWithActiveInsulin(state).oldestNoteTime,
   (state, now: Date) => now,
   (state: IStorage) => state.userDiabetesProperties.shortInsulinType,
+  (state: IStorage) => state.noteList,
   calculateActiveInsulinValue
 )
 
@@ -21,6 +22,7 @@ function calculateActiveInsulinValue(
   oldestNoteTime: number,
   now: Date,
   shortInsulinType: ShortInsulinType,
+  noteList: INoteList
 ): number {
   const config: IChartConfiguration = new ChartConfig().getConfigs().activeInsulin;
 
@@ -33,13 +35,13 @@ function calculateActiveInsulinValue(
   if (!(notes.length > 0) || !shortInsulinType) return 0;
 
   const nowTime = now.getTime();
-  const oldestNoteDate = new Date(oldestNoteTime);
 
   const values: number[] = [];
 
   notes.forEach((note: INoteListNote) => {
-    const currentDate = new Date(note.date);
-    currentDate.setHours(currentDate.getHours() + oldestNoteDate.getHours());
+    const currentNote = noteList[note.id];
+
+    const currentDate = new Date(currentNote.date);
 
     const deltaDate = nowTime - currentDate.getTime();
     const insulin = note.insulin;

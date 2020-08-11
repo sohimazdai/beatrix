@@ -53,6 +53,8 @@ function* run({ payload: { diabetesProperties } }: CompleteOnboardingAction) {
             diabetesProperties || { skipped: true }
         );
 
+        appAnalytics.setUserProperties(diabetesProperties)
+
         yield put(
             createUserChangeAction({
                 loading: false,

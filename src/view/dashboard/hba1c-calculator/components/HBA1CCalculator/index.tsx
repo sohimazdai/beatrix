@@ -61,6 +61,7 @@ class HBA1CCalculator extends React.Component<Props, State> {
               {i18nGet('your_hba1c')}
             </Text>
             <Tooltip
+              analyticsKeyOnOpen="hba1c"
               actionType="press"
               popover={(
                 <Text style={styles.tooltipText}>
