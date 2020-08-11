@@ -11,6 +11,7 @@ import { convertFlatNoteListToNoteListByDay } from '../../../../../../store/sele
 import { INoteListByDay } from '../../../../../../model/INoteList';
 import { selectFirstNoteDate } from '../../selectors/selectFirstNoteDate';
 import { Color } from '../../../../../../constant/Color';
+import { appAnalytics } from '../../../../../../app/Analytics';
 
 interface Props {
   userDiabetesProperties?: IUserDiabetesProperties;
@@ -82,7 +83,10 @@ export const ExportDataConnect = connect(
     firstNoteDate: selectFirstNoteDate(state),
   }),
   (dispatch) => ({
-    onExportPress: (from?: number, to?: number) => dispatch(createExportDataAction(from, to))
+    onExportPress: (from?: number, to?: number) => {
+      appAnalytics.sendEventWithProps(appAnalytics.events.EXPORT_PRESS, { from, to });
+      dispatch(createExportDataAction(from, to))
+    },
   })
 )(ExportData)
 

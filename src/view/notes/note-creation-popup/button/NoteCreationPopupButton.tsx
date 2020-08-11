@@ -6,6 +6,7 @@ import { createChangeInteractive } from "../../../../store/modules/interactive/i
 import * as React from 'react';
 import { styles } from './Style';
 import { i18nGet } from '../../../../localisation/Translate';
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
     openPopup: () => void;
@@ -19,7 +20,7 @@ const NoteCreationPopupButton = (props: Props) => (
         >
             <Text style={styles.addNoteButtonText}>
                 {i18nGet('add')}
-                </Text>
+            </Text>
             <AddNoteIcon_WHITE />
         </TouchableOpacity>
     </View>
@@ -29,6 +30,7 @@ export const NoteCreationPopupButtonConnect = connect(
     () => ({}),
     (dispatch) => ({
         openPopup: () => {
+            appAnalytics.sendEvent(appAnalytics.events.ADD_NOTE_CLICKED);
             dispatch(createChangeInteractive({
                 creatingNoteMode: true,
                 editingNoteId: "",

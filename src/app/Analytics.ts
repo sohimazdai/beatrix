@@ -14,10 +14,11 @@ export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
   locale?: string
 };
 
+export const staticProperties = {
+  section: '',
+};
+
 export const appAnalytics = {
-  staticProperties: {
-    section: '',
-  },
 
   init: (): Promise<void> => {
     logger('::amplitude initializing');
@@ -40,7 +41,7 @@ export const appAnalytics = {
   sendEvent: (eventName: string) => {
     logger('::amplitude trying to send event: ', eventName);
 
-    Amplitude.logEventWithProperties(eventName, appAnalytics.staticProperties)
+    Amplitude.logEventWithProperties(eventName, staticProperties)
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
@@ -50,7 +51,7 @@ export const appAnalytics = {
 
     Amplitude.logEventWithProperties(eventName, {
       ...properties,
-      ...appAnalytics.staticProperties,
+      ...staticProperties,
     })
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
@@ -65,11 +66,11 @@ export const appAnalytics = {
   },
 
   setSection: (sectionName: AnalyticsSections) => {
-    logger('::amplitude old section: ', appAnalytics.staticProperties.section);
+    logger('::amplitude old section: ', staticProperties.section);
 
-    appAnalytics.staticProperties.section = sectionName;
+    staticProperties.section = sectionName;
 
-    logger('::amplitude new section: ', appAnalytics.staticProperties.section);
+    logger('::amplitude new section: ', staticProperties.section);
   },
 
   events: {
@@ -99,6 +100,7 @@ export const appAnalytics = {
     USER_DIABETES_PROPERTIES_UPDATED: 'User diabetes properties updated',
     EXPORT_DATA: "Export data",
     EXPORT_SEEN: 'Export seen',
+    EXPORT_PRESS: 'Export press',
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',
@@ -115,6 +117,7 @@ export const appAnalytics = {
     NOTE_DATE_CHANGED: 'Note date changed',
     NOTE_TIME_CHANGED: 'Note time changed',
     NOTES_SYNCED: 'Notes synced',
+    ADD_NOTE_CLICKED: 'Add note clicked',
     //TOOLTIPS
     TOOLTIP_SHOWN: 'Tooltip shown',
     //HANDLED ERRORS
@@ -124,6 +127,10 @@ export const appAnalytics = {
     GOOGLE_SIGN_IN_PRESSED: 'Google sign in pressed',
     //LINK OPENED
     SETTINGS_INSULIN_LINK_OPENED: 'Settings insulin link opened',
+
+    // GENERAL
+    PHONE_CONNECTION_STATUS_CHANGE: 'Phone connection status change',
+    SERVER_AVAILIBILITY_STATUS_CHANGE: 'Server availibility status change',
   }
 }
 

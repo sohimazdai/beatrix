@@ -30,7 +30,6 @@ class PieChartComponent extends React.Component<Props, State> {
 
   render() {
     const { parts } = this.props;
-    const { viewType } = this.state;
     const isPercent = true;
     const totalValue = parts.reduce((acc, curr) => acc + curr.value, 0);
 

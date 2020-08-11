@@ -7,6 +7,7 @@ import { IStorage } from '../model/IStorage';
 import { IApp } from '../model/IApp';
 import { logger } from './Logger';
 import Variables from './Variables';
+import { appAnalytics } from './Analytics';
 
 interface Props {
     app?: IApp
@@ -22,6 +23,10 @@ function Component(props: Props) {
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();
             logger('Phone is ' + (isConnected ? 'online' : 'offline'));
+
+            appAnalytics.sendEventWithProps(appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE, {
+                isConnected
+            });
         });
 
         function handleConnectivityChange(isConnected) {

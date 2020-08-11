@@ -3,6 +3,7 @@ import { IStorage } from '../../../model/IStorage';
 import { AppApi } from '../../../api/AppApi';
 import { createChangeAppAction } from '../../modules/app/app';
 import { logger } from '../../../app/Logger';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = 'PING_APP_ACTION';
 
@@ -22,6 +23,10 @@ function* ping() {
                 yield put(createChangeAppAction({
                     serverAvailable: true
                 }))
+
+                appAnalytics.sendEventWithProps(appAnalytics.events.SERVER_AVAILIBILITY_STATUS_CHANGE, {
+                    isConnected: true
+                });
             }
         }
     } catch (e) {
@@ -29,7 +34,11 @@ function* ping() {
         logger('Server is n/a')
         yield put(createChangeAppAction({
             serverAvailable: false
-        }))
+        }));
+
+        appAnalytics.sendEventWithProps(appAnalytics.events.SERVER_AVAILIBILITY_STATUS_CHANGE, {
+            isConnected: false
+        });
     }
 };
 
