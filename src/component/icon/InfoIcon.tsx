@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { Circle, Path, Color } from "react-native-svg"
+import Svg, { Circle, Path, COLOR } from "react-native-svg"
 
 interface Props {
   roundFill?: string

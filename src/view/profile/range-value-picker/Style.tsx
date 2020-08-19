@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { shadowOptions } from "../../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../../constant/ShadowOptions";
 
 export const styles = StyleSheet.create({
     view: {
@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
 
         backgroundColor: '#FFFFFF',
 
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     applyItemView: {
         display: 'flex',
@@ -91,7 +91,7 @@ export const styles = StyleSheet.create({
 
         backgroundColor: '#FFFFFF',
 
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     deleteItemViewTouchable: {
         width: '100%',

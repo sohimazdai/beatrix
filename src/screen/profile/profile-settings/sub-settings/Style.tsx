@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { shadowOptions } from "../../../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../../../constant/ShadowOptions";
 
 export const styles = StyleSheet.create({
     keyboardAvoidingView: {
@@ -68,13 +68,13 @@ export const styles = StyleSheet.create({
         borderColor: "white",
         borderWidth: 2,
         borderRadius: 5,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     shortInsulinTypeButtonActive: {
         borderColor: "#2E3858",
         borderWidth: 2,
         borderRadius: 5,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     shortInsulinTypePickerItemText: {
         fontSize: 16,

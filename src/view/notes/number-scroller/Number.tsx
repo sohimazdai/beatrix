@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text, StyleSheet } from 'react-native';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 
 interface Props {
   isDecimal?: boolean;
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   touchable: {
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderColor: Color.PRIMARY,
+    borderColor: COLOR.PRIMARY,
   },
   text: {
     width: 70,
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   textSelected: {
-    backgroundColor: Color.PRIMARY,
-    color: Color.WHITE,
+    backgroundColor: COLOR.PRIMARY,
+    color: COLOR.WHITE,
   },
   decimalText: {
     width: 40,

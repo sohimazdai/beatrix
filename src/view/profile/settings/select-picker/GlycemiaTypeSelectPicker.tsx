@@ -9,7 +9,7 @@ import { styles } from './Style';
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 import { i18nGet } from '../../../../localisation/Translate';
 import { Measures } from '../../../../localisation/Measures';
-import { Color } from '../../../../constant/Color';
+import { COLOR } from '../../../../constant/Color';
 import { callSyncParametersAlert } from '../../modules/call-sync-parameters-alert';
 
 interface Props {

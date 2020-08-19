@@ -1,8 +1,8 @@
 import { SheduleKeyType } from "./IUserPropertiesShedule";
 
 export interface IInteractive {
-    creatingNoteMode?: boolean
-    editingNoteId?: string
+    creatingNoteMode?: boolean // TODO: remove it
+    editingNoteId?: string // TODO: and it
 
     selectedDotId?: number
     selectedChartPeriod?: string

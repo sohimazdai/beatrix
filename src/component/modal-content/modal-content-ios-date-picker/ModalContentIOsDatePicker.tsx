@@ -1,8 +1,8 @@
 import React from 'react';
 import { IModalIOsDatePicker } from '../../../model/IModal';
 import { View, StyleSheet, DatePickerIOS, TouchableOpacity, Text } from 'react-native';
-import { Color } from '../../../constant/Color';
-import { shadowOptions } from '../../../constant/ShadowOptions';
+import { COLOR } from '../../../constant/Color';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 
 interface ModalContentIOsDatePickerProps {
     modal: IModalIOsDatePicker
@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 20,
 
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
 
         alignItems: 'stretch',
-        backgroundColor: Color.WHITE
+        backgroundColor: COLOR.WHITE
     },
     buttonView: {
 
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: Color.BUTTON_STROKE_LIGHT_GRAY,
-        backgroundColor: Color.WHITE,
+        borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
+        backgroundColor: COLOR.WHITE,
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center',
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
 
     buttonText: {
         fontSize: 16,
-        color: Color.DIMGRAY,
+        color: COLOR.DIMGRAY,
     }
 })

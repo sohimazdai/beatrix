@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Text, Button, StyleSheet, View } from 'react-native';
 import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { i18nGet } from '../../../../../localisation/Translate';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { Loader } from '../../../../../component/loader/Loader';
 import { IStorage } from '../../../../../model/IStorage';
@@ -69,7 +69,7 @@ class HBA1CCalculator extends React.Component<Props, State> {
                 </Text>
               )}
             >
-              <InfoIcon roundFill={Color.PRIMARY_LIGHT} textColor={Color.PRIMARY_WHITE} />
+              <InfoIcon roundFill={COLOR.PRIMARY_LIGHT} textColor={COLOR.PRIMARY_WHITE} />
             </Tooltip>
             <View style={styles.cardTitleLoader}>
               <Loader isManaged isManagedLoading={isCalculating} />
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 19,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   cardTitleValue: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     fontSize: 25,
-    color: Color.BLUE,
+    color: COLOR.BLUE,
     fontWeight: '500',
   },
   cardTitleLoader: {
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   tooltipText: {
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
     fontSize: 15,
     lineHeight: 20,
   },
@@ -155,15 +155,15 @@ const styles = StyleSheet.create({
   },
   contentText: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   button: {
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Color.PRIMARY,
+    backgroundColor: COLOR.PRIMARY,
   },
   buttonText: {
     fontSize: 17,
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
   },
 })

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
 import Tooltip from '../../tooltip/Tooltip';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
 import { VegetablesIcon } from '../value-icons/VegetablesIcon';
 import { Measures } from '../../../localisation/Measures';
@@ -53,7 +53,7 @@ export const BreadUnitsIconConnected = connect(
 
 const styles = StyleSheet.create({
   tooltipText: {
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
     fontSize: 15,
     lineHeight: 20,
   }

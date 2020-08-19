@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { View, StyleSheet, Text } from 'react-native';
 
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IStorage } from '../../../../../model/IStorage';
@@ -16,7 +16,7 @@ import { createChangeInteractive } from '../../../../../store/modules/interactiv
 import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { NotesIcon } from '../../../../../component/icon/NotesIcon';
 import { selectRecentNoteListByDay } from '../../selectors/select-recent-note-list-by-day';
-import { shadowOptions } from '../../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
 
 interface Props {
   recentNoteListByDay: INoteListByDay
@@ -155,27 +155,27 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 19,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   cardContent: {
     paddingTop: 16,
   },
   touchable: {
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   iconBarWrap: {
     marginBottom: 8,
   },
   dateTitle: {
     fontSize: 15,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     paddingVertical: 8,
     paddingBottom: 4,
   },
   emptyListText: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
 })

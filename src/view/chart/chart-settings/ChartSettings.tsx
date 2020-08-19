@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { shadowOptions } from '../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 import { ChartSettingsDatePickerConnect } from '../chart-settings-date-picker/ChartSettingsDatePicker';
 import { DateHelper } from '../../../utils/DateHelper';
 import { MinusIcon } from '../../../component/icon/MinusIcon';
@@ -178,9 +178,9 @@ const styles = StyleSheet.create({
 
         justifyContent: 'center',
         alignItems: 'center',
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
         borderRadius: 5,
-        backgroundColor: Color.WHITE,
+        backgroundColor: COLOR.WHITE,
     },
     dateClickerDisable: {
         opacity: 0.5,
@@ -247,13 +247,13 @@ const styles = StyleSheet.create({
 
         borderWidth: 2,
 
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: Color.WHITE,
-        backgroundColor: Color.WHITE,
-        color: Color.TEXT_DARK_GRAY,
+        borderColor: COLOR.WHITE,
+        backgroundColor: COLOR.WHITE,
+        color: COLOR.TEXT_DARK_GRAY,
     },
     periodButtonActive: {
         backgroundColor: "#2E3858",
@@ -294,13 +294,13 @@ const styles = StyleSheet.create({
 
         borderWidth: 2,
 
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: Color.WHITE,
-        backgroundColor: Color.WHITE,
-        color: Color.TEXT_DARK_GRAY,
+        borderColor: COLOR.WHITE,
+        backgroundColor: COLOR.WHITE,
+        color: COLOR.TEXT_DARK_GRAY,
     },
     dontDisplayButtonText: {
         fontSize: 14,

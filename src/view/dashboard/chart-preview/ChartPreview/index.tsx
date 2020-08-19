@@ -8,7 +8,7 @@ import { DashboardCard } from '../../../shared/components/DashboardCard';
 import { IStorage } from '../../../../model/IStorage';
 import { convertFlatNoteListToNoteListByDay } from '../../../../store/selector/NoteListSelector';
 import { DateHelper } from '../../../../utils/DateHelper';
-import { Color } from '../../../../constant/Color';
+import { COLOR } from '../../../../constant/Color';
 import { ChartsIcon } from '../../../../component/icon/ChartsIcon';
 import { i18nGet } from '../../../../localisation/Translate';
 import { Measures } from '../../../../localisation/Measures';
@@ -17,7 +17,7 @@ import { ChartWrap } from '../../../chart/chart-wrap/ChartWrap';
 import { ChartValueType } from '../../../../model/IChart';
 import { INoteList } from '../../../../model/INoteList';
 import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
-import { shadowOptions } from '../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties,
@@ -122,14 +122,14 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 19,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   cardContent: {
     paddingTop: 16,
   },
   touchable: {
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   iconBarWrap: {
     marginBottom: 8,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   emptyListText: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   highightTitlesView: {

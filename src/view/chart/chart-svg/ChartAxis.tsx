@@ -1,6 +1,6 @@
 import React from 'react'
 import { Circle, Line, Polyline } from 'react-native-svg';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { IChartDot, ChartAxisType, IChartConfiguration } from '../../../model/IChart';
 
 export interface ChartAxisProps {

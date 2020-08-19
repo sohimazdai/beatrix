@@ -6,7 +6,7 @@ import { IStorage } from '../../../model/IStorage';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import Tooltip from '../../tooltip/Tooltip';
 import { Measures } from '../../../localisation/Measures';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
 import { LongSyringeIcon } from '../value-icons/LongSyringeIcon';
 
@@ -43,7 +43,7 @@ export const LongInsulinIconConnected = connect(
 
 const styles = StyleSheet.create({
   tooltipText: {
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
     fontSize: 15,
     lineHeight: 20,
   }

@@ -1,5 +1,5 @@
-import { shadowOptions } from "../../../../../constant/ShadowOptions";
-import { Color } from "../../../../../constant/Color";
+import { SHADOW_OPTIONS } from "../../../../../constant/ShadowOptions";
+import { COLOR } from "../../../../../constant/Color";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
         borderRadius: 25,
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        backgroundColor: Color.WHITE,
+        backgroundColor: COLOR.WHITE,
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden'
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
 
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Color.WHITE,
+        backgroundColor: COLOR.WHITE,
     },
     dateTitleView: {
         width: '100%',
@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
         right: 20,
         top: 20,
         borderRadius: 50,
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
     },
     editNoteIconTouchableView: {
         position: 'absolute',
@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
         top: 20,
         backgroundColor: "#fff",
         borderRadius: 5,
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
     },
     editNoteIconTouchable: {
 

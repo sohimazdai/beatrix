@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { shadowOptions } from '../../constant/ShadowOptions'
+import { SHADOW_OPTIONS } from '../../constant/ShadowOptions'
 
 interface Props {
     header?: string
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#ffffff',
         padding: 10,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     itemCardLeft: {
         flex: 1,

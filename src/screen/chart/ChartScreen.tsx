@@ -1,29 +1,33 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { IStorage } from '../../model/IStorage';
-import { Dispatch, Action } from 'redux';
 import { View, Text } from 'react-native';
-import { INoteList, INoteListByDay } from '../../model/INoteList';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ChartValueType, ChartPeriodType, ChartAveragePeriodType } from '../../model/IChart';
-import { convertFlatNoteListToNoteListByDay } from '../../store/selector/NoteListSelector';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
-import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
-import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
-import { DateHelper } from '../../utils/DateHelper';
-import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet } from "react-native";
+
+import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { BlockHat } from '../../component/hat/BlockHat';
-import { NoteCreationPopupButtonConnect } from '../../view/notes/note-creation-popup/button/NoteCreationPopupButton';
-import { styles } from './Style';
-import { ChartConfig } from './config/ChartConfig';
-import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
+import { NoteCreationButton } from '../../view/notes/note-creation-popup/button/NoteCreationButton';
 import { InfoIcon } from '../../component/icon/InfoIcon';
+
+import { IStorage } from '../../model/IStorage';
+import { INoteList, INoteListByDay } from '../../model/INoteList';
+import { ChartValueType, ChartPeriodType, ChartAveragePeriodType } from '../../model/IChart';
+import { ChartSettings } from '../../view/chart/chart-settings/ChartSettings';
+import { DateHelper } from '../../utils/DateHelper';
+import { ChartConfig } from './config/ChartConfig';
 import { ModalType } from '../../model/IModal';
-import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
-import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
 import { Measures } from '../../localisation/Measures';
+import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
+import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
+import { COLOR } from "../../constant/Color";
+import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
+
+import { convertFlatNoteListToNoteListByDay } from '../../store/selector/NoteListSelector';
+import { getArrayAverage, getWeekDaysNumbers } from '../../calculation-services/chart-calculation-services/ChartCalculationHelper';
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
+import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { i18nGet } from '../../localisation/Translate';
 import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 
@@ -124,6 +128,13 @@ class Chart extends React.Component<ChartProps, ChartState> {
         }
     }
 
+    goToNoteEditor = () => {
+        const { navigation } = this.props;
+
+        navigation.navigate(NavigatorEntities.NOTE_EDITOR);
+    }
+
+
     render() {
         const { navigation } = this.props;
 
@@ -149,7 +160,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
                     </View>
                 </View>
                 {!this.state.popupShown && <View style={styles.addNoteButtonView}>
-                    <NoteCreationPopupButtonConnect />
+                    <NoteCreationButton onClick={this.goToNoteEditor} />
                 </View>}
             </View>
         )
@@ -480,7 +491,7 @@ export const ChartConnect = connect(
         noteList: state.noteList,
         userDiabetesProperties: state.userDiabetesProperties,
     }),
-    (dispatch: Dispatch<Action>) => ({ dispatch }),
+    (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
         return {
             ...ownProps,
@@ -515,3 +526,153 @@ export const ChartConnect = connect(
         }
     }
 )(Chart)
+
+const styles = StyleSheet.create({
+    view: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        backgroundColor: '#F6F8FF',
+    },
+    scrollViewWrapWrap: {
+        backgroundColor: "#2E3858",
+    },
+    scrollViewWrap: {
+        backgroundColor: "#2E3858",
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        overflow: 'hidden',
+    },
+    scrollView: {
+        paddingTop: 10,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+        backgroundColor: "#003653",
+    },
+    viewGradient: {
+        position: 'absolute',
+
+        left: 0,
+        top: 0,
+
+        height: '100%',
+        width: '100%',
+    },
+    ChartView: {
+        width: '100%',
+
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    chartView: {
+        width: '100%',
+
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: COLOR.LIGHT_BLUE,
+
+        ...SHADOW_OPTIONS,
+
+        overflow: 'hidden'
+    },
+    chartGradient: {
+        width: '100%',
+
+        paddingTop: 20,
+        paddingBottom: 25,
+
+        backgroundColor: COLOR.LIGHT_BLUE,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        ...SHADOW_OPTIONS,
+    },
+    highightTitlesView: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    highightTitle: {
+        fontSize: 13,
+        color: '#CCCCCC',
+        textAlign: 'center',
+    },
+    axisTitleView: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    axisTitleText: {
+        paddingTop: 5,
+        paddingRight: 10,
+
+        fontSize: 11,
+        fontWeight: 'bold',
+        color: '#eee',
+    },
+    settingsViewWrap: {
+        backgroundColor: "#3E2626",
+    },
+    settingsView: {
+        overflow: 'hidden',
+        display: 'flex',
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
+
+        backgroundColor: COLOR.PRIMARY_BASE,
+
+        paddingTop: 20,
+        paddingHorizontal: 38,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    statisticsView: {
+    },
+    statisticsViewText: {
+        textAlign: 'center',
+    },
+    addNoteButtonView: {
+        position: 'absolute',
+        bottom: 5,
+        right: 5,
+
+        ...SHADOW_OPTIONS,
+    },
+    addNoteButton: {
+        display: 'flex',
+        padding: 5,
+        margin: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(250,250,250, 1)',
+        borderRadius: 30,
+        ...SHADOW_OPTIONS
+    },
+    addNoteButtonText: {
+        fontSize: 18,
+        color: "#333333",
+        marginRight: 5
+    },
+    headerTitleRightSide: {
+        marginTop: 5,
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    headerTouchable: {
+        marginTop: 2,
+    },
+    rightTitle: {
+        fontWeight: '300',
+        fontSize: 19,
+        color: '#ffffff',
+        marginRight: 5,
+    }
+})

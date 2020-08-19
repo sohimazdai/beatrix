@@ -1,7 +1,7 @@
 import { ChartAxisType, IChartConfiguration } from "../../../model/IChart"
 import { Dimensions } from "react-native"
 import { PolylineType } from "../../../view/chart/chart-svg/ChartPolyline";
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 
 export class ChartConfig {
     TIME_STEP_MINUTES = 5;
@@ -52,9 +52,9 @@ export class ChartConfig {
             axisColor: '#666666',
             netColor: '#999999',
             yNetTitlesColor: '#666666',
-            polylineColor: Color.PRIMARY_LIGHT,
-            dotStrokeColor: Color.PRIMARY_LIGHT,
-            dotFillColor: Color.RED_LIGHT,
+            polylineColor: COLOR.PRIMARY_LIGHT,
+            dotStrokeColor: COLOR.PRIMARY_LIGHT,
+            dotFillColor: COLOR.RED_LIGHT,
             paddingTop: true,
             paddingBottom: true,
             basicPadding: this.BASIC_PADDING,

@@ -1,30 +1,36 @@
 import React from "react";
 import { View, } from "react-native";
 import { connect } from "react-redux";
-import { IStorage } from "../../model/IStorage";
-import { INoteListByDay } from "../../model/INoteList";
 import {
   NavigationParams,
   NavigationScreenProp,
   NavigationState
 } from "react-navigation";
-import { BlockHat } from "../../component/hat/BlockHat";
-import { NoteCreationPopupButtonConnect } from "../../view/notes/note-creation-popup/button/NoteCreationPopupButton";
-import { styles } from "./Style";
 import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
+import { StyleSheet } from "react-native";
+
+import { BlockHat } from "../../component/hat/BlockHat";
+import { NoteCreationButton } from "../../view/notes/note-creation-popup/button/NoteCreationButton";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
-import { IUser } from '../../model/IUser';
-import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
-import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
-import { IApp } from '../../model/IApp';
-import { i18nGet } from '../../localisation/Translate';
 import { LastNotesConnected } from '../../view/dashboard/last-notes/components/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
 import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-info/components/ActiveInsulinInfo';
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
-import { StatisticsType } from '../../view/dashboard/statistics-card/entities';
 import { HBA1CCalculatorConnected } from '../../view/dashboard/hba1c-calculator/components/HBA1CCalculator';
 import { Fader } from '../../component/fader/Fader';
+
+import { IStorage } from "../../model/IStorage";
+import { INoteListByDay } from "../../model/INoteList";
+import { IUser } from '../../model/IUser';
+import { IApp } from '../../model/IApp';
+import { StatisticsType } from '../../view/dashboard/statistics-card/entities';
+import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
+import { COLOR } from "../../constant/Color";
+
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
+import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
+import { i18nGet } from '../../localisation/Translate';
+import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -57,6 +63,12 @@ class DashboardScreen extends React.PureComponent<FullProps> {
     if (!pP.app.serverAvailable && this.props.app.serverAvailable) {
       this.props.syncNotes();
     }
+  }
+
+  goToNoteEditor = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(NavigatorEntities.NOTE_EDITOR);
   }
 
   render() {
@@ -99,7 +111,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
           </ScrollView>
         </View>
         <View style={styles.addNoteButtonView}>
-          <NoteCreationPopupButtonConnect />
+          <NoteCreationButton onClick={this.goToNoteEditor} />
         </View>
         <Fader hidden={!this.props.selectedDotId} />
       </View >
@@ -130,3 +142,45 @@ export const DashboardScreenConnect = connect(
     syncNotes: () => dispatch(createSyncNotesAction({ reason: SyncReasonType.SEND_PENDING })),
   }),
 )(DashboardScreen);
+
+const styles = StyleSheet.create({
+  screenView: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: COLOR.PRIMARY,
+    maxWidth: 420,
+  },
+  scrollViewWrapper: {
+    backgroundColor: COLOR.PRIMARY,
+  },
+  scrollView: {
+    height: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: COLOR.PRIMARY_WHITE,
+  },
+  statisticsScrollView: {
+    display: 'flex',
+    marginLeft: -8,
+    paddingHorizontal: 16,
+    overflow: 'visible',
+  },
+  addNoteButtonView: {
+    position: "absolute",
+    bottom: 5,
+    width: '100%',
+    ...SHADOW_OPTIONS
+  },
+  profileIconView: {
+    width: 30,
+    height: 30,
+    padding: 3,
+    borderRadius: 5,
+    backgroundColor: COLOR.PRIMARY_WHITE,
+    ...SHADOW_OPTIONS,
+  },
+  stub: {
+    marginTop: 152,
+  },
+});

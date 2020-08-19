@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
-import { Color } from '../../constant/Color';
+import { COLOR } from '../../constant/Color';
 
 interface Props {
   loading: boolean
@@ -16,7 +16,7 @@ class Component extends React.Component<Props> {
 
     if (isManaged) {
       return isManagedLoading
-        ? <ActivityIndicator collapsable color={Color.PRIMARY} style={{ paddingLeft: 5 }} />
+        ? <ActivityIndicator collapsable color={COLOR.PRIMARY} style={{ paddingLeft: 5 }} />
         : null
     }
 

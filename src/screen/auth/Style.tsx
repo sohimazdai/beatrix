@@ -1,6 +1,6 @@
-import { shadowOptions } from "../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { StyleSheet } from "react-native";
-import { Color } from "../../constant/Color";
+import { COLOR } from "../../constant/Color";
 
 export const styles = StyleSheet.create({
     AuthScreen: {
@@ -62,10 +62,10 @@ export const styles = StyleSheet.create({
 
         textAlign: 'left',
         fontSize: 16,
-        color: Color.TEXT_DARK_GRAY,
+        color: COLOR.TEXT_DARK_GRAY,
 
         borderColor: '#FFC19C',
-        backgroundColor: Color.WHITE,
+        backgroundColor: COLOR.WHITE,
     },
     rememberButton: {
         width: 150,
@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 10,
         backgroundColor: "white",
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     rememberButtonTouchable: {
         width: '100%',
@@ -127,9 +127,9 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 15,
         borderColor: '#FFB4B4',
-        backgroundColor: Color.WHITE,
+        backgroundColor: COLOR.WHITE,
         justifyContent: 'center',
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     registrationButtonText: {
         textAlign: 'center',
@@ -156,7 +156,7 @@ export const styles = StyleSheet.create({
 
         backgroundColor: 'white',
         borderRadius: 10,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     authScreenRestorePasswordViewTitle: {
         height: 30,
@@ -174,7 +174,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center'
     },
     authFormInstallationText: {
-        color: Color.TEXT_DARK_GRAY,
+        color: COLOR.TEXT_DARK_GRAY,
         marginLeft: 8,
         fontSize: 15,
     },

@@ -1,10 +1,10 @@
 import React from 'react';
 import { IModalInfo } from '../../../model/IModal';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { ScrollView } from 'react-native-gesture-handler';
-import { shadowOptions } from '../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 import { i18nGet } from '../../../localisation/Translate';
 
 interface ModalContentInfoCardProps {
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     flexDirection: 'column',
-    backgroundColor: Color.WHITE,
+    backgroundColor: COLOR.WHITE,
   },
   scrollView: {
     maxHeight: Dimensions.get('screen').height * 0.8,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
 
     fontSize: 18,
     fontWeight: 'bold',
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   infoTextCards: {
     flex: 1,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
 
     fontSize: 15,
     textAlign: 'left',
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   infoCard: {
     backgroundColor: ColorType.DEFAULT,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     display: 'flex',
     flexDirection: 'row',
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   infoText: {
     flex: 1,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
 
     fontSize: 16,
     textAlign: 'left',
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   okButtonView: {
     alignSelf: 'center',
@@ -181,16 +181,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: Color.BUTTON_STROKE_LIGHT_GRAY,
+    borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
     backgroundColor: 'white',
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   okButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
 })

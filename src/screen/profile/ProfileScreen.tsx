@@ -1,14 +1,16 @@
 import React from 'react'
-import { Hat } from '../../component/hat/Hat'
 import { connect } from 'react-redux'
-import { IStorage } from '../../model/IStorage'
 import { View, StyleSheet, ScrollView, Text, Alert } from 'react-native'
-import { ProfileItem } from '../../view/profile/ProfileItem'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { NavigationParams, NavigationScreenProp } from 'react-navigation'
-import { NavigationState } from 'react-navigation'
-import { appAnalytics, AnalyticsSections } from '../../app/Analytics'
+import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation'
+
+import { Hat } from '../../component/hat/Hat'
+import { ProfileItem } from '../../view/profile/ProfileItem'
+
+import { IStorage } from '../../model/IStorage'
 import { IUser } from '../../model/IUser'
+
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 import { i18nGet } from '../../localisation/Translate'
 

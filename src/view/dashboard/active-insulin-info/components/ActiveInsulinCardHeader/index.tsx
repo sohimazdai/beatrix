@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { InfoIcon } from '../../../../../component/icon/InfoIcon';
 
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 import { i18nGet } from '../../../../../localisation/Translate';
 
 export default function ActiveInsulinCardHeader() {
@@ -22,7 +22,7 @@ export default function ActiveInsulinCardHeader() {
           </Text>
         )}
       >
-        <InfoIcon roundFill={Color.PRIMARY} textColor={Color.PRIMARY_WHITE} />
+        <InfoIcon roundFill={COLOR.PRIMARY} textColor={COLOR.PRIMARY_WHITE} />
       </Tooltip>
     </View>
   )
@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    color: Color.CRIMSON_RED,
+    color: COLOR.CRIMSON_RED,
     fontWeight: '500',
   },
   tooltipText: {
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
     fontSize: 15,
     lineHeight: 20,
   },

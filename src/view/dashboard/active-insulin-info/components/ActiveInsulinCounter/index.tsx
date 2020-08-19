@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Text, StyleSheet } from 'react-native';
 import { IStorage } from '../../../../../model/IStorage';
 import { selectActiveInsulinValue } from '../../selectors/select-active-insulin-value';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 
 interface Props {
   activeInsulinValue: number
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     top: 16,
     right: 16,
     fontSize: 25,
-    color: Color.BLUE,
+    color: COLOR.BLUE,
     fontWeight: '500',
   }
 })

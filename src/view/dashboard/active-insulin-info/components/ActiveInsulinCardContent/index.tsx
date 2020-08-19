@@ -8,7 +8,7 @@ import { DateHelper } from '../../../../../utils/DateHelper';
 import { INoteListNote, INoteListByDay } from '../../../../../model/INoteList';
 import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { i18nGet } from '../../../../../localisation/Translate';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 import { ActiveInsulinChartConnected } from '../InsulinChart';
 import { selectActiveInsulinDuration } from '../../selectors/select-active-insulin-duration';
 import { OXTimeTitles } from '../OXTimeTitles';
@@ -161,6 +161,6 @@ const styles = StyleSheet.create({
   cardText: {
     paddingTop: 8,
     fontSize: 14,
-    color: Color.TEXT_BLACK,
+    color: COLOR.TEXT_BLACK,
   },
 })

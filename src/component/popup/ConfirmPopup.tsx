@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { IStorage } from '../../model/IStorage'
 import { IInteractive } from '../../model/IInteractive'
 import { View, StyleSheet, Text } from 'react-native'
-import { Color } from '../../constant/Color'
+import { COLOR } from '../../constant/Color'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 interface Props {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: Color.LIGHT_PINK_RED,
+        backgroundColor: COLOR.LIGHT_PINK_RED,
     },
     questionText: {
         flex: 1,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 
         fontSize: 18,
         textAlign: 'center',
-        color: Color.TEXT_DARK_GRAY,
+        color: COLOR.TEXT_DARK_GRAY,
     },
     confirmButtons: {
         width: '100%',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: Color.BUTTON_STROKE_LIGHT_GRAY,
+        borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
         backgroundColor: 'white',
     },
     negativeButtonTouchable: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     },
     negativeButtonText: {
         fontSize: 16,
-        color: Color.DIMGRAY,
+        color: COLOR.DIMGRAY,
     },
     positiveButtonView: {
         width: 100,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: Color.INDIAN_RED,
+        borderColor: COLOR.INDIAN_RED,
         backgroundColor: 'white',
     },
     positiveButtonTouchable: {
@@ -133,6 +133,6 @@ const styles = StyleSheet.create({
 
     positiveButtonText: {
         fontSize: 16,
-        color: Color.DIMGRAY,
+        color: COLOR.DIMGRAY,
     }
 })

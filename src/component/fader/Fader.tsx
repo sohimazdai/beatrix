@@ -1,6 +1,6 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
-import { Color } from '../../constant/Color';
+import { COLOR } from '../../constant/Color';
 import { i18nGet } from '../../localisation/Translate';
 import { Loader } from '../loader/Loader';
 

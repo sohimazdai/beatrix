@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { i18nGet } from '../../../localisation/Translate';
 import { connect } from 'react-redux';
 import Tooltip from '../../tooltip/Tooltip';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
 import { RoundClocksIcon } from '../RoundClocksIcon';
 
@@ -35,7 +35,7 @@ export const ClocsIconTooltipedConnected = connect()(ClocsIconTooltipedComponent
 
 const styles = StyleSheet.create({
   tooltipText: {
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
     fontSize: 15,
     lineHeight: 20,
   }

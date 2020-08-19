@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { IStorage } from '../../../../../model/IStorage';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 import { IUserDiabetesProperties } from '../../../../../model/IUserDiabetesProperties';
 import { ChartValueType, ChartPeriodType, ChartDotsData } from '../../../../../model/IChart';
 import { INoteListByDay } from '../../../../../model/INoteList';
 import { ChartConfig } from '../../../../../screen/chart/config/ChartConfig';
-import { shadowOptions } from '../../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
 import { ChartBox } from '../../../../chart/chart-svg/ChartBox';
 import { ChartPolyline } from '../../../../chart/chart-svg/ChartPolyline';
 import { calculateDayChartDots } from '../../../../../calculation-services/chart-calculation-services/ChartCalculationService';
@@ -115,14 +115,14 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 19,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   cardContent: {
     paddingTop: 16,
   },
   touchable: {
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   iconBarWrap: {
     marginBottom: 8,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   emptyListText: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   highightTitlesView: {

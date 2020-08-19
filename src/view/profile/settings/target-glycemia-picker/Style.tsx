@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { Color } from '../../../../constant/Color';
-import { shadowOptions } from "../../../../constant/ShadowOptions";
+import { COLOR } from '../../../../constant/Color';
+import { SHADOW_OPTIONS } from "../../../../constant/ShadowOptions";
 
 export const styles = StyleSheet.create({
     profileView: {
@@ -51,21 +51,21 @@ export const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 5,
         alignSelf: 'center',
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     applyButton: {
         margin: 10,
-        color: Color.GREEN,
+        color: COLOR.GREEN,
     },
     changeButton: {
         margin: 10,
-        color: Color.PRIMARY_BASE,
+        color: COLOR.PRIMARY_BASE,
     },
     shortInsulinTypeButtonActive: {
         borderColor: "#2E3858",
         borderWidth: 2,
         borderRadius: 5,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     shortInsulinTypePickerItemText: {
         fontSize: 16,
@@ -116,13 +116,13 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     shortInsulinTypePickerItemTextBlockedSelected: {
-        color: Color.PRIMARY,
+        color: COLOR.PRIMARY,
         fontWeight: '500',
         fontSize: 18,
         margin: 5,
     },
     shortInsulinTypePickerItemTextChange: {
-        color: Color.PRIMARY_LIGHT,
+        color: COLOR.PRIMARY_LIGHT,
         fontWeight: '500',
         fontSize: 16,
     },

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
 import Tooltip from '../../tooltip/Tooltip';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { appAnalytics } from '../../../app/Analytics';
 import { ShortSyringeIcon } from '../value-icons/ShortSyringeIcon';
 
@@ -42,7 +42,7 @@ export const ShortInsulinIconConnected = connect(
 
 const styles = StyleSheet.create({
   tooltipText: {
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
     fontSize: 15,
     lineHeight: 20,
   }

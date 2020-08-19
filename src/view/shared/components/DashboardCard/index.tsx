@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Color } from '../../../../constant/Color';
-import { shadowOptions } from '../../../../constant/ShadowOptions';
+import { COLOR } from '../../../../constant/Color';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 interface Props {
   children?: any;
@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'visible',
     padding: 16,
-    backgroundColor: Color.PRIMARY_WHITE,
+    backgroundColor: COLOR.PRIMARY_WHITE,
     borderRadius: 10,
     marginVertical: 4,
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
 })

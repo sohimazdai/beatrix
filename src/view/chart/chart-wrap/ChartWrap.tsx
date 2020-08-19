@@ -10,7 +10,7 @@ import { BreadUnitsTextRotated } from '../../../component/icon/BreadUnitsTextRot
 import { GlucoseTextRotated } from '../../../component/icon/GlucoseTextRotated';
 import { INoteList, INoteListByDay } from '../../../model/INoteList';
 import { ChartDot } from '../chart-svg/ChartDot';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { calculateDayChartDots, calculateMonthChartDots, calculateThreeMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
 import { ChartAxisPair } from '../chart-svg/ChartAxisPair';
@@ -126,9 +126,9 @@ export function Comp(props: ChartWrapProps) {
                         x={item.x}
                         y={item.y}
                         noteId={item.id}
-                        fill={config.dotFillColor ? config.dotFillColor : Color.RED}
+                        fill={config.dotFillColor ? config.dotFillColor : COLOR.RED}
                         dotStrokeColor={config.dotStrokeColor}
-                        stroke={Color.WHITE}
+                        stroke={COLOR.WHITE}
                         selectedDotId={selectedDotId}
                         type={props.type}
                         isAlone={config.isAlone}
@@ -142,8 +142,8 @@ export function Comp(props: ChartWrapProps) {
                         x={item.x}
                         y={item.y}
                         noteId={item.id}
-                        fill={config.dotFillColor ? config.dotFillColor : Color.WHITE}
-                        stroke={Color.INDIAN_RED}
+                        fill={config.dotFillColor ? config.dotFillColor : COLOR.WHITE}
+                        stroke={COLOR.INDIAN_RED}
                         selectedDotId={selectedDotId}
                         isAlone={config.isAlone}
                     />

@@ -8,7 +8,7 @@ import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties'
 import { Measures } from '../../../localisation/Measures';
 import { i18nGet } from '../../../localisation/Translate';
 import { selectActiveInsulinValue } from '../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 
 interface OwnProps {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     activeInsulinText: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: Color.RED_DARK,
+        color: COLOR.RED_DARK,
         paddingTop: 8,
     },
     recommendation: {

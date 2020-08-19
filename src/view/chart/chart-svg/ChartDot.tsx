@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Circle } from 'react-native-svg';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { IChartDot, ChartValueType } from '../../../model/IChart';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
 import { connect } from 'react-redux';
@@ -59,7 +59,7 @@ const Component = (props: Props) => (
 function getStroke(props: Props) {
     if (props.selectedDotId == (props.noteId ? props.noteId : String(props.id))) {
         if (props.isAlone) {
-            return Color.RED_BASE;
+            return COLOR.RED_BASE;
         }
         return props.stroke;
     }

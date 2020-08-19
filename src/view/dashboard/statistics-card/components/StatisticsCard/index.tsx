@@ -5,7 +5,7 @@ import { PieChartConnected } from '../PieChart';
 
 import { StatisticsType, StatisticsViewType } from '../../entities';
 import { Text, StyleSheet, View } from 'react-native';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { MeasuresStatisticsConnected } from '../MeasuresStatistics';
 import { NoteValueType } from '../../../../../model/INoteList';
@@ -62,7 +62,7 @@ export const StatisticsCardConnected = connect(
 const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 19,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
   cardContent: {

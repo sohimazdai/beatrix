@@ -5,7 +5,7 @@ import { GlucometerIcon } from '../../../component/icon/value-icons/GlucometerIc
 import { VegetablesIcon } from '../../../component/icon/value-icons/VegetablesIcon'
 import { ShortSyringeIcon } from '../../../component/icon/value-icons/ShortSyringeIcon'
 import { LongSyringeIcon } from '../../../component/icon/value-icons/LongSyringeIcon'
-import { shadowOptions } from '../../../constant/ShadowOptions'
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions'
 import { CommentIcon } from '../../../component/icon/CommentIcon'
 import { NoteValueType } from '../../../model/INoteList'
 
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
 
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
 
         backgroundColor: '#ffffff',
     },

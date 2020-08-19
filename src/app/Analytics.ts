@@ -92,6 +92,7 @@ export const appAnalytics = {
     HBA1C_CALCULATED: 'HBA1C calculated',
     //NOTELIST
     NOTELIST_SEEN: 'NoteList seen',
+    NOTE_EDITOR_SEEN: 'NoteEditor seen',
     //PROFILE
     PROFILE_SEEN: 'Profile seen',
     DIABETES_PROFILE_SEEN: 'Profile diabetes seen',

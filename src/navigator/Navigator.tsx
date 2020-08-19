@@ -23,6 +23,7 @@ import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
 import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { ExportDataSettings } from '../screen/profile/profile-settings/sub-settings/ExportDataSettings';
 import { OnboardingConnected } from '../screen/onboarding/Onboarding';
+import { NoteEditorConnect } from '../screen/note-editor/NoteEdtitor';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -51,7 +52,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
 
     const faded = (
         props.interactive.confirmPopupShown ||
-        props.interactive.creatingNoteMode ||
+        // props.interactive.creatingNoteMode ||
         props.modal.needToShow ||
         props.user.syncLoading ||
         props.user.exportLoading
@@ -68,7 +69,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
                 <AuthedNavigatorContainer />
                 <Fader hidden={!faded} type={faderType} />
                 <ChartDotInfoPopupConnect />
-                <NoteCreationPopupConnect />
+                {/* <NoteCreationPopupConnect /> */}
                 <ConfirmPopupConnect />
                 <ModalContentConnect />
             </>
@@ -115,6 +116,7 @@ const AuthedNavigator = createStackNavigator(
         Notes: { screen: NoteListScreenConnect },
         Charts: { screen: ChartConnect },
         Profile: { screen: ProfileScreenStack },
+        NoteEditor: { screen: NoteEditorConnect },
     },
     {
         headerMode: 'none'

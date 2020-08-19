@@ -10,7 +10,7 @@ import { IUserDiabetesProperties, GlycemiaMeasuringType } from "../../../../mode
 import { createUpdateUserDiabetesPropertiesAction } from '../../../../store/service/user/UpdateUserDiabetesPropertiesSaga';
 import { i18nGet } from '../../../../localisation/Translate';
 import { styles } from './Style';
-import { Color } from '../../../../constant/Color';
+import { COLOR } from '../../../../constant/Color';
 import { Measures } from '../../../../localisation/Measures';
 
 interface Props {
@@ -87,7 +87,7 @@ function ProfileSettingsTargetGlycemiaPicker(props: Props) {
                         </View>
                         <View style={styles.applyButton}>
                             <Button
-                                color={Color.GREEN_DARK}
+                                color={COLOR.GREEN_DARK}
                                 title={i18nGet('profile_apply')}
                                 onPress={() => {
                                     setBlocked(true);

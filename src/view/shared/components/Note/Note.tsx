@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../../model/INoteList';
-import { shadowOptions } from '../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 interface Props {
     note?: INoteListNote
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: 10,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     text: {
         flex: 1,

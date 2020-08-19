@@ -10,11 +10,11 @@ import {
 import Triangle from './Triangle';
 import { ScreenWidth, ScreenHeight, isIOS } from './helpers';
 import getTooltipCoordinate from './getTooltipCoordinate';
-import { Color } from '../../constant/Color';
+import { COLOR } from '../../constant/Color';
 import { appAnalytics } from '../../app/Analytics';
 
 const defaultProps = {
-  pointerColor: Color.PRIMARY,
+  pointerColor: COLOR.PRIMARY,
   overlayColor: "white",
   toggleWrapperProps: {},
   withOverlay: false,
@@ -24,7 +24,7 @@ const defaultProps = {
   width: 150,
   containerStyle: {},
   pointerStyle: {},
-  backgroundColor: Color.PRIMARY,
+  backgroundColor: COLOR.PRIMARY,
   onClose: () => { },
   actionType: 'press',
 };

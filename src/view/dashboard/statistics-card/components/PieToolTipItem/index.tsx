@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { render } from 'react-dom';
 import { PieColors } from '../../entities';
 import { i18nGet } from '../../../../../localisation/Translate';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 
 interface Props {
   title: string
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     lineHeight: 20,
     fontSize: 15,
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
   }
 })

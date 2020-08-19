@@ -12,7 +12,7 @@ import { PieLegendItem } from '../PieLegendItem';
 import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { PieToolTipItem } from '../PieToolTipItem';
 import { i18nGet } from '../../../../../localisation/Translate';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 
 interface Props {
   viewType: StatisticsViewType
@@ -41,7 +41,7 @@ class PieChartComponent extends React.Component<Props, State> {
           maxWidth: 160,
           textAlign: 'center',
           fontSize: 15,
-          color: Color.TEXT_DARK_GRAY
+          color: COLOR.TEXT_DARK_GRAY
         }}>
           {i18nGet('glucose_not_found_for_diagram')}
         </Text>

@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { shadowOptions } from "../../../constant/ShadowOptions";
-import { Color } from '../../../constant/Color';
+import { SHADOW_OPTIONS } from "../../../constant/ShadowOptions";
+import { COLOR } from '../../../constant/Color';
 
 export const styles = StyleSheet.create({
     noteCreationViewScrollView: {
@@ -85,17 +85,17 @@ export const styles = StyleSheet.create({
         padding: 15,
         marginVertical: 10,
 
-        ...shadowOptions,
+        ...SHADOW_OPTIONS,
 
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Color.PRIMARY,
+        backgroundColor: COLOR.PRIMARY,
     },
     saveButtonText: {
         fontFamily: 'Roboto',
         fontSize: 17,
-        color: Color.WHITE,
+        color: COLOR.WHITE,
         fontWeight: 'bold',
     },
     deleteButtonTouchable: {
@@ -105,12 +105,12 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         fontWeight: 'bold',
-        backgroundColor: Color.RED_DARK,
+        backgroundColor: COLOR.RED_DARK,
     },
     deleteButtonText: {
         fontFamily: 'Roboto',
         fontSize: 17,
-        color: Color.WHITE,
+        color: COLOR.WHITE,
         fontWeight: 'bold',
     },
     inputViewTitle: {
@@ -120,7 +120,7 @@ export const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 20,
         fontWeight: "bold",
-        color: Color.TEXT_DARK_GRAY
+        color: COLOR.TEXT_DARK_GRAY
     },
     numberScrollWrapper: {
         marginTop: 40,

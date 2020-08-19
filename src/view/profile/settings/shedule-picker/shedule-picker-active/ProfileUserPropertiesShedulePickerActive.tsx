@@ -10,7 +10,7 @@ import { styles } from './Style';
 import { createUpdateUserSheduleAction } from '../../../../../store/service/user/UpdateSheduleSaga';
 import { InteractiveUserPropertiesShedulePopupType } from '../../../../../model/IInteractive';
 import { i18nGet } from '../../../../../localisation/Translate';
-import { Color } from '../../../../../constant/Color';
+import { COLOR } from '../../../../../constant/Color';
 
 interface Props {
     sheduleKey?: SheduleKeyType
@@ -225,7 +225,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
                 <Button
                     title={i18nGet('add')}
                     onPress={this.onAddPress}
-                    color={Color.PRIMARY}
+                    color={COLOR.PRIMARY}
                 />
             </View>
         )
@@ -256,7 +256,7 @@ export default class ProfileUserPropertiesShedulePickerActive extends Component<
                 <Button
                     title={i18nGet('save')}
                     onPress={this.onSaveSheduleClick}
-                    color={Color.GREEN_DARK}
+                    color={COLOR.GREEN_DARK}
                 />
             </View>
         )

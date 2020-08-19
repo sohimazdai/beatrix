@@ -1,20 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { View, Button, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
-import { i18nGet } from '../../../localisation/Translate';
-import { IStorage } from '../../../model/IStorage';
-import { Color } from '../../../constant/Color';
-import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
-import { shadowOptions } from '../../../constant/ShadowOptions';
-import { Measures } from '../../../localisation/Measures';
 import { BlockHat } from '../../../component/hat/BlockHat';
-import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
-import { appAnalytics, AnalyticsSections } from '../../../app/Analytics';
 import Tooltip from '../../../component/tooltip/Tooltip';
 import { InfoIcon } from '../../../component/icon/InfoIcon';
+
+import { IStorage } from '../../../model/IStorage';
+import { COLOR } from '../../../constant/Color';
+import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
+import { Measures } from '../../../localisation/Measures';
+
+import { i18nGet } from '../../../localisation/Translate';
+import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
+import { appAnalytics, AnalyticsSections } from '../../../app/Analytics';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties
@@ -117,7 +118,7 @@ class Onboarding extends React.Component<Props, State> {
           <Button
             title={i18nGet('skip')}
             onPress={this.skipOnboarding}
-            color={Color.TEXT_DARK_GRAY}
+            color={COLOR.TEXT_DARK_GRAY}
           />
           <View style={{ height: 100 }} />
         </ScrollView>
@@ -158,7 +159,7 @@ class Onboarding extends React.Component<Props, State> {
               </View>
             )}
           >
-            <InfoIcon textColor={Color.PRIMARY_WHITE} roundFill={Color.PRIMARY} />
+            <InfoIcon textColor={COLOR.PRIMARY_WHITE} roundFill={COLOR.PRIMARY} />
           </Tooltip>
         </View>
         <View style={styles.typePicker}>
@@ -204,7 +205,7 @@ class Onboarding extends React.Component<Props, State> {
           {i18nGet('glycemia_unit_description')}
         </Text>
         <View style={styles.typePicker}>
-          <View style={shadowOptions}>
+          <View style={SHADOW_OPTIONS}>
             <TouchableOpacity
               onPress={() => this.selectGlycemiaMeasuringType(
                 GlycemiaMeasuringType.MG_DL
@@ -216,7 +217,7 @@ class Onboarding extends React.Component<Props, State> {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={shadowOptions}>
+          <View style={SHADOW_OPTIONS}>
             <TouchableOpacity
               onPress={() => this.selectGlycemiaMeasuringType(
                 GlycemiaMeasuringType.MMOL_L
@@ -253,7 +254,7 @@ class Onboarding extends React.Component<Props, State> {
           {i18nGet('carb_unit_description')}
         </Text>
         <View style={styles.typePicker}>
-          <View style={shadowOptions}>
+          <View style={SHADOW_OPTIONS}>
             <TouchableOpacity
               onPress={() => this.selectCarbsMeasuringType(
                 CarbsMeasuringType.BREAD_UNITS
@@ -265,7 +266,7 @@ class Onboarding extends React.Component<Props, State> {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={shadowOptions}>
+          <View style={SHADOW_OPTIONS}>
             <TouchableOpacity
               onPress={() => this.selectCarbsMeasuringType(
                 CarbsMeasuringType.CARBOHYDRATES
@@ -299,20 +300,20 @@ export const OnboardingConnected = connect(
 
 const styles = StyleSheet.create({
   onboardingScreen: {
-    backgroundColor: Color.PRIMARY,
+    backgroundColor: COLOR.PRIMARY,
   },
   scrollView: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: Color.WHITE,
+    backgroundColor: COLOR.WHITE,
   },
   insulinPickerView: {
     borderRadius: 10,
     margin: 16,
     marginBottom: 0,
     padding: 16,
-    backgroundColor: Color.WHITE,
-    ...shadowOptions,
+    backgroundColor: COLOR.WHITE,
+    ...SHADOW_OPTIONS,
   },
   insulinPickerHeader: {
     display: 'flex',
@@ -320,20 +321,20 @@ const styles = StyleSheet.create({
   },
   tooltipText: {
     fontSize: 15,
-    color: Color.PRIMARY_WHITE,
+    color: COLOR.PRIMARY_WHITE,
   },
   insulinPickerItem: {
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   checkboxTouchable: {
     borderRadius: 3,
     borderWidth: 1,
-    borderColor: Color.TEXT_DARK_GRAY,
+    borderColor: COLOR.TEXT_DARK_GRAY,
     padding: 8,
   },
   checkboxTouchableActive: {
-    backgroundColor: Color.GREEN,
-    borderColor: Color.GREEN_DARK,
+    backgroundColor: COLOR.GREEN,
+    borderColor: COLOR.GREEN_DARK,
   },
   checkboxText: {
     marginLeft: 4,
@@ -346,35 +347,35 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   typePickerItem: {
-    backgroundColor: Color.WHITE,
-    borderColor: Color.WHITE,
+    backgroundColor: COLOR.WHITE,
+    borderColor: COLOR.WHITE,
     borderWidth: 2,
     padding: 8,
     marginTop: 8,
     borderRadius: 5,
   },
   typePickerItemActive: {
-    borderColor: Color.PRIMARY,
+    borderColor: COLOR.PRIMARY,
   },
   typePickerItemText: {
     fontSize: 16,
   },
   label: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   labelWithoutMargin: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   note: {
     padding: 16,
     fontSize: 15,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
   defaultText: {
     paddingTop: 16,
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
   },
 })

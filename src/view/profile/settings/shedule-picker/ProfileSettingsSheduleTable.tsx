@@ -11,7 +11,7 @@ import { createClearSheduleByKeyType } from '../../../../store/modules/user-prop
 import { ProfileUserPropertiesShedulePickerActiveConnect } from './shedule-picker-active/ProfileUserPropertiesShedulePickerActive';
 import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
-import { Color } from '../../../../constant/Color';
+import { COLOR } from '../../../../constant/Color';
 
 interface Props {
     sheduleKey: SheduleKeyType
@@ -106,7 +106,7 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
         return (
             <View style={styles.clearSheduleButton}>
                 <Button
-                    color={Color.CRIMSON_RED}
+                    color={COLOR.CRIMSON_RED}
                     title={i18nGet('shedule_clear')}
                     onPress={() => {
                         Alert.alert(

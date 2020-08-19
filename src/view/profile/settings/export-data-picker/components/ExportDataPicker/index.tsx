@@ -10,7 +10,7 @@ import { NoteDatePickerConnect } from '../../../../../notes/note-date-picker/Not
 import { convertFlatNoteListToNoteListByDay } from '../../../../../../store/selector/NoteListSelector';
 import { INoteListByDay } from '../../../../../../model/INoteList';
 import { selectFirstNoteDate } from '../../selectors/selectFirstNoteDate';
-import { Color } from '../../../../../../constant/Color';
+import { COLOR } from '../../../../../../constant/Color';
 import { appAnalytics } from '../../../../../../app/Analytics';
 
 interface Props {
@@ -92,7 +92,7 @@ export const ExportDataConnect = connect(
 
 const styles = StyleSheet.create({
   title: {
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     fontSize: 19,
     marginBottom: 10,
     display: 'flex',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   optionsCellText: {
     fontSize: 16,
-    color: Color.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DARK_GRAY,
     marginRight: 8,
   },
   buttonView: {

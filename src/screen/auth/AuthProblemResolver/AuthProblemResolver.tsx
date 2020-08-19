@@ -6,7 +6,7 @@ import { batchActions } from 'redux-batched-actions';
 import { IStorage } from '../../../model/IStorage';
 import { IUser } from '../../../model/IUser';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { shadowOptions } from '../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 import { createGetUserByInstallationIdAction } from '../../../store/service/auth/GetUserByInstallationId';
 import { createSyncUserAction } from '../../../store/service/user/SyncUserSaga';
 import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 5,
-    ...shadowOptions,
+    ...SHADOW_OPTIONS,
   },
   buttonText: {
     fontSize: 16,

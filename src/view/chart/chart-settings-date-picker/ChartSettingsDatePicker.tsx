@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
 import { ModalType, IModalPickerType } from '../../../model/IModal';
-import { Color } from '../../../constant/Color';
+import { COLOR } from '../../../constant/Color';
 import { CalendarIcon } from '../../../component/icon/CalendarIcon';
 import { ChartPeriodType } from '../../../model/IChart';
 import { DateHelper } from '../../../utils/DateHelper';
 import { appAnalytics } from '../../../app/Analytics';
-import { shadowOptions } from '../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 import { i18nGet } from '../../../localisation/Translate';
 
 export interface ChartSettingsDatePickerProps {
@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
         width: 170,
 
         borderRadius: 5,
-        backgroundColor: Color.WHITE,
-        ...shadowOptions,
+        backgroundColor: COLOR.WHITE,
+        ...SHADOW_OPTIONS,
     },
     viewWide: {
         width: 190,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
 
         textAlign: 'center',
         fontSize: 17,
-        color: Color.DIMGRAY,
+        color: COLOR.DIMGRAY,
     },
     inputTextWide: {
         fontSize: 14,

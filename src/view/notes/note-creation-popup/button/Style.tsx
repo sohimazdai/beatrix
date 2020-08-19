@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { shadowOptions } from "../../../../constant/ShadowOptions";
-import { Color } from '../../../../constant/Color';
+import { SHADOW_OPTIONS } from "../../../../constant/ShadowOptions";
+import { COLOR } from '../../../../constant/Color';
 
 export const styles = StyleSheet.create({
     addNoteButton: {
@@ -8,9 +8,9 @@ export const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
 
-        backgroundColor: Color.PRIMARY,
+        backgroundColor: COLOR.PRIMARY,
         borderRadius: 10,
-        ...shadowOptions
+        ...SHADOW_OPTIONS
     },
     addNoteButtonTouchable: {
         padding: 10,
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     },
     addNoteButtonText: {
         fontSize: 18,
-        color: Color.WHITE,
+        color: COLOR.WHITE,
         fontWeight: '500',
         marginRight: 5,
     }
