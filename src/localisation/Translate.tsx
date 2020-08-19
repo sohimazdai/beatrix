@@ -1221,4 +1221,16 @@ const translateStore = {
     'es': 'Selección predeterminada',
     'ru': 'Выбор по умолчанию',
   },
+
+  //NOTE_EDITOR
+  note_editing: {
+    'en': 'Edit note',
+    'es': 'Editar nota',
+    'ru': 'Редактирование записи',
+  },
+  note_creation: {
+    'en': 'Create note',
+    'es': 'Crear nota',
+    'ru': 'Создание записи',
+  },
 }

@@ -18,7 +18,7 @@ import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/insulin-d
 import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
-import { CloseIcon } from '../../component/icon/CloseIcon';
+import { BlockHat } from '../../component/hat/BlockHat';
 
 import { IInteractive } from '../../model/IInteractive';
 import { INoteListNote, NoteValueType } from '../../model/INoteList';
@@ -34,6 +34,16 @@ import { i18nGet } from '../../localisation/Translate';
 import { createCreateNoteAction } from '../../store/service/note/CreateNoteSaga';
 import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga';
 import { appAnalytics } from '../../app/Analytics';
+
+const INITIAL_STATE = {
+  date: new Date(),
+  glucose: 0,
+  breadUnits: 0,
+  insulin: 0,
+  longInsulin: 0,
+  commentary: '',
+  currentValueType: NoteValueType.GLUCOSE,
+};
 
 interface Props {
   interactive?: IInteractive
@@ -55,33 +65,29 @@ interface State {
 }
 
 class NoteEditor extends React.PureComponent<Props, State>{
-  state = {
-    date: new Date(),
-    glucose: 0,
-    breadUnits: 0,
-    insulin: 0,
-    longInsulin: 0,
-    commentary: '',
-    currentValueType: NoteValueType.GLUCOSE,
+  constructor(props: Props) {
+    super(props);
+    const { note } = props;
+
+    if (note) {
+      const { id, userId, carbsUnitWeight, carbsMeasuringType, glycemiaType, ...restNote } = note;
+
+      const noteFromProps: State = {
+        ...INITIAL_STATE,
+        ...restNote,
+        date: new Date(restNote.date),
+      }
+
+      this.state = noteFromProps;
+    } else this.state = INITIAL_STATE
   }
 
   componentDidMount() {
-    //TODO: add analytics
-  }
-
-  componentDidUpdate(pP: Props, pS: State) {
     const { note } = this.props;
 
-    if (!pP.note && note) {
-      this.setState({
-        date: new Date(note.date),
-        glucose: note.glucose,
-        breadUnits: note.breadUnits,
-        insulin: note.insulin,
-        longInsulin: note.longInsulin,
-        commentary: note.commentary,
-      });
-    };
+    appAnalytics.sendEventWithProps(appAnalytics.events.NOTE_EDITOR_SEEN, {
+      isEditing: note ? true : false
+    })
   }
 
   closeEditor = () => {
@@ -91,28 +97,39 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   render() {
+    const { note } = this.props;
+
+    const title = note
+      ? i18nGet('note_editing')
+      : i18nGet('note_creation');
+
     return (
       <View
-        style={!this.props.note ?
-          styles.NoteEditorView :
-          styles.noteEditingView
+        style={note
+          ? styles.noteEditingView
+          : styles.noteCreationView
         }
       >
-        <ScrollView style={styles.NoteEditorViewScrollView}>
-          <View style={styles.scrollViewContent}>
+        <BlockHat title={title} onBackPress={this.closeEditor} />
+        <ScrollView
+          style={note
+            ? styles.noteEditingViewScrollView
+            : styles.noteCreationViewScrollView
+          }
+        >
+          <View
+            style={note
+              ? styles.noteEditingScrollViewContent
+              : styles.noteCreationScrollViewContent
+            }
+          >
             {this.renderPickerBlock()}
-            <View style={styles.buttonsBlock}>
-              {this.props.note && this.renderDeleteButton()}
-              {this.renderSaveButton()}
-            </View>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          style={styles.hideTouchable}
-          onPress={this.closeEditor}
-        >
-          <CloseIcon />
-        </TouchableOpacity>
+        <View style={styles.buttonsBlock}>
+          {this.props.note && this.renderDeleteButton()}
+          {this.renderSaveButton()}
+        </View>
       </View>
     )
   }
@@ -358,8 +375,9 @@ export const NoteEditorConnect = connect(
     userDiabetesProperties: state.userDiabetesProperties
   }),
   (dispatch) => ({ dispatch }),
-  (stateProps, { dispatch }, ownProps: any) => {
-    const noteId = stateProps.interactive.editingNoteId || "";
+  (stateProps, { dispatch }, ownProps: Partial<Props>) => {
+    const noteId = ownProps.navigation.getParam('noteId') || "";
+
     return {
       ...ownProps,
       ...stateProps,
@@ -373,42 +391,30 @@ export const NoteEditorConnect = connect(
 )(NoteEditor)
 
 const styles = StyleSheet.create({
-  NoteEditorViewScrollView: {
-    flex: 1,
-    width: '100%',
-    minHeight: Dimensions.get('screen').height * 0.9,
-  },
-  NoteEditorView: {
-    flex: 1,
-    width: '100%',
-    height: Dimensions.get('screen').height * 0.9,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    backgroundColor: "#D4EEFF",
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+  noteCreationView: {
+    backgroundColor: COLOR.PRIMARY,
   },
   noteEditingView: {
-    flex: 1,
-    width: '100%',
-    height: Dimensions.get('screen').height * 0.9,
-    borderTopRightRadius: 20,
+    backgroundColor: COLOR.PRIMARY,
+  },
+  noteCreationViewScrollView: {
     borderTopLeftRadius: 20,
-    backgroundColor: "#FFE1DF",
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    borderTopRightRadius: 20,
+    backgroundColor: COLOR.BLUE_BASE,
+  },
+  noteEditingViewScrollView: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: COLOR.RED_BASE,
+  },
+  noteEditingScrollViewContent: {
+    minHeight: Dimensions.get('screen').height - 75,
     alignItems: 'center',
   },
-  scrollViewContent: {
-    flex: 1,
-    height: Dimensions.get('screen').height * 0.9,
-    width: '100%',
-    flexDirection: 'column',
+  noteCreationScrollViewContent: {
+    minHeight: Dimensions.get('screen').height - 75,
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
-
   inputBlock: {
     flex: 3,
     width: '100%',
@@ -421,7 +427,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonsBlock: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 16,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -453,7 +460,6 @@ const styles = StyleSheet.create({
   },
   saveButtonTouchable: {
     padding: 15,
-    marginVertical: 10,
 
     ...SHADOW_OPTIONS,
 
