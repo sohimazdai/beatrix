@@ -30,6 +30,7 @@ import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createModalChangeAction } from '../../store/modules/modal/ModalActionCreator';
 import { i18nGet } from '../../localisation/Translate';
 import { createChangeInteractive } from '../../store/modules/interactive/interactive';
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 
 export interface ChartProps {
     noteListByDay: INoteListByDay
@@ -128,12 +129,11 @@ class Chart extends React.Component<ChartProps, ChartState> {
         }
     }
 
-    goToNoteEditor = () => {
+    goToNoteEditor = (noteId?: string) => {
         const { navigation } = this.props;
 
-        navigation.navigate(NavigatorEntities.NOTE_EDITOR);
+        navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
     }
-
 
     render() {
         const { navigation } = this.props;
@@ -162,6 +162,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
                 {!this.state.popupShown && <View style={styles.addNoteButtonView}>
                     <NoteCreationButton onClick={this.goToNoteEditor} />
                 </View>}
+                <ChartDotInfoPopupConnect navigation={navigation} />
             </View>
         )
     }

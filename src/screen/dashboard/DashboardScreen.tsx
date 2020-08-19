@@ -31,6 +31,7 @@ import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -65,10 +66,10 @@ class DashboardScreen extends React.PureComponent<FullProps> {
     }
   }
 
-  goToNoteEditor = () => {
+  goToNoteEditor = (noteId?: string) => {
     const { navigation } = this.props;
 
-    navigation.navigate(NavigatorEntities.NOTE_EDITOR);
+    navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
   }
 
   render() {
@@ -81,7 +82,10 @@ class DashboardScreen extends React.PureComponent<FullProps> {
           <ScrollView style={styles.scrollView}>
             <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
               <ActiveInsulinInfoConnected navigation={navigation} />
-              <LastNotesConnected onNotesPress={() => navigation.navigate('Notes')} />
+              <LastNotesConnected
+                onNotesPress={() => navigation.navigate('Notes')}
+                onNotePress={(noteId) => this.goToNoteEditor(noteId)}
+              />
               <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
             </View>
             <ScrollView
@@ -114,6 +118,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
           <NoteCreationButton onClick={this.goToNoteEditor} />
         </View>
         <Fader hidden={!this.props.selectedDotId} />
+        <ChartDotInfoPopupConnect navigation={navigation} />
       </View >
     );
   }

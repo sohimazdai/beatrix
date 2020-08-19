@@ -72,10 +72,10 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     }
   }
 
-  goToNoteEditor = () => {
+  goToNoteEditor = (noteId?: string) => {
     const { navigation } = this.props;
 
-    navigation.navigate(NavigatorEntities.NOTE_EDITOR);
+    navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
   }
 
   render() {
@@ -197,7 +197,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
             <Note
               key={note.id}
               note={note}
-              onPress={() => this.props.selectNoteToEdit(note.id)}
+              onPress={() => this.goToNoteEditor(note.id)}
             />
           );
         })}
@@ -272,12 +272,6 @@ export const NoteListScreenConnect = connect(
   }),
   dispatch => ({
     dispatch,
-    selectNoteToEdit: (noteId: string) => dispatch(
-      createChangeInteractive({
-        editingNoteId: noteId,
-        creatingNoteMode: true
-      })
-    ),
     syncNotes: () => dispatch(createSyncNotesAction({ reason: SyncReasonType.SEND_PENDING })),
   }),
 )(NoteListScreen);

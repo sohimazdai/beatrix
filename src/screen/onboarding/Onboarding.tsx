@@ -3,19 +3,19 @@ import { connect } from 'react-redux';
 import { View, Button, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
-import { BlockHat } from '../../../component/hat/BlockHat';
-import Tooltip from '../../../component/tooltip/Tooltip';
-import { InfoIcon } from '../../../component/icon/InfoIcon';
+import { BlockHat } from '../../component/hat/BlockHat';
+import Tooltip from '../../component/tooltip/Tooltip';
+import { InfoIcon } from '../../component/icon/InfoIcon';
 
-import { IStorage } from '../../../model/IStorage';
-import { COLOR } from '../../../constant/Color';
-import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
-import { Measures } from '../../../localisation/Measures';
+import { IStorage } from '../../model/IStorage';
+import { COLOR } from '../../constant/Color';
+import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../model/IUserDiabetesProperties';
+import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
+import { Measures } from '../../localisation/Measures';
 
-import { i18nGet } from '../../../localisation/Translate';
-import { createCompleteOnboardingAction } from '../../../store/service/onboarding/CompleteOnboardingSaga';
-import { appAnalytics, AnalyticsSections } from '../../../app/Analytics';
+import { i18nGet } from '../../localisation/Translate';
+import { createCompleteOnboardingAction } from '../../store/service/onboarding/CompleteOnboardingSaga';
+import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties

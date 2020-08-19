@@ -1,27 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { View, StyleSheet, Text } from 'react-native';
-
-import { COLOR } from '../../../../../constant/Color';
-import { i18nGet } from '../../../../../localisation/Translate';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { IStorage } from '../../../../../model/IStorage';
-import { convertFlatNoteListToNoteListByDay } from '../../../../../store/selector/NoteListSelector';
-import { DateHelper } from '../../../../../utils/DateHelper';
-import { INoteList, INoteListByDay, INoteListNote } from '../../../../../model/INoteList';
+
 import { Note } from '../../../../shared/components/Note/Note';
 import { HorizontalIconBar } from '../../../../shared/components/IconBar/HorizontalIconBar';
-import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { NotesIcon } from '../../../../../component/icon/NotesIcon';
-import { selectRecentNoteListByDay } from '../../selectors/select-recent-note-list-by-day';
+
+import { COLOR } from '../../../../../constant/Color';
+import { DateHelper } from '../../../../../utils/DateHelper';
+import { IStorage } from '../../../../../model/IStorage';
+import { INoteList, INoteListByDay, INoteListNote } from '../../../../../model/INoteList';
 import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
+
+import { i18nGet } from '../../../../../localisation/Translate';
+import { selectRecentNoteListByDay } from '../../selectors/select-recent-note-list-by-day';
 
 interface Props {
   recentNoteListByDay: INoteListByDay
   onNotesPress: () => void;
-  selectNoteToEdit: (noteId: string) => void;
+  onNotePress: (noteId: string) => void;
 };
 
 class LastNotes extends React.Component<Props> {
@@ -45,6 +44,7 @@ class LastNotes extends React.Component<Props> {
   }
 
   renderCard(dayNotes: INoteList) {
+    const { onNotePress } = this.props;
     const notes: INoteListNote[] = Object.values(dayNotes).sort((a, b) => {
       return b.date - a.date;
     });
@@ -56,7 +56,7 @@ class LastNotes extends React.Component<Props> {
             <Note
               key={note.id}
               note={note}
-              onPress={() => this.props.selectNoteToEdit(note.id)}
+              onPress={() => onNotePress(note.id)}
             />
           );
         })}
@@ -93,7 +93,7 @@ class LastNotes extends React.Component<Props> {
   }
 
   render() {
-    const { selectNoteToEdit, onNotesPress, recentNoteListByDay } = this.props;
+    const { onNotesPress, recentNoteListByDay } = this.props;
     let isNoteListEmpty = false;
     let notesToRender = [];
 
@@ -136,14 +136,6 @@ class LastNotes extends React.Component<Props> {
 export const LastNotesConnected = connect(
   (state: IStorage) => ({
     recentNoteListByDay: selectRecentNoteListByDay(state),
-  }),
-  (dispatch) => ({
-    selectNoteToEdit: (noteId: string) => dispatch(
-      createChangeInteractive({
-        editingNoteId: noteId,
-        creatingNoteMode: true
-      })
-    ),
   })
 )(LastNotes);
 

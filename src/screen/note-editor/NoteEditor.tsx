@@ -27,7 +27,6 @@ import { IStorage } from '../../model/IStorage';
 import { COLOR } from '../../constant/Color';
 import { Measures } from '../../localisation/Measures';
 
-import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 import { createDeleteNoteInNoteListById } from '../../store/modules/noteList/NoteListActionCreator';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 import { createDeleteNoteAction } from '../../store/service/note/DeleteNoteSaga';
@@ -41,7 +40,6 @@ interface Props {
   note?: INoteListNote
   userDiabetesProperties?: IUserDiabetesProperties
   dispatch?: (action) => void
-  hidePopup?: () => void
   onNoteDelete?: (noteId: string) => void;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -86,6 +84,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
     };
   }
 
+  closeEditor = () => {
+    const { navigation } = this.props;
+
+    navigation.goBack();
+  }
+
   render() {
     return (
       <View
@@ -105,7 +109,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         </ScrollView>
         <TouchableOpacity
           style={styles.hideTouchable}
-          onPress={this.props.hidePopup}
+          onPress={this.closeEditor}
         >
           <CloseIcon />
         </TouchableOpacity>
@@ -273,7 +277,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         ...note,
         id: this.props.note.id
       }));
-      this.props.hidePopup();
+      this.closeEditor();
     }
     else {
       if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
@@ -282,7 +286,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
           glycemiaType: Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType),
           carbsMeasuringType: Measures.getDefaultCarbsMeasuringType(carbsMeasuringType),
         }));
-        this.props.hidePopup()
+        this.closeEditor()
       } else {
         Alert.alert(
           i18nGet('fill_at_least_one_parameter'),
@@ -323,7 +327,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
   deleteNote = () => {
     // this.props.onNoteDelete(this.props.note.id);
     this.props.dispatch(createDeleteNoteAction(this.props.note.id))
-    this.props.hidePopup()
+    this.closeEditor()
   }
 
   setInitialState() {
@@ -361,12 +365,6 @@ export const NoteEditorConnect = connect(
       ...stateProps,
       dispatch,
       note: stateProps.noteList[noteId] || null,
-      hidePopup() {
-        dispatch(createChangeInteractive({
-          creatingNoteMode: false,
-          editingNoteId: ''
-        }))
-      },
       onNoteDelete(noteId) {
         dispatch(createDeleteNoteInNoteListById(noteId))
       }

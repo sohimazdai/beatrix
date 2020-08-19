@@ -14,12 +14,9 @@ export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
   locale?: string
 };
 
-export const staticProperties = {
-  section: '',
-};
+export let section = '';
 
 export const appAnalytics = {
-
   init: (): Promise<void> => {
     logger('::amplitude initializing');
 
@@ -41,7 +38,7 @@ export const appAnalytics = {
   sendEvent: (eventName: string) => {
     logger('::amplitude trying to send event: ', eventName);
 
-    Amplitude.logEventWithProperties(eventName, staticProperties)
+    Amplitude.logEventWithProperties(eventName, { section })
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
@@ -51,7 +48,7 @@ export const appAnalytics = {
 
     Amplitude.logEventWithProperties(eventName, {
       ...properties,
-      ...staticProperties,
+      ...{ section },
     })
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
@@ -66,11 +63,7 @@ export const appAnalytics = {
   },
 
   setSection: (sectionName: AnalyticsSections) => {
-    logger('::amplitude old section: ', staticProperties.section);
-
-    staticProperties.section = sectionName;
-
-    logger('::amplitude new section: ', staticProperties.section);
+    // NOTHING TO DO TODO: remove or change
   },
 
   events: {

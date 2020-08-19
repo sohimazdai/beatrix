@@ -9,6 +9,7 @@ import { appStarter } from './src/app/AppStarter';
 import { AppConnection } from './src/app/AppConnection';
 import { handleError } from './src/app/ErrorHandler';
 import { DevStub } from './src/component/dev-stub/DevStub';
+import { ChartDotInfoPopupConnect } from './src/view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 
 interface State {
   appIsReady: boolean

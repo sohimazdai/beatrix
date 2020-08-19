@@ -1,23 +1,30 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { INoteListNote } from '../../../../../model/INoteList';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet } from "react-native";
+
 import { BottomPopup } from '../../../../../component/popup/BottomPopup';
 import { ChartDotInfoPopupValue } from '../dot-info-popup-value/ChartDotInfoPopupValue';
-import { ChartValueType, ChartPeriodType } from '../../../../../model/IChart';
 import { CloseIcon } from '../../../../../component/icon/CloseIcon';
 import { EditNoteIcon } from '../../../../../component/icon/EditNoteIcon';
-import { connect } from 'react-redux';
+
+import { INoteListNote } from '../../../../../model/INoteList';
+import { ChartValueType, ChartPeriodType } from '../../../../../model/IChart';
 import { IStorage } from '../../../../../model/IStorage';
-import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
-import { ScrollView } from 'react-native-gesture-handler';
-import { styles } from './Style';
 import { DateHelper } from '../../../../../utils/DateHelper';
+import { SHADOW_OPTIONS } from "../../../../../constant/ShadowOptions";
+import { COLOR } from "../../../../../constant/Color";
+import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+
+import { createChangeInteractive } from '../../../../../store/modules/interactive/interactive';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { selectAverageValue } from '../../selectors/select-value-average';
 import { appAnalytics } from '../../../../../app/Analytics';
+import { NavigatorEntities } from '../../../../../navigator/modules/NavigatorEntities';
 
-export interface ChartDotInfoPopupProps {
+interface ChartDotInfoPopupProps {
     note?: INoteListNote
     selectedDotId?: number
     selectedChartPeriod?: string
@@ -26,7 +33,13 @@ export interface ChartDotInfoPopupProps {
     closePopup?: () => void;
 }
 
-export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
+interface OwnProps {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+interface Props extends OwnProps, ChartDotInfoPopupProps { }
+
+export class ChartDotInfoPopup extends React.Component<Props> {
     componentDidMount() {
         const { closePopup } = this.props;
         BackHandler.addEventListener('hardwareBackPress', function close() {
@@ -45,6 +58,12 @@ export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
         BackHandler.removeEventListener('hardwareBackPress', function close() {
             closePopup();
         });
+    }
+
+    goToNoteEditor = (noteId?: string) => {
+        const { navigation } = this.props;
+
+        navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
     }
 
     getChartPopupTitle = () => {
@@ -76,7 +95,6 @@ export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
         const {
             selectedChartPeriod = ChartPeriodType.DAY,
             note,
-            openEditPopup,
             closePopup,
         } = this.props;
 
@@ -134,7 +152,7 @@ export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
                             <TouchableOpacity
                                 style={styles.editNoteIconTouchable}
                                 onPress={() => {
-                                    openEditPopup(note.id);
+                                    this.goToNoteEditor(note.id);
                                     closePopup();
                                 }}
                             >
@@ -152,11 +170,12 @@ export class ChartDotInfoPopup extends React.Component<ChartDotInfoPopupProps> {
 
 
 export const ChartDotInfoPopupConnect = connect(
-    (state: IStorage) => ({
+    (state: IStorage, ownProps: OwnProps) => ({
         state,
         selectedDotId: state.interactive.selectedDotId,
         selectedChartPeriod: state.interactive.selectedChartPeriod,
         note: state.noteList[state.interactive.selectedDotId] || null,
+        navigation: ownProps.navigation,
     }),
     (dispatch) => ({ dispatch }),
     (stateProps, { dispatch }, ownProps) => {
@@ -168,12 +187,6 @@ export const ChartDotInfoPopupConnect = connect(
                 stateProps.selectedChartPeriod,
                 stateProps.selectedDotId
             ) || null,
-            openEditPopup: (noteId) => {
-                dispatch(createChangeInteractive({
-                    creatingNoteMode: true,
-                    editingNoteId: noteId,
-                }));
-            },
             closePopup: () => {
                 dispatch(createChangeInteractive({
                     selectedDotId: null,
@@ -182,3 +195,87 @@ export const ChartDotInfoPopupConnect = connect(
         }
     }
 )(ChartDotInfoPopup)
+
+const styles = StyleSheet.create({
+    animatedView: {
+        width: '100%',
+        display: 'flex',
+
+        borderRadius: 25,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        backgroundColor: COLOR.WHITE,
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden'
+    },
+    popupGradient: {
+        width: '100%',
+        display: 'flex',
+
+        padding: 15,
+        paddingBottom: 35,
+
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLOR.WHITE,
+    },
+    dateTitleView: {
+        width: '100%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    dateTitle: {
+        fontSize: 18,
+    },
+    upperValues: {
+        display: 'flex',
+        width: '100%',
+
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    bottomValues: {
+        display: 'flex',
+        width: '100%',
+
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    commentValue: {
+        marginTop: 15,
+        width: '100%',
+        maxHeight: 200,
+        borderRadius: 10,
+        backgroundColor: "white",
+        padding: 15,
+        overflow: 'scroll'
+    },
+    commentValueText: {
+        fontSize: 18,
+        color: "#333333"
+    },
+    closeTouchable: {
+        position: 'absolute',
+        right: 20,
+        top: 20,
+        borderRadius: 50,
+        ...SHADOW_OPTIONS,
+    },
+    editNoteIconTouchableView: {
+        position: 'absolute',
+        left: 20,
+        top: 20,
+        backgroundColor: "#fff",
+        borderRadius: 5,
+        ...SHADOW_OPTIONS,
+    },
+    editNoteIconTouchable: {
+
+    },
+    editNoteIcon: {
+        width: 30,
+        height: 30
+    }
+})
