@@ -18,7 +18,7 @@ import * as Localization from 'expo-localization';
 import translate, { setLocale } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
-import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettngs';
+import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettings';
 import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
 import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { ExportDataSettings } from '../screen/profile/profile-settings/sub-settings/ExportDataSettings';

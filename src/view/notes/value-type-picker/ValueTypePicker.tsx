@@ -1,12 +1,13 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native'
-import { RoundClocksIcon } from '../../../component/icon/RoundClocksIcon'
+
 import { GlucometerIcon } from '../../../component/icon/value-icons/GlucometerIcon'
 import { VegetablesIcon } from '../../../component/icon/value-icons/VegetablesIcon'
 import { ShortSyringeIcon } from '../../../component/icon/value-icons/ShortSyringeIcon'
 import { LongSyringeIcon } from '../../../component/icon/value-icons/LongSyringeIcon'
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions'
 import { CommentIcon } from '../../../component/icon/CommentIcon'
+
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions'
 import { NoteValueType } from '../../../model/INoteList'
 
 interface Props {

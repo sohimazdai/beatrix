@@ -34,6 +34,7 @@ import { i18nGet } from '../../localisation/Translate';
 import { createCreateNoteAction } from '../../store/service/note/CreateNoteSaga';
 import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga';
 import { appAnalytics } from '../../app/Analytics';
+import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -176,9 +177,16 @@ class NoteEditor extends React.PureComponent<Props, State>{
     )
   }
 
+  goToInsulinSettings = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(NavigatorEntities.SETTINGS_INSULIN, {
+      backPage: NavigatorEntities.NOTE_EDITOR,
+    });
+  }
+
   renderInputByValue() {
     let { glucose, breadUnits, insulin, longInsulin, currentValueType } = this.state;
-    const { navigation } = this.props;
 
     const isCreating =
       this.props.interactive.creatingNoteMode && !this.props.interactive.editingNoteId;
@@ -193,7 +201,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
           {this.renderInputByType(NoteValueType.SHORT_INSULIN, insulin)}
           <NoteInsulinDoseRecommendationConnect
             note={this.noteFromState}
-            navigation={navigation}
+            goToInsulinSettings={this.goToInsulinSettings}
           />
         </>
       case NoteValueType.LONG_INSULIN:
@@ -475,7 +483,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   deleteButtonTouchable: {
-    marginVertical: 10,
     padding: 15,
     borderRadius: 15,
     justifyContent: 'center',

@@ -10,17 +10,17 @@ import { i18nGet } from '../../../localisation/Translate';
 import { selectActiveInsulinValue } from '../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
 import { COLOR } from '../../../constant/Color';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface OwnProps {
     note?: INoteListNote
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    goToInsulinSettings: () => void;
 }
 
-interface Props {
+interface Props extends OwnProps {
     userDiabetesProperties?: IUserDiabetesProperties
     userPropertiesShedule?: IUserPropertiesShedule
     activeInsulinValue?: number
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
     note?: INoteListNote
 }
 
@@ -30,6 +30,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
         userPropertiesShedule,
         userDiabetesProperties,
         activeInsulinValue,
+        goToInsulinSettings,
     } = props;
     const { glycemiaMeasuringType } = userDiabetesProperties;
 
@@ -44,12 +45,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
     const isFormUnfilled = !sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio;
 
     function getRecommendation() {
-        if (isFormUnfilled) {
-            const recommendIfNeededMemo = React.useMemo(() => Math.random() < 0.4, []);
-            return recommendIfNeededMemo
-                ? i18nGet('fill_out_your_diabetes_profile_for_recommendations')
-                : ''
-        }
+        if (isFormUnfilled) return '';
 
         if (note.glucose == 0 && note.breadUnits == 0) {
             return '';
@@ -79,14 +75,19 @@ function NoteInsulinDoseRecommendation(props: Props) {
 
     const recommendation = getRecommendation();
 
-    if (!recommendation && isFormUnfilled) return null;
-
     return (
         <View style={styles.view}>
             {!!recommendation && (
                 <Text style={styles.recommendation}>
                     {recommendation}
                 </Text>
+            )}
+            {!!isFormUnfilled && (
+                <TouchableOpacity onPress={goToInsulinSettings}>
+                    <Text style={styles.settingsLink}>
+                        {i18nGet('fill_out_your_diabetes_profile_for_recommendations')}
+                    </Text>
+                </TouchableOpacity>
             )}
             {!!activeInsulinValue && (
                 <Text style={styles.activeInsulinText}>
@@ -133,5 +134,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#333333'
+    },
+    settingsLink: {
+        color: COLOR.BLUE,
+        fontWeight: 'bold',
+        fontSize: 16,
+        textDecorationLine: 'underline',
+        textDecorationColor: COLOR.BLUE,
     }
 })
