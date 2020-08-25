@@ -16,5 +16,5 @@ export const rootReducer = combineReducers({
     interactive: interactiveReducer,
     userDiabetesProperties: userDiabetesPropertiesReducer,
     userPropertiesShedule: userPropertiesSheduleReducer,
-    pendingNoteList: pendingNoteListReducer
+    pendingNoteList: pendingNoteListReducer,
 });

@@ -90,8 +90,8 @@ class AuthScreen extends React.Component<AuthScreenProps> {
 
 export const AuthScreenConnect = connect(
     (state: IStorage) => ({ user: state.user }),
-    (dispatch: Dispatch<Action>) => ({ dispatch }),
-    (stateProps, { dispatch }, ownProps) => {
+    () => ({}),
+    (stateProps, { }, ownProps) => {
         return {
             ...stateProps,
             ...ownProps,

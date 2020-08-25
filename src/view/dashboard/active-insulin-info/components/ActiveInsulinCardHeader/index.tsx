@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   cardTitle: {
-    fontSize: 16,
+    fontSize: 19,
     color: COLOR.CRIMSON_RED,
     fontWeight: '500',
   },

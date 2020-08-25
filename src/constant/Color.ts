@@ -30,4 +30,7 @@ export enum COLOR {
 
     GREEN = '#46CE94',
     GREEN_DARK = '#009455',
+
+    TEXT_DIMGRAY = '#666666',
+    TEXT_WHITE = '#FFFFFF',
 }

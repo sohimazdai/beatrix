@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../../model/INoteList';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import { COLOR } from '../../../../constant/Color';
 
 interface Props {
     note?: INoteListNote
@@ -9,30 +10,32 @@ interface Props {
 }
 
 export function Note(props: Props) {
-    return <View
-        style={styles.noteView}
-    >
-        <TouchableOpacity
-            style={styles.touchableContainer}
-            onPress={props.onPress}
+    return (
+        <View
+            style={styles.noteView}
         >
+            <TouchableOpacity
+                style={styles.touchableContainer}
+                onPress={props.onPress}
+            >
+                <Text style={styles.text}>
+                    {getTime(new Date(props.note.date))}
+                </Text>
+            </TouchableOpacity>
             <Text style={styles.text}>
-                {getTime(new Date(props.note.date))}
+                {props.note.glucose || '-'}
             </Text>
-        </TouchableOpacity>
-        <Text style={styles.text}>
-            {props.note.glucose || '-'}
-        </Text>
-        <Text style={styles.text}>
-            {props.note.breadUnits || '-'}
-        </Text>
-        <Text style={styles.text}>
-            {props.note.insulin || '-'}
-        </Text>
-        <Text style={styles.text}>
-            {props.note.longInsulin || '-'}
-        </Text>
-    </View>
+            <Text style={styles.text}>
+                {props.note.breadUnits || '-'}
+            </Text>
+            <Text style={styles.text}>
+                {props.note.insulin || '-'}
+            </Text>
+            <Text style={styles.text}>
+                {props.note.longInsulin || '-'}
+            </Text>
+        </View>
+    );
 }
 
 const getTime = (date: Date) => {
@@ -59,9 +62,9 @@ const styles = StyleSheet.create({
         height: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: COLOR.WHITE,
         borderRadius: 10,
-        ...SHADOW_OPTIONS
+        ...SHADOW_OPTIONS,
     },
     text: {
         flex: 1,

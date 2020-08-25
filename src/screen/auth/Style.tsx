@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     avoidingView: {
         justifyContent: 'flex-end'
@@ -25,6 +26,7 @@ export const styles = StyleSheet.create({
         position: "absolute",
     },
     AuthForm: {
+        maxWidth: 480,
         width: '100%',
         position: "relative",
 
@@ -33,20 +35,21 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
+    
     form: {
         width: '100%',
         display: 'flex',
         borderTopLeftRadius: 55,
         borderTopRightRadius: 55,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
-
+    
     authFormGradient: {
         width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        ...SHADOW_OPTIONS,
     },
 
     inputForm: {

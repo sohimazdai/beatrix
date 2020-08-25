@@ -7,14 +7,34 @@ import { BreadUnitsIconConnected } from '../../../../component/icon/tooltiped/Br
 import { ShortInsulinIconConnected } from '../../../../component/icon/tooltiped/ShortInsulinIcon';
 import { LongInsulinIconConnected } from '../../../../component/icon/tooltiped/LongInsulinIcon';
 
-export function HorizontalIconBar() {
+interface Props {
+  isBig?: boolean
+}
+
+export function HorizontalIconBar(props: Props) {
+  const { isBig } = props;
+
+  const iconStyle = isBig
+    ? { ...styles.iconBarIcon, ...styles.iconBarIconBig }
+    : styles.iconBarIcon;
+
   return (
     <View style={styles.iconBarView}>
-      <ClocsIconTooltipedConnected style={styles.iconBarIcon} />
-      <GlycemiaIconConnected style={styles.iconBarIcon} />
-      <BreadUnitsIconConnected style={styles.iconBarIcon} />
-      <ShortInsulinIconConnected style={styles.iconBarIcon} />
-      <LongInsulinIconConnected style={styles.iconBarIcon} />
+      <View style={styles.iconWrap}>
+        <ClocsIconTooltipedConnected style={iconStyle} />
+      </View>
+      <View style={styles.iconWrap}>
+        <GlycemiaIconConnected style={iconStyle} />
+      </View>
+      <View style={styles.iconWrap}>
+        <BreadUnitsIconConnected style={iconStyle} />
+      </View>
+      <View style={styles.iconWrap}>
+        <ShortInsulinIconConnected style={iconStyle} />
+      </View>
+      <View style={styles.iconWrap}>
+        <LongInsulinIconConnected style={iconStyle} />
+      </View>
     </View>
   );
 }
@@ -25,11 +45,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+  },
+  iconWrap: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconBarIcon: {
-    flex: 1,
     height: 30,
     width: 30,
+  },
+  iconBarIconBig: {
+    height: 35,
+    width: 35,
+    marginVertical: 16,
   },
 })

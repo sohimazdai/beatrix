@@ -32,6 +32,7 @@ import { createChangeInteractive } from "../../store/modules/interactive/interac
 import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';
+import { HorizontalIconBar } from '../../view/shared/components/IconBar/HorizontalIconBar';
 
 interface NoteListScreenStateTProps {
   app: IApp;
@@ -87,10 +88,14 @@ class NoteListScreen extends React.PureComponent<FullProps> {
           onBackPress={() => navigation.navigate('Dashboard')}
           title={i18nGet('notes')}
         />
-        {this.renderIconBar()}
-        <View style={styles.cardsViewWrapWrap}>
-          <View style={styles.cardsViewWrap}>
-            {this.renderCards()}
+        <View style={styles.contentWrap}>
+          <View style={styles.content}>
+            <HorizontalIconBar isBig />
+            <View style={styles.cardsViewWrapWrap}>
+              <View style={styles.cardsViewWrap}>
+                {this.renderCards()}
+              </View>
+            </View>
           </View>
         </View>
         <View style={styles.addNoteButtonView}>
@@ -102,30 +107,6 @@ class NoteListScreen extends React.PureComponent<FullProps> {
 
   showMorePosts = () => {
     this.setState({ portionsToRender: this.state.portionsToRender + 1 });
-  }
-
-  renderProfileIcon() {
-    return (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("Profile")}
-      >
-        <ProfileIcon fill={"white"} />
-      </TouchableOpacity>
-    );
-  }
-
-  renderIconBar() {
-    return (
-      <View style={styles.iconBarViewWrap}>
-        <View style={styles.iconBarView}>
-          <ClocsIconTooltipedConnected style={styles.iconBarIcon} />
-          <GlycemiaIconConnected style={styles.iconBarIcon} />
-          <BreadUnitsIconConnected style={styles.iconBarIcon} />
-          <ShortInsulinIconConnected style={styles.iconBarIcon} />
-          <LongInsulinIconConnected style={styles.iconBarIcon} />
-        </View>
-      </View>
-    );
   }
 
   renderCards() {
@@ -297,23 +278,13 @@ const styles = StyleSheet.create({
     overflow: 'scroll',
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
-  iconBarViewWrap: {
+  contentWrap: {
     backgroundColor: "#2E3858",
   },
-  iconBarView: {
-    display: "flex",
-    paddingVertical: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: 'space-evenly',
+  content: {
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     backgroundColor: COLOR.PRIMARY_WHITE,
-  },
-  iconBarIcon: {
-    flex: 1,
-    height: 35,
-    width: 35,
   },
   cardWrap: {
     width: "100%",

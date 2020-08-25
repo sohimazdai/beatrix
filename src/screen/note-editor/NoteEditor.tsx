@@ -8,6 +8,7 @@ import {
   Alert,
   StyleSheet,
   Dimensions,
+  Modal,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -18,7 +19,7 @@ import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/insulin-d
 import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
-import { BlockHat } from '../../component/hat/BlockHat';
+import { StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 
 import { IInteractive } from '../../model/IInteractive';
 import { INoteListNote, NoteValueType } from '../../model/INoteList';
@@ -35,6 +36,8 @@ import { createCreateNoteAction } from '../../store/service/note/CreateNoteSaga'
 import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga';
 import { appAnalytics } from '../../app/Analytics';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
+import { Hat } from '../../component/hat/Hat';
+import { BottomPopup } from '../../component/popup/BottomPopup';
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -43,7 +46,7 @@ const INITIAL_STATE = {
   insulin: 0,
   longInsulin: 0,
   commentary: '',
-  currentValueType: NoteValueType.GLUCOSE,
+  currentValueType: null,
 };
 
 interface Props {
@@ -111,7 +114,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
           : styles.noteCreationView
         }
       >
-        <BlockHat title={title} onBackPress={this.closeEditor} />
+        <Hat
+          onBackPress={this.closeEditor}
+          title={title}
+        />
         <ScrollView
           style={note
             ? styles.noteEditingViewScrollView
@@ -131,6 +137,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
           {this.props.note && this.renderDeleteButton()}
           {this.renderSaveButton()}
         </View>
+        {this.renderInputPopup()}
       </View>
     )
   }
@@ -155,6 +162,31 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
   onValueTypePickerSelect = (type) => this.setState({ currentValueType: type })
 
+  renderInputPopup() {
+    const { currentValueType } = this.state;
+
+    return (
+      <BottomPopup
+        hidden={!currentValueType}
+      >
+        <View style={styles.inputPopup}>
+          {this.renderInputByValue()}
+          <View style={styles.inputPopupButtons}>
+            <StyledButton
+              style={StyledButtonType.OUTLINE}
+              onPress={() => { this.setState({ currentValueType: null }) }}
+              label={i18nGet('cancel')}
+            />
+            <StyledButton
+              style={StyledButtonType.PRIMARY}
+              onPress={() => { }}
+              label={i18nGet('ok')}
+            />
+          </View>
+        </View>
+      </BottomPopup>
+    )
+  }
   renderPickerBlock() {
     return (
       <View style={styles.inputBlock}>
@@ -172,7 +204,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
           onSelect={this.onValueTypePickerSelect}
           selectedType={this.state.currentValueType}
         />
-        {this.renderInputByValue()}
       </View>
     )
   }
@@ -519,6 +550,19 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 15,
     marginTop: 20,
+  },
+  inputPopup: {
+    backgroundColor: COLOR.PRIMARY_WHITE,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    alignItems: 'center',
+  },
+  inputPopupButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: 200,
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   hideTouchable: {
     position: 'absolute',

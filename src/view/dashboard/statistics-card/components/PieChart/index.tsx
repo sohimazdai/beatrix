@@ -13,6 +13,7 @@ import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { PieToolTipItem } from '../PieToolTipItem';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { COLOR } from '../../../../../constant/Color';
+import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
 
 interface Props {
   viewType: StatisticsViewType
@@ -77,7 +78,7 @@ class PieChartComponent extends React.Component<Props, State> {
               </View>
             )}
           >
-            <PieChart style={{ height: 90, width: 90 }} data={pieData} />
+            <PieChart style={styles.pieChart} data={pieData} />
           </Tooltip>
           <View>
             {parts.map((part) => (
@@ -118,5 +119,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingTop: 8,
+  },
+  pieChart: {
+    height: 90,
+    width: 90,
+    ...SHADOW_OPTIONS,
   }
 })
