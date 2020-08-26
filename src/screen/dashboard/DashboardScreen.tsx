@@ -10,7 +10,7 @@ import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
 
 import { BlockHat } from "../../component/hat/BlockHat";
-import { NoteCreationButton } from "../../view/notes/note-creation-popup/button/NoteCreationButton";
+import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { LastNotesConnected } from '../../view/dashboard/last-notes/components/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';

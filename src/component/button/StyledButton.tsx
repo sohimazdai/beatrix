@@ -8,6 +8,7 @@ import { COLOR } from '../../constant/Color';
 export enum StyledButtonType {
   PRIMARY = 'primary',
   OUTLINE = 'outline',
+  DELETE = 'delete',
 }
 interface Props {
   onPress: () => void;
@@ -27,6 +28,9 @@ export class StyledButton extends React.Component<Props> {
       case StyledButtonType.OUTLINE:
         additionalStyle = styles.touchableOutline;
         break;
+      case StyledButtonType.DELETE:
+        additionalStyle = styles.touchableDelete
+        break;
     }
 
     return { ...styles.touchable, ...additionalStyle };
@@ -42,6 +46,9 @@ export class StyledButton extends React.Component<Props> {
         break;
       case StyledButtonType.OUTLINE:
         additionalStyle = styles.textOutline;
+        break;
+      case StyledButtonType.DELETE:
+        additionalStyle = styles.textDelete
         break;
     }
 
@@ -79,6 +86,12 @@ const styles = StyleSheet.create({
   touchableOutline: {
     backgroundColor: COLOR.WHITE,
     borderColor: COLOR.TEXT_DIMGRAY,
+    borderWidth: 1,
+  },
+  touchableDelete: {
+    backgroundColor: COLOR.WHITE,
+    borderColor: COLOR.RED,
+    borderWidth: 1,
   },
   text: {
     fontSize: 17,
@@ -87,6 +100,9 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_WHITE,
   },
   textOutline: {
+    color: COLOR.TEXT_DIMGRAY,
+  },
+  textDelete: {
     color: COLOR.TEXT_DIMGRAY,
   },
 })

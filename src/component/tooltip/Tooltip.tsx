@@ -137,6 +137,7 @@ class Tooltip extends React.Component<Props, State> {
       justifyContent: 'center',
       flex: 1,
       maxWidth: ScreenWidth / 2,
+      width: '100%',
       borderRadius: 10,
       padding: 10,
       ...containerStyle,

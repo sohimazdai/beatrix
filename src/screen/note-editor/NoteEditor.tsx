@@ -16,10 +16,9 @@ import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-n
 
 import { NumberScroller } from '../../view/notes/number-scroller/NumberScroller';
 import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
-import { ValueTypePicker } from '../../view/notes/value-type-picker/ValueTypePicker';
+import { ValueTypePicker } from '../../view/note-editor/value-type-picker/ValueTypePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
-import { StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 
 import { IInteractive } from '../../model/IInteractive';
 import { INoteListNote, NoteValueType } from '../../model/INoteList';
@@ -38,6 +37,7 @@ import { appAnalytics } from '../../app/Analytics';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { Hat } from '../../component/hat/Hat';
 import { BottomPopup } from '../../component/popup/BottomPopup';
+import { DownArrowIcon } from '../../component/icon/DownArrowIcon';
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -162,6 +162,16 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
   onValueTypePickerSelect = (type) => this.setState({ currentValueType: type })
 
+  onDowArrowIconPress = () => {
+    const { currentValueType } = this.state;
+
+    appAnalytics.sendEventWithProps(
+      appAnalytics.events.NOTE_EDITOR_INPUT_POPUP_CLOSED,
+      currentValueType
+    );
+
+    this.setState({ currentValueType: null })
+  }
   renderInputPopup() {
     const { currentValueType } = this.state;
 
@@ -171,23 +181,18 @@ class NoteEditor extends React.PureComponent<Props, State>{
       >
         <View style={styles.inputPopup}>
           {this.renderInputByValue()}
-          <View style={styles.inputPopupButtons}>
-            <StyledButton
-              style={StyledButtonType.OUTLINE}
-              onPress={() => { this.setState({ currentValueType: null }) }}
-              label={i18nGet('cancel')}
-            />
-            <StyledButton
-              style={StyledButtonType.PRIMARY}
-              onPress={() => { }}
-              label={i18nGet('ok')}
-            />
-          </View>
         </View>
+        <TouchableOpacity
+          style={styles.downArrowIcon}
+          onPress={this.onDowArrowIconPress}
+        >
+          <DownArrowIcon />
+        </TouchableOpacity>
       </BottomPopup>
     )
   }
   renderPickerBlock() {
+    const { currentValueType, ...note } = this.state;
     return (
       <View style={styles.inputBlock}>
         <View style={styles.timePickers}>
@@ -203,6 +208,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         <ValueTypePicker
           onSelect={this.onValueTypePickerSelect}
           selectedType={this.state.currentValueType}
+          {...note}
         />
       </View>
     )
@@ -217,10 +223,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   renderInputByValue() {
-    let { glucose, breadUnits, insulin, longInsulin, currentValueType } = this.state;
-
-    const isCreating =
-      this.props.interactive.creatingNoteMode && !this.props.interactive.editingNoteId;
+    let { glucose, breadUnits, insulin, longInsulin, currentValueType, commentary } = this.state;
 
     switch (currentValueType) {
       case NoteValueType.GLUCOSE:
@@ -250,10 +253,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
                 blurOnSubmit
                 style={{ maxHeight: 80 }}
                 onChangeText={(text) => this.setState({ commentary: text })}
-                defaultValue={isCreating ?
-                  this.state.commentary :
-                  this.props.note && this.props.note.commentary
-                }
+                defaultValue={commentary}
                 keyboardType="default"
                 returnKeyType="done"
                 onSubmitEditing={() => { Keyboard.dismiss() }}
@@ -530,6 +530,7 @@ const styles = StyleSheet.create({
   inputViewTitle: {
     width: '100%',
     textAlign: 'center',
+    paddingHorizontal: 32,
     marginTop: 20,
     fontSize: 19,
     lineHeight: 20,
@@ -552,17 +553,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   inputPopup: {
+    position: 'relative',
     backgroundColor: COLOR.PRIMARY_WHITE,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     alignItems: 'center',
   },
-  inputPopupButtons: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: 200,
-    justifyContent: 'space-between',
-    marginBottom: 16,
+  downArrowIcon: {
+    position: 'absolute',
+    padding: 8,
+    top: 8,
+    right: 8,
   },
   hideTouchable: {
     position: 'absolute',

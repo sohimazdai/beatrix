@@ -8,7 +8,7 @@ import { StyleSheet } from "react-native";
 
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { BlockHat } from '../../component/hat/BlockHat';
-import { NoteCreationButton } from '../../view/notes/note-creation-popup/button/NoteCreationButton';
+import { NoteCreationButton } from '../../view/shared/components/CreateNoteButton/NoteCreationButton';
 import { InfoIcon } from '../../component/icon/InfoIcon';
 
 import { IStorage } from '../../model/IStorage';

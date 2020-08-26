@@ -9,7 +9,7 @@ import {
 import { StyleSheet } from "react-native";
 
 import { Note } from "../../view/shared/components/Note/Note";
-import { NoteCreationButton } from "../../view/notes/note-creation-popup/button/NoteCreationButton";
+import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { Hat } from '../../component/hat/Hat';

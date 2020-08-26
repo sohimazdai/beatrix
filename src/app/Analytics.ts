@@ -121,7 +121,8 @@ export const appAnalytics = {
     GOOGLE_SIGN_IN_PRESSED: 'Google sign in pressed',
     //LINK OPENED
     SETTINGS_INSULIN_LINK_OPENED: 'Settings insulin link opened',
-
+    //NOTE_EDITOR
+    NOTE_EDITOR_INPUT_POPUP_CLOSED: 'Note editor input popup closed',
     // GENERAL
     PHONE_CONNECTION_STATUS_CHANGE: 'Phone connection status change',
     SERVER_AVAILIBILITY_STATUS_CHANGE: 'Server availibility status change',
