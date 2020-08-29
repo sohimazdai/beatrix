@@ -8,7 +8,6 @@ import {
   Alert,
   StyleSheet,
   Dimensions,
-  Modal,
   KeyboardAvoidingView,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -20,6 +19,7 @@ import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/insulin-d
 import { ValueTypePicker } from '../../view/note-editor/value-type-picker/ValueTypePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
+import { DownArrowIcon } from '../../component/icon/ArrowDownIcon';
 
 import { IInteractive } from '../../model/IInteractive';
 import { INoteListNote, NoteValueType } from '../../model/INoteList';
@@ -28,6 +28,7 @@ import { IStorage } from '../../model/IStorage';
 import { COLOR } from '../../constant/Color';
 import { Measures } from '../../localisation/Measures';
 
+import { SuperPopup, PopupDirection } from '../../component/popup/SuperPopup';
 import { createDeleteNoteInNoteListById } from '../../store/modules/noteList/NoteListActionCreator';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 import { createDeleteNoteAction } from '../../store/service/note/DeleteNoteSaga';
@@ -37,10 +38,10 @@ import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga'
 import { appAnalytics } from '../../app/Analytics';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { Hat } from '../../component/hat/Hat';
-import { SuperPopup, PopupDirection } from '../../component/popup/SuperPopup';
-import { DownArrowIcon } from '../../component/icon/ArrowDownIcon';
-import { TopPopup } from '../../component/popup/TopPopup';
-import { ArrowTopIcon } from '../../component/icon/ArrowTopIcon';
+import { TagPicker } from '../../view/note-editor/tag-picker/TagPicker';
+import { StyledButton, IconPositionType, StyledButtonType } from '../../component/button/StyledButton';
+import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
+import { PlusRoundedIcon } from '../../component/icon/PlusRoundedIcon';
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -69,6 +70,7 @@ interface State {
   longInsulin: number
   commentary: string,
   currentValueType: NoteValueType
+  isTagPickerOpen?: boolean
 }
 
 class NoteEditor extends React.PureComponent<Props, State>{
@@ -142,6 +144,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         </View>
         <KeyboardAvoidingView behavior='position'>
           {this.renderInputPopup()}
+          {this.renderTagsPopup()}
         </KeyboardAvoidingView>
       </View>
     )
@@ -170,13 +173,45 @@ class NoteEditor extends React.PureComponent<Props, State>{
   onDowArrowIconPress = () => {
     const { currentValueType } = this.state;
 
+    const analyticsProp = currentValueType
+      ? currentValueType
+      : 'tag-picker';
+
     appAnalytics.sendEventWithProps(
       appAnalytics.events.NOTE_EDITOR_INPUT_POPUP_CLOSED,
-      currentValueType
+      analyticsProp
     );
 
-    this.setState({ currentValueType: null })
+    this.setState({ currentValueType: null, isTagPickerOpen: false })
   }
+
+  onTagPickerOpen = () => {
+    this.setState({
+      isTagPickerOpen: true,
+      currentValueType: null,
+    })
+  }
+
+  renderTagsPopup() {
+    const { navigation } = this.props;
+    const { isTagPickerOpen } = this.state;
+
+    return (
+      <SuperPopup
+        hidden={!isTagPickerOpen}
+        direction={PopupDirection.BOTTOM_TOP}
+      >
+        <TagPicker navigation={navigation} />
+        <TouchableOpacity
+          style={styles.arrowDownIcon}
+          onPress={this.onDowArrowIconPress}
+        >
+          <DownArrowIcon />
+        </TouchableOpacity>
+      </SuperPopup>
+    )
+  }
+
   renderInputPopup() {
     const { currentValueType } = this.state;
 
@@ -217,6 +252,16 @@ class NoteEditor extends React.PureComponent<Props, State>{
           selectedType={this.state.currentValueType}
           {...note}
         />
+        <View style={styles.addTagsButtons}>
+          <StyledButton
+            fluid
+            icon={<PlusRoundedIcon color={COLOR.PRIMARY} />}
+            iconPosition={IconPositionType.LEFT}
+            label={i18nGet('add_tag_to_note')}
+            onPress={this.onTagPickerOpen}
+            style={StyledButtonType.EMPTY}
+          />
+        </View>
       </View>
     )
   }
@@ -388,7 +433,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   deleteNote = () => {
-    // this.props.onNoteDelete(this.props.note.id);
     this.props.dispatch(createDeleteNoteAction(this.props.note.id))
     this.closeEditor()
   }
@@ -462,8 +506,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputBlock: {
-    flex: 3,
     width: '100%',
+    maxWidth: 280,
     paddingBottom: 20,
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -490,8 +534,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  textInDatePickerIOS: {
-    textAlign: 'center',
+  addTagsButtons: {
+    width: '100%',
+    marginTop: 16,
   },
   inputView: {
     width: '100%',
@@ -570,18 +615,5 @@ const styles = StyleSheet.create({
     top: 8,
     right: 8,
   },
-  arrowTopIcon: {
-    position: 'absolute',
-    padding: 8,
-    bottom: 8,
-    right: 8,
-  },
-  hideTouchable: {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-    height: 30,
-    width: 30
-  }
 })
 

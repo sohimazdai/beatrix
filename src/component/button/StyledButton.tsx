@@ -9,14 +9,32 @@ export enum StyledButtonType {
   PRIMARY = 'primary',
   OUTLINE = 'outline',
   DELETE = 'delete',
+  EMPTY = 'empty',
 }
+
+export enum IconPositionType {
+  LEFT = 'left',
+  RIGHT = 'right',
+}
+
 interface Props {
+  fluid?: boolean
   onPress: () => void;
   label: string;
   style: StyledButtonType;
+  icon?: JSX.Element;
+  iconPosition?: IconPositionType;
 };
 
 export class StyledButton extends React.Component<Props> {
+  get viewStyle() {
+    const { fluid } = this.props;
+
+    return fluid
+      ? { ...styles.buttonView, flex: 1, width: '100%' }
+      : styles.buttonView
+  };
+
   get touchableStyle() {
     const { style } = this.props;
     let additionalStyle = {};
@@ -30,6 +48,9 @@ export class StyledButton extends React.Component<Props> {
         break;
       case StyledButtonType.DELETE:
         additionalStyle = styles.touchableDelete
+        break;
+      case StyledButtonType.EMPTY:
+        additionalStyle = styles.touchableEmpty
         break;
     }
 
@@ -50,25 +71,57 @@ export class StyledButton extends React.Component<Props> {
       case StyledButtonType.DELETE:
         additionalStyle = styles.textDelete
         break;
+      case StyledButtonType.DELETE:
+        additionalStyle = styles.textEmpty
+        break;
     }
 
     return { ...styles.text, ...additionalStyle };
   }
 
+  get iconStyle() {
+    const { iconPosition } = this.props;
+
+    const iconLeft = iconPosition === IconPositionType.LEFT;
+
+    return iconLeft
+      ? { ...styles.icon, marginRight: 8 }
+      : { ...styles.icon, marginLeft: 8 }
+  }
+
   render() {
-    const { label, onPress } = this.props;
+    const { label, onPress, iconPosition } = this.props;
+
+    const iconLeft = iconPosition === IconPositionType.LEFT;
+
     return (
-      <View style={styles.buttonView}>
+      <View style={this.viewStyle}>
         <TouchableOpacity
           onPress={onPress}
           style={this.touchableStyle}
         >
+          {iconLeft && <View style={this.iconStyle}>
+            {this.icon()}
+          </View>}
+
           <Text style={this.textStyle}>
             {label}
           </Text>
+
+          {!iconLeft && <View style={this.iconStyle}>
+            {this.icon()}
+          </View>}
         </TouchableOpacity>
       </View>
     );
+  }
+
+  icon() {
+    const { icon } = this.props;
+
+    if (!icon) return null;
+
+    return icon;
   }
 }
 
@@ -79,6 +132,8 @@ const styles = StyleSheet.create({
   touchable: {
     borderRadius: 10,
     padding: 10,
+    display: 'flex',
+    flexDirection: 'row',
   },
   touchablePrimary: {
     backgroundColor: COLOR.PRIMARY,
@@ -93,6 +148,9 @@ const styles = StyleSheet.create({
     borderColor: COLOR.RED,
     borderWidth: 1,
   },
+  touchableEmpty: {
+    backgroundColor: COLOR.TRANSPARENT,
+  },
   text: {
     fontSize: 17,
   },
@@ -105,4 +163,10 @@ const styles = StyleSheet.create({
   textDelete: {
     color: COLOR.TEXT_DIMGRAY,
   },
+  textEmpty: {
+    color: COLOR.TEXT_DARK_GRAY,
+  },
+  icon: {
+    marginHorizontal: 8,
+  }
 })

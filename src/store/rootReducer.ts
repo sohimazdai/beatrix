@@ -7,6 +7,7 @@ import { interactiveReducer } from './modules/interactive/interactive';
 import { userDiabetesPropertiesReducer } from './modules/user-diabetes-properties/UserDiabetesPropertiesReducer';
 import { userPropertiesSheduleReducer } from './modules/user-properties-shedule/UserPropertiesShedule';
 import { pendingNoteListReducer } from './modules/pending-note-list/PendingNoteList';
+import { tagListReducer } from './modules/tag-list/tagList';
 
 export const rootReducer = combineReducers({
     app: appReducer,
@@ -17,4 +18,5 @@ export const rootReducer = combineReducers({
     userDiabetesProperties: userDiabetesPropertiesReducer,
     userPropertiesShedule: userPropertiesSheduleReducer,
     pendingNoteList: pendingNoteListReducer,
+    tagList: tagListReducer,
 });

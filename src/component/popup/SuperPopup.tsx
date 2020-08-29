@@ -75,6 +75,5 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
-        backgroundColor: 'red',
     },
 })

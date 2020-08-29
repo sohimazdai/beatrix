@@ -33,4 +33,6 @@ export enum COLOR {
 
     TEXT_DIMGRAY = '#666666',
     TEXT_WHITE = '#FFFFFF',
+
+    TRANSPARENT = 'transparent',
 }

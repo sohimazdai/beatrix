@@ -1233,4 +1233,29 @@ const translateStore = {
     'es': 'Crear nota',
     'ru': 'Создание записи',
   },
+  add_tag_to_note: {
+    'en': 'Add tag',
+    'es': 'Añadir etiqueta',
+    'ru': 'Добавить тег',
+  },
+  there_are_no_tags: {
+    'en': 'No tags found',
+    'es': 'No se encontraron etiquetas',
+    'ru': 'Теги не найдены',
+  },
+  create_tags: {
+    'en': 'Create tags',
+    'es': 'Crear etiquetas',
+    'ru': 'Создать теги',
+  },
+  before_meal: {
+    'en': 'Before eating',
+    'es': 'Antes de comer',
+    'ru': 'Перед едой',
+  },
+  after_meal: {
+    'en': '2 hours after eating',
+    'es': '2 horas después de comer',
+    'ru': '2 часа после еды',
+  },
 }
