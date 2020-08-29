@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BottomPopup } from './BottomPopup'
+import { SuperPopup, PopupDirection } from './SuperPopup'
 import { connect } from 'react-redux'
 import { IStorage } from '../../model/IStorage'
 import { IInteractive } from '../../model/IInteractive'
@@ -14,7 +14,10 @@ interface Props {
 export default class ConfirmPopup extends Component<Props> {
     render() {
         return (
-            <BottomPopup hidden={!this.props.interactive.confirmPopupShown}>
+            <SuperPopup
+                hidden={!this.props.interactive.confirmPopupShown}
+                direction={PopupDirection.BOTTOM_TOP}
+            >
                 <View style={styles.view}>
                     <Text style={styles.questionText}>
                         {'Вы уверены?'}
@@ -42,7 +45,7 @@ export default class ConfirmPopup extends Component<Props> {
                         </View>
                     </View>
                 </View>
-            </BottomPopup>
+            </SuperPopup>
         )
     }
 }

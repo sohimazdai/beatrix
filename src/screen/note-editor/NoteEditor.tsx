@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Dimensions,
   Modal,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -36,8 +37,10 @@ import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga'
 import { appAnalytics } from '../../app/Analytics';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { Hat } from '../../component/hat/Hat';
-import { BottomPopup } from '../../component/popup/BottomPopup';
-import { DownArrowIcon } from '../../component/icon/DownArrowIcon';
+import { SuperPopup, PopupDirection } from '../../component/popup/SuperPopup';
+import { DownArrowIcon } from '../../component/icon/ArrowDownIcon';
+import { TopPopup } from '../../component/popup/TopPopup';
+import { ArrowTopIcon } from '../../component/icon/ArrowTopIcon';
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -137,7 +140,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
           {this.props.note && this.renderDeleteButton()}
           {this.renderSaveButton()}
         </View>
-        {this.renderInputPopup()}
+        <KeyboardAvoidingView behavior='position'>
+          {this.renderInputPopup()}
+        </KeyboardAvoidingView>
       </View>
     )
   }
@@ -176,21 +181,23 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { currentValueType } = this.state;
 
     return (
-      <BottomPopup
+      <SuperPopup
         hidden={!currentValueType}
+        direction={PopupDirection.BOTTOM_TOP}
       >
         <View style={styles.inputPopup}>
           {this.renderInputByValue()}
         </View>
         <TouchableOpacity
-          style={styles.downArrowIcon}
+          style={styles.arrowDownIcon}
           onPress={this.onDowArrowIconPress}
         >
           <DownArrowIcon />
         </TouchableOpacity>
-      </BottomPopup>
+      </SuperPopup>
     )
   }
+
   renderPickerBlock() {
     const { currentValueType, ...note } = this.state;
     return (
@@ -555,14 +562,18 @@ const styles = StyleSheet.create({
   inputPopup: {
     position: 'relative',
     backgroundColor: COLOR.PRIMARY_WHITE,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
     alignItems: 'center',
   },
-  downArrowIcon: {
+  arrowDownIcon: {
     position: 'absolute',
     padding: 8,
     top: 8,
+    right: 8,
+  },
+  arrowTopIcon: {
+    position: 'absolute',
+    padding: 8,
+    bottom: 8,
     right: 8,
   },
   hideTouchable: {

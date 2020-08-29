@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+
 import { Loader } from '../loader/Loader'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { BackArrowIcon } from '../icon/BackArrowIcon'

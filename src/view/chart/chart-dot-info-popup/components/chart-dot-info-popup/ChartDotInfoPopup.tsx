@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 
-import { BottomPopup } from '../../../../../component/popup/BottomPopup';
+import { SuperPopup, PopupDirection } from '../../../../../component/popup/SuperPopup';
 import { ChartDotInfoPopupValue } from '../dot-info-popup-value/ChartDotInfoPopupValue';
 import { CloseIcon } from '../../../../../component/icon/CloseIcon';
 import { EditNoteIcon } from '../../../../../component/icon/EditNoteIcon';
@@ -101,7 +101,10 @@ export class ChartDotInfoPopup extends React.Component<Props> {
         const editable = selectedChartPeriod == ChartPeriodType.DAY;
 
 
-        return <BottomPopup hidden={!note}>
+        return <SuperPopup
+            hidden={!note}
+            direction={PopupDirection.BOTTOM_TOP}
+        >
             <View style={styles.animatedView}>
                 <LinearGradient
                     style={styles.popupGradient}
@@ -162,7 +165,7 @@ export class ChartDotInfoPopup extends React.Component<Props> {
                     )}
                 </LinearGradient>
             </View>
-        </BottomPopup>
+        </SuperPopup>
     }
 }
 

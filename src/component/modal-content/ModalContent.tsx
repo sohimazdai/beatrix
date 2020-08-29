@@ -6,7 +6,7 @@ import { Action, Dispatch } from "redux";
 import { createModalChangeAction } from "../../store/modules/modal/ModalActionCreator";
 import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
 import { ModalContentIOsDatePicker } from "./modal-content-ios-date-picker/ModalContentIOsDatePicker";
-import { BottomPopup } from '../popup/BottomPopup';
+import { SuperPopup, PopupDirection } from '../popup/SuperPopup';
 import { ModalContentInfo } from './modal-content-info/ModalContentInfo';
 import { ModalContentHint } from './modal-content-hint/ModalContentHint';
 
@@ -18,9 +18,12 @@ interface ModalContentProps {
 class ModalContent extends React.PureComponent<ModalContentProps> {
     render() {
         return (
-            <BottomPopup hidden={!this.props.modal.needToShow}>
+            <SuperPopup
+                hidden={!this.props.modal.needToShow}
+                direction={PopupDirection.BOTTOM_TOP}
+            >
                 {this.modalToShow}
-            </BottomPopup>
+            </SuperPopup>
         );
     }
 
