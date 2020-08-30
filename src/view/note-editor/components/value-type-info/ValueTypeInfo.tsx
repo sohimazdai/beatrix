@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import Tooltip from '../../../component/tooltip/Tooltip';
-import { MagnifierIcon } from '../../../component/icon/MagnifierIcon';
-import { COLOR } from '../../../constant/Color';
+import Tooltip from '../../../../component/tooltip/Tooltip';
+import { MagnifierIcon } from '../../../../component/icon/MagnifierIcon';
+import { COLOR } from '../../../../constant/Color';
 
 interface Props {
   value?: string | number

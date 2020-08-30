@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native'
 
-import { GlucometerIcon } from '../../../component/icon/value-icons/GlucometerIcon'
-import { VegetablesIcon } from '../../../component/icon/value-icons/VegetablesIcon'
-import { ShortSyringeIcon } from '../../../component/icon/value-icons/ShortSyringeIcon'
-import { LongSyringeIcon } from '../../../component/icon/value-icons/LongSyringeIcon'
-import { CommentIcon } from '../../../component/icon/CommentIcon'
+import { GlucometerIcon } from '../../../../component/icon/value-icons/GlucometerIcon'
+import { VegetablesIcon } from '../../../../component/icon/value-icons/VegetablesIcon'
+import { ShortSyringeIcon } from '../../../../component/icon/value-icons/ShortSyringeIcon'
+import { LongSyringeIcon } from '../../../../component/icon/value-icons/LongSyringeIcon'
+import { CommentIcon } from '../../../../component/icon/CommentIcon'
 
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions'
-import { NoteValueType } from '../../../model/INoteList'
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions'
+import { NoteValueType } from '../../../../model/INoteList'
 import { ValueTypeInfo } from '../value-type-info/ValueTypeInfo'
 
 interface Props {

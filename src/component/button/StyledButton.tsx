@@ -28,11 +28,22 @@ interface Props {
 
 export class StyledButton extends React.Component<Props> {
   get viewStyle() {
-    const { fluid } = this.props;
+    const { fluid, style } = this.props;
 
-    return fluid
+    let additionStyle = {};
+
+    const viewStyle = fluid
       ? { ...styles.buttonView, flex: 1, width: '100%' }
-      : styles.buttonView
+      : styles.buttonView;
+
+    switch (style) {
+      case StyledButtonType.EMPTY:
+        additionStyle = styles.buttonViewEmpty;
+        break;
+      default: additionStyle = {};
+    }
+
+    return { ...viewStyle, ...additionStyle };
   };
 
   get touchableStyle() {
@@ -129,11 +140,15 @@ const styles = StyleSheet.create({
   buttonView: {
     ...SHADOW_OPTIONS,
   },
+  buttonViewEmpty: {
+    shadowColor: COLOR.TRANSPARENT,
+  },
   touchable: {
     borderRadius: 10,
     padding: 10,
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   touchablePrimary: {
     backgroundColor: COLOR.PRIMARY,
@@ -150,6 +165,7 @@ const styles = StyleSheet.create({
   },
   touchableEmpty: {
     backgroundColor: COLOR.TRANSPARENT,
+    paddingHorizontal: 0,
   },
   text: {
     fontSize: 17,
@@ -167,6 +183,6 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_DARK_GRAY,
   },
   icon: {
-    marginHorizontal: 8,
+    marginHorizontal: 0,
   }
 })

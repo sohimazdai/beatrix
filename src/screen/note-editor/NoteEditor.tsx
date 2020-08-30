@@ -16,7 +16,7 @@ import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-n
 
 import { NumberScroller } from '../../view/notes/number-scroller/NumberScroller';
 import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
-import { ValueTypePicker } from '../../view/note-editor/value-type-picker/ValueTypePicker';
+import { ValueTypePicker } from '../../view/note-editor/components/value-type-picker/ValueTypePicker';
 import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
 import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
 import { DownArrowIcon } from '../../component/icon/ArrowDownIcon';
@@ -38,10 +38,11 @@ import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga'
 import { appAnalytics } from '../../app/Analytics';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { Hat } from '../../component/hat/Hat';
-import { TagPicker } from '../../view/note-editor/tag-picker/TagPicker';
+import { TagPicker } from '../../view/note-editor/components/tag-picker/TagPicker';
 import { StyledButton, IconPositionType, StyledButtonType } from '../../component/button/StyledButton';
-import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { PlusRoundedIcon } from '../../component/icon/PlusRoundedIcon';
+import { ITagList } from '../../model/ITagList';
+import { TagsIcon } from '../../component/icon/TagsIcon';
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -51,6 +52,7 @@ const INITIAL_STATE = {
   longInsulin: 0,
   commentary: '',
   currentValueType: null,
+  selectedTags: [],
 };
 
 interface Props {
@@ -60,6 +62,7 @@ interface Props {
   dispatch?: (action) => void
   onNoteDelete?: (noteId: string) => void;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  tagList?: ITagList
 }
 
 interface State {
@@ -71,6 +74,7 @@ interface State {
   commentary: string,
   currentValueType: NoteValueType
   isTagPickerOpen?: boolean
+  selectedTags?: number[]
 }
 
 class NoteEditor extends React.PureComponent<Props, State>{
@@ -79,11 +83,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { note } = props;
 
     if (note) {
-      const { id, userId, carbsUnitWeight, carbsMeasuringType, glycemiaType, ...restNote } = note;
+      const {
+        id, userId, carbsUnitWeight, carbsMeasuringType, glycemiaType, tagIds, ...restNote
+      } = note;
 
       const noteFromProps: State = {
         ...INITIAL_STATE,
         ...restNote,
+        selectedTags: tagIds,
         date: new Date(restNote.date),
       }
 
@@ -168,7 +175,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
     appAnalytics.sendEvent(appAnalytics.events.NOTE_TIME_CHANGED);
   }
 
-  onValueTypePickerSelect = (type) => this.setState({ currentValueType: type })
+  onValueTypePickerSelect = (type) => this.setState({
+    currentValueType: type,
+    isTagPickerOpen: false,
+  })
 
   onDowArrowIconPress = () => {
     const { currentValueType } = this.state;
@@ -192,23 +202,104 @@ class NoteEditor extends React.PureComponent<Props, State>{
     })
   }
 
+  onTagSelect = (tagId: number) => {
+    const { selectedTags } = this.state;
+
+    if (selectedTags) {
+      this.setState({
+        selectedTags: [
+          ...selectedTags,
+          tagId
+        ]
+      })
+    } else this.setState({ selectedTags: [tagId] })
+  }
+
+  goToTagEditor = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(
+      NavigatorEntities.TAG_EDITOR,
+      { backPage: NavigatorEntities.NOTE_EDITOR }
+    );
+  }
+
   renderTagsPopup() {
     const { navigation } = this.props;
-    const { isTagPickerOpen } = this.state;
+    const { isTagPickerOpen, selectedTags } = this.state;
 
     return (
       <SuperPopup
         hidden={!isTagPickerOpen}
         direction={PopupDirection.BOTTOM_TOP}
       >
-        <TagPicker navigation={navigation} />
+        <TagPicker
+          navigation={navigation}
+          selectedTags={selectedTags}
+          onTagPress={this.onTagSelect}
+        />
         <TouchableOpacity
           style={styles.arrowDownIcon}
           onPress={this.onDowArrowIconPress}
         >
           <DownArrowIcon />
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.toTabsIcon}
+          onPress={this.goToTagEditor}
+        >
+          <TagsIcon />
+        </TouchableOpacity>
       </SuperPopup>
+    )
+  }
+
+  onTagDelete = (tagId: number) => {
+    const { selectedTags } = this.state;
+
+    this.setState({
+      selectedTags: selectedTags.filter((id: number) => id !== tagId),
+    });
+  }
+
+  renderPickerBlock() {
+    const { navigation } = this.props;
+    const { currentValueType, selectedTags, isTagPickerOpen, ...note } = this.state;
+    return (
+      <View style={styles.inputBlock}>
+        <View style={styles.timePickers}>
+          <NoteDatePickerConnect
+            date={this.state.date}
+            onChange={this.onDateChange}
+          />
+          <NoteTimePickerConnect
+            date={this.state.date}
+            onChange={this.onTimeChange}
+          />
+        </View>
+        <ValueTypePicker
+          onSelect={this.onValueTypePickerSelect}
+          selectedType={this.state.currentValueType}
+          {...note}
+        />
+        <View style={styles.tags}>
+          <StyledButton
+            fluid
+            icon={<TagsIcon />}
+            iconPosition={IconPositionType.LEFT}
+            label={i18nGet('add_tag_to_note')}
+            onPress={this.onTagPickerOpen}
+            style={StyledButtonType.EMPTY}
+          />
+          <TagPicker
+            viewerOfSelected
+            width={280}
+            navigation={navigation}
+            selectedTags={selectedTags}
+            onTagPress={this.onTagDelete}
+          />
+        </View>
+      </View>
     )
   }
 
@@ -230,39 +321,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
           <DownArrowIcon />
         </TouchableOpacity>
       </SuperPopup>
-    )
-  }
-
-  renderPickerBlock() {
-    const { currentValueType, ...note } = this.state;
-    return (
-      <View style={styles.inputBlock}>
-        <View style={styles.timePickers}>
-          <NoteDatePickerConnect
-            date={this.state.date}
-            onChange={this.onDateChange}
-          />
-          <NoteTimePickerConnect
-            date={this.state.date}
-            onChange={this.onTimeChange}
-          />
-        </View>
-        <ValueTypePicker
-          onSelect={this.onValueTypePickerSelect}
-          selectedType={this.state.currentValueType}
-          {...note}
-        />
-        <View style={styles.addTagsButtons}>
-          <StyledButton
-            fluid
-            icon={<PlusRoundedIcon color={COLOR.PRIMARY} />}
-            iconPosition={IconPositionType.LEFT}
-            label={i18nGet('add_tag_to_note')}
-            onPress={this.onTagPickerOpen}
-            style={StyledButtonType.EMPTY}
-          />
-        </View>
-      </View>
     )
   }
 
@@ -437,23 +495,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
     this.closeEditor()
   }
 
-  setInitialState() {
-    this.setState({
-      date: new Date(),
-      glucose: 0,
-      breadUnits: 0,
-      insulin: 0,
-      longInsulin: 0,
-      commentary: "",
-      currentValueType: NoteValueType.GLUCOSE
-    })
-  }
-
-  get noteFromState() {
-    let { currentValueType, ...note } = this.state;
+  get noteFromState(): INoteListNote {
+    let { currentValueType, isTagPickerOpen, selectedTags, ...note } = this.state;
     return {
       ...note,
       date: note.date.getTime(),
+      tagIds: selectedTags,
     };
   }
 }
@@ -462,7 +509,8 @@ export const NoteEditorConnect = connect(
   (state: IStorage) => ({
     noteList: state.noteList,
     interactive: state.interactive,
-    userDiabetesProperties: state.userDiabetesProperties
+    userDiabetesProperties: state.userDiabetesProperties,
+    tagList: state.tagList,
   }),
   (dispatch) => ({ dispatch }),
   (stateProps, { dispatch }, ownProps: Partial<Props>) => {
@@ -534,9 +582,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  addTagsButtons: {
+  tags: {
     width: '100%',
     marginTop: 16,
+    alignItems: 'flex-start',
   },
   inputView: {
     width: '100%',
@@ -603,6 +652,8 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 15,
     marginTop: 20,
+    borderWidth: 1,
+    borderColor: COLOR.PRIMARY,
   },
   inputPopup: {
     position: 'relative',
@@ -615,5 +666,11 @@ const styles = StyleSheet.create({
     top: 8,
     right: 8,
   },
+  toTabsIcon: {
+    position: 'absolute',
+    padding: 8,
+    top: 8,
+    left: 8,
+  }
 })
 

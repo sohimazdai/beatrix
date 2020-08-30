@@ -9,7 +9,6 @@ import { IStorage } from '../model/IStorage';
 import { ProfileScreenConnect } from '../screen/profile/ProfileScreen';
 import { IInteractive } from '../model/IInteractive';
 import { ProfileScreenDiabetesSettings } from '../screen/profile/profile-settings/ProfileScreenDiabetesSettings';
-import { NoteCreationPopupConnect } from '../view/notes/note-creation-popup/NoteCreationPopup';
 import { ConfirmPopupConnect } from '../component/popup/ConfirmPopup';
 import { Fader, FaderType } from '../component/fader/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
@@ -20,10 +19,10 @@ import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-set
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettings';
 import { DashboardScreenConnect } from '../screen/dashboard/DashboardScreen';
-import { ChartDotInfoPopupConnect } from '../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { ExportDataSettings } from '../screen/profile/profile-settings/sub-settings/ExportDataSettings';
 import { OnboardingConnected } from '../screen/onboarding/Onboarding';
 import { NoteEditorConnect } from '../screen/note-editor/NoteEditor';
+import { TagEditor } from '../screen/tag-editor/TagEditor';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -100,7 +99,6 @@ const ProfileScreenStack = createStackNavigator(
         },
         ExportDataSettings: {
             screen: ExportDataSettings,
-            
         }
     },
     {
@@ -115,6 +113,7 @@ const AuthedNavigator = createStackNavigator(
         Charts: { screen: ChartConnect },
         Profile: { screen: ProfileScreenStack },
         NoteEditor: { screen: NoteEditorConnect },
+        TagEditor: { screen: TagEditor }
     },
     {
         headerMode: 'none'

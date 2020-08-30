@@ -1258,4 +1258,19 @@ const translateStore = {
     'es': '2 horas después de comer',
     'ru': '2 часа после еды',
   },
+  tags: {
+    'en': 'Tags',
+    'es': 'Etiquetas',
+    'ru': 'Теги',
+  },
+  tags_run_out: {
+    'en': 'Tags have run out',
+    'es': 'No más etiquetas',
+    'ru': 'Теги закончились',
+  },
+  tag_editor: {
+    'en': 'Tags',
+    'es': 'Etiquetas',
+    'ru': 'Теги',
+  },
 }
