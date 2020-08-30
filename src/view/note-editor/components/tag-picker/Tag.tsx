@@ -24,6 +24,11 @@ export function Tag(props: Props) {
     marginLeft: isFirst ? 0 : 4,
   }
 
+  // const signStyle = {
+  //   ...styles.sign,
+  //   color
+  // }
+
   return (
     <View style={viewStyle}>
       <TouchableOpacity
@@ -34,11 +39,11 @@ export function Tag(props: Props) {
           <Text style={textStyle}>
             {name}
           </Text>
-          {icon && (
-            <View>
-              {icon}
-            </View>
-          )}
+          {/* {icon && (
+            <Text style={signStyle}>
+              -
+            </Text>
+          )} */}
         </View>
       </TouchableOpacity>
     </View>
@@ -62,6 +67,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
   },
-  tagIconView: {
+  sign: {
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: 'bold',
   }
 })

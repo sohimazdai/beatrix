@@ -1273,4 +1273,14 @@ const translateStore = {
     'es': 'Etiquetas',
     'ru': 'Теги',
   },
+  create: {
+    'en': 'Create',
+    'es': 'Crear',
+    'ru': 'Создать',
+  },
+  enter_tag: {
+    'en': 'Enter a tag',
+    'es': 'Ingrese una etiqueta',
+    'ru': 'Введите тег',
+  },
 }

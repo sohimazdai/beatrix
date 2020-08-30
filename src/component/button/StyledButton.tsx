@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
@@ -24,17 +24,25 @@ interface Props {
   style: StyledButtonType;
   icon?: JSX.Element;
   iconPosition?: IconPositionType;
+  marginLeft?: boolean
 };
 
 export class StyledButton extends React.Component<Props> {
   get viewStyle() {
-    const { fluid, style } = this.props;
+    const { fluid, style, marginLeft } = this.props;
 
     let additionStyle = {};
 
-    const viewStyle = fluid
+    let viewStyle: ViewStyle = fluid
       ? { ...styles.buttonView, flex: 1, width: '100%' }
       : styles.buttonView;
+
+    if (marginLeft) {
+      viewStyle = {
+        ...viewStyle,
+        marginLeft: 8
+      }
+    }
 
     switch (style) {
       case StyledButtonType.EMPTY:
@@ -104,6 +112,7 @@ export class StyledButton extends React.Component<Props> {
     const { label, onPress, iconPosition } = this.props;
 
     const iconLeft = iconPosition === IconPositionType.LEFT;
+    const iconRight = iconPosition === IconPositionType.RIGHT;
 
     return (
       <View style={this.viewStyle}>
@@ -119,7 +128,7 @@ export class StyledButton extends React.Component<Props> {
             {label}
           </Text>
 
-          {!iconLeft && <View style={this.iconStyle}>
+          {iconRight && <View style={this.iconStyle}>
             {this.icon()}
           </View>}
         </TouchableOpacity>

@@ -40,9 +40,10 @@ import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { Hat } from '../../component/hat/Hat';
 import { TagPicker } from '../../view/note-editor/components/tag-picker/TagPicker';
 import { StyledButton, IconPositionType, StyledButtonType } from '../../component/button/StyledButton';
-import { PlusRoundedIcon } from '../../component/icon/PlusRoundedIcon';
 import { ITagList } from '../../model/ITagList';
 import { TagsIcon } from '../../component/icon/TagsIcon';
+import { MinusIcon } from '../../component/icon/MinusIcon';
+import { MinusSignIcon } from '../../component/icon/MinusSignIcon';
 
 const INITIAL_STATE = {
   date: new Date(),
