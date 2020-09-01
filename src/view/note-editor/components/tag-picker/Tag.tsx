@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function Tag(props: Props) {
-  const { tag: { name, bgColor, color }, onPress, icon, isFirst } = props;
+  const { tag: { name, bgColor, color }, onPress, isFirst } = props;
 
   const textStyle = {
     ...styles.text,
@@ -24,27 +24,15 @@ export function Tag(props: Props) {
     marginLeft: isFirst ? 0 : 4,
   }
 
-  // const signStyle = {
-  //   ...styles.sign,
-  //   color
-  // }
-
   return (
     <View style={viewStyle}>
       <TouchableOpacity
         style={styles.touchable}
         onPress={onPress}
       >
-        <View style={styles.tagContent}>
-          <Text style={textStyle}>
-            {name}
-          </Text>
-          {/* {icon && (
-            <Text style={signStyle}>
-              -
-            </Text>
-          )} */}
-        </View>
+        <Text style={textStyle}>
+          {name}
+        </Text>
       </TouchableOpacity>
     </View>
   )
@@ -58,11 +46,6 @@ const styles = StyleSheet.create({
   },
   touchable: {
     padding: 8,
-  },
-  tagContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   text: {
     fontSize: 14,

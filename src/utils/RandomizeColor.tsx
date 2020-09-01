@@ -1,5 +1,8 @@
 import { COLOR } from '../constant/Color';
 
+const OFFSET = 20;
+const RGB_COLOR_VALUE_MAX = 256;
+
 interface RGB {
   r: number,
   g: number,
@@ -7,9 +10,9 @@ interface RGB {
 }
 
 export const randomizeColor = () => {
-  const red = Math.floor(Math.random() * 256);
-  const green = Math.floor(Math.random() * 256);
-  const blue = Math.floor(Math.random() * 256);
+  const red = Math.floor(Math.random() * RGB_COLOR_VALUE_MAX);
+  const green = Math.floor(Math.random() * RGB_COLOR_VALUE_MAX);
+  const blue = Math.floor(Math.random() * RGB_COLOR_VALUE_MAX);
 
   return `rgb(${red}, ${green}, ${blue})`;
 }
@@ -30,7 +33,7 @@ export const randomizeBGandFontColor = (): { bgColor: string, color: string } =>
 
 function isRgbLight(rgb: RGB) {
   let average = (rgb.r + rgb.g + rgb.b) / 3;
-  return average > 128
+  return average > (RGB_COLOR_VALUE_MAX / 2)
     ? true
     : false;
 }
@@ -44,5 +47,19 @@ function getRGB(): RGB {
 }
 
 function getRandomRGB(): number {
-  return Math.floor(Math.random() * 256);
+  const randomColor = Math.floor(Math.random() * RGB_COLOR_VALUE_MAX);
+
+  const smoothedColor = randomColor > 200
+    ? randomColor - OFFSET
+    : randomColor < OFFSET
+      ? randomColor + OFFSET
+      : randomColor;
+
+  const contrastedColor = smoothedColor > (RGB_COLOR_VALUE_MAX / 2 - OFFSET)
+    ? smoothedColor - OFFSET
+    : smoothedColor < (RGB_COLOR_VALUE_MAX / 2 + OFFSET)
+      ? smoothedColor + OFFSET
+      : smoothedColor;
+
+  return contrastedColor;
 }

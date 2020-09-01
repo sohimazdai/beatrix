@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
+import { Text, StyleSheet, View, StyleProp, ViewStyle, ButtonProps } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
@@ -25,6 +25,7 @@ interface Props {
   icon?: JSX.Element;
   iconPosition?: IconPositionType;
   marginLeft?: boolean
+  disabled?: boolean
 };
 
 export class StyledButton extends React.Component<Props> {
@@ -109,7 +110,7 @@ export class StyledButton extends React.Component<Props> {
   }
 
   render() {
-    const { label, onPress, iconPosition } = this.props;
+    const { label, onPress, iconPosition, disabled } = this.props;
 
     const iconLeft = iconPosition === IconPositionType.LEFT;
     const iconRight = iconPosition === IconPositionType.RIGHT;
@@ -119,6 +120,7 @@ export class StyledButton extends React.Component<Props> {
         <TouchableOpacity
           onPress={onPress}
           style={this.touchableStyle}
+          disabled={disabled}
         >
           {iconLeft && <View style={this.iconStyle}>
             {this.icon()}
@@ -132,6 +134,7 @@ export class StyledButton extends React.Component<Props> {
             {this.icon()}
           </View>}
         </TouchableOpacity>
+        {disabled && <View style={styles.disabledView} />}
       </View>
     );
   }
@@ -147,6 +150,7 @@ export class StyledButton extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   buttonView: {
+    position: 'relative',
     ...SHADOW_OPTIONS,
   },
   buttonViewEmpty: {
@@ -193,5 +197,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 0,
-  }
+  },
+  disabledView: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: COLOR.TEXT_WHITE,
+    opacity: 0.5,
+  },
 })

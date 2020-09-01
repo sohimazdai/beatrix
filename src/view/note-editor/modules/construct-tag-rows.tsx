@@ -22,6 +22,8 @@ export const constructTagRows = (
   );
 
   Object.values(tagListTags).forEach((tag: ITag, index: number) => {
+    if (!tag) return;
+
     const isFit = checkThatTagIsFit(tag);
 
     if (isFit) {

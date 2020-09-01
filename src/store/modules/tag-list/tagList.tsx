@@ -1,4 +1,4 @@
-import { ITagList, ITag } from "../../../model/ITagList";
+import { ITagList, ITag, ITagListTags } from "../../../model/ITagList";
 import { i18nGet } from '../../../localisation/Translate';
 import { randomizeBGandFontColor } from '../../../utils/RandomizeColor';
 
@@ -81,12 +81,14 @@ export function tagListReducer(
                 id: tagId,
             };
 
+            const tags = {
+                ...module.tags,
+                [tag.id]: tag
+            };
+
             return {
                 ...module,
-                tags: {
-                    ...module.tags,
-                    [tag.id]: tag,
-                },
+                tags,
                 nextId: module.nextId + 1,
             }
         case TagListActionType.REMOVE:

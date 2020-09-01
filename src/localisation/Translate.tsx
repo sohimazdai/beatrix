@@ -1283,4 +1283,14 @@ const translateStore = {
     'es': 'Ingrese una etiqueta',
     'ru': 'Введите тег',
   },
+  you_want_to_delete_tag: {
+    'en': 'Do you want to remove this tag?',
+    'es': '¿Quieres eliminar esta etiqueta?',
+    'ru': 'Хотите удалить этот тег?',
+  },
+  you_wont_use_this_tag_anymore_for_filtering_notes: {
+    'en': 'You will no longer be able to use this tag when filtering notes',
+    'es': 'Ya no podrá usar esta etiqueta al filtrar notas',
+    'ru': 'Вы не сможете больше использовать этот тег для фильтрации записей',
+  },
 }

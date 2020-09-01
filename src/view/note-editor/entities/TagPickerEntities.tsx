@@ -1,4 +1,4 @@
-const LETTER_WIDTH_MAX = 6;
+const LETTER_WIDTH_MAX = 8;
 const PADDING_LEFT = 8;
 const PADDING_RIGHT = 8;
 const MARGIN_LEFT = 4;
