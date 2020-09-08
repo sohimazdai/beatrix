@@ -35,8 +35,11 @@ export class StyledButton extends React.Component<Props> {
     let additionStyle = {};
 
     let viewStyle: ViewStyle = fluid
-      ? { ...styles.buttonView, flex: 1, width: '100%' }
-      : styles.buttonView;
+      ? {
+        ...styles.buttonView,
+        flex: 1,
+        width: '100%',
+      } : styles.buttonView;
 
     if (marginLeft) {
       viewStyle = {
@@ -78,7 +81,7 @@ export class StyledButton extends React.Component<Props> {
   }
 
   get textStyle() {
-    const { style } = this.props;
+    const { style, fluid } = this.props;
     let additionalStyle = {};
 
     switch (style) {
@@ -162,6 +165,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   touchablePrimary: {
     backgroundColor: COLOR.PRIMARY,

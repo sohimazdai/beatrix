@@ -1293,4 +1293,44 @@ const translateStore = {
     'es': 'Ya no podrá usar esta etiqueta al filtrar notas',
     'ru': 'Вы не сможете больше использовать этот тег для фильтрации записей',
   },
+  filter: {
+    'en': 'Filter',
+    'es': 'Filtrar',
+    'ru': 'Фильтр',
+  },
+  with_high_glucose: {
+    'en': 'Hyperglycemia',
+    'es': 'Hiperglucemia',
+    'ru': 'Гипергликемия',
+  },
+  with_low_glucose: {
+    'en': 'Hypoglycemia',
+    'es': 'Hipoglucemia',
+    'ru': 'Гипогликемия',
+  },
+  with_normal_glucose: {
+    'en': 'Normal glycemia',
+    'es': 'Glucemia normal',
+    'ru': 'Нормальная гликемия',
+  },
+  with_comment: {
+    'en': 'With comment',
+    'es': 'Con comentario',
+    'ru': 'С комментарием',
+  },
+  with_tags: {
+    'en': 'With tags',
+    'es': 'Con etiquetas',
+    'ru': 'С тегами',
+  },
+  clear: {
+    'en': 'Clear',
+    'es': 'Regreso',
+    'ru': 'Очистить',
+  },
+  apply: {
+    'en': 'Apply',
+    'es': 'Aplicar',
+    'ru': 'Применить',
+  },
 }

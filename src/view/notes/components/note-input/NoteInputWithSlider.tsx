@@ -1,8 +1,8 @@
 import React from 'react';
 import { Platform, StyleSheet, View, Slider, Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { COLOR } from '../../../constant/Color';
-import { BaseDecimalInput } from '../../../component/input/BaseDecimalInput';
+import { COLOR } from '../../../../constant/Color';
+import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
 
 interface Props {
     onChangeText: (text: string) => void;

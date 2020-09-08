@@ -6,6 +6,7 @@ export const persistConfig: PersistConfig = {
     blacklist: [
         'modal',
         'interactive',
+        'noteFilter',
         // 'tagList',
         // 'userDiabetesProperties',
         // 'noteList',

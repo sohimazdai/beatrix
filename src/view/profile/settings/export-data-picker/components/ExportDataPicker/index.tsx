@@ -6,7 +6,7 @@ import { IUserDiabetesProperties } from '../../../../../../model/IUserDiabetesPr
 import { ProfilePicker } from '../../../../ProfilePicker';
 import { IStorage } from '../../../../../../model/IStorage';
 import { createExportDataAction } from '../../../../../../store/service/export/ExportDataSaga';
-import { NoteDatePickerConnect } from '../../../../../notes/note-date-picker/NoteDatePicker';
+import { NoteDatePickerConnect } from '../../../../../notes/components/note-date-picker/NoteDatePicker';
 import { convertFlatNoteListToNoteListByDay } from '../../../../../../store/selector/NoteListSelector';
 import { INoteListByDay } from '../../../../../../model/INoteList';
 import { selectFirstNoteDate } from '../../selectors/selectFirstNoteDate';

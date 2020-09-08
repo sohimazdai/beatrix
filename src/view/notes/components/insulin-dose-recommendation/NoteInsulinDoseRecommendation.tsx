@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { IStorage } from '../../../model/IStorage';
-import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../model/IUserPropertiesShedule';
-import { INoteListNote } from '../../../model/INoteList';
-import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
-import { Measures } from '../../../localisation/Measures';
-import { i18nGet } from '../../../localisation/Translate';
-import { selectActiveInsulinValue } from '../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
-import { COLOR } from '../../../constant/Color';
+import { IStorage } from '../../../../model/IStorage';
+import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../../model/IUserPropertiesShedule';
+import { INoteListNote } from '../../../../model/INoteList';
+import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
+import { Measures } from '../../../../localisation/Measures';
+import { i18nGet } from '../../../../localisation/Translate';
+import { selectActiveInsulinValue } from '../../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
+import { COLOR } from '../../../../constant/Color';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 

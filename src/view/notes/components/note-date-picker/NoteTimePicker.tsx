@@ -2,10 +2,10 @@ import React from 'react';
 import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet, TimePickerAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
-import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
-import { ModalType, IModalPickerType } from '../../../model/IModal';
-import { COLOR } from '../../../constant/Color';
-import { ClocksIcon } from '../../../component/icon/ClocksIcon';
+import { createModalChangeAction } from '../../../../store/modules/modal/ModalActionCreator';
+import { ModalType, IModalPickerType } from '../../../../model/IModal';
+import { COLOR } from '../../../../constant/Color';
+import { ClocksIcon } from '../../../../component/icon/ClocksIcon';
 
 export interface NoteTimePickerProps {
     date: Date

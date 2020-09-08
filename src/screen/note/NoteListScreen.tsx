@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Dimensions } from "react-native";
 import { connect } from "react-redux";
 import {
   NavigationParams,
@@ -11,13 +11,6 @@ import { StyleSheet } from "react-native";
 import { Note } from "../../view/shared/components/Note/Note";
 import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { ProfileIcon } from "../../component/icon/ProfileIcon";
-import { Hat } from '../../component/hat/Hat';
-import { GlycemiaIconConnected } from '../../component/icon/tooltiped/GlycemiaIcon';
-import { ClocsIconTooltipedConnected } from '../../component/icon/tooltiped/ClocsIconTooltiped';
-import { BreadUnitsIconConnected } from '../../component/icon/tooltiped/BreadUnitsIcon';
-import { LongInsulinIconConnected } from '../../component/icon/tooltiped/LongInsulinIcon';
-import { ShortInsulinIconConnected } from '../../component/icon/tooltiped/ShortInsulinIcon';
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay, INoteListNote } from "../../model/INoteList";
@@ -28,16 +21,21 @@ import { COLOR } from "../../constant/Color";
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 
 import { convertFlatNoteListToNoteListByDay } from "../../store/selector/NoteListSelector";
-import { createChangeInteractive } from "../../store/modules/interactive/interactive";
 import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';
 import { HorizontalIconBar } from '../../view/shared/components/IconBar/HorizontalIconBar';
+import { BlockHat } from '../../component/hat/BlockHat';
+import { FilterIcon } from '../../component/icon/FilterIcon';
+import { FilterPopupConnected } from '../../view/notes/components/filter-popup/FilterPopup';
+import { selectFilteredNotes } from '../../view/notes/selectors/select-filtered-notes';
+import { checkIsFilterActive } from '../../view/notes/selectors/check-is-filter-active';
 
 interface NoteListScreenStateTProps {
   app: IApp;
   noteListByDay: INoteListByDay;
   user: IUser;
+  isFilterActive: boolean,
 }
 
 interface NoteListScreenDispatchProps {
@@ -60,6 +58,8 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     noteEditingShown: false,
     editingNoteId: null,
     portionsToRender: 1,
+    isFilterPopupOpen: false,
+    selectedDate: new Date(),
   };
 
   componentDidMount() {
@@ -79,30 +79,57 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
   }
 
+  renderFilterIcon() {
+    const { isFilterActive } = this.props;
+
+    return (
+      <TouchableOpacity
+        style={styles.filterIcon}
+        onPress={() => this.setState({ isFilterPopupOpen: true })}
+      >
+        <FilterIcon width={20} height={20} />
+        {isFilterActive && <View style={styles.redDot} />}
+      </TouchableOpacity>
+    )
+  }
+
+  goToTagEditor = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(NavigatorEntities.TAG_EDITOR, { backPage: NavigatorEntities.NOTE_LIST })
+  }
+
   render() {
     const { navigation } = this.props;
+    const { isFilterPopupOpen, selectedDate } = this.state;
 
     return (
       <View style={styles.screenView}>
-        <Hat
+        <BlockHat
           onBackPress={() => navigation.navigate('Dashboard')}
           title={i18nGet('notes')}
+          rightSideSlot={this.renderFilterIcon()}
         />
         <View style={styles.contentWrap}>
           <View style={styles.content}>
             <HorizontalIconBar isBig />
-            <View style={styles.cardsViewWrapWrap}>
-              <View style={styles.cardsViewWrap}>
-                {this.renderCards()}
-              </View>
-            </View>
+            {this.renderCards()}
           </View>
         </View>
         <View style={styles.addNoteButtonView}>
           <NoteCreationButton onClick={this.goToNoteEditor} />
         </View>
+        <FilterPopupConnected
+          isOpen={isFilterPopupOpen}
+          onHide={this.hideFilter}
+          goToTagEditor={this.goToTagEditor}
+        />
       </View>
     );
+  }
+
+  hideFilter = () => {
+    this.setState({ isFilterPopupOpen: false });
   }
 
   showMorePosts = () => {
@@ -185,6 +212,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       </View>
     );
   }
+
   renderShowMoreButton() {
     return (
       <View style={styles.showMoreButtonWrapper}>
@@ -249,7 +277,8 @@ export const NoteListScreenConnect = connect(
   (state: IStorage) => ({
     app: state.app,
     user: state.user,
-    noteListByDay: convertFlatNoteListToNoteListByDay(state),
+    noteListByDay: selectFilteredNotes(state),
+    isFilterActive: checkIsFilterActive(state),
   }),
   dispatch => ({
     dispatch,
@@ -264,32 +293,39 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
-  cardsViewWrapWrap: {
-    height: '100%',
+  filterIcon: {
+    position: 'relative',
+    padding: 5,
   },
-  cardsViewWrap: {
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
-  },
-  cardsView: {
-    height: '100%',
-    width: '100%',
-    overflow: 'scroll',
-    backgroundColor: COLOR.PRIMARY_WHITE,
+  redDot: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: COLOR.RED,
   },
   contentWrap: {
     backgroundColor: "#2E3858",
   },
   content: {
+    display: 'flex',
+    height: '100%',
+    width: '100%',
+    flexDirection: 'column',
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
+  cardsView: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: COLOR.PRIMARY_WHITE,
+  },
   cardWrap: {
     width: "100%",
-    marginBottom: 15,
-    marginTop: 15,
+    paddingVertical: 8,
     alignItems: "center"
   },
   dateView: {
@@ -370,7 +406,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 120,
   },
   showMoreButton: {
     padding: 10,
@@ -383,6 +418,19 @@ const styles = StyleSheet.create({
     ...SHADOW_OPTIONS,
   },
   noteListBottom: {
-    marginVertical: 35
-  }
+    height: 120,
+    width: '100%',
+  },
+  arrowDownIcon: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
+    padding: 8,
+  },
+  popupHeader: {
+    paddingHorizontal: 32,
+    fontSize: 19,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });

@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, StyleSheet, Alert } from 'react-native';
@@ -11,10 +11,9 @@ import { i18nGet } from '../../localisation/Translate';
 import { BaseTextInput } from '../../component/input/BaseTextInput';
 import { StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 import { createAddTag, createRemoveTag } from '../../store/modules/tag-list/tagList';
-import { TagList } from '../../view/note-editor/components/tag-picker/TagLIst';
 import { TagPicker } from '../../view/note-editor/components/tag-picker/TagPicker';
-import { TextInput } from 'react-native-gesture-handler';
 import { randomizeBGandFontColor } from '../../utils/RandomizeColor';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
   tagList: ITagList
@@ -25,11 +24,13 @@ interface Props {
 
 interface State {
   tagName: string,
+  tagIdToEdit: number,
 }
 
 class TagEditorComp extends React.Component<Props, State> {
   state: State = {
     tagName: '',
+    tagIdToEdit: null,
   }
 
   onBack = () => {
@@ -94,14 +95,13 @@ class TagEditorComp extends React.Component<Props, State> {
               disabled={!tagName}
             />
           </View>
-          <View style={styles.tagPickerView}>
+          <ScrollView style={styles.tagPickerView}>
             <TagPicker
               viewerOfSelected
               onTagPress={onRemoveTag}
-              navigation={navigation}
               selectedTags={this.tagListTagsIds}
             />
-          </View>
+          </ScrollView>
         </View>
       </View>
     );

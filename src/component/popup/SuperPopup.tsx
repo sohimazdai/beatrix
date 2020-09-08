@@ -67,11 +67,13 @@ const styles = StyleSheet.create({
         opacity: 1
     },
     TopPopup: {
+        position: 'relative',
         overflow: 'hidden',
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
     },
     BottomPopup: {
+        position: 'relative',
         overflow: 'hidden',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,

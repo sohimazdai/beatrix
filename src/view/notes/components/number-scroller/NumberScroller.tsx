@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Number from './Number';
-import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
+import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 import { connect } from 'react-redux';
-import { IStorage } from '../../../model/IStorage';
+import { IStorage } from '../../../../model/IStorage';
 import { Dimensions, View } from 'react-native';
-import { IMeasuresOption } from '../../../localisation/Measures';
+import { IMeasuresOption } from '../../../../localisation/Measures';
 
 const PORTION = 50;
 const LENGTH = 70;

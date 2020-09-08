@@ -14,12 +14,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-navigation';
 
-import { NumberScroller } from '../../view/notes/number-scroller/NumberScroller';
-import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
+import { NumberScroller } from '../../view/notes/components/number-scroller/NumberScroller';
+import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/components/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 import { ValueTypePicker } from '../../view/note-editor/components/value-type-picker/ValueTypePicker';
-import { NoteTimePickerConnect } from '../../view/notes/note-date-picker/NoteTimePicker';
-import { NoteDatePickerConnect } from '../../view/notes/note-date-picker/NoteDatePicker';
-import { DownArrowIcon } from '../../component/icon/ArrowDownIcon';
+import { NoteTimePickerConnect } from '../../view/notes/components/note-date-picker/NoteTimePicker';
+import { NoteDatePickerConnect } from '../../view/notes/components/note-date-picker/NoteDatePicker';
+import { ArrowTaillessIcon, ArrowDirection } from '../../component/icon/ArrowTaillessIcon';
 
 import { IInteractive } from '../../model/IInteractive';
 import { INoteListNote, NoteValueType } from '../../model/INoteList';
@@ -42,8 +42,9 @@ import { TagPicker } from '../../view/note-editor/components/tag-picker/TagPicke
 import { StyledButton, IconPositionType, StyledButtonType } from '../../component/button/StyledButton';
 import { ITagList } from '../../model/ITagList';
 import { TagsIcon } from '../../component/icon/TagsIcon';
-import { MinusIcon } from '../../component/icon/MinusIcon';
-import { MinusSignIcon } from '../../component/icon/MinusSignIcon';
+import { PopupHeader } from '../../component/popup/PopupHeader';
+
+const POPUP_PADDING_HORIZONTAL = 16;
 
 const INITIAL_STATE = {
   date: new Date(),
@@ -226,7 +227,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   renderTagsPopup() {
-    const { navigation } = this.props;
     const { isTagPickerOpen, selectedTags } = this.state;
 
     return (
@@ -234,23 +234,31 @@ class NoteEditor extends React.PureComponent<Props, State>{
         hidden={!isTagPickerOpen}
         direction={PopupDirection.BOTTOM_TOP}
       >
-        <TagPicker
-          navigation={navigation}
-          selectedTags={selectedTags}
-          onTagPress={this.onTagSelect}
-        />
-        <TouchableOpacity
-          style={styles.arrowDownIcon}
-          onPress={this.onDowArrowIconPress}
-        >
-          <DownArrowIcon />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.toTabsIcon}
-          onPress={this.goToTagEditor}
-        >
-          <TagsIcon />
-        </TouchableOpacity>
+        <View style={styles.tagPopupContent}>
+          <PopupHeader
+            title={i18nGet('tags')}
+            leftSlot={
+              <TouchableOpacity
+                style={styles.toTabsIcon}
+                onPress={this.goToTagEditor}
+              >
+                <TagsIcon />
+              </TouchableOpacity>
+            }
+            rightSlot={
+              <TouchableOpacity
+                style={styles.arrowDownIcon}
+                onPress={this.onDowArrowIconPress}
+              >
+                <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
+              </TouchableOpacity>
+            }
+          />
+          <TagPicker
+            selectedTags={selectedTags}
+            onTagPress={this.onTagSelect}
+          />
+        </View>
       </SuperPopup>
     )
   }
@@ -285,7 +293,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
         />
         <View style={styles.tags}>
           <StyledButton
-            fluid
             icon={<TagsIcon />}
             iconPosition={IconPositionType.LEFT}
             label={i18nGet('add_tag_to_note')}
@@ -295,7 +302,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
           <TagPicker
             viewerOfSelected
             width={280}
-            navigation={navigation}
             selectedTags={selectedTags}
             onTagPress={this.onTagDelete}
           />
@@ -315,12 +321,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
         <View style={styles.inputPopup}>
           {this.renderInputByValue()}
         </View>
-        <TouchableOpacity
-          style={styles.arrowDownIcon}
-          onPress={this.onDowArrowIconPress}
-        >
-          <DownArrowIcon />
-        </TouchableOpacity>
       </SuperPopup>
     )
   }
@@ -354,9 +354,18 @@ class NoteEditor extends React.PureComponent<Props, State>{
       case NoteValueType.COMMENT:
         return (
           <View style={styles.commentInputView}>
-            <Text style={styles.inputViewTitle}>
-              {i18nGet(NoteValueType.COMMENT)}
-            </Text>
+            <PopupHeader
+              title={i18nGet(NoteValueType.COMMENT)}
+              rightSlot={
+                <TouchableOpacity
+                  style={styles.arrowDownIcon}
+                  onPress={this.onDowArrowIconPress}
+                >
+                  <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
+                </TouchableOpacity>
+              }
+              paddingHorizontal={POPUP_PADDING_HORIZONTAL}
+            />
             <View style={styles.commentViewTextArea}>
               <TextInput
                 autoFocus
@@ -397,9 +406,18 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
     return (
       <View style={styles.inputView}>
-        <Text style={styles.inputViewTitle}>
-          {i18nGet(name)}{displayedValue}
-        </Text>
+        <PopupHeader
+          paddingHorizontal={POPUP_PADDING_HORIZONTAL}
+          title={`${i18nGet(name)}${displayedValue}`}
+          rightSlot={
+            <TouchableOpacity
+              style={styles.arrowDownIcon}
+              onPress={this.onDowArrowIconPress}
+            >
+              <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
+            </TouchableOpacity>
+          }
+        />
         <View style={styles.numberScrollWrapper}>
           <NumberScroller
             key={name}
@@ -588,6 +606,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignItems: 'flex-start',
   },
+  tagPopupContent: {
+    padding: POPUP_PADDING_HORIZONTAL,
+    backgroundColor: COLOR.WHITE,
+  },
   inputView: {
     width: '100%',
     marginTop: 20,
@@ -630,12 +652,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   inputViewTitle: {
-    width: '100%',
     textAlign: 'center',
-    paddingHorizontal: 32,
-    marginTop: 20,
+    flex: 1,
     fontSize: 19,
-    lineHeight: 20,
     fontWeight: "bold",
     color: COLOR.TEXT_DARK_GRAY
   },
@@ -662,16 +681,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   arrowDownIcon: {
-    position: 'absolute',
     padding: 8,
-    top: 8,
-    right: 8,
   },
   toTabsIcon: {
-    position: 'absolute',
     padding: 8,
-    top: 8,
-    left: 8,
   }
 })
 

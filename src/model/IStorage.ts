@@ -7,6 +7,7 @@ import { IUserDiabetesProperties } from "./IUserDiabetesProperties";
 import { IUserPropertiesShedule } from "./IUserPropertiesShedule";
 import { IPendingNoteList } from './IPendingNoteList';
 import { ITagList } from './ITagList';
+import { INoteFilter } from './INoteFilter';
 
 export interface IStorage {
     app?: IApp,
@@ -18,4 +19,5 @@ export interface IStorage {
     userPropertiesShedule?: IUserPropertiesShedule,
     pendingNoteList?: IPendingNoteList
     tagList?: ITagList
+    noteFilter?: INoteFilter
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text, StyleSheet } from 'react-native';
-import { COLOR } from '../../../constant/Color';
+import { COLOR } from '../../../../constant/Color';
 
 interface Props {
   isDecimal?: boolean;
