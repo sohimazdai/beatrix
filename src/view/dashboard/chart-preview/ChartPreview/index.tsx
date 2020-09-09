@@ -17,7 +17,7 @@ import { ChartWrap } from '../../../chart/chart-wrap/ChartWrap';
 import { ChartValueType } from '../../../../model/IChart';
 import { INoteList } from '../../../../model/INoteList';
 import { ChartConfig } from '../../../../screen/chart/config/ChartConfig';
-import { SHADOW_OPTIONS } from '../../../../constant/OptionsShadow';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 interface Props {
   userDiabetesProperties: IUserDiabetesProperties,

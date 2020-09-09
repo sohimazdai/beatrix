@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { COLOR } from '../../../../constant/Color';
-import { SHADOW_OPTIONS } from "../../../../constant/OptionsShadow";
+import { SHADOW_OPTIONS } from "../../../../constant/ShadowOptions";
 
 export const styles = StyleSheet.create({
     profileView: {

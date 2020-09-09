@@ -6,7 +6,7 @@ import { batchActions } from 'redux-batched-actions';
 import { IStorage } from '../../../model/IStorage';
 import { IUser } from '../../../model/IUser';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SHADOW_OPTIONS } from '../../../constant/OptionsShadow';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 import { createGetUserByInstallationIdAction } from '../../../store/service/auth/GetUserByInstallationId';
 import { createSyncUserAction } from '../../../store/service/user/SyncUserSaga';
 import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';

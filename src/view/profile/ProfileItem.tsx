@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { SHADOW_OPTIONS } from '../../constant/OptionsShadow'
+import { SHADOW_OPTIONS } from '../../constant/ShadowOptions'
 
 interface Props {
     header?: string

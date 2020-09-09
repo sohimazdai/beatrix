@@ -20,7 +20,7 @@ import { ChartConfig } from './config/ChartConfig';
 import { ModalType } from '../../model/IModal';
 import { Measures } from '../../localisation/Measures';
 import { IUserDiabetesProperties } from '../../model/IUserDiabetesProperties';
-import { SHADOW_OPTIONS } from "../../constant/OptionsShadow";
+import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { COLOR } from "../../constant/Color";
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 

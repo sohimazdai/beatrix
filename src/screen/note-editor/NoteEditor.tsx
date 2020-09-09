@@ -30,7 +30,7 @@ import { Measures } from '../../localisation/Measures';
 
 import { SuperPopup, PopupDirection } from '../../component/popup/SuperPopup';
 import { createDeleteNoteInNoteListById } from '../../store/modules/noteList/NoteListActionCreator';
-import { SHADOW_OPTIONS } from '../../constant/OptionsShadow';
+import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 import { createDeleteNoteAction } from '../../store/service/note/DeleteNoteSaga';
 import { i18nGet } from '../../localisation/Translate';
 import { createCreateNoteAction } from '../../store/service/note/CreateNoteSaga';
