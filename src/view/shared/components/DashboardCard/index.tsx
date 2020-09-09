@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { COLOR } from '../../../../constant/Color';
-import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../constant/OptionsShadow';
 
 interface Props {
   children?: any;

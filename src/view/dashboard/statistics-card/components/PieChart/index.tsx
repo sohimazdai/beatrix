@@ -13,7 +13,7 @@ import Tooltip from '../../../../../component/tooltip/Tooltip';
 import { PieToolTipItem } from '../PieToolTipItem';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { COLOR } from '../../../../../constant/Color';
-import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../../constant/OptionsShadow';
 
 interface Props {
   viewType: StatisticsViewType

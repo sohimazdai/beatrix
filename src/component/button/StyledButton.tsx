@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, View, StyleProp, ViewStyle, ButtonProps } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../constant/OptionsShadow';
 import { COLOR } from '../../constant/Color';
 
 export enum StyledButtonType {

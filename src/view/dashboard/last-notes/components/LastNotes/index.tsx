@@ -12,7 +12,7 @@ import { COLOR } from '../../../../../constant/Color';
 import { DateHelper } from '../../../../../utils/DateHelper';
 import { IStorage } from '../../../../../model/IStorage';
 import { INoteList, INoteListByDay, INoteListNote } from '../../../../../model/INoteList';
-import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../../constant/OptionsShadow';
 
 import { i18nGet } from '../../../../../localisation/Translate';
 import { selectRecentNoteListByDay } from '../../selectors/select-recent-note-list-by-day';

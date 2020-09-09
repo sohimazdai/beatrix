@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-nati
 import { COLOR } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../constant/OptionsShadow';
 import { i18nGet } from '../../../localisation/Translate';
 
 interface ModalContentInfoCardProps {

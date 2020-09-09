@@ -7,7 +7,7 @@ import { ShortSyringeIcon } from '../../../../component/icon/value-icons/ShortSy
 import { LongSyringeIcon } from '../../../../component/icon/value-icons/LongSyringeIcon'
 import { CommentIcon } from '../../../../component/icon/CommentIcon'
 
-import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions'
+import { SHADOW_OPTIONS } from '../../../../constant/OptionsShadow'
 import { NoteValueType } from '../../../../model/INoteList'
 import { ValueTypeInfo } from '../value-type-info/ValueTypeInfo'
 

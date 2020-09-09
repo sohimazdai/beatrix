@@ -14,7 +14,7 @@ import { INoteListNote } from '../../../../../model/INoteList';
 import { ChartValueType, ChartPeriodType } from '../../../../../model/IChart';
 import { IStorage } from '../../../../../model/IStorage';
 import { DateHelper } from '../../../../../utils/DateHelper';
-import { SHADOW_OPTIONS } from "../../../../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../../../../constant/OptionsShadow";
 import { COLOR } from "../../../../../constant/Color";
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 

@@ -30,7 +30,7 @@ import { COLOR } from "../../constant/Color";
 import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';
-import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../constant/OptionsShadow";
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 
 interface DashboardScreenStateTProps {

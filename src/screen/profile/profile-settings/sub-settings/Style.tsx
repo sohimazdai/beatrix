@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { SHADOW_OPTIONS } from "../../../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../../../constant/OptionsShadow";
 
 export const styles = StyleSheet.create({
     keyboardAvoidingView: {

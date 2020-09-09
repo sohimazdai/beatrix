@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../constant/OptionsShadow';
 import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
 import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
 import { i18nGet } from '../../../localisation/Translate';

@@ -10,7 +10,7 @@ import { InfoIcon } from '../../component/icon/InfoIcon';
 import { IStorage } from '../../model/IStorage';
 import { COLOR } from '../../constant/Color';
 import { ShortInsulinType, GlycemiaMeasuringType, IUserDiabetesProperties, CarbsMeasuringType } from '../../model/IUserDiabetesProperties';
-import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../constant/OptionsShadow';
 import { Measures } from '../../localisation/Measures';
 
 import { i18nGet } from '../../localisation/Translate';

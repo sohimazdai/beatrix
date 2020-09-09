@@ -9,7 +9,7 @@ import { IUserDiabetesProperties } from '../../../../../model/IUserDiabetesPrope
 import { ChartValueType, ChartPeriodType, ChartDotsData } from '../../../../../model/IChart';
 import { INoteListByDay } from '../../../../../model/INoteList';
 import { ChartConfig } from '../../../../../screen/chart/config/ChartConfig';
-import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
+import { SHADOW_OPTIONS } from '../../../../../constant/OptionsShadow';
 import { ChartBox } from '../../../../chart/chart-svg/ChartBox';
 import { ChartPolyline } from '../../../../chart/chart-svg/ChartPolyline';
 import { calculateDayChartDots } from '../../../../../calculation-services/chart-calculation-services/ChartCalculationService';

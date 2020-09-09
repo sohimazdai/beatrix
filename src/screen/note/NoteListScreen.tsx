@@ -18,7 +18,7 @@ import { IUser } from '../../model/IUser';
 import { IApp } from '../../model/IApp';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { COLOR } from "../../constant/Color";
-import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../constant/OptionsShadow";
 
 import { convertFlatNoteListToNoteListByDay } from "../../store/selector/NoteListSelector";
 import { appAnalytics, AnalyticsSections } from '../../app/Analytics';

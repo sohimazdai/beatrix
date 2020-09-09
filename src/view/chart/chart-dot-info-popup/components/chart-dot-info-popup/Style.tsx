@@ -1,4 +1,4 @@
-import { SHADOW_OPTIONS } from "../../../../../constant/ShadowOptions";
+import { SHADOW_OPTIONS } from "../../../../../constant/OptionsShadow";
 import { COLOR } from "../../../../../constant/Color";
 import { StyleSheet } from "react-native";
 
