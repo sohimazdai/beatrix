@@ -3,14 +3,11 @@ import { connect } from 'react-redux';
 import { createChangeAppAction } from '../store/modules/app/app';
 import { NetInfo } from 'react-native';
 import { createAppPingAction } from '../store/service/app/AppPingSaga';
-import { IStorage } from '../model/IStorage';
-import { IApp } from '../model/IApp';
 import { logger } from './Logger';
 import Variables from './Variables';
 import { appAnalytics } from './Analytics';
 
 interface Props {
-    app?: IApp
     changeAppConnection: (isConnected: boolean) => void
     pingServer: () => void
     setServerNotAvailability: () => void
@@ -46,10 +43,7 @@ function Component(props: Props) {
 }
 
 export const AppConnection = connect(
-    (state: IStorage) => ({
-        app: state.app,
-        user: state.user
-    }),
+    null,
     (dispatch) => ({
         dispatch,
         changeAppConnection: (isConnected: boolean) => {

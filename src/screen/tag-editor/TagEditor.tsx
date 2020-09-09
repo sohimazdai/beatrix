@@ -14,6 +14,8 @@ import { createAddTag, createRemoveTag } from '../../store/modules/tag-list/tagL
 import { TagPicker } from '../../view/note-editor/components/tag-picker/TagPicker';
 import { randomizeBGandFontColor } from '../../utils/RandomizeColor';
 import { ScrollView } from 'react-native-gesture-handler';
+import { batchActions } from 'redux-batched-actions';
+import { createChangePending } from '../../store/modules/pending/pending';
 
 interface Props {
   tagList: ITagList
@@ -48,6 +50,8 @@ class TagEditorComp extends React.Component<Props, State> {
 
   get tagListTagsIds() {
     const { tagList } = this.props;
+
+    if (!tagList.tags) return [];
 
     return Object.values(tagList.tags).map((tag: ITag) => tag.id);
   }
@@ -113,7 +117,12 @@ export const TagEditor = connect(
     tagList: state.tagList
   }),
   (dispatch) => ({
-    onAddTag: (tag: ITag) => dispatch(createAddTag(tag)),
+    onAddTag: (tag: ITag) => {
+      dispatch(batchActions([
+        createAddTag(tag),
+        createChangePending({ tagList: true })
+      ]));
+    },
     onRemoveTag: (tagId: number) => {
       Alert.alert(
         i18nGet('you_want_to_delete_tag'),
@@ -121,7 +130,12 @@ export const TagEditor = connect(
         [
           {
             text: i18nGet('delete'),
-            onPress: () => dispatch(createRemoveTag(tagId)),
+            onPress: () => {
+              dispatch(batchActions([
+                createRemoveTag(tagId),
+                createChangePending({ tagList: true })
+              ]));
+            },
             style: "destructive"
           },
           { text: i18nGet('cancel'), onPress: () => { }, style: 'cancel' }

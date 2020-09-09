@@ -115,6 +115,8 @@ function* run({ payload: { from, to } }: ExportDataAction) {
         comment: i18nGet('exports_titles_comment'),
       };
 
+      const timezoneOffset = new Date().getTimezoneOffset();
+
       yield call(
         ExportApi.exportNotes,
         state.user.id,
@@ -122,6 +124,7 @@ function* run({ payload: { from, to } }: ExportDataAction) {
         from,
         to,
         stats,
+        timezoneOffset
       );
 
       appAnalytics.sendEventWithProps(appAnalytics.events.EXPORT_DATA, stats);

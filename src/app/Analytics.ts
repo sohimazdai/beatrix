@@ -126,6 +126,8 @@ export const appAnalytics = {
     // GENERAL
     PHONE_CONNECTION_STATUS_CHANGE: 'Phone connection status change',
     SERVER_AVAILIBILITY_STATUS_CHANGE: 'Server availibility status change',
+    // PENDING
+    PENDNG_DATA_SYNCED: 'Pending data synced',
   }
 }
 

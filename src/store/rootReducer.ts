@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer } from 'redux';
 import { appReducer } from './modules/app/app';
 import { noteListReducer } from './modules/noteList/NoteListReducer';
 import { modalReducer } from './modules/modal/ModalListReducer';
@@ -9,8 +9,10 @@ import { userPropertiesSheduleReducer } from './modules/user-properties-shedule/
 import { pendingNoteListReducer } from './modules/pending-note-list/PendingNoteList';
 import { tagListReducer } from './modules/tag-list/tagList';
 import { noteFilterReducer } from './modules/note-filter/noteFilter';
+import { IStorage } from '../model/IStorage';
+import { pendingReducer } from './modules/pending/pending';
 
-export const rootReducer = combineReducers({
+export const rootReducer: Reducer<IStorage> = combineReducers({
     app: appReducer,
     noteList: noteListReducer,
     modal: modalReducer,
@@ -20,5 +22,6 @@ export const rootReducer = combineReducers({
     userPropertiesShedule: userPropertiesSheduleReducer,
     pendingNoteList: pendingNoteListReducer,
     tagList: tagListReducer,
-    noteFilter: noteFilterReducer
+    noteFilter: noteFilterReducer,
+    pending: pendingReducer,
 });

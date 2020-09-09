@@ -12,6 +12,7 @@ import { watchClearInstallationId } from './service/auth/ClearInstallationIdSaga
 import { watchUpdateUserDiabetesProperties } from './service/user/UpdateUserDiabetesPropertiesSaga';
 import { watchExportData } from './service/export/ExportDataSaga';
 import { watchCompleteOnboarding } from './service/onboarding/CompleteOnboardingSaga';
+import { watchSyncPendingData } from './service/pending/SyncPendingData';
 
 export function* rootSaga() {
     yield all([
@@ -34,5 +35,7 @@ export function* rootSaga() {
         fork(watchAppPing),
         //EXPORT
         fork(watchExportData),
+        //PENDING
+        fork(watchSyncPendingData),
     ]);
 };

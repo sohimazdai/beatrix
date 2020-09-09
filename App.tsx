@@ -10,6 +10,7 @@ import { AppConnection } from './src/app/AppConnection';
 import { handleError } from './src/app/ErrorHandler';
 import { DevStub } from './src/component/dev-stub/DevStub';
 import { ChartDotInfoPopupConnect } from './src/view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
+import { PendingWatcherConnected } from './src/app/PendingWatcher';
 
 interface State {
   appIsReady: boolean
@@ -40,6 +41,7 @@ export default class App extends React.Component<never, State> {
               <AppNavigator />
               <AppConnection />
               <DevStub />
+              <PendingWatcherConnected />
             </AppearanceProvider>
           </PersistGate>
         </Provider>

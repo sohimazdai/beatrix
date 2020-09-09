@@ -826,7 +826,6 @@ const translateStore = {
     es: 'Error al actualizar el registro en el servidor',
     ru: 'Ошибка обновления записи на сервере',
   },
-
   notes_sync_error: {
     en: 'Error synchronizing records with the server',
     es: 'Error al sincronizar registros con el servidor',

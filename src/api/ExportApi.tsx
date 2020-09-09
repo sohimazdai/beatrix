@@ -7,8 +7,9 @@ export class ExportApi {
         from: number,
         to: number,
         stats: any,
+        timezoneOffset: number
     ) {
-        return api.post('export', { userId, titles, from, to, stats });
+        return api.post('export', { userId, titles, from, to, stats, timezoneOffset });
     }
 
     static finishExport(userId: string) {

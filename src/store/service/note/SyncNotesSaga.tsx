@@ -62,10 +62,12 @@ function* run(action: Action) {
         const noteList = state.noteList;
 
         let userPendingNotes = [];
+
         if (state.pendingNoteList && state.pendingNoteList.notes) {
             userPendingNotes = Object.values(state.pendingNoteList.notes)
                 .filter(note => note.userId === userId);
-        }
+        };
+
         const notesToSync = userPendingNotes.reduce((notes, next) => {
             if (next.id) {
                 return [

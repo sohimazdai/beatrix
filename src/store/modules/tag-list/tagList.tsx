@@ -6,17 +6,19 @@ export enum TagListActionType {
     CHANGE = "TAG_LIST_CHANGE",
     ADD = 'TAG_LIST_ADD_TAG',
     REMOVE = 'TAG_LIST_REMOVE_TAG',
+    REPLACE = 'TAG_LIST_REPLACE',
 }
 
 export type TagListActionTypes = (
     TagListChangeAction |
     TagListRemoveAction |
-    TagListAddAction
+    TagListAddAction |
+    TagListReplaceAction
 );
 
 export interface TagListChangeAction {
     type: TagListActionType.CHANGE,
-    payload: ITagList
+    payload: Partial<ITagList>
 }
 
 export interface TagListAddAction {
@@ -29,7 +31,12 @@ export interface TagListRemoveAction {
     payload: number
 }
 
-export function createChangeTagList(tagList: ITagList): TagListChangeAction {
+export interface TagListReplaceAction {
+    type: TagListActionType.REPLACE,
+    payload: ITagList
+}
+
+export function createChangeTagList(tagList: Partial<ITagList>): TagListChangeAction {
     return {
         type: TagListActionType.CHANGE,
         payload: tagList
@@ -47,6 +54,13 @@ export function createRemoveTag(id: number): TagListRemoveAction {
     return {
         type: TagListActionType.REMOVE,
         payload: id
+    }
+}
+
+export function createReplaceTagList(tagList: ITagList): TagListReplaceAction {
+    return {
+        type: TagListActionType.REPLACE,
+        payload: tagList
     }
 }
 
@@ -86,10 +100,14 @@ export function tagListReducer(
                 [tag.id]: tag
             };
 
+            const nextId = module.nextId
+                ? module.nextId + 1
+                : Math.max(Number(Object.keys(tags)));
+
             return {
                 ...module,
                 tags,
-                nextId: module.nextId + 1,
+                nextId: nextId,
             }
         case TagListActionType.REMOVE:
             const newTags = { ...module.tags };
@@ -98,6 +116,8 @@ export function tagListReducer(
                 ...module,
                 tags: newTags
             };
+        case TagListActionType.REPLACE:
+            return action.payload;
 
         default: return module;
     }

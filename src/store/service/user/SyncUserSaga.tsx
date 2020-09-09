@@ -16,6 +16,8 @@ import { createClearPendingNoteListByUserId } from '../../modules/pending-note-l
 import { syncNotes } from '../../service-helper/sync-notes';
 import { INoteList } from '../../../model/INoteList';
 import { appAnalytics } from '../../../app/Analytics';
+import { createChangeTagList } from '../../modules/tag-list/tagList';
+import { ITagListTags } from '../../../model/ITagList';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -46,20 +48,20 @@ function* syncUser({ payload }: SyncUserAction) {
         const state: IStorage = yield select(state => state);
         const userId = state.user.id;
 
-        // appAnalytics.setUser(payload.user.id); TODO: this analytics now is in auth
-
         if (state.app.serverAvailable) {
             const userData: {
                 data: {
                     properties: IUserDiabetesProperties,
                     shedule: IUserPropertiesShedule,
                     isNeedToShowOnboarding: boolean,
+                    tagList: ITagListTags
                 }
             } = yield call(UserApi.syncUser, payload.user);
 
             const properties: IUserDiabetesProperties = userData.data.properties;
             const shedule: IUserPropertiesShedule = userData.data.shedule || {};
             const isNeedToShowOnboarding: boolean = userData.data.isNeedToShowOnboarding || false;
+            const tags: ITagListTags = userData.data.tagList || {};
 
             if (!properties.glycemiaMeasuringType) {
                 properties.glycemiaMeasuringType = Measures.getDefaultGlucoseMeasuringType(
@@ -96,6 +98,7 @@ function* syncUser({ payload }: SyncUserAction) {
                     createUserChangeAction({
                         isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding
                     }),
+                    createChangeTagList({ tags }),
                 ])
             );
 
@@ -108,7 +111,7 @@ function* syncUser({ payload }: SyncUserAction) {
                 ])
             )
 
-            // SYNC DIABETES PROPERTIES AND SHEDULE
+            // SYNC DIABETES PROPERTIES, SHEDULE, ONBOARDING, TAG_LIST
             const result = yield call(
                 UserApi.syncUserProperties,
                 userId,
@@ -116,6 +119,7 @@ function* syncUser({ payload }: SyncUserAction) {
                 [],
                 shedule,
             );
+
             yield put(
                 batchActions([
                     createNoteListOneLevelDeepMerge(result.data.notes),

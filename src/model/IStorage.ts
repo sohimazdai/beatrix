@@ -8,6 +8,7 @@ import { IUserPropertiesShedule } from "./IUserPropertiesShedule";
 import { IPendingNoteList } from './IPendingNoteList';
 import { ITagList } from './ITagList';
 import { INoteFilter } from './INoteFilter';
+import { IPending } from './IPending';
 
 export interface IStorage {
     app?: IApp,
@@ -20,4 +21,5 @@ export interface IStorage {
     pendingNoteList?: IPendingNoteList
     tagList?: ITagList
     noteFilter?: INoteFilter
+    pending?: IPending
 }
