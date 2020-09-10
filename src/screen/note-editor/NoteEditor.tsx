@@ -44,6 +44,7 @@ import { StyledButton, IconPositionType, StyledButtonType } from '../../componen
 import { ITagList } from '../../model/ITagList';
 import { TagsIcon } from '../../component/icon/TagsIcon';
 import { PopupHeader } from '../../component/popup/PopupHeader';
+import { Avoiding } from '../../component/avoiding/Avoiding';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -130,7 +131,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
             : styles.noteCreationView
           }
         >
-          <ScrollView>
+          <ScrollView style={styles.scrollView}>
             <Hat
               onBackPress={this.closeEditor}
               title={title}
@@ -157,12 +158,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
             {this.renderSaveButton()}
           </View>
         </View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'android' ? 'height' : 'position'}
-        >
+        <Avoiding>
           {this.renderInputPopup()}
           {this.renderTagsPopup()}
-        </KeyboardAvoidingView>
+        </Avoiding>
       </>
     )
   }
@@ -213,7 +212,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   onTagSelect = (tagId: number) => {
+    const { tagList } = this.props;
     const { selectedTags } = this.state;
+
+    appAnalytics.sendEventWithProps(appAnalytics.events.CREATE_TAG, {
+      name: tagList.tags[String(tagId)].name
+    });
 
     if (selectedTags) {
       this.setState({
@@ -280,7 +284,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   renderPickerBlock() {
-    const { navigation } = this.props;
     const { currentValueType, selectedTags, isTagPickerOpen, ...note } = this.state;
     return (
       <View style={styles.inputBlock}>
@@ -361,7 +364,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         return this.renderInputByType(NoteValueType.LONG_INSULIN, longInsulin)
       case NoteValueType.COMMENT:
         return (
-          <View style={styles.commentInputView}>
+          <>
             <PopupHeader
               title={i18nGet(NoteValueType.COMMENT)}
               rightSlot={
@@ -387,7 +390,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
                 onSubmitEditing={() => { Keyboard.dismiss() }}
               />
             </View>
-          </View>
+          </>
         )
     }
   }
@@ -413,7 +416,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
       : ': ' + i18nGet('not_selected');
 
     return (
-      <View style={styles.inputView}>
+      <>
         <PopupHeader
           paddingHorizontal={POPUP_PADDING_HORIZONTAL}
           title={`${i18nGet(name)}${displayedValue}`}
@@ -441,7 +444,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
             }}
           />
         </View>
-      </View>
+      </>
     )
   }
 
@@ -556,22 +559,24 @@ const styles = StyleSheet.create({
   noteEditingView: {
     backgroundColor: COLOR.PRIMARY,
   },
+  scrollView: {
+  },
   noteCreationViewScrollView: {
+    height: Dimensions.get('screen').height,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: COLOR.BLUE_BASE,
   },
   noteEditingViewScrollView: {
+    height: Dimensions.get('screen').height,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: COLOR.RED_BASE,
   },
   noteEditingScrollViewContent: {
-    minHeight: Dimensions.get('screen').height - 100,
     alignItems: 'center',
   },
   noteCreationScrollViewContent: {
-    minHeight: Dimensions.get('screen').height - 100,
     alignItems: 'center',
   },
   inputBlock: {
@@ -618,11 +623,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   commentInputView: {
-    flex: 1,
     width: '100%',
     margin: 15,
     marginBottom: 0,
-    height: 185
+    paddingBottom: 50,
   },
   saveButtonTouchable: {
     padding: 15,
@@ -674,13 +678,14 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     borderRadius: 15,
-    marginTop: 20,
+    marginVertical: 20,
     borderWidth: 1,
     borderColor: COLOR.PRIMARY,
   },
   inputPopup: {
     backgroundColor: COLOR.PRIMARY_WHITE,
     alignItems: 'center',
+    paddingTop: 16,
   },
   arrowDownIcon: {
     padding: 8,

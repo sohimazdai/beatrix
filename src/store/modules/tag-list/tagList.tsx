@@ -76,9 +76,19 @@ export function tagListReducer(
                 id: 2,
                 name: i18nGet('after_meal'),
                 ...randomizeBGandFontColor(),
-            }
+            },
+            '3': {
+                id: 3,
+                name: i18nGet('fasting'),
+                ...randomizeBGandFontColor(),
+            },
+            '4': {
+                id: 4,
+                name: i18nGet('before_bedtime'),
+                ...randomizeBGandFontColor(),
+            },
         },
-        nextId: 3,
+        nextId: 5,
     },
     action: TagListActionTypes
 ): ITagList {

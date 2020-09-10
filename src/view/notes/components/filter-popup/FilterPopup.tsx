@@ -14,14 +14,7 @@ import { StyledButton, StyledButtonType, IconPositionType } from '../../../../co
 import { IStorage } from '../../../../model/IStorage';
 import { INoteFilter } from '../../../../model/INoteFilter';
 import { createChangeNoteFilter } from '../../../../store/modules/note-filter/noteFilter';
-
-const VALUES = {
-  comment: 'withCommentsChecked',
-  tags: 'withTagsChecked',
-  highG: 'highGlucoseChecked',
-  lowG: 'lowGlucoseChecked',
-  normG: 'normalGlucoseChecked',
-}
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
   noteFilter: INoteFilter
@@ -74,13 +67,20 @@ class FilterPopup extends React.Component<Props> {
     } = this.state;
     const { applyFilter, onHide } = this.props;
 
-    applyFilter({
+    const filtersToApply = {
       tags,
       withComment: withCommentsChecked,
       withTags: withTagsChecked,
       highGlucose: highGlucoseChecked,
       lowGlucose: lowGlucoseChecked,
       normalGlucose: normalGlucoseChecked,
+    };
+
+    applyFilter(filtersToApply);
+
+    appAnalytics.sendEventWithProps(appAnalytics.events.APPLY_FILTER, {
+      ...filtersToApply,
+      tags: filtersToApply.tags.length
     })
 
     onHide();
@@ -88,6 +88,8 @@ class FilterPopup extends React.Component<Props> {
 
   onClear = () => {
     const { applyFilter } = this.props;
+
+    appAnalytics.sendEvent(appAnalytics.events.CLEAR_FILTER);
 
     this.setState({
       tags: [],
@@ -201,7 +203,7 @@ class FilterPopup extends React.Component<Props> {
             />
           </View>
         </ScrollView>
-      </SuperPopup >
+      </SuperPopup>
     );
   }
 }

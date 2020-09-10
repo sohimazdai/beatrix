@@ -16,12 +16,13 @@ import { randomizeBGandFontColor } from '../../utils/RandomizeColor';
 import { ScrollView } from 'react-native-gesture-handler';
 import { batchActions } from 'redux-batched-actions';
 import { createChangePending } from '../../store/modules/pending/pending';
+import { appAnalytics } from '../../app/Analytics';
 
 interface Props {
   tagList: ITagList
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   onAddTag: (tag: ITag) => void
-  onRemoveTag: (tagId: number) => void
+  onRemoveTag: (tagId: number, successCallback: () => void) => void
 };
 
 interface State {
@@ -60,6 +61,11 @@ class TagEditorComp extends React.Component<Props, State> {
     const { onAddTag } = this.props;
     const { tagName } = this.state;
 
+
+    appAnalytics.sendEventWithProps(appAnalytics.events.ADD_TAG_TO_NOTE, {
+      name: tagName
+    });
+
     const colors = randomizeBGandFontColor();
 
     const newTag: ITag = {
@@ -74,8 +80,19 @@ class TagEditorComp extends React.Component<Props, State> {
     });
   }
 
+  onDeleteTag = (tagId: number) => {
+    const { tagList, onRemoveTag } = this.props;
+
+    const tagName = tagList.tags[tagId].name;
+
+    const cb = () => appAnalytics.sendEventWithProps(appAnalytics.events.DELETE_TAG, {
+      name: tagName
+    });
+
+    onRemoveTag(tagId, cb)
+  }
+
   render() {
-    const { onRemoveTag, navigation } = this.props;
     const { tagName } = this.state;
 
     return (
@@ -102,7 +119,7 @@ class TagEditorComp extends React.Component<Props, State> {
           <ScrollView style={styles.tagPickerView}>
             <TagPicker
               viewerOfSelected
-              onTagPress={onRemoveTag}
+              onTagPress={this.onDeleteTag}
               selectedTags={this.tagListTagsIds}
             />
           </ScrollView>
@@ -123,7 +140,7 @@ export const TagEditor = connect(
         createChangePending({ tagList: true })
       ]));
     },
-    onRemoveTag: (tagId: number) => {
+    onRemoveTag: (tagId: number, successCallback: () => void) => {
       Alert.alert(
         i18nGet('you_want_to_delete_tag'),
         i18nGet('you_wont_use_this_tag_anymore_for_filtering_notes'),
@@ -135,6 +152,7 @@ export const TagEditor = connect(
                 createRemoveTag(tagId),
                 createChangePending({ tagList: true })
               ]));
+              successCallback();
             },
             style: "destructive",
           },

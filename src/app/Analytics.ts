@@ -128,6 +128,13 @@ export const appAnalytics = {
     SERVER_AVAILIBILITY_STATUS_CHANGE: 'Server availibility status change',
     // PENDING
     PENDNG_DATA_SYNCED: 'Pending data synced',
+    // TAG_LIST
+    ADD_TAG_TO_NOTE: 'Tag added to note',
+    CREATE_TAG: 'Tag cretead',
+    DELETE_TAG: 'Tag deleted',
+    // FILTER
+    CLEAR_FILTER: 'Filter cleared',
+    APPLY_FILTER: 'Filter applied',
   }
 }
 

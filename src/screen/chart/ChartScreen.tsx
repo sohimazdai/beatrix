@@ -139,31 +139,33 @@ class Chart extends React.Component<ChartProps, ChartState> {
         const { navigation } = this.props;
 
         return (
-            <View style={styles.view}>
-                <BlockHat
-                    onBackPress={() => navigation.navigate('Dashboard')}
-                    title={i18nGet('charts')}
-                    rightSideSlot={this.getHatTitle()}
-                />
-                <View style={styles.scrollViewWrapWrap}>
-                    <View style={styles.scrollViewWrap}>
-                        <ScrollView style={styles.scrollView}>
-                            <View
-                                style={styles.ChartView}
-                            >
-                                {this.renderChart()}
-                                <View style={styles.settingsViewWrap}>
-                                    {this.renderSettings()}
+            <>
+                <View style={styles.view}>
+                    <BlockHat
+                        onBackPress={() => navigation.navigate('Dashboard')}
+                        title={i18nGet('charts')}
+                        rightSideSlot={this.getHatTitle()}
+                    />
+                    <View style={styles.scrollViewWrapWrap}>
+                        <View style={styles.scrollViewWrap}>
+                            <ScrollView style={styles.scrollView}>
+                                <View
+                                    style={styles.ChartView}
+                                >
+                                    {this.renderChart()}
+                                    <View style={styles.settingsViewWrap}>
+                                        {this.renderSettings()}
+                                    </View>
                                 </View>
-                            </View>
-                        </ScrollView>
+                            </ScrollView>
+                        </View>
                     </View>
+                    {!this.state.popupShown && <View style={styles.addNoteButtonView}>
+                        <NoteCreationButton onClick={this.goToNoteEditor} />
+                    </View>}
                 </View>
-                {!this.state.popupShown && <View style={styles.addNoteButtonView}>
-                    <NoteCreationButton onClick={this.goToNoteEditor} />
-                </View>}
                 <ChartDotInfoPopupConnect navigation={navigation} />
-            </View>
+            </>
         )
     }
 

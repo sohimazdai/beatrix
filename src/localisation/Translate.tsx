@@ -1332,4 +1332,14 @@ const translateStore = {
     'es': 'Aplicar',
     'ru': 'Применить',
   },
+  fasting: {
+    'en': 'Fasting',
+    'es': 'En ayunas',
+    'ru': 'Натощак',
+  },
+  before_bedtime: {
+    'en': 'Before bedtime',
+    'es': 'Аntes de dormir',
+    'ru': 'Перед сном',
+  },
 }
