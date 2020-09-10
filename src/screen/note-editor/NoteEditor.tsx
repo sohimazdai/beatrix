@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Dimensions,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -122,40 +123,47 @@ class NoteEditor extends React.PureComponent<Props, State>{
       : i18nGet('note_creation');
 
     return (
-      <View
-        style={note
-          ? styles.noteEditingView
-          : styles.noteCreationView
-        }
-      >
-        <Hat
-          onBackPress={this.closeEditor}
-          title={title}
-        />
-        <ScrollView
+      <>
+        <View
           style={note
-            ? styles.noteEditingViewScrollView
-            : styles.noteCreationViewScrollView
+            ? styles.noteEditingView
+            : styles.noteCreationView
           }
         >
-          <View
-            style={note
-              ? styles.noteEditingScrollViewContent
-              : styles.noteCreationScrollViewContent
-            }
-          >
-            {this.renderPickerBlock()}
+          <ScrollView>
+            <Hat
+              onBackPress={this.closeEditor}
+              title={title}
+            />
+            <View
+              style={note
+                ? styles.noteEditingViewScrollView
+                : styles.noteCreationViewScrollView
+              }
+            >
+              <View
+                style={
+                  note
+                    ? styles.noteEditingScrollViewContent
+                    : styles.noteCreationScrollViewContent
+                }
+              >
+                {this.renderPickerBlock()}
+              </View>
+            </View>
+          </ScrollView>
+          <View style={styles.buttonsBlock}>
+            {this.props.note && this.renderDeleteButton()}
+            {this.renderSaveButton()}
           </View>
-        </ScrollView>
-        <View style={styles.buttonsBlock}>
-          {this.props.note && this.renderDeleteButton()}
-          {this.renderSaveButton()}
         </View>
-        <KeyboardAvoidingView behavior='position'>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'android' ? 'height' : 'position'}
+        >
           {this.renderInputPopup()}
           {this.renderTagsPopup()}
         </KeyboardAvoidingView>
-      </View>
+      </>
     )
   }
 
@@ -238,20 +246,20 @@ class NoteEditor extends React.PureComponent<Props, State>{
           <PopupHeader
             title={i18nGet('tags')}
             leftSlot={
-              <TouchableOpacity
-                style={styles.toTabsIcon}
+              <StyledButton
+                icon={<TagsIcon />}
+                iconPosition={IconPositionType.LEFT}
                 onPress={this.goToTagEditor}
-              >
-                <TagsIcon />
-              </TouchableOpacity>
+                style={StyledButtonType.EMPTY}
+              />
             }
             rightSlot={
-              <TouchableOpacity
-                style={styles.arrowDownIcon}
+              <StyledButton
+                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} />}
+                iconPosition={IconPositionType.LEFT}
                 onPress={this.onDowArrowIconPress}
-              >
-                <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
-              </TouchableOpacity>
+                style={StyledButtonType.EMPTY}
+              />
             }
           />
           <TagPicker
@@ -357,12 +365,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
             <PopupHeader
               title={i18nGet(NoteValueType.COMMENT)}
               rightSlot={
-                <TouchableOpacity
-                  style={styles.arrowDownIcon}
+                <StyledButton
+                  icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} />}
+                  iconPosition={IconPositionType.LEFT}
+                  style={StyledButtonType.EMPTY}
                   onPress={this.onDowArrowIconPress}
-                >
-                  <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
-                </TouchableOpacity>
+                />
               }
               paddingHorizontal={POPUP_PADDING_HORIZONTAL}
             />
@@ -410,12 +418,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
           paddingHorizontal={POPUP_PADDING_HORIZONTAL}
           title={`${i18nGet(name)}${displayedValue}`}
           rightSlot={
-            <TouchableOpacity
-              style={styles.arrowDownIcon}
+            <StyledButton
+              style={StyledButtonType.EMPTY}
               onPress={this.onDowArrowIconPress}
-            >
-              <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
-            </TouchableOpacity>
+              iconPosition={IconPositionType.LEFT}
+              icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} />}
+            />
           }
         />
         <View style={styles.numberScrollWrapper}>
@@ -439,14 +447,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
   renderSaveButton() {
     return (
-      <TouchableOpacity
-        style={styles.saveButtonTouchable}
+      <StyledButton
+        style={StyledButtonType.PRIMARY}
         onPress={this.createNote}
-      >
-        <Text style={styles.saveButtonText}>
-          {this.props.note ? i18nGet('rewrite') : i18nGet('write')}
-        </Text>
-      </TouchableOpacity>
+        label={this.props.note ? i18nGet('rewrite') : i18nGet('write')}
+      />
     )
   }
 
@@ -482,14 +487,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
   renderDeleteButton() {
     return (
-      <TouchableOpacity
-        style={styles.deleteButtonTouchable}
+      <StyledButton
+        style={StyledButtonType.DELETE}
         onPress={this.onDeleteClick}
-      >
-        <Text style={styles.deleteButtonText}>
-          {i18nGet('delete')}
-        </Text>
-      </TouchableOpacity>
+        label={i18nGet('delete')}
+      />
     )
   }
 
@@ -565,11 +567,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.RED_BASE,
   },
   noteEditingScrollViewContent: {
-    minHeight: Dimensions.get('screen').height - 75,
+    minHeight: Dimensions.get('screen').height - 100,
     alignItems: 'center',
   },
   noteCreationScrollViewContent: {
-    minHeight: Dimensions.get('screen').height - 75,
+    minHeight: Dimensions.get('screen').height - 100,
     alignItems: 'center',
   },
   inputBlock: {
@@ -586,6 +588,7 @@ const styles = StyleSheet.create({
   buttonsBlock: {
     position: 'absolute',
     bottom: 16,
+    paddingHorizontal: 16,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -676,7 +679,6 @@ const styles = StyleSheet.create({
     borderColor: COLOR.PRIMARY,
   },
   inputPopup: {
-    position: 'relative',
     backgroundColor: COLOR.PRIMARY_WHITE,
     alignItems: 'center',
   },

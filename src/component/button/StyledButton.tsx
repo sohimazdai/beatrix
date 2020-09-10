@@ -20,7 +20,7 @@ export enum IconPositionType {
 interface Props {
   fluid?: boolean
   onPress: () => void;
-  label: string;
+  label?: string;
   style: StyledButtonType;
   icon?: JSX.Element;
   iconPosition?: IconPositionType;
@@ -129,9 +129,9 @@ export class StyledButton extends React.Component<Props> {
             {this.icon()}
           </View>}
 
-          <Text style={this.textStyle}>
+          {!!label && <Text style={this.textStyle}>
             {label}
-          </Text>
+          </Text>}
 
           {iconRight && <View style={this.iconStyle}>
             {this.icon()}
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   touchable: {
     borderRadius: 10,
-    padding: 10,
+    padding: 12,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -176,9 +176,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   touchableDelete: {
-    backgroundColor: COLOR.WHITE,
-    borderColor: COLOR.RED,
-    borderWidth: 1,
+    backgroundColor: COLOR.RED_DARK,
+    borderWidth: 0,
   },
   touchableEmpty: {
     backgroundColor: COLOR.TRANSPARENT,
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_DIMGRAY,
   },
   textDelete: {
-    color: COLOR.TEXT_DIMGRAY,
+    color: COLOR.TEXT_WHITE,
   },
   textEmpty: {
     color: COLOR.TEXT_DARK_GRAY,

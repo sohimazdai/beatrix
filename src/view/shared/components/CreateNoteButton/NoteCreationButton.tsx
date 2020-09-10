@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 import { AddNoteIcon } from "../../../../component/icon/AddNoteIcon";
 
-import { styles } from './Style';
 import { i18nGet } from '../../../../localisation/Translate';
+import { COLOR } from '../../../../constant/Color';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import { StyledButton, IconPositionType, StyledButtonType } from '../../../../component/button/StyledButton';
 
 interface Props {
     onClick: () => void;
@@ -13,14 +15,38 @@ interface Props {
 
 export const NoteCreationButton = (props: Props) => (
     <View style={styles.addNoteButton}>
-        <TouchableOpacity
+        <StyledButton
+            icon={<AddNoteIcon />}
+            iconPosition={IconPositionType.RIGHT}
+            label={i18nGet('add')}
+            style={StyledButtonType.PRIMARY}
             onPress={props.onClick}
-            style={styles.addNoteButtonTouchable}
-        >
-            <Text style={styles.addNoteButtonText}>
-                {i18nGet('add')}
-            </Text>
-            <AddNoteIcon />
-        </TouchableOpacity>
+        />
     </View>
 )
+
+const styles = StyleSheet.create({
+    addNoteButton: {
+        margin: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+
+        backgroundColor: COLOR.PRIMARY,
+        borderRadius: 10,
+        ...SHADOW_OPTIONS
+    },
+    addNoteButtonTouchable: {
+        padding: 10,
+        display: 'flex',
+
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    addNoteButtonText: {
+        fontSize: 18,
+        color: COLOR.WHITE,
+        fontWeight: '500',
+        marginRight: 5,
+    }
+})

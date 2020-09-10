@@ -7,7 +7,7 @@ export function callSyncParametersAlert(cb: Function) {
     i18nGet('we_will_recalculating_your_notes'),
     `${i18nGet('its_need_to_fit')}. \n\n${i18nGet('please_do_not_close_app')}`,
     [
-      { text: i18nGet('cancel') },
+      { text: i18nGet('cancel'), style: "cancel" },
       { text: i18nGet('got_it'), onPress: () => cb() },
     ]
   );

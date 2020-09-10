@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Animated, Dimensions, View } from 'react-native'
+import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 
 export enum PopupDirection {
     TOP_BOTTOM = 'top-bottom',
@@ -64,16 +65,14 @@ const styles = StyleSheet.create({
         display: "flex",
         position: 'absolute',
         width: '100%',
-        opacity: 1
+        opacity: 1,
     },
     TopPopup: {
-        position: 'relative',
         overflow: 'hidden',
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
     },
     BottomPopup: {
-        position: 'relative',
         overflow: 'hidden',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,

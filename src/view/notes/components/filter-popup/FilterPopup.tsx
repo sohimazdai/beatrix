@@ -10,7 +10,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 import { PopupHeader } from '../../../../component/popup/PopupHeader';
 import { TagsIcon } from '../../../../component/icon/TagsIcon';
 import { Checkbox } from '../../../../component/checkbox/Checkbox';
-import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
+import { StyledButton, StyledButtonType, IconPositionType } from '../../../../component/button/StyledButton';
 import { IStorage } from '../../../../model/IStorage';
 import { INoteFilter } from '../../../../model/INoteFilter';
 import { createChangeNoteFilter } from '../../../../store/modules/note-filter/noteFilter';
@@ -123,12 +123,12 @@ class FilterPopup extends React.Component<Props> {
         <ScrollView style={styles.popupContent}>
           <PopupHeader
             rightSlot={
-              <TouchableOpacity
-                style={styles.arrowDownIcon}
+              <StyledButton
+                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} />}
+                iconPosition={IconPositionType.LEFT}
                 onPress={onHide}
-              >
-                <ArrowTaillessIcon direction={ArrowDirection.DOWN} />
-              </TouchableOpacity>
+                style={StyledButtonType.EMPTY}
+              />
             }
             title={i18nGet('filter')}
           />

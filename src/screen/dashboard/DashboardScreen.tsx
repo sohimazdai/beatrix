@@ -76,50 +76,52 @@ class DashboardScreen extends React.PureComponent<FullProps> {
     const { navigation } = this.props;
 
     return (
-      <View style={styles.screenView}>
-        <BlockHat title={i18nGet('compensation')} rightSideSlot={this.renderProfileIcon()} />
-        <View style={styles.scrollViewWrapper}>
-          <ScrollView style={styles.scrollView}>
-            <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
-              <ActiveInsulinInfoConnected navigation={navigation} />
-              <LastNotesConnected
-                onNotesPress={() => navigation.navigate('Notes')}
-                onNotePress={(noteId) => this.goToNoteEditor(noteId)}
-              />
-              <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
-            </View>
-            <ScrollView
-              style={styles.statisticsScrollView}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={{ width: 8 }} />
-              <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
-              <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
-              <View style={{ width: 24 }} />
+      <>
+        <View style={styles.screenView}>
+          <BlockHat title={i18nGet('compensation')} rightSideSlot={this.renderProfileIcon()} />
+          <View style={styles.scrollViewWrapper}>
+            <ScrollView style={styles.scrollView}>
+              <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
+                <ActiveInsulinInfoConnected navigation={navigation} />
+                <LastNotesConnected
+                  onNotesPress={() => navigation.navigate('Notes')}
+                  onNotePress={(noteId) => this.goToNoteEditor(noteId)}
+                />
+                <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
+              </View>
+              <ScrollView
+                style={styles.statisticsScrollView}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={{ width: 8 }} />
+                <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
+                <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
+                <View style={{ width: 24 }} />
+              </ScrollView>
+              <ScrollView
+                style={styles.statisticsScrollView}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={{ width: 8 }} />
+                <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
+                <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
+                <View style={{ width: 24 }} />
+              </ScrollView>
+              <View style={{ padding: 16, paddingTop: 0 }}>
+                <HBA1CCalculatorConnected />
+              </View>
+              <View style={styles.stub} />
             </ScrollView>
-            <ScrollView
-              style={styles.statisticsScrollView}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={{ width: 8 }} />
-              <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
-              <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
-              <View style={{ width: 24 }} />
-            </ScrollView>
-            <View style={{ padding: 16, paddingTop: 0 }}>
-              <HBA1CCalculatorConnected />
-            </View>
-            <View style={styles.stub} />
-          </ScrollView>
-        </View>
-        <View style={styles.addNoteButtonView}>
-          <NoteCreationButton onClick={this.goToNoteEditor} />
-        </View>
-        <Fader hidden={!this.props.selectedDotId} />
+          </View>
+          <View style={styles.addNoteButtonView}>
+            <NoteCreationButton onClick={this.goToNoteEditor} />
+          </View>
+          <Fader hidden={!this.props.selectedDotId} />
+        </View >
         <ChartDotInfoPopupConnect navigation={navigation} />
-      </View >
+      </>
     );
   }
 

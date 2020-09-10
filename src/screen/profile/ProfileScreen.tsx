@@ -120,9 +120,11 @@ export const ProfileScreenConnect = connect(
                         {
                             text: i18nGet('leave'),
                             onPress: () => dispatch(createClearInstallationIdAction()),
+                            style: 'destructive',
                         },
                         {
                             text: i18nGet('cancel'),
+                            style: 'cancel'
                         },
                     ]
                 );

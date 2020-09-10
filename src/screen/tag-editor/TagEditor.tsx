@@ -136,9 +136,9 @@ export const TagEditor = connect(
                 createChangePending({ tagList: true })
               ]));
             },
-            style: "destructive"
+            style: "destructive",
           },
-          { text: i18nGet('cancel'), onPress: () => { }, style: 'cancel' }
+          { text: i18nGet('cancel'), style: 'cancel' }
         ]
       );
     },

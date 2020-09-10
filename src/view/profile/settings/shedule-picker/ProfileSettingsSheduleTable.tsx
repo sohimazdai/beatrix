@@ -121,7 +121,6 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
                                 {
                                     text: i18nGet('yes'),
                                     onPress: () => this.props.clearShedule(this.props.sheduleKey),
-                                    style: 'cancel',
                                 },
                             ]
                         )

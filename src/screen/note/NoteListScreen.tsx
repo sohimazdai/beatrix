@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, Dimensions } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import {
   NavigationParams,
@@ -101,30 +101,32 @@ class NoteListScreen extends React.PureComponent<FullProps> {
 
   render() {
     const { navigation } = this.props;
-    const { isFilterPopupOpen, selectedDate } = this.state;
+    const { isFilterPopupOpen } = this.state;
 
     return (
-      <View style={styles.screenView}>
-        <BlockHat
-          onBackPress={() => navigation.navigate('Dashboard')}
-          title={i18nGet('notes')}
-          rightSideSlot={this.renderFilterIcon()}
-        />
-        <View style={styles.contentWrap}>
-          <View style={styles.content}>
-            <HorizontalIconBar isBig />
-            {this.renderCards()}
+      <>
+        <View style={styles.screenView}>
+          <BlockHat
+            onBackPress={() => navigation.navigate('Dashboard')}
+            title={i18nGet('notes')}
+            rightSideSlot={this.renderFilterIcon()}
+          />
+          <View style={styles.contentWrap}>
+            <View style={styles.content}>
+              <HorizontalIconBar isBig />
+              {this.renderCards()}
+            </View>
           </View>
-        </View>
-        <View style={styles.addNoteButtonView}>
-          <NoteCreationButton onClick={this.goToNoteEditor} />
+          <View style={styles.addNoteButtonView}>
+            <NoteCreationButton onClick={this.goToNoteEditor} />
+          </View>
         </View>
         <FilterPopupConnected
           isOpen={isFilterPopupOpen}
           onHide={this.hideFilter}
           goToTagEditor={this.goToTagEditor}
         />
-      </View>
+      </>
     );
   }
 
