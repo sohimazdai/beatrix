@@ -45,6 +45,7 @@ import { ITagList } from '../../model/ITagList';
 import { TagsIcon } from '../../component/icon/TagsIcon';
 import { PopupHeader } from '../../component/popup/PopupHeader';
 import { Avoiding } from '../../component/avoiding/Avoiding';
+import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -136,7 +137,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
             : styles.noteCreationView
           }
         >
-          <ScrollView style={styles.scrollView}>
+          <ScrollView>
             <Hat
               onBackPress={this.closeEditor}
               title={title}
@@ -367,6 +368,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
     });
   }
 
+  goToFood = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(NavigatorEntities.FOOD_PAGE, {
+      backPage: NavigatorEntities.NOTE_EDITOR,
+    });
+  }
+
   renderInputByValue() {
     let { glucose, breadUnits, insulin, longInsulin, currentValueType, commentary } = this.state;
 
@@ -374,7 +383,16 @@ class NoteEditor extends React.PureComponent<Props, State>{
       case NoteValueType.GLUCOSE:
         return this.renderInputByType(NoteValueType.GLUCOSE, glucose)
       case NoteValueType.BREAD_UNITS:
-        return this.renderInputByType(NoteValueType.BREAD_UNITS, breadUnits)
+        return <>
+          {this.renderInputByType(NoteValueType.BREAD_UNITS, breadUnits)}
+          <StyledButton
+            icon={<VegetablesIcon width={30} height={30} />}
+            iconPosition={IconPositionType.LEFT}
+            label={i18nGet('add_food')}
+            onPress={this.goToFood}
+            style={StyledButtonType.EMPTY}
+          />
+        </>
       case NoteValueType.SHORT_INSULIN:
         return <>
           {this.renderInputByType(NoteValueType.SHORT_INSULIN, insulin)}
@@ -695,8 +713,7 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_DARK_GRAY
   },
   numberScrollWrapper: {
-    marginTop: 40,
-    height: 150,
+    marginVertical: 20,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',

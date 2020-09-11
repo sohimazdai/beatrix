@@ -3,4 +3,8 @@ export enum NavigatorEntities {
   SETTINGS_INSULIN = 'InsulinSettings',
   TAG_EDITOR = 'TagEditor',
   NOTE_LIST = 'Notes',
+  FOOD_PAGE = 'Food',
+  CHARTS = 'Charts',
+  DASHBOARD = 'Dashboard',
+  PROFILE = "Profile",
 }

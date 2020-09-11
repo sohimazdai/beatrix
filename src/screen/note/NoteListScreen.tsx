@@ -20,7 +20,6 @@ import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { COLOR } from "../../constant/Color";
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 
-import { convertFlatNoteListToNoteListByDay } from "../../store/selector/NoteListSelector";
 import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';

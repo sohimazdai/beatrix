@@ -37,6 +37,17 @@ export default function translate() {
 }
 
 const translateStore = {
+  // FOOD
+  food: {
+    'en': 'Food',
+    'es': 'Comida',
+    'ru': 'Продукты',
+  },
+  add_food: {
+    'en': 'Add food',
+    'es': 'Agregar comida',
+    'ru': 'Добавить продукт',
+  },
   // AUTH
   looking_for_active_session: {
     en: 'Looking for active session',

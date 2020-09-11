@@ -8,6 +8,7 @@ import {
 } from "react-navigation";
 import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
+import SideMenu from 'react-native-side-menu';
 
 import { BlockHat } from "../../component/hat/BlockHat";
 import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
@@ -32,6 +33,7 @@ import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
+import { SideMenuContent } from '../../view/shared/components/SideMenu';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -76,9 +78,12 @@ class DashboardScreen extends React.PureComponent<FullProps> {
     const { navigation } = this.props;
 
     return (
-      <>
+      <SideMenu navigation={navigation} isOpen menu={<SideMenuContent navigation={navigation} />}>
         <View style={styles.screenView}>
-          <BlockHat title={i18nGet('compensation')} rightSideSlot={this.renderProfileIcon()} />
+          <BlockHat
+            title={i18nGet('compensation')}
+            rightSideSlot={this.renderProfileIcon()}
+          />
           <View style={styles.scrollViewWrapper}>
             <ScrollView style={styles.scrollView}>
               <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
@@ -121,7 +126,7 @@ class DashboardScreen extends React.PureComponent<FullProps> {
           <Fader hidden={!this.props.selectedDotId} />
         </View >
         <ChartDotInfoPopupConnect navigation={navigation} />
-      </>
+      </SideMenu>
     );
   }
 

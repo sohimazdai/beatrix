@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer, createBottomTabNavigator, StackNavigatorConfig } from "react-navigation";
 import { AuthScreenConnect } from "../screen/auth/AuthScreen";
 import { NoteListScreenConnect } from "../screen/note/NoteListScreen";
 import { ChartConnect } from "../screen/chart/ChartScreen";
@@ -23,6 +23,7 @@ import { ExportDataSettings } from '../screen/profile/profile-settings/sub-setti
 import { OnboardingConnected } from '../screen/onboarding/Onboarding';
 import { NoteEditorConnect } from '../screen/note-editor/NoteEditor';
 import { TagEditor } from '../screen/tag-editor/TagEditor';
+import { FoodScreen } from '../screen/food/FoodScreen';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -106,6 +107,10 @@ const ProfileScreenStack = createStackNavigator(
     }
 )
 
+const authedStackNavigatorConfig: StackNavigatorConfig = {
+    headerMode: 'none',
+}
+
 const AuthedNavigator = createStackNavigator(
     {
         Dashboard: { screen: DashboardScreenConnect },
@@ -113,11 +118,10 @@ const AuthedNavigator = createStackNavigator(
         Charts: { screen: ChartConnect },
         Profile: { screen: ProfileScreenStack },
         NoteEditor: { screen: NoteEditorConnect },
-        TagEditor: { screen: TagEditor }
+        TagEditor: { screen: TagEditor },
+        Food: { screen: FoodScreen },
     },
-    {
-        headerMode: 'none'
-    }
+    authedStackNavigatorConfig
 )
 
 const UnknownMainNavigator = createStackNavigator(
