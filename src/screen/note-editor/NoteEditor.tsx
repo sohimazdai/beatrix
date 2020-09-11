@@ -99,7 +99,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
       }
 
       this.state = noteFromProps;
-    } else this.state = INITIAL_STATE
+    } else {
+      this.state = {
+        ...INITIAL_STATE,
+        date: new Date(),
+      }
+    }
   }
 
   componentDidMount() {
@@ -158,10 +163,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
             {this.renderSaveButton()}
           </View>
         </View>
-        <Avoiding>
-          {this.renderInputPopup()}
-          {this.renderTagsPopup()}
-        </Avoiding>
+        {this.renderInputPopup()}
+        {this.renderCommentInputPopup()}
+        {this.renderTagsPopup()}
       </>
     )
   }
@@ -324,10 +328,29 @@ class NoteEditor extends React.PureComponent<Props, State>{
   renderInputPopup() {
     const { currentValueType } = this.state;
 
+    const isCommentPopupVisible = currentValueType === NoteValueType.COMMENT;
+
     return (
       <SuperPopup
-        hidden={!currentValueType}
+        hidden={!currentValueType || isCommentPopupVisible}
         direction={PopupDirection.BOTTOM_TOP}
+      >
+        <View style={styles.inputPopup}>
+          {this.renderInputByValue()}
+        </View>
+      </SuperPopup>
+    )
+  }
+
+  renderCommentInputPopup() {
+    const { currentValueType } = this.state;
+
+    const isCommentPopupVisible = currentValueType === NoteValueType.COMMENT;
+
+    return (
+      <SuperPopup
+        hidden={!isCommentPopupVisible}
+        direction={PopupDirection.TOP_BOTTOM}
       >
         <View style={styles.inputPopup}>
           {this.renderInputByValue()}
@@ -365,18 +388,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
       case NoteValueType.COMMENT:
         return (
           <>
-            <PopupHeader
-              title={i18nGet(NoteValueType.COMMENT)}
-              rightSlot={
-                <StyledButton
-                  icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} />}
-                  iconPosition={IconPositionType.LEFT}
-                  style={StyledButtonType.EMPTY}
-                  onPress={this.onDowArrowIconPress}
-                />
-              }
-              paddingHorizontal={POPUP_PADDING_HORIZONTAL}
-            />
             <View style={styles.commentViewTextArea}>
               <TextInput
                 autoFocus
@@ -388,6 +399,20 @@ class NoteEditor extends React.PureComponent<Props, State>{
                 keyboardType="default"
                 returnKeyType="done"
                 onSubmitEditing={() => { Keyboard.dismiss() }}
+              />
+            </View>
+            <View style={styles.commentPopupHeader}>
+              <PopupHeader
+                title={i18nGet(NoteValueType.COMMENT)}
+                rightSlot={
+                  <StyledButton
+                    icon={<ArrowTaillessIcon direction={ArrowDirection.UP} />}
+                    iconPosition={IconPositionType.LEFT}
+                    style={StyledButtonType.EMPTY}
+                    onPress={this.onDowArrowIconPress}
+                  />
+                }
+                paddingHorizontal={POPUP_PADDING_HORIZONTAL}
               />
             </View>
           </>
@@ -621,6 +646,10 @@ const styles = StyleSheet.create({
   inputView: {
     width: '100%',
     marginTop: 20,
+  },
+  commentPopupHeader: {
+    width: '100%',
+    marginBottom: 16,
   },
   commentInputView: {
     width: '100%',

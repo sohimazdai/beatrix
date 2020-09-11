@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, Animated, Dimensions, View } from 'react-native'
-import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 
 export enum PopupDirection {
     TOP_BOTTOM = 'top-bottom',
     BOTTOM_TOP = 'bottom-top',
+    BOTTOM_CENTER = 'bottom-center',
 }
 
 export interface SuperPopupProps {
