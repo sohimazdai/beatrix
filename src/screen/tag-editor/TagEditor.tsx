@@ -54,7 +54,7 @@ class TagEditorComp extends React.Component<Props, State> {
 
     if (!tagList.tags) return [];
 
-    return Object.values(tagList.tags).map((tag: ITag) => tag.id);
+    return Object.keys(tagList.tags);
   }
 
   onCreateTag = () => {

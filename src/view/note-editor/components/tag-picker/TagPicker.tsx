@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { IStorage } from '../../../../model/IStorage';
-import { ITagList, ITag } from '../../../../model/ITagList';
+import { ITagList } from '../../../../model/ITagList';
 import { constructTagRows } from '../../modules/construct-tag-rows';
 import { TagPickerEntities } from '../../entities/TagPickerEntities';
 import { TagList } from './TagLIst';
@@ -11,7 +11,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
   tagList: ITagList,
-  selectedTags: number[]
+  selectedTags: string[]
   onTagPress: (tagId: number) => void;
   icon?: JSX.Element;
   viewerOfSelected?: boolean // показывает выбранные
@@ -24,7 +24,7 @@ class Picker extends React.Component<Props> {
     const { selectedTags, tagList: { tags } } = this.props;
     const newTagList = { ...tags };
 
-    selectedTags && selectedTags.forEach((tagId: number) => delete newTagList[tagId]);
+    selectedTags && selectedTags.forEach((tagId: string) => delete newTagList[tagId]);
 
     return newTagList;
   }
@@ -33,7 +33,7 @@ class Picker extends React.Component<Props> {
     const { selectedTags, tagList: { tags } } = this.props;
     const newTagList = {};
 
-    selectedTags && selectedTags.forEach((tagId: number) => {
+    selectedTags && selectedTags.forEach((tagId: string) => {
       newTagList[tagId] = tags[tagId]
     });
 

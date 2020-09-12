@@ -1,19 +1,22 @@
 import { ITagList, ITag, ITagListTags } from "../../../model/ITagList";
 import { i18nGet } from '../../../localisation/Translate';
 import { randomizeBGandFontColor } from '../../../utils/RandomizeColor';
+import { v1 as uuidv1 } from 'uuid';
 
 export enum TagListActionType {
     CHANGE = "TAG_LIST_CHANGE",
     ADD = 'TAG_LIST_ADD_TAG',
     REMOVE = 'TAG_LIST_REMOVE_TAG',
     REPLACE = 'TAG_LIST_REPLACE',
+    MERGE_TAGS = 'TAG_LIST_MERGE_TAGS',
 }
 
 export type TagListActionTypes = (
     TagListChangeAction |
     TagListRemoveAction |
     TagListAddAction |
-    TagListReplaceAction
+    TagListReplaceAction |
+    TagListMergeTagsAction
 );
 
 export interface TagListChangeAction {
@@ -34,6 +37,11 @@ export interface TagListRemoveAction {
 export interface TagListReplaceAction {
     type: TagListActionType.REPLACE,
     payload: ITagList
+}
+
+export interface TagListMergeTagsAction {
+    type: TagListActionType.MERGE_TAGS,
+    payload: ITagListTags
 }
 
 export function createChangeTagList(tagList: Partial<ITagList>): TagListChangeAction {
@@ -64,32 +72,38 @@ export function createReplaceTagList(tagList: ITagList): TagListReplaceAction {
     }
 }
 
-export function tagListReducer(
-    module: ITagList = {
-        tags: {
-            '1': {
-                id: 1,
-                name: i18nGet('before_meal'),
-                ...randomizeBGandFontColor(),
-            },
-            '2': {
-                id: 2,
-                name: i18nGet('after_meal'),
-                ...randomizeBGandFontColor(),
-            },
-            '3': {
-                id: 3,
-                name: i18nGet('fasting'),
-                ...randomizeBGandFontColor(),
-            },
-            '4': {
-                id: 4,
-                name: i18nGet('before_bedtime'),
-                ...randomizeBGandFontColor(),
-            },
-        },
-        nextId: 5,
+export function createMergeTags(tags: ITagListTags): TagListMergeTagsAction {
+    return {
+        type: TagListActionType.MERGE_TAGS,
+        payload: tags
+    }
+}
+
+const defaultTags = () => ({
+    [uuidv1()]: {
+        id: 1,
+        name: i18nGet('before_meal'),
+        ...randomizeBGandFontColor(),
     },
+    [uuidv1()]: {
+        id: 2,
+        name: i18nGet('after_meal'),
+        ...randomizeBGandFontColor(),
+    },
+    [uuidv1()]: {
+        id: 3,
+        name: i18nGet('fasting'),
+        ...randomizeBGandFontColor(),
+    },
+    [uuidv1()]: {
+        id: 4,
+        name: i18nGet('before_bedtime'),
+        ...randomizeBGandFontColor(),
+    },
+});
+
+export function tagListReducer(
+    module: ITagList = { tags: defaultTags(), },
     action: TagListActionTypes
 ): ITagList {
     switch (action.type) {
@@ -99,25 +113,17 @@ export function tagListReducer(
                 ...action.payload
             }
         case TagListActionType.ADD:
-            const tagId = module.nextId;
-            const tag: ITag = {
-                ...action.payload,
-                id: tagId,
-            };
-
-            const tags = {
-                ...module.tags,
-                [tag.id]: tag
-            };
-
-            const nextId = module.nextId
-                ? module.nextId + 1
-                : Math.max(Number(Object.keys(tags)));
+            const newId = uuidv1();
 
             return {
                 ...module,
-                tags,
-                nextId: nextId,
+                tags: {
+                    ...module.tags,
+                    [newId]: {
+                        ...action.payload,
+                        id: newId,
+                    },
+                },
             }
         case TagListActionType.REMOVE:
             const newTags = { ...module.tags };
@@ -128,7 +134,14 @@ export function tagListReducer(
             };
         case TagListActionType.REPLACE:
             return action.payload;
-
+        case TagListActionType.MERGE_TAGS:
+            return {
+                ...module,
+                tags: {
+                    ...module.tags,
+                    ...action.payload
+                },
+            };
         default: return module;
     }
 }

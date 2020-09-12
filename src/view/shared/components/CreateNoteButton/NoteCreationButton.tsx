@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 import { AddNoteIcon } from "../../../../component/icon/AddNoteIcon";
 
@@ -8,6 +7,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { StyledButton, IconPositionType, StyledButtonType } from '../../../../component/button/StyledButton';
+import { appAnalytics } from '../../../../app/Analytics';
 
 interface Props {
     onClick: () => void;
@@ -20,7 +20,10 @@ export const NoteCreationButton = (props: Props) => (
             iconPosition={IconPositionType.RIGHT}
             label={i18nGet('add')}
             style={StyledButtonType.PRIMARY}
-            onPress={props.onClick}
+            onPress={() => {
+                appAnalytics.sendEvent(appAnalytics.events.ADD_NOTE_CLICKED);
+                props.onClick();
+            }}
         />
     </View>
 )

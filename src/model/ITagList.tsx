@@ -11,5 +11,4 @@ export interface ITagListTags {
 
 export interface ITagList {
   tags: ITagListTags,
-  nextId: number,
 }

@@ -16,7 +16,7 @@ import { createClearPendingNoteListByUserId } from '../../modules/pending-note-l
 import { syncNotes } from '../../service-helper/sync-notes';
 import { INoteList } from '../../../model/INoteList';
 import { appAnalytics } from '../../../app/Analytics';
-import { createChangeTagList } from '../../modules/tag-list/tagList';
+import { createChangeTagList, createMergeTags } from '../../modules/tag-list/tagList';
 import { ITagListTags } from '../../../model/ITagList';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
@@ -98,7 +98,7 @@ function* syncUser({ payload }: SyncUserAction) {
                     createUserChangeAction({
                         isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding
                     }),
-                    createChangeTagList({ tags }),
+                    createMergeTags(tags),
                 ])
             );
 
