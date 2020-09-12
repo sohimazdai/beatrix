@@ -26,6 +26,7 @@ interface Props {
   iconPosition?: IconPositionType;
   marginLeft?: boolean
   disabled?: boolean
+  withoutPadding?: boolean
 };
 
 export class StyledButton extends React.Component<Props> {
@@ -59,7 +60,7 @@ export class StyledButton extends React.Component<Props> {
   };
 
   get touchableStyle() {
-    const { style } = this.props;
+    const { style, withoutPadding } = this.props;
     let additionalStyle = {};
 
     switch (style) {
@@ -77,7 +78,12 @@ export class StyledButton extends React.Component<Props> {
         break;
     }
 
-    return { ...styles.touchable, ...additionalStyle };
+    const paddingStyle = withoutPadding
+      ? { padding: 0 }
+      : {};
+
+
+    return { ...styles.touchable, ...additionalStyle, ...paddingStyle };
   }
 
   get textStyle() {

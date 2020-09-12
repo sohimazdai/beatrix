@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     fontSize: 19,
     color: COLOR.PRIMARY_WHITE,
     backgroundColor: COLOR.PRIMARY,
-    borderBottomRightRadius: 10,
     overflow: 'hidden',
   },
   links: {

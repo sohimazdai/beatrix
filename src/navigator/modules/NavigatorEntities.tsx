@@ -7,4 +7,6 @@ export enum NavigatorEntities {
   CHARTS = 'Charts',
   DASHBOARD = 'Dashboard',
   PROFILE = "Profile",
+  BARCODE_SCANNING = 'BarcodeScanning',
+  FOOD_CARD = 'FoodCard',
 }

@@ -1,44 +1,63 @@
-import { api } from './api';
-import { INoteListNote } from '../model/INoteList';
-import Axios, { AxiosRequestConfig } from 'axios';
-
-const CLIENT_SECRET = 'b3e60656e3954222adece95dc5e9b88e';
-const CLIENT_SECRET_2 = 'b3e60656e3954222adece95dc5e9b88e';
-const CIENT_ID = 'd84709d0262e4f86817ad2d2da7183f5';
-const CONSUMER_KEY = 'd84709d0262e4f86817ad2d2da7183f5';
-const CONSUMER_SECRET = '0c00acdc27b1422d9d0f57862104260f';
+import { barcodeFoodMapper } from './mappers/barcodeFoodMapper';
+import { IFoodListItem, IFoodList } from '../model/IFood';
+import { createQueryString } from '../utils/create-query-string';
+import { searchFoodMapper } from './mappers/searchFoodMapper';
 
 export class FoodApi {
-  static searchBread() {
-    return Axios.post(
-      'https://platform.fatsecret.com/rest/server.api',
-      {
-        method: 'food.get.v2&food_id=33691&format=json'
-      },
-      {
-        headers: { 'content-type': 'application/json' },
-        params: {
+  static async searchProductsByKey(key: string): Promise<(IFoodList)> {
+    const baseUrl = `https://world.openfoodfacts.org/cgi/search.pl`;
+    const query = createQueryString({
+      search_terms: key,
+      search_simple: 1,
+      action: 'process',
+      json: 1,
+    });
+    const url = `${baseUrl}?${query}`;
 
-        }
-      }
-    )
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const { products } = await response.json();
+
+      const search = searchFoodMapper(products);
+
+      return search;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
-  static auth() {
-    const opts: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'https://oauth.fatsecret.com/connect/token',
-      auth: {
-        username: CIENT_ID,
-        password: CLIENT_SECRET
-      },
-      headers: { 'content-type': 'application/json' },
-      // form: {
-      //   'grant_type': 'client_credentials',
-      //   'scope': 'basic'
-      // },
-      // json: true
+  static async getProductByBarcode(id: string): Promise<(IFoodListItem | null)> {
+    const url = `https://world.openfoodfacts.org/api/v0/product/${id}.json`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const { product } = await response.json();
+
+      if (product.status === 0) {
+        return null;
+      }
+
+      const food = barcodeFoodMapper(product);
+
+      return food;
+    } catch (error) {
+      console.error(error);
+      return null;
     }
-    return Axios(opts).catch(e => console.log('🤖🤖🤖🤖 e', e))
   }
 }

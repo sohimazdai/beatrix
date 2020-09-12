@@ -24,6 +24,8 @@ import { OnboardingConnected } from '../screen/onboarding/Onboarding';
 import { NoteEditorConnect } from '../screen/note-editor/NoteEditor';
 import { TagEditor } from '../screen/tag-editor/TagEditor';
 import { FoodScreen } from '../screen/food/FoodScreen';
+import { BarcodeScanningScreen } from '../screen/food/BarcodeScanningScreen';
+import { FoodCard } from '../screen/food/FoodCard';
 
 setLocale(Localization.locale.slice(0, 2));
 
@@ -120,6 +122,8 @@ const AuthedNavigator = createStackNavigator(
         NoteEditor: { screen: NoteEditorConnect },
         TagEditor: { screen: TagEditor },
         Food: { screen: FoodScreen },
+        BarcodeScanning: { screen: BarcodeScanningScreen },
+        FoodCard: { screen: FoodCard }
     },
     authedStackNavigatorConfig
 )

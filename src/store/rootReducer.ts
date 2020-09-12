@@ -11,6 +11,7 @@ import { tagListReducer } from './modules/tag-list/tagList';
 import { noteFilterReducer } from './modules/note-filter/noteFilter';
 import { IStorage } from '../model/IStorage';
 import { pendingReducer } from './modules/pending/pending';
+import { foodReducer } from './modules/food/food';
 
 export const rootReducer: Reducer<IStorage> = combineReducers({
     app: appReducer,
@@ -24,4 +25,5 @@ export const rootReducer: Reducer<IStorage> = combineReducers({
     tagList: tagListReducer,
     noteFilter: noteFilterReducer,
     pending: pendingReducer,
+    food: foodReducer,
 });

@@ -19,10 +19,6 @@ export function createSyncPendingDataAction() {
       error: null
     }),
     { type: ACTION_TYPE },
-    createChangePending({
-      loading: true,
-      error: null,
-    }),
   ])
 }
 

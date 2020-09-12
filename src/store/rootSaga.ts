@@ -13,6 +13,8 @@ import { watchUpdateUserDiabetesProperties } from './service/user/UpdateUserDiab
 import { watchExportData } from './service/export/ExportDataSaga';
 import { watchCompleteOnboarding } from './service/onboarding/CompleteOnboardingSaga';
 import { watchSyncPendingData } from './service/pending/SyncPendingData';
+import { watchFetchProductByBarcode } from './service/barcode/FetchBarcodeProductSaga';
+import { watchSearchProductByKey } from './service/barcode/SearchProductByKeySaga';
 
 export function* rootSaga() {
     yield all([
@@ -37,5 +39,8 @@ export function* rootSaga() {
         fork(watchExportData),
         //PENDING
         fork(watchSyncPendingData),
+        // FOOD
+        fork(watchFetchProductByBarcode),
+        fork(watchSearchProductByKey),
     ]);
 };

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Dimensions } from 'react-native'
 
 import { Loader } from '../loader/Loader'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     settingsView: {
         display: 'flex',
-        width: '100%',
+        maxWidth: '100%',
         paddingHorizontal: 16,
         paddingVertical: 16,
         paddingBottom: 8,
@@ -70,9 +70,11 @@ const styles = StyleSheet.create({
         padding: 5
     },
     title: {
+        maxWidth: Dimensions.get('screen').width - 120,
         fontSize: 19,
         fontWeight: 'bold',
-        color: '#ffffff'
+        color: '#ffffff',
+        paddingRight: 8,
     },
     rightSideSlot: {
     },

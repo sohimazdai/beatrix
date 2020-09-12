@@ -38,6 +38,41 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  type_food: {
+    'en': 'Write the name',
+    'es': 'Escribe el nombre',
+    'ru': 'Напишите название',
+  },
+  food_favorites: {
+    'en': 'Favorites',
+    'es': 'Mis productos',
+    'ru': 'Мои продукты',
+  },
+  food_history: {
+    'en': 'History',
+    'es': 'Historia',
+    'ru': 'История',
+  },
+  food_search: {
+    'en': 'Search',
+    'es': 'Buscar',
+    'ru': 'Поиск',
+  },
+  product_not_found: {
+    'en': 'Product not found',
+    'es': 'Producto no encontrado',
+    'ru': 'Продукт не найден',
+  },
+  product_scanning: {
+    'en': 'Barcode scanning',
+    'es': 'Escaneo de código de barras',
+    'ru': 'Сканирование штрих-кода',
+  },
+  barcode_scanning_error: {
+    'en': 'Barcode scanning error',
+    'es': 'Error de escaneo de código de barras',
+    'ru': 'Ошибка сканирования продукта',
+  },
   food: {
     'en': 'Food',
     'es': 'Comida',
