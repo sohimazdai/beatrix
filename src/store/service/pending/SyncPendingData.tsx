@@ -10,6 +10,8 @@ import { createChangeTagList } from '../../modules/tag-list/tagList';
 
 const ACTION_TYPE = "SYNC_PENDING_DATA_ACTION";
 
+let tagListPending = false;
+
 export function createSyncPendingDataAction() {
   return batchActions([
     createUserChangeAction({
@@ -28,11 +30,8 @@ function* run() {
   try {
     const state: IStorage = yield select(state => state);
 
-    if (state.app.serverAvailable && !state.pending.loading) {
-      yield put(createChangePending({
-        loading: true,
-        error: null,
-      }));
+    if (state.app.serverAvailable && !tagListPending) {
+      tagListPending = true;
 
       if (state.pending.tagList) {
         yield call(TagApi.syncTags, state.user.id, state.tagList.tags);
@@ -53,6 +52,7 @@ function* run() {
         }),
       ])
     );
+    tagListPending = false;
   } catch (e) {
     handleError(e, i18nGet('sync_error'));
     yield put(
@@ -67,6 +67,7 @@ function* run() {
         }),
       ])
     );
+    tagListPending = false;
   }
 }
 

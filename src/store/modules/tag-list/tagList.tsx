@@ -79,24 +79,31 @@ export function createMergeTags(tags: ITagListTags): TagListMergeTagsAction {
     }
 }
 
+const ids = {
+    1: uuidv1(),
+    2: uuidv1(),
+    3: uuidv1(),
+    4: uuidv1()
+}
+
 const defaultTags = () => ({
-    [uuidv1()]: {
-        id: 1,
+    [ids[1]]: {
+        id: ids[1],
         name: i18nGet('before_meal'),
         ...randomizeBGandFontColor(),
     },
-    [uuidv1()]: {
-        id: 2,
+    [ids[2]]: {
+        id: ids[2],
         name: i18nGet('after_meal'),
         ...randomizeBGandFontColor(),
     },
-    [uuidv1()]: {
-        id: 3,
+    [ids[3]]: {
+        id: ids[3],
         name: i18nGet('fasting'),
         ...randomizeBGandFontColor(),
     },
-    [uuidv1()]: {
-        id: 4,
+    [ids[4]]: {
+        id: ids[4],
         name: i18nGet('before_bedtime'),
         ...randomizeBGandFontColor(),
     },
@@ -106,6 +113,12 @@ export function tagListReducer(
     module: ITagList = { tags: defaultTags(), },
     action: TagListActionTypes
 ): ITagList {
+    Object.keys(module.tags).forEach((tagKey) => {
+        if (tagKey !== String(module.tags[tagKey].id)) {
+            module.tags[tagKey].id = tagKey;
+        }
+    });
+
     switch (action.type) {
         case TagListActionType.CHANGE:
             return {
