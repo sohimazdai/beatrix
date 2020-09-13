@@ -17,6 +17,7 @@ export function BaseTextInput(props: Props) {
       allowFontScaling={false}
       maxLength={30}
       {...props}
+      clearButtonMode={'always'}
     />
   );
 }

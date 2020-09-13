@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, StatusBar } from 'react-native'
 
 import { Loader } from '../loader/Loader'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -15,7 +15,7 @@ export class BlockHat extends React.Component<Props> {
     render() {
         return (
             <View style={styles.hatView}>
-                <View style={styles.settingsView}>
+                <View style={styles.view}>
                     <View style={styles.leftSide}>
                         {this.props.onBackPress && <View
                             style={styles.backArrow}
@@ -44,15 +44,13 @@ export class BlockHat extends React.Component<Props> {
 const styles = StyleSheet.create({
     hatView: {
         backgroundColor: "#2E3858",
-        paddingTop: 20,
+        paddingTop: 24,
     },
-    settingsView: {
+    view: {
         display: 'flex',
         maxWidth: '100%',
         paddingHorizontal: 16,
-        paddingVertical: 16,
-        paddingBottom: 8,
-
+        paddingVertical: 12,
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: 'center',
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
         width: 40,
     },
     backArrowTouchable: {
-        padding: 5
+        paddingRight: 5
     },
     title: {
         maxWidth: Dimensions.get('screen').width - 120,

@@ -13,8 +13,8 @@ import { watchUpdateUserDiabetesProperties } from './service/user/UpdateUserDiab
 import { watchExportData } from './service/export/ExportDataSaga';
 import { watchCompleteOnboarding } from './service/onboarding/CompleteOnboardingSaga';
 import { watchSyncPendingData } from './service/pending/SyncPendingData';
-import { watchFetchProductByBarcode } from './service/barcode/FetchBarcodeProductSaga';
-import { watchSearchProductByKey } from './service/barcode/SearchProductByKeySaga';
+import { watchFetchProductByBarcode } from './service/food/FetchBarcodeProductSaga';
+import { watchSearchProductByKey } from './service/food/SearchProductByKeySaga';
 
 export function* rootSaga() {
     yield all([

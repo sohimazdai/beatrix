@@ -62,5 +62,5 @@ function* run({ payload }: SearchProductByKeyAction) {
 }
 
 export function* watchSearchProductByKey() {
-  yield takeLeading(ACTION_TYPE, run);
+  yield takeLatest(ACTION_TYPE, run);
 }

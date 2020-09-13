@@ -8,8 +8,9 @@ import { COLOR } from '../../constant/Color';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { connect } from 'react-redux';
-import { createFetchProductByBarcodeAction } from '../../store/service/barcode/FetchBarcodeProductSaga';
+import { createFetchProductByBarcodeAction } from '../../store/service/food/FetchBarcodeProductSaga';
 import { StyledButton, StyledButtonType } from '../../component/button/StyledButton';
+import { FoodApi } from '../../api/FoodApi';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -28,15 +29,18 @@ export function BarcodeScanningScreenComponent(props: Props) {
       }
       setHasPermission(cameraStatus === 'granted');
     })();
-    props.fetchProductData('4607145590012');
   }, []);
 
-  const handleBarCodeScanned = (barcodeData) => {
+  const handleBarCodeScanned = async (barcodeData) => {
     const { data } = barcodeData;
-    const { fetchProductData } = props;
+    const { navigation } = props;
 
     setScanned(true);
-    fetchProductData(data)
+    const foodItem = await FoodApi.getProductByBarcode(data);
+
+    if (foodItem) {
+      navigation.navigate(NavigatorEntities.FOOD_CARD, { foodItem })
+    } else alert('не получилос')
   };
 
   const wrap = (children: ReactNode) => (
@@ -71,8 +75,16 @@ export function BarcodeScanningScreenComponent(props: Props) {
     wrap(
       <>
         <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          onBarCodeScanned={handleBarCodeScanned}
           style={styles.barcodeScaner}
+          barCodeTypes={[
+            BarCodeScanner.Constants.BarCodeType.qr,
+            BarCodeScanner.Constants.BarCodeType.code39,
+            BarCodeScanner.Constants.BarCodeType.code93,
+            BarCodeScanner.Constants.BarCodeType.code128,
+            BarCodeScanner.Constants.BarCodeType.ean13,
+            BarCodeScanner.Constants.BarCodeType.ean8,
+          ]}
         />
         {scanned && (
           <View style={styles.buttonWrap}>

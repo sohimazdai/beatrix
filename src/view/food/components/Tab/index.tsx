@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, Animated } from 'react-native';
-import { StyledButtonType, StyledButton } from '../../../../component/button/StyledButton';
+import { StyleSheet, Text, Animated } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { COLOR } from '../../../../constant/Color';
 
@@ -49,6 +48,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomWidth: 2,
     borderColor: COLOR.PRIMARY_WHITE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   touchable: {
     display: 'flex',
@@ -61,5 +62,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: COLOR.PRIMARY,
     marginLeft: 8,
+    textAlign: 'center',
   }
 })

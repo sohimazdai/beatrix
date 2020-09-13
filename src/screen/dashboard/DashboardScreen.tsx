@@ -1,5 +1,5 @@
 import React from "react";
-import { View, } from "react-native";
+import { View, StatusBar, } from "react-native";
 import { connect } from "react-redux";
 import {
   NavigationParams,
@@ -60,6 +60,8 @@ class DashboardScreen extends React.PureComponent<FullProps> {
   componentDidMount() {
     appAnalytics.setSection(AnalyticsSections.DASHBOARD);
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
+
+    StatusBar.setBarStyle('light-content');
   }
 
   componentDidUpdate(pP: FullProps) {

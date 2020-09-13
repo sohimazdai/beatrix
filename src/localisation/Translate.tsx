@@ -38,6 +38,41 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  for_100g_of_product: {
+    'en': 'Per 100 grams of product',
+    'es': 'Por 100 gramos de producto',
+    'ru': 'На 100 грамм продукта',
+  },
+  food_search_tips_1: {
+    'en': 'To find a food, enter the whole word from the product name',
+    'es': 'Para encontrar un producto, ingrese la palabra completa del nombre del producto',
+    'ru': 'Чтобы найти продукт, введите слово из названия продукта целиком',
+  },
+  you_are_have_not_history: {
+    'en': 'Search for products or scan, the whole story will be saved here',
+    'es': 'Busque productos o escanee, la historia completa se guardará aquí',
+    'ru': 'Ищите продукты или сканируйте, вся история сохраниться здесь',
+  },
+  you_not_added_any_food_yet: {
+    'en': 'This will display the products you save when searching or scanning',
+    'es': 'Esto mostrará los productos que guarda al buscar o escanear',
+    'ru': 'Здесь будут отображаться продукты, которые вы сохраните при поиске или сканировании',
+  },
+  food_fat: {
+    'en': 'Fats',
+    'es': 'Grasas',
+    'ru': 'Жиры',
+  },
+  food_carbohydrates: {
+    'en': 'Carbohydrates',
+    'es': 'Сarbohidratos',
+    'ru': 'Углеводы',
+  },
+  food_proteins: {
+    'en': 'Proteins',
+    'es': 'Proteínas',
+    'ru': 'Белки',
+  },
   type_food: {
     'en': 'Write the name',
     'es': 'Escribe el nombre',

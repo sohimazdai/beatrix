@@ -3,6 +3,7 @@ import { IFoodListItem } from '../../../../model/IFood';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLOR } from '../../../../constant/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
   item: IFoodListItem
@@ -18,15 +19,30 @@ export default function FoodItem(props: Props) {
           {item.name}
         </Text>
         <View style={styles.nutrients}>
-          <Text style={styles.nutrientItem}>
-            {item.nutrients.proteins}
-          </Text>
-          <Text style={styles.nutrientItem}>
-            {item.nutrients.carbohydrates}
-          </Text>
-          <Text style={styles.nutrientItem}>
-            {item.nutrients.fat}
-          </Text>
+          <View style={styles.nutrientsItem}>
+            <Text style={styles.nutrientItemTitle}>
+              {i18nGet('food_proteins')}
+            </Text>
+            <Text style={styles.nutrientItemValue}>
+              {item.nutrients.proteins}
+            </Text>
+          </View>
+          <View style={styles.nutrientsItem}>
+            <Text style={styles.nutrientItemTitle}>
+              {i18nGet('food_fat')}
+            </Text>
+            <Text style={styles.nutrientItemValue}>
+              {item.nutrients.fat}
+            </Text>
+          </View>
+          <View style={styles.nutrientsItem}>
+            <Text style={styles.nutrientItemTitle}>
+              {i18nGet('food_carbohydrates')}
+            </Text>
+            <Text style={styles.nutrientItemValue}>
+              {item.nutrients.carbohydrates}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     </View>
@@ -35,7 +51,9 @@ export default function FoodItem(props: Props) {
 
 const styles = StyleSheet.create({
   foodItem: {
-    marginTop: 16,
+    paddingVertical: 4,
+    borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
+    borderBottomWidth: 1,
   },
   touchable: {
     display: 'flex',
@@ -46,18 +64,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     lineHeight: 22,
-    color: COLOR.TEXT_DARK_GRAY,
     minHeight: 22,
   },
   nutrients: {
     display: 'flex',
+    paddingVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  nutrientItem: {
-    flex: 1,
+  nutrientsItem: {
     alignItems: 'flex-start',
+    flexDirection: 'row',
+    paddingRight: 8,
+  },
+  nutrientItemTitle: {
     textAlign: 'left',
+    color: COLOR.TEXT_DARK_GRAY,
+  },
+  nutrientItemValue: {
+    width: 35,
+    paddingLeft: 4,
+    color: COLOR.TEXT_DARK_GRAY,
   },
 })

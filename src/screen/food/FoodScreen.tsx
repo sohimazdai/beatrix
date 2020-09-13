@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, SafeAreaView, View } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { i18nGet } from '../../localisation/Translate';
@@ -11,10 +11,15 @@ import { SearchContentConnected } from '../../view/food/components/SearchContent
 import { BlockHat } from '../../component/hat/BlockHat';
 import { ScanBarcodeIcon } from '../../component/icon/ScanBarcodeIcon';
 import { COLOR } from '../../constant/Color';
+import { HistoryContentConnected } from '../../view/food/components/HistoryContent';
+import { FavoritesContentConnected } from '../../view/food/components/FavoritesContent';
+import { IStorage } from '../../model/IStorage';
+import { IFood } from '../../model/IFood';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   clearSearch: () => void;
+  food: IFood
 };
 
 interface State {
@@ -30,6 +35,18 @@ class FoodScreenComponent extends React.Component<Props, State> {
     const { clearSearch } = this.props;
 
     clearSearch();
+  }
+
+  goToFoodCard = (foodId: string, section: FoodSection) => {
+    const { navigation, food } = this.props;
+
+    navigation.navigate(
+      NavigatorEntities.FOOD_CARD,
+      {
+        selectedFoodPage: FoodSection.HISTORY,
+        foodItem: food[section][foodId],
+      },
+    );
   }
 
   onBack = () => {
@@ -52,11 +69,10 @@ class FoodScreenComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const { navigation } = this.props;
     const { selectedPage } = this.state;
 
     return (
-      <View>
+      <View style={styles.screen}>
         <BlockHat
           onBackPress={this.onBack}
           title={i18nGet('food')}
@@ -68,29 +84,48 @@ class FoodScreenComponent extends React.Component<Props, State> {
             withoutPadding
           />}
         />
-        <Tabs selectedPage={FoodSection.SEARCH} />
-        {selectedPage === FoodSection.SEARCH && <SearchContentConnected navigation={navigation} />}
-        {selectedPage === FoodSection.HISTORY && <SearchContentConnected navigation={navigation} />}
-        {selectedPage === FoodSection.FAVORITES && <SearchContentConnected navigation={navigation} />}
+        <Tabs
+          selectedPage={selectedPage}
+          onPageSelect={(section) => this.setState({ selectedPage: section })}
+        />
+        {this.renderAppropriateContent()}
       </View>
     );
+  }
+
+  renderAppropriateContent() {
+    const { selectedPage } = this.state;
+
+    switch (selectedPage) {
+      case FoodSection.SEARCH:
+        return <SearchContentConnected
+          goToFoodCard={(foodId) => this.goToFoodCard(foodId, FoodSection.SEARCH)}
+        />;
+      case FoodSection.HISTORY:
+        return <HistoryContentConnected
+          goToFoodCard={(foodId) => this.goToFoodCard(foodId, FoodSection.HISTORY)}
+        />;
+      case FoodSection.FAVORITES:
+        return <FavoritesContentConnected
+          goToFoodCard={(foodId) => this.goToFoodCard(foodId, FoodSection.FAVORITES)}
+        />;
+
+    }
   }
 }
 
 
 export const FoodScreen = connect(
-  null,
+  (state: IStorage) => ({
+    food: state.food,
+  }),
   (dispatch) => ({
     clearSearch: () => dispatch(createReplaceFood(FoodSection.SEARCH, {})),
   }),
-)(FoodScreenComponent)
+)(FoodScreenComponent);
 
 const styles = StyleSheet.create({
-  barscanner: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    height: '80%',
-  }
+  screen: {
+    flex: 1,
+  },
 })

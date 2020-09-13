@@ -1,70 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { View, StyleSheet } from 'react-native';
-import { IFoodList } from '../../../../model/IFood';
+import { View, StyleSheet, Text } from 'react-native';
 import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { i18nGet } from '../../../../localisation/Translate';
-import { IStorage } from '../../../../model/IStorage';
-import { createSearchProductByKeyAction } from '../../../../store/service/barcode/SearchProductByKeySaga';
+import { createSearchProductByKeyAction } from '../../../../store/service/food/SearchProductByKeySaga';
 import { FoodList } from '../FoodList';
-import { FoodSection } from '../../../../store/modules/food/food';
-import { ScrollView } from 'react-native-gesture-handler';
-import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
+import { FoodSection, createReplaceFood } from '../../../../store/modules/food/food';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import { COLOR } from '../../../../constant/Color';
 
 interface Props {
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-  loading: boolean
   onType: (text: string) => void
-  searchList: IFoodList
+  goToFoodCard: (foodId: string) => void
+  clearSearch: () => void;
 };
 
-class SearchContent extends React.Component<Props> {
-  goToFoodCard = (foodId: string) => {
-    const { navigation, searchList } = this.props;
-    navigation.navigate(
-      NavigatorEntities.FOOD_CARD,
-      {
-        selectedFoodPage: FoodSection.SEARCH,
-        foodItem: searchList[foodId],
-      },
-    );
-  };
+function SearchContent(props: Props) {
+  const { onType, goToFoodCard, clearSearch } = props;
+  const [typed, setTyped] = React.useState('');
 
-  render() {
-    const { onType } = this.props;
+  useEffect(() => {
+    clearSearch();
+  }, []);
 
-    return (
-      <View>
-        <View style={styles.inputView}>
-          <BaseTextInput
-            placeholder={i18nGet('type_food')}
-            onChangeText={onType}
-            defaultValue={''}
-          />
-        </View>
-        <ScrollView>
-          <FoodList section={FoodSection.SEARCH} goToFoodCard={this.goToFoodCard} />
-        </ScrollView>
+  return (
+    <View style={styles.view}>
+      <View style={styles.inputView}>
+        <BaseTextInput
+          placeholder={i18nGet('type_food')}
+          onChangeText={(text: string) => {
+            !!text && onType(text);
+            setTyped(text)
+          }}
+          defaultValue={''}
+        />
       </View>
-    );
-  }
+      {
+        !!typed
+          ? <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
+          : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
+      }
+    </View>
+  );
 }
 
 export const SearchContentConnected = connect(
-  (state: IStorage) => ({
-    loading: state.food.loading,
-    searchList: state.food.search,
-  }),
+  null,
   (dispatch) => ({
     onType: (text: string) => dispatch(createSearchProductByKeyAction(text)),
+    clearSearch: () => dispatch(createReplaceFood(FoodSection.SEARCH, {})),
   })
 )(SearchContent);
 
 const styles = StyleSheet.create({
+  view: {
+    flex: 1,
+  },
   inputView: {
-    margin: 16,
-    height: 52,
-  }
+    padding: 16,
+    height: 84,
+    backgroundColor: COLOR.PRIMARY_WHITE,
+    ...SHADOW_OPTIONS
+  },
+  text: {
+    padding: 16,
+    fontSize: 15,
+    color: COLOR.TEXT_DIMGRAY,
+  },
 })

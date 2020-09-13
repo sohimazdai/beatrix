@@ -48,7 +48,7 @@ export class FoodApi {
 
       const { product } = await response.json();
 
-      if (product.status === 0) {
+      if (!product || product.status === 0) {
         return null;
       }
 
