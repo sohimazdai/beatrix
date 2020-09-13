@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { i18nGet } from '../../localisation/Translate';
@@ -15,6 +15,7 @@ import { HistoryContentConnected } from '../../view/food/components/HistoryConte
 import { FavoritesContentConnected } from '../../view/food/components/FavoritesContent';
 import { IStorage } from '../../model/IStorage';
 import { IFood } from '../../model/IFood';
+import { FoodApi } from '../../api/FoodApi';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -30,6 +31,14 @@ class FoodScreenComponent extends React.Component<Props, State> {
   state = {
     selectedPage: this.props.navigation.getParam('selectedFoodPage') || FoodSection.SEARCH
   };
+
+  async componentDidMount() {
+    const tokenObj = await FoodApi.getAuthorizationCode();
+    FoodApi.setToken(tokenObj['access_token']);
+    console.log('🤖🤖🤖🤖 FoodApi get token', FoodApi.getToken());
+    const food = await FoodApi.getProductById('33691');
+    console.log('🤖🤖🤖🤖 food', food);
+  }
 
   componentWillUnmount() {
     const { clearSearch } = this.props;

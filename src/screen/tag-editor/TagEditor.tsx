@@ -82,7 +82,8 @@ class TagEditorComp extends React.Component<Props, State> {
 
   onDeleteTag = (tagId: number) => {
     const { tagList, onRemoveTag } = this.props;
-
+    console.log('🤖🤖🤖🤖 tagList', tagList);
+    console.log('🤖🤖🤖🤖 tagId', tagId);
     const tagName = tagList.tags[tagId].name;
 
     const cb = () => appAnalytics.sendEventWithProps(appAnalytics.events.DELETE_TAG, {
