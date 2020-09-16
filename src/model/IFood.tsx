@@ -12,6 +12,7 @@ export interface IFoodListItem {
   name?: string
   genericName?: string
   code?: string
+  brandName?: string
   nutrients?: IFoodNutrients
 }
 
@@ -23,6 +24,8 @@ export interface IFood {
   history?: IFoodList
   search?: IFoodList
   favorites?: IFoodList
+
+  searchTotal?: number
 
   loading?: boolean
   error?: any

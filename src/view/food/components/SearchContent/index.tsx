@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     padding: 16,
     height: 84,
     backgroundColor: COLOR.PRIMARY_WHITE,
-    ...SHADOW_OPTIONS
+    ...SHADOW_OPTIONS,
+    elevation: 2,
   },
   text: {
     padding: 16,

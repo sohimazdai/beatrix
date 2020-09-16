@@ -1,8 +1,13 @@
 import i18n from 'i18n-js';
 import { logger } from '../app/Logger';
 
+const _localisationParameters = {
+  locale: '',
+  region: '',
+};
+
 export function setLocale(countryCode) {
-  logger(`CountryCode is ${countryCode}`);
+  logger(`LocaleCode is ${countryCode}`);
 
   switch (countryCode) {
     case 'es': i18n.locale = 'es';
@@ -11,7 +16,17 @@ export function setLocale(countryCode) {
       break;
     default: i18n.locale = 'en';
   }
+
+  _localisationParameters.locale = i18n.locale;
 }
+
+export function setRegion(regionCode) {
+  logger(`CountryCode is ${regionCode}`);
+  
+  _localisationParameters.region = regionCode;
+}
+
+export function getRegion() { return _localisationParameters.region };
 
 export function getLocale() {
   return i18n.locale;

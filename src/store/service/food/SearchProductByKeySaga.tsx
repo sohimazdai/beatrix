@@ -3,10 +3,11 @@ import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
 import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
-import { i18nGet } from '../../../localisation/Translate';
+import { getLocale, getRegion, i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
-import { createChangeFood, FoodSection, createReplaceFood } from '../../modules/food/food';
+import { createChangeFood, FoodSection, createReplaceFood, createSetFoodSearchTotal } from '../../modules/food/food';
 import { IFoodList } from '../../../model/IFood';
+import { checkForItIsInRuGroup } from '../../../localisation/Residents';
 
 const ACTION_TYPE = "SEARCH_PRODUCT_BY_KEY_ACTION";
 
@@ -31,15 +32,25 @@ interface SearchProductByKeyAction {
 function* run({ payload }: SearchProductByKeyAction) {
   try {
     const state: IStorage = yield select(state => state);
+    const isInRussianGroup = checkForItIsInRuGroup(getLocale(), getRegion());
 
     if (state.app.networkConnected) {
-      const products: IFoodList = yield call(FoodApi.searchProductsByKey, payload);
+      let res;
+      let foods = {};
+      let total = 0;
 
-      yield put(
-        createReplaceFood(
-          FoodSection.SEARCH,
-          products
-        ));
+      if (isInRussianGroup) { //TODO: delete reverse
+        res = yield call(FoodApi.searchFatSecret, payload);
+      } else {
+        res = yield call(FoodApi.searchProductsByKey, payload);
+      }
+
+      foods = res.foods;
+      total = res.total;
+
+      console.log('🤖🤖🤖🤖 res', res);
+      yield put(createSetFoodSearchTotal(total));
+      yield put(createReplaceFood(FoodSection.SEARCH, foods));
     } else {
       alert(i18nGet('active_network_needed'));
     }
@@ -62,5 +73,5 @@ function* run({ payload }: SearchProductByKeyAction) {
 }
 
 export function* watchSearchProductByKey() {
-  yield takeLatest(ACTION_TYPE, run);
+  yield throttle(500, ACTION_TYPE, run);
 }

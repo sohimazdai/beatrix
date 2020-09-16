@@ -22,8 +22,14 @@ function HistoryContent(props: Props) {
     <View style={styles.view}>
       {
         isListEmpty
-          ? <FoodList section={FoodSection.HISTORY} goToFoodCard={goToFoodCard} />
-          : <Text style={styles.text}>{i18nGet('you_are_have_not_history')}</Text>
+          ? (
+            <FoodList
+              section={FoodSection.HISTORY}
+              goToFoodCard={goToFoodCard}
+              reversible
+              cutTo={100}
+            />
+          ) : <Text style={styles.text}>{i18nGet('you_are_have_not_history')}</Text>
       }
     </View >
   );

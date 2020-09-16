@@ -10,9 +10,11 @@ export enum FoodActionType {
     CHANGE = "FOOD_CHANGE",
     REPLACE = "FOOD_REPLACE",
     REMOVE_ITEM = "FOOD_ITEM_REMOVE",
+    SET_TOTAL_SEARCh = "FOOD_SET_TOTAL_SEARCH",
 }
 
-export type FoodActionTypes = FoodChangeAction | FoodReplaceAction | FoodItemRemoveAction;
+export type FoodActionTypes = FoodChangeAction | FoodReplaceAction | FoodItemRemoveAction |
+    FoodSearchTotalSetAction;
 
 export interface FoodChangeAction {
     type: FoodActionType.CHANGE,
@@ -38,6 +40,13 @@ export interface FoodItemRemoveAction {
     },
 }
 
+export interface FoodSearchTotalSetAction {
+    type: FoodActionType.SET_TOTAL_SEARCh,
+    payload: {
+        total: number
+    },
+}
+
 export function createChangeFood(section: FoodSection, foodList: IFoodList): FoodChangeAction {
     return {
         type: FoodActionType.CHANGE,
@@ -59,11 +68,20 @@ export function createRemoveFoodItem(section: FoodSection, foodId: string): Food
     };
 }
 
+export function createSetFoodSearchTotal(total: number = 0): FoodSearchTotalSetAction {
+    return {
+        type: FoodActionType.SET_TOTAL_SEARCh,
+        payload: { total },
+    };
+}
+
 export function foodReducer(
     module: IFood = {
         history: {},
         search: {},
         favorites: {},
+
+        searchTotal: 0,
 
         loading: false,
         error: null,
@@ -92,6 +110,11 @@ export function foodReducer(
             return {
                 ...module,
                 [action.payload.section]: newList
+            };
+        case FoodActionType.SET_TOTAL_SEARCh:
+            return {
+                ...module,
+                searchTotal: action.payload.total,
             };
         default: return module;
     }

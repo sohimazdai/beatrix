@@ -19,6 +19,9 @@ import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
 import { HBA1CCalculatorConnected } from '../../view/dashboard/hba1c-calculator/components/HBA1CCalculator';
 import { Fader } from '../../component/fader/Fader';
+import { SideMenuContent } from '../../view/shared/components/SideMenu';
+import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
+import { MenuIcon } from '../../component/icon/MenuIcon';
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay } from "../../model/INoteList";
@@ -32,8 +35,6 @@ import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
-import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
-import { SideMenuContent } from '../../view/shared/components/SideMenu';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -56,7 +57,13 @@ interface FullProps
   DashboardScreenDispatchProps,
   DashboardScreenStateTProps { }
 
-class DashboardScreen extends React.PureComponent<FullProps> {
+interface State {
+  menuShown: boolean
+}
+
+class DashboardScreen extends React.PureComponent<FullProps, State> {
+  state = { menuShown: false };
+
   componentDidMount() {
     appAnalytics.setSection(AnalyticsSections.DASHBOARD);
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
@@ -78,13 +85,22 @@ class DashboardScreen extends React.PureComponent<FullProps> {
 
   render() {
     const { navigation } = this.props;
+    const { menuShown } = this.state;
 
     return (
-      <SideMenu navigation={navigation} isOpen menu={<SideMenuContent navigation={navigation} />}>
+      <SideMenu
+        navigation={navigation}
+        isOpen={menuShown}
+        menu={<SideMenuContent navigation={navigation} />}
+        onChange={(isOpen) => this.setState({ menuShown: isOpen })}
+        bounceBackOnOverdraw={false}
+      >
         <View style={styles.screenView}>
           <BlockHat
             title={i18nGet('compensation')}
             rightSideSlot={this.renderProfileIcon()}
+            leftIcon={<MenuIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
+            leftIconPress={() => this.setState({ menuShown: true })}
           />
           <View style={styles.scrollViewWrapper}>
             <ScrollView style={styles.scrollView}>

@@ -14,13 +14,22 @@ interface Props {
   section: FoodSection
   foodList: IFoodList
   elementsToShow?: number
+  cutTo?: number
+  reversible?: boolean
   goToFoodCard: (foodId: string) => void
 }
 
 function FoodListComponent(props: Props) {
-  const { foodList, elementsToShow, goToFoodCard } = props;
-  const cutTo = elementsToShow || DEFAULT_ELEMENTS_ON_SCREEN_INITIAL;
-  const foods = Object.values(foodList)//.slice(0, cutTo);
+  const { foodList, elementsToShow, goToFoodCard, reversible, cutTo } = props;
+  let foods: IFoodListItem[] = Object.values(foodList);
+
+  if (reversible) {
+    foods = foods.reverse();
+  }
+
+  if (cutTo) {
+    foods = foods.slice(0, cutTo);
+  }
 
   return (
     <>

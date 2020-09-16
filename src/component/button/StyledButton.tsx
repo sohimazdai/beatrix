@@ -121,7 +121,9 @@ export class StyledButton extends React.Component<Props> {
   render() {
     const { label, onPress, iconPosition, disabled } = this.props;
 
-    const iconLeft = iconPosition === IconPositionType.LEFT;
+    const iconLeft = !iconPosition && this.icon
+      ? true
+      : iconPosition === IconPositionType.RIGHT;
     const iconRight = iconPosition === IconPositionType.RIGHT;
 
     return (
