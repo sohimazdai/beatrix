@@ -119,11 +119,8 @@ export class StyledButton extends React.Component<Props> {
   }
 
   render() {
-    const { label, onPress, iconPosition, disabled } = this.props;
+    const { label, onPress, icon, disabled, iconPosition } = this.props;
 
-    const iconLeft = !iconPosition && this.icon
-      ? true
-      : iconPosition === IconPositionType.RIGHT;
     const iconRight = iconPosition === IconPositionType.RIGHT;
 
     return (
@@ -133,7 +130,7 @@ export class StyledButton extends React.Component<Props> {
           style={this.touchableStyle}
           disabled={disabled}
         >
-          {iconLeft && <View style={this.iconStyle}>
+          {!!icon && !iconRight && <View style={this.iconStyle}>
             {this.icon()}
           </View>}
 
@@ -141,7 +138,7 @@ export class StyledButton extends React.Component<Props> {
             {label}
           </Text>}
 
-          {iconRight && <View style={this.iconStyle}>
+          {!!icon && iconRight && <View style={this.iconStyle}>
             {this.icon()}
           </View>}
         </TouchableOpacity>

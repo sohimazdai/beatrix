@@ -1,8 +1,6 @@
 import { IFoodList } from '../../model/IFood';
 import * as Localization from 'expo-localization';
 
-const locale = Localization.locale;
-
 export function searchFoodMapper(products: any[]): IFoodList {
   const searchFood: IFoodList = {};
 

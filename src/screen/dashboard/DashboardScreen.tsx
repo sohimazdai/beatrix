@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StatusBar, } from "react-native";
+import { View, StatusBar, Animated, Easing } from "react-native";
 import { connect } from "react-redux";
 import {
   NavigationParams,
@@ -35,6 +35,8 @@ import { appAnalytics, AnalyticsSections } from '../../app/Analytics';
 import { createSyncNotesAction, SyncReasonType } from '../../store/service/note/SyncNotesSaga';
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
+import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
+import { Header } from '../../component/hat/Header';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -91,72 +93,78 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
       <SideMenu
         navigation={navigation}
         isOpen={menuShown}
-        menu={<SideMenuContent navigation={navigation} />}
+        menu={<SideMenuContent
+          navigation={navigation}
+          closeSideMenu={() => this.setState({ menuShown: false })}
+        />}
         onChange={(isOpen) => this.setState({ menuShown: isOpen })}
-        bounceBackOnOverdraw={false}
+        animationFunction={(prop, value) => Animated.timing(prop, {
+          toValue: value,
+          duration: 100,
+          useNativeDriver: true,
+        })}
       >
         <View style={styles.screenView}>
-          <BlockHat
+          <Header
             title={i18nGet('compensation')}
-            rightSideSlot={this.renderProfileIcon()}
             leftIcon={<MenuIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
             leftIconPress={() => this.setState({ menuShown: true })}
+            rightIcon={<ProfileIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
+            rightIconPress={() => this.props.navigation.navigate("Profile")}
           />
-          <View style={styles.scrollViewWrapper}>
-            <ScrollView style={styles.scrollView}>
-              <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
-                <ActiveInsulinInfoConnected navigation={navigation} />
-                <LastNotesConnected
-                  onNotesPress={() => navigation.navigate('Notes')}
-                  onNotePress={(noteId) => this.goToNoteEditor(noteId)}
-                />
-                <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
-              </View>
-              <ScrollView
-                style={styles.statisticsScrollView}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
-                <View style={{ width: 8 }} />
-                <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
-                <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
-                <View style={{ width: 24 }} />
-              </ScrollView>
-              <ScrollView
-                style={styles.statisticsScrollView}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
-                <View style={{ width: 8 }} />
-                <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
-                <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
-                <View style={{ width: 24 }} />
-              </ScrollView>
-              <View style={{ padding: 16, paddingTop: 0 }}>
-                <HBA1CCalculatorConnected />
-              </View>
-              <View style={styles.stub} />
+          <ScrollView style={styles.scrollView}>
+            <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
+              <ActiveInsulinInfoConnected navigation={navigation} />
+              <LastNotesConnected
+                onNotesPress={() => navigation.navigate('Notes')}
+                onNotePress={(noteId) => this.goToNoteEditor(noteId)}
+              />
+              <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
+            </View>
+            <ScrollView
+              style={styles.statisticsScrollView}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              <View style={{ width: 8 }} />
+              <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
+              <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
+              <View style={{ width: 24 }} />
             </ScrollView>
-          </View>
+            <ScrollView
+              style={styles.statisticsScrollView}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              <View style={{ width: 8 }} />
+              <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
+              <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
+              <View style={{ width: 24 }} />
+            </ScrollView>
+            <View style={{ padding: 16, paddingTop: 0 }}>
+              <HBA1CCalculatorConnected />
+            </View>
+            <View style={styles.stub} />
+          </ScrollView>
           <View style={styles.addNoteButtonView}>
             <NoteCreationButton onClick={this.goToNoteEditor} />
           </View>
           <Fader hidden={!this.props.selectedDotId} />
         </View >
         <ChartDotInfoPopupConnect navigation={navigation} />
-      </SideMenu>
+      </SideMenu >
     );
   }
 
   renderProfileIcon() {
     return (
-      <View style={styles.profileIconView}>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Profile")}
-        >
-          <ProfileIcon fill={"white"} />
-        </TouchableOpacity>
-      </View>
+      <StyledButton
+        icon={<ProfileIcon fill={"white"} width={25} height={25} />}
+        iconPosition={IconPositionType.LEFT}
+        style={StyledButtonType.EMPTY}
+        onPress={() => this.props.navigation.navigate("Profile")}
+        withoutPadding
+      />
     );
   }
 }
@@ -180,13 +188,8 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: COLOR.PRIMARY,
   },
-  scrollViewWrapper: {
-    backgroundColor: COLOR.PRIMARY,
-  },
   scrollView: {
     height: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
   statisticsScrollView: {
@@ -210,6 +213,6 @@ const styles = StyleSheet.create({
     ...SHADOW_OPTIONS,
   },
   stub: {
-    marginTop: 152,
+    marginTop: 62,
   },
 });

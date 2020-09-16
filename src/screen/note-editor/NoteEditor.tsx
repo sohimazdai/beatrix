@@ -79,7 +79,7 @@ interface State {
   commentary: string,
   currentValueType: NoteValueType
   isTagPickerOpen?: boolean
-  selectedTags?: number[]
+  selectedTags?: string[]
 }
 
 class NoteEditor extends React.PureComponent<Props, State>{
@@ -216,7 +216,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
     })
   }
 
-  onTagSelect = (tagId: number) => {
+  onTagSelect = (tagId: string) => {
     const { tagList } = this.props;
     const { selectedTags } = this.state;
 
@@ -256,16 +256,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
             title={i18nGet('tags')}
             leftSlot={
               <StyledButton
-                icon={<TagsIcon />}
-                iconPosition={IconPositionType.LEFT}
+                icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
                 onPress={this.goToTagEditor}
                 style={StyledButtonType.EMPTY}
               />
             }
             rightSlot={
               <StyledButton
-                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} />}
-                iconPosition={IconPositionType.LEFT}
+                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={30} fill={COLOR.PRIMARY} />}
                 onPress={this.onDowArrowIconPress}
                 style={StyledButtonType.EMPTY}
               />
@@ -280,11 +278,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
     )
   }
 
-  onTagDelete = (tagId: number) => {
+  onTagDelete = (tagId: string) => {
     const { selectedTags } = this.state;
 
     this.setState({
-      selectedTags: selectedTags.filter((id: number) => id !== tagId),
+      selectedTags: selectedTags.filter((id: string) => id !== tagId),
     });
   }
 
@@ -309,8 +307,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         />
         <View style={styles.tags}>
           <StyledButton
-            icon={<TagsIcon />}
-            iconPosition={IconPositionType.LEFT}
+            icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
             label={i18nGet('add_tag_to_note')}
             onPress={this.onTagPickerOpen}
             style={StyledButtonType.EMPTY}

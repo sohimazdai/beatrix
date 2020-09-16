@@ -1,12 +1,15 @@
 import * as React from "react"
 import Svg, { Rect, Path } from "react-native-svg"
+import { COLOR } from '../../constant/Color';
 
 export function NotesIcon(props) {
+  const { fill, ...restProps } = props;
+
   return (
-    <Svg width={25} height={24} viewBox="0 0 25 24" fill="none" {...props}>
+    <Svg width={25} height={24} viewBox="0 0 25 24" fill="none" {...restProps}>
       <Path
         d="M8 9.078C8 7.93 8.93 7 10.078 7h12.844C24.07 7 25 7.93 25 9.078v12.844C25 23.07 24.07 24 22.922 24H10.078A2.078 2.078 0 018 21.922V9.078z"
-        fill="#2E3858"
+        fill={fill ? fill : COLOR.PRIMARY}
       />
       <Path
         d="M4 5.063C4 3.923 4.923 3 6.063 3h13.875C21.076 3 22 3.923 22 5.063v13.875C22 20.076 21.077 21 19.937 21H6.063A2.062 2.062 0 014 18.937V5.063z"

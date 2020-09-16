@@ -10,15 +10,29 @@ import { ChartsIcon } from '../../../../component/icon/ChartsIcon';
 import { TagsIcon } from '../../../../component/icon/TagsIcon';
 import { VegetablesIcon } from '../../../../component/icon/value-icons/VegetablesIcon';
 import { ProfileIcon } from '../../../../component/icon/ProfileIcon';
+import { Header } from '../../../../component/hat/Header';
+import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  closeSideMenu: () => void
 }
 export class SideMenuContent extends React.Component<Props> {
   render() {
+    const { closeSideMenu } = this.props;
+
     return (
       <View style={styles.view}>
-        <Text style={styles.title}>B E A T R I X</Text>
+        <Header
+          title={'B E A T R I X'}
+          rightIcon={<ArrowTaillessIcon
+            direction={ArrowDirection.RIGHT}
+            width={15}
+            height={25}
+            iconColor={COLOR.PRIMARY_WHITE}
+          />}
+          rightIconPress={closeSideMenu}
+        />
         <View style={styles.links}>
           {this.renderItem(
             i18nGet('notes'),

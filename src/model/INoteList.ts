@@ -19,7 +19,7 @@ export interface INoteListNote {
     carbsUnitWeight?: CarbsUnitWeightType
     carbsMeasuringType?: CarbsMeasuringType
 
-    tagIds?: number[]
+    tagIds?: string[]
 }
 
 export interface INoteListByDay {

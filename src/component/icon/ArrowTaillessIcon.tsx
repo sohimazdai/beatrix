@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import Svg, { Path, SvgProps } from "react-native-svg"
 import { COLOR } from '../../constant/Color'
 
 export enum ArrowDirection {
@@ -9,14 +9,14 @@ export enum ArrowDirection {
   LEFT = 'left',
 }
 
-interface Props {
+interface Props extends SvgProps {
   direction: ArrowDirection
   iconColor?: string
   isSmall?: boolean
 }
 
 export function ArrowTaillessIcon(props: Props) {
-  const { direction, iconColor, isSmall } = props;
+  const { direction, iconColor, isSmall, ...restProps } = props;
 
   const arrow = getArrow(direction, iconColor)
   const size = isSmall
@@ -31,6 +31,7 @@ export function ArrowTaillessIcon(props: Props) {
     <Svg
       {...size}
       viewBox="0 0 100 100"
+      {...restProps}
     >
       {arrow}
     </Svg>

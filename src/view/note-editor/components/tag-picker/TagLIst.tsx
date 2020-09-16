@@ -5,7 +5,7 @@ import { ITag } from '../../../../model/ITagList';
 
 interface Props {
   toShowTagRows: ITag[][];
-  onTagPress: (noteId: number) => void;
+  onTagPress: (noteId: string) => void;
   icon?: JSX.Element
 }
 

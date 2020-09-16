@@ -7,7 +7,7 @@ import { Tag } from './Tag';
 interface Props {
   tags: ITag[]
   icon: JSX.Element
-  onTagPress: (tagId: number) => void
+  onTagPress: (tagId: string) => void
 };
 
 export function TagRow(props: Props) {

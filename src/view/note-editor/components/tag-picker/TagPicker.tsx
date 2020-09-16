@@ -12,7 +12,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 interface Props {
   tagList: ITagList,
   selectedTags: string[]
-  onTagPress: (tagId: number) => void;
+  onTagPress: (tagId: string) => void;
   icon?: JSX.Element;
   viewerOfSelected?: boolean // показывает выбранные
   width?: number

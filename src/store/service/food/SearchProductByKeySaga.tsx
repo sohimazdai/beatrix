@@ -5,8 +5,7 @@ import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { getLocale, getRegion, i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
-import { createChangeFood, FoodSection, createReplaceFood, createSetFoodSearchTotal } from '../../modules/food/food';
-import { IFoodList } from '../../../model/IFood';
+import { FoodSection, createReplaceFood, createSetFoodSearchTotal } from '../../modules/food/food';
 import { checkForItIsInRuGroup } from '../../../localisation/Residents';
 
 const ACTION_TYPE = "SEARCH_PRODUCT_BY_KEY_ACTION";
@@ -39,7 +38,7 @@ function* run({ payload }: SearchProductByKeyAction) {
       let foods = {};
       let total = 0;
 
-      if (isInRussianGroup) { //TODO: delete reverse
+      if (!isInRussianGroup) { //TODO: delete reverse
         res = yield call(FoodApi.searchFatSecret, payload);
       } else {
         res = yield call(FoodApi.searchProductsByKey, payload);
@@ -48,7 +47,6 @@ function* run({ payload }: SearchProductByKeyAction) {
       foods = res.foods;
       total = res.total;
 
-      console.log('🤖🤖🤖🤖 res', res);
       yield put(createSetFoodSearchTotal(total));
       yield put(createReplaceFood(FoodSection.SEARCH, foods));
     } else {
