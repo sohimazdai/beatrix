@@ -26,6 +26,8 @@ import { TagEditor } from '../screen/tag-editor/TagEditor';
 import { FoodScreen } from '../screen/food/FoodScreen';
 import { BarcodeScanningScreen } from '../screen/food/BarcodeScanningScreen';
 import { FoodCard } from '../screen/food/FoodCard';
+import { NavigatorEntities } from './modules/NavigatorEntities';
+import { FoodCreationScreenConnected } from '../screen/food/FoodCreationScreen';
 
 setLocale(Localization.locale.slice(0, 2));
 setRegion(Localization.locale.slice(3, 5));
@@ -124,7 +126,8 @@ const AuthedNavigator = createStackNavigator(
         TagEditor: { screen: TagEditor },
         Food: { screen: FoodScreen },
         BarcodeScanning: { screen: BarcodeScanningScreen },
-        FoodCard: { screen: FoodCard }
+        FoodCard: { screen: FoodCard },
+        [NavigatorEntities.FOOD_CARD_CREATION]: { screen: FoodCreationScreenConnected },
     },
     authedStackNavigatorConfig
 )

@@ -1,5 +1,5 @@
 import React, { useRef, RefObject } from 'react';
-import { View, StyleSheet, TextInputProperties, Text } from 'react-native';
+import { View, StyleSheet, Text, TextInputProperties } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { COLOR } from '../../constant/Color';
 
@@ -10,13 +10,17 @@ interface Props extends TextInputProperties {
 export function BaseTextInput(props: Props) {
   const { referal } = props;
 
+  const style = {
+    ...styles.textInput,
+    ...(props as any).style
+  }
   return (
     <TextInput
       ref={referal}
-      style={styles.textInput}
       allowFontScaling={false}
       maxLength={30}
       {...props}
+      style={style}
       clearButtonMode={'always'}
     />
   );

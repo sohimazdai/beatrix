@@ -49,6 +49,17 @@ class FoodScreenComponent extends React.Component<Props, State> {
     );
   }
 
+  goToFoodCardCreation = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(
+      NavigatorEntities.FOOD_CARD_CREATION,
+      {
+        selectedFoodPage: FoodSection.HISTORY,
+      },
+    );
+  }
+
   onBack = () => {
     const { navigation } = this.props;
 
@@ -108,6 +119,7 @@ class FoodScreenComponent extends React.Component<Props, State> {
       case FoodSection.FAVORITES:
         return <FavoritesContentConnected
           goToFoodCard={(foodId) => this.goToFoodCard(foodId, FoodSection.FAVORITES)}
+          goToFoodCardCreation={this.goToFoodCardCreation}
         />;
 
     }

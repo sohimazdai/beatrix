@@ -32,7 +32,7 @@ export default function FoodItem(props: Props) {
               {i18nGet('food_fat')}
             </Text>
             <Text style={styles.nutrientItemValue}>
-              {item.nutrients.fat}
+              {item.nutrients.fats}
             </Text>
           </View>
           <View style={styles.nutrientsItem}>

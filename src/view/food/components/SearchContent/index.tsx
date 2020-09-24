@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, Text } from 'react-native';
 import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { i18nGet } from '../../../../localisation/Translate';
-import { createSearchProductByKeyAction } from '../../../../store/service/food/SearchProductByKeySaga';
 import { FoodList } from '../FoodList';
 import { FoodSection, createReplaceFood } from '../../../../store/modules/food/food';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { COLOR } from '../../../../constant/Color';
+import { createSearchProductsAction } from '../../../../store/service/food/SearchProductsSaga';
 
 interface Props {
   onType: (text: string) => void
@@ -34,6 +34,7 @@ function SearchContent(props: Props) {
             setTyped(text)
           }}
           defaultValue={''}
+          clearButtonMode={"while-editing"}
         />
       </View>
       {
@@ -48,7 +49,7 @@ function SearchContent(props: Props) {
 export const SearchContentConnected = connect(
   null,
   (dispatch) => ({
-    onType: (text: string) => dispatch(createSearchProductByKeyAction(text)),
+    onType: (text: string) => dispatch(createSearchProductsAction(text)),
     clearSearch: () => dispatch(createReplaceFood(FoodSection.SEARCH, {})),
   })
 )(SearchContent);
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   },
   text: {
     padding: 16,
-    fontSize: 15,
-    color: COLOR.TEXT_DIMGRAY,
+    fontSize: 17,
+    color: COLOR.TEXT_DARK_GRAY,
   },
 })

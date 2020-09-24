@@ -9,4 +9,5 @@ export enum NavigatorEntities {
   PROFILE = "Profile",
   BARCODE_SCANNING = 'BarcodeScanning',
   FOOD_CARD = 'FoodCard',
+  FOOD_CARD_CREATION = 'FoodCardCreation',
 }

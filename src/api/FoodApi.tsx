@@ -1,7 +1,7 @@
-import { barcodeFoodMapper } from './mappers/barcodeFoodMapper';
-import { IFoodListItem, IFoodList } from '../model/IFood';
+import { oFFBarcodeMapper } from './mappers/oFFBarcodeMapper';
+import { IFoodListItem, IFoodList, FoodDatabase } from '../model/IFood';
 import { createQueryString } from '../utils/create-query-string';
-import { searchFoodMapper } from './mappers/searchFoodMapper';
+import { oFFMapper } from './mappers/oFFMapper';
 import { api } from './api';
 import { fatSecretSearchMapper } from './mappers/fatSecretSearchMapper';
 import { handleErrorSilently } from '../app/ErrorHandler';
@@ -12,7 +12,15 @@ export interface SearchReturn {
 }
 
 export class FoodApi {
-  static async searchProductsByKey(key: string): Promise<(SearchReturn)> {
+  static async addProduct(product: IFoodListItem): Promise<String> {
+    return api.post('food/add', { product });
+  }
+
+  static async searchProductsInLocalDb(dbs: FoodDatabase[], name: string): Promise<SearchReturn> {
+    return api.post('food/search/dbs', { dbs, searchOptions: { name } });
+  }
+
+  static async searchOpenFoodFacts(key: string): Promise<(SearchReturn)> {
     const baseUrl = `https://world.openfoodfacts.org/cgi/search.pl`;
     const query = createQueryString({
       search_terms: key,
@@ -33,7 +41,7 @@ export class FoodApi {
 
       const { products, count } = await response.json();
 
-      const search = searchFoodMapper(products);
+      const search = oFFMapper(products);
 
       return {
         foods: search,
@@ -68,7 +76,7 @@ export class FoodApi {
     }
   }
 
-  static async getProductByBarcode(id: string): Promise<(IFoodListItem | null)> {
+  static async getOFFProductByBarcode(id: string): Promise<(IFoodListItem | null)> {
     const url = `https://world.openfoodfacts.org/api/v0/product/${id}.json`;
 
     try {
@@ -86,7 +94,7 @@ export class FoodApi {
         return null;
       }
 
-      const food = barcodeFoodMapper(product);
+      const food = oFFBarcodeMapper(product);
 
       return food;
     } catch (error) {

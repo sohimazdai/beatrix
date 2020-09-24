@@ -2,27 +2,33 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, StyleSheet, Text } from 'react-native';
-import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { i18nGet } from '../../../../localisation/Translate';
-import { createSearchProductByKeyAction } from '../../../../store/service/food/SearchProductByKeySaga';
 import { FoodList } from '../FoodList';
-import { FoodSection, foodReducer } from '../../../../store/modules/food/food';
-import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import { FoodSection } from '../../../../store/modules/food/food';
 import { COLOR } from '../../../../constant/Color';
 import { IStorage } from '../../../../model/IStorage';
 import { IFoodList } from '../../../../model/IFood';
+import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
 
 interface Props {
   favoritesList: IFoodList
   goToFoodCard: (foodId: string) => void
+  goToFoodCardCreation: () => void
 };
 
 function FavoritesContent(props: Props) {
-  const { goToFoodCard, favoritesList } = props;
+  const { goToFoodCard, goToFoodCardCreation, favoritesList } = props;
 
   const thereAreFoods = Object.values(favoritesList).length > 0;
   return (
     <View style={styles.view}>
+      <View style={styles.buttonView}>
+        <StyledButton
+          style={StyledButtonType.PRIMARY}
+          label={i18nGet('create_food_card')}
+          onPress={goToFoodCardCreation}
+        />
+      </View>
       {
         thereAreFoods
           ? <FoodList section={FoodSection.FAVORITES} goToFoodCard={goToFoodCard} />
@@ -42,9 +48,14 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
   },
+  buttonView: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
+  },
   text: {
     padding: 16,
     fontSize: 17,
-    color: COLOR.TEXT_DARK_GRAY,
+    color: COLOR.TEXT_DIMGRAY,
   },
 })

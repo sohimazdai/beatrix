@@ -1,19 +1,27 @@
+import { LocaleType, RegionType } from '../localisation/Translate';
+
 export interface IFoodNutrients {
   proteins?: number,
-  fat?: number,
+  fats?: number,
   carbohydrates?: number,
+  calories?: number,
   energy?: number,
-  energyKJ?: number,
 }
 
 export interface IFoodListItem {
   id: string
+  sourceId: string
+  barcode?: string | number
   image?: string
-  name?: string
-  genericName?: string
+  name: string
+  dbId: number
+  categoryId?: number
+  description?: string
   code?: string
   brandName?: string
   nutrients?: IFoodNutrients
+  locale?: LocaleType
+  region?: RegionType
 }
 
 export interface IFoodList {
@@ -29,4 +37,11 @@ export interface IFood {
 
   loading?: boolean
   error?: any
+}
+
+export enum FoodDatabase {
+  USDA_SR_27_PORTNOV = 100,
+  OPEN_FOOD_FACTS = 200,
+  FAT_SECRET_US = 300,
+  USERS_DB = 400,
 }

@@ -36,7 +36,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
     const { navigation } = props;
 
     setScanned(true);
-    const foodItem = await FoodApi.getProductByBarcode(data);
+    const foodItem = await FoodApi.getOFFProductByBarcode(data);
 
     if (foodItem) {
       navigation.navigate(NavigatorEntities.FOOD_CARD, { foodItem })

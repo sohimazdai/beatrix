@@ -22,7 +22,7 @@ interface Props {
   tagList: ITagList
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   onAddTag: (tag: ITag) => void
-  onRemoveTag: (tagId: number, successCallback: () => void) => void
+  onRemoveTag: (tagId: string, successCallback: () => void) => void
 };
 
 interface State {
@@ -70,7 +70,7 @@ class TagEditorComp extends React.Component<Props, State> {
 
     const newTag: ITag = {
       name: tagName,
-      id: 0,
+      id: '0',
       ...colors
     }
 
@@ -80,10 +80,8 @@ class TagEditorComp extends React.Component<Props, State> {
     });
   }
 
-  onDeleteTag = (tagId: number) => {
+  onDeleteTag = (tagId: string) => {
     const { tagList, onRemoveTag } = this.props;
-    console.log('🤖🤖🤖🤖 tagList', tagList);
-    console.log('🤖🤖🤖🤖 tagId', tagId);
     const tagName = tagList.tags[tagId].name;
 
     const cb = () => appAnalytics.sendEventWithProps(appAnalytics.events.DELETE_TAG, {
@@ -141,7 +139,7 @@ export const TagEditor = connect(
         createChangePending({ tagList: true })
       ]));
     },
-    onRemoveTag: (tagId: number, successCallback: () => void) => {
+    onRemoveTag: (tagId: string, successCallback: () => void) => {
       Alert.alert(
         i18nGet('you_want_to_delete_tag'),
         i18nGet('you_wont_use_this_tag_anymore_for_filtering_notes'),

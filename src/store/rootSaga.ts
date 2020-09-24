@@ -14,7 +14,8 @@ import { watchExportData } from './service/export/ExportDataSaga';
 import { watchCompleteOnboarding } from './service/onboarding/CompleteOnboardingSaga';
 import { watchSyncPendingData } from './service/pending/SyncPendingData';
 import { watchFetchProductByBarcode } from './service/food/FetchBarcodeProductSaga';
-import { watchSearchProductByKey } from './service/food/SearchProductByKeySaga';
+import { watchSearchProducts } from './service/food/SearchProductsSaga';
+import { watchAddProduct } from './service/food/AddProductSaga';
 
 export function* rootSaga() {
     yield all([
@@ -41,6 +42,7 @@ export function* rootSaga() {
         fork(watchSyncPendingData),
         // FOOD
         fork(watchFetchProductByBarcode),
-        fork(watchSearchProductByKey),
+        fork(watchSearchProducts),
+        fork(watchAddProduct),
     ]);
 };

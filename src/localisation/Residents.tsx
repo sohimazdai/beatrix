@@ -1,4 +1,4 @@
-const LOCALES_FOR_RUSSIAN_FATSECRET = [
+const LOCALES_FOR_RU = [
   'ru',
   'uk',
   'be',
@@ -6,7 +6,7 @@ const LOCALES_FOR_RUSSIAN_FATSECRET = [
   'ky',
 ];
 
-const REGIONS_FOR_RU_FATSECRET = [
+const REGIONS_FOR_RU = [
   'RU',
   'UA',
   'BY',
@@ -14,7 +14,7 @@ const REGIONS_FOR_RU_FATSECRET = [
   'KG',
 ];
 
-export function checkForItIsInRuGroup(locale: string, region: string) {
-  return LOCALES_FOR_RUSSIAN_FATSECRET.find(l => locale === l) ||
-    REGIONS_FOR_RU_FATSECRET.find(r => region === r);
+export function checkForIsItInRuGroup(locale: string, region: string) {
+  return !!LOCALES_FOR_RU.find(l => locale === l) ||
+    !!REGIONS_FOR_RU.find(r => region === r);
 };

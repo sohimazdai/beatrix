@@ -31,7 +31,7 @@ export interface TagListAddAction {
 
 export interface TagListRemoveAction {
     type: TagListActionType.REMOVE,
-    payload: number
+    payload: string
 }
 
 export interface TagListReplaceAction {
@@ -58,7 +58,7 @@ export function createAddTag(tag: ITag): TagListAddAction {
     }
 }
 
-export function createRemoveTag(id: number): TagListRemoveAction {
+export function createRemoveTag(id: string): TagListRemoveAction {
     return {
         type: TagListActionType.REMOVE,
         payload: id

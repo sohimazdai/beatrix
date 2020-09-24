@@ -33,7 +33,7 @@ function* run({ payload }: FetchProductByBarcodeAction) {
     const foodHistory = state.food.history;
 
     if (state.app.networkConnected) {
-      const product = yield call(FoodApi.getProductByBarcode, payload);
+      const product = yield call(FoodApi.getOFFProductByBarcode, payload);
 
       if (product && product.id) {
         yield put(

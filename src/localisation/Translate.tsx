@@ -1,6 +1,17 @@
 import i18n from 'i18n-js';
 import { logger } from '../app/Logger';
 
+export enum LocaleType {
+  es = 'es',
+  en = 'en',
+  ru = 'ru',
+}
+
+export enum RegionType {
+  ru = 'ru',
+  other = 'other',
+}
+
 const _localisationParameters = {
   locale: '',
   region: '',
@@ -22,7 +33,7 @@ export function setLocale(countryCode) {
 
 export function setRegion(regionCode) {
   logger(`CountryCode is ${regionCode}`);
-  
+
   _localisationParameters.region = regionCode;
 }
 
@@ -53,15 +64,145 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  in_100_gram_product_can_not_be_nutritients_more_than_100_gramm: {
+    'en': '100 grams of a product cannot contain more than 100 grams of nutrients',
+    'es': '100 gramos de un producto no pueden contener más de 100 gramos de nutrientes',
+    'ru': 'В 100 граммах продукта не может быть больше 100 грамм нутриентов',
+  },
+  food_is_not_added: {
+    'en': 'Failed to add product',
+    'es': 'No se pudo agregar el producto',
+    'ru': 'Не удалось добавить продукт',
+  },
+  one_of_these_fields_is_required_at_least: {
+    'en': 'At least one of these fields is required',
+    'es': 'Al menos uno de estos campos es obligatorio',
+    'ru': 'По-крайней мере одно из этих полей - обязательное',
+  },
+  type_zero_if_not_exists: {
+    'en': 'Enter 0 if the product does not contain the correct nutrients',
+    'es': 'Ingrese 0 si el producto no contiene los nutrientes correctos',
+    'ru': 'Введите 0, если продукт не содержит подходящих питательных веществ',
+  },
+  required: {
+    'en': 'Required',
+    'es': 'Obligatorio',
+    'ru': 'Обязательно',
+  },
+  food_creation_barcode: {
+    'en': 'Barcode',
+    'es': 'Código de barras',
+    'ru': 'Штрих-код',
+  },
+  food_creation_carbs: {
+    'en': 'Carbohydrates',
+    'es': 'Hidratos',
+    'ru': 'Углеводы',
+  },
+  food_creation_fats: {
+    'en': 'Fat',
+    'es': 'Grasas',
+    'ru': 'Жиры',
+  },
+  food_creation_proteins: {
+    'en': 'Protein',
+    'es': 'Proteínas',
+    'ru': 'Белки',
+  },
+  food_creation_energy: {
+    'en': 'Energy',
+    'es': 'Energía',
+    'ru': 'Энергия',
+  },
+  food_creation_calories: {
+    'en': 'Calories',
+    'es': 'Calorías',
+    'ru': 'Калорийность',
+  },
+  food_creation_brand_name: {
+    'en': 'Brand name',
+    'es': 'Nombre de la marca',
+    'ru': 'Торговая марка',
+  },
+  food_creation_product_name: {
+    'en': 'Name',
+    'es': 'Nombre',
+    'ru': 'Название',
+  },
+  create_food_card: {
+    'en': 'Add product',
+    'es': 'Agregar producto',
+    'ru': 'Создать продукт',
+  },
+  food_card_creation: {
+    'en': 'Product card creation',
+    'es': 'Creación de tarjetas de producto',
+    'ru': 'Создание карточки продукта',
+  },
+  food_brand_name: {
+    'en': 'Brand name',
+    'es': 'Nombre de la marca',
+    'ru': 'Торговый знак',
+  },
+  food_card: {
+    'en': 'Product card',
+    'es': 'Tarjeta del producto',
+    'ru': 'Карточка продукта',
+  },
+  food_db_unknown: {
+    'en': 'Unknown',
+    'es': 'Desconocido',
+    'ru': 'Неизвестно',
+  },
+  food_db_users_db: {
+    'en': 'Products added by users',
+    'es': 'Productos agregados por los usuarios',
+    'ru': 'Продукты, добавленные пользователями',
+  },
+  food_db_usda_27_portnov: {
+    'en': 'USDA SR27 Nutrient Database in Russian. Translated by Portnov N.M., Mosov A.V.',
+    'es': 'Base de datos de nutrientes USDA SR27 en ruso. Traducido por Portnov N.M., Mosov A.V.',
+    'ru': 'База данных нутриентов продуктов USDA SR27 по-русски. Перевод Портнов Н.М., Мосов А.В.',
+  },
+  food_db_off: {
+    'en': 'OpenFoodFacts',
+    'es': 'OpenFoodFacts',
+    'ru': 'OpenFoodFacts',
+  },
+  food_db_fat_secret: {
+    'en': 'FatSecret',
+    'es': 'FatSecret',
+    'ru': 'FatSecret',
+  },
+  food_source: {
+    'en': 'Source',
+    'es': 'Fuente',
+    'ru': 'Источник',
+  },
   for_100g_of_product: {
-    'en': 'Per 100 grams of product',
-    'es': 'Por 100 gramos de producto',
+    'en': 'Per 100 grams',
+    'es': 'Por 100 gramos',
     'ru': 'На 100 грамм продукта',
   },
+  food_search_tips_4: {
+    'en': 'You can add a product yourself in the "Favorites" tab',
+    'es': 'Puede agregar un producto usted mismo en la pestaña "Mis productos"',
+    'ru': 'Вы можете добавить продукт самостоятельно во вкладке "Мои продукты"',
+  },
+  food_search_tips_3: {
+    'en': 'Search and scan history is located in the "History" tab',
+    'es': 'El historial de búsqueda y escaneo se encuentra en la pestaña "Historia"',
+    'ru': 'История поиска и сканирования находится во вкладке "История"',
+  },
+  food_search_tips_2: {
+    'en': 'To scan a product by barcode, click on the icon in the upper right corner',
+    'es': 'Para escanear un producto por código de barras, haga clic en el icono en la esquina superior derecha',
+    'ru': 'Чтобы сканировать продукт по штрихкоду, нажмите на иконку в правом верхнем углу',
+  },
   food_search_tips_1: {
-    'en': 'To find a food, enter the whole word from the product name',
-    'es': 'Para encontrar un producto, ingrese la palabra completa del nombre del producto',
-    'ru': 'Чтобы найти продукт, введите слово из названия продукта целиком',
+    'en': 'Start typing to find food',
+    'es': 'Empiece a escribir para buscar comida',
+    'ru': 'Начните печатать, чтобы найти продукты',
   },
   you_are_have_not_history: {
     'en': 'Search for products or scan, the whole story will be saved here',
@@ -69,9 +210,29 @@ const translateStore = {
     'ru': 'Ищите продукты или сканируйте, вся история сохраниться здесь',
   },
   you_not_added_any_food_yet: {
-    'en': 'This will display the products you save when searching or scanning',
-    'es': 'Esto mostrará los productos que guarda al buscar o escanear',
-    'ru': 'Здесь будут отображаться продукты, которые вы сохраните при поиске или сканировании',
+    'en': 'Products that you bookmark when searching or scanning, as well as those that you added yourself will be displayed here.',
+    'es': 'Los productos que marque como favoritos al buscar o escanear, así como los que agregó usted mismo, se mostrarán aquí.',
+    'ru': 'Здесь будут отображаться продукты, которые вы сохраните при поиске или сканировании, а также те, которые вы добавили',
+  },
+  kcal: {
+    'en': 'kcal',
+    'es': 'kcal',
+    'ru': 'ккал',
+  },
+  kJ: {
+    'en': 'kJ',
+    'es': 'kJ',
+    'ru': 'кДж',
+  },
+  food_energy: {
+    'en': 'Energy',
+    'es': 'Energía',
+    'ru': 'Энергия',
+  },
+  food_calories: {
+    'en': 'Calories',
+    'es': 'Calorías',
+    'ru': 'Калории',
   },
   food_fat: {
     'en': 'Fats',
