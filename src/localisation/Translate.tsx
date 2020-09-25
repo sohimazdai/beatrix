@@ -64,6 +64,26 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  indicate_portion: {
+    'en': 'Specify portion',
+    'es': 'Especificar porción',
+    'ru': 'Укажите порцию',
+  },
+  gram: {
+    'en': 'g',
+    'es': 'g',
+    'ru': 'г',
+  },
+  add_racion: {
+    'en': 'Add meal',
+    'es': 'Agregar comida',
+    'ru': 'Добавить прием пищи',
+  },
+  weight_of_product: {
+    'en': 'Product weight',
+    'es': 'Peso del Producto',
+    'ru': 'Вес продукта',
+  },
   in_100_gram_product_can_not_be_nutritients_more_than_100_gramm: {
     'en': '100 grams of a product cannot contain more than 100 grams of nutrients',
     'es': '100 gramos de un producto no pueden contener más de 100 gramos de nutrientes',
@@ -95,7 +115,7 @@ const translateStore = {
     'ru': 'Штрих-код',
   },
   food_creation_carbs: {
-    'en': 'Carbohydrates',
+    'en': 'Carbs',
     'es': 'Hidratos',
     'ru': 'Углеводы',
   },
@@ -183,6 +203,11 @@ const translateStore = {
     'en': 'Per 100 grams',
     'es': 'Por 100 gramos',
     'ru': 'На 100 грамм продукта',
+  },
+  food_search_tips_add: {
+    'en': 'You can create a product. It will be automatically added to your favorites and you can find it in the search.',
+    'es': 'Puedes crear un producto. Se agregará automáticamente a "Mis productos" y podrás encontrarlo en la búsqueda.',
+    'ru': 'Вы можете создать продукт. Он будет автоматически добавлен в "Мои продукты", и вы сможете найти его в поиске.',
   },
   food_search_tips_4: {
     'en': 'You can add a product yourself in the "Favorites" tab',
@@ -572,7 +597,7 @@ const translateStore = {
     ru: 'Глюкоза',
   },
   breadUnits: {
-    en: 'Carbohydrates',
+    en: 'Bread unit',
     es: 'Racion de HC',
     ru: 'ХЕ',
   },

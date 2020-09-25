@@ -1,5 +1,6 @@
 import { GlycemiaMeasuringType, CarbsUnitWeightType, CarbsMeasuringType } from './IUserDiabetesProperties';
 import { ITag } from './ITagList';
+import { IFoodList } from './IFood';
 
 export interface INoteList {
     [id: string]: INoteListNote
@@ -20,6 +21,8 @@ export interface INoteListNote {
     carbsMeasuringType?: CarbsMeasuringType
 
     tagIds?: string[]
+
+    foodList?: IFoodList
 }
 
 export interface INoteListByDay {

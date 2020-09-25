@@ -1,17 +1,24 @@
 import React from 'react';
-import { KeyboardTypeOptions, Text, View, StyleSheet } from 'react-native';
+import { KeyboardTypeOptions, Text, View, StyleSheet, NativeSyntheticEvent, TextInputChangeEventData, TextInputFocusEventData } from 'react-native';
+import { NativeViewGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { COLOR } from '../../../../constant/Color';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
   isFormWithError?: boolean
   isRequired?: boolean
   type?: KeyboardTypeOptions
-  value?: string
+  value?: string | number
   placeholder?: string
-  onTextChange: (text: string) => void
   label: string
+  autoFocus?: boolean
+  withoutMarginTop?: boolean
+  highlighted?: boolean
+  disabled?: boolean
+  onTextChange: (text: string) => void
+  onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void
 };
 
 export class FoodCreationInput extends React.Component<Props> {
@@ -22,23 +29,41 @@ export class FoodCreationInput extends React.Component<Props> {
   }
 
   render() {
-    const { label, onTextChange, placeholder, isRequired, type, value } = this.props;
+    const {
+      label, placeholder, type, value,
+      isRequired, disabled, withoutMarginTop, highlighted, autoFocus,
+      onTextChange, onFocus,
+    } = this.props;
     const { isErrored } = this;
 
     const placeholderText = isRequired
       ? `${placeholder ? placeholder + ' ' : ''}${i18nGet('required')}`
       : placeholder;
 
-    const inputStyles = isErrored
+    let inputStyles = isErrored
       ? { ...styles.input, ...styles.inputErrored }
       : styles.input;
+
+    inputStyles = highlighted
+      ? { ...inputStyles, ...styles.inputHighlighted }
+      : inputStyles;
+
+    inputStyles = disabled
+      ? { ...inputStyles, ...styles.inputDisabled }
+      : inputStyles;
 
     const labelStyles = isErrored
       ? { ...styles.inputLabel, ...styles.inputLabelErrored }
       : styles.inputLabel;
 
+    const wrapStyles = withoutMarginTop
+      ? { ...styles.wrap, ...{ marginTop: 0 } }
+      : styles.wrap;
+
+    const stringedValue = String(value);
+
     return (
-      <View style={styles.wrap}>
+      <View style={wrapStyles} >
         <Text style={labelStyles}>
           {label}
         </Text>
@@ -47,7 +72,10 @@ export class FoodCreationInput extends React.Component<Props> {
           keyboardType={type}
           onChangeText={onTextChange}
           placeholder={placeholderText}
-          value={value}
+          value={stringedValue}
+          autoFocus={autoFocus}
+          onFocus={onFocus}
+          disabled={disabled}
         />
       </View>
     );
@@ -58,6 +86,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1,
     marginTop: 16,
+    height: 74,
   },
   inputLabel: {
     fontSize: 15,
@@ -68,9 +97,18 @@ const styles = StyleSheet.create({
     color: COLOR.RED_DARK,
   },
   input: {
+    height: 50,
     minHeight: 50,
+    backgroundColor: COLOR.PRIMARY_WHITE,
   },
   inputErrored: {
     borderColor: COLOR.RED_DARK,
   },
+  inputHighlighted: {
+    borderColor: COLOR.BLUE,
+    ...SHADOW_OPTIONS,
+  },
+  inputDisabled: {
+    backgroundColor: COLOR.DISABLED
+  }
 });

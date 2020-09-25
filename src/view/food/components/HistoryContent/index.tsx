@@ -26,6 +26,7 @@ function HistoryContent(props: Props) {
             <FoodList
               section={FoodSection.HISTORY}
               goToFoodCard={goToFoodCard}
+              sortBy="dateAdded"
               reversible
               cutTo={100}
             />

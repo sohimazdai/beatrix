@@ -46,6 +46,8 @@ import { TagsIcon } from '../../component/icon/TagsIcon';
 import { PopupHeader } from '../../component/popup/PopupHeader';
 import { Avoiding } from '../../component/avoiding/Avoiding';
 import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
+import { FoodListComponent } from '../../view/food/components/FoodList';
+import { IFoodList, IFoodListItem } from '../../model/IFood';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -58,6 +60,7 @@ const INITIAL_STATE = {
   commentary: '',
   currentValueType: null,
   selectedTags: [],
+  foodList: {},
 };
 
 interface Props {
@@ -80,6 +83,7 @@ interface State {
   currentValueType: NoteValueType
   isTagPickerOpen?: boolean
   selectedTags?: string[]
+  foodList: IFoodList,
 }
 
 class NoteEditor extends React.PureComponent<Props, State>{
@@ -114,6 +118,30 @@ class NoteEditor extends React.PureComponent<Props, State>{
     appAnalytics.sendEventWithProps(appAnalytics.events.NOTE_EDITOR_SEEN, {
       isEditing: note ? true : false
     })
+  }
+
+  componentDidUpdate(pP: Props) {
+    const { navigation } = this.props;
+    const { foodList } = this.state;
+
+    const foodForNote = navigation.getParam('foodForNote');
+
+    console.log('🤖🤖🤖🤖 prev food', pP.navigation.getParam('foodForNote'));
+    console.log('🤖🤖🤖🤖 this food', foodForNote);
+
+    if (
+      (
+        pP.navigation.getParam('foodForNote')?.nutrients?.weight !== foodForNote.nutrients.weight ||
+        pP.navigation.getParam('foodForNote')?.id !== foodForNote.id
+      ) && foodForNote
+    ) {
+      this.setState({
+        foodList: {
+          ...foodList,
+          [foodForNote.id]: foodForNote
+        }
+      })
+    }
   }
 
   closeEditor = () => {
@@ -288,6 +316,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
   renderPickerBlock() {
     const { currentValueType, selectedTags, isTagPickerOpen, ...note } = this.state;
+
     return (
       <View style={styles.inputBlock}>
         <View style={styles.timePickers}>
@@ -305,12 +334,27 @@ class NoteEditor extends React.PureComponent<Props, State>{
           selectedType={this.state.currentValueType}
           {...note}
         />
+        <View style={styles.foods}>
+          <StyledButton
+            icon={<VegetablesIcon width={30} height={30} />}
+            iconPosition={IconPositionType.LEFT}
+            label={i18nGet('add_food')}
+            onPress={this.goToFood}
+            style={StyledButtonType.EMPTY}
+          />
+          <FoodListComponent
+            foodList={note.foodList}
+            goToFoodCard={this.goToFoodCard}
+            forNote
+          />
+        </View>
         <View style={styles.tags}>
           <StyledButton
             icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
             label={i18nGet('add_tag_to_note')}
             onPress={this.onTagPickerOpen}
             style={StyledButtonType.EMPTY}
+            iconPosition={IconPositionType.LEFT}
           />
           <TagPicker
             viewerOfSelected
@@ -365,11 +409,29 @@ class NoteEditor extends React.PureComponent<Props, State>{
     });
   }
 
+  goToFoodCard = (foodId?: string) => {
+    const { navigation } = this.props;
+    const { foodList } = this.state;
+
+    const foodItem = foodList[foodId];
+    console.log('🤖🤖🤖🤖 from note to card', foodItem);
+    navigation.navigate(NavigatorEntities.FOOD_CARD, {
+      backPage: NavigatorEntities.NOTE_EDITOR,
+      isForNote: true,
+      foodForNote: null,
+      foodItem,
+      isEditing: true,
+    });
+  }
+
   goToFood = () => {
     const { navigation } = this.props;
 
     navigation.navigate(NavigatorEntities.FOOD_PAGE, {
       backPage: NavigatorEntities.NOTE_EDITOR,
+      isForNote: true,
+      foodForNote: null,
+      isEditing: false,
     });
   }
 
@@ -380,16 +442,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
       case NoteValueType.GLUCOSE:
         return this.renderInputByType(NoteValueType.GLUCOSE, glucose)
       case NoteValueType.BREAD_UNITS:
-        return <>
-          {this.renderInputByType(NoteValueType.BREAD_UNITS, breadUnits)}
-          <StyledButton
-            icon={<VegetablesIcon width={30} height={30} />}
-            iconPosition={IconPositionType.LEFT}
-            label={i18nGet('add_food')}
-            onPress={this.goToFood}
-            style={StyledButtonType.EMPTY}
-          />
-        </>
+        return this.renderInputByType(NoteValueType.BREAD_UNITS, breadUnits)
       case NoteValueType.SHORT_INSULIN:
         return <>
           {this.renderInputByType(NoteValueType.SHORT_INSULIN, insulin)}
@@ -621,7 +674,7 @@ const styles = StyleSheet.create({
   },
   inputBlock: {
     width: '100%',
-    maxWidth: 280,
+    maxWidth: 320,
     paddingBottom: 20,
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -648,6 +701,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  foods: {
+    width: '100%',
+    marginTop: 16,
+    alignItems: 'flex-start',
   },
   tags: {
     width: '100%',

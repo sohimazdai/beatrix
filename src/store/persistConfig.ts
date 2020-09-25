@@ -8,6 +8,7 @@ export const persistConfig: PersistConfig = {
         'interactive',
         'noteFilter',
         // 'noteList',
+        // 'pendingNoteList',
         // 'userDiabetesProperties',
         // 'userPropertiesShedule',
         // 'user',

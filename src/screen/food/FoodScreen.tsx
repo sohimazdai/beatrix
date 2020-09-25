@@ -40,11 +40,14 @@ class FoodScreenComponent extends React.Component<Props, State> {
   goToFoodCard = (foodId: string, section: FoodSection) => {
     const { navigation, food } = this.props;
 
+    const isForNote = navigation.getParam('isForNote');
+
     navigation.navigate(
       NavigatorEntities.FOOD_CARD,
       {
         selectedFoodPage: FoodSection.HISTORY,
         foodItem: food[section][foodId],
+        isForNote: isForNote,
       },
     );
   }
@@ -111,6 +114,7 @@ class FoodScreenComponent extends React.Component<Props, State> {
       case FoodSection.SEARCH:
         return <SearchContentConnected
           goToFoodCard={(foodId) => this.goToFoodCard(foodId, FoodSection.SEARCH)}
+          goToFoodCardCreation={this.goToFoodCardCreation}
         />;
       case FoodSection.HISTORY:
         return <HistoryContentConnected

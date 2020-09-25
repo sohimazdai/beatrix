@@ -109,13 +109,15 @@ export class StyledButton extends React.Component<Props> {
   }
 
   get iconStyle() {
-    const { iconPosition } = this.props;
+    const { iconPosition, label } = this.props;
 
     const iconLeft = iconPosition === IconPositionType.LEFT;
 
-    return iconLeft
-      ? { ...styles.icon, marginRight: 8 }
-      : { ...styles.icon, marginLeft: 8 }
+    return !label
+      ? styles.icon
+      : iconLeft
+        ? { ...styles.icon, marginRight: 8 }
+        : { ...styles.icon, marginLeft: 8 }
   }
 
   render() {
@@ -211,6 +213,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: COLOR.TEXT_WHITE,
+    borderRadius: 10,
     opacity: 0.5,
   },
 })

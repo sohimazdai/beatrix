@@ -114,7 +114,13 @@ class FoodCreationScreen extends React.Component<Props> {
       return;
     }
 
-    if (!name || !calories || !proteins || !fats || !carbohydrates) {
+    if (
+      !name ||
+      (!calories && calories !== 0) ||
+      (!proteins && proteins !== 0) ||
+      (!fats && fats !== 0) ||
+      (!carbohydrates && carbohydrates !== 0)
+    ) {
       this.setState({ isErrored: true })
       return;
     }
@@ -126,7 +132,6 @@ class FoodCreationScreen extends React.Component<Props> {
       dbId: FoodDatabase.USERS_DB,
     };
 
-
     addProduct(product);
     this.setState({ isErrored: false });
 
@@ -137,12 +142,12 @@ class FoodCreationScreen extends React.Component<Props> {
     const { name, brandName, barcode, calories, energy, proteins, fats, carbohydrates, isErrored } = this.state;
 
     return (
-      <View>
+      <View style={styles.view}>
         <BlockHat
           onBackPress={this.onBack}
           title={i18nGet('food_card_creation')}
         />
-        <ScrollView style={styles.view}>
+        <ScrollView style={styles.scrollView}>
           <FoodCreationInput
             label={i18nGet('food_creation_product_name')}
             onTextChange={(text: string) => this.setState({ name: text })}
@@ -242,9 +247,11 @@ export const FoodCreationScreenConnected = connect(
 
 const styles = StyleSheet.create({
   view: {
+    flex: 1,
+  },
+  scrollView: {
     padding: 16,
     paddingTop: 0,
-    flexGrow: 1,
   },
   rowSection: {
     marginTop: 16,

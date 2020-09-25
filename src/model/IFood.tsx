@@ -6,6 +6,8 @@ export interface IFoodNutrients {
   carbohydrates?: number,
   calories?: number,
   energy?: number,
+
+  weight?: number
 }
 
 export interface IFoodListItem {
@@ -22,6 +24,7 @@ export interface IFoodListItem {
   nutrients?: IFoodNutrients
   locale?: LocaleType
   region?: RegionType
+  dateAdded?: number
 }
 
 export interface IFoodList {

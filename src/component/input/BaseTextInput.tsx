@@ -5,23 +5,24 @@ import { COLOR } from '../../constant/Color';
 
 interface Props extends TextInputProperties {
   referal?: RefObject<TextInput>
+  disabled?: boolean
 };
 
 export function BaseTextInput(props: Props) {
-  const { referal } = props;
+  const { referal, disabled } = props;
 
   const style = {
     ...styles.textInput,
-    ...(props as any).style
+    ...(props as any).style,
+    fontSize: 16,
   }
   return (
     <TextInput
       ref={referal}
       allowFontScaling={false}
-      maxLength={30}
+      editable={!disabled}
       {...props}
       style={style}
-      clearButtonMode={'always'}
     />
   );
 }

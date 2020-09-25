@@ -5,7 +5,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import { createChangeFood, FoodSection, createRemoveFoodItem } from '../../store/modules/food/food';
 import { IFoodListItem, IFoodList, FoodDatabase } from '../../model/IFood';
 import { batchActions } from 'redux-batched-actions';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { StyledButton, StyledButtonType, IconPositionType } from '../../component/button/StyledButton';
 import { FavoritesIcom } from '../../component/icon/FavoritesIcon';
@@ -13,6 +13,11 @@ import { COLOR } from '../../constant/Color';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
+import { FoodCreationInput } from '../../view/food/components/FoodCreationInput';
+import { FoodCalculatorConnected } from '../../view/food/components/FoodCalculator';
+import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
+import { PopupHeader } from '../../component/popup/PopupHeader';
+import { ArrowDirection, ArrowTaillessIcon } from '../../component/icon/ArrowTaillessIcon';
 
 interface OwnProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -36,21 +41,35 @@ function FoodCardComponent(props: Props) {
     favoritesList,
   } = props;
 
-  useEffect(() => addToHistory(foodItem), []);
+  const [popupOpen, setPopupOpen] = React.useState(true);
+
+  useEffect(() => {
+    addToHistory(foodItem);
+  }, []);
 
   const onBack = () => {
     const selectedFoodPage = navigation.getParam('selectedFoodPage') || null;
     navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
   };
 
-  const isSelected = favoritesList[foodItem.id];
+  const isSelected = favoritesList && favoritesList[foodItem.id];
   const handler = isSelected
     ? () => removeFoodItemFromFavorites(foodItem)
     : () => addFoodItemToFavorites(foodItem);
 
-  const energy = foodItem.nutrients.energy || foodItem.nutrients.calories
+  const isForNote = navigation.getParam('isForNote');
+
+
+  const isEditing: boolean = navigation.getParam('isEditing');
+  const popupBodyStyles = isEditing
+    ? { ...styles.popup, ...styles.editingBg }
+    : styles.popup;
+  const popupStickerStyles = isEditing
+    ? { ...styles.openPopupSticker, ...styles.editingBg }
+    : styles.openPopupSticker;
+
   return (
-    <View>
+    <View style={styles.wrap}>
       <BlockHat
         title={i18nGet('food_card')}
         onBackPress={onBack}
@@ -133,6 +152,31 @@ function FoodCardComponent(props: Props) {
           </Text>
         </View>
       </View>
+      {isForNote && !popupOpen && (
+        <View style={styles.openPopupSticker}>
+          <StyledButton
+            icon={<ArrowTaillessIcon width={20} height={20} fill={COLOR.PRIMARY} direction={ArrowDirection.UP} />}
+            onPress={() => setPopupOpen(true)}
+            style={StyledButtonType.EMPTY}
+            iconPosition={IconPositionType.LEFT}
+          />
+        </View>
+      )}
+      <SuperPopup direction={PopupDirection.BOTTOM_TOP} hidden={!isForNote || !popupOpen}>
+        <View style={styles.popup}>
+          <PopupHeader
+            title={i18nGet('indicate_portion')}
+            rightSlot={
+              <StyledButton
+                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} fill={COLOR.PRIMARY} />}
+                style={StyledButtonType.EMPTY}
+                onPress={() => setPopupOpen(false)}
+              />
+            }
+          />
+          <FoodCalculatorConnected navigation={navigation} />
+        </View>
+      </SuperPopup>
     </View>
   );
 }
@@ -174,18 +218,27 @@ export const FoodCard = connect(
       ]));
     },
     addToHistory: (foodItem: IFoodListItem) => {
-      dispatch(createChangeFood(FoodSection.HISTORY, { [foodItem.id]: foodItem }));
+      dispatch(createChangeFood(
+        FoodSection.HISTORY,
+        {
+          [foodItem.id]: { ...foodItem, dateAdded: new Date().getTime() }
+        }
+      ));
     },
   })
 )(FoodCardComponent)
 
 const styles = StyleSheet.create({
+  wrap: {
+    height: '100%',
+  },
   view: {
     padding: 16,
   },
   imageWrap: {
     borderRadius: 10,
     backgroundColor: COLOR.PRIMARY_WHITE,
+    marginBottom: 16,
     ...SHADOW_OPTIONS,
   },
   image: {
@@ -196,7 +249,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 19,
     color: COLOR.TEXT_DARK_GRAY,
-    marginTop: 16,
   },
   brandName: {
     fontSize: 17,
@@ -257,4 +309,20 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: COLOR.TEXT_DIMGRAY,
   },
+  popup: {
+    backgroundColor: COLOR.BLUE_BASE,
+    padding: 16,
+  },
+  openPopupSticker: {
+    position: 'absolute',
+    bottom: 0,
+    right: 16,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    padding: 8,
+    backgroundColor: COLOR.BLUE_BASE,
+  },
+  editingBg: {
+    backgroundColor: COLOR.RED_BASE
+  }
 })

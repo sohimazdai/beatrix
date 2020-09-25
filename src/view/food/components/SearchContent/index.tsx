@@ -9,20 +9,37 @@ import { FoodSection, createReplaceFood } from '../../../../store/modules/food/f
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { COLOR } from '../../../../constant/Color';
 import { createSearchProductsAction } from '../../../../store/service/food/SearchProductsSaga';
+import { IStorage } from '../../../../model/IStorage';
+import { IFoodList } from '../../../../model/IFood';
+import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
+import { AddNoteIcon } from '../../../../component/icon/AddNoteIcon';
 
 interface Props {
+  searchFood: IFoodList
+  loading: boolean
   onType: (text: string) => void
   goToFoodCard: (foodId: string) => void
+  goToFoodCardCreation: () => void
   clearSearch: () => void;
 };
 
 function SearchContent(props: Props) {
-  const { onType, goToFoodCard, clearSearch } = props;
+  const { onType, goToFoodCard, clearSearch, searchFood, goToFoodCardCreation, loading } = props;
   const [typed, setTyped] = React.useState('');
+  const [searched, setSearched] = React.useState(false);
+
+  const isListEmpty = Object.values(searchFood).length === 0;
 
   useEffect(() => {
     clearSearch();
   }, []);
+
+  useEffect(() => {
+    !loading && !!typed && setTimeout(() => {
+      !loading && setSearched(true)
+    }, 1000);
+    loading && setSearched(false)
+  }, [loading])
 
   return (
     <View style={styles.view}>
@@ -39,7 +56,19 @@ function SearchContent(props: Props) {
       </View>
       {
         !!typed
-          ? <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
+          ? isListEmpty && searched
+            ? (
+              <View style={styles.emptyListButton}>
+                <StyledButton
+                  style={StyledButtonType.PRIMARY}
+                  onPress={goToFoodCardCreation}
+                  label={i18nGet('create_food_card')}
+                  icon={<AddNoteIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
+                  iconPosition={IconPositionType.RIGHT}
+                />
+                <Text style={styles.text}>{i18nGet('food_search_tips_add')}</Text>
+              </View>
+            ) : <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
           : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
       }
     </View>
@@ -47,7 +76,10 @@ function SearchContent(props: Props) {
 }
 
 export const SearchContentConnected = connect(
-  null,
+  (state: IStorage) => ({
+    searchFood: state.food.search,
+    loading: state.user.loading,
+  }),
   (dispatch) => ({
     onType: (text: string) => dispatch(createSearchProductsAction(text)),
     clearSearch: () => dispatch(createReplaceFood(FoodSection.SEARCH, {})),
@@ -70,4 +102,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: COLOR.TEXT_DARK_GRAY,
   },
+  emptyListButton: {
+    flex: 1,
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  }
 })

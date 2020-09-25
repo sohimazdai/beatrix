@@ -35,4 +35,5 @@ export enum COLOR {
     TEXT_WHITE = '#FFFFFF',
 
     TRANSPARENT = 'transparent',
+    DISABLED = '#ededed',
 }
