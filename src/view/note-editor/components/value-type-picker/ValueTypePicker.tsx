@@ -16,7 +16,7 @@ interface Props {
     selectedType?: NoteValueType
 
     glucose?: number
-    breadUnits?: number
+    breadUnits?: number | string
     insulin?: number
     longInsulin?: number
     commentary?: string

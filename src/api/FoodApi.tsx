@@ -1,10 +1,11 @@
-import { oFFBarcodeMapper } from './mappers/oFFBarcodeMapper';
 import { IFoodListItem, IFoodList, FoodDatabase } from '../model/IFood';
 import { createQueryString } from '../utils/create-query-string';
 import { oFFMapper } from './mappers/oFFMapper';
 import { api } from './api';
 import { fatSecretSearchMapper } from './mappers/fatSecretSearchMapper';
 import { handleErrorSilently } from '../app/ErrorHandler';
+import { localDBFoodItemMapper } from './mappers/localDbFoodItemMapper';
+import { oFFBarcodeMapper } from './mappers/oFFBarcodeMapper';
 
 export interface SearchReturn {
   foods: IFoodList,
@@ -12,6 +13,52 @@ export interface SearchReturn {
 }
 
 export class FoodApi {
+  static async getFoodIdsFromFavorites(userId: string) {
+    return api.post('favorites/get', { userId });
+  }
+
+  static async removeFoodIdFromFavorites(userId: string, foodIds: string[]) {
+    return api.post('favorites/remove', { userId, foodIds });
+  }
+
+  static async addFoodIdToFavorites(userId: string, foodId: string) {
+    return api.post('favorites/add', { userId, foodId });
+  }
+
+  static async getFoodItemById(foodId: string): Promise<IFoodListItem | null> {
+    try {
+      const response = await api.post('food/get', { foodId });
+
+      if (!response.data) {
+        return null;
+      }
+
+      const foodItem = localDBFoodItemMapper(response.data);
+
+      return foodItem;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  static async getByBarcodeFromLocalDB(barcode: string): Promise<IFoodListItem | null> {
+    try {
+      const response = await api.post('food/get/barcode', { barcode });
+
+      if (!response.data) {
+        return null;
+      }
+
+      const food = localDBFoodItemMapper(response.data);
+
+      return food;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   static async addProduct(product: IFoodListItem): Promise<String> {
     return api.post('food/add', { product });
   }

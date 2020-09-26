@@ -16,6 +16,10 @@ import { watchSyncPendingData } from './service/pending/SyncPendingData';
 import { watchFetchProductByBarcode } from './service/food/FetchBarcodeProductSaga';
 import { watchSearchProducts } from './service/food/SearchProductsSaga';
 import { watchAddProduct } from './service/food/AddProductSaga';
+import { watchGetFoodItemById } from './service/food/GetFoodItemById';
+import { watchAddProductToFavorite } from './service/food/AddProductToFavoriteSaga';
+import { watchRemoveProdcutFromFavorite } from './service/food/RemoveProductFromFavoritesSaga';
+import { watchGetFavoritesProducts } from './service/food/GetFavoritesProductsSaga';
 
 export function* rootSaga() {
     yield all([
@@ -44,5 +48,10 @@ export function* rootSaga() {
         fork(watchFetchProductByBarcode),
         fork(watchSearchProducts),
         fork(watchAddProduct),
+        fork(watchGetFoodItemById),
+        // FOOD_FAVORITE
+        fork(watchAddProductToFavorite),
+        fork(watchRemoveProdcutFromFavorite),
+        fork(watchGetFavoritesProducts),
     ]);
 };

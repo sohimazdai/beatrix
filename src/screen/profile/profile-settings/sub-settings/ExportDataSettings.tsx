@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { styles } from './Style';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { IInteractive } from '../../../../model/IInteractive';
-import { Hat } from '../../../../component/hat/Hat';
 import { IStorage } from '../../../../model/IStorage';
 import { i18nGet } from '../../../../localisation/Translate';
 import { ExportDataConnect } from '../../../../view/profile/settings/export-data-picker/components/ExportDataPicker';
 import { Fader } from '../../../../component/fader/Fader';
 import { IUser } from '../../../../model/IUser';
 import { appAnalytics } from '../../../../app/Analytics';
+import { BlockHat } from '../../../../component/hat/BlockHat';
 
 interface Props {
   interactive: IInteractive
@@ -30,7 +30,7 @@ export class ExportDataSettingsComponent extends Component<Props> {
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Hat
+        <BlockHat
           onBackPress={() => this.props.navigation.navigate('Profile')}
           title={i18nGet('export_data')}
         />

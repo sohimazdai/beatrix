@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   valueText: {
     color: COLOR.TEXT_BLACK,
-    fontSize: 19,
+    fontSize: 17,
   },
   tooltipText: {
     color: COLOR.PRIMARY_WHITE,

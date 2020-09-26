@@ -33,7 +33,9 @@ class FoodCreationScreen extends React.Component<Props> {
     id: foodToCreateId,
     sourceId: foodToCreateId,
     dbId: FoodDatabase.USERS_DB,
-    barcode: this.props.navigation.getParam('barcode'),
+    barcode: !!this.props.navigation.getParam('barcode')
+      ? this.props.navigation.getParam('barcode')
+      : '',
     name: '',
     brandName: '',
     calories: '',
@@ -212,7 +214,7 @@ class FoodCreationScreen extends React.Component<Props> {
             />
             <View style={styles.space} />
             <FoodCreationInput
-              label={i18nGet('food_creation_carbs')}
+              label={i18nGet('food_creation_carbohydrates')}
               onTextChange={(text: string) => this.setState({ carbohydrates: text })}
               value={carbohydrates}
               isFormWithError={isErrored}
@@ -265,6 +267,7 @@ const styles = StyleSheet.create({
   },
   buttonBar: {
     marginTop: 24,
+    paddingBottom: 16,
   },
   space: {
     padding: 2,

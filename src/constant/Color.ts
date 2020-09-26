@@ -36,4 +36,6 @@ export enum COLOR {
 
     TRANSPARENT = 'transparent',
     DISABLED = '#ededed',
+
+    HALF_TRANSPARENT = 'rgba(255, 255, 255, 0.5)',
 }

@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { COLOR } from '../../../../constant/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../../localisation/Translate';
+import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
 
 interface Props {
   item: IFoodListItem
@@ -20,34 +21,19 @@ export default function NoteFoodItem(props: Props) {
             {item.name}
           </Text>
           <Text style={styles.weight}>
-            {item.nutrients.weight}
+            {numberizeAndFix(item.nutrients.weight) + ' ' + i18nGet('gram')}
           </Text>
         </View>
         <View style={styles.nutrients}>
-          <View style={styles.nutrientsItem}>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_proteins')}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {item.nutrients.proteins}
-            </Text>
-          </View>
-          <View style={styles.nutrientsItem}>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_fat')}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {item.nutrients.fats}
-            </Text>
-          </View>
-          <View style={styles.nutrientsItem}>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_carbohydrates')}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {item.nutrients.carbohydrates}
-            </Text>
-          </View>
+          <Text style={styles.nutrientText}>
+            {`${i18nGet('food_proteins')} ${item.nutrients.proteins}`}
+          </Text>
+          <Text style={styles.nutrientText}>
+            {`${i18nGet('food_fat')} ${item.nutrients.fats}`}
+          </Text>
+          <Text style={styles.nutrientText}>
+            {`${i18nGet('food_creation_carbohydrates')} ${item.nutrients.carbohydrates}`}
+          </Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -68,6 +54,7 @@ const styles = StyleSheet.create({
   titleRow: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     flex: 1,
@@ -77,7 +64,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   weight: {
-    width: 80,
+    minWidth: 70,
+    paddingLeft: 8,
+    fontSize: 16,
+    lineHeight: 22,
+    textAlign: "right",
   },
   nutrients: {
     display: 'flex',
@@ -86,18 +77,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  nutrientsItem: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    paddingRight: 8,
-  },
-  nutrientItemTitle: {
-    textAlign: 'left',
+  nutrientText: {
+    flex: 1,
     color: COLOR.TEXT_DARK_GRAY,
-  },
-  nutrientItemValue: {
-    width: 35,
-    paddingLeft: 4,
-    color: COLOR.TEXT_DARK_GRAY,
-  },
+  }
 })

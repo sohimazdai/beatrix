@@ -18,6 +18,8 @@ import { INoteList } from '../../../model/INoteList';
 import { appAnalytics } from '../../../app/Analytics';
 import { createChangeTagList, createMergeTags } from '../../modules/tag-list/tagList';
 import { ITagListTags } from '../../../model/ITagList';
+import { createGetFoodItemByIdAction } from '../food/GetFoodItemById';
+import { createGetFavoritesProductsAction } from '../food/GetFavoritesProductsSaga';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -126,7 +128,10 @@ function* syncUser({ payload }: SyncUserAction) {
                     createChangeUserPropertiesShedule(result.data.shedule),
                     createUserChangeAction({ isNeedToShowOnboarding }),
                 ])
-            )
+            );
+
+            // SYNC FAVORITES FOOD
+            yield put(createGetFavoritesProductsAction());
         }
 
         appAnalytics.sendEvent(appAnalytics.events.USER_SYNCED);

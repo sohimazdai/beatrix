@@ -7,6 +7,7 @@ export const persistConfig: PersistConfig = {
         'modal',
         'interactive',
         'noteFilter',
+        //________o b l i v i o n________l i n e________//
         // 'noteList',
         // 'pendingNoteList',
         // 'userDiabetesProperties',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { createChangeFood, FoodSection, createRemoveFoodItem } from '../../store/modules/food/food';
-import { IFoodListItem, IFoodList, FoodDatabase } from '../../model/IFood';
+import { IFoodListItem, IFoodList, FoodDatabase, IFood } from '../../model/IFood';
 import { batchActions } from 'redux-batched-actions';
 import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { BlockHat } from '../../component/hat/BlockHat';
@@ -18,6 +18,12 @@ import { FoodCalculatorConnected } from '../../view/food/components/FoodCalculat
 import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
 import { PopupHeader } from '../../component/popup/PopupHeader';
 import { ArrowDirection, ArrowTaillessIcon } from '../../component/icon/ArrowTaillessIcon';
+import { selectSelectedFoodItem } from '../../view/food/selectors/select-selected-food-item';
+import { createAddProductAction } from '../../store/service/food/AddProductSaga';
+import { createGetFoodItemByIdAction } from '../../store/service/food/GetFoodItemById';
+import { Loader } from '../../component/loader/Loader';
+import { createAddProductToFavoriteAction } from '../../store/service/food/AddProductToFavoriteSaga';
+import { createRemoveProdcutFromFavoriteAction } from '../../store/service/food/RemoveProductFromFavoritesSaga';
 
 interface OwnProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -26,16 +32,25 @@ interface OwnProps {
 interface Props extends OwnProps {
   foodItem: IFoodListItem
   favoritesList: IFoodList
+  foodId: string
+  foodLoading: boolean
+  addProductToFavoriteInDb: (foodId: string) => void
   addFoodItemToFavorites: (foodItem: IFoodListItem) => void
   removeFoodItemFromFavorites: (foodItem: IFoodListItem) => void
+  removeProductFromFavoriteInDb: (foodIds: string[]) => void
   addToHistory: (foodItem: IFoodListItem) => void
+  autoAddToDb: (foodItem: IFoodListItem) => void
+  getFoodItemById: (foodId: string) => void
 }
 
 function FoodCardComponent(props: Props) {
   const {
     foodItem,
     addToHistory,
+    autoAddToDb,
+    addProductToFavoriteInDb,
     addFoodItemToFavorites,
+    removeProductFromFavoriteInDb,
     removeFoodItemFromFavorites,
     navigation,
     favoritesList,
@@ -45,17 +60,30 @@ function FoodCardComponent(props: Props) {
 
   useEffect(() => {
     addToHistory(foodItem);
+    autoAddToDb(foodItem);
   }, []);
 
   const onBack = () => {
+    const backPage = navigation.getParam('backPage');
+    if (backPage) {
+      navigation.navigate(backPage);
+
+      return;
+    }
+
     const selectedFoodPage = navigation.getParam('selectedFoodPage') || null;
     navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
   };
 
   const isSelected = favoritesList && favoritesList[foodItem.id];
   const handler = isSelected
-    ? () => removeFoodItemFromFavorites(foodItem)
-    : () => addFoodItemToFavorites(foodItem);
+    ? () => {
+      removeFoodItemFromFavorites(foodItem);
+      removeProductFromFavoriteInDb([foodItem.id]);
+    } : () => {
+      addFoodItemToFavorites(foodItem);
+      addProductToFavoriteInDb(foodItem.id);
+    };
 
   const isForNote = navigation.getParam('isForNote');
 
@@ -153,7 +181,7 @@ function FoodCardComponent(props: Props) {
         </View>
       </View>
       {isForNote && !popupOpen && (
-        <View style={styles.openPopupSticker}>
+        <View style={popupStickerStyles}>
           <StyledButton
             icon={<ArrowTaillessIcon width={20} height={20} fill={COLOR.PRIMARY} direction={ArrowDirection.UP} />}
             onPress={() => setPopupOpen(true)}
@@ -163,7 +191,7 @@ function FoodCardComponent(props: Props) {
         </View>
       )}
       <SuperPopup direction={PopupDirection.BOTTOM_TOP} hidden={!isForNote || !popupOpen}>
-        <View style={styles.popup}>
+        <View style={popupBodyStyles}>
           <PopupHeader
             title={i18nGet('indicate_portion')}
             rightSlot={
@@ -199,12 +227,70 @@ function getDbName(dbId: number | string) {
   }
 }
 
+function FoodCardLoader(props: Props) {
+  const { foodItem, navigation, foodId, foodLoading, getFoodItemById } = props;
+
+  const onBack = () => {
+    const backPage = navigation.getParam('backPage');
+    if (backPage) {
+      navigation.navigate(backPage);
+
+      return;
+    }
+
+    const selectedFoodPage = navigation.getParam('selectedFoodPage') || null;
+    navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
+  };
+
+
+  if (!foodItem) {
+    useEffect(
+      () => {
+        getFoodItemById(foodId)
+      },
+      []
+    );
+
+    return (
+      <View>
+        <BlockHat
+          onBackPress={onBack}
+          title={i18nGet('food_card')}
+        />
+        {
+          foodLoading
+            ? (
+              <View style={styles.foodCardLoaderContent}>
+                <Text style={styles.foodLoadingStatusText}>
+                  {i18nGet('food_loading_now')}
+                </Text>
+                <Loader isManaged isManagedLoading color={COLOR.PRIMARY} />
+              </View>
+            ) : (
+              <View style={styles.foodCardLoaderContent}>
+                <Text style={styles.foodLoadingStatusText}>
+                  {i18nGet('food_not_loaded_we_are_sorry_try_later')}
+                </Text>
+              </View>
+            )
+        }
+      </View>
+    );
+  }
+
+  return <FoodCardComponent {...props} />
+}
+
 export const FoodCard = connect(
   (state: IStorage, ownProps: OwnProps) => ({
-    foodItem: ownProps.navigation.getParam('foodItem') || null,
+    foodItem: selectSelectedFoodItem(state, ownProps.navigation.getParam('foodItem')?.id),
+    foodId: ownProps.navigation.getParam('foodItem')?.id,
+    foodLoading: state.food.loading,
     favoritesList: state.food.favorites,
   }),
   (dispatch) => ({
+    addProductToFavoriteInDb: (foodId: string) => dispatch(createAddProductToFavoriteAction(foodId)),
+    removeProductFromFavoriteInDb: (foodIds: string[]) => dispatch(createRemoveProdcutFromFavoriteAction(foodIds)),
     addFoodItemToFavorites: (foodItem: IFoodListItem) => {
       dispatch(batchActions([
         createChangeFood(FoodSection.FAVORITES, { [foodItem.id]: foodItem }),
@@ -225,8 +311,12 @@ export const FoodCard = connect(
         }
       ));
     },
+    autoAddToDb: (foodItem: IFoodListItem) => {
+      dispatch(createAddProductAction(foodItem, { auto: true }));
+    },
+    getFoodItemById: (foodId: string) => dispatch(createGetFoodItemByIdAction(foodId))
   })
-)(FoodCardComponent)
+)(FoodCardLoader)
 
 const styles = StyleSheet.create({
   wrap: {
@@ -324,5 +414,17 @@ const styles = StyleSheet.create({
   },
   editingBg: {
     backgroundColor: COLOR.RED_BASE
-  }
+  },
+  foodCardLoaderContent: {
+    width: '100%',
+    height: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  foodLoadingStatusText: {
+    fontSize: 18,
+    color: COLOR.PRIMARY,
+    padding: 16,
+  },
 })

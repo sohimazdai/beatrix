@@ -1,15 +1,10 @@
 import React from 'react';
 import {
   View,
-  Text,
-  TouchableOpacity,
   TextInput,
   Keyboard,
   Alert,
   StyleSheet,
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -38,16 +33,18 @@ import { createCreateNoteAction } from '../../store/service/note/CreateNoteSaga'
 import { createUpdateNoteAction } from '../../store/service/note/UpdateNoteSaga';
 import { appAnalytics } from '../../app/Analytics';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
-import { Hat } from '../../component/hat/Hat';
 import { TagPicker } from '../../view/note-editor/components/tag-picker/TagPicker';
 import { StyledButton, IconPositionType, StyledButtonType } from '../../component/button/StyledButton';
 import { ITagList } from '../../model/ITagList';
 import { TagsIcon } from '../../component/icon/TagsIcon';
 import { PopupHeader } from '../../component/popup/PopupHeader';
-import { Avoiding } from '../../component/avoiding/Avoiding';
 import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
 import { FoodListComponent } from '../../view/food/components/FoodList';
-import { IFoodList, IFoodListItem } from '../../model/IFood';
+import { IFoodList } from '../../model/IFood';
+import { sumMealTotal } from '../../view/food/modules/sumMealTotal';
+import { numberizeAndFix } from '../../api/helper/numberize-and-fix';
+import { MealTotal } from '../../view/note-editor/components/MealTotal';
+import { BlockHat } from '../../component/hat/BlockHat';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -125,22 +122,29 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { foodList } = this.state;
 
     const foodForNote = navigation.getParam('foodForNote');
-
-    console.log('🤖🤖🤖🤖 prev food', pP.navigation.getParam('foodForNote'));
-    console.log('🤖🤖🤖🤖 this food', foodForNote);
+    const foodIdToRemove = navigation.getParam('foodIdToRemove');
 
     if (
       (
-        pP.navigation.getParam('foodForNote')?.nutrients?.weight !== foodForNote.nutrients.weight ||
-        pP.navigation.getParam('foodForNote')?.id !== foodForNote.id
+        pP.navigation.getParam('foodForNote')?.nutrients?.weight !== foodForNote?.nutrients?.weight ||
+        pP.navigation.getParam('foodForNote')?.id !== foodForNote?.id
       ) && foodForNote
     ) {
       this.setState({
         foodList: {
           ...foodList,
           [foodForNote.id]: foodForNote
-        }
+        },
       })
+    }
+
+    if (!pP.navigation.getParam('foodIdToRemove') && !!foodIdToRemove) {
+      const newList = { ...foodList };
+      delete newList[foodIdToRemove];
+
+      this.setState({ foodList: newList });
+
+      navigation.setParams({ foodIdToRemove: null })
     }
   }
 
@@ -148,6 +152,21 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { navigation } = this.props;
 
     navigation.goBack();
+  }
+
+  get additionalCarbs() {
+    const { userDiabetesProperties: { carbsMeasuringType, carbsUnitWeightType } } = this.props;
+    const { foodList } = this.state;
+
+    const measuring = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
+    const buWeight = Measures.getDefaultCarbsUnitWeightType(carbsUnitWeightType);
+    const carbsTotal = sumMealTotal(foodList).carbohydrates;
+
+    if (measuring === CarbsMeasuringType.BREAD_UNITS) {
+      return numberizeAndFix(carbsTotal / buWeight);
+    } else {
+      return numberizeAndFix(carbsTotal);
+    }
   }
 
   render() {
@@ -158,44 +177,23 @@ class NoteEditor extends React.PureComponent<Props, State>{
       : i18nGet('note_creation');
 
     return (
-      <>
-        <View
-          style={note
-            ? styles.noteEditingView
-            : styles.noteCreationView
-          }
-        >
-          <ScrollView>
-            <Hat
-              onBackPress={this.closeEditor}
-              title={title}
-            />
-            <View
-              style={note
-                ? styles.noteEditingViewScrollView
-                : styles.noteCreationViewScrollView
-              }
-            >
-              <View
-                style={
-                  note
-                    ? styles.noteEditingScrollViewContent
-                    : styles.noteCreationScrollViewContent
-                }
-              >
-                {this.renderPickerBlock()}
-              </View>
-            </View>
-          </ScrollView>
-          <View style={styles.buttonsBlock}>
-            {this.props.note && this.renderDeleteButton()}
-            {this.renderSaveButton()}
-          </View>
+      <View style={{ ...styles.wrap, ...(!!note ? styles.wrapEditiing : {}) }}>
+        <BlockHat
+          onBackPress={this.closeEditor}
+          title={title}
+        />
+        <ScrollView style={styles.scrollView} contentContainerStyle={{ flexGrow: 1, }}>
+          {this.renderPickerBlock()}
+          <View style={styles.bottomSpace} />
+        </ScrollView>
+        <View style={styles.buttonsBlock}>
+          {this.props.note && this.renderDeleteButton()}
+          {this.renderSaveButton()}
         </View>
-        {this.renderInputPopup()}
-        {this.renderCommentInputPopup()}
-        {this.renderTagsPopup()}
-      </>
+        { this.renderInputPopup()}
+        { this.renderCommentInputPopup()}
+        { this.renderTagsPopup()}
+      </View>
     )
   }
 
@@ -333,6 +331,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
           onSelect={this.onValueTypePickerSelect}
           selectedType={this.state.currentValueType}
           {...note}
+          breadUnits={
+            !!note.breadUnits && !!this.additionalCarbs
+              ? `${note.breadUnits}+${this.additionalCarbs}`
+              : 0
+          }
         />
         <View style={styles.foods}>
           <StyledButton
@@ -342,11 +345,16 @@ class NoteEditor extends React.PureComponent<Props, State>{
             onPress={this.goToFood}
             style={StyledButtonType.EMPTY}
           />
-          <FoodListComponent
-            foodList={note.foodList}
-            goToFoodCard={this.goToFoodCard}
-            forNote
-          />
+          <View style={styles.foodList}>
+            <FoodListComponent
+              foodList={note.foodList}
+              goToFoodCard={this.goToFoodCard}
+              forNote
+            />
+          </View>
+          {Object.values(note.foodList).length > 1 && (
+            <MealTotal foodList={note.foodList} />
+          )}
         </View>
         <View style={styles.tags}>
           <StyledButton
@@ -414,7 +422,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { foodList } = this.state;
 
     const foodItem = foodList[foodId];
-    console.log('🤖🤖🤖🤖 from note to card', foodItem);
+
     navigation.navigate(NavigatorEntities.FOOD_CARD, {
       backPage: NavigatorEntities.NOTE_EDITOR,
       isForNote: true,
@@ -447,7 +455,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
         return <>
           {this.renderInputByType(NoteValueType.SHORT_INSULIN, insulin)}
           <NoteInsulinDoseRecommendationConnect
-            note={this.noteFromState}
+            note={{
+              ...this.noteFromState,
+              breadUnits: this.noteFromState.breadUnits + this.additionalCarbs
+            }}
             goToInsulinSettings={this.goToInsulinSettings}
           />
         </>
@@ -566,7 +577,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
       this.closeEditor();
     }
     else {
-      if (note.glucose || note.breadUnits || note.insulin || note.longInsulin || note.commentary) {
+      if (
+        note.glucose || note.breadUnits || note.insulin ||
+        note.longInsulin || note.commentary || this.additionalCarbs
+      ) {
         this.props.dispatch(createCreateNoteAction({
           ...note,
           glycemiaType: Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType),
@@ -646,36 +660,24 @@ export const NoteEditorConnect = connect(
 )(NoteEditor)
 
 const styles = StyleSheet.create({
-  noteCreationView: {
-    backgroundColor: COLOR.PRIMARY,
-  },
-  noteEditingView: {
-    backgroundColor: COLOR.PRIMARY,
-  },
-  scrollView: {
-  },
-  noteCreationViewScrollView: {
-    height: Dimensions.get('screen').height,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+  wrap: {
+    position: 'relative',
     backgroundColor: COLOR.BLUE_BASE,
+    flex: 1,
   },
-  noteEditingViewScrollView: {
-    height: Dimensions.get('screen').height,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+  wrapEditiing: {
+    position: 'relative',
     backgroundColor: COLOR.RED_BASE,
   },
-  noteEditingScrollViewContent: {
-    alignItems: 'center',
-  },
-  noteCreationScrollViewContent: {
-    alignItems: 'center',
+  scrollView: {
+    height: '100%',
+    flexGrow: 1,
   },
   inputBlock: {
-    width: '100%',
-    maxWidth: 320,
+    flex: 1,
+    maxWidth: 400,
     paddingBottom: 20,
+    paddingHorizontal: 16,
     flexDirection: 'column',
     justifyContent: 'flex-start',
 
@@ -706,11 +708,22 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 16,
     alignItems: 'flex-start',
+    backgroundColor: COLOR.HALF_TRANSPARENT,
+    padding: 8,
+    borderRadius: 10,
+  },
+  foodList: {
+    flex: 1,
+    width: '100%',
   },
   tags: {
     width: '100%',
     marginTop: 16,
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    backgroundColor: COLOR.HALF_TRANSPARENT,
+    padding: 8,
+    borderRadius: 10,
   },
   tagPopupContent: {
     padding: POPUP_PADDING_HORIZONTAL,
@@ -729,6 +742,10 @@ const styles = StyleSheet.create({
     margin: 15,
     marginBottom: 0,
     paddingBottom: 50,
+  },
+  bottomSpace: {
+    width: '100%',
+    height: 120,
   },
   saveButtonTouchable: {
     padding: 15,

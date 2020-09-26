@@ -148,7 +148,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     );
     var isButtonShowing = sortedDays.length !== daysToRender.length;
     return daysToRender.length !== 0 ? (
-      <ScrollView style={styles.cardsView}>
+      <ScrollView style={styles.cardsScrollView}>
         {
           daysToRender.map(day => {
             return (
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
-  cardsView: {
+  cardsScrollView: {
     height: '100%',
     width: '100%',
     backgroundColor: COLOR.PRIMARY_WHITE,

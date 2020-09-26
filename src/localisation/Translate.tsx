@@ -64,6 +64,86 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  food_not_loaded_we_are_sorry_try_later: {
+    'en': 'Failed to load data',
+    'es': 'No se pudieron cargar los datos',
+    'ru': 'Не удалось загрузить данные',
+  },
+  food_loading_now: {
+    'en': 'Data is loading',
+    'es': 'Los datos se están cargando',
+    'ru': 'Загружаем данные',
+  },
+  food_in_dev: {
+    'en': 'Food (In developing)',
+    'es': 'Comida (En desarrollo)',
+    'ru': 'Продукты (В разработке)',
+  },
+  scan_again: {
+    'en': 'Scan again',
+    'es': 'Escanea otra vez',
+    'ru': 'Сканировать снова',
+  },
+  we_have_no_access: {
+    'en': 'No access to camera',
+    'es': 'Sin acceso a la cámara',
+    'ru': 'Нет доступа к камере',
+  },
+  requesting_for_camera_permissions: {
+    'en': 'Camera access requesting',
+    'es': 'Solicitud de acceso a la cámara',
+    'ru': 'Запрашиваем доступ к камере',
+  },
+  scan_try_again: {
+    'en': 'Try again',
+    'es': 'Probar de nuevo',
+    'ru': 'Еще раз',
+  },
+  search_food: {
+    'en': 'Search',
+    'es': 'Buscar',
+    'ru': 'Найти',
+  },
+  add_food_handly: {
+    'en': 'Add product',
+    'es': 'Añadir producto',
+    'ru': 'Добавить продукт',
+  },
+  what_you_want_to_do_later: {
+    'en': 'Choose further action',
+    'es': 'Elija otra acción',
+    'ru': 'Выберите дальнейшее действие',
+  },
+  scan_failed: {
+    'en': 'The scanned product was not found',
+    'es': 'No se encontró el producto escaneado',
+    'ru': 'Отсканированный продукт не найден',
+  },
+  carbohydrates_short: {
+    'en': 'C',
+    'es': 'C',
+    'ru': 'У',
+  },
+  fats_short: {
+    'en': 'F',
+    'es': 'F',
+    'ru': 'Ж',
+  },
+  proteins_short: {
+    'en': 'P',
+    'es': 'P',
+    'ru': 'Б',
+  },
+  total: {
+    'en': 'Total',
+    'es': 'Totales',
+    'ru': 'Всего',
+  },
+  remove_racion: {
+    'en': 'Remove',
+    'es': 'Eliminar',
+    'ru': 'Убрать',
+  },
   indicate_portion: {
     'en': 'Specify portion',
     'es': 'Especificar porción',
@@ -74,9 +154,14 @@ const translateStore = {
     'es': 'g',
     'ru': 'г',
   },
+  racion: {
+    'en': 'Meal',
+    'es': 'Comida',
+    'ru': 'Прием пищи',
+  },
   add_racion: {
     'en': 'Add meal',
-    'es': 'Agregar comida',
+    'es': 'Añadir comida',
     'ru': 'Добавить прием пищи',
   },
   weight_of_product: {
@@ -114,7 +199,7 @@ const translateStore = {
     'es': 'Código de barras',
     'ru': 'Штрих-код',
   },
-  food_creation_carbs: {
+  food_creation_carbohydrates: {
     'en': 'Carbs',
     'es': 'Hidratos',
     'ru': 'Углеводы',
@@ -613,7 +698,7 @@ const translateStore = {
   },
   comment: {
     en: 'Comment',
-    es: 'Сomentarios',
+    es: 'Сomentario',
     ru: 'Комментарий',
   },
 

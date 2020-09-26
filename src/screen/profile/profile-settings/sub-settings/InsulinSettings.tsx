@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { styles } from './Style';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { IInteractive } from '../../../../model/IInteractive';
-import { Hat } from '../../../../component/hat/Hat';
 import { IStorage } from '../../../../model/IStorage';
 import { ProfileSettingsSheduleTableConnect } from '../../../../view/profile/settings/shedule-picker/ProfileSettingsSheduleTable';
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
 import { i18nGet } from '../../../../localisation/Translate';
 import { ShortInsulinTypePickerConnect } from '../../../../view/profile/settings/select-picker/ShortInsulinTypePicker';
 import { appAnalytics } from '../../../../app/Analytics';
+import { BlockHat } from '../../../../component/hat/BlockHat';
 
 interface Props {
   interactive: IInteractive
@@ -19,7 +19,7 @@ interface Props {
 
 export class InsulinSettingsComponent extends Component<Props> {
   componentDidMount() {
-    appAnalytics.sendEventWithProps(appAnalytics.events.SETTINGS_SEEN,{
+    appAnalytics.sendEventWithProps(appAnalytics.events.SETTINGS_SEEN, {
       screenName: 'Insulin'
     });
   }
@@ -43,7 +43,7 @@ export class InsulinSettingsComponent extends Component<Props> {
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Hat
+        <BlockHat
           onBackPress={this.onBack}
           title={i18nGet('insulin_settings')}
         />

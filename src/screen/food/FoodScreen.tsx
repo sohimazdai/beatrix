@@ -89,7 +89,7 @@ class FoodScreenComponent extends React.Component<Props, State> {
       <View style={styles.screen}>
         <BlockHat
           onBackPress={this.onBack}
-          title={i18nGet('food')}
+          title={i18nGet('food_in_dev')}
           rightSideSlot={<StyledButton
             icon={<ScanBarcodeIcon width={30} height={30} fill={COLOR.PRIMARY_WHITE} />}
             style={StyledButtonType.EMPTY}
@@ -125,7 +125,6 @@ class FoodScreenComponent extends React.Component<Props, State> {
           goToFoodCard={(foodId) => this.goToFoodCard(foodId, FoodSection.FAVORITES)}
           goToFoodCardCreation={this.goToFoodCardCreation}
         />;
-
     }
   }
 }

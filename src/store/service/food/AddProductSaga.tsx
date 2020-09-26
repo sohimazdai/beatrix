@@ -11,7 +11,7 @@ import { FoodSection } from '../../modules/food/food';
 
 const ACTION_TYPE = "ADD_PRODUCT_TO_DB";
 
-export function createAddProductAction(foodItem: IFoodListItem) {
+export function createAddProductAction(foodItem: IFoodListItem, options?: Options) {
   return batchActions([
     createUserChangeAction({
       loading: true,
@@ -20,16 +20,22 @@ export function createAddProductAction(foodItem: IFoodListItem) {
     {
       type: ACTION_TYPE,
       payload: foodItem,
+      options
     },
   ])
+}
+
+interface Options {
+  auto: boolean
 }
 
 interface AddProductAction {
   type: 'ADD_PRODUCT_TO_DB',
   payload: IFoodListItem
+  options: Options
 }
 
-function* run({ payload }: AddProductAction) {
+function* run({ payload, options }: AddProductAction) {
   try {
     const state: IStorage = yield select(state => state);
     if (state.app.networkConnected) {
@@ -39,6 +45,7 @@ function* run({ payload }: AddProductAction) {
         ...nutrients,
       }
 
+      //TODO: HANDLE AUTO ADDING
       const foodToSaveLocally: IFoodListItem = {
         ...restFood,
         nutrients,
@@ -46,10 +53,12 @@ function* run({ payload }: AddProductAction) {
       const { data: { success } } = yield call(FoodApi.addProduct, foodToSaveInDb);
 
       if (success) {
-        yield put(createChangeFood(
-          FoodSection.FAVORITES,
-          { [foodToSaveLocally.id]: foodToSaveLocally }
-        ));
+        if (!options?.auto) {
+          yield put(createChangeFood(
+            FoodSection.FAVORITES,
+            { [foodToSaveLocally.id]: foodToSaveLocally }
+          ));
+        }
       } else {
         alert(i18nGet('food_is_not_added'))
       }

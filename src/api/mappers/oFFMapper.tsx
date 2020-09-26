@@ -1,6 +1,7 @@
 import { convertCaloriesToEnergy, convertEnergyToCalories } from '../../calculation-services/food-calculation-services/calories-energy-converter';
 import { FoodDatabase, IFoodList } from '../../model/IFood';
 import { numberizeAndFix } from '../helper/numberize-and-fix';
+import { v1 as uuidv1 } from 'uuid';
 
 export function oFFMapper(products: any[]): IFoodList {
   const searchFood: IFoodList = {};
@@ -19,8 +20,10 @@ export function oFFMapper(products: any[]): IFoodList {
 
     if (!id || !name) return;
 
+    const idForDb = uuidv1();
+
     searchFood[id] = {
-      id,
+      id: idForDb,
       sourceId: id,
       barcode: product['code'],
       name,

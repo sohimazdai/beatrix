@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
+import { View, Text, TouchableOpacity, BackHandler, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
@@ -23,6 +23,11 @@ import { i18nGet } from '../../../../../localisation/Translate';
 import { selectAverageValue } from '../../selectors/select-value-average';
 import { appAnalytics } from '../../../../../app/Analytics';
 import { NavigatorEntities } from '../../../../../navigator/modules/NavigatorEntities';
+import { PopupHeader } from '../../../../../component/popup/PopupHeader';
+import { IconPositionType, StyledButton, StyledButtonType } from '../../../../../component/button/StyledButton';
+import { ArrowDirection, ArrowTaillessIcon } from '../../../../../component/icon/ArrowTaillessIcon';
+import { sumMealTotal } from '../../../../food/modules/sumMealTotal';
+import { FoodListComponent } from '../../../../food/components/FoodList';
 
 interface ChartDotInfoPopupProps {
     note?: INoteListNote
@@ -41,7 +46,8 @@ interface Props extends OwnProps, ChartDotInfoPopupProps { }
 
 export class ChartDotInfoPopup extends React.Component<Props> {
     componentDidMount() {
-        const { closePopup } = this.props;
+        const { closePopup, navigation } = this.props;
+
         BackHandler.addEventListener('hardwareBackPress', function close() {
             closePopup();
         });
@@ -63,7 +69,20 @@ export class ChartDotInfoPopup extends React.Component<Props> {
     goToNoteEditor = (noteId?: string) => {
         const { navigation } = this.props;
 
-        navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
+        navigation.navigate(NavigatorEntities.NOTE_EDITOR, {
+            noteId,
+            backPage: (navigation.state as any).routeName
+        });
+    }
+
+    goToFoodCard = (foodId?: string) => {
+        const { navigation, note } = this.props;
+        const foodItem = note.foodList?.[foodId];
+
+        navigation.navigate(NavigatorEntities.FOOD_CARD, {
+            foodItem,
+            backPage: (navigation.state as any).routeName
+        });
     }
 
     getChartPopupTitle = () => {
@@ -91,6 +110,7 @@ export class ChartDotInfoPopup extends React.Component<Props> {
                 return displayingDate
         }
     }
+
     render() {
         const {
             selectedChartPeriod = ChartPeriodType.DAY,
@@ -105,66 +125,73 @@ export class ChartDotInfoPopup extends React.Component<Props> {
             hidden={!note}
             direction={PopupDirection.BOTTOM_TOP}
         >
-            <View style={styles.animatedView}>
-                <LinearGradient
-                    style={styles.popupGradient}
-                    colors={['#DFF2FF', '#F6F8FF']}
-                >
-                    {note && <>
-                        <View style={styles.dateTitleView}>
-                            <Text style={styles.dateTitle}>
-                                {this.getChartPopupTitle()}
-                            </Text>
-                        </View>
-                        <View style={styles.upperValues}>
-                            <ChartDotInfoPopupValue
-                                type={ChartValueType.GLUCOSE}
-                                value={note[ChartValueType.GLUCOSE]}
-                            />
-                            <ChartDotInfoPopupValue
-                                type={ChartValueType.INSULIN}
-                                value={note[ChartValueType.INSULIN]}
-                            />
-                        </View>
-                        <View style={styles.bottomValues}>
-                            <ChartDotInfoPopupValue
-                                type={ChartValueType.BREAD_UNITS}
-                                value={note[ChartValueType.BREAD_UNITS]}
-                            />
-                            <ChartDotInfoPopupValue
-                                type={ChartValueType.LONG_INSULIN}
-                                value={note[ChartValueType.LONG_INSULIN]}
-                            />
-                        </View>
-                        {!!note.commentary && <ScrollView style={styles.commentValue}>
-                            <View>
-                                <Text style={styles.commentValueText}>
-                                    {note.commentary}
-                                </Text>
-                            </View>
-                        </ScrollView>}
-                    </>}
-                    <TouchableOpacity
-                        style={styles.closeTouchable}
-                        onPress={closePopup}
-                    >
-                        <CloseIcon />
-                    </TouchableOpacity>
-                    {editable && (
-                        <View style={styles.editNoteIconTouchableView}>
-                            <TouchableOpacity
-                                style={styles.editNoteIconTouchable}
+            <LinearGradient
+                style={styles.popupGradient}
+                colors={['#DFF2FF', '#F6F8FF']}
+            >
+                {note && <ScrollView style={styles.wrap}>
+                    <PopupHeader
+                        title={this.getChartPopupTitle()}
+                        leftSlot={(
+                            editable && <StyledButton
+                                icon={<EditNoteIcon width={30} height={30} fill={COLOR.PRIMARY} />}
+                                iconPosition={IconPositionType.LEFT}
                                 onPress={() => {
                                     this.goToNoteEditor(note.id);
                                     closePopup();
                                 }}
-                            >
-                                <EditNoteIcon style={styles.editNoteIcon} />
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                </LinearGradient>
-            </View>
+                                style={StyledButtonType.EMPTY}
+                            />
+                        )}
+                        rightSlot={(
+                            <StyledButton
+                                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} fill={COLOR.PRIMARY} />}
+                                iconPosition={IconPositionType.RIGHT}
+                                onPress={closePopup}
+                                style={StyledButtonType.EMPTY}
+                            />
+                        )}
+                    />
+                    <View style={styles.upperValues}>
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.GLUCOSE}
+                            value={note[ChartValueType.GLUCOSE]}
+                        />
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.INSULIN}
+                            value={note[ChartValueType.INSULIN]}
+                        />
+                    </View>
+                    <View style={styles.bottomValues}>
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.BREAD_UNITS}
+                            value={note[ChartValueType.BREAD_UNITS]}
+                        />
+                        <ChartDotInfoPopupValue
+                            type={ChartValueType.LONG_INSULIN}
+                            value={note[ChartValueType.LONG_INSULIN]}
+                        />
+                    </View>
+                    <View style={styles.valueBlock}>
+                        <Text style={styles.blockTitle}>
+                            {i18nGet('racion')}
+                        </Text>
+                        <FoodListComponent
+                            foodList={note.foodList}
+                            goToFoodCard={this.goToFoodCard}
+                            forNote
+                        />
+                    </View>
+                    {!!note.commentary && <View style={styles.valueBlock}>
+                        <Text style={styles.blockTitle}>
+                            {i18nGet('comment')}
+                        </Text>
+                        <Text style={styles.commentValueText}>
+                            {note.commentary}
+                        </Text>
+                    </View>}
+                </ScrollView>}
+            </LinearGradient>
         </SuperPopup>
     }
 }
@@ -200,24 +227,13 @@ export const ChartDotInfoPopupConnect = connect(
 )(ChartDotInfoPopup)
 
 const styles = StyleSheet.create({
-    animatedView: {
-        width: '100%',
-        display: 'flex',
-
-        borderRadius: 25,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-        backgroundColor: COLOR.WHITE,
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden'
+    wrap: {
+        maxHeight: Dimensions.get('screen').height / 2,
+        padding: 16,
     },
     popupGradient: {
         width: '100%',
         display: 'flex',
-
-        padding: 15,
-        paddingBottom: 35,
 
         justifyContent: 'center',
         alignItems: 'center',
@@ -246,39 +262,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    commentValue: {
-        marginTop: 15,
+    blockTitle: {
+        fontSize: 17,
+        color: COLOR.PRIMARY,
+    },
+    valueBlock: {
         width: '100%',
-        maxHeight: 200,
+        marginVertical: 16,
+        padding: 8,
+        backgroundColor: COLOR.HALF_TRANSPARENT,
         borderRadius: 10,
-        backgroundColor: "white",
-        padding: 15,
-        overflow: 'scroll'
     },
     commentValueText: {
-        fontSize: 18,
+        marginTop: 4,
+        fontSize: 16,
         color: "#333333"
     },
-    closeTouchable: {
-        position: 'absolute',
-        right: 20,
-        top: 20,
-        borderRadius: 50,
-        ...SHADOW_OPTIONS,
-    },
-    editNoteIconTouchableView: {
-        position: 'absolute',
-        left: 20,
-        top: 20,
-        backgroundColor: "#fff",
-        borderRadius: 5,
-        ...SHADOW_OPTIONS,
-    },
-    editNoteIconTouchable: {
-
-    },
-    editNoteIcon: {
-        width: 30,
-        height: 30
-    }
 })

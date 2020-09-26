@@ -11,10 +11,19 @@ export enum FoodActionType {
     REPLACE = "FOOD_REPLACE",
     REMOVE_ITEM = "FOOD_ITEM_REMOVE",
     SET_TOTAL_SEARCh = "FOOD_SET_TOTAL_SEARCH",
+    SET_LOADING_AND_ERROR = "FOOD_SET_LOADING_AND_ERROR",
 }
 
 export type FoodActionTypes = FoodChangeAction | FoodReplaceAction | FoodItemRemoveAction |
-    FoodSearchTotalSetAction;
+    FoodSearchTotalSetAction | FoodSetLoadingAndErrorAction;
+
+export interface FoodSetLoadingAndErrorAction {
+    type: FoodActionType.SET_LOADING_AND_ERROR,
+    payload: {
+        loading: boolean
+        error: any
+    },
+}
 
 export interface FoodChangeAction {
     type: FoodActionType.CHANGE,
@@ -47,6 +56,12 @@ export interface FoodSearchTotalSetAction {
     },
 }
 
+export function createSetFoodLoadingAndError(pl: { loading: boolean, error: any }): FoodSetLoadingAndErrorAction {
+    return {
+        type: FoodActionType.SET_LOADING_AND_ERROR,
+        payload: { ...pl },
+    }
+}
 export function createChangeFood(section: FoodSection, foodList: IFoodList): FoodChangeAction {
     return {
         type: FoodActionType.CHANGE,
@@ -89,6 +104,13 @@ export function foodReducer(
     action: FoodActionTypes
 ): IFood {
     switch (action.type) {
+        case FoodActionType.SET_LOADING_AND_ERROR:
+            return {
+                ...module,
+
+                loading: action.payload.loading,
+                error: action.payload.error,
+            };
         case FoodActionType.CHANGE:
             return {
                 ...module,

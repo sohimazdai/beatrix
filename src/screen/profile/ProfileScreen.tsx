@@ -4,7 +4,6 @@ import { View, StyleSheet, ScrollView, Text, Alert } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation'
 
-import { Hat } from '../../component/hat/Hat'
 import { ProfileItem } from '../../view/profile/ProfileItem'
 
 import { IStorage } from '../../model/IStorage'
@@ -13,6 +12,7 @@ import { IUser } from '../../model/IUser'
 import { appAnalytics, AnalyticsSections } from '../../app/Analytics'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 import { i18nGet } from '../../localisation/Translate'
+import { BlockHat } from '../../component/hat/BlockHat'
 
 interface Props {
     onLogOut?: () => void;
@@ -34,7 +34,7 @@ class ProfileScreenComponent extends React.Component<Props, State> {
         const { user } = this.props;
         return (
             <View style={styles.profileView}>
-                <Hat
+                <BlockHat
                     onBackPress={() => this.props.navigation.navigate('Dashboard')}
                     title={i18nGet('profile')}
                 />

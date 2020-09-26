@@ -12,6 +12,7 @@ import { IFoodListItem, IFoodNutrients } from '../../../../model/IFood';
 import { IStorage } from '../../../../model/IStorage';
 import { CarbsMeasuringType, IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
+import { selectSelectedFoodItem } from '../../selectors/select-selected-food-item';
 import { FoodCreationInput } from '../FoodCreationInput';
 
 enum FoodCalculatorKey {
@@ -29,6 +30,7 @@ interface Props {
   userDiabetesProperties: IUserDiabetesProperties
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   withPadding?: boolean
+  selectedFoodItem?: IFoodListItem
 };
 
 class FoodCalculator extends React.Component<Props> {
@@ -44,9 +46,9 @@ class FoodCalculator extends React.Component<Props> {
   }
 
   get foodItem(): IFoodListItem {
-    const { navigation } = this.props;
+    const { selectedFoodItem } = this.props;
 
-    return navigation.getParam('foodItem');
+    return selectedFoodItem;
   }
 
   get currentRelation() {
@@ -191,14 +193,28 @@ class FoodCalculator extends React.Component<Props> {
       },
     };
 
-    console.log('🤖🤖🤖🤖 from card to note', foodForNote);
-
     navigation.navigate(
       NavigatorEntities.NOTE_EDITOR,
       {
         foodForNote,
       },
     );
+  }
+
+  onMealRemove = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(
+      NavigatorEntities.NOTE_EDITOR,
+      {
+        foodIdToRemove: this.foodItem.id,
+        isEditing: false,
+      },
+    );
+  }
+
+  get isEditing() {
+    return !!this.props.navigation.getParam('isEditing');
   }
 
   render() {
@@ -326,7 +342,7 @@ class FoodCalculator extends React.Component<Props> {
           />
           <View style={styles.space} />
           <FoodCreationInput
-            label={`${i18nGet('food_creation_carbs')}(${i18nGet('gram')})`}
+            label={`${i18nGet('food_creation_carbohydrates')}(${i18nGet('gram')})`}
             onTextChange={this.onTextInputValueChange}
             value={
               isEmpty(FoodCalculatorKey.CARBOHYDRATES)
@@ -343,13 +359,20 @@ class FoodCalculator extends React.Component<Props> {
           />
         </View>
         <View style={styles.buttons}>
+          {this.isEditing && <>
+            <StyledButton
+              label={i18nGet('remove_racion')}
+              onPress={this.onMealRemove}
+              style={StyledButtonType.DELETE}
+            />
+            <View style={styles.space} />
+          </>}
           <StyledButton
             label={i18nGet('add_racion')}
             onPress={this.onMealAdd}
-            icon={<AddNoteIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
-            iconPosition={IconPositionType.RIGHT}
             style={StyledButtonType.PRIMARY}
             disabled={!keyValue}
+            fluid
           />
         </View>
       </View>
@@ -358,14 +381,14 @@ class FoodCalculator extends React.Component<Props> {
 }
 
 export const FoodCalculatorConnected = connect(
-  (state: IStorage) => ({
+  (state: IStorage, ownProps: Partial<Props>) => ({
     userDiabetesProperties: state.userDiabetesProperties,
+    selectedFoodItem: selectSelectedFoodItem(state, ownProps.navigation?.getParam('foodItem')?.id)
   })
 )(FoodCalculator);
 
 const styles = StyleSheet.create({
   wrap: {
-    backgroundColor: COLOR.BLUE_BASE,
   },
   totalPadding: {
     padding: 16,
@@ -402,6 +425,8 @@ const styles = StyleSheet.create({
 
   },
   buttons: {
+    display: 'flex',
+    flexDirection: 'row',
     marginTop: 16,
   },
   space: {

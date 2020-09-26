@@ -8,11 +8,12 @@ interface Props {
   loading: boolean
   isManaged?: boolean
   isManagedLoading?: boolean
+  color?: string
 }
 
 class Component extends React.Component<Props> {
   render() {
-    const { loading, isManaged, isManagedLoading } = this.props;
+    const { loading, isManaged, isManagedLoading, color } = this.props;
 
     if (isManaged) {
       return isManagedLoading
@@ -22,7 +23,7 @@ class Component extends React.Component<Props> {
 
     if (!loading) return null;
 
-    return <ActivityIndicator collapsable color={'white'} style={{ paddingLeft: 5 }} />
+    return <ActivityIndicator collapsable color={color || 'white'} style={{ paddingLeft: 5 }} />
   }
 }
 

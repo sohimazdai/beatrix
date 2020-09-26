@@ -4,12 +4,12 @@ import { styles } from './Style';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { IInteractive } from '../../../model/IInteractive';
-import { Hat } from '../../../component/hat/Hat';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ProfileItem } from '../../../view/profile/ProfileItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../localisation/Translate';
 import { appAnalytics } from '../../../app/Analytics';
+import { BlockHat } from '../../../component/hat/BlockHat';
 
 interface Props {
     interactive: IInteractive
@@ -36,7 +36,7 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
     render() {
         return (
             <View style={styles.keyboardAvoidingView}>
-                <Hat
+                <BlockHat
                     onBackPress={() => this.props.navigation.navigate('Profile')}
                     title={i18nGet('diabetic_profile')}
                 />

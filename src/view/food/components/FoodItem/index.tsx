@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { COLOR } from '../../../../constant/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../../localisation/Translate';
+import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
 
 interface Props {
   item: IFoodListItem
@@ -24,7 +25,7 @@ export default function FoodItem(props: Props) {
               {i18nGet('food_proteins')}
             </Text>
             <Text style={styles.nutrientItemValue}>
-              {item.nutrients.proteins}
+              {numberizeAndFix(item.nutrients.proteins)}
             </Text>
           </View>
           <View style={styles.nutrientsItem}>
@@ -32,7 +33,7 @@ export default function FoodItem(props: Props) {
               {i18nGet('food_fat')}
             </Text>
             <Text style={styles.nutrientItemValue}>
-              {item.nutrients.fats}
+              {numberizeAndFix(item.nutrients.fats)}
             </Text>
           </View>
           <View style={styles.nutrientsItem}>
@@ -40,7 +41,7 @@ export default function FoodItem(props: Props) {
               {i18nGet('food_carbohydrates')}
             </Text>
             <Text style={styles.nutrientItemValue}>
-              {item.nutrients.carbohydrates}
+              {numberizeAndFix(item.nutrients.carbohydrates)}
             </Text>
           </View>
         </View>
