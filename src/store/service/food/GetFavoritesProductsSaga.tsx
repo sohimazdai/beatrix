@@ -26,16 +26,11 @@ function* run() {
     const state: IStorage = yield select(state => state);
     const favoritesInStore = state.food.favorites;
     const userId = state.user.id;
-    console.log('🤖🤖🤖🤖 favoritesInStore', favoritesInStore);
-    console.log('🤖🤖🤖🤖 userId', userId);
 
     if (state.app.networkConnected) {
       const result = yield call(FoodApi.getFoodIdsFromFavorites, userId);
-      console.log('🤖🤖🤖🤖 result from server', result);
 
       const favorites = result.data?.favorites || [];
-
-      console.log('🤖🤖🤖🤖 favs from server', favorites);
 
       const foodIdsToSync: string[] = [];
 
@@ -44,8 +39,6 @@ function* run() {
           foodIdsToSync.push(favoriteId)
         }
       });
-
-      console.log('🤖🤖🤖🤖 foodIdsToSync', foodIdsToSync);
 
       const foodList: IFoodList = {};
 
@@ -58,7 +51,6 @@ function* run() {
         foodId = favIterator.next();
       }
 
-      console.log('🤖🤖🤖🤖 foodList after iterator', foodList);
       yield put(
         createChangeFood(
           FoodSection.FAVORITES,
