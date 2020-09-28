@@ -44,7 +44,7 @@ interface Props extends OwnProps, ChartDotInfoPopupProps { }
 
 export class ChartDotInfoPopup extends React.Component<Props> {
     componentDidMount() {
-        const { closePopup, navigation } = this.props;
+        const { closePopup } = this.props;
 
         BackHandler.addEventListener('hardwareBackPress', function close() {
             closePopup();
@@ -117,8 +117,6 @@ export class ChartDotInfoPopup extends React.Component<Props> {
 
         const editable = selectedChartPeriod == ChartPeriodType.DAY;
 
-
-        console.log('🤖🤖🤖🤖 i am here');
         return <SuperPopup
             hidden={!note}
             direction={PopupDirection.BOTTOM_TOP}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStackNavigator, createAppContainer, createBottomTabNavigator, StackNavigatorConfig } from "react-navigation";
+import { createStackNavigator, createAppContainer, StackNavigatorConfig } from "react-navigation";
 import { AuthScreenConnect } from "../screen/auth/AuthScreen";
 import { NoteListScreenConnect } from "../screen/note/NoteListScreen";
 import { ChartConnect } from "../screen/chart/ChartScreen";
