@@ -130,10 +130,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
         pP.navigation.getParam('foodForNote')?.id !== foodForNote?.id
       ) && foodForNote
     ) {
+      const { _id, _v, ...rest } = foodForNote;
       this.setState({
         foodList: {
           ...foodList,
-          [foodForNote.id]: foodForNote
+          [rest.id]: rest
         },
       })
     }
@@ -332,9 +333,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
           selectedType={this.state.currentValueType}
           {...note}
           breadUnits={
-            !!note.breadUnits && !!this.additionalCarbs
-              ? `${note.breadUnits}+${this.additionalCarbs}`
-              : 0
+            !note.breadUnits && !this.additionalCarbs
+              ? 0
+              : `${note.breadUnits}+${this.additionalCarbs}`
           }
         />
         <View style={styles.foods}>
@@ -428,6 +429,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
       isForNote: true,
       foodForNote: null,
       foodItem,
+      foodId,
       isEditing: true,
     });
   }

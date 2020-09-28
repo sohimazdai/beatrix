@@ -66,7 +66,7 @@ function* run() {
       })
     );
   } catch (e) {
-    handleErrorSilently(e, 'Ошибка удаления из favorites');
+    handleErrorSilently(e, 'Ошибка получения продуктов под одному из favorites');
     yield put(
       createUserChangeAction({
         loading: false,

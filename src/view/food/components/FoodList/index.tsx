@@ -20,6 +20,7 @@ interface Props {
 
 export function FoodListComponent(props: Props) {
   const { foodList, sortBy, goToFoodCard, reversible, cutTo, forNote } = props;
+
   let foods: IFoodListItem[] = Object.values(foodList);
 
   if (sortBy) {
@@ -33,7 +34,6 @@ export function FoodListComponent(props: Props) {
   if (cutTo) {
     foods = foods.slice(0, cutTo);
   }
-
 
   return (
     <>

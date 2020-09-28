@@ -10,31 +10,21 @@ import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { COLOR } from '../../../../constant/Color';
 import { createSearchProductsAction } from '../../../../store/service/food/SearchProductsSaga';
 import { IStorage } from '../../../../model/IStorage';
-import { IFoodList } from '../../../../model/IFood';
-import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
-import { AddNoteIcon } from '../../../../component/icon/AddNoteIcon';
+import { IFood, IFoodList } from '../../../../model/IFood';
+import { Loader } from '../../../../component/loader/Loader';
 
 interface Props {
   searchFood: IFoodList
   loading: boolean
+  food: IFood,
   onType: (text: string) => void
   goToFoodCard: (foodId: string) => void
   goToFoodCardCreation: () => void
 };
 
 function SearchContent(props: Props) {
-  const { onType, goToFoodCard, searchFood, goToFoodCardCreation, loading } = props;
+  const { onType, goToFoodCard, food } = props;
   const [typed, setTyped] = React.useState('');
-  const [searched, setSearched] = React.useState(false);
-
-  const isListEmpty = Object.values(searchFood).length === 0;
-
-  useEffect(() => {
-    !loading && !!typed && setTimeout(() => {
-      !loading && setSearched(true)
-    }, 1000);
-    loading && setSearched(false)
-  }, [loading])
 
   return (
     <View style={styles.view}>
@@ -50,23 +40,15 @@ function SearchContent(props: Props) {
         />
       </View>
       {
-        !!typed 
-        ? <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
-        : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
-          // ? isListEmpty && searched
-          //   ? (
-          //     <View style={styles.emptyListButton}>
-          //       <StyledButton
-          //         style={StyledButtonType.PRIMARY}
-          //         onPress={goToFoodCardCreation}
-          //         label={i18nGet('create_food_card')}
-          //         icon={<AddNoteIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
-          //         iconPosition={IconPositionType.RIGHT}
-          //       />
-          //       <Text style={styles.text}>{i18nGet('food_search_tips_add')}</Text>
-          //     </View>
-          //   ) : <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
-          // : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
+        !!typed
+          ? (
+            <>
+              <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
+              {food.loading && <View style={styles.loadingView}>
+                <Loader isManaged isManagedLoading={food.loading} />
+              </View>}
+            </>
+          ) : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
       }
     </View>
   );
@@ -76,6 +58,7 @@ export const SearchContentConnected = connect(
   (state: IStorage) => ({
     searchFood: state.food.search,
     loading: state.user.loading,
+    food: state.food,
   }),
   (dispatch) => ({
     onType: (text: string) => dispatch(createSearchProductsAction(text)),
@@ -98,11 +81,17 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: COLOR.TEXT_DARK_GRAY,
   },
+  loadingView: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+  },
   emptyListButton: {
     flex: 1,
     flexGrow: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-  }
+  },
 })

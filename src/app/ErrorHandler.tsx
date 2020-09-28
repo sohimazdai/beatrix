@@ -1,5 +1,5 @@
 import { appAnalytics } from './Analytics';
-import { logger } from './Logger';
+import { logError, logger } from './Logger';
 
 export function handleError(e: Error, customMessage?: string) {
   const message = customMessage
@@ -18,5 +18,7 @@ export function handleErrorSilently(message: string, type?: string) {
   appAnalytics.sendEventWithProps(appAnalytics.events.ERROR, {
     message: message,
     type: type,
-  })
+  });
+
+  logError(message + ':::' + type)
 }

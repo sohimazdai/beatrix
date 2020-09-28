@@ -14,11 +14,13 @@ import { FoodSection } from '../../store/modules/food/food';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { IFoodListItem } from '../../model/IFood';
 import { createAddProductAction } from '../../store/service/food/AddProductSaga';
+import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   fetchProductData: (id: string) => void;
   autoAddToDb: (foodItem: IFoodListItem) => void;
+  selectCardFoodId: (foodId: string) => void;
 }
 
 export function BarcodeScanningScreenComponent(props: Props) {
@@ -39,7 +41,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
 
   const handleBarCodeScanned = async (barcodeData) => {
     const { data } = barcodeData;
-    const { navigation } = props;
+    const { navigation, selectCardFoodId } = props;
 
     setScanned(true);
     let foodItem = await FoodApi.getOFFProductByBarcode(data);
@@ -50,7 +52,8 @@ export function BarcodeScanningScreenComponent(props: Props) {
 
     if (foodItem) {
       autoAddToDb(foodItem);
-      navigation.navigate(NavigatorEntities.FOOD_CARD, { foodItem })
+      // selectCardFoodId(foodItem.id)
+      navigation.navigate(NavigatorEntities.FOOD_CARD);
     } else Alert.alert(
       i18nGet('scan_failed'),
       i18nGet('what_you_want_to_do_later'),
@@ -146,7 +149,8 @@ export const BarcodeScanningScreen = connect(
   null,
   (dispatch) => ({
     fetchProductData: (id: string) => dispatch(createFetchProductByBarcodeAction(id)),
-    autoAddToDb: (foodItem: IFoodListItem) => dispatch(createAddProductAction(foodItem, { auto: true }))
+    autoAddToDb: (foodItem: IFoodListItem) => dispatch(createAddProductAction(foodItem, { auto: true })),
+    selectCardFoodId: (foodId: string) => dispatch(createChangeInteractive({ cardFoodId: foodId }))
   })
 )(BarcodeScanningScreenComponent)
 

@@ -36,10 +36,11 @@ interface GetFoodItemByIdAction {
 function* run({ payload }: GetFoodItemByIdAction) {
   try {
     const state: IStorage = yield select(state => state);
-    if (state.app.networkConnected) {
-      const foodItem: IFoodListItem | null = yield call(FoodApi.getFoodItemById, payload);
 
-      if (!!foodItem) {
+    if (state.app.networkConnected) {
+      const foodItem: IFoodListItem | null | any = yield call(FoodApi.getFoodItemById, payload);
+
+      if (!foodItem.error) {
         yield put(createChangeFood(
           FoodSection.HISTORY,
           { [foodItem.id]: foodItem }
@@ -64,7 +65,7 @@ function* run({ payload }: GetFoodItemByIdAction) {
       ])
     );
   } catch (e) {
-    handleErrorSilently(e, 'Food item get error localDB');
+    handleErrorSilently(e, 'Ошибка запроса на продукт из ДБ');
     yield put(
       batchActions([
         createSetFoodLoadingAndError({

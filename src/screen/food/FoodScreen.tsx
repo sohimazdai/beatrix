@@ -45,9 +45,9 @@ class FoodScreenComponent extends React.Component<Props, State> {
     navigation.navigate(
       NavigatorEntities.FOOD_CARD,
       {
-        selectedFoodPage: FoodSection.HISTORY,
-        foodItem: food[section][foodId],
-        isForNote: isForNote,
+        selectedFoodPage: section,
+        foodId,
+        isForNote,
       },
     );
   }

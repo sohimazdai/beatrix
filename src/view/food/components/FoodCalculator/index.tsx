@@ -383,7 +383,7 @@ class FoodCalculator extends React.Component<Props> {
 export const FoodCalculatorConnected = connect(
   (state: IStorage, ownProps: Partial<Props>) => ({
     userDiabetesProperties: state.userDiabetesProperties,
-    selectedFoodItem: selectSelectedFoodItem(state, ownProps.navigation?.getParam('foodItem')?.id)
+    selectedFoodItem: selectSelectedFoodItem(state, ownProps.navigation?.getParam('foodId'))
   })
 )(FoodCalculator);
 

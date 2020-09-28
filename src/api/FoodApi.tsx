@@ -4,7 +4,6 @@ import { oFFMapper } from './mappers/oFFMapper';
 import { api } from './api';
 import { fatSecretSearchMapper } from './mappers/fatSecretSearchMapper';
 import { handleErrorSilently } from '../app/ErrorHandler';
-import { localDBFoodItemMapper } from './mappers/localDbFoodItemMapper';
 import { oFFBarcodeMapper } from './mappers/oFFBarcodeMapper';
 
 export interface SearchReturn {
@@ -33,11 +32,11 @@ export class FoodApi {
         return null;
       }
 
-      const foodItem = localDBFoodItemMapper(response.data);
+      const foodItem = response.data;
 
       return foodItem;
     } catch (error) {
-      console.error(error);
+      handleErrorSilently(error, 'FoodApi getFoodItemById')
       return null;
     }
   }
@@ -50,11 +49,11 @@ export class FoodApi {
         return null;
       }
 
-      const food = localDBFoodItemMapper(response.data);
+      const food = response.data;
 
       return food;
     } catch (error) {
-      console.error(error);
+      handleErrorSilently(error, 'FoodApi getByBarcodeFromLocalDB')
       return null;
     }
   }
@@ -95,7 +94,7 @@ export class FoodApi {
         total: count,
       };
     } catch (error) {
-      handleErrorSilently(error, 'Ошибка запроса на поиск в Open Food Facts');
+      handleErrorSilently(error, 'FoodApi searchOpenFoodFacts')
       return {
         foods: {},
         total: 0,
@@ -113,9 +112,8 @@ export class FoodApi {
         total: data.total,
         foods,
       }
-    } catch (e) {
-      handleErrorSilently(e, 'Ошибка запроса на поиск в Open Food Facts');
-
+    } catch (error) {
+      handleErrorSilently(error, 'FoodApi searchFatSecret')
       return {
         foods: {},
         total: 0,
@@ -145,7 +143,7 @@ export class FoodApi {
 
       return food;
     } catch (error) {
-      console.error(error);
+      handleErrorSilently(error, 'FoodApi getOFFProductByBarcode')
       return null;
     }
   }

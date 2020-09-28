@@ -1,7 +1,7 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
-import { handleError } from '../../../app/ErrorHandler';
+import { handleError, handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
@@ -39,28 +39,23 @@ function* run({ payload, options }: AddProductAction) {
   try {
     const state: IStorage = yield select(state => state);
     if (state.app.networkConnected) {
-      const { nutrients, ...restFood } = payload;
-      const foodToSaveInDb: IFoodListItem = {
-        ...restFood,
-        ...nutrients,
-      }
-
       //TODO: HANDLE AUTO ADDING
-      const foodToSaveLocally: IFoodListItem = {
-        ...restFood,
-        nutrients,
-      }
-      const { data: { success } } = yield call(FoodApi.addProduct, foodToSaveInDb);
+      const { data: { success } } = yield call(FoodApi.addProduct, payload);
+
+      const {_v, _id, ...food} = payload as any;
 
       if (success) {
         if (!options?.auto) {
           yield put(createChangeFood(
             FoodSection.FAVORITES,
-            { [foodToSaveLocally.id]: foodToSaveLocally }
+            { [food.id]: food }
           ));
         }
       } else {
-        alert(i18nGet('food_is_not_added'))
+        if (!options?.auto) {
+          alert(i18nGet('food_is_not_added'));
+          throw new Error(i18nGet('food_is_not_added'))
+        }
       }
     } else {
       alert(i18nGet('active_network_needed'));
@@ -73,7 +68,7 @@ function* run({ payload, options }: AddProductAction) {
       })
     );
   } catch (e) {
-    handleError(e, i18nGet('sync_error'));
+    handleErrorSilently(e, 'Ошибка добавления продукта в ДБ');
     yield put(
       createUserChangeAction({
         loading: false,

@@ -1,5 +1,6 @@
 import { FoodDatabase, IFoodList, IFoodListItem } from '../../model/IFood';
 import { parseUglyFatSecretString } from '../helper/parseUglyFatSecretString';
+import { v1 as uuidV1 } from 'uuid';
 
 export const fatSecretSearchMapper = (products: any[]): IFoodList => {
   console.log(products[0]);
@@ -14,8 +15,10 @@ export const fatSecretSearchMapper = (products: any[]): IFoodList => {
     try {
       const nutrients = parseUglyFatSecretString(product['food_description']);
 
+      const id = uuidV1();
+
       const food: IFoodListItem = {
-        id: product['food_id'],
+        id,
         sourceId: product['food_id'],
         dbId: FoodDatabase.FAT_SECRET_US,
         brandName: product['brand_name'],
@@ -23,7 +26,7 @@ export const fatSecretSearchMapper = (products: any[]): IFoodList => {
         nutrients,
       };
 
-      foods[food.id] = food;
+      foods[id] = food;
     } catch (e) {
       //ITS NEED TO SKIP BROKEN FOODS
       return

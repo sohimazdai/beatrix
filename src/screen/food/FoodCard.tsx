@@ -24,6 +24,7 @@ import { createGetFoodItemByIdAction } from '../../store/service/food/GetFoodIte
 import { Loader } from '../../component/loader/Loader';
 import { createAddProductToFavoriteAction } from '../../store/service/food/AddProductToFavoriteSaga';
 import { createRemoveProdcutFromFavoriteAction } from '../../store/service/food/RemoveProductFromFavoritesSaga';
+import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 
 interface OwnProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -41,6 +42,7 @@ interface Props extends OwnProps {
   addToHistory: (foodItem: IFoodListItem) => void
   autoAddToDb: (foodItem: IFoodListItem) => void
   getFoodItemById: (foodId: string) => void
+  unsetfoodId: () => void
 }
 
 function FoodCardComponent(props: Props) {
@@ -54,6 +56,7 @@ function FoodCardComponent(props: Props) {
     removeFoodItemFromFavorites,
     navigation,
     favoritesList,
+    foodId
   } = props;
 
   const [popupOpen, setPopupOpen] = React.useState(true);
@@ -75,14 +78,14 @@ function FoodCardComponent(props: Props) {
     navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
   };
 
-  const isSelected = favoritesList && favoritesList[foodItem.id];
+  const isSelected = favoritesList && !!favoritesList[foodId];
   const handler = isSelected
     ? () => {
       removeFoodItemFromFavorites(foodItem);
-      removeProductFromFavoriteInDb([foodItem.id]);
+      removeProductFromFavoriteInDb([foodId]);
     } : () => {
       addFoodItemToFavorites(foodItem);
-      addProductToFavoriteInDb(foodItem.id);
+      addProductToFavoriteInDb(foodId);
     };
 
   const isForNote = navigation.getParam('isForNote');
@@ -277,16 +280,15 @@ function FoodCardLoader(props: Props) {
       </View>
     );
   }
-
   return <FoodCardComponent {...props} />
 }
 
 export const FoodCard = connect(
   (state: IStorage, ownProps: OwnProps) => ({
-    foodItem: selectSelectedFoodItem(state, ownProps.navigation.getParam('foodItem')?.id),
-    foodId: ownProps.navigation.getParam('foodItem')?.id,
+    foodItem: selectSelectedFoodItem(state, ownProps.navigation.getParam('foodId')),
     foodLoading: state.food.loading,
     favoritesList: state.food.favorites,
+    foodId: ownProps.navigation.getParam('foodId'),
   }),
   (dispatch) => ({
     addProductToFavoriteInDb: (foodId: string) => dispatch(createAddProductToFavoriteAction(foodId)),
@@ -314,7 +316,7 @@ export const FoodCard = connect(
     autoAddToDb: (foodItem: IFoodListItem) => {
       dispatch(createAddProductAction(foodItem, { auto: true }));
     },
-    getFoodItemById: (foodId: string) => dispatch(createGetFoodItemByIdAction(foodId))
+    getFoodItemById: (foodId: string) => dispatch(createGetFoodItemByIdAction(foodId)),
   })
 )(FoodCardLoader)
 

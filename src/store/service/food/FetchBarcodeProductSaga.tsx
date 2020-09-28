@@ -1,7 +1,7 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
-import { handleError } from '../../../app/ErrorHandler';
+import { handleError, handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
@@ -41,7 +41,7 @@ function* run({ payload }: FetchProductByBarcodeAction) {
             FoodSection.HISTORY,
             {
               ...foodHistory,
-              [product.id]: product
+              [product.id]: product,
             }
           ))
       } else {
@@ -59,7 +59,7 @@ function* run({ payload }: FetchProductByBarcodeAction) {
       })
     );
   } catch (e) {
-    handleError(e, i18nGet('sync_error'));
+    handleErrorSilently(e, 'Ошибка чтения продукта по штрих-коду');
     yield put(
       createUserChangeAction({
         loading: false,

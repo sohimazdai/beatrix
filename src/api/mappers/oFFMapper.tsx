@@ -22,7 +22,7 @@ export function oFFMapper(products: any[]): IFoodList {
 
     const idForDb = uuidv1();
 
-    searchFood[id] = {
+    searchFood[idForDb] = {
       id: idForDb,
       sourceId: id,
       barcode: product['code'],

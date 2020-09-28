@@ -15,6 +15,8 @@ export interface IInteractive {
     userPropertiesShedulePopupType?: SheduleKeyType
 
     isPasswordRestored?: boolean
+
+    cardFoodId?: string
 }
 
 export enum InteractiveUserPropertiesShedulePopupType {

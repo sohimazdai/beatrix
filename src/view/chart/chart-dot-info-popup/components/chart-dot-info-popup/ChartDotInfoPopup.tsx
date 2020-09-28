@@ -1,20 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, BackHandler, Dimensions } from 'react-native';
+import { View, Text, BackHandler, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 
 import { SuperPopup, PopupDirection } from '../../../../../component/popup/SuperPopup';
 import { ChartDotInfoPopupValue } from '../dot-info-popup-value/ChartDotInfoPopupValue';
-import { CloseIcon } from '../../../../../component/icon/CloseIcon';
 import { EditNoteIcon } from '../../../../../component/icon/EditNoteIcon';
 
 import { INoteListNote } from '../../../../../model/INoteList';
 import { ChartValueType, ChartPeriodType } from '../../../../../model/IChart';
 import { IStorage } from '../../../../../model/IStorage';
 import { DateHelper } from '../../../../../utils/DateHelper';
-import { SHADOW_OPTIONS } from "../../../../../constant/ShadowOptions";
 import { COLOR } from "../../../../../constant/Color";
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 
@@ -26,7 +24,6 @@ import { NavigatorEntities } from '../../../../../navigator/modules/NavigatorEnt
 import { PopupHeader } from '../../../../../component/popup/PopupHeader';
 import { IconPositionType, StyledButton, StyledButtonType } from '../../../../../component/button/StyledButton';
 import { ArrowDirection, ArrowTaillessIcon } from '../../../../../component/icon/ArrowTaillessIcon';
-import { sumMealTotal } from '../../../../food/modules/sumMealTotal';
 import { FoodListComponent } from '../../../../food/components/FoodList';
 
 interface ChartDotInfoPopupProps {
@@ -36,6 +33,7 @@ interface ChartDotInfoPopupProps {
 
     openEditPopup?: (noteId) => void
     closePopup?: () => void;
+    changeNoteFoodInteractive?: (foodId: string) => void
 }
 
 interface OwnProps {
@@ -76,11 +74,10 @@ export class ChartDotInfoPopup extends React.Component<Props> {
     }
 
     goToFoodCard = (foodId?: string) => {
-        const { navigation, note } = this.props;
-        const foodItem = note.foodList?.[foodId];
+        const { navigation } = this.props;
 
         navigation.navigate(NavigatorEntities.FOOD_CARD, {
-            foodItem,
+            foodId,
             backPage: (navigation.state as any).routeName
         });
     }
@@ -121,6 +118,7 @@ export class ChartDotInfoPopup extends React.Component<Props> {
         const editable = selectedChartPeriod == ChartPeriodType.DAY;
 
 
+        console.log('🤖🤖🤖🤖 i am here');
         return <SuperPopup
             hidden={!note}
             direction={PopupDirection.BOTTOM_TOP}
@@ -172,16 +170,15 @@ export class ChartDotInfoPopup extends React.Component<Props> {
                             value={note[ChartValueType.LONG_INSULIN]}
                         />
                     </View>
-                    <View style={styles.valueBlock}>
+                    {Object.values(note.foodList).length > 0 && <View style={styles.valueBlock}>
                         <Text style={styles.blockTitle}>
                             {i18nGet('racion')}
                         </Text>
                         <FoodListComponent
                             foodList={note.foodList}
                             goToFoodCard={this.goToFoodCard}
-                            forNote
                         />
-                    </View>
+                    </View>}
                     {!!note.commentary && <View style={styles.valueBlock}>
                         <Text style={styles.blockTitle}>
                             {i18nGet('comment')}
@@ -222,12 +219,16 @@ export const ChartDotInfoPopupConnect = connect(
                     selectedDotId: null,
                 }));
             },
-        }
+            changeNoteFoodInteractive: (foodId: string) => dispatch(createChangeInteractive({
+                cardFoodId: foodId
+            }))
+        };
     }
 )(ChartDotInfoPopup)
 
 const styles = StyleSheet.create({
     wrap: {
+        width: '100%',
         maxHeight: Dimensions.get('screen').height / 2,
         padding: 16,
     },
