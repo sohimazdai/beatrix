@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { createChangeAppAction } from '../store/modules/app/app';
-import { NetInfo } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import { createAppPingAction } from '../store/service/app/AppPingSaga';
 import { logger } from './Logger';
 import Variables from './Variables';
