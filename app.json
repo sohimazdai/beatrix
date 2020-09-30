@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.11.5",
+    "version": "1.11.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -37,7 +37,7 @@
     },
     "android": {
       "package": "com.doq.beatrix",
-      "versionCode": 30,
+      "versionCode": 31,
       "adaptiveIcon": {
         "backgroundColor": "#FFE1DF",
         "foregroundImage": "./assets/icon.png"

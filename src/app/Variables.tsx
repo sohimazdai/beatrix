@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-const prodUrl = "3d0dc492-bd67-4182-9871-7cfbdbe16ad5.pub.cloud.scaleway.com";
+const prodUrl = "3d0dc492-bd67-4182-9871-7cfbdbe16ad5.pub.instances.scw.cloud";
 
 const ENV = {
   dev: {

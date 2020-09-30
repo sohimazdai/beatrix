@@ -15,7 +15,6 @@ class Api {
             config,
         )
     };
-
 }
 
 export const api = new Api();
