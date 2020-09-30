@@ -16,7 +16,16 @@ interface Props {
 function Component(props: Props) {
     React.useEffect(() => {
         logger('Environment: ', Variables);
-        NetInfo.isConnected.fetch().then(isConnected => {
+        // NetInfo.isConnected.fetch().then(isConnected => {
+        //     props.changeAppConnection(isConnected);
+        //     isConnected && props.pingServer();
+        //     logger('Phone is ' + (isConnected ? 'online' : 'offline'));
+
+        //     appAnalytics.sendEventWithProps(appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE, {
+        //         isConnected
+        //     });
+        // });
+        const unsubscribe = NetInfo.addEventListener(({ isConnected }) => {
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();
             logger('Phone is ' + (isConnected ? 'online' : 'offline'));
@@ -24,6 +33,7 @@ function Component(props: Props) {
             appAnalytics.sendEventWithProps(appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE, {
                 isConnected
             });
+            handleConnectivityChange(isConnected)
         });
 
         function handleConnectivityChange(isConnected) {
@@ -33,11 +43,7 @@ function Component(props: Props) {
             logger('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
         }
 
-        NetInfo.isConnected.addEventListener('connectionChange', handleConnectivityChange);
-
-        return function cleanup() {
-            NetInfo.isConnected.removeEventListener('connectionChange', handleConnectivityChange);
-        }
+        return unsubscribe();
     }, [])
     return null;
 }
