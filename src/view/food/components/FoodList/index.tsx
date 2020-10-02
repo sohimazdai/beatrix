@@ -16,12 +16,17 @@ interface Props {
   goToFoodCard: (foodId: string) => void
   sortBy?: string
   forNote?: boolean
+  sortFunction?: (foods: IFoodListItem[]) => IFoodListItem[]
 }
 
 export function FoodListComponent(props: Props) {
-  const { foodList, sortBy, goToFoodCard, reversible, cutTo, forNote } = props;
+  const { foodList, sortBy, goToFoodCard, reversible, cutTo, forNote, sortFunction } = props;
 
   let foods: IFoodListItem[] = Object.values(foodList);
+
+  if (!!sortFunction) {
+    foods = sortFunction(foods);
+  }
 
   if (sortBy) {
     foods = Object.values(foodList).sort((food1, food2) => food1[sortBy] - food2[sortBy]);
@@ -34,6 +39,7 @@ export function FoodListComponent(props: Props) {
   if (cutTo) {
     foods = foods.slice(0, cutTo);
   }
+
 
   return (
     <>

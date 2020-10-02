@@ -6,6 +6,7 @@ import { batchActions } from 'redux-batched-actions';
 import { FoodApi } from '../../../api/FoodApi';
 import { IFoodList } from '../../../model/IFood';
 import { createChangeFood, FoodSection } from '../../modules/food/food';
+import { appAnalytics } from '../../../app/Analytics';
 
 const type = "GET_FAVORITES_PRODUCTS";
 
@@ -57,6 +58,13 @@ function* run() {
           foodList
         )
       )
+
+      appAnalytics.sendEventWithProps(
+        appAnalytics.events.FOOD_FAVORITES_FETCHED,
+        { favorites: Object.values(foodList).length }
+      );
+
+      appAnalytics.setUserProperties({ favorites: Object.values(foodList).length })
     }
 
     yield put(

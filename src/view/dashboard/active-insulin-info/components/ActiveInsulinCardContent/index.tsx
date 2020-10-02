@@ -6,14 +6,12 @@ import { IStorage } from '../../../../../model/IStorage';
 import { convertFlatNoteListToNoteListByDay } from '../../../../../store/selector/NoteListSelector';
 import { DateHelper } from '../../../../../utils/DateHelper';
 import { INoteListNote, INoteListByDay } from '../../../../../model/INoteList';
-import { DashboardCard } from '../../../../shared/components/DashboardCard';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { COLOR } from '../../../../../constant/Color';
 import { ActiveInsulinChartConnected } from '../InsulinChart';
 import { selectActiveInsulinDuration } from '../../selectors/select-active-insulin-duration';
 import { OXTimeTitles } from '../OXTimeTitles';
 import { selectNoteWithActiveInsulin } from '../../selectors/select-notes-with-active-insulin';
-import { ActiveInsulinCounterConnected } from '../ActiveInsulinCounter';
 import ActiveInsulinCardHeader from '../ActiveInsulinCardHeader';
 import checkThatInsulinIsActive from './check-that-insulin-is-active';
 import calculateActiveInsulinTime from './calculate-active-insulin-time';
@@ -123,7 +121,7 @@ class ActiveInsulinCardContent extends React.Component<Props, State> {
 
     return (
       <>
-        <ActiveInsulinCardHeader />
+        <ActiveInsulinCardHeader now={now} />
         <ActiveInsulinChartConnected />
         <OXTimeTitles
           hoursOfinsulinDuration={this.props.hoursOfinsulinDuration}
@@ -132,7 +130,6 @@ class ActiveInsulinCardContent extends React.Component<Props, State> {
         <Text style={styles.cardText}>
           {message}
         </Text>
-        <ActiveInsulinCounterConnected now={now} />
       </>
     );
   }

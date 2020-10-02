@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { Text, View, StyleSheet, Button, Alert } from 'react-native';
+import { Text, View, StyleSheet, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import * as Permissions from 'expo-permissions';
 import { i18nGet } from '../../localisation/Translate';
@@ -15,6 +15,7 @@ import { BlockHat } from '../../component/hat/BlockHat';
 import { IFoodListItem } from '../../model/IFood';
 import { createAddProductAction } from '../../store/service/food/AddProductSaga';
 import { createChangeInteractive } from '../../store/modules/interactive/interactive';
+import { appAnalytics } from '../../app/Analytics';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -37,11 +38,15 @@ export function BarcodeScanningScreenComponent(props: Props) {
       }
       setHasPermission(cameraStatus === 'granted');
     })();
+
+    appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SCREEN_SEEN);
   }, []);
 
   const handleBarCodeScanned = async (barcodeData) => {
     const { data } = barcodeData;
-    const { navigation, selectCardFoodId } = props;
+    const { navigation } = props;
+
+    appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_START_SCANING);
 
     setScanned(true);
     let foodItem = await FoodApi.getOFFProductByBarcode(data);
@@ -52,8 +57,10 @@ export function BarcodeScanningScreenComponent(props: Props) {
 
     if (foodItem) {
       autoAddToDb(foodItem);
-      // selectCardFoodId(foodItem.id)
+
       navigation.navigate(NavigatorEntities.FOOD_CARD);
+
+      appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SUCCESS_SCANING);
     } else Alert.alert(
       i18nGet('scan_failed'),
       i18nGet('what_you_want_to_do_later'),

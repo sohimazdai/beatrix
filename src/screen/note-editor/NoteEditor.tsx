@@ -125,10 +125,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const foodIdToRemove = navigation.getParam('foodIdToRemove');
 
     if (
-      (
+      foodForNote && (
         pP.navigation.getParam('foodForNote')?.nutrients?.weight !== foodForNote?.nutrients?.weight ||
         pP.navigation.getParam('foodForNote')?.id !== foodForNote?.id
-      ) && foodForNote
+      )
     ) {
       const { _id, _v, ...rest } = foodForNote;
       this.setState({
@@ -136,7 +136,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
           ...foodList,
           [rest.id]: rest
         },
-      })
+      });
+      appAnalytics.sendEventWithProps(
+        appAnalytics.events.FOOD_ADD_TO_NOTE,
+        { dbId: rest.dbId, weight: rest.nutrients.weight }
+      );
     }
 
     if (!pP.navigation.getParam('foodIdToRemove') && !!foodIdToRemove) {
@@ -144,6 +148,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
       delete newList[foodIdToRemove];
 
       this.setState({ foodList: newList });
+
+      const foodToRemove = newList[foodIdToRemove];
+      appAnalytics.sendEventWithProps(
+        appAnalytics.events.FOOD_REMOVE_FROM_NOTE,
+        { dbId: foodToRemove.dbId }
+      )
 
       navigation.setParams({ foodIdToRemove: null })
     }

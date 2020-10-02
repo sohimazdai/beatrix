@@ -10,8 +10,10 @@ import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { COLOR } from '../../../../constant/Color';
 import { createSearchProductsAction } from '../../../../store/service/food/SearchProductsSaga';
 import { IStorage } from '../../../../model/IStorage';
-import { IFood, IFoodList } from '../../../../model/IFood';
+import { IFood, IFoodList, IFoodListItem } from '../../../../model/IFood';
 import { Loader } from '../../../../component/loader/Loader';
+import { sortSearchResult } from '../../../../store/service-helper/sort-search-result';
+import { TextInput } from 'react-native-gesture-handler';
 
 interface Props {
   searchFood: IFoodList
@@ -20,11 +22,15 @@ interface Props {
   onType: (text: string) => void
   goToFoodCard: (foodId: string) => void
   goToFoodCardCreation: () => void
+  clearSearch: () => void
 };
 
 function SearchContent(props: Props) {
-  const { onType, goToFoodCard, food } = props;
+  const inputRef = React.createRef<TextInput>();
+  const { onType, goToFoodCard, food, clearSearch } = props;
   const [typed, setTyped] = React.useState('');
+
+  const sortFunction = (foods: IFoodListItem[]) => sortSearchResult(typed, foods);
 
   return (
     <View style={styles.view}>
@@ -32,8 +38,9 @@ function SearchContent(props: Props) {
         <BaseTextInput
           placeholder={i18nGet('type_food')}
           onChangeText={(text: string) => {
+            setTyped(text);
+            if (!text) clearSearch();
             !!text && onType(text);
-            setTyped(text)
           }}
           defaultValue={''}
           clearButtonMode={"while-editing"}
@@ -43,7 +50,11 @@ function SearchContent(props: Props) {
         !!typed
           ? (
             <>
-              <FoodList section={FoodSection.SEARCH} goToFoodCard={goToFoodCard} />
+              <FoodList
+                sortFunction={sortFunction}
+                section={FoodSection.SEARCH}
+                goToFoodCard={goToFoodCard}
+              />
               {food.loading && <View style={styles.loadingView}>
                 <Loader isManaged isManagedLoading={food.loading} />
               </View>}
@@ -62,6 +73,7 @@ export const SearchContentConnected = connect(
   }),
   (dispatch) => ({
     onType: (text: string) => dispatch(createSearchProductsAction(text)),
+    clearSearch: () => dispatch(createReplaceFood(FoodSection.SEARCH, {}))
   })
 )(SearchContent);
 

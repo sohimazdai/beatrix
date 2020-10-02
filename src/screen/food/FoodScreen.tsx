@@ -15,6 +15,7 @@ import { HistoryContentConnected } from '../../view/food/components/HistoryConte
 import { FavoritesContentConnected } from '../../view/food/components/FavoritesContent';
 import { IStorage } from '../../model/IStorage';
 import { IFood } from '../../model/IFood';
+import { appAnalytics } from '../../app/Analytics';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -30,6 +31,10 @@ class FoodScreenComponent extends React.Component<Props, State> {
   state = {
     selectedPage: this.props.navigation.getParam('selectedFoodPage') || FoodSection.SEARCH
   };
+
+  componentDidMount() {
+    appAnalytics.sendEvent(appAnalytics.events.FOOD_SCREEN_SEEN)
+  }
 
   componentWillUnmount() {
     const { clearSearch } = this.props;

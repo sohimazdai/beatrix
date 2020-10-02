@@ -17,6 +17,7 @@ import { createAddProductAction } from '../../store/service/food/AddProductSaga'
 import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { numberizeAndFix } from '../../api/helper/numberize-and-fix';
 import { v1 } from 'uuid';
+import { appAnalytics } from '../../app/Analytics';
 
 const foodToCreateId = uuidv4();
 
@@ -45,6 +46,10 @@ class FoodCreationScreen extends React.Component<Props> {
     carbohydrates: '',
 
     isErrored: false,
+  }
+
+  componentDidMount() {
+    appAnalytics.sendEvent(appAnalytics.events.FOOD_CREATION_SEEN)
   }
 
   get locale() {
@@ -137,7 +142,7 @@ class FoodCreationScreen extends React.Component<Props> {
     addProduct(product);
     this.setState({ isErrored: false });
 
-    navigation.navigate(NavigatorEntities.FOOD_CARD, { foodItem: product })
+    navigation.navigate(NavigatorEntities.FOOD_CARD, { foodItem: product });
   }
 
   render() {

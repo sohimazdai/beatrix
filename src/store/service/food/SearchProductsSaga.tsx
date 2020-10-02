@@ -1,14 +1,16 @@
-import { put, call, select, takeLatest, throttle } from "redux-saga/effects";
+import { put, call, select, throttle } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
 import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { getLocale, getRegion, i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
-import { FoodSection, createReplaceFood, createSetFoodSearchTotal, createSetFoodLoadingAndError, createChangeFood } from '../../modules/food/food';
+import { FoodSection, createReplaceFood, createSetFoodLoadingAndError } from '../../modules/food/food';
 import { checkForIsItInRuGroup } from '../../../localisation/Residents';
 import { FOOD_DATABASES_BY_COUNTRY_GROUP } from '../../../localisation/FoodDatabases';
 import { dbMapper } from '../../../api/mappers/dbMapper';
+import { IFoodList } from '../../../model/IFood';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = "SEARCH_PRODUCTS";
 
@@ -34,36 +36,56 @@ interface SearchProductsAction {
   payload: string
 }
 
-function* run({ payload }: SearchProductsAction) {
+function* run({ payload: searchString }: SearchProductsAction) {
   try {
     const state: IStorage = yield select(state => state);
     const isInRussianGroup = checkForIsItInRuGroup(getLocale(), getRegion());
     if (state.app.networkConnected) {
       let res;
+      let foods: IFoodList = {};
 
       if (isInRussianGroup) {
-        const { data } = yield call(FoodApi.searchProductsInLocalDb, FOOD_DATABASES_BY_COUNTRY_GROUP.RU, payload);
-        const dbFoods = dbMapper(data.foods);
+        const { data } = yield call(
+          FoodApi.searchProductsInLocalDb,
+          FOOD_DATABASES_BY_COUNTRY_GROUP.RU,
+          searchString
+        );
+        foods = dbMapper(data.foods);
 
-        yield put(createReplaceFood(FoodSection.SEARCH, dbFoods));
+        const res = yield call(FoodApi.searchOpenFoodFacts, searchString);
 
-        res = yield call(FoodApi.searchOpenFoodFacts, payload);
-
-        yield put(createChangeFood(FoodSection.SEARCH, res.foods));
+        foods = {
+          ...foods,
+          ...res.foods,
+        };
       } else {
-        const { data } = yield call(FoodApi.searchProductsInLocalDb, FOOD_DATABASES_BY_COUNTRY_GROUP.EN, payload);
-        const dbFoods = dbMapper(data.foods);
+        const { data } = yield call(
+          FoodApi.searchProductsInLocalDb,
+          FOOD_DATABASES_BY_COUNTRY_GROUP.EN,
+          searchString
+        );
 
-        yield put(createReplaceFood(FoodSection.SEARCH, dbFoods));
+        foods = dbMapper(data.foods);
 
-        res = yield call(FoodApi.searchFatSecret, payload);
+        res = yield call(FoodApi.searchFatSecret, searchString);
 
-        yield put(createChangeFood(FoodSection.SEARCH, res.foods));
+        foods = {
+          ...foods,
+          ...res.foods,
+        };
 
-        res = yield call(FoodApi.searchOpenFoodFacts, payload);
+        res = yield call(FoodApi.searchOpenFoodFacts, searchString);
 
-        yield put(createChangeFood(FoodSection.SEARCH, res.foods));
+        foods = {
+          ...foods,
+          ...res.foods,
+        };
+
       }
+
+      yield put(createReplaceFood(FoodSection.SEARCH, foods));
+
+      appAnalytics.sendEvent(appAnalytics.events.FOOD_SEARCH);
     } else {
       alert(i18nGet('active_network_needed'));
     }

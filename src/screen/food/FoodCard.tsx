@@ -13,7 +13,6 @@ import { COLOR } from '../../constant/Color';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
-import { FoodCreationInput } from '../../view/food/components/FoodCreationInput';
 import { FoodCalculatorConnected } from '../../view/food/components/FoodCalculator';
 import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
 import { PopupHeader } from '../../component/popup/PopupHeader';
@@ -24,7 +23,7 @@ import { createGetFoodItemByIdAction } from '../../store/service/food/GetFoodIte
 import { Loader } from '../../component/loader/Loader';
 import { createAddProductToFavoriteAction } from '../../store/service/food/AddProductToFavoriteSaga';
 import { createRemoveProdcutFromFavoriteAction } from '../../store/service/food/RemoveProductFromFavoritesSaga';
-import { createChangeInteractive } from '../../store/modules/interactive/interactive';
+import { appAnalytics } from '../../app/Analytics';
 
 interface OwnProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -60,10 +59,16 @@ function FoodCardComponent(props: Props) {
   } = props;
 
   const [popupOpen, setPopupOpen] = React.useState(true);
+  const isForNote = navigation.getParam('isForNote');
 
   useEffect(() => {
     addToHistory(foodItem);
     autoAddToDb(foodItem);
+
+    appAnalytics.sendEventWithProps(
+      appAnalytics.events.FOOD_CARD_SEEN,
+      { dbId: foodItem.dbId, isForNote }
+    )
   }, []);
 
   const onBack = () => {
@@ -87,9 +92,6 @@ function FoodCardComponent(props: Props) {
       addFoodItemToFavorites(foodItem);
       addProductToFavoriteInDb(foodId);
     };
-
-  const isForNote = navigation.getParam('isForNote');
-
 
   const isEditing: boolean = navigation.getParam('isEditing');
   const popupBodyStyles = isEditing

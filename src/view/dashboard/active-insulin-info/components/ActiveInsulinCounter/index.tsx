@@ -33,9 +33,6 @@ export const ActiveInsulinCounterConnected = connect(
 
 const styles = StyleSheet.create({
   text: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
     fontSize: 25,
     color: COLOR.BLUE,
     fontWeight: '500',

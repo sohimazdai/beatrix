@@ -12,6 +12,8 @@ export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
   shedule?: IUserPropertiesShedule
 
   locale?: string
+
+  favorites?: number
 };
 
 export let section = '';
@@ -135,6 +137,23 @@ export const appAnalytics = {
     // FILTER
     CLEAR_FILTER: 'Filter cleared',
     APPLY_FILTER: 'Filter applied',
+    // FOOD
+    ADD_FOOD_HANDLY: 'Food add handly',
+    ADD_FOOD_AUTO: 'Food add auto',
+    ADD_FOOD_TO_FAVORITES: 'Food add to favrites',
+    REMOVE_FOOD_FROM_FAVORITES: 'Food remove from favrites',
+    FOOD_BARCODE_GOT: 'Food searched by barcode',
+    FOOD_FAVORITES_FETCHED: 'Food favorites fetched',
+    FOOD_GOT_BY_ID: 'Food got by id',
+    FOOD_SEARCH: 'Food searched',
+    FOOD_CARD_SEEN: 'Food card screen seen',
+    FOOD_CREATION_SEEN: 'Food creation screen seen',
+    FOOD_SCREEN_SEEN: 'Food screen seen',
+    FOOD_BARCODE_SCREEN_SEEN: 'Food barcode screen seen',
+    FOOD_BARCODE_START_SCANING: 'Food barcode start scanning',
+    FOOD_BARCODE_SUCCESS_SCANING: 'Food barcode success scanning',
+    FOOD_ADD_TO_NOTE: 'Food added to note',
+    FOOD_REMOVE_FROM_NOTE: 'Food removed from note',
   }
 }
 

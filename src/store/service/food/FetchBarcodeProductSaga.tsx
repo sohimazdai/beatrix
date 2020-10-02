@@ -1,11 +1,14 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
-import { handleError, handleErrorSilently } from '../../../app/ErrorHandler';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
 import { createChangeFood, FoodSection } from '../../modules/food/food';
+import { appAnalytics } from '../../../app/Analytics';
+import { IFoodListItem } from '../../../model/IFood';
+import { createFoodAnalytics } from '../../service-helper/createFoodAnalytics';
 
 const ACTION_TYPE = "FETCH_PRODUCT_BY_BARCODE_ACTION";
 
@@ -33,9 +36,14 @@ function* run({ payload }: FetchProductByBarcodeAction) {
     const foodHistory = state.food.history;
 
     if (state.app.networkConnected) {
-      const product = yield call(FoodApi.getOFFProductByBarcode, payload);
+      const product: IFoodListItem = yield call(FoodApi.getOFFProductByBarcode, payload);
 
       if (product && product.id) {
+        appAnalytics.sendEventWithProps(
+          appAnalytics.events.FOOD_BARCODE_GOT,
+          createFoodAnalytics(product),
+        );
+
         yield put(
           createChangeFood(
             FoodSection.HISTORY,
@@ -43,9 +51,11 @@ function* run({ payload }: FetchProductByBarcodeAction) {
               ...foodHistory,
               [product.id]: product,
             }
-          ))
+          ));
       } else {
         alert(i18nGet('product_not_found'));
+
+        throw new Error('Продукт не найден');
       }
 
     } else {

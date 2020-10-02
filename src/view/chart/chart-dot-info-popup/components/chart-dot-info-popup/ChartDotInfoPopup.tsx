@@ -175,6 +175,7 @@ export class ChartDotInfoPopup extends React.Component<Props> {
                         <FoodListComponent
                             foodList={note.foodList}
                             goToFoodCard={this.goToFoodCard}
+                            forNote
                         />
                     </View>}
                     {!!note.commentary && <View style={styles.valueBlock}>

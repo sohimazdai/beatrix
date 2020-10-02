@@ -4,6 +4,9 @@ import { IStorage } from "../../../model/IStorage";
 import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { FoodApi } from '../../../api/FoodApi';
+import { appAnalytics } from '../../../app/Analytics';
+import { selectSelectedFoodItem } from '../../../view/food/selectors/select-selected-food-item';
+import { createFoodAnalytics } from '../../service-helper/createFoodAnalytics';
 
 const type = "REMOVE_PRODUCT_FROM_FAVORITE";
 
@@ -28,10 +31,15 @@ interface RemoveProdcutFromFavoriteAction {
 function* run({ payload }: RemoveProdcutFromFavoriteAction) {
   try {
     const state: IStorage = yield select(state => state);
+    const foodToRemoveFromFavs = selectSelectedFoodItem(state, payload[0]);
     const userId = state.user.id;
 
     if (state.app.networkConnected) {
       yield call(FoodApi.removeFoodIdFromFavorites, userId, payload);
+      appAnalytics.sendEventWithProps(
+        appAnalytics.events.REMOVE_FOOD_FROM_FAVORITES,
+        createFoodAnalytics(foodToRemoveFromFavs),
+      )
     }
 
     yield put(
