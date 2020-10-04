@@ -40,7 +40,7 @@ function* createNote({ payload }: CreateNoteAction) {
     const noteWithoutId = payload.note;
     const userId = state.user.id;
     const noteId = uuidv1();
-
+    const foods = Object.values(payload.note.foodList || {}).length;
     try {
         yield put(createNoteListChangeNoteByIdAction(noteWithoutId, userId, noteId));
 
@@ -49,16 +49,24 @@ function* createNote({ payload }: CreateNoteAction) {
                 NoteApi.createNote,
                 {
                     ...noteWithoutId,
-                    id: noteId
+                    id: noteId,
+                    userId,
                 },
                 userId);
         } else {
             yield put(createAddNotePendingNoteList(noteId, state.user.id));
         }
 
+        const { foodList, ...analyticsNote } = noteWithoutId;
+
         appAnalytics.sendEventWithProps(
             appAnalytics.events.NOTE_CREATED,
-            noteWithoutId
+            {
+                ...analyticsNote,
+                foods,
+                id: noteId,
+                userId,
+            }
         );
 
         yield put(createUserChangeAction({

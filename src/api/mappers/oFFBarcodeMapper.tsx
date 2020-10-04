@@ -20,17 +20,28 @@ export function oFFBarcodeMapper(response): IFoodListItem {
       proteins: numberizeAndFix(nutrients.proteins || nutrients['proteins_100g']),
       fats: numberizeAndFix(nutrients.fat || nutrients['fat_100g']),
       carbohydrates: numberizeAndFix(nutrients.carbohydrates || nutrients['carbohydrates_100g']),
-      calories: numberizeAndFix(nutrients.calories || nutrients['energy_100g']),
-      energy: numberizeAndFix(nutrients['calories-kj'] || nutrients['calories-kj_100g']),
+      calories:
+        nutrients['energy-kcal_100g'] ||
+        nutrients['calories-kcal_100g'] ||
+        nutrients['energy-kcal'] ||
+        nutrients['calories-kcal'] ||
+        null,
+      energy:
+        nutrients['energy-kj_100g'] ||
+        nutrients['calories-kj_100g'] ||
+        nutrients['energy-kj'] ||
+        nutrients['calories-kj'] ||
+        null,
     },
   };
 
-  food.nutrients.energy = numberizeAndFix(
-    food.nutrients.energy || convertCaloriesToEnergy(food.nutrients.calories)
-  );
-  food.nutrients.calories = numberizeAndFix(
-    food.nutrients.calories || convertEnergyToCalories(food.nutrients.energy)
-  );
+  if (!food.nutrients.energy && food.nutrients.calories) {
+    food.nutrients.energy = numberizeAndFix(convertCaloriesToEnergy(food.nutrients.calories));
+  }
+
+  if (!food.nutrients.calories && food.nutrients.energy) {
+    food.nutrients.calories = numberizeAndFix(convertEnergyToCalories(food.nutrients.energy));
+  }
 
   return food;
 }

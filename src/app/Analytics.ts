@@ -27,7 +27,7 @@ export const appAnalytics = {
       .catch((e) => logger('::amplitude initializing error: ', e.message))
   },
   setUser: (userId: string) => {
-    logger('::amplitude user is setting now');
+    logger('::amplitude user is setting now', { userId });
 
     Amplitude.setUserId(userId)
       .then(() => Amplitude.setUserProperties({
@@ -121,6 +121,7 @@ export const appAnalytics = {
     //AUTH
     AUTH_SCREEN_SEEN: 'Auth screen seen',
     GOOGLE_SIGN_IN_PRESSED: 'Google sign in pressed',
+    RESOLVER_PRESSED: 'Resolver pressed',
     //LINK OPENED
     SETTINGS_INSULIN_LINK_OPENED: 'Settings insulin link opened',
     //NOTE_EDITOR

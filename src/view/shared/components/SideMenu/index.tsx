@@ -47,15 +47,15 @@ export class SideMenuContent extends React.Component<Props> {
           )}
 
           {this.renderItem(
-            i18nGet('tags'),
-            <TagsIcon width={25} height={25} />,
-            NavigatorEntities.TAG_EDITOR,
-          )}
-
-          {this.renderItem(
             i18nGet('food'),
             <VegetablesIcon width={25} height={25} />,
             NavigatorEntities.FOOD_PAGE,
+          )}
+
+          {this.renderItem(
+            i18nGet('tags'),
+            <TagsIcon width={25} height={25} />,
+            NavigatorEntities.TAG_EDITOR,
           )}
 
           {this.renderItem(

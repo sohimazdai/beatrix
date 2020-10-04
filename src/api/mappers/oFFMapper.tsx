@@ -14,8 +14,18 @@ export function oFFMapper(products: any[]): IFoodList {
       proteins: nutrients.proteins || nutrients['proteins_100g'] || 0,
       fats: nutrients.fat || nutrients['fat_100g'] || 0,
       carbohydrates: nutrients.carbohydrates || nutrients['carbohydrates_100g'] || 0,
-      calories: nutrients.calories || nutrients['energy_100g'] || 0,
-      energy: nutrients['calories-kj'] || nutrients['calories-kj_100g'] || 0,
+      calories:
+        nutrients['energy-kcal_100g'] ||
+        nutrients['calories-kcal_100g'] ||
+        nutrients['energy-kcal'] ||
+        nutrients['calories-kcal'] ||
+        null,
+      energy:
+        nutrients['energy-kj_100g'] ||
+        nutrients['calories-kj_100g'] ||
+        nutrients['energy-kj'] ||
+        nutrients['calories-kj'] ||
+        null,
     }
 
     if (!id || !name) return;

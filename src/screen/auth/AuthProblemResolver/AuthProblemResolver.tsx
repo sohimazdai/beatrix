@@ -12,6 +12,7 @@ import { createSyncUserAction } from '../../../store/service/user/SyncUserSaga';
 import { createUserChangeAction } from '../../../store/modules/user/UserActionCreator';
 import { IApp } from '../../../model/IApp';
 import { i18nGet } from '../../../localisation/Translate';
+import { appAnalytics } from '../../../app/Analytics';
 
 interface Props {
   user?: IUser
@@ -61,8 +62,15 @@ class Component extends React.Component<Props, State> {
     }
   }
 
-  render() {
+  onResolverPress = () => {
     const { user, syncUser } = this.props;
+
+    appAnalytics.sendEventWithProps(appAnalytics.events.RESOLVER_PRESSED, { userId: user.id });
+    syncUser();
+  }
+
+  render() {
+    const { user } = this.props;
 
     if (Platform.OS === 'ios') return null;
 
@@ -76,7 +84,7 @@ class Component extends React.Component<Props, State> {
           {i18nGet('continue_as')}
         </Text>
         <View style={styles.buttonView}>
-          <TouchableOpacity onPress={syncUser}>
+          <TouchableOpacity onPress={this.onResolverPress}>
             <Text style={styles.buttonText}>
               {userName}
             </Text>
