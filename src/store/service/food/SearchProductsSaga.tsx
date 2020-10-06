@@ -1,4 +1,4 @@
-import { put, call, select, throttle } from "redux-saga/effects";
+import { put, call, select, takeLatest, all } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
 import { handleErrorSilently } from '../../../app/ErrorHandler';
@@ -45,42 +45,35 @@ function* run({ payload: searchString }: SearchProductsAction) {
       let foods: IFoodList = {};
 
       if (isInRussianGroup) {
-        const { data } = yield call(
-          FoodApi.searchProductsInLocalDb,
-          FOOD_DATABASES_BY_COUNTRY_GROUP.RU,
-          searchString
-        );
-        foods = dbMapper(data.foods);
-
-        const res = yield call(FoodApi.searchOpenFoodFacts, searchString);
+        const [localDB, offDB] = yield all([
+          call(
+            FoodApi.searchProductsInLocalDb,
+            FOOD_DATABASES_BY_COUNTRY_GROUP.RU,
+            searchString
+          ),
+          call(FoodApi.searchOpenFoodFacts, searchString),
+        ])
 
         foods = {
-          ...foods,
-          ...res.foods,
+          ...dbMapper(localDB.foods),
+          ...offDB.foods,
         };
       } else {
-        const { data } = yield call(
-          FoodApi.searchProductsInLocalDb,
-          FOOD_DATABASES_BY_COUNTRY_GROUP.EN,
-          searchString
-        );
-
-        foods = dbMapper(data.foods);
-
-        res = yield call(FoodApi.searchFatSecret, searchString);
-
-        foods = {
-          ...foods,
-          ...res.foods,
-        };
-
-        res = yield call(FoodApi.searchOpenFoodFacts, searchString);
+        const [localDB, fsDB, offDB] = yield all([
+          call(
+            FoodApi.searchProductsInLocalDb,
+            FOOD_DATABASES_BY_COUNTRY_GROUP.EN,
+            searchString
+          ),
+          call(FoodApi.searchFatSecret, searchString),
+          call(FoodApi.searchOpenFoodFacts, searchString),
+        ]);
 
         foods = {
-          ...foods,
-          ...res.foods,
+          ...localDB.foods,
+          ...fsDB.foods,
+          ...offDB.foods,
         };
-
       }
 
       yield put(createReplaceFood(FoodSection.SEARCH, foods));
@@ -120,5 +113,5 @@ function* run({ payload: searchString }: SearchProductsAction) {
 }
 
 export function* watchSearchProducts() {
-  yield throttle(500, ACTION_TYPE, run);
+  yield takeLatest(ACTION_TYPE, run);
 }

@@ -4,6 +4,8 @@ import { numberizeAndFix } from '../helper/numberize-and-fix';
 import { v1 as uuidv1 } from 'uuid';
 
 export function oFFMapper(products: any[]): IFoodList {
+  // console.log(products);
+
   const searchFood: IFoodList = {};
 
   products.forEach((product) => {
@@ -11,9 +13,9 @@ export function oFFMapper(products: any[]): IFoodList {
     const id = product.id;
     const name = product['product_name'] || product['generic_name'];
     const nutrientsMapped = {
-      proteins: nutrients.proteins || nutrients['proteins_100g'] || 0,
-      fats: nutrients.fat || nutrients['fat_100g'] || 0,
-      carbohydrates: nutrients.carbohydrates || nutrients['carbohydrates_100g'] || 0,
+      proteins: nutrients['proteins_100g'] || nutrients.proteins || 0,
+      fats: nutrients['fat_100g'] || nutrients.fat || 0,
+      carbohydrates: nutrients['carbohydrates_100g'] || nutrients.carbohydrates || 0,
       calories:
         nutrients['energy-kcal_100g'] ||
         nutrients['calories-kcal_100g'] ||

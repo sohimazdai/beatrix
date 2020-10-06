@@ -13,7 +13,6 @@ import { IStorage } from '../../../../model/IStorage';
 import { IFood, IFoodList, IFoodListItem } from '../../../../model/IFood';
 import { Loader } from '../../../../component/loader/Loader';
 import { sortSearchResult } from '../../../../store/service-helper/sort-search-result';
-import { TextInput } from 'react-native-gesture-handler';
 
 interface Props {
   searchFood: IFoodList
@@ -26,11 +25,16 @@ interface Props {
 };
 
 function SearchContent(props: Props) {
-  const inputRef = React.createRef<TextInput>();
   const { onType, goToFoodCard, food, clearSearch } = props;
   const [typed, setTyped] = React.useState('');
 
   const sortFunction = (foods: IFoodListItem[]) => sortSearchResult(typed, foods);
+
+  useEffect(
+    () => {
+      !typed && clearSearch();
+    }, [typed]
+  );
 
   return (
     <View style={styles.view}>

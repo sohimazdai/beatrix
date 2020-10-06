@@ -4,7 +4,7 @@ import { numberizeAndFix } from '../helper/numberize-and-fix';
 import { v1 as uuidv1 } from 'uuid';
 
 export function oFFBarcodeMapper(response): IFoodListItem {
-  // console.dir(response);
+  // console.log(response);
 
   const nutrients = response.nutriments || response.nutrients || {};
 
@@ -17,9 +17,9 @@ export function oFFBarcodeMapper(response): IFoodListItem {
     dbId: FoodDatabase.OPEN_FOOD_FACTS,
     image: response['image_url'] || response['image_front_url'],
     nutrients: {
-      proteins: numberizeAndFix(nutrients.proteins || nutrients['proteins_100g']),
-      fats: numberizeAndFix(nutrients.fat || nutrients['fat_100g']),
-      carbohydrates: numberizeAndFix(nutrients.carbohydrates || nutrients['carbohydrates_100g']),
+      proteins: numberizeAndFix(nutrients['proteins_100g'] || nutrients.proteins),
+      fats: numberizeAndFix(nutrients['fat_100g'] || nutrients.fat),
+      carbohydrates: numberizeAndFix(nutrients['carbohydrates_100g'] || nutrients.carbohydrates),
       calories:
         nutrients['energy-kcal_100g'] ||
         nutrients['calories-kcal_100g'] ||
