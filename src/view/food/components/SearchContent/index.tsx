@@ -98,10 +98,11 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_DARK_GRAY,
   },
   loadingView: {
-    width: '100%',
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
   },
   emptyListButton: {
     flex: 1,

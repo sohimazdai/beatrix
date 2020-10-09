@@ -43,12 +43,14 @@ export function BarcodeScanningScreenComponent(props: Props) {
   }, []);
 
   const handleBarCodeScanned = async (barcodeData) => {
+    if (scanned) return;
+
     const { data } = barcodeData;
     const { navigation } = props;
 
     appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_START_SCANING);
 
-    setScanned(true);
+    await setScanned(true);
     let foodItem = await FoodApi.getOFFProductByBarcode(data);
 
     if (!foodItem) {
@@ -96,10 +98,9 @@ export function BarcodeScanningScreenComponent(props: Props) {
         {children}
       </View>
     </View>
-  )
+  );
 
   const onBackPress = () => {
-
     const backPage = navigation?.state?.params?.backPage || NavigatorEntities.FOOD_PAGE;
 
     navigation.navigate(backPage);
@@ -112,7 +113,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
           onBarCodeScanned={handleBarCodeScanned}
           style={styles.barcodeScaner}
           barCodeTypes={[
-            BarCodeScanner.Constants.BarCodeType.qr,
+            // BarCodeScanner.Constants.BarCodeType.qr,
             BarCodeScanner.Constants.BarCodeType.code39,
             BarCodeScanner.Constants.BarCodeType.code93,
             BarCodeScanner.Constants.BarCodeType.code128,

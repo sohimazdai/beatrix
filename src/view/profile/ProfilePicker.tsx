@@ -7,15 +7,19 @@ interface Props {
     hint?: string
     children?: any
     hintCritical?: boolean
+    titleTooltip?: React.ReactNode
 }
 
 export class ProfilePicker extends React.Component<Props> {
     render() {
+        const { titleTooltip } = this.props;
+
         return <View style={styles.profilePickerView}>
             <View style={styles.itemHeader}>
                 {this.props.title && <Text style={styles.itemCardTitle}>
                     {this.props.title}
                 </Text>}
+                {!!titleTooltip && (titleTooltip)}
             </View>
             <View style={styles.itemCard}>
                 {this.props.description && <Text style={styles.itemCardDescription}>
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         width: '100%',
         padding: 10,
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         backgroundColor: '#ffffff',

@@ -41,7 +41,6 @@ function* run({ payload: searchString }: SearchProductsAction) {
     const state: IStorage = yield select(state => state);
     const isInRussianGroup = checkForIsItInRuGroup(getLocale(), getRegion());
     if (state.app.networkConnected) {
-      let res;
       let foods: IFoodList = {};
 
       if (isInRussianGroup) {
@@ -55,7 +54,7 @@ function* run({ payload: searchString }: SearchProductsAction) {
         ])
 
         foods = {
-          ...dbMapper(localDB.foods),
+          ...dbMapper(localDB.data.foods),
           ...offDB.foods,
         };
       } else {
@@ -70,7 +69,7 @@ function* run({ payload: searchString }: SearchProductsAction) {
         ]);
 
         foods = {
-          ...localDB.foods,
+          ...dbMapper(localDB.data.foods),
           ...fsDB.foods,
           ...offDB.foods,
         };

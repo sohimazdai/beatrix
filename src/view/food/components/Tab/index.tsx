@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   text: {
+    maxWidth: 80,
     fontSize: 17,
     color: COLOR.PRIMARY,
     marginLeft: 8,

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { connect } from 'react-redux';
 import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
-import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
-import { AddNoteIcon } from '../../../../component/icon/AddNoteIcon';
+import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
 import { COLOR } from '../../../../constant/Color';
 import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';

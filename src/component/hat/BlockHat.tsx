@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     },
     leftSide: {
         display: 'flex',
+        maxWidth: Dimensions.get('screen').width - 60,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     },
     title: {
         paddingLeft: 4,
-        maxWidth: Dimensions.get('screen').width - 120,
+        // maxWidth: Dimensions.get('screen').width - 120,
         fontSize: 19,
         color: '#ffffff',
         paddingRight: 8,
