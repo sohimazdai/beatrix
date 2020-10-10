@@ -1,7 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
-import { COLOR } from '../../constant/Color';
-import { i18nGet } from '../../localisation/Translate';
+import { Animated, Dimensions, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Loader } from '../loader/Loader';
 
 export enum FaderType {
@@ -13,10 +12,11 @@ export interface FaderProps {
     hidden?: boolean;
     children?: any;
     type?: FaderType;
+    onPress?: () => void
 }
 
 export const Fader = (props: FaderProps) => {
-    const { type } = props;
+    const { onPress } = props;
 
     const [opacity] = React.useState(new Animated.Value(0));
     const [isDisplay, setDisplay] = React.useState(false);
@@ -37,19 +37,23 @@ export const Fader = (props: FaderProps) => {
     return isDisplay && (
         <Animated.View
             style={{
-                ...styles.FaderView,
+                ...styles.faderView,
                 opacity: opacity,
             }}
         >
             {props.type !== FaderType.EMPTY && (
                 <Loader />
             )}
+            {!!onPress && <TouchableOpacity
+                style={styles.touchableZone}
+                onPress={onPress}
+            />}
         </Animated.View>
     ) || null;
 }
 
 const styles = StyleSheet.create({
-    FaderView: {
+    faderView: {
         height: '100%',
         width: '100%',
 
@@ -63,4 +67,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
         padding: 16,
     },
+    touchableZone: {
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
+    }
 })

@@ -6,11 +6,9 @@ import {
   NavigationScreenProp,
   NavigationState
 } from "react-navigation";
-import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
-import SideMenu from 'react-native-side-menu';
 
-import { BlockHat } from "../../component/hat/BlockHat";
 import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { LastNotesConnected } from '../../view/dashboard/last-notes/components/LastNotes';
@@ -19,7 +17,7 @@ import { ActiveInsulinInfoConnected } from '../../view/dashboard/active-insulin-
 import { StatisticsCardConnected } from '../../view/dashboard/statistics-card/components/StatisticsCard';
 import { HBA1CCalculatorConnected } from '../../view/dashboard/hba1c-calculator/components/HBA1CCalculator';
 import { Fader } from '../../component/fader/Fader';
-import { SideMenuContent } from '../../view/shared/components/SideMenu';
+import { SideMenu } from '../../view/shared/components/SideMenu';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { MenuIcon } from '../../component/icon/MenuIcon';
 
@@ -37,6 +35,7 @@ import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 import { Header } from '../../component/hat/Header';
+import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -67,6 +66,8 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
   state = { menuShown: false };
 
   componentDidMount() {
+    console.log('🤖🤖🤖🤖 dashboard updated');
+
     appAnalytics.setSection(AnalyticsSections.DASHBOARD);
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
 
@@ -77,6 +78,7 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
     if (!pP.app.serverAvailable && this.props.app.serverAvailable) {
       this.props.syncNotes();
     }
+    console.log('🤖🤖🤖🤖 dashboard updated');
   }
 
   goToNoteEditor = (noteId?: string) => {
@@ -85,25 +87,16 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
     navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
   }
 
+  closeSideMenu = () => {
+    this.setState({ menuShown: false })
+  }
+
   render() {
     const { navigation } = this.props;
     const { menuShown } = this.state;
 
     return (
-      <SideMenu
-        navigation={navigation}
-        isOpen={menuShown}
-        menu={<SideMenuContent
-          navigation={navigation}
-          closeSideMenu={() => this.setState({ menuShown: false })}
-        />}
-        onChange={(isOpen) => this.setState({ menuShown: isOpen })}
-        animationFunction={(prop, value) => Animated.timing(prop, {
-          toValue: value,
-          duration: 100,
-          useNativeDriver: true,
-        })}
-      >
+      <>
         <View style={styles.screenView}>
           <Header
             title={i18nGet('compensation')}
@@ -152,7 +145,12 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
           <Fader hidden={!this.props.selectedDotId} />
         </View >
         <ChartDotInfoPopupConnect navigation={navigation} />
-      </SideMenu >
+        <SideMenu
+          hidden={!menuShown}
+          navigation={navigation}
+          closeSideMenu={this.closeSideMenu}
+        />
+      </>
     );
   }
 

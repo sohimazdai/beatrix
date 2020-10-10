@@ -85,6 +85,7 @@ export const appAnalytics = {
     //DASHBOARD
     DASHBOARD_SEEN: 'Dashboard seen',
     HBA1C_CALCULATED: 'HBA1C calculated',
+    NAVIGATE_FROM_SIDE_MENU: 'Navigated from side menu',
     //NOTELIST
     NOTELIST_SEEN: 'NoteList seen',
     NOTE_EDITOR_SEEN: 'NoteEditor seen',

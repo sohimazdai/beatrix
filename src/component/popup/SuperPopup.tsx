@@ -1,11 +1,13 @@
 import React from 'react'
 import { StyleSheet, Animated, Dimensions, View } from 'react-native'
+import { Directions } from 'react-native-gesture-handler';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 
 export enum PopupDirection {
     TOP_BOTTOM = 'top-bottom',
     BOTTOM_TOP = 'bottom-top',
     BOTTOM_CENTER = 'bottom-center',
+    LEFT_TO_RIGHT = 'left-to-right',
 }
 
 export interface SuperPopupProps {
@@ -18,13 +20,18 @@ export interface SuperPopupProps {
 export const SuperPopup = (props: SuperPopupProps) => {
     const { onPopupClosed, hidden } = props;
 
-    const [currentBottom] = React.useState(new Animated.Value(-Dimensions.get('screen').height))
+    const startValue =
+        props.direction && props.direction === PopupDirection.LEFT_TO_RIGHT
+            ? -Dimensions.get('screen').width
+            : -Dimensions.get('screen').height;
+
+    const [current] = React.useState(new Animated.Value(startValue))
     const [children, setChildren] = React.useState(null)
     const [direction, setDirection] = React.useState(props.direction);
 
     React.useEffect(() => {
         Animated.timing(
-            currentBottom,
+            current,
             {
                 toValue: hidden ? -Dimensions.get('screen').height : 0,
                 duration: 300,
@@ -42,15 +49,23 @@ export const SuperPopup = (props: SuperPopupProps) => {
     const style = direction && direction === PopupDirection.TOP_BOTTOM
         ? {
             ...styles.SuperPopupView,
-            top: currentBottom,
-        } : {
-            ...styles.SuperPopupView,
-            bottom: currentBottom,
-        };
+            width: '100%',
+            top: current,
+        } : direction === PopupDirection.LEFT_TO_RIGHT
+            ? {
+                ...styles.SuperPopupView,
+                left: current,
+            } : {
+                ...styles.SuperPopupView,
+                width: '100%',
+                bottom: current,
+            };
 
     const viewStyle = direction && direction === PopupDirection.TOP_BOTTOM
         ? styles.TopPopup
-        : styles.BottomPopup;
+        : direction === PopupDirection.LEFT_TO_RIGHT
+            ? styles.LeftPopup
+            : styles.BottomPopup;
 
     return (
         <Animated.View style={style}>
@@ -65,7 +80,6 @@ const styles = StyleSheet.create({
     SuperPopupView: {
         display: "flex",
         position: 'absolute',
-        width: '100%',
         opacity: 1,
     },
     TopPopup: {
@@ -78,6 +92,12 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
+        ...SHADOW_OPTIONS,
+    },
+    LeftPopup: {
+        overflow: 'hidden',
+        borderTopRightRadius: 25,
+        borderBottomRightRadius: 25,
         ...SHADOW_OPTIONS,
     },
 })
