@@ -9,8 +9,8 @@ import { appStarter } from './src/app/AppStarter';
 import { AppConnection } from './src/app/AppConnection';
 import { handleError } from './src/app/ErrorHandler';
 import { DevStub } from './src/component/dev-stub/DevStub';
-import { ChartDotInfoPopupConnect } from './src/view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { PendingWatcherConnected } from './src/app/PendingWatcher';
+import * as SplashScreen from 'expo-splash-screen';
 
 interface State {
   appIsReady: boolean
@@ -25,8 +25,11 @@ export default class App extends React.Component<never, State> {
     appStarter()
       .then(() => {
         this.setState({ appIsReady: true });
+        SplashScreen.hideAsync();
       })
-      .catch(e => handleError(e, 'Ошибка инициализации'))
+      .catch(e => {
+        handleError(e, 'Ошибка инициализации')
+      });
   }
 
   render() {
