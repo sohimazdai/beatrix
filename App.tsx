@@ -28,7 +28,8 @@ export default class App extends React.Component<never, State> {
         SplashScreen.hideAsync();
       })
       .catch(e => {
-        handleError(e, 'Ошибка инициализации')
+        handleError(e, 'Ошибка инициализации');
+        SplashScreen.hideAsync();
       });
   }
 

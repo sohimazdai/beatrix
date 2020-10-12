@@ -9,19 +9,18 @@ import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
 import { selectActiveInsulinValue } from '../../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
 import { COLOR } from '../../../../constant/Color';
-import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface OwnProps {
-    note?: INoteListNote
+    note?: INoteListNote;
     goToInsulinSettings: () => void;
 }
 
 interface Props extends OwnProps {
-    userDiabetesProperties?: IUserDiabetesProperties
-    userPropertiesShedule?: IUserPropertiesShedule
-    activeInsulinValue?: number
-    note?: INoteListNote
+    userDiabetesProperties?: IUserDiabetesProperties;
+    userPropertiesShedule?: IUserPropertiesShedule;
+    activeInsulinValue?: number;
+    note?: INoteListNote;
 }
 
 function NoteInsulinDoseRecommendation(props: Props) {
@@ -90,12 +89,27 @@ function NoteInsulinDoseRecommendation(props: Props) {
                 </TouchableOpacity>
             )}
             {!!activeInsulinValue && (
-                <Text style={styles.activeInsulinText}>
-                    {`${i18nGet('rest_active_insulin')}: ${activeInsulinValue.toFixed(1)}`}
-                </Text>
+                <View style={styles.textRow}>
+                    <Text style={styles.activeInsulinText}>
+                        {`${i18nGet('rest_active_insulin')}: ${activeInsulinValue.toFixed(1)}`}
+                    </Text>
+                </View>
+            )}
+            {!!activeInsulinValue && Number(insulinValue) > activeInsulinValue && (
+                <View style={styles.textRow}>
+                    <Text style={styles.text}>
+                        {`${i18nGet('need_to_inject')}: ${insulinValue} - `}
+                    </Text>
+                    <Text style={styles.activeInsulinTextBold}>
+                        {activeInsulinValue.toFixed(1)}
+                    </Text>
+                    <Text style={styles.text}>
+                        {` = ${(Number(insulinValue) - activeInsulinValue).toFixed(1)}`}
+                    </Text>
+                </View>
             )}
         </View>
-    )
+    );
 }
 
 export const NoteInsulinDoseRecommendationConnect = connect(
@@ -119,21 +133,36 @@ export const NoteInsulinDoseRecommendationConnect = connect(
 
 const styles = StyleSheet.create({
     view: {
-        marginTop: 15,
+        width: '100%',
+        marginTop: 16,
         backgroundColor: 'rgba(255,255,255, 0.5)',
-        padding: 15,
+        padding: 16,
         borderRadius: 5,
+    },
+    textRow: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    text: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        lineHeight: 30,
     },
     activeInsulinText: {
         fontSize: 16,
+        color: COLOR.RED_DARK,
+        lineHeight: 30,
+    },
+    activeInsulinTextBold: {
+        fontSize: 16,
         fontWeight: 'bold',
         color: COLOR.RED_DARK,
-        paddingTop: 8,
+        lineHeight: 30,
     },
     recommendation: {
         fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333333'
+        color: COLOR.TEXT_DARK_GRAY,
+        lineHeight: 30,
     },
     settingsLink: {
         color: COLOR.BLUE,

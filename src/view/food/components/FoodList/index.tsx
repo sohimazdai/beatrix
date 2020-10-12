@@ -45,12 +45,13 @@ export function FoodListComponent(props: Props) {
     <>
       <FlatList
         data={foods}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           forNote
             ? (
               <NoteFoodItem
                 key={item.id}
                 item={item}
+                isLast={index === foods.length - 1}
                 goToFoodCard={goToFoodCard}
               />
             ) : (

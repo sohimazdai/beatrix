@@ -4,7 +4,7 @@ import { appAnalytics } from './Analytics';
 import Variables from './Variables';
 import { logger } from './Logger';
 
-export async function appStarter() {
+export function appStarter() {
     logger('App environment:', Variables.name);
 
     return new Promise((resolve, reject) => {

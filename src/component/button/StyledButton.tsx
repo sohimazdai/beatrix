@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   touchableOutline: {
     backgroundColor: COLOR.WHITE,
-    borderColor: COLOR.TEXT_DIMGRAY,
+    borderColor: COLOR.PRIMARY,
     borderWidth: 1,
   },
   touchableDelete: {
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_WHITE,
   },
   textOutline: {
-    color: COLOR.TEXT_DIMGRAY,
+    color: COLOR.PRIMARY,
   },
   textDelete: {
     color: COLOR.TEXT_WHITE,

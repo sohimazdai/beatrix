@@ -21,21 +21,18 @@ export class MealTotal extends React.Component<Props> {
             {i18nGet('total')}:
           </Text>
           <Text style={styles.text}>
-            {`${i18nGet('food_creation_energy')}: ${totals.energy}${i18nGet('kJ')}`}
-          </Text>
-          <Text style={styles.text}>
-            {`${i18nGet('food_creation_calories')}: ${totals.calories}${i18nGet('kcal')}`}
+            {`${totals.energy}${i18nGet('kJ')}/${totals.calories}${i18nGet('kcal')}`}
           </Text>
         </View>
         <View style={styles.row}>
           <Text style={{ ...styles.text, ...styles.textFirst }}>
-            {`${i18nGet('food_creation_proteins')}: ${totals.proteins}${i18nGet('gram')}`}
+            {`${i18nGet('proteins_short')}: ${totals.proteins}${i18nGet('gram')}`}
           </Text>
           <Text style={styles.text}>
-            {`${i18nGet('food_creation_fats')}: ${totals.fats}${i18nGet('gram')}`}
+            {`${i18nGet('fats_short')}: ${totals.fats}${i18nGet('gram')}`}
           </Text>
           <Text style={styles.text}>
-            {`${i18nGet('food_creation_carbohydrates')}: ${totals.carbohydrates}${i18nGet('gram')}`}
+            {`${i18nGet('carbohydrates_short')}: ${totals.carbohydrates}${i18nGet('gram')}`}
           </Text>
         </View>
       </View>
@@ -45,6 +42,7 @@ export class MealTotal extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   wrap: {
+    width: '100%',
     marginTop: 8,
     display: 'flex',
     flexDirection: 'column',
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     paddingLeft: 8,
     color: COLOR.PRIMARY_WHITE,
   },

@@ -17,10 +17,11 @@ import { PopupDirection, SuperPopup } from '../../../../component/popup/SuperPop
 import { Fader } from '../../../../component/fader/Fader';
 
 interface Props {
-  hidden: boolean
+  hidden: boolean;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-  closeSideMenu: () => void
+  closeSideMenu: () => void;
 }
+
 export class SideMenu extends React.Component<Props> {
   render() {
     const { closeSideMenu, hidden } = this.props;
@@ -74,7 +75,7 @@ export class SideMenu extends React.Component<Props> {
           </View>
         </SuperPopup>
       </>
-    )
+    );
   }
 
   renderItem(title: string, icon: JSX.Element, screenName: NavigatorEntities) {

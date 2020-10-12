@@ -52,6 +52,7 @@ const INITIAL_STATE = {
   date: new Date(),
   glucose: 0,
   breadUnits: 0,
+  totalBreadUnits: 0,
   insulin: 0,
   longInsulin: 0,
   commentary: '',
@@ -326,6 +327,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
   renderPickerBlock() {
     const { currentValueType, selectedTags, isTagPickerOpen, ...note } = this.state;
 
+    const bu = !note.breadUnits && !this.additionalCarbs
+      ? '-'
+      : !note.breadUnits && this.additionalCarbs
+        ? `0+${this.additionalCarbs}`
+        : note.breadUnits && !this.additionalCarbs
+          ? `${note.breadUnits}+0`
+          : `${note.breadUnits}+${this.additionalCarbs}`;
+
     return (
       <View style={styles.inputBlock}>
         <View style={styles.timePickers}>
@@ -342,46 +351,57 @@ class NoteEditor extends React.PureComponent<Props, State>{
           onSelect={this.onValueTypePickerSelect}
           selectedType={this.state.currentValueType}
           {...note}
-          breadUnits={
-            !note.breadUnits && !this.additionalCarbs
-              ? 0
-              : `${note.breadUnits}+${this.additionalCarbs}`
-          }
+          breadUnits={note.breadUnits - this.additionalCarbs}
+          breadUnitsInfo={bu}
         />
-        <View style={styles.foods}>
+        <View style={styles.buttonView}>
           <StyledButton
             icon={<VegetablesIcon width={30} height={30} />}
             iconPosition={IconPositionType.LEFT}
             label={i18nGet('add_food')}
             onPress={this.goToFood}
-            style={StyledButtonType.EMPTY}
+            style={StyledButtonType.OUTLINE}
           />
-          <View style={styles.foodList}>
-            <FoodListComponent
-              foodList={note.foodList}
-              goToFoodCard={this.goToFoodCard}
-              forNote
-            />
-          </View>
-          {Object.values(note.foodList).length > 1 && (
-            <MealTotal foodList={note.foodList} />
-          )}
-        </View>
-        <View style={styles.tags}>
+          <View style={styles.space} />
           <StyledButton
             icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
             label={i18nGet('add_tag_to_note')}
             onPress={this.onTagPickerOpen}
-            style={StyledButtonType.EMPTY}
+            style={StyledButtonType.OUTLINE}
             iconPosition={IconPositionType.LEFT}
           />
-          <TagPicker
-            viewerOfSelected
-            width={280}
-            selectedTags={selectedTags}
-            onTagPress={this.onTagDelete}
-          />
         </View>
+        {Object.values(note.foodList).length > 0 && (
+          <View style={styles.foods}>
+            <View style={styles.foodList}>
+              <FoodListComponent
+                foodList={note.foodList}
+                goToFoodCard={this.goToFoodCard}
+                forNote
+              />
+            </View>
+            {Object.values(note.foodList).length > 1 && (
+              <MealTotal foodList={note.foodList} />
+            )}
+          </View>
+        )}
+        {selectedTags.length > 0 && (
+          <View style={styles.tags}>
+            <TagPicker
+              viewerOfSelected
+              width={280}
+              selectedTags={selectedTags}
+              onTagPress={this.onTagDelete}
+            />
+          </View>
+        )}
+        <NoteInsulinDoseRecommendationConnect
+          note={{
+            ...this.noteFromState,
+            breadUnits: this.noteFromState.breadUnits + this.additionalCarbs
+          }}
+          goToInsulinSettings={this.goToInsulinSettings}
+        />
       </View>
     )
   }
@@ -591,18 +611,19 @@ class NoteEditor extends React.PureComponent<Props, State>{
     else {
       if (
         note.glucose || note.breadUnits || note.insulin ||
-        note.longInsulin || note.commentary || this.additionalCarbs
+        note.longInsulin || note.commentary
       ) {
         this.props.dispatch(createCreateNoteAction({
           ...note,
+          breadUnits: note.breadUnits + this.additionalCarbs,
           glycemiaType: Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType),
           carbsMeasuringType: Measures.getDefaultCarbsMeasuringType(carbsMeasuringType),
         }));
-        this.closeEditor()
+        this.closeEditor();
       } else {
         Alert.alert(
           i18nGet('fill_at_least_one_parameter'),
-        )
+        );
       }
     }
   }
@@ -697,6 +718,9 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
   },
+  space: {
+    padding: 4,
+  },
   buttonsBlock: {
     position: 'absolute',
     bottom: 16,
@@ -715,6 +739,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  buttonView: {
+    flexDirection: 'row',
+    marginTop: 8,
+    alignSelf: 'flex-start',
   },
   foods: {
     width: '100%',

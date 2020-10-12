@@ -1,20 +1,21 @@
 import React from 'react';
 import { IFoodListItem } from '../../../../model/IFood';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLOR } from '../../../../constant/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../../localisation/Translate';
 import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
+import { COLOR } from '../../../../constant/Color';
 
 interface Props {
   item: IFoodListItem
+  isLast?: boolean
   goToFoodCard: (foodId: string) => void
 }
 export default function NoteFoodItem(props: Props) {
-  const { item, goToFoodCard } = props;
+  const { item, isLast, goToFoodCard } = props;
 
   return (
-    <View style={styles.foodItem}>
+    <View style={{ ...styles.foodItem, ...(isLast ? styles.foodItemLast : {}) }} >
       <TouchableOpacity style={styles.touchable} onPress={() => goToFoodCard(item.id)}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>
@@ -36,7 +37,7 @@ export default function NoteFoodItem(props: Props) {
           </Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </ View>
   );
 }
 
@@ -45,6 +46,9 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
     borderBottomWidth: 1,
+  },
+  foodItemLast: {
+    borderBottomWidth: 0,
   },
   touchable: {
     display: 'flex',

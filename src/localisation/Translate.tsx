@@ -637,7 +637,11 @@ const translateStore = {
     es: 'Sin notas',
     ru: 'Записей не найдено... Давайте добавим!',
   },
-
+  need_to_inject: {
+    'en': 'Need to inject',
+    'es': 'Es necesario inyectar',
+    'ru': 'Необходимо ввести',
+  },
   fill_out_your_diabetes_profile_for_recommendations: {
     en: 'Fill out your diabetes profile for recommendations',
     es: 'Complete su perfil de diabetes para obtener recomendaciones',

@@ -16,7 +16,8 @@ interface Props {
     selectedType?: NoteValueType
 
     glucose?: number
-    breadUnits?: number | string
+    breadUnits?: number
+    breadUnitsInfo?: number | string
     insulin?: number
     longInsulin?: number
     commentary?: string
@@ -30,6 +31,7 @@ export class ValueTypePicker extends React.Component<Props> {
             insulin,
             longInsulin,
             breadUnits,
+            breadUnitsInfo,
             commentary
         } = this.props;
         return <View style={styles.view}>
@@ -64,7 +66,7 @@ export class ValueTypePicker extends React.Component<Props> {
                         <VegetablesIcon style={styles.icon} />
                     </TouchableOpacity>
                 </View>
-                <ValueTypeInfo value={breadUnits} />
+                <ValueTypeInfo value={breadUnitsInfo} />
             </View>
 
             <View style={styles.valueTypeColumn}>
