@@ -5,6 +5,8 @@ import {
   Keyboard,
   Alert,
   StyleSheet,
+  Dimensions,
+  Text,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -52,7 +54,6 @@ const INITIAL_STATE = {
   date: new Date(),
   glucose: 0,
   breadUnits: 0,
-  totalBreadUnits: 0,
   insulin: 0,
   longInsulin: 0,
   commentary: '',
@@ -194,8 +195,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
           onBackPress={this.closeEditor}
           title={title}
         />
-        <ScrollView style={styles.scrollView} contentContainerStyle={{ flexGrow: 1, }}>
+        <ScrollView style={styles.scrollView}>
           {this.renderPickerBlock()}
+          {this.renderNoteDashboard()}
           <View style={styles.bottomSpace} />
         </ScrollView>
         <View style={styles.buttonsBlock}>
@@ -371,8 +373,23 @@ class NoteEditor extends React.PureComponent<Props, State>{
             iconPosition={IconPositionType.LEFT}
           />
         </View>
-        {Object.values(note.foodList).length > 0 && (
-          <View style={styles.foods}>
+      </View>
+    )
+  }
+
+  renderNoteDashboard() {
+    const { currentValueType, selectedTags, isTagPickerOpen, ...note } = this.state;
+    const { userDiabetesProperties } = this.props;
+    const needToRenderFoodList = Object.values(note.foodList).length > 0;
+    const needToRenderTotalFood = needToRenderFoodList && !!note.breadUnits;
+    const carbsMeasuringType = Measures.getDefaultCarbsMeasuringType(userDiabetesProperties.carbsMeasuringType);
+    const measuringTypeIsCarbs = carbsMeasuringType === CarbsMeasuringType.CARBOHYDRATES;
+    const localiseString = measuringTypeIsCarbs ? 'sum_of_carbs' : 'sum_of_bus';
+
+    return (
+      <View style={styles.listsContainer}>
+        {needToRenderFoodList && (
+          <View style={styles.noteDashboardItem}>
             <View style={styles.foodList}>
               <FoodListComponent
                 foodList={note.foodList}
@@ -385,14 +402,17 @@ class NoteEditor extends React.PureComponent<Props, State>{
             )}
           </View>
         )}
-        {selectedTags.length > 0 && (
-          <View style={styles.tags}>
-            <TagPicker
-              viewerOfSelected
-              width={280}
-              selectedTags={selectedTags}
-              onTagPress={this.onTagDelete}
-            />
+        {needToRenderTotalFood && (
+          <View style={styles.noteDashboardItem}>
+            <Text style={styles.totalFoodText}>
+              {`${i18nGet('hand_input')}: ${note.breadUnits}`}
+            </Text>
+            <Text style={styles.totalFoodText}>
+              {`${i18nGet('added_food')}: ${this.additionalCarbs}`}
+            </Text>
+            <Text style={styles.totalFoodText}>
+              {`${i18nGet(localiseString)}: ${note.breadUnits} + ${this.additionalCarbs} = ${note.breadUnits + this.additionalCarbs}`}
+            </Text>
           </View>
         )}
         <NoteInsulinDoseRecommendationConnect
@@ -402,6 +422,16 @@ class NoteEditor extends React.PureComponent<Props, State>{
           }}
           goToInsulinSettings={this.goToInsulinSettings}
         />
+        {selectedTags.length > 0 && (
+          <View style={styles.noteDashboardItem}>
+            <TagPicker
+              viewerOfSelected
+              width={Dimensions.get('window').width}
+              selectedTags={selectedTags}
+              onTagPress={this.onTagDelete}
+            />
+          </View>
+        )}
       </View>
     )
   }
@@ -585,12 +615,18 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   renderSaveButton() {
+    const { note } = this.props;
+
     return (
-      <StyledButton
-        style={StyledButtonType.PRIMARY}
-        onPress={this.createNote}
-        label={this.props.note ? i18nGet('rewrite') : i18nGet('write')}
-      />
+      <>
+        {!!note && <View style={styles.space} />}
+        <StyledButton
+          fluid
+          style={StyledButtonType.PRIMARY}
+          onPress={this.createNote}
+          label={this.props.note ? i18nGet('rewrite') : i18nGet('write')}
+        />
+      </>
     )
   }
 
@@ -709,7 +745,6 @@ const styles = StyleSheet.create({
   inputBlock: {
     flex: 1,
     maxWidth: 400,
-    paddingBottom: 20,
     paddingHorizontal: 16,
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -742,29 +777,27 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     flexDirection: 'row',
-    marginTop: 8,
+    marginTop: 16,
     alignSelf: 'flex-start',
   },
-  foods: {
-    width: '100%',
-    marginTop: 16,
-    alignItems: 'flex-start',
-    backgroundColor: COLOR.HALF_TRANSPARENT,
-    padding: 8,
-    borderRadius: 10,
+  listsContainer: {
+    paddingHorizontal: 16,
   },
-  foodList: {
-    flex: 1,
-    width: '100%',
-  },
-  tags: {
+  noteDashboardItem: {
     width: '100%',
     marginTop: 16,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     backgroundColor: COLOR.HALF_TRANSPARENT,
     padding: 8,
-    borderRadius: 10,
+    borderRadius: 5,
+  },
+  totalFoodText: {
+    fontSize: 16,
+  },
+  foodList: {
+    flex: 1,
+    width: '100%',
   },
   tagPopupContent: {
     padding: POPUP_PADDING_HORIZONTAL,

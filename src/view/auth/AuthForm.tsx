@@ -97,12 +97,11 @@ const styles = StyleSheet.create({
     },
     authFormTitle: {
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 20,
         color: '#333333',
         margin: 22,
         marginRight: 0,
         marginLeft: 0,
-        fontWeight: 'bold',
     },
     socialButton: {
         marginTop: 30,

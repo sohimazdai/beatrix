@@ -74,6 +74,12 @@ function NoteInsulinDoseRecommendation(props: Props) {
 
     const recommendation = getRecommendation();
 
+    if (!recommendation && !isFormUnfilled && !activeInsulinValue && !(
+        activeInsulinValue && Number(insulinValue) > activeInsulinValue
+    )) {
+        return null;
+    }
+
     return (
         <View style={styles.view}>
             {!!recommendation && (
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 16,
         backgroundColor: 'rgba(255,255,255, 0.5)',
-        padding: 16,
+        padding: 8,
         borderRadius: 5,
     },
     textRow: {
@@ -145,28 +151,20 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        fontWeight: 'bold',
-        lineHeight: 30,
     },
     activeInsulinText: {
         fontSize: 16,
         color: COLOR.RED_DARK,
-        lineHeight: 30,
     },
     activeInsulinTextBold: {
         fontSize: 16,
-        fontWeight: 'bold',
         color: COLOR.RED_DARK,
-        lineHeight: 30,
     },
     recommendation: {
         fontSize: 16,
-        color: COLOR.TEXT_DARK_GRAY,
-        lineHeight: 30,
     },
     settingsLink: {
         color: COLOR.BLUE,
-        fontWeight: 'bold',
         fontSize: 16,
         textDecorationLine: 'underline',
         textDecorationColor: COLOR.BLUE,

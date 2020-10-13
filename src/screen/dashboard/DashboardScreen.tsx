@@ -66,8 +66,6 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
   state = { menuShown: false };
 
   componentDidMount() {
-    console.log('🤖🤖🤖🤖 dashboard updated');
-
     appAnalytics.setSection(AnalyticsSections.DASHBOARD);
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
 
@@ -78,7 +76,6 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
     if (!pP.app.serverAvailable && this.props.app.serverAvailable) {
       this.props.syncNotes();
     }
-    console.log('🤖🤖🤖🤖 dashboard updated');
   }
 
   goToNoteEditor = (noteId?: string) => {

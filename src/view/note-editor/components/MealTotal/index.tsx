@@ -48,9 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    padding: 8,
-    borderRadius: 10,
-    backgroundColor: COLOR.PRIMARY,
   },
   row: {
     display: 'flex',
@@ -62,7 +59,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     paddingLeft: 8,
-    color: COLOR.PRIMARY_WHITE,
   },
   textFirst: {
     paddingLeft: 0,

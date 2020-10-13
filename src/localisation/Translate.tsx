@@ -64,6 +64,26 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  hand_input: {
+    'en': 'Manual input',
+    'es': 'Entrada manual',
+    'ru': 'Ручной ввод',
+  },
+  added_food: {
+    'en': 'Added food',
+    'es': 'Productos agregados',
+    'ru': 'Добавленные продукты',
+  },
+  sum_of_bus: {
+    'en': 'Total bread units',
+    'es': 'Totales raciones de HC',
+    'ru': 'Всего ХЕ',
+  },
+  sum_of_carbs: {
+    'en': 'Total carbohydrates',
+    'es': 'Carbohidratos totales',
+    'ru': 'Всего углеводов',
+  },
   food_not_loaded_we_are_sorry_try_later: {
     'en': 'Failed to load data',
     'es': 'No se pudieron cargar los datos',
@@ -643,14 +663,14 @@ const translateStore = {
     'ru': 'Необходимо ввести',
   },
   fill_out_your_diabetes_profile_for_recommendations: {
-    en: 'Fill out your diabetes profile for recommendations',
-    es: 'Complete su perfil de diabetes para obtener recomendaciones',
-    ru: 'Заполните диабетический профиль для получения рекомендаций',
+    en: 'Complete your diabetic profile for insulin dosage recommendations',
+    es: 'Complete su perfil de diabético para conocer las recomendaciones de dosis de insulina',
+    ru: 'Заполните диабетический профиль для получения рекомендаций по дозировке инсулина',
   },
   enter_blood_glucose_value_to_get_recommendation: {
-    en: 'Enter blood glucose value to get recommendation',
-    es: 'Ingrese el valor de glucosa para obtener la recomendación',
-    ru: 'Введите значение глюкозы, чтобы получить рекомендацию',
+    en: 'Enter glucose value for insulin dosage recommendation',
+    es: 'Ingrese el valor de glucosa para la recomendación de dosis de insulina',
+    ru: 'Введите значение глюкозы, чтобы получить рекомендацию по дозировке инсулина',
   },
   insulin_is_not_recommended: {
     en: 'Insulin is not recommended',
