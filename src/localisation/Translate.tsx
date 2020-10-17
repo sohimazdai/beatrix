@@ -64,6 +64,16 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  network_is_unavailable: {
+    'en': 'No internet connection',
+    'es': 'Sin conexión a Internet',
+    'ru': 'Нет соединения с сетью интернет',
+  },
+  server_is_unavailable: {
+    'en': 'Our server is not available, please try again later',
+    'es': 'Nuestro servidor no está disponible, inténtelo de nuevo más tarde',
+    'ru': 'Наш сервер недоступен, попробуйте позже',
+  },
   specify_nutrients_for_100g_of_product: {
     'en': 'List the nutrients per 100 grams of food',
     'es': 'Enumere los nutrientes por cada 100 gramos de comida',
@@ -238,6 +248,11 @@ const translateStore = {
     'en': 'Required',
     'es': 'Obligatorio',
     'ru': 'Обязательно',
+  },
+  food_note_bread_units: {
+    'en': 'Units',
+    'es': 'Unidades',
+    'ru': 'ХЕ',
   },
   food_creation_barcode: {
     'en': 'Barcode',

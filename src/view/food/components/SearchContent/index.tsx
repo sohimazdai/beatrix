@@ -15,8 +15,11 @@ import { Loader } from '../../../../component/loader/Loader';
 import { sortSearchResult } from '../../../../store/service-helper/sort-search-result';
 import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
 import { CrossIcon } from '../../../../component/icon/CrossIcon';
+import { IApp } from '../../../../model/IApp';
+import { NetworkIssue } from '../../../shared/components/NetworkIssue';
 
 interface Props {
+  app: IApp
   searchFood: IFoodList
   loading: boolean
   food: IFood,
@@ -27,7 +30,7 @@ interface Props {
 };
 
 function SearchContent(props: Props) {
-  const { onType, goToFoodCard, food, clearSearch, goToFoodCardCreation } = props;
+  const { onType, goToFoodCard, food, clearSearch, goToFoodCardCreation, app } = props;
   const [typed, setTyped] = React.useState('');
 
   const sortFunction = (foods: IFoodListItem[]) => sortSearchResult(typed, foods);
@@ -38,19 +41,22 @@ function SearchContent(props: Props) {
     }, [typed]
   );
 
+  const type = (text: string) => {
+    setTyped(text);
+    !!text && onType(text);
+    if (!text) clearSearch();
+  }
+
   return (
     <View style={styles.view}>
       <View style={styles.inputView}>
         <BaseTextInput
           placeholder={i18nGet('type_food')}
-          onChangeText={(text: string) => {
-            setTyped(text);
-            if (!text) clearSearch();
-            !!text && onType(text);
-          }}
+          onChangeText={type}
           value={typed}
           defaultValue={''}
           clearButtonMode={"while-editing"}
+          disabled={!app.serverAvailable}
         />
         {!!typed && <View style={styles.crossIcon}>
           <StyledButton
@@ -87,6 +93,7 @@ function SearchContent(props: Props) {
             )
           : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
       }
+      <NetworkIssue />
     </View>
   );
 }
@@ -96,6 +103,7 @@ export const SearchContentConnected = connect(
     searchFood: state.food.search,
     loading: state.user.loading,
     food: state.food,
+    app: state.app,
   }),
   (dispatch) => ({
     onType: (text: string) => dispatch(createSearchProductsAction(text)),
@@ -105,6 +113,7 @@ export const SearchContentConnected = connect(
 
 const styles = StyleSheet.create({
   view: {
+    position: 'relative',
     flex: 1,
   },
   inputView: {

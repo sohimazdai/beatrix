@@ -5,14 +5,28 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../../localisation/Translate';
 import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
 import { COLOR } from '../../../../constant/Color';
+import { connect } from 'react-redux';
+import { IStorage } from '../../../../model/IStorage';
+import { CarbsMeasuringType, IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
+import { Measures } from '../../../../localisation/Measures';
 
 interface Props {
   item: IFoodListItem
   isLast?: boolean
+  userDiabetesProperties: IUserDiabetesProperties
   goToFoodCard: (foodId: string) => void
 }
-export default function NoteFoodItem(props: Props) {
-  const { item, isLast, goToFoodCard } = props;
+
+function NoteFoodItem(props: Props) {
+  const {
+    item, isLast, goToFoodCard,
+    userDiabetesProperties: { carbsMeasuringType, carbsUnitWeightType },
+  } = props;
+  const needToRenderXE =
+    Measures.getDefaultCarbsMeasuringType(carbsMeasuringType) === CarbsMeasuringType.BREAD_UNITS;
+  const bu = numberizeAndFix(
+    item.nutrients.carbohydrates / Measures.getDefaultCarbsUnitWeightType(carbsUnitWeightType)
+  );
 
   return (
     <View style={{ ...styles.foodItem, ...(isLast ? styles.foodItemLast : {}) }} >
@@ -35,11 +49,19 @@ export default function NoteFoodItem(props: Props) {
           <Text style={styles.nutrientText}>
             {`${i18nGet('food_creation_carbohydrates')} ${item.nutrients.carbohydrates}`}
           </Text>
+          {needToRenderXE && <Text style={styles.nutrientText}>
+            {`${i18nGet('food_note_bread_units')} ${bu}`}
+          </Text>}
         </View>
       </TouchableOpacity>
     </ View>
   );
 }
+export default connect(
+  (state: IStorage) => ({
+    userDiabetesProperties: state.userDiabetesProperties,
+  })
+)(NoteFoodItem);
 
 const styles = StyleSheet.create({
   foodItem: {
@@ -79,10 +101,10 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
   nutrientText: {
     flex: 1,
+    textAlign: 'left',
     color: COLOR.TEXT_DARK_GRAY,
   }
 })

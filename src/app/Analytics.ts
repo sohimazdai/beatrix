@@ -156,6 +156,7 @@ export const appAnalytics = {
     FOOD_BARCODE_SUCCESS_SCANING: 'Food barcode success scanning',
     FOOD_ADD_TO_NOTE: 'Food added to note',
     FOOD_REMOVE_FROM_NOTE: 'Food removed from note',
+    FOOD_SEARCH_UNAVAILABLE: 'Food search unavailable click',
   }
 }
 

@@ -142,7 +142,9 @@ class FoodCreationScreen extends React.Component<Props> {
     addProduct(product);
     this.setState({ isErrored: false });
 
-    navigation.navigate(NavigatorEntities.FOOD_CARD, { foodId: id });
+    setTimeout(() => {
+      navigation.navigate(NavigatorEntities.FOOD_CARD, { foodId: id });
+    }, 500);
   }
 
   render() {

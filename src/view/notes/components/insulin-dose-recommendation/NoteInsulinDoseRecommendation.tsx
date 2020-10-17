@@ -10,6 +10,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 import { selectActiveInsulinValue } from '../../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
 import { COLOR } from '../../../../constant/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
 
 interface OwnProps {
     note?: INoteListNote;
@@ -110,7 +111,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
                         {activeInsulinValue.toFixed(1)}
                     </Text>
                     <Text style={styles.text}>
-                        {` = ${(Number(insulinValue) - activeInsulinValue).toFixed(1)}`}
+                        {` = ${numberizeAndFix((Number(insulinValue) - activeInsulinValue))}`}
                     </Text>
                 </View>
             )}
