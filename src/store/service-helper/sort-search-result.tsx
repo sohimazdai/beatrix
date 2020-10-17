@@ -6,18 +6,24 @@ export function sortSearchResult(
   searchString: string,
   searchFoods: IFoodListItem[]
 ): IFoodListItem[] {
+  const nameLengthSorted = searchFoods.sort((food1, food2) => food2.name.length - food1.name.length);
+
   const stringSet = searchString.trim().replace(splitRegexp, '.');
 
-  const resultLength = searchFoods.length;
+  const resultLength = nameLengthSorted.length;
 
   const foods: IFoodListItem[] = new Array(resultLength).fill(null);
 
   let currentTop = 0;
   let currentBottom = resultLength - 1;
   const reSet = new RegExp('^' + stringSet, 'i');
+  const reSetSecond = new RegExp(stringSet, 'i');
 
-  searchFoods.forEach((foodItem: IFoodListItem, index: number) => {
+  nameLengthSorted.forEach((foodItem: IFoodListItem, index: number) => {
     let newIndex = 0;
+    console.log('🤖🤖🤖🤖 reSet', reSet);
+    console.log('🤖🤖🤖🤖 foodItem.name', foodItem.name);
+    console.log('🤖🤖🤖🤖 reSet.test(foodItem.name)', reSet.test(foodItem.name));
     if (reSet.test(foodItem.name)) {
       foods[currentTop] = foodItem;
       currentTop++;

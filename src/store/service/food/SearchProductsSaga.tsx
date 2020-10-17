@@ -6,10 +6,7 @@ import { batchActions } from 'redux-batched-actions';
 import { getLocale, getRegion, i18nGet } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
 import { FoodSection, createReplaceFood, createSetFoodLoadingAndError } from '../../modules/food/food';
-import { checkForIsItInRuGroup } from '../../../localisation/Residents';
-import { FOOD_DATABASES_BY_COUNTRY_GROUP } from '../../../localisation/FoodDatabases';
-import { dbMapper } from '../../../api/mappers/dbMapper';
-import { IFoodList } from '../../../model/IFood';
+import { getRegionGroup } from '../../../localisation/Residents';
 import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = "SEARCH_PRODUCTS";
@@ -39,48 +36,48 @@ interface SearchProductsAction {
 function* run({ payload: searchString }: SearchProductsAction) {
   try {
     const state: IStorage = yield select(state => state);
-    const isInRussianGroup = checkForIsItInRuGroup(getLocale(), getRegion());
-    if (state.app.networkConnected) {
-      let foods: IFoodList = {};
+    const regionGroup = getRegionGroup(getLocale(), getRegion());
+    if (state.app.serverAvailable) {
+      const { data, error } = yield call(FoodApi.searchProducts, searchString, regionGroup);
 
-      if (isInRussianGroup) {
-        const [localDB, offDB] = yield all([
-          call(
-            FoodApi.searchProductsInLocalDb,
-            FOOD_DATABASES_BY_COUNTRY_GROUP.RU,
-            searchString
-          ),
-          call(FoodApi.searchOpenFoodFacts, searchString),
-        ])
+      if (error) throw new Error(error.message);
 
-        foods = {
-          ...dbMapper(localDB.data.foods),
-          ...offDB.foods,
-        };
-      } else {
-        const [localDB, fsDB, offDB] = yield all([
-          call(
-            FoodApi.searchProductsInLocalDb,
-            FOOD_DATABASES_BY_COUNTRY_GROUP.EN,
-            searchString
-          ),
-          call(FoodApi.searchFatSecret, searchString),
-          call(FoodApi.searchOpenFoodFacts, searchString),
-        ]);
-
-        foods = {
-          ...dbMapper(localDB.data.foods),
-          ...fsDB.foods,
-          ...offDB.foods,
-        };
-      }
-
-      yield put(createReplaceFood(FoodSection.SEARCH, foods));
-
+      console.log('🤖🤖🤖🤖 foods', data);
+      yield put(createReplaceFood(FoodSection.SEARCH, data));
       appAnalytics.sendEvent(appAnalytics.events.FOOD_SEARCH);
     } else {
-      alert(i18nGet('active_network_needed'));
+      alert(i18nGet('server_is_not_available_try_to_restart_app'));
     }
+    // const [localDB, offDB] = yield all([
+    //   call(
+    //     FoodApi.searchProductsInLocalDb,
+    //     FOOD_DATABASES_BY_COUNTRY_GROUP.RU,
+    //     searchString
+    //   ),
+    //   call(FoodApi.searchOpenFoodFacts, searchString),
+    // ])
+
+    // foods = {
+    //   ...dbMapper(localDB.data.foods),
+    //   ...offDB.foods,
+    // };
+    // } else {
+    // const [localDB, fsDB, offDB] = yield all([
+    //   call(
+    //     FoodApi.searchProductsInLocalDb,
+    //     FOOD_DATABASES_BY_COUNTRY_GROUP.EN,
+    //     searchString
+    //   ),
+    //   call(FoodApi.searchFatSecret, searchString),
+    //   call(FoodApi.searchOpenFoodFacts, searchString),
+    // ]);
+
+    //   foods = {
+    //     ...dbMapper(localDB.data.foods),
+    //     ...fsDB.foods,
+    //     ...offDB.foods,
+    //   };
+    // }
 
     yield put(
       batchActions([
@@ -103,8 +100,8 @@ function* run({ payload: searchString }: SearchProductsAction) {
           error: e,
         }),
         createSetFoodLoadingAndError({
-          loading: true,
-          error: null
+          loading: false,
+          error: e,
         }),
       ])
     );

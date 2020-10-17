@@ -101,6 +101,7 @@ function FoodCardComponent(props: Props) {
     ? { ...styles.openPopupSticker, ...styles.editingBg }
     : styles.openPopupSticker;
 
+  console.log('🤖🤖🤖🤖 foodItem', foodItem);
   return (
     <View style={styles.wrap}>
       <BlockHat
@@ -228,6 +229,12 @@ function getDbName(dbId: number | string) {
     case FoodDatabase.USERS_DB:
     case String(FoodDatabase.USERS_DB):
       return i18nGet('food_db_users_db');
+    case FoodDatabase.USERS_LOCAL_DB:
+    case String(FoodDatabase.USERS_LOCAL_DB):
+      return i18nGet('food_db_user_local_db');
+    case FoodDatabase.USERS_FAST_LOCAL_DB:
+    case String(FoodDatabase.USERS_FAST_LOCAL_DB):
+      return i18nGet('food_db_user_local_fast_db');
     default: return i18nGet('food_db_unknown');
   }
 }

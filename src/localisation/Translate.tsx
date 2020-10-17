@@ -64,6 +64,11 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  publish_to_whole_world: {
+    'en': 'Add a product to a shared database',
+    'es': 'Agregar un producto a una base de datos compartida',
+    'ru': 'Сделать продукт доступным для всех пользователей',
+  },
   network_is_unavailable: {
     'en': 'No internet connection',
     'es': 'Sin conexión a Internet',
@@ -318,6 +323,16 @@ const translateStore = {
     'en': 'Unknown',
     'es': 'Desconocido',
     'ru': 'Неизвестно',
+  },
+  food_db_user_local_fast_db: {
+    'en': 'Product added by manual calculation',
+    'es': 'Producto agregado por cálculo manual',
+    'ru': 'Продукт, добавленный при ручном расчете',
+  },
+  food_db_user_local_db: {
+    'en': 'The product you added. The product is hidden from all users.',
+    'es': 'El producto que agregaste. El producto está oculto a todos los usuarios.',
+    'ru': 'Продукт, добавленный вами. Продукт скрыт от всех пользователей.',
   },
   food_db_users_db: {
     'en': 'Products added by users',

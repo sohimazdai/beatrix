@@ -14,7 +14,8 @@ const REGIONS_FOR_RU = [
   'KG',
 ];
 
-export function checkForIsItInRuGroup(locale: string, region: string) {
-  return !!LOCALES_FOR_RU.find(l => locale === l) ||
-    !!REGIONS_FOR_RU.find(r => region === r);
+export function getRegionGroup(locale: string, region: string): string {
+  return (!!LOCALES_FOR_RU.find(l => locale === l) && 'RU') ||
+    (!!REGIONS_FOR_RU.find(r => region === r) && 'RU') ||
+    region;
 };

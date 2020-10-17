@@ -4,7 +4,7 @@ import { logError, logger } from './Logger';
 export function handleError(e: Error, customMessage?: string) {
   const message = customMessage
     ? `${customMessage}.\n${e.message}`
-    : e.message;
+    : JSON.stringify(e.message);
 
   alert(message);
   logger(message);
@@ -14,11 +14,13 @@ export function handleError(e: Error, customMessage?: string) {
   })
 }
 
-export function handleErrorSilently(message: string, type?: string) {
+export function handleErrorSilently(message: Error | string, type?: string) {
+  let messageToSend = JSON.stringify(message);
+
   appAnalytics.sendEventWithProps(appAnalytics.events.ERROR, {
-    message: message,
+    message: messageToSend,
     type: type,
   });
 
-  logError(message + ':::' + type)
+  logError(messageToSend + ':::' + type)
 }

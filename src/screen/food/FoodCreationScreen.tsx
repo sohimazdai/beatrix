@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, CheckBox, StyleSheet, Text, View } from 'react-native';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { FoodDatabase, IFoodListItem } from '../../model/IFood';
@@ -18,6 +18,9 @@ import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 import { numberizeAndFix } from '../../api/helper/numberize-and-fix';
 import { v1 } from 'uuid';
 import { appAnalytics } from '../../app/Analytics';
+import { Checkbox } from '../../component/checkbox/Checkbox';
+import { IStorage } from '../../model/IStorage';
+import { IUser } from '../../model/IUser';
 
 const foodToCreateId = uuidv4();
 
@@ -26,6 +29,7 @@ interface OwnProps {
 }
 
 interface Props extends OwnProps {
+  user: IUser
   addProduct: (food: IFoodListItem) => void
 };
 
@@ -45,6 +49,7 @@ class FoodCreationScreen extends React.Component<Props> {
     fats: '',
     carbohydrates: '',
 
+    isForPublishing: false,
     isErrored: false,
   }
 
@@ -107,7 +112,8 @@ class FoodCreationScreen extends React.Component<Props> {
   }
 
   onAddFood = () => {
-    const { name } = this.state;
+    const { name, isForPublishing } = this.state;
+    const { user } = this.props;
     const { calories, proteins, fats, carbohydrates } = this.product.nutrients;
 
     const { addProduct, navigation } = this.props;
@@ -136,7 +142,8 @@ class FoodCreationScreen extends React.Component<Props> {
       ...this.product,
       id,
       sourceId: id,
-      dbId: FoodDatabase.USERS_DB,
+      userId: user.id,
+      dbId: isForPublishing ? FoodDatabase.USERS_DB : FoodDatabase.USERS_LOCAL_DB,
     };
 
     addProduct(product);
@@ -148,7 +155,10 @@ class FoodCreationScreen extends React.Component<Props> {
   }
 
   render() {
-    const { name, brandName, barcode, calories, energy, proteins, fats, carbohydrates, isErrored } = this.state;
+    const {
+      name, brandName, barcode, calories, energy,
+      proteins, fats, carbohydrates, isErrored, isForPublishing,
+    } = this.state;
 
     return (
       <View style={styles.view}>
@@ -232,6 +242,13 @@ class FoodCreationScreen extends React.Component<Props> {
           <Text style={styles.hint}>
             {i18nGet('type_zero_if_not_exists')}
           </Text>
+          <View style={styles.checkbox}>
+            <Checkbox
+              onCheck={() => this.setState({ isForPublishing: !isForPublishing })}
+              isChecked={isForPublishing}
+              label={i18nGet('publish_to_whole_world')}
+            />
+          </View>
           <View style={styles.buttonBar}>
             <StyledButton
               label={i18nGet('create_food_card')}
@@ -248,7 +265,9 @@ class FoodCreationScreen extends React.Component<Props> {
 }
 
 export const FoodCreationScreenConnected = connect(
-  null,
+  (state: IStorage) => ({
+    user: state.user,
+  }),
   dispatch => ({
     addProduct: (product: IFoodListItem) => dispatch(createAddProductAction(product)),
   }),
@@ -263,7 +282,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   rowSection: {
-    marginTop: 16,
+    // marginTop: 16,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -278,5 +297,8 @@ const styles = StyleSheet.create({
   },
   space: {
     padding: 2,
+  },
+  checkbox: {
+    marginTop: 16,
   }
 })

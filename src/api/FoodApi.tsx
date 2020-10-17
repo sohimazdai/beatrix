@@ -12,6 +12,10 @@ export interface SearchReturn {
 }
 
 export class FoodApi {
+  static async searchProducts(searchString: string, regionGroup: string) {
+    return api.post('food/search/region', { searchString, regionGroup });
+  }
+
   static async getFoodIdsFromFavorites(userId: string) {
     return api.post('favorites/get', { userId });
   }

@@ -85,6 +85,7 @@ function SearchContent(props: Props) {
                   sortFunction={sortFunction}
                   section={FoodSection.SEARCH}
                   goToFoodCard={goToFoodCard}
+                  cutTo={20}
                 />
                 {food.loading && <View style={styles.loadingView}>
                   <Loader isManaged isManagedLoading={food.loading} />

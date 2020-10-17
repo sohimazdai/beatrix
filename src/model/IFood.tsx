@@ -17,6 +17,7 @@ export interface IFoodListItem {
   image?: string
   name: string
   dbId: number
+  userId?: string
   categoryId?: number
   description?: string
   code?: string
@@ -48,5 +49,5 @@ export enum FoodDatabase {
   FAT_SECRET_US = 300,
   USERS_DB = 400,
   USERS_LOCAL_DB = 800,
-  USERS_FAST_LOCAL_DB = 800,
+  USERS_FAST_LOCAL_DB = 801,
 }
