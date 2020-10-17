@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     fontSize: 22,
+    color: COLOR.TEXT_BLACK
   },
   textSelected: {
     backgroundColor: COLOR.PRIMARY,

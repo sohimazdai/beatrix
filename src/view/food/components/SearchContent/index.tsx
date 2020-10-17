@@ -13,7 +13,8 @@ import { IStorage } from '../../../../model/IStorage';
 import { IFood, IFoodList, IFoodListItem } from '../../../../model/IFood';
 import { Loader } from '../../../../component/loader/Loader';
 import { sortSearchResult } from '../../../../store/service-helper/sort-search-result';
-import { StyledButton } from '../../../../component/button/StyledButton';
+import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
+import { CrossIcon } from '../../../../component/icon/CrossIcon';
 
 interface Props {
   searchFood: IFoodList
@@ -26,7 +27,7 @@ interface Props {
 };
 
 function SearchContent(props: Props) {
-  const { onType, goToFoodCard, food, clearSearch } = props;
+  const { onType, goToFoodCard, food, clearSearch, goToFoodCardCreation } = props;
   const [typed, setTyped] = React.useState('');
 
   const sortFunction = (foods: IFoodListItem[]) => sortSearchResult(typed, foods);
@@ -47,27 +48,44 @@ function SearchContent(props: Props) {
             if (!text) clearSearch();
             !!text && onType(text);
           }}
+          value={typed}
           defaultValue={''}
           clearButtonMode={"while-editing"}
         />
-        {/* <StyledButton
-          icon={<CrossIcon}
-        /> */}
+        {!!typed && <View style={styles.crossIcon}>
+          <StyledButton
+            icon={<CrossIcon width={12} height={12} />}
+            style={StyledButtonType.EMPTY}
+            onPress={() => setTyped('')}
+          />
+        </View>}
       </View>
       {
         !!typed
-          ? (
-            <>
-              <FoodList
-                sortFunction={sortFunction}
-                section={FoodSection.SEARCH}
-                goToFoodCard={goToFoodCard}
-              />
-              {food.loading && <View style={styles.loadingView}>
-                <Loader isManaged isManagedLoading={food.loading} />
-              </View>}
+          ? !food.loading && (!Object.values(food.search) || Object.values(food.search).length === 0)
+            ? <>
+              <Text style={styles.text}>{i18nGet('food_search_tips_2')}</Text>
+              <View style={styles.styledButton}>
+                <StyledButton
+                  style={StyledButtonType.PRIMARY}
+                  label={i18nGet('add_food')}
+                  onPress={goToFoodCardCreation}
+                />
+              </View>
             </>
-          ) : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
+            : (
+              <>
+                <FoodList
+                  sortFunction={sortFunction}
+                  section={FoodSection.SEARCH}
+                  goToFoodCard={goToFoodCard}
+                />
+                {food.loading && <View style={styles.loadingView}>
+                  <Loader isManaged isManagedLoading={food.loading} />
+                </View>}
+              </>
+            )
+          : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
       }
     </View>
   );
@@ -90,16 +108,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputView: {
+    position: 'relative',
     padding: 16,
     height: 84,
     backgroundColor: COLOR.PRIMARY_WHITE,
     ...SHADOW_OPTIONS,
     elevation: 2,
   },
+  crossIcon: {
+    position: 'absolute',
+    right: 24,
+    display: 'flex',
+    height: 84,
+    justifyContent: 'center',
+  },
   text: {
     padding: 16,
     fontSize: 17,
     color: COLOR.TEXT_DARK_GRAY,
+    textAlign: 'center',
+  },
+  styledButton: {
+    width: 200,
+    alignSelf: 'center',
   },
   loadingView: {
     position: 'absolute',

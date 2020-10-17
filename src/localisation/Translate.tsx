@@ -350,9 +350,9 @@ const translateStore = {
     'ru': 'История поиска и сканирования находится во вкладке "История"',
   },
   food_search_tips_2: {
-    'en': 'To scan a product by barcode, click on the icon in the upper right corner',
-    'es': 'Para escanear un producto por código de barras, haga clic en el icono en la esquina superior derecha',
-    'ru': 'Чтобы сканировать продукт по штрихкоду, нажмите на иконку в правом верхнем углу',
+    'en': 'No results were found for this request',
+    'es': 'No se encontraron resultados para esta solicitud',
+    'ru': 'Ничего не найдено по данному запросу',
   },
   food_search_tips_1: {
     'en': 'Start typing to find food',
