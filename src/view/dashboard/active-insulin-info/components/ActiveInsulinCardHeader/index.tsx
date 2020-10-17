@@ -6,7 +6,7 @@ import { InfoIcon } from '../../../../../component/icon/InfoIcon';
 
 import { COLOR } from '../../../../../constant/Color';
 import { i18nGet } from '../../../../../localisation/Translate';
-import { ActiveInsulinCounter, ActiveInsulinCounterConnected } from '../ActiveInsulinCounter';
+import { ActiveInsulinCounterConnected } from '../ActiveInsulinCounter';
 
 interface Props {
   now: Date
@@ -46,9 +46,11 @@ const styles = StyleSheet.create({
   tooltipedHeader: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   cardTitle: {
     fontSize: 19,
+    lineHeight: 22,
     color: COLOR.CRIMSON_RED,
     fontWeight: '500',
   },

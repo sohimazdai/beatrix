@@ -47,4 +47,6 @@ export enum FoodDatabase {
   OPEN_FOOD_FACTS = 200,
   FAT_SECRET_US = 300,
   USERS_DB = 400,
+  USERS_LOCAL_DB = 800,
+  USERS_FAST_LOCAL_DB = 800,
 }

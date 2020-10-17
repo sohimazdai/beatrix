@@ -13,6 +13,7 @@ import { IStorage } from '../../../../model/IStorage';
 import { IFood, IFoodList, IFoodListItem } from '../../../../model/IFood';
 import { Loader } from '../../../../component/loader/Loader';
 import { sortSearchResult } from '../../../../store/service-helper/sort-search-result';
+import { StyledButton } from '../../../../component/button/StyledButton';
 
 interface Props {
   searchFood: IFoodList
@@ -49,6 +50,9 @@ function SearchContent(props: Props) {
           defaultValue={''}
           clearButtonMode={"while-editing"}
         />
+        {/* <StyledButton
+          icon={<CrossIcon}
+        /> */}
       </View>
       {
         !!typed

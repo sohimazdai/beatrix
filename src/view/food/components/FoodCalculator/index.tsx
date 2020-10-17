@@ -7,14 +7,14 @@ import { StyledButton, StyledButtonType } from '../../../../component/button/Sty
 import { COLOR } from '../../../../constant/Color';
 import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
-import { IFoodListItem, IFoodNutrients } from '../../../../model/IFood';
+import { IFoodList, IFoodListItem, IFoodNutrients } from '../../../../model/IFood';
 import { IStorage } from '../../../../model/IStorage';
 import { CarbsMeasuringType, IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
 import { selectSelectedFoodItem } from '../../selectors/select-selected-food-item';
 import { FoodCreationInput } from '../FoodCreationInput';
 
-enum FoodCalculatorKey {
+export enum FoodCalculatorKey {
   WEIGHT = 'weight',
   BREAD_UNITS = 'breadUnits',
 
@@ -25,18 +25,30 @@ enum FoodCalculatorKey {
   FATS = 'fats',
 }
 
+export enum FoodCalculatorType {
+  FOOD_ADDING = "food_adding",
+  QUICK_FOOD = 'quick-food',
+}
+
 interface Props {
+  food?: IFoodListItem
+  navigation?: NavigationScreenProp<NavigationState, NavigationParams>;
+  isEditing?: boolean
+
+  type: FoodCalculatorType
   userDiabetesProperties: IUserDiabetesProperties
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   withPadding?: boolean
-  selectedFoodItem?: IFoodListItem
+  sourceFood?: IFoodListItem
+  quickAdd?: (foodNutrients: IFoodNutrients) => void
+  quickRemove?: () => void
 };
 
 class FoodCalculator extends React.Component<Props> {
   state = {
     selectedKey: FoodCalculatorKey.WEIGHT,
     keyValue: (
-      this.props.navigation.getParam('foodItem')?.nutrients?.weight ||
+      this.props.food?.nutrients?.weight ||
+      this.props.navigation?.getParam('foodItem')?.nutrients?.weight ||
       '100'
     ),
     isErrored: false,
@@ -44,10 +56,10 @@ class FoodCalculator extends React.Component<Props> {
     isValueEmpty: false,
   }
 
-  get foodItem(): IFoodListItem {
-    const { selectedFoodItem } = this.props;
+  get sourceFood(): IFoodListItem {
+    const { sourceFood } = this.props;
 
-    return selectedFoodItem;
+    return sourceFood;
   }
 
   get currentRelation() {
@@ -56,14 +68,14 @@ class FoodCalculator extends React.Component<Props> {
     const selectedKeyValueFor100gram = selectedKey === FoodCalculatorKey.WEIGHT
       ? 100
       : selectedKey === FoodCalculatorKey.BREAD_UNITS
-        ? numberizeAndFix(this.foodItem.nutrients.carbohydrates / this.xeWeight)
-        : numberizeAndFix(this.foodItem.nutrients[selectedKey]);
+        ? numberizeAndFix(this.sourceFood.nutrients.carbohydrates / this.xeWeight)
+        : numberizeAndFix(this.sourceFood.nutrients[selectedKey]);
 
     return numberizeAndFix(keyValue) / selectedKeyValueFor100gram;
   };
 
   get calculatedNutrients(): IFoodNutrients {
-    const { calories, energy, carbohydrates, fats, proteins } = this.foodItem.nutrients;
+    const { calories, energy, carbohydrates, fats, proteins } = this.sourceFood.nutrients;
 
     return {
       calories: numberizeAndFix(calories * this.currentRelation),
@@ -93,7 +105,7 @@ class FoodCalculator extends React.Component<Props> {
   }
 
   get originalXeIn100Gramm() {
-    return numberizeAndFix(this.foodItem.nutrients.carbohydrates / this.xeWeight)
+    return numberizeAndFix(this.sourceFood.nutrients.carbohydrates / this.xeWeight)
   }
 
   get calculatedXe(): number {
@@ -108,21 +120,6 @@ class FoodCalculator extends React.Component<Props> {
     return withPadding
       ? { ...styles.wrap, ...styles.totalPadding }
       : styles.wrap;
-  }
-
-  onTextInputFocus = (selectedKey: FoodCalculatorKey) => {
-    const newKeyValue = selectedKey === FoodCalculatorKey.WEIGHT
-      ? this.currentRelation * 100
-      : selectedKey === FoodCalculatorKey.BREAD_UNITS
-        ? this.currentRelation * this.originalXeIn100Gramm
-        : this.currentRelation * this.foodItem.nutrients[selectedKey];
-
-    this.setState({
-      keyValue: newKeyValue,
-      selectedKey,
-      trailingDot: false,
-      isValueEmpty: false,
-    });
   }
 
   onTextInputValueChange = (text: string) => {
@@ -172,9 +169,25 @@ class FoodCalculator extends React.Component<Props> {
     })
   }
 
+  onTextInputFocus = (selectedKey: FoodCalculatorKey) => {
+    const newKeyValue = selectedKey === FoodCalculatorKey.WEIGHT
+      ? this.currentRelation * 100
+      : selectedKey === FoodCalculatorKey.BREAD_UNITS
+        ? this.currentRelation * this.originalXeIn100Gramm
+        : this.currentRelation * this.sourceFood.nutrients[selectedKey];
+
+    this.setState({
+      keyValue: newKeyValue,
+      selectedKey,
+      trailingDot: false,
+      isValueEmpty: false,
+    });
+  }
+
+
   onMealAdd = () => {
     const { isValueEmpty } = this.state;
-    const { navigation } = this.props;
+    const { navigation, type, quickAdd } = this.props;
 
     if (isValueEmpty) {
       this.setState({ isErrored: true });
@@ -184,8 +197,17 @@ class FoodCalculator extends React.Component<Props> {
       this.setState({ isErrored: false });
     }
 
+    if (type === FoodCalculatorType.QUICK_FOOD) {
+      quickAdd({
+        ...this.calculatedNutrients,
+        weight: this.currentRelation * 100,
+      })
+
+      return;
+    }
+
     const foodForNote: IFoodListItem = {
-      ...this.foodItem,
+      ...this.sourceFood,
       nutrients: {
         ...this.calculatedNutrients,
         weight: this.currentRelation * 100,
@@ -201,22 +223,26 @@ class FoodCalculator extends React.Component<Props> {
   }
 
   onMealRemove = () => {
-    const { navigation } = this.props;
+    const { navigation, type, quickRemove } = this.props;
+
+    if (type === FoodCalculatorType.QUICK_FOOD) {
+      quickRemove();
+
+      return;
+    }
 
     navigation.navigate(
       NavigatorEntities.NOTE_EDITOR,
       {
-        foodIdToRemove: this.foodItem.id,
+        foodIdToRemove: this.sourceFood.id,
         isEditing: false,
       },
     );
   }
 
-  get isEditing() {
-    return !!this.props.navigation.getParam('isEditing');
-  }
 
   render() {
+    const { type, isEditing } = this.props;
     const { isErrored, keyValue, selectedKey, trailingDot, isValueEmpty } = this.state;
     const { calories, energy, fats, proteins, carbohydrates } = this.calculatedNutrients;
 
@@ -230,159 +256,233 @@ class FoodCalculator extends React.Component<Props> {
 
     const breadUntis = numberizeAndFix(this.currentRelation * this.originalXeIn100Gramm);
 
-    return (
-      <View style={this.wrapStyles}>
-        <View style={{ ...styles.rowSection, ...styles.rowSectionFirst }}>
-          <FoodCreationInput
-            label={`${i18nGet('weight_of_product')}(${i18nGet('gram')})`}
-            isFormWithError={isErrored}
-            isRequired
-            onTextChange={this.onTextInputValueChange}
-            value={
-              isEmpty(FoodCalculatorKey.WEIGHT)
-                ? ""
-                : numberizeAndFix(this.currentRelation * 100) + postfix(FoodCalculatorKey.WEIGHT)
-            }
-            autoFocus
-            onFocus={() => this.onTextInputFocus(FoodCalculatorKey.WEIGHT)}
-            type="decimal-pad"
-            highlighted={selectedKey === FoodCalculatorKey.WEIGHT}
-          />
-          {this.XE && (
-            <>
-              <View style={styles.space} />
-              <FoodCreationInput
-                label={`${i18nGet('breadUnits')}`}
-                isFormWithError={isErrored}
-                isRequired
-                onTextChange={this.onTextInputValueChange}
-                value={
-                  isEmpty(FoodCalculatorKey.BREAD_UNITS)
-                    ? ""
-                    : breadUntis + postfix(FoodCalculatorKey.BREAD_UNITS)
-                }
-                autoFocus
-                onFocus={() => this.onTextInputFocus(FoodCalculatorKey.BREAD_UNITS)}
-                type="decimal-pad"
-                highlighted={selectedKey === FoodCalculatorKey.BREAD_UNITS}
-                disabled={!this.foodItem.nutrients.carbohydrates}
-              />
-            </>
-          )}
-        </View>
-        <View style={styles.rowSection}>
-          <FoodCreationInput
-            label={`${i18nGet('food_creation_calories')}(${i18nGet('kcal')})`}
-            onTextChange={this.onTextInputValueChange}
-            value={
-              isEmpty(FoodCalculatorKey.CALORIES)
-                ? ""
-                : calories + postfix(FoodCalculatorKey.CALORIES)
-            }
-            type="decimal-pad"
-            isFormWithError={isErrored}
-            onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CALORIES)}
-            isRequired
-            highlighted={selectedKey === FoodCalculatorKey.CALORIES}
-            disabled={!numberizeAndFix(this.foodItem.nutrients[FoodCalculatorKey.CALORIES])}
-            withoutMarginTop
-          />
-          <View style={styles.space} />
-          <FoodCreationInput
-            label={`${i18nGet('food_creation_energy')}(${i18nGet('kJ')})`}
-            onTextChange={this.onTextInputValueChange}
-            value={
-              isEmpty(FoodCalculatorKey.ENERGY)
-                ? ""
-                : energy + postfix(FoodCalculatorKey.ENERGY)
-            }
-            type="decimal-pad"
-            isFormWithError={isErrored}
-            onFocus={() => this.onTextInputFocus(FoodCalculatorKey.ENERGY)}
-            isRequired
-            highlighted={selectedKey === FoodCalculatorKey.ENERGY}
-            disabled={!numberizeAndFix(this.foodItem.nutrients[FoodCalculatorKey.ENERGY])}
-            withoutMarginTop
-          />
-        </View>
-        <View style={styles.rowSection}>
-          <FoodCreationInput
-            label={`${i18nGet('food_creation_proteins')}(${i18nGet('gram')})`}
-            onTextChange={this.onTextInputValueChange}
-            value={
-              isEmpty(FoodCalculatorKey.PROTEINS)
-                ? ""
-                : proteins + postfix(FoodCalculatorKey.PROTEINS)
-            }
-            type="decimal-pad"
-            isFormWithError={isErrored}
-            onFocus={() => this.onTextInputFocus(FoodCalculatorKey.PROTEINS)}
-            isRequired
-            highlighted={selectedKey === FoodCalculatorKey.PROTEINS}
-            disabled={!numberizeAndFix(this.foodItem.nutrients[FoodCalculatorKey.PROTEINS])}
-            withoutMarginTop
-          />
-          <View style={styles.space} />
-          <FoodCreationInput
-            label={`${i18nGet('food_creation_fats')}(${i18nGet('gram')})`}
-            onTextChange={this.onTextInputValueChange}
-            value={
-              isEmpty(FoodCalculatorKey.FATS)
-                ? ""
-                : fats + postfix(FoodCalculatorKey.FATS)
-            }
-            type="decimal-pad"
-            isFormWithError={isErrored}
-            onFocus={() => this.onTextInputFocus(FoodCalculatorKey.FATS)}
-            isRequired
-            highlighted={selectedKey === FoodCalculatorKey.FATS}
-            disabled={!numberizeAndFix(this.foodItem.nutrients[FoodCalculatorKey.FATS])}
-            withoutMarginTop
-          />
-          <View style={styles.space} />
-          <FoodCreationInput
-            label={`${i18nGet('food_creation_carbohydrates')}(${i18nGet('gram')})`}
-            onTextChange={this.onTextInputValueChange}
-            value={
-              isEmpty(FoodCalculatorKey.CARBOHYDRATES)
-                ? ""
-                : carbohydrates + postfix(FoodCalculatorKey.CARBOHYDRATES)
-            }
-            type="decimal-pad"
-            isFormWithError={isErrored}
-            onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CARBOHYDRATES)}
-            highlighted={selectedKey === FoodCalculatorKey.CARBOHYDRATES}
-            disabled={!numberizeAndFix(this.foodItem.nutrients[FoodCalculatorKey.CARBOHYDRATES])}
-            isRequired
-            withoutMarginTop
-          />
-        </View>
-        <View style={styles.buttons}>
-          {this.isEditing && <>
-            <StyledButton
-              label={i18nGet('remove_racion')}
-              onPress={this.onMealRemove}
-              style={StyledButtonType.DELETE}
+    if (type === FoodCalculatorType.QUICK_FOOD) {
+      return (
+        <View style={this.wrapStyles}>
+          <View style={{ ...styles.rowSection, ...styles.rowSectionFirst }}>
+            <FoodCreationInput
+              label={`${i18nGet('weight_of_product')}(${i18nGet('gram')})`}
+              isFormWithError={isErrored}
+              isRequired
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.WEIGHT)
+                  ? ""
+                  : numberizeAndFix(this.currentRelation * 100) + postfix(FoodCalculatorKey.WEIGHT)
+              }
+              autoFocus={!this.XE}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.WEIGHT)}
+              type="decimal-pad"
+              withoutMarginTop
             />
             <View style={styles.space} />
-          </>}
-          <StyledButton
-            label={i18nGet('add_racion')}
-            onPress={this.onMealAdd}
-            style={StyledButtonType.PRIMARY}
-            disabled={!keyValue}
-            fluid
-          />
+            {this.XE && (
+              <>
+                <FoodCreationInput
+                  label={`${i18nGet('breadUnits')}`}
+                  isFormWithError={isErrored}
+                  isRequired
+                  onTextChange={this.onTextInputValueChange}
+                  value={
+                    isEmpty(FoodCalculatorKey.BREAD_UNITS)
+                      ? ""
+                      : breadUntis + postfix(FoodCalculatorKey.BREAD_UNITS)
+                  }
+                  autoFocus
+                  onFocus={() => this.onTextInputFocus(FoodCalculatorKey.BREAD_UNITS)}
+                  type="decimal-pad"
+                  disabled={!this.sourceFood.nutrients.carbohydrates}
+                  withoutMarginTop
+                />
+              </>
+            )}
+            <View style={styles.space} />
+            <FoodCreationInput
+              label={`${i18nGet('food_creation_carbohydrates')}(${i18nGet('gram')})`}
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.CARBOHYDRATES)
+                  ? ""
+                  : carbohydrates + postfix(FoodCalculatorKey.CARBOHYDRATES)
+              }
+              type="decimal-pad"
+              isFormWithError={isErrored}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CARBOHYDRATES)}
+              disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.CARBOHYDRATES])}
+              isRequired
+              withoutMarginTop
+            />
+          </View>
+          <View style={styles.buttons}>
+            {isEditing && <>
+              <StyledButton
+                label={i18nGet('remove_racion')}
+                onPress={this.onMealRemove}
+                style={StyledButtonType.DELETE}
+              />
+              <View style={styles.space} />
+            </>}
+            <StyledButton
+              label={isEditing ? i18nGet('rewrite') : i18nGet('add_racion')}
+              onPress={this.onMealAdd}
+              style={StyledButtonType.PRIMARY}
+              disabled={!keyValue}
+              fluid
+            />
+          </View>
+        </View >
+      );
+    }
+
+    if (type === FoodCalculatorType.FOOD_ADDING) {
+      return (
+        <View style={this.wrapStyles}>
+          <View style={{ ...styles.rowSection, ...styles.rowSectionFirst }}>
+            <FoodCreationInput
+              label={`${i18nGet('weight_of_product')}(${i18nGet('gram')})`}
+              isFormWithError={isErrored}
+              isRequired
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.WEIGHT)
+                  ? ""
+                  : numberizeAndFix(this.currentRelation * 100) + postfix(FoodCalculatorKey.WEIGHT)
+              }
+              autoFocus={!this.XE}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.WEIGHT)}
+              type="decimal-pad"
+            />
+            {this.XE && (
+              <>
+                <View style={styles.space} />
+                <FoodCreationInput
+                  label={`${i18nGet('breadUnits')}`}
+                  isFormWithError={isErrored}
+                  isRequired
+                  onTextChange={this.onTextInputValueChange}
+                  value={
+                    isEmpty(FoodCalculatorKey.BREAD_UNITS)
+                      ? ""
+                      : breadUntis + postfix(FoodCalculatorKey.BREAD_UNITS)
+                  }
+                  autoFocus
+                  onFocus={() => this.onTextInputFocus(FoodCalculatorKey.BREAD_UNITS)}
+                  type="decimal-pad"
+                  disabled={!this.sourceFood.nutrients.carbohydrates}
+                />
+              </>
+            )}
+          </View>
+          <View style={styles.rowSection}>
+            <FoodCreationInput
+              label={`${i18nGet('food_creation_calories')}(${i18nGet('kcal')})`}
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.CALORIES)
+                  ? ""
+                  : calories + postfix(FoodCalculatorKey.CALORIES)
+              }
+              type="decimal-pad"
+              isFormWithError={isErrored}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CALORIES)}
+              isRequired
+              disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.CALORIES])}
+              withoutMarginTop
+            />
+            <View style={styles.space} />
+            <FoodCreationInput
+              label={`${i18nGet('food_creation_energy')}(${i18nGet('kJ')})`}
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.ENERGY)
+                  ? ""
+                  : energy + postfix(FoodCalculatorKey.ENERGY)
+              }
+              type="decimal-pad"
+              isFormWithError={isErrored}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.ENERGY)}
+              isRequired
+              disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.ENERGY])}
+              withoutMarginTop
+            />
+          </View>
+          <View style={styles.rowSection}>
+            <FoodCreationInput
+              label={`${i18nGet('food_creation_proteins')}(${i18nGet('gram')})`}
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.PROTEINS)
+                  ? ""
+                  : proteins + postfix(FoodCalculatorKey.PROTEINS)
+              }
+              type="decimal-pad"
+              isFormWithError={isErrored}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.PROTEINS)}
+              isRequired
+              disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.PROTEINS])}
+              withoutMarginTop
+            />
+            <View style={styles.space} />
+            <FoodCreationInput
+              label={`${i18nGet('food_creation_fats')}(${i18nGet('gram')})`}
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.FATS)
+                  ? ""
+                  : fats + postfix(FoodCalculatorKey.FATS)
+              }
+              type="decimal-pad"
+              isFormWithError={isErrored}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.FATS)}
+              isRequired
+              disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.FATS])}
+              withoutMarginTop
+            />
+            <View style={styles.space} />
+            <FoodCreationInput
+              label={`${i18nGet('food_creation_carbohydrates')}(${i18nGet('gram')})`}
+              onTextChange={this.onTextInputValueChange}
+              value={
+                isEmpty(FoodCalculatorKey.CARBOHYDRATES)
+                  ? ""
+                  : carbohydrates + postfix(FoodCalculatorKey.CARBOHYDRATES)
+              }
+              type="decimal-pad"
+              isFormWithError={isErrored}
+              onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CARBOHYDRATES)}
+              disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.CARBOHYDRATES])}
+              isRequired
+              withoutMarginTop
+            />
+          </View>
+          <View style={styles.buttons}>
+            {isEditing && <>
+              <StyledButton
+                label={i18nGet('remove_racion')}
+                onPress={this.onMealRemove}
+                style={StyledButtonType.DELETE}
+              />
+              <View style={styles.space} />
+            </>}
+            <StyledButton
+              label={isEditing ? i18nGet('rewrite') : i18nGet('add_racion')}
+              onPress={this.onMealAdd}
+              style={StyledButtonType.PRIMARY}
+              disabled={!keyValue}
+              fluid
+            />
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   }
 }
 
 export const FoodCalculatorConnected = connect(
   (state: IStorage, ownProps: Partial<Props>) => ({
     userDiabetesProperties: state.userDiabetesProperties,
-    selectedFoodItem: selectSelectedFoodItem(state, ownProps.navigation?.getParam('foodId'))
+    sourceFood: ownProps.food || selectSelectedFoodItem(state, ownProps.navigation?.getParam('foodId')),
+    isEditing: ownProps.navigation?.getParam('isEditing') || ownProps.isEditing
   })
 )(FoodCalculator);
 
@@ -396,6 +496,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'baseline',
   },
   rowSectionFirst: {
     marginTop: 0,
@@ -406,10 +507,6 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_DIMGRAY,
   },
   nutrientsRow: {
-    // display: 'flex',
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'flex-start',
   },
   nutrient: {
     display: 'flex',

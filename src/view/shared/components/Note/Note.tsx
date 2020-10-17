@@ -3,12 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../../model/INoteList';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { COLOR } from '../../../../constant/Color';
-import { connect } from 'react-redux';
-import { IStorage } from '../../../../model/IStorage';
-import { CarbsMeasuringType, IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
-import { Measures } from '../../../../localisation/Measures';
-import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
-import { sumMealTotal } from '../../../food/modules/sumMealTotal';
+import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 
 interface Props {
     note: INoteListNote
@@ -16,17 +11,7 @@ interface Props {
     onPress?: () => void
 }
 
-function NoteComponent(props: Props) {
-    const { userDiabetesProperties, note } = props;
-
-    const measuring = Measures.getDefaultCarbsMeasuringType(userDiabetesProperties.carbsMeasuringType);
-    const buWeight = Measures.getDefaultCarbsUnitWeightType(userDiabetesProperties.carbsUnitWeightType);
-    const carbsTotal = sumMealTotal(note.foodList).carbohydrates;
-
-    const additionalCarbs = measuring === CarbsMeasuringType.BREAD_UNITS
-        ? numberizeAndFix(carbsTotal / buWeight)
-        : carbsTotal;
-
+export function Note(props: Props) {
     return (
         <View
             style={styles.noteView}
@@ -43,7 +28,7 @@ function NoteComponent(props: Props) {
                 {props.note.glucose || '-'}
             </Text>
             <Text style={styles.text}>
-                {(props.note.breadUnits + additionalCarbs) || '-'}
+                {(props.note.breadUnits) || '-'}
             </Text>
             <Text style={styles.text}>
                 {props.note.insulin || '-'}
@@ -60,12 +45,6 @@ const getTime = (date: Date) => {
     const time = date.getMinutes() >= 10 ? '' + date.getMinutes() : "0" + date.getMinutes();
     return firstItem + ':' + time;
 }
-
-export const Note = connect(
-    (state: IStorage) => ({
-        userDiabetesProperties: state.userDiabetesProperties,
-    })
-)(NoteComponent)
 
 const styles = StyleSheet.create({
     noteView: {

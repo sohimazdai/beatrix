@@ -33,6 +33,7 @@ export const Checkbox = (props: Props) => {
 const styles = StyleSheet.create({
   touchableContainer: {
     marginBottom: 8,
+    paddingRight: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -54,5 +55,6 @@ const styles = StyleSheet.create({
   checkboxText: {
     marginLeft: 4,
     fontSize: 16,
+    flexGrow: 1,
   },
 })

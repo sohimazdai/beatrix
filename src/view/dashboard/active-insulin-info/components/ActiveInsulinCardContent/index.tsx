@@ -1,158 +1,34 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { Text, StyleSheet } from 'react-native';
-import { IStorage } from '../../../../../model/IStorage';
-import { convertFlatNoteListToNoteListByDay } from '../../../../../store/selector/NoteListSelector';
-import { DateHelper } from '../../../../../utils/DateHelper';
-import { INoteListNote, INoteListByDay } from '../../../../../model/INoteList';
-import { i18nGet } from '../../../../../localisation/Translate';
 import { COLOR } from '../../../../../constant/Color';
 import { ActiveInsulinChartConnected } from '../InsulinChart';
-import { selectActiveInsulinDuration } from '../../selectors/select-active-insulin-duration';
 import { OXTimeTitles } from '../OXTimeTitles';
-import { selectNoteWithActiveInsulin } from '../../selectors/select-notes-with-active-insulin';
 import ActiveInsulinCardHeader from '../ActiveInsulinCardHeader';
-import checkThatInsulinIsActive from './check-that-insulin-is-active';
-import calculateActiveInsulinTime from './calculate-active-insulin-time';
-import { IUserDiabetesProperties } from '../../../../../model/IUserDiabetesProperties';
 
 interface Props {
-  lastNote?: INoteListNote,
-  lastYesterdayNote?: INoteListNote,
-  hoursOfinsulinDuration: number,
-  oldestNoteTime: number
-  activeInsulinNoteListByDay: INoteListByDay
-  userDiabetesProperties: IUserDiabetesProperties
+  now: Date
+  initialHour: number
+  message: string
+  hoursOfinsulinDuration: number
 };
 
-interface State {
-  minutes?: number
-  hours?: number
-  intervalId?: NodeJS.Timeout
-  now: Date
+export function ActiveInsulinCardContent(props: Props) {
+  const { now, initialHour, message, hoursOfinsulinDuration } = props;
+  return (
+    <>
+      <ActiveInsulinCardHeader now={now} />
+      <ActiveInsulinChartConnected />
+      <OXTimeTitles
+        hoursOfinsulinDuration={hoursOfinsulinDuration}
+        initialHour={initialHour}
+      />
+      <Text style={styles.cardText}>
+        {message}
+      </Text>
+    </>
+  );
 }
-
-class ActiveInsulinCardContent extends React.Component<Props, State> {
-  state = {
-    minutes: 0,
-    hours: 0,
-    intervalId: null,
-    now: new Date(),
-  };
-
-  componentDidMount() {
-    const { lastNote, lastYesterdayNote } = this.props;
-    if (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) {
-      this.setInitialState();
-      return;
-    }
-
-    this.timer();
-
-    const intervalId = setInterval(this.timer, 60 * 1000);
-    this.setState({ intervalId: intervalId });
-  }
-
-  componentDidUpdate(pP: Props) {
-    const { lastNote, lastYesterdayNote } = this.props;
-
-    if (
-      (checkThatInsulinIsActive(lastNote) || checkThatInsulinIsActive(lastYesterdayNote)) &&
-      (!checkThatInsulinIsActive(pP.lastNote) && !checkThatInsulinIsActive(pP.lastYesterdayNote))
-    ) {
-      clearInterval(this.state.intervalId);
-      this.timer();
-
-      const intervalId = setInterval(this.timer, 60 * 1000);
-      this.setState({ intervalId: intervalId });
-    }
-
-    if (
-      (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) &&
-      (checkThatInsulinIsActive(pP.lastNote) || checkThatInsulinIsActive(pP.lastYesterdayNote))
-    ) {
-      clearInterval(this.state.intervalId);
-      this.setState({ intervalId: null });
-      this.setInitialState();
-    }
-  }
-
-  componentWillUnmount = () => {
-    clearInterval(this.state.intervalId);
-  };
-
-  timer = () => {
-    const { lastNote, lastYesterdayNote, userDiabetesProperties } = this.props;
-    const { shortInsulinType } = userDiabetesProperties;
-    const noteToUpdate = lastNote || lastYesterdayNote;
-
-    if (!checkThatInsulinIsActive(lastNote) && !checkThatInsulinIsActive(lastYesterdayNote)) {
-      this.setInitialState();
-      return;
-    }
-
-    const expiresIn = calculateActiveInsulinTime(noteToUpdate.date, shortInsulinType);
-
-    this.setState({
-      ...expiresIn,
-      now: new Date(),
-    });
-  };
-
-  setInitialState = () => {
-    this.setState({
-      minutes: 0,
-      hours: 0,
-    })
-  }
-
-  render() {
-    const { oldestNoteTime, activeInsulinNoteListByDay } = this.props;
-    const { minutes, hours, now } = this.state;
-
-    if (!activeInsulinNoteListByDay) return null;
-
-    if (!minutes && !hours) return null;
-
-    const message = `${i18nGet('expires_in')} ~ ${hours}${i18nGet('hours_short')} ${minutes}${i18nGet('minutes_short')}`
-
-    const initialHour = new Date(oldestNoteTime).getHours();
-
-    return (
-      <>
-        <ActiveInsulinCardHeader now={now} />
-        <ActiveInsulinChartConnected />
-        <OXTimeTitles
-          hoursOfinsulinDuration={this.props.hoursOfinsulinDuration}
-          initialHour={initialHour}
-        />
-        <Text style={styles.cardText}>
-          {message}
-        </Text>
-      </>
-    );
-  }
-}
-
-export const ActiveInsulinCardContentConnected = connect(
-  (state: IStorage) => ({
-    lastNote: Object.values(
-      convertFlatNoteListToNoteListByDay(state)[DateHelper.today()] || {}
-    )
-      .filter(note => !!note.insulin)
-      .sort((noteA, noteB) => noteB.date - noteA.date)[0],
-    lastYesterdayNote: Object.values(
-      convertFlatNoteListToNoteListByDay(state)[DateHelper.yesterday()] || {}
-    )
-      .filter(note => !!note.insulin)
-      .sort((noteA, noteB) => noteB.date - noteA.date)[0],
-    hoursOfinsulinDuration: selectActiveInsulinDuration(state),
-    oldestNoteTime: selectNoteWithActiveInsulin(state).oldestNoteTime,
-    activeInsulinNoteListByDay: selectNoteWithActiveInsulin(state).noteListByDay,
-    userDiabetesProperties: state.userDiabetesProperties,
-  })
-)(ActiveInsulinCardContent);
 
 const styles = StyleSheet.create({
   cardText: {

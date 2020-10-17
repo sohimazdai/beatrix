@@ -42,11 +42,13 @@ import { TagsIcon } from '../../component/icon/TagsIcon';
 import { PopupHeader } from '../../component/popup/PopupHeader';
 import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
 import { FoodListComponent } from '../../view/food/components/FoodList';
-import { IFoodList } from '../../model/IFood';
+import { FoodDatabase, IFoodList, IFoodListItem } from '../../model/IFood';
 import { sumMealTotal } from '../../view/food/modules/sumMealTotal';
 import { numberizeAndFix } from '../../api/helper/numberize-and-fix';
 import { MealTotal } from '../../view/note-editor/components/MealTotal';
 import { BlockHat } from '../../component/hat/BlockHat';
+import CalculatorIcon from '../../component/icon/CalculatorIcon';
+import { CarbsCalculator } from '../../view/food/components/CarbsCalculator';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -80,9 +82,11 @@ interface State {
   longInsulin: number
   commentary: string,
   currentValueType: NoteValueType
+  isCalculatorOpen?: boolean
   isTagPickerOpen?: boolean
   selectedTags?: string[]
   foodList: IFoodList,
+  foodSelected?: IFoodListItem,
 }
 
 class NoteEditor extends React.PureComponent<Props, State>{
@@ -98,6 +102,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
       const noteFromProps: State = {
         ...INITIAL_STATE,
         ...restNote,
+        breadUnits: this.currentHandlyBreadUnits,
         selectedTags: tagIds,
         date: new Date(restNote.date),
       }
@@ -111,6 +116,24 @@ class NoteEditor extends React.PureComponent<Props, State>{
     }
   }
 
+  get currentHandlyBreadUnits() {
+    const { note } = this.props;
+    const { breadUnits: propsBu, foodList } = note;
+    const { userDiabetesProperties: { carbsMeasuringType, carbsUnitWeightType } } = this.props;
+
+    const measuring = Measures.getDefaultCarbsMeasuringType(carbsMeasuringType);
+    const buWeight = Measures.getDefaultCarbsUnitWeightType(carbsUnitWeightType);
+    const carbsTotal = sumMealTotal(foodList).carbohydrates;
+    let foodBu = 0;
+    if (measuring === CarbsMeasuringType.BREAD_UNITS) {
+      foodBu = numberizeAndFix(carbsTotal / buWeight);
+    } else {
+      foodBu = numberizeAndFix(carbsTotal);
+    }
+
+    return numberizeAndFix(propsBu - foodBu)
+  }
+
   componentDidMount() {
     const { note } = this.props;
 
@@ -121,7 +144,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
   componentDidUpdate(pP: Props) {
     const { navigation } = this.props;
-    const { foodList } = this.state;
 
     const foodForNote = navigation.getParam('foodForNote');
     const foodIdToRemove = navigation.getParam('foodIdToRemove');
@@ -133,32 +155,22 @@ class NoteEditor extends React.PureComponent<Props, State>{
       )
     ) {
       const { _id, _v, ...rest } = foodForNote;
-      this.setState({
-        foodList: {
-          ...foodList,
-          [rest.id]: rest
-        },
-      });
-      appAnalytics.sendEventWithProps(
-        appAnalytics.events.FOOD_ADD_TO_NOTE,
-        { dbId: rest.dbId, weight: rest.nutrients.weight }
-      );
+      this.addFood(rest);
     }
 
     if (!pP.navigation.getParam('foodIdToRemove') && !!foodIdToRemove) {
-      const newList = { ...foodList };
-      delete newList[foodIdToRemove];
-
-      this.setState({ foodList: newList });
-
-      const foodToRemove = newList[foodIdToRemove];
-      appAnalytics.sendEventWithProps(
-        appAnalytics.events.FOOD_REMOVE_FROM_NOTE,
-        { dbId: foodToRemove.dbId }
-      )
+      this.removeFood(foodIdToRemove);
 
       navigation.setParams({ foodIdToRemove: null })
     }
+  }
+
+  closePopup = () => {
+    this.setState({
+      isCalculatorOpen: false,
+      isTagPickerOpen: false,
+      currentValueType: null,
+    })
   }
 
   closeEditor = () => {
@@ -182,9 +194,42 @@ class NoteEditor extends React.PureComponent<Props, State>{
     }
   }
 
+
+
+  addFood = (food: IFoodListItem) => {
+    const { foodList } = this.state;
+
+    this.setState({
+      foodList: {
+        ...foodList,
+        [food.id]: food
+      },
+      isCalculatorOpen: false,
+      foodSelected: null,
+    });
+    appAnalytics.sendEventWithProps(
+      appAnalytics.events.FOOD_ADD_TO_NOTE,
+      { dbId: food.dbId, weight: food.nutrients.weight }
+    );
+  }
+
+  removeFood = (foodId: string) => {
+    const { foodList } = this.state;
+
+    const foodToRemove = foodList[foodId];
+    appAnalytics.sendEventWithProps(
+      appAnalytics.events.FOOD_REMOVE_FROM_NOTE,
+      { dbId: foodToRemove.dbId }
+    );
+
+    const newList = { ...foodList };
+    delete newList[foodId];
+
+    this.setState({ foodList: newList, foodSelected: null, });
+  }
+
   render() {
     const { note } = this.props;
-
     const title = note
       ? i18nGet('note_editing')
       : i18nGet('note_creation');
@@ -197,6 +242,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         />
         <ScrollView style={styles.scrollView}>
           {this.renderPickerBlock()}
+          {this.renderButtons()}
           {this.renderNoteDashboard()}
           <View style={styles.bottomSpace} />
         </ScrollView>
@@ -207,6 +253,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         { this.renderInputPopup()}
         { this.renderCommentInputPopup()}
         { this.renderTagsPopup()}
+        { this.renderQuickCalculatorPopup()}
       </View>
     )
   }
@@ -232,6 +279,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
   onValueTypePickerSelect = (type) => this.setState({
     currentValueType: type,
     isTagPickerOpen: false,
+    isCalculatorOpen: false,
   })
 
   onDowArrowIconPress = () => {
@@ -246,12 +294,13 @@ class NoteEditor extends React.PureComponent<Props, State>{
       analyticsProp
     );
 
-    this.setState({ currentValueType: null, isTagPickerOpen: false })
+    this.setState({ currentValueType: null, isTagPickerOpen: false, isCalculatorOpen: false })
   }
 
   onTagPickerOpen = () => {
     this.setState({
       isTagPickerOpen: true,
+      isCalculatorOpen: false,
       currentValueType: null,
     })
   }
@@ -318,6 +367,20 @@ class NoteEditor extends React.PureComponent<Props, State>{
     )
   }
 
+  renderQuickCalculatorPopup = () => {
+    const { isCalculatorOpen, foodSelected } = this.state;
+    return (
+      <SuperPopup hidden={!isCalculatorOpen}>
+        <CarbsCalculator
+          onClose={this.closePopup}
+          onAdd={this.addFood}
+          onRemove={this.removeFood}
+          food={foodSelected}
+        />
+      </SuperPopup>
+    )
+  }
+
   onTagDelete = (tagId: string) => {
     const { selectedTags } = this.state;
 
@@ -356,29 +419,61 @@ class NoteEditor extends React.PureComponent<Props, State>{
           breadUnits={note.breadUnits - this.additionalCarbs}
           breadUnitsInfo={bu}
         />
-        <View style={styles.buttonView}>
-          <StyledButton
-            icon={<VegetablesIcon width={30} height={30} />}
-            iconPosition={IconPositionType.LEFT}
-            label={i18nGet('add_food')}
-            onPress={this.goToFood}
-            style={StyledButtonType.OUTLINE}
-          />
-          <View style={styles.space} />
-          <StyledButton
-            icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
-            label={i18nGet('add_tag_to_note')}
-            onPress={this.onTagPickerOpen}
-            style={StyledButtonType.OUTLINE}
-            iconPosition={IconPositionType.LEFT}
-          />
-        </View>
       </View>
     )
   }
 
+  onCalculatorOpen = () => {
+    this.setState({
+      isTagPickerOpen: false,
+      isCalculatorOpen: true,
+      currentValueType: null,
+    })
+  }
+
+  renderButtons() {
+    return (
+      <ScrollView
+        style={styles.buttonView}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        <View style={styles.space} />
+        <View style={styles.space} />
+        <StyledButton
+          icon={<VegetablesIcon width={30} height={30} />}
+          iconPosition={IconPositionType.LEFT}
+          label={i18nGet('add_food')}
+          onPress={this.goToFood}
+          style={StyledButtonType.OUTLINE}
+        />
+        <View style={styles.space} />
+        <StyledButton
+          icon={<CalculatorIcon width={30} height={30} fill={COLOR.PRIMARY} />}
+          label={i18nGet('calculate_carbs')}
+          onPress={this.onCalculatorOpen}
+          style={StyledButtonType.OUTLINE}
+          iconPosition={IconPositionType.LEFT}
+        />
+        <View style={styles.space} />
+        <StyledButton
+          icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
+          label={i18nGet('add_tag_to_note')}
+          onPress={this.onTagPickerOpen}
+          style={StyledButtonType.OUTLINE}
+          iconPosition={IconPositionType.LEFT}
+        />
+        <View style={styles.space} />
+        <View style={styles.space} />
+      </ScrollView>
+    )
+  }
+
   renderNoteDashboard() {
-    const { currentValueType, selectedTags, isTagPickerOpen, ...note } = this.state;
+    const {
+      currentValueType, selectedTags, isTagPickerOpen, isCalculatorOpen,
+      ...note
+    } = this.state;
     const { userDiabetesProperties } = this.props;
     const needToRenderFoodList = Object.values(note.foodList).length > 0;
     const needToRenderTotalFood = needToRenderFoodList && !!note.breadUnits;
@@ -483,6 +578,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { foodList } = this.state;
 
     const foodItem = foodList[foodId];
+
+    if (foodItem.dbId === FoodDatabase.USERS_FAST_LOCAL_DB) {
+      this.setState({
+        isCalculatorOpen: true,
+        foodSelected: foodItem,
+      });
+      return;
+    }
 
     navigation.navigate(NavigatorEntities.FOOD_CARD, {
       backPage: NavigatorEntities.NOTE_EDITOR,
@@ -640,6 +743,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
     if (this.props.note) {
       this.props.dispatch(createUpdateNoteAction({
         ...note,
+        breadUnits: numberizeAndFix(note.breadUnits + this.additionalCarbs),
         id: this.props.note.id
       }));
       this.closeEditor();
@@ -647,11 +751,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
     else {
       if (
         note.glucose || note.breadUnits || note.insulin ||
-        note.longInsulin || note.commentary
+        note.longInsulin || note.commentary || this.additionalCarbs
       ) {
         this.props.dispatch(createCreateNoteAction({
           ...note,
-          breadUnits: note.breadUnits + this.additionalCarbs,
+          breadUnits: numberizeAndFix(note.breadUnits + this.additionalCarbs),
           glycemiaType: Measures.getDefaultGlucoseMeasuringType(glycemiaMeasuringType),
           carbsMeasuringType: Measures.getDefaultCarbsMeasuringType(carbsMeasuringType),
         }));
@@ -696,7 +800,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   get noteFromState(): INoteListNote {
-    let { currentValueType, isTagPickerOpen, selectedTags, ...note } = this.state;
+    let {
+      currentValueType, isTagPickerOpen, selectedTags, isCalculatorOpen,
+      ...note
+    } = this.state;
     return {
       ...note,
       date: note.date.getTime(),

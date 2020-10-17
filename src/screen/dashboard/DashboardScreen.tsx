@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StatusBar, Animated, Easing } from "react-native";
+import { View, StatusBar } from "react-native";
 import { connect } from "react-redux";
 import {
   NavigationParams,
@@ -35,7 +35,6 @@ import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 import { Header } from '../../component/hat/Header';
-import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
 
 interface DashboardScreenStateTProps {
   app: IApp;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { KeyboardTypeOptions, Text, View, StyleSheet, NativeSyntheticEvent, TextInputChangeEventData, TextInputFocusEventData } from 'react-native';
-import { NativeViewGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
+import { NativeViewGestureHandlerStateChangeEvent, TextInput } from 'react-native-gesture-handler';
 import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
@@ -11,29 +11,47 @@ interface Props {
   isRequired?: boolean
   type?: KeyboardTypeOptions
   value?: string | number
+  defaultValue?: string | number
   placeholder?: string
   label: string
   autoFocus?: boolean
   withoutMarginTop?: boolean
-  highlighted?: boolean
   disabled?: boolean
   onTextChange: (text: string) => void
   onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void
 };
 
-export class FoodCreationInput extends React.Component<Props> {
+interface State {
+  focused: boolean,
+}
+
+export class FoodCreationInput extends React.Component<Props, State> {
+  state = { focused: false, }
+
   get isErrored() {
     const { value, isFormWithError, isRequired } = this.props;
 
     return !value && isFormWithError && isRequired;
   }
 
+  onFocus = (e) => {
+    const { onFocus } = this.props;
+
+    this.setState({ focused: true });
+    onFocus && onFocus(e);
+  }
+
+  onBlur = () => {
+    this.setState({ focused: false })
+  }
+
   render() {
     const {
-      label, placeholder, type, value,
-      isRequired, disabled, withoutMarginTop, highlighted, autoFocus,
-      onTextChange, onFocus,
+      label, placeholder, type, value, defaultValue,
+      isRequired, disabled, withoutMarginTop, autoFocus,
+      onTextChange,
     } = this.props;
+    const { focused } = this.state;
     const { isErrored } = this;
 
     const placeholderText = isRequired
@@ -44,7 +62,7 @@ export class FoodCreationInput extends React.Component<Props> {
       ? { ...styles.input, ...styles.inputErrored }
       : styles.input;
 
-    inputStyles = highlighted
+    inputStyles = focused
       ? { ...inputStyles, ...styles.inputHighlighted }
       : inputStyles;
 
@@ -61,6 +79,7 @@ export class FoodCreationInput extends React.Component<Props> {
       : styles.wrap;
 
     const stringedValue = String(value);
+    const stringedDefaultValue = String(value);
 
     return (
       <View style={wrapStyles} >
@@ -72,9 +91,11 @@ export class FoodCreationInput extends React.Component<Props> {
           keyboardType={type}
           onChangeText={onTextChange}
           placeholder={placeholderText}
-          value={stringedValue}
+          {...(stringedValue ? { value: stringedValue } : {})}
+          {...(stringedDefaultValue ? { defaultValue: stringedDefaultValue } : {})}
           autoFocus={autoFocus}
-          onFocus={onFocus}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
           disabled={disabled}
         />
       </View>

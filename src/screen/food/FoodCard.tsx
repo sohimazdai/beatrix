@@ -13,7 +13,7 @@ import { COLOR } from '../../constant/Color';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
-import { FoodCalculatorConnected } from '../../view/food/components/FoodCalculator';
+import { FoodCalculatorConnected, FoodCalculatorType } from '../../view/food/components/FoodCalculator';
 import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
 import { PopupHeader } from '../../component/popup/PopupHeader';
 import { ArrowDirection, ArrowTaillessIcon } from '../../component/icon/ArrowTaillessIcon';
@@ -207,7 +207,7 @@ function FoodCardComponent(props: Props) {
               />
             }
           />
-          <FoodCalculatorConnected navigation={navigation} />
+          <FoodCalculatorConnected type={FoodCalculatorType.FOOD_ADDING} navigation={navigation} />
         </View>
       </SuperPopup>
     </View>

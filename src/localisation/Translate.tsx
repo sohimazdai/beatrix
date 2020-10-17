@@ -64,6 +64,31 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  specify_nutrients_for_100g_of_product: {
+    'en': 'List the nutrients per 100 grams of food',
+    'es': 'Enumere los nutrientes por cada 100 gramos de comida',
+    'ru': 'Укажите питательные вещества на 100 граммов пищи',
+  },
+  unknown_product: {
+    'en': 'Calculated food',
+    'es': 'Comida calculada',
+    'ru': 'Продукт из расчета',
+  },
+  indicate_fats_prots_and_other: {
+    'en': 'Specify additionally proteins, fats and energy value',
+    'es': 'Especificar adicionalmente proteínas, grasas y valor energético',
+    'ru': 'Указать дополнительно белки, жиры и энергетичскую ценность',
+  },
+  carbs_calculator_popup_header: {
+    'en': 'Calculating carbohydrates manually',
+    'es': 'Calcular carbohidratos manualmente',
+    'ru': 'Расчет углеводов вручную',
+  },
+  calculate_carbs: {
+    'en': 'Calculation',
+    'es': 'Cálculo',
+    'ru': 'Расчет',
+  },
   hand_input: {
     'en': 'Manual input',
     'es': 'Entrada manual',

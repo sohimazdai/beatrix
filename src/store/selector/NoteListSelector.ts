@@ -1,4 +1,4 @@
-import { INoteListByDay, INoteList } from "../../model/INoteList";
+import { INoteListByDay } from "../../model/INoteList";
 import { IStorage } from '../../model/IStorage';
 import { createSelector } from 'reselect';
 
