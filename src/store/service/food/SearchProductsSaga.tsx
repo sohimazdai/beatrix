@@ -42,7 +42,6 @@ function* run({ payload: searchString }: SearchProductsAction) {
 
       if (error) throw new Error(error.message);
 
-      console.log('🤖🤖🤖🤖 foods', data);
       yield put(createReplaceFood(FoodSection.SEARCH, data));
       appAnalytics.sendEvent(appAnalytics.events.FOOD_SEARCH);
     } else {

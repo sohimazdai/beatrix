@@ -17,13 +17,9 @@ export function sortSearchResult(
   let currentTop = 0;
   let currentBottom = resultLength - 1;
   const reSet = new RegExp('^' + stringSet, 'i');
-  const reSetSecond = new RegExp(stringSet, 'i');
 
   nameLengthSorted.forEach((foodItem: IFoodListItem, index: number) => {
     let newIndex = 0;
-    console.log('🤖🤖🤖🤖 reSet', reSet);
-    console.log('🤖🤖🤖🤖 foodItem.name', foodItem.name);
-    console.log('🤖🤖🤖🤖 reSet.test(foodItem.name)', reSet.test(foodItem.name));
     if (reSet.test(foodItem.name)) {
       foods[currentTop] = foodItem;
       currentTop++;

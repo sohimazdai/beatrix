@@ -79,21 +79,8 @@ export function createMergeTags(tags: ITagListTags): TagListMergeTagsAction {
     }
 }
 
-function createTags(i18nKeys: string[]) {
-    return i18nKeys.reduce((tags, nameKey) => {
-        const id = uuidv1();
-        tags[id] = {
-            id,
-            name: i18nGet(nameKey),
-            ...randomizeBGandFontColor(),
-        };
-
-        return tags;
-    }, {})
-}
-
 export function tagListReducer(
-    module: ITagList = { tags: createTags(['before_meal', 'after_meal', 'fasting', 'before_bedtime']), },
+    module: ITagList = { tags: {} },
     action: TagListActionTypes
 ): ITagList {
     Object.keys(module.tags).forEach((tagKey) => {

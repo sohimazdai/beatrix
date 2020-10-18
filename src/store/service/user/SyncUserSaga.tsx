@@ -16,10 +16,11 @@ import { createClearPendingNoteListByUserId } from '../../modules/pending-note-l
 import { syncNotes } from '../../service-helper/sync-notes';
 import { INoteList } from '../../../model/INoteList';
 import { appAnalytics } from '../../../app/Analytics';
-import { createChangeTagList, createMergeTags } from '../../modules/tag-list/tagList';
+import { createMergeTags } from '../../modules/tag-list/tagList';
 import { ITagListTags } from '../../../model/ITagList';
-import { createGetFoodItemByIdAction } from '../food/GetFoodItemById';
 import { createGetFavoritesProductsAction } from '../food/GetFavoritesProductsSaga';
+import { createTags } from '../../service-helper/create-tags';
+import { createChangePending } from '../../modules/pending/pending';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -63,7 +64,13 @@ function* syncUser({ payload }: SyncUserAction) {
             const properties: IUserDiabetesProperties = userData.data.properties;
             const shedule: IUserPropertiesShedule = userData.data.shedule || {};
             const isNeedToShowOnboarding: boolean = userData.data.isNeedToShowOnboarding || false;
-            const tags: ITagListTags = userData.data.tagList || {};
+            const tags: ITagListTags = Object.values(userData.data.tagList).length
+                ? userData.data.tagList
+                : isNeedToShowOnboarding
+                    ? createTags()
+                    : {}
+
+            yield put(createChangePending({ tagList: true }));
 
             if (!properties.glycemiaMeasuringType) {
                 properties.glycemiaMeasuringType = Measures.getDefaultGlucoseMeasuringType(

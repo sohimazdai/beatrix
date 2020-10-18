@@ -101,7 +101,6 @@ function FoodCardComponent(props: Props) {
     ? { ...styles.openPopupSticker, ...styles.editingBg }
     : styles.openPopupSticker;
 
-  console.log('🤖🤖🤖🤖 foodItem', foodItem);
   return (
     <View style={styles.wrap}>
       <BlockHat
