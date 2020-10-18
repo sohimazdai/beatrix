@@ -29,20 +29,7 @@ export class FoodApi {
   }
 
   static async getFoodItemById(foodId: string): Promise<IFoodListItem | null> {
-    try {
-      const response = await api.post('food/get', { foodId });
-
-      if (!response.data) {
-        return null;
-      }
-
-      const foodItem = response.data;
-
-      return foodItem;
-    } catch (error) {
-      handleErrorSilently(error, 'FoodApi getFoodItemById')
-      return null;
-    }
+    return api.post('favorites/get', { foodId });
   }
 
   static async getByBarcodeFromLocalDB(barcode: string): Promise<IFoodListItem | null> {
@@ -63,7 +50,7 @@ export class FoodApi {
   }
 
   static async addProduct(product: IFoodListItem): Promise<String> {
-    return api.post('food/add', { product });
+    return api.post('food/add', { foodId: product.id, product });
   }
 
   static async searchProductsInLocalDb(dbs: FoodDatabase[], name: string): Promise<SearchReturn> {

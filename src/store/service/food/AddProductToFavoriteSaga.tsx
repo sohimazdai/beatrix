@@ -18,24 +18,24 @@ export function createAddProductToFavoriteAction(foodId: string) {
     }),
     {
       type,
-      payload: foodId
+      foodId
     },
   ])
 }
 
 interface AddProductToFavoriteAction {
   type,
-  payload: string
+  foodId: string
 }
 
-function* run({ payload }: AddProductToFavoriteAction) {
+function* run({ foodId }: AddProductToFavoriteAction) {
   try {
     const state: IStorage = yield select(state => state);
-    const foodToAdd = selectSelectedFoodItem(state, payload);
+    const foodToAdd = selectSelectedFoodItem(state, foodId);
     const userId = state.user.id;
 
     if (state.app.networkConnected) {
-      yield call(FoodApi.addFoodIdToFavorites, String(userId), String(payload));
+      yield call(FoodApi.addFoodIdToFavorites, String(userId), String(foodId));
       appAnalytics.sendEventWithProps(
         appAnalytics.events.ADD_FOOD_TO_FAVORITES,
         createFoodAnalytics(foodToAdd),

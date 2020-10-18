@@ -46,7 +46,6 @@ interface Props extends OwnProps {
 
 function FoodCardComponent(props: Props) {
   const {
-    foodItem,
     addToHistory,
     autoAddToDb,
     addProductToFavoriteInDb,
@@ -55,6 +54,7 @@ function FoodCardComponent(props: Props) {
     removeFoodItemFromFavorites,
     navigation,
     favoritesList,
+    foodItem,
     foodId
   } = props;
 
@@ -83,14 +83,19 @@ function FoodCardComponent(props: Props) {
     navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
   };
 
-  const isSelected = favoritesList && !!favoritesList[foodId];
+  const getFoodId = () => {
+    return foodId || foodItem.id;
+  }
+
+  const isSelected = favoritesList && !!favoritesList[getFoodId()];
+
   const handler = isSelected
     ? () => {
       removeFoodItemFromFavorites(foodItem);
-      removeProductFromFavoriteInDb([foodId]);
+      removeProductFromFavoriteInDb([getFoodId()]);
     } : () => {
       addFoodItemToFavorites(foodItem);
-      addProductToFavoriteInDb(foodId);
+      addProductToFavoriteInDb(getFoodId());
     };
 
   const isEditing: boolean = navigation.getParam('isEditing');
@@ -254,7 +259,7 @@ function FoodCardLoader(props: Props) {
   };
 
 
-  if (!foodItem) {
+  if (!foodItem && foodId) {
     useEffect(
       () => {
         getFoodItemById(foodId)
@@ -293,7 +298,7 @@ function FoodCardLoader(props: Props) {
 
 export const FoodCard = connect(
   (state: IStorage, ownProps: OwnProps) => ({
-    foodItem: selectSelectedFoodItem(state, ownProps.navigation.getParam('foodId')),
+    foodItem: ownProps.navigation.getParam('foodItem') || selectSelectedFoodItem(state, ownProps.navigation.getParam('foodId')),
     foodLoading: state.food.loading,
     favoritesList: state.food.favorites,
     foodId: ownProps.navigation.getParam('foodId'),
@@ -310,7 +315,12 @@ export const FoodCard = connect(
     removeFoodItemFromFavorites: (foodItem: IFoodListItem) => {
       dispatch(batchActions([
         createRemoveFoodItem(FoodSection.FAVORITES, foodItem.id),
-        createChangeFood(FoodSection.HISTORY, { [foodItem.id]: foodItem }),
+        createChangeFood(FoodSection.HISTORY, {
+          [foodItem.id]: {
+            ...foodItem,
+            dateAdded: new Date().getTime(),
+          }
+        }),
       ]));
     },
     addToHistory: (foodItem: IFoodListItem) => {

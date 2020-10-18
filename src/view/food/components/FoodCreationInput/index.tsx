@@ -47,7 +47,7 @@ export class FoodCreationInput extends React.Component<Props, State> {
 
   render() {
     const {
-      label, placeholder, type, value, defaultValue,
+      label, placeholder, type, value,
       isRequired, disabled, withoutMarginTop, autoFocus,
       onTextChange,
     } = this.props;

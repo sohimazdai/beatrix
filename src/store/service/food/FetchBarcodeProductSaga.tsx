@@ -49,7 +49,9 @@ function* run({ payload }: FetchProductByBarcodeAction) {
             FoodSection.HISTORY,
             {
               ...foodHistory,
-              [product.id]: product,
+              [product.id]: {
+                ...product, dateAdded: new Date().getTime(),
+              }
             }
           ));
       } else {

@@ -38,8 +38,8 @@ class FoodCreationScreen extends React.Component<Props> {
     id: foodToCreateId,
     sourceId: foodToCreateId,
     dbId: FoodDatabase.USERS_DB,
-    barcode: !!this.props.navigation.getParam('barcode')
-      ? this.props.navigation.getParam('barcode')
+    barcode: !!this.props.navigation.state.params.barcode
+      ? this.props.navigation.state.params.barcode
       : '',
     name: '',
     brandName: '',

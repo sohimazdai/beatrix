@@ -25,27 +25,27 @@ export function createGetFoodItemByIdAction(foodId: string) {
     }),
     {
       type,
-      payload: foodId
+      foodId
     },
   ])
 }
 
 interface GetFoodItemByIdAction {
   type,
-  payload: string
+  foodId: string
 }
 
-function* run({ payload }: GetFoodItemByIdAction) {
+function* run({ foodId }: GetFoodItemByIdAction) {
   try {
     const state: IStorage = yield select(state => state);
 
     if (state.app.networkConnected) {
-      const foodItem: IFoodListItem | null | any = yield call(FoodApi.getFoodItemById, payload);
+      const foodItem: IFoodListItem | null | any = yield call(FoodApi.getFoodItemById, foodId);
 
       if (!foodItem.error) {
         yield put(createChangeFood(
           FoodSection.HISTORY,
-          { [foodItem.id]: foodItem }
+          { [foodItem.id]: { ...foodItem, dateAdded: new Date().getTime() } }
         ));
         appAnalytics.sendEventWithProps(
           appAnalytics.events.FOOD_GOT_BY_ID,

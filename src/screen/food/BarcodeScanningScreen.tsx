@@ -16,16 +16,19 @@ import { IFoodListItem } from '../../model/IFood';
 import { createAddProductAction } from '../../store/service/food/AddProductSaga';
 import { createChangeInteractive } from '../../store/modules/interactive/interactive';
 import { appAnalytics } from '../../app/Analytics';
+import { selectFoodWithBarcode } from '../../view/food/selectors/select-food-with-barcode';
+import { IStorage } from '../../model/IStorage';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   fetchProductData: (id: string) => void;
   autoAddToDb: (foodItem: IFoodListItem) => void;
   selectCardFoodId: (foodId: string) => void;
+  selectBarcodeFood: (barcode: string) => IFoodListItem;
 }
 
 export function BarcodeScanningScreenComponent(props: Props) {
-  const { navigation, autoAddToDb } = props;
+  const { navigation, autoAddToDb, selectBarcodeFood } = props;
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -45,28 +48,34 @@ export function BarcodeScanningScreenComponent(props: Props) {
   const handleBarCodeScanned = async (barcodeData) => {
     if (scanned) return;
 
-    const { data } = barcodeData;
     const { navigation } = props;
 
     appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_START_SCANING);
 
     await setScanned(true);
-    let foodItem = await FoodApi.getOFFProductByBarcode(data);
+
+    let foodItem = selectBarcodeFood(barcodeData);
 
     if (!foodItem) {
-      foodItem = await FoodApi.getByBarcodeFromLocalDB(data);
+      foodItem = await FoodApi.getOFFProductByBarcode(barcodeData);
+    }
+
+    if (!foodItem) {
+      foodItem = await FoodApi.getByBarcodeFromLocalDB(barcodeData);
     }
 
     if (foodItem) {
       autoAddToDb(foodItem);
 
-      navigation.navigate(NavigatorEntities.FOOD_CARD);
+      navigation.navigate(NavigatorEntities.FOOD_CARD, {
+        foodItem
+      });
 
       appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SUCCESS_SCANING);
-    } else execAlert(data);
+    } else execAlert(barcodeData);
   };
 
-  const execAlert = (data) => {
+  const execAlert = (barcodeData) => {
     Alert.alert(
       i18nGet('scan_failed'),
       i18nGet('what_you_want_to_do_later'),
@@ -75,7 +84,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
           text: i18nGet('add_food_handly'),
           style: 'default',
           onPress: () => navigation.navigate(NavigatorEntities.FOOD_CARD_CREATION, {
-            barcode: data,
+            barcode: barcodeData,
             backPage: NavigatorEntities.BARCODE_SCANNING,
           })
         },
@@ -88,21 +97,12 @@ export function BarcodeScanningScreenComponent(props: Props) {
           })
         },
         {
-          text: i18nGet('try_again'),
+          text: i18nGet('scan_try_again'),
           style: 'cancel',
         },
       ]
     )
   }
-
-  const wrap = (children: ReactNode) => (
-    <View style={styles.view}>
-      <BlockHat onBackPress={onBackPress} title={i18nGet('product_scanning')} />
-      <View style={styles.content}>
-        {children}
-      </View>
-    </View>
-  );
 
   const onBackPress = () => {
     const backPage = navigation?.state?.params?.backPage || NavigatorEntities.FOOD_PAGE;
@@ -111,20 +111,26 @@ export function BarcodeScanningScreenComponent(props: Props) {
   }
 
   return (
-    wrap(
-      <>
-        {hasPermission && !scanned && <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
-          style={styles.barcodeScaner}
-          barCodeTypes={[
-            // BarCodeScanner.Constants.BarCodeType.qr,
-            BarCodeScanner.Constants.BarCodeType.code39,
-            BarCodeScanner.Constants.BarCodeType.code93,
-            BarCodeScanner.Constants.BarCodeType.code128,
-            BarCodeScanner.Constants.BarCodeType.ean13,
-            BarCodeScanner.Constants.BarCodeType.ean8,
-          ]}
-        />}
+    <View style={styles.view}>
+      <BlockHat onBackPress={onBackPress} title={i18nGet('product_scanning')} />
+      <View style={styles.content}>
+        {hasPermission && !scanned && (
+          <>
+            <BarCodeScanner
+              onBarCodeScanned={handleBarCodeScanned}
+              style={styles.barcodeScaner}
+              barCodeTypes={[
+                // BarCodeScanner.Constants.BarCodeType.qr,
+                BarCodeScanner.Constants.BarCodeType.code39,
+                BarCodeScanner.Constants.BarCodeType.code93,
+                BarCodeScanner.Constants.BarCodeType.code128,
+                BarCodeScanner.Constants.BarCodeType.ean13,
+                BarCodeScanner.Constants.BarCodeType.ean8,
+              ]}
+            />
+            <Text style={styles.text}>{i18nGet('scanning_hint')}</Text>
+          </>
+        )}
         <View style={styles.bottom}>
           {hasPermission === null && (
             <Text style={styles.text}>{i18nGet('requesting_for_camera_permissions')}</Text>
@@ -142,7 +148,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
               />
             </View>
           )}
-          <View style={styles.buttonWrap}>
+          {scanned && <View style={styles.buttonWrap}>
             <StyledButton
               fluid
               style={StyledButtonType.PRIMARY}
@@ -151,14 +157,17 @@ export function BarcodeScanningScreenComponent(props: Props) {
                 backPage: NavigatorEntities.BARCODE_SCANNING,
               })}
             />
-          </View>
+          </View>}
         </View>
-      </>
-    ));
+      </View >
+    </View >
+  );
 }
 
 export const BarcodeScanningScreen = connect(
-  null,
+  (state: IStorage) => ({
+    selectBarcodeFood: (barcode) => selectFoodWithBarcode(state, barcode),
+  }),
   (dispatch) => ({
     fetchProductData: (id: string) => dispatch(createFetchProductByBarcodeAction(id)),
     autoAddToDb: (foodItem: IFoodListItem) => dispatch(createAddProductAction(foodItem, { auto: true })),
@@ -178,10 +187,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   barcodeScaner: {
-    borderRadius: 10,
+    backgroundColor: COLOR.TEXT_BLACK,
     width: '100%',
-    minHeight: 300,
-    maxHeight: 600,
+    height: 300,
+    borderRadius: 10,
   },
   bottom: {
     position: 'absolute',
@@ -191,9 +200,13 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 8,
-    fontSize: 19,
-    color: COLOR.TEXT_DARK_GRAY
+    fontSize: 16,
+    color: COLOR.TEXT_DARK_GRAY,
+    backgroundColor: COLOR.BLUE_BASE,
+    borderRadius: 10,
+    padding: 16,
   },
   buttonWrap: {
+    marginTop: 16,
   }
 })
