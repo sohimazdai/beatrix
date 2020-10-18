@@ -6,5 +6,6 @@ export function createFoodAnalytics(foodItem: IFoodListItem): Partial<IFoodListI
     sourceId: foodItem.sourceId,
     name: foodItem.name,
     dbId: foodItem.dbId,
+    ...(foodItem.barcode ? { barcode: foodItem.barcode } : {})
   }
 }

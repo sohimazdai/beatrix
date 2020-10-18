@@ -63,7 +63,11 @@ export function BarcodeScanningScreenComponent(props: Props) {
       navigation.navigate(NavigatorEntities.FOOD_CARD);
 
       appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SUCCESS_SCANING);
-    } else Alert.alert(
+    } else execAlert(data);
+  };
+
+  const execAlert = (data) => {
+    Alert.alert(
       i18nGet('scan_failed'),
       i18nGet('what_you_want_to_do_later'),
       [
@@ -89,7 +93,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
         },
       ]
     )
-  };
+  }
 
   const wrap = (children: ReactNode) => (
     <View style={styles.view}>
@@ -109,7 +113,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
   return (
     wrap(
       <>
-        {hasPermission && <BarCodeScanner
+        {hasPermission && !scanned && <BarCodeScanner
           onBarCodeScanned={handleBarCodeScanned}
           style={styles.barcodeScaner}
           barCodeTypes={[
