@@ -66,10 +66,6 @@ export class FoodCreationInput extends React.Component<Props, State> {
       ? { ...inputStyles, ...styles.inputHighlighted }
       : inputStyles;
 
-    inputStyles = disabled
-      ? { ...inputStyles, ...styles.inputDisabled }
-      : inputStyles;
-
     const labelStyles = isErrored
       ? { ...styles.inputLabel, ...styles.inputLabelErrored }
       : styles.inputLabel;
@@ -129,7 +125,4 @@ const styles = StyleSheet.create({
     borderColor: COLOR.BLUE,
     ...SHADOW_OPTIONS,
   },
-  inputDisabled: {
-    backgroundColor: COLOR.DISABLED
-  }
 });

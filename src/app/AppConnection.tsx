@@ -16,34 +16,18 @@ interface Props {
 function Component(props: Props) {
     React.useEffect(() => {
         logger('Environment: ', Variables);
-        // NetInfo.isConnected.fetch().then(isConnected => {
-        //     props.changeAppConnection(isConnected);
-        //     isConnected && props.pingServer();
-        //     logger('Phone is ' + (isConnected ? 'online' : 'offline'));
-
-        //     appAnalytics.sendEventWithProps(appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE, {
-        //         isConnected
-        //     });
-        // });
         const unsubscribe = NetInfo.addEventListener(({ isConnected }) => {
-            props.changeAppConnection(isConnected);
-            isConnected && props.pingServer();
-            logger('Phone is ' + (isConnected ? 'online' : 'offline'));
-
             appAnalytics.sendEventWithProps(appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE, {
                 isConnected
             });
-            handleConnectivityChange(isConnected)
+
+            props.changeAppConnection(isConnected);
+            isConnected && props.pingServer();
+
+            logger('🤙✨ Phone connecting change to ' + (isConnected ? 'online ✅' : 'offline ⛔'));
         });
 
-        function handleConnectivityChange(isConnected) {
-            props.changeAppConnection(isConnected);
-            !isConnected && props.setServerNotAvailability();
-            isConnected && props.pingServer();
-            logger('Phone connecting change to ' + (isConnected ? 'online' : 'offline'));
-        }
-
-        return unsubscribe();
+        return unsubscribe;
     }, [])
     return null;
 }
@@ -53,7 +37,14 @@ export const AppConnection = connect(
     (dispatch) => ({
         dispatch,
         changeAppConnection: (isConnected: boolean) => {
-            dispatch(createChangeAppAction({ networkConnected: isConnected }))
+            if (isConnected) {
+                dispatch(createChangeAppAction({ networkConnected: true }))
+            } else {
+                dispatch(createChangeAppAction({
+                    networkConnected: false,
+                    serverAvailable: false,
+                }))
+            }
         },
         pingServer: () => dispatch(createAppPingAction()),
         setServerNotAvailability: () => dispatch(createChangeAppAction({

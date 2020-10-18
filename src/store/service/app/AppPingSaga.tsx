@@ -19,22 +19,24 @@ function* ping() {
         if (state.app.networkConnected) {
             const isOk = yield call(AppApi.ping);
             if (isOk.data == 'ОК') {
-                logger('Server is available');
-                yield put(createChangeAppAction({
-                    serverAvailable: true
-                }))
+                logger('🖥️ Server is available ✅');
 
-                appAnalytics.sendEventWithProps(appAnalytics.events.SERVER_AVAILIBILITY_STATUS_CHANGE, {
-                    isConnected: true
-                });
+                yield put(createChangeAppAction({ serverAvailable: true }));
+            } else {
+                logger('🖥️ Server is is n/a ⛔');
+
+                yield put(createChangeAppAction({ serverAvailable: false }));
             }
+
+            appAnalytics.sendEventWithProps(appAnalytics.events.SERVER_AVAILIBILITY_STATUS_CHANGE, {
+                isConnected: isOk.data == 'ОК'
+            });
         }
     } catch (e) {
         logger('ErrorCatched: ' + e.message)
-        logger('Server is n/a')
-        yield put(createChangeAppAction({
-            serverAvailable: false
-        }));
+        logger('🖥️ Server is n/a ⛔')
+
+        yield put(createChangeAppAction({ serverAvailable: false }));
 
         appAnalytics.sendEventWithProps(appAnalytics.events.SERVER_AVAILIBILITY_STATUS_CHANGE, {
             isConnected: false

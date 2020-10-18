@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AuthButtonGoogleConnect } from './button/AuthButtonGoogle';
@@ -9,6 +9,9 @@ import { AuthProblemResolver } from '../../screen/auth/AuthProblemResolver/AuthP
 import { i18nGet } from '../../localisation/Translate';
 import { COLOR } from '../../constant/Color';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
+import { IApp } from '../../model/IApp';
+import { Action } from 'redux';
+import { createAppPingAction } from '../../store/service/app/AppPingSaga';
 
 enum AuthType {
     EMAIL = 'email',
@@ -19,6 +22,8 @@ interface Props {
     user?: IUser
     loading?: boolean
     installationLoading?: boolean
+    app: IApp
+    dispatch: Dispatch<Action>
 }
 
 interface State {
@@ -31,6 +36,14 @@ export class AuthForm extends React.Component<Props, State> {
         password: "",
         checkPassword: "",
         authType: AuthType.GOOGLE,
+    }
+
+    componentDidMount() {
+        const { app, dispatch } = this.props;
+
+        if (!app.networkConnected || !app.serverAvailable) {
+            dispatch(createAppPingAction())
+        }
     }
 
     render() {
@@ -68,6 +81,7 @@ export const AuthFormConnect = connect(
         user: state.user,
         isPasswordRestored: state.interactive.isPasswordRestored,
         installationLoading: state.user.installationLoading,
+        app: state.app,
     }),
     (dispatch) => ({ dispatch }),
     (stateProps, ownProps) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
@@ -7,6 +7,8 @@ import { GoogleLogoIcon } from '../../../component/icon/GoogleLogoIcon';
 import { createGoogleAuthAction } from '../../../store/service/auth/GoogleAuthSaga';
 import { i18nGet } from '../../../localisation/Translate';
 import { appAnalytics } from '../../../app/Analytics';
+import { IStorage } from '../../../model/IStorage';
+import { createAppPingAction } from '../../../store/service/app/AppPingSaga';
 
 interface Props {
     onGoogleSignin?: () => void;
@@ -35,15 +37,33 @@ export function AuthButtonGoogle(props: Props) {
 }
 
 export const AuthButtonGoogleConnect = connect(
-    (state) => ({}),
-    (dispatch) => ({ dispatch }),
-    (stateProps, { dispatch }, ownProps) => {
+    (state: IStorage) => ({
+        app: state.app,
+    }),
+    (dispatch) => ({
+        signInWithGoogle: () => dispatch(createGoogleAuthAction()),
+        ping: () => dispatch(createAppPingAction()),
+    }),
+    (stateProps, dispatchProps, ownProps) => {
         return {
             ...stateProps,
             ...ownProps,
             onGoogleSignin: () => {
-                appAnalytics.sendEvent(appAnalytics.events.GOOGLE_SIGN_IN_PRESSED);
-                dispatch(createGoogleAuthAction())
+                if (stateProps.app.networkConnected) {
+                    appAnalytics.sendEvent(appAnalytics.events.GOOGLE_SIGN_IN_PRESSED);
+                    dispatchProps.signInWithGoogle();
+                } else {
+                    Alert.alert(
+                        i18nGet('active_network_needed'),
+                        '',
+                        [
+                            {
+                                text: i18nGet('ok'),
+                                onPress: () => dispatchProps.ping(),
+                            }
+                        ]
+                    )
+                }
             }
         }
     }

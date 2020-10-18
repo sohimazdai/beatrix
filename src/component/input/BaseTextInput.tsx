@@ -15,6 +15,7 @@ export function BaseTextInput(props: Props) {
   const style = {
     ...styles.textInput,
     ...(props as any).style,
+    ...(disabled ? styles.disabled : {}),
     fontSize: 16,
   }
 
@@ -42,5 +43,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 8,
+  },
+  disabled: {
+    opacity: 0.5,
+    backgroundColor: COLOR.DISABLED,
   }
 })
