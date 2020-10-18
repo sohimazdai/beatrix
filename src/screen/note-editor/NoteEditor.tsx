@@ -49,6 +49,7 @@ import { MealTotal } from '../../view/note-editor/components/MealTotal';
 import { BlockHat } from '../../component/hat/BlockHat';
 import CalculatorIcon from '../../component/icon/CalculatorIcon';
 import { CarbsCalculator } from '../../view/food/components/CarbsCalculator';
+import SoupIcon from '../../component/icon/SoupIcon';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -194,8 +195,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
     }
   }
 
-
-
   addFood = (food: IFoodListItem) => {
     const { foodList } = this.state;
 
@@ -207,9 +206,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
       isCalculatorOpen: false,
       foodSelected: null,
     });
+
     appAnalytics.sendEventWithProps(
       appAnalytics.events.FOOD_ADD_TO_NOTE,
-      { dbId: food.dbId, weight: food.nutrients.weight }
+      { dbId: food.dbId, weight: food.nutrients.weight },
     );
   }
 
@@ -441,7 +441,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         <View style={styles.space} />
         <View style={styles.space} />
         <StyledButton
-          icon={<VegetablesIcon width={30} height={30} />}
+          icon={<SoupIcon width={30} height={30} />}
           iconPosition={IconPositionType.LEFT}
           label={i18nGet('add_food')}
           onPress={this.goToFood}

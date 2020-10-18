@@ -40,18 +40,18 @@ function NoteFoodItem(props: Props) {
           </Text>
         </View>
         <View style={styles.nutrients}>
-          <Text style={styles.nutrientText}>
-            {`${i18nGet('food_proteins')} ${item.nutrients.proteins}`}
-          </Text>
-          <Text style={styles.nutrientText}>
-            {`${i18nGet('food_fat')} ${item.nutrients.fats}`}
-          </Text>
-          <Text style={styles.nutrientText}>
-            {`${i18nGet('food_creation_carbohydrates')} ${item.nutrients.carbohydrates}`}
-          </Text>
           {needToRenderXE && <Text style={styles.nutrientText}>
-            {`${i18nGet('food_note_bread_units')} ${bu}`}
+            {`${i18nGet('food_note_bread_units')}: ${bu}`}
           </Text>}
+          <Text style={styles.nutrientText}>
+            {`${i18nGet('food_proteins')}: ${item.nutrients.proteins}`}
+          </Text>
+          <Text style={styles.nutrientText}>
+            {`${i18nGet('food_fat')}: ${item.nutrients.fats}`}
+          </Text>
+          <Text style={styles.nutrientText}>
+            {`${i18nGet('food_creation_carbohydrates')}: ${item.nutrients.carbohydrates}`}
+          </Text>
         </View>
       </TouchableOpacity>
     </ View>
@@ -97,13 +97,14 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   nutrients: {
+    width: '100%',
     display: 'flex',
     paddingVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   nutrientText: {
-    flex: 1,
     textAlign: 'left',
     color: COLOR.TEXT_DARK_GRAY,
   }

@@ -62,8 +62,10 @@ function FoodCardComponent(props: Props) {
   const isForNote = navigation.getParam('isForNote');
 
   useEffect(() => {
-    addToHistory(foodItem);
-    autoAddToDb(foodItem);
+    if (!navigation.state.params.isEditing) {
+      addToHistory(foodItem);
+      autoAddToDb(foodItem);
+    }
 
     appAnalytics.sendEventWithProps(
       appAnalytics.events.FOOD_CARD_SEEN,
@@ -298,7 +300,7 @@ function FoodCardLoader(props: Props) {
 
 export const FoodCard = connect(
   (state: IStorage, ownProps: OwnProps) => ({
-    foodItem: ownProps.navigation.getParam('foodItem') || selectSelectedFoodItem(state, ownProps.navigation.getParam('foodId')),
+    foodItem: ownProps.navigation.state.params.foodItem || selectSelectedFoodItem(state, ownProps.navigation.getParam('foodId')),
     foodLoading: state.food.loading,
     favoritesList: state.food.favorites,
     foodId: ownProps.navigation.getParam('foodId'),

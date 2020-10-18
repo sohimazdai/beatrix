@@ -160,19 +160,19 @@ const translateStore = {
     'ru': 'Запрашиваем доступ к камере',
   },
   scan_try_again: {
-    'en': 'Try again',
-    'es': 'Probar de nuevo',
-    'ru': 'Еще раз',
+    'en': 'Try to scan again',
+    'es': 'Intenta escanear de nuevo',
+    'ru': 'Сканировать еще раз',
   },
   search_food: {
-    'en': 'Search',
-    'es': 'Buscar',
-    'ru': 'Найти',
+    'en': 'Find in search',
+    'es': 'Encontrar en la búsqueda',
+    'ru': 'Найти в поиске',
   },
   add_food_handly: {
-    'en': 'Add product',
-    'es': 'Añadir producto',
-    'ru': 'Добавить продукт',
+    'en': 'Add this product manually',
+    'es': 'Agregar este producto manualmente',
+    'ru': 'Добавить этот продукт вручную',
   },
   what_you_want_to_do_later: {
     'en': 'Choose further action',
@@ -1267,10 +1267,10 @@ const translateStore = {
     es: 'Error al sincronizar la programación con el servidor',
     shedule_sync_error: 'Ошибка синхронизации расписания с сервером',
   },
-  sync_error: {
-    en: 'Error synchronizing with server',
-    es: 'Error al sincronizar con el servidor',
-    ru: 'Ошибка при синхронизации с сервером',
+  sync_pending_error: {
+    en: 'Error synchronizing tags with server',
+    es: 'Error al sincronizar las etiquetas con el servidor',
+    ru: 'Ошибка при синхронизации тегов с сервером',
   },
   note_updating_error: {
     en: 'Error updating record on server',

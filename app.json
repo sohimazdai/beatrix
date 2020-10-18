@@ -13,7 +13,7 @@
       "backgroundColor": "#FFFFFF",
       "resizeMode": "cover"
     },
-    "version": "1.11.6",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -36,7 +36,7 @@
     },
     "android": {
       "package": "com.doq.beatrix",
-      "versionCode": 31,
+      "versionCode": 32,
       "adaptiveIcon": {
         "backgroundColor": "#FFE1DF",
         "foregroundImage": "./assets/icon.png"

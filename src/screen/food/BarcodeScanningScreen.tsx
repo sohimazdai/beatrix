@@ -45,7 +45,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
     appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SCREEN_SEEN);
   }, []);
 
-  const handleBarCodeScanned = async (barcodeData) => {
+  const handleBarCodeScanned = async ({ data: barcodeData }) => {
     if (scanned) return;
 
     const { navigation } = props;
@@ -98,6 +98,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
         },
         {
           text: i18nGet('scan_try_again'),
+          onPress: () => setScanned(false),
           style: 'cancel',
         },
       ]

@@ -1,12 +1,11 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
-import { handleError } from '../../../app/ErrorHandler';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { TagApi } from '../../../api/TagApi';
 import { createReplacePending, createChangePending } from '../../modules/pending/pending';
-import { createChangeTagList } from '../../modules/tag-list/tagList';
 
 const ACTION_TYPE = "SYNC_PENDING_DATA_ACTION";
 
@@ -50,7 +49,7 @@ function* run() {
     );
     tagListPending = false;
   } catch (e) {
-    handleError(e, i18nGet('sync_error'));
+    handleErrorSilently(e, i18nGet('sync_pending_error'));
     yield put(
       batchActions([
         createUserChangeAction({
