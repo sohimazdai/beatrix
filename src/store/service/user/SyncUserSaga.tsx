@@ -16,7 +16,7 @@ import { createClearPendingNoteListByUserId } from '../../modules/pending-note-l
 import { syncNotes } from '../../service-helper/sync-notes';
 import { INoteList } from '../../../model/INoteList';
 import { appAnalytics } from '../../../app/Analytics';
-import { createMergeTags } from '../../modules/tag-list/tagList';
+import { createReplaceTagList } from '../../modules/tag-list/tagList';
 import { ITagListTags } from '../../../model/ITagList';
 import { createGetFavoritesProductsAction } from '../food/GetFavoritesProductsSaga';
 import { createTags } from '../../service-helper/create-tags';
@@ -70,7 +70,10 @@ function* syncUser({ payload }: SyncUserAction) {
                     ? createTags()
                     : {}
 
-            yield put(createChangePending({ tagList: true }));
+            yield put(batchActions([
+                createReplaceTagList({ tags }),
+                createChangePending({ tagList: true }),
+            ]));
 
             if (!properties.glycemiaMeasuringType) {
                 properties.glycemiaMeasuringType = Measures.getDefaultGlucoseMeasuringType(
@@ -107,7 +110,6 @@ function* syncUser({ payload }: SyncUserAction) {
                     createUserChangeAction({
                         isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding
                     }),
-                    createMergeTags(tags),
                 ])
             );
 

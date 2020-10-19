@@ -31,7 +31,7 @@ function FavoritesContent(props: Props) {
       </View>
       {
         thereAreFoods
-          ? <FoodList section={FoodSection.FAVORITES} goToFoodCard={goToFoodCard} />
+          ? <FoodList section={FoodSection.FAVORITES} goToFoodCard={goToFoodCard} sortBy="foodAdded" />
           : <Text style={styles.text}>{i18nGet('you_not_added_any_food_yet')}</Text>
       }
     </View >

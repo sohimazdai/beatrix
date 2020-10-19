@@ -37,7 +37,7 @@ interface Props extends OwnProps {
   addProductToFavoriteInDb: (foodId: string) => void
   addFoodItemToFavorites: (foodItem: IFoodListItem) => void
   removeFoodItemFromFavorites: (foodItem: IFoodListItem) => void
-  removeProductFromFavoriteInDb: (foodIds: string[]) => void
+  removeProductFromFavoriteInDb: (foodId: string) => void
   addToHistory: (foodItem: IFoodListItem) => void
   autoAddToDb: (foodItem: IFoodListItem) => void
   getFoodItemById: (foodId: string) => void
@@ -94,7 +94,7 @@ function FoodCardComponent(props: Props) {
   const handler = isSelected
     ? () => {
       removeFoodItemFromFavorites(foodItem);
-      removeProductFromFavoriteInDb([getFoodId()]);
+      removeProductFromFavoriteInDb(getFoodId());
     } : () => {
       addFoodItemToFavorites(foodItem);
       addProductToFavoriteInDb(getFoodId());
@@ -307,10 +307,10 @@ export const FoodCard = connect(
   }),
   (dispatch) => ({
     addProductToFavoriteInDb: (foodId: string) => dispatch(createAddProductToFavoriteAction(foodId)),
-    removeProductFromFavoriteInDb: (foodIds: string[]) => dispatch(createRemoveProdcutFromFavoriteAction(foodIds)),
+    removeProductFromFavoriteInDb: (foodId: string) => dispatch(createRemoveProdcutFromFavoriteAction(foodId)),
     addFoodItemToFavorites: (foodItem: IFoodListItem) => {
       dispatch(batchActions([
-        createChangeFood(FoodSection.FAVORITES, { [foodItem.id]: foodItem }),
+        createChangeFood(FoodSection.FAVORITES, { [foodItem.id]: { ...foodItem, dateAdded: new Date().getTime() } }),
         createRemoveFoodItem(FoodSection.HISTORY, foodItem.id),
       ]));
     },

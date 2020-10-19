@@ -17,9 +17,10 @@ function Component(props: Props) {
     React.useEffect(() => {
         logger('Environment: ', Variables);
         const unsubscribe = NetInfo.addEventListener(({ isConnected }) => {
-            appAnalytics.sendEventWithProps(appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE, {
-                isConnected
-            });
+            appAnalytics.sendEventWithProps(
+                appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE,
+                { isConnected }
+            );
 
             props.changeAppConnection(isConnected);
             isConnected && props.pingServer();

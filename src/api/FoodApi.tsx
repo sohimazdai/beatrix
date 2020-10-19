@@ -16,18 +16,6 @@ export class FoodApi {
     return api.post('food/search/region', { searchString, regionGroup });
   }
 
-  static async getFoodIdsFromFavorites(userId: string) {
-    return api.post('favorites/get', { userId });
-  }
-
-  static async removeFoodIdFromFavorites(userId: string, foodIds: string[]) {
-    return api.post('favorites/remove', { userId, foodIds });
-  }
-
-  static async addFoodIdToFavorites(userId: string, foodId: string) {
-    return api.post('favorites/add', { userId, foodId });
-  }
-
   static async getFoodItemById(foodId: string): Promise<IFoodListItem | null> {
     return api.post('favorites/get', { foodId });
   }
@@ -139,4 +127,19 @@ export class FoodApi {
     }
   }
 
+  static async getFoodIdsFromFavorites(userId: string) {
+    return api.post('favorites/get', { userId });
+  }
+
+  static async removeFoodIdFromFavorites(userId: string, foodId: string) {
+    return api.post('favorites/remove', { userId, foodId });
+  }
+
+  static async addFoodIdToFavorites(userId: string, foodId: string) {
+    return api.post('favorites/add', { userId, foodId });
+  }
+
+  static async syncFavoriteFood(userId: string, favorites: string[]): Promise<any> {
+    return api.post('favorites/sync', { userId, favorites });
+  }
 }

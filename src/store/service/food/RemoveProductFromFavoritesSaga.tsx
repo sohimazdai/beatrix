@@ -7,10 +7,11 @@ import { FoodApi } from '../../../api/FoodApi';
 import { appAnalytics } from '../../../app/Analytics';
 import { selectSelectedFoodItem } from '../../../view/food/selectors/select-selected-food-item';
 import { createFoodAnalytics } from '../../service-helper/createFoodAnalytics';
+import { createChangePending } from '../../modules/pending/pending';
 
 const type = "REMOVE_PRODUCT_FROM_FAVORITE";
 
-export function createRemoveProdcutFromFavoriteAction(foodIds: string[]) {
+export function createRemoveProdcutFromFavoriteAction(foodId: string) {
   return batchActions([
     createUserChangeAction({
       loading: true,
@@ -18,28 +19,30 @@ export function createRemoveProdcutFromFavoriteAction(foodIds: string[]) {
     }),
     {
       type,
-      payload: foodIds
+      foodId,
     },
   ])
 }
 
 interface RemoveProdcutFromFavoriteAction {
   type,
-  payload: string[]
+  foodId: string
 }
 
-function* run({ payload }: RemoveProdcutFromFavoriteAction) {
+function* run({ foodId }: RemoveProdcutFromFavoriteAction) {
   try {
     const state: IStorage = yield select(state => state);
-    const foodToRemoveFromFavs = selectSelectedFoodItem(state, payload[0]);
+    const foodToRemoveFromFavs = selectSelectedFoodItem(state, foodId);
     const userId = state.user.id;
 
-    if (state.app.networkConnected) {
-      yield call(FoodApi.removeFoodIdFromFavorites, userId, payload);
+    if (state.app.serverAvailable) {
+      yield call(FoodApi.removeFoodIdFromFavorites, userId, foodId);
       appAnalytics.sendEventWithProps(
         appAnalytics.events.REMOVE_FOOD_FROM_FAVORITES,
         createFoodAnalytics(foodToRemoveFromFavs),
       )
+    } else {
+      yield put(createChangePending({ favoriteFood: true }))
     }
 
     yield put(

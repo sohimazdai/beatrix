@@ -46,7 +46,7 @@ export const appAnalytics = {
   },
   sendEventWithProps: (eventName: string, properties: any) => {
     logger('::amplitude trying to send event: ', eventName);
-    logger('::amplitude event properties: ', properties);
+    logger('::amplitude event properties: ', JSON.stringify(properties));
 
     Amplitude.logEventWithProperties(eventName, {
       ...properties,

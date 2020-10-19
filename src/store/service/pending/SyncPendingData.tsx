@@ -6,6 +6,8 @@ import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { TagApi } from '../../../api/TagApi';
 import { createReplacePending, createChangePending } from '../../modules/pending/pending';
+import { FoodApi } from '../../../api/FoodApi';
+import { IFoodListItem } from '../../../model/IFood';
 
 const ACTION_TYPE = "SYNC_PENDING_DATA_ACTION";
 
@@ -30,6 +32,12 @@ function* run() {
 
       if (state.pending.tagList) {
         yield call(TagApi.syncTags, state.user.id, state.tagList.tags);
+      }
+
+      if (state.pending.favoriteFood) {
+        const ids = Object.values(state.food.favorites).map((fav: IFoodListItem) => fav.id);
+
+        yield call(FoodApi.syncFavoriteFood, state.user.id, ids);
       }
 
       yield put(createReplacePending({}));

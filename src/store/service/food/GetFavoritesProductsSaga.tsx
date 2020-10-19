@@ -7,6 +7,7 @@ import { FoodApi } from '../../../api/FoodApi';
 import { IFoodList } from '../../../model/IFood';
 import { createChangeFood, FoodSection } from '../../modules/food/food';
 import { appAnalytics } from '../../../app/Analytics';
+import { createChangePending } from '../../modules/pending/pending';
 
 const type = "GET_FAVORITES_PRODUCTS";
 
@@ -28,7 +29,7 @@ function* run() {
     const favoritesInStore = state.food.favorites;
     const userId = state.user.id;
 
-    if (state.app.networkConnected) {
+    if (state.app.serverAvailable) {
       const result = yield call(FoodApi.getFoodIdsFromFavorites, userId);
 
       const favorites = result.data?.favorites || [];
@@ -49,6 +50,7 @@ function* run() {
       while (!foodId.done) {
         const foodIdValue = foodId.value[1]
         foodList[foodIdValue] = yield call(FoodApi.getFoodItemById, foodIdValue);
+        foodList[foodIdValue].dateAdded = new Date().getTime();
         foodId = favIterator.next();
       }
 
@@ -65,6 +67,8 @@ function* run() {
       );
 
       appAnalytics.setUserProperties({ favorites: Object.values(foodList).length })
+    } else {
+      yield put(createChangePending({ favoriteFood: true }));
     }
 
     yield put(
@@ -74,7 +78,7 @@ function* run() {
       })
     );
   } catch (e) {
-    handleErrorSilently(e, 'Ошибка получения продуктов под одному из favorites');
+    handleErrorSilently(e, 'Ошибка получения продуктов по одному из favorites');
     yield put(
       createUserChangeAction({
         loading: false,

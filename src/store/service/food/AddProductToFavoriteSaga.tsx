@@ -7,6 +7,7 @@ import { FoodApi } from '../../../api/FoodApi';
 import { appAnalytics } from '../../../app/Analytics';
 import { selectSelectedFoodItem } from '../../../view/food/selectors/select-selected-food-item';
 import { createFoodAnalytics } from '../../service-helper/createFoodAnalytics';
+import { createChangePending } from '../../modules/pending/pending';
 
 const type = "ADD_PRODUCT_TO_FAVORITE";
 
@@ -34,13 +35,15 @@ function* run({ foodId }: AddProductToFavoriteAction) {
     const foodToAdd = selectSelectedFoodItem(state, foodId);
     const userId = state.user.id;
 
-    if (state.app.networkConnected) {
+    if (state.app.serverAvailable) {
       yield call(FoodApi.addFoodIdToFavorites, String(userId), String(foodId));
       appAnalytics.sendEventWithProps(
         appAnalytics.events.ADD_FOOD_TO_FAVORITES,
         createFoodAnalytics(foodToAdd),
       );
       appAnalytics.setUserProperties({ favorites: Object.values(state.food.favorites).length })
+    } else {
+      yield put(createChangePending({ favoriteFood: true }))
     }
 
     yield put(
