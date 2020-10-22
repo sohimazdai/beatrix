@@ -5,7 +5,7 @@ import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { FoodApi } from '../../../api/FoodApi';
 import { IFoodList } from '../../../model/IFood';
-import { createChangeFood, FoodSection } from '../../modules/food/food';
+import { createReplaceFood, FoodSection } from '../../modules/food/food';
 import { appAnalytics } from '../../../app/Analytics';
 import { createChangePending } from '../../modules/pending/pending';
 
@@ -26,38 +26,55 @@ export function createGetFavoritesProductsAction() {
 function* run() {
   try {
     const state: IStorage = yield select(state => state);
-    const favoritesInStore = state.food.favorites;
+    const favoritesInStore = { ...state.food.favorites };
     const userId = state.user.id;
 
     if (state.app.serverAvailable) {
       const result = yield call(FoodApi.getFoodIdsFromFavorites, userId);
 
-      const favorites = result.data?.favorites || [];
-
-      const foodIdsToSync: string[] = [];
-
-      favorites.forEach((favoriteId) => {
-        if (!favoritesInStore[favoriteId]) {
-          foodIdsToSync.push(favoriteId)
-        }
-      });
-
+      const favorites = result.data.favorites || [];
       const foodList: IFoodList = {};
 
-      const favIterator = foodIdsToSync.entries();
+      const favoritesInStoreValue =
+        !!favoritesInStore && Object.values(favoritesInStore)
+          .map((food) => food.id)
+          .filter(foodId => !favorites.find((id) => id === foodId));
+      const favIterator = [
+        ...favorites,
+        ...favoritesInStoreValue,
+      ].entries();
+
       let foodId = favIterator.next();
 
       while (!foodId.done) {
-        const foodIdValue = foodId.value[1]
-        foodList[foodIdValue] = yield call(FoodApi.getFoodItemById, foodIdValue);
-        foodList[foodIdValue].dateAdded = new Date().getTime();
-        foodId = favIterator.next();
+        const foodIdValue = foodId.value[1];
+
+        if (!foodIdValue || foodIdValue === 'undefined') {
+          foodId = favIterator.next();
+        } else {
+          const {
+            data: {
+              __v,
+              _id,
+              ...foodItem
+            }
+          } = yield call(FoodApi.getFoodItemById, foodIdValue);
+
+          if (foodItem && foodItem.id) {
+            foodList[foodIdValue] = {
+              ...foodItem,
+              dateAdded: new Date().getTime()
+            };
+          }
+
+          foodId = favIterator.next();
+        }
       }
 
       yield put(
-        createChangeFood(
+        createReplaceFood(
           FoodSection.FAVORITES,
-          foodList
+          foodList,
         )
       )
 

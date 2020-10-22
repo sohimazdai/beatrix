@@ -68,7 +68,7 @@ function* syncUser({ payload }: SyncUserAction) {
                 ? userData.data.tagList
                 : isNeedToShowOnboarding
                     ? createTags()
-                    : {}
+                    : {};
 
             yield put(batchActions([
                 createReplaceTagList({ tags }),

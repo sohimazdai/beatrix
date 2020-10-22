@@ -20,6 +20,8 @@ function FavoritesContent(props: Props) {
   const { goToFoodCard, goToFoodCardCreation, favoritesList } = props;
 
   const thereAreFoods = Object.values(favoritesList).length > 0;
+
+  console.log('🤖🤖🤖🤖 favoritesList', favoritesList);
   return (
     <View style={styles.view}>
       <View style={styles.buttonView}>

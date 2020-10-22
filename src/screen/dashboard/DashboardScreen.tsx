@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { View, StatusBar } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -35,6 +35,8 @@ import { i18nGet } from '../../localisation/Translate';
 import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 import { Header } from '../../component/hat/Header';
+import { Action } from 'redux';
+import { createGetFavoritesProductsAction } from '../../store/service/food/GetFavoritesProductsSaga';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -46,6 +48,7 @@ interface DashboardScreenStateTProps {
 interface DashboardScreenDispatchProps {
   selectNoteToEdit: (noteId: string) => void;
   syncNotes: () => void;
+  dispatch: Dispatch<Action>;
 }
 
 interface DashboardScreenProps {
@@ -102,7 +105,7 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
             rightIconPress={() => this.props.navigation.navigate("Profile")}
           />
           <ScrollView style={styles.scrollView}>
-            <View style={{ padding: 16, paddingBottom: 0, marginTop: -4 }}>
+            <View style={{ padding: 16, paddingBottom: 0 }}>
               <ActiveInsulinInfoConnected navigation={navigation} />
               <LastNotesConnected
                 onNotesPress={() => navigation.navigate('Notes')}

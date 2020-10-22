@@ -73,16 +73,15 @@ export function Comp(props: ChartSettingsProps) {
                 </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
-                        let buttonStyle = period === selectedChartPeriod ?
-                            { ...styles.periodButton, ...styles.periodButtonActive } :
-                            styles.periodButton;
-                        let buttonTextStyle = period === selectedChartPeriod ?
-                            { ...styles.periodButtonText, ...styles.periodButtonTextActive } :
-                            styles.periodButtonText;
+                        let buttonStyle = period === selectedChartPeriod
+                            ? { ...styles.periodButton, ...styles.periodButtonActive }
+                            : styles.periodButton;
+                        let buttonTextStyle = period === selectedChartPeriod
+                            ? { ...styles.periodButtonText, ...styles.periodButtonTextActive }
+                            : styles.periodButtonText;
                         return <View
                             style={buttonStyle}
                             key={period}
-
                         >
                             <TouchableOpacity
                                 style={styles.periodButtonTouchable}
@@ -245,19 +244,14 @@ const styles = StyleSheet.create({
         width: 87,
         height: 25,
 
-        borderWidth: 2,
-
         ...SHADOW_OPTIONS,
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: COLOR.WHITE,
         backgroundColor: COLOR.WHITE,
-        color: COLOR.TEXT_DARK_GRAY,
     },
     periodButtonActive: {
-        backgroundColor: "#2E3858",
-        borderColor: "#2E3858"
+        backgroundColor: COLOR.PRIMARY,
     },
     periodButtonTouchable: {
         display: 'flex',
@@ -270,10 +264,11 @@ const styles = StyleSheet.create({
     periodButtonText: {
         fontSize: 14,
         lineHeight: 16,
+        color: COLOR.PRIMARY,
     },
     periodButtonTextActive: {
         fontWeight: 'bold',
-        color: "#FFFFFF"
+        color: COLOR.WHITE,
     },
     scaleAverageValueTitle: {
         width: '100%',

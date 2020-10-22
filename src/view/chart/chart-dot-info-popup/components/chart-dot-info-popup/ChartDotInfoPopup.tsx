@@ -168,27 +168,49 @@ export class ChartDotInfoPopup extends React.Component<Props> {
                             value={note[ChartValueType.LONG_INSULIN]}
                         />
                     </View>
-                    {Object.values(note.foodList).length > 0 && <View style={styles.valueBlock}>
-                        <Text style={styles.blockTitle}>
-                            {i18nGet('racion')}
-                        </Text>
-                        <FoodListComponent
-                            foodList={note.foodList}
-                            goToFoodCard={this.goToFoodCard}
-                            forNote
-                        />
-                    </View>}
-                    {!!note.commentary && <View style={styles.valueBlock}>
-                        <Text style={styles.blockTitle}>
-                            {i18nGet('comment')}
-                        </Text>
-                        <Text style={styles.commentValueText}>
-                            {note.commentary}
-                        </Text>
-                    </View>}
+                    {this.renderFoodList()}
+                    {this.renderComments()}
                 </ScrollView>}
             </LinearGradient>
         </SuperPopup>
+    }
+
+    renderFoodList() {
+        const { selectedChartPeriod, note } = this.props;
+        const isDayPeriod = selectedChartPeriod === ChartPeriodType.DAY;
+        const thereIsFood = note.foodList && Object.values(note.foodList).length > 0;
+
+        if (!isDayPeriod || !thereIsFood) return null;
+
+        return (
+            <View style={styles.valueBlock}>
+                <Text style={styles.blockTitle}>
+                    {i18nGet('racion')}
+                </Text>
+                <FoodListComponent
+                    foodList={note.foodList}
+                    goToFoodCard={this.goToFoodCard}
+                    forNote
+                />
+            </View>
+        );
+    }
+
+    renderComments() {
+        const { note } = this.props;
+
+        if (!note.commentary) return null;
+
+        return (
+            <View style={styles.valueBlock}>
+                <Text style={styles.blockTitle}>
+                    {i18nGet('comment')}
+                </Text>
+                <Text style={styles.commentValueText}>
+                    {note.commentary}
+                </Text>
+            </View>
+        );
     }
 }
 

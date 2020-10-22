@@ -17,7 +17,7 @@ export class FoodApi {
   }
 
   static async getFoodItemById(foodId: string): Promise<IFoodListItem | null> {
-    return api.post('favorites/get', { foodId });
+    return api.post('food/get', { foodId });
   }
 
   static async getByBarcodeFromLocalDB(barcode: string): Promise<IFoodListItem | null> {

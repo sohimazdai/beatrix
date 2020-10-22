@@ -50,6 +50,7 @@ import { BlockHat } from '../../component/hat/BlockHat';
 import CalculatorIcon from '../../component/icon/CalculatorIcon';
 import { CarbsCalculator } from '../../view/food/components/CarbsCalculator';
 import SoupIcon from '../../component/icon/SoupIcon';
+import { createGetFavoritesProductsAction } from '../../store/service/food/GetFavoritesProductsSaga';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -140,7 +141,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
     appAnalytics.sendEventWithProps(appAnalytics.events.NOTE_EDITOR_SEEN, {
       isEditing: note ? true : false
-    })
+    });
+
+    this.props.dispatch(createGetFavoritesProductsAction());
   }
 
   componentDidUpdate(pP: Props) {
