@@ -80,9 +80,9 @@ const translateStore = {
     'ru': 'Нет соединения с сетью интернет',
   },
   server_is_unavailable: {
-    'en': 'Our server is not available, please try again later',
-    'es': 'Nuestro servidor no está disponible, inténtelo de nuevo más tarde',
-    'ru': 'Наш сервер недоступен, попробуйте позже',
+    'en': 'Our server is currently unavailable. Tap to try to connect.',
+    'es': 'Nuestro servidor no está disponible actualmente. Haga clic para intentar conectarse.',
+    'ru': 'В данное время наш сервер недоступен. Нажмите, чтобы попробовать подключиться.',
   },
   specify_nutrients_for_100g_of_product: {
     'en': 'List the nutrients per 100 grams of food',
@@ -140,9 +140,9 @@ const translateStore = {
     'ru': 'Загружаем данные',
   },
   food_in_dev: {
-    'en': 'Food (In developing)',
-    'es': 'Comida (En desarrollo)',
-    'ru': 'Продукты (В разработке)',
+    'en': 'Food',
+    'es': 'Comida',
+    'ru': 'Продукты',
   },
   scan_again: {
     'en': 'Scan again',
