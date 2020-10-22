@@ -21,7 +21,6 @@ function FavoritesContent(props: Props) {
 
   const thereAreFoods = Object.values(favoritesList).length > 0;
 
-  console.log('🤖🤖🤖🤖 favoritesList', favoritesList);
   return (
     <View style={styles.view}>
       <View style={styles.buttonView}>

@@ -8,8 +8,8 @@ import { i18nGet } from '../../../../localisation/Translate';
 import { NotesIcon } from '../../../../component/icon/NotesIcon';
 import { ChartsIcon } from '../../../../component/icon/ChartsIcon';
 import { TagsIcon } from '../../../../component/icon/TagsIcon';
-import { VegetablesIcon } from '../../../../component/icon/value-icons/VegetablesIcon';
 import { ProfileIcon } from '../../../../component/icon/ProfileIcon';
+import SoupIcon from '../../../../component/icon/SoupIcon';
 import { Header } from '../../../../component/hat/Header';
 import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
 import { appAnalytics } from '../../../../app/Analytics';
@@ -56,7 +56,7 @@ export class SideMenu extends React.Component<Props> {
 
               {this.renderItem(
                 i18nGet('food'),
-                <VegetablesIcon width={25} height={25} />,
+                <SoupIcon width={25} height={25} />,
                 NavigatorEntities.FOOD_PAGE,
               )}
 

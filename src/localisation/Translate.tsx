@@ -713,9 +713,9 @@ const translateStore = {
     ru: 'Показать больше',
   },
   notes_not_found: {
-    en: 'Notes not found... Lets write a new one!',
+    en: 'Notes not found',
     es: 'Sin notas',
-    ru: 'Записей не найдено... Давайте добавим!',
+    ru: 'Записи не найдены',
   },
   need_to_inject: {
     'en': 'Need to inject',

@@ -6,30 +6,43 @@ export function sortSearchResult(
   searchString: string,
   searchFoods: IFoodListItem[]
 ): IFoodListItem[] {
-  const nameLengthSorted = searchFoods.sort((food1, food2) => food2.name.length - food1.name.length);
+  const splittedName = searchString.split(splitRegexp);
+  const stringSetRE = new RegExp(createSetString(splittedName), 'i');
 
-  const stringSet = searchString.trim().replace(splitRegexp, '.');
+  return searchFoods
+    .sort((food1, food2) => food1.name.length - food2.name.length)
+    .sort(
+      (food1, food2) => {
+        const food1Name = food1.name;
+        const food2Name = food2.name;
 
-  const resultLength = nameLengthSorted.length;
+        if (stringSetRE.test(food1Name)) {
+          if (stringSetRE.test(food2Name)) {
+            return food1.name.length - food2.name.length;
+          }
 
-  const foods: IFoodListItem[] = new Array(resultLength).fill(null);
+          return -1;
+        } else {
+          if (stringSetRE.test(food2Name)) {
+            return 1;
+          }
 
-  let currentTop = 0;
-  let currentBottom = resultLength - 1;
-  const reSet = new RegExp('^' + stringSet, 'i');
+          return food1.name.length - food2.name.length;
+        }
+      }
+    );
+}
 
-  nameLengthSorted.forEach((foodItem: IFoodListItem, index: number) => {
-    let newIndex = 0;
-    if (reSet.test(foodItem.name)) {
-      foods[currentTop] = foodItem;
-      currentTop++;
-      newIndex = currentTop;
-    } else {
-      foods[currentBottom] = foodItem;
-      currentBottom--;
-      newIndex = currentBottom;
-    }
-  })
+function createSetString(splitted) {
+  const res = [splitted];
 
-  return foods;
+  for (let i = 1; i < splitted.length; i++) {
+    res[i] = [...res[i - 1]];
+    const shifted = res[i].shift();
+    res[i].push(shifted);
+  }
+  for (let i = 0; i < splitted.length; i++) {
+    res[i] = res[i].join('\.*');
+  }
+  return '(' + res.join(')|(') + ')';
 }

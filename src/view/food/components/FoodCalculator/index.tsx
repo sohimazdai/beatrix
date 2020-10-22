@@ -68,11 +68,10 @@ class FoodCalculator extends React.Component<Props> {
     const selectedKeyValueFor100gram = selectedKey === FoodCalculatorKey.WEIGHT
       ? 100
       : selectedKey === FoodCalculatorKey.BREAD_UNITS
-        ? numberizeAndFix(this.sourceFood.nutrients.carbohydrates / this.xeWeight, 10)
-        : numberizeAndFix(this.sourceFood.nutrients[selectedKey], 10);
+        ? this.sourceFood.nutrients.carbohydrates / this.xeWeight
+        : this.sourceFood.nutrients[selectedKey];
 
-    console.log('🤖🤖🤖🤖 currentRelation', numberizeAndFix(keyValue / selectedKeyValueFor100gram, 10));
-    return numberizeAndFix(keyValue / selectedKeyValueFor100gram, 10);
+    return keyValue / selectedKeyValueFor100gram;
   };
 
   get calculatedNutrients(): IFoodNutrients {
@@ -112,7 +111,6 @@ class FoodCalculator extends React.Component<Props> {
   get calculatedXe(): number {
     const { carbohydrates } = this.calculatedNutrients
 
-    console.log('🤖🤖🤖🤖 calculatedNutrients', this.calculatedNutrients);
     return numberizeAndFix(carbohydrates / this.xeWeight);
   }
 

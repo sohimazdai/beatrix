@@ -37,12 +37,14 @@ import { IconPositionType, StyledButton, StyledButtonType } from '../../componen
 import { Header } from '../../component/hat/Header';
 import { Action } from 'redux';
 import { createGetFavoritesProductsAction } from '../../store/service/food/GetFavoritesProductsSaga';
+import { createAppPingAction } from '../../store/service/app/AppPingSaga';
 
 interface DashboardScreenStateTProps {
   app: IApp;
   noteListByDay: INoteListByDay;
   user: IUser;
   selectedDotId: number;
+  ping: () => void;
 }
 
 interface DashboardScreenDispatchProps {
@@ -68,6 +70,9 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
   state = { menuShown: false };
 
   componentDidMount() {
+    const { ping } = this.props;
+    ping();
+
     appAnalytics.setSection(AnalyticsSections.DASHBOARD);
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
 
@@ -75,8 +80,10 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
   }
 
   componentDidUpdate(pP: FullProps) {
-    if (!pP.app.serverAvailable && this.props.app.serverAvailable) {
-      this.props.syncNotes();
+    const { app, syncNotes } = this.props;
+
+    if (!pP.app.serverAvailable && app.serverAvailable) {
+      syncNotes();
     }
   }
 
@@ -175,6 +182,7 @@ export const DashboardScreenConnect = connect(
   dispatch => ({
     dispatch,
     syncNotes: () => dispatch(createSyncNotesAction({ reason: SyncReasonType.SEND_PENDING })),
+    ping: () => dispatch(createAppPingAction()),
   }),
 )(DashboardScreen);
 

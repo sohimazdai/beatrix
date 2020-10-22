@@ -57,6 +57,12 @@ class FoodCreationScreen extends React.Component<Props> {
     appAnalytics.sendEvent(appAnalytics.events.FOOD_CREATION_SEEN)
   }
 
+  get isForNote() {
+    const { navigation } = this.props;
+
+    return navigation.getParam('isForNote');
+  }
+
   get locale() {
     return LocaleType[getLocale()];
   }
@@ -150,7 +156,7 @@ class FoodCreationScreen extends React.Component<Props> {
     this.setState({ isErrored: false });
 
     setTimeout(() => {
-      navigation.navigate(NavigatorEntities.FOOD_CARD, { foodId: id });
+      navigation.navigate(NavigatorEntities.FOOD_CARD, { foodId: id, isForNote: this.isForNote });
     }, 500);
   }
 

@@ -1,4 +1,4 @@
-import { put, call, select, takeLatest, all } from "redux-saga/effects";
+import { put, call, select, takeLatest } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
 import { handleErrorSilently } from '../../../app/ErrorHandler';
@@ -47,36 +47,6 @@ function* run({ payload: searchString }: SearchProductsAction) {
     } else {
       alert(i18nGet('server_is_not_available_try_to_restart_app'));
     }
-    // const [localDB, offDB] = yield all([
-    //   call(
-    //     FoodApi.searchProductsInLocalDb,
-    //     FOOD_DATABASES_BY_COUNTRY_GROUP.RU,
-    //     searchString
-    //   ),
-    //   call(FoodApi.searchOpenFoodFacts, searchString),
-    // ])
-
-    // foods = {
-    //   ...dbMapper(localDB.data.foods),
-    //   ...offDB.foods,
-    // };
-    // } else {
-    // const [localDB, fsDB, offDB] = yield all([
-    //   call(
-    //     FoodApi.searchProductsInLocalDb,
-    //     FOOD_DATABASES_BY_COUNTRY_GROUP.EN,
-    //     searchString
-    //   ),
-    //   call(FoodApi.searchFatSecret, searchString),
-    //   call(FoodApi.searchOpenFoodFacts, searchString),
-    // ]);
-
-    //   foods = {
-    //     ...dbMapper(localDB.data.foods),
-    //     ...fsDB.foods,
-    //     ...offDB.foods,
-    //   };
-    // }
 
     yield put(
       batchActions([

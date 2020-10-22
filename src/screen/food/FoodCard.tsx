@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../model/IStorage';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { createChangeFood, FoodSection, createRemoveFoodItem } from '../../store/modules/food/food';
-import { IFoodListItem, IFoodList, FoodDatabase, IFood } from '../../model/IFood';
+import { IFoodListItem, IFoodList, FoodDatabase } from '../../model/IFood';
 import { batchActions } from 'redux-batched-actions';
-import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { StyledButton, StyledButtonType, IconPositionType } from '../../component/button/StyledButton';
-import { FavoritesIcom } from '../../component/icon/FavoritesIcon';
+import { FavoritesIcon } from '../../component/icon/FavoritesIcon';
 import { COLOR } from '../../constant/Color';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { i18nGet } from '../../localisation/Translate';
@@ -18,7 +18,6 @@ import { PopupDirection, SuperPopup } from '../../component/popup/SuperPopup';
 import { PopupHeader } from '../../component/popup/PopupHeader';
 import { ArrowDirection, ArrowTaillessIcon } from '../../component/icon/ArrowTaillessIcon';
 import { selectSelectedFoodItem } from '../../view/food/selectors/select-selected-food-item';
-import { createAddProductAction } from '../../store/service/food/AddProductSaga';
 import { createGetFoodItemByIdAction } from '../../store/service/food/GetFoodItemById';
 import { Loader } from '../../component/loader/Loader';
 import { createAddProductToFavoriteAction } from '../../store/service/food/AddProductToFavoriteSaga';
@@ -39,7 +38,6 @@ interface Props extends OwnProps {
   removeFoodItemFromFavorites: (foodItem: IFoodListItem) => void
   removeProductFromFavoriteInDb: (foodId: string) => void
   addToHistory: (foodItem: IFoodListItem) => void
-  autoAddToDb: (foodItem: IFoodListItem) => void
   getFoodItemById: (foodId: string) => void
   unsetfoodId: () => void
 }
@@ -47,7 +45,6 @@ interface Props extends OwnProps {
 function FoodCardComponent(props: Props) {
   const {
     addToHistory,
-    autoAddToDb,
     addProductToFavoriteInDb,
     addFoodItemToFavorites,
     removeProductFromFavoriteInDb,
@@ -64,7 +61,6 @@ function FoodCardComponent(props: Props) {
   useEffect(() => {
     if (!navigation.state.params.isEditing) {
       addToHistory(foodItem);
-      autoAddToDb(foodItem);
     }
 
     appAnalytics.sendEventWithProps(
@@ -89,9 +85,9 @@ function FoodCardComponent(props: Props) {
     return foodId || foodItem.id;
   }
 
-  const isSelected = favoritesList && !!favoritesList[getFoodId()];
+  const isFavorite = favoritesList && !!favoritesList[getFoodId()];
 
-  const handler = isSelected
+  const handler = isFavorite
     ? () => {
       removeFoodItemFromFavorites(foodItem);
       removeProductFromFavoriteInDb(getFoodId());
@@ -117,10 +113,10 @@ function FoodCardComponent(props: Props) {
           style={StyledButtonType.EMPTY}
           onPress={handler}
           iconPosition={IconPositionType.LEFT}
-          icon={<FavoritesIcom
+          icon={<FavoritesIcon
             height={25}
             width={25}
-            fill={isSelected ? COLOR.RED : COLOR.PRIMARY_WHITE}
+            fill={isFavorite ? COLOR.RED : null}
           />}
           withoutPadding
         />}
@@ -214,7 +210,11 @@ function FoodCardComponent(props: Props) {
               />
             }
           />
-          <FoodCalculatorConnected type={FoodCalculatorType.FOOD_ADDING} navigation={navigation} />
+          <FoodCalculatorConnected
+            type={FoodCalculatorType.FOOD_ADDING}
+            food={foodItem}
+            navigation={navigation}
+          />
         </View>
       </SuperPopup>
     </View>
@@ -332,9 +332,6 @@ export const FoodCard = connect(
           [foodItem.id]: { ...foodItem, dateAdded: new Date().getTime() }
         }
       ));
-    },
-    autoAddToDb: (foodItem: IFoodListItem) => {
-      dispatch(createAddProductAction(foodItem, { auto: true }));
     },
     getFoodItemById: (foodId: string) => dispatch(createGetFoodItemByIdAction(foodId)),
   })

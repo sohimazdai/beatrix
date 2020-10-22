@@ -5,7 +5,7 @@ import Tab from '../Tab';
 import { i18nGet } from '../../../../localisation/Translate';
 import { MagnifierIcon } from '../../../../component/icon/MagnifierIcon';
 import { HistoryIcon } from '../../../../component/icon/HistoryIcon';
-import { FavoritesIcom } from '../../../../component/icon/FavoritesIcon';
+import { FavoritesIcon } from '../../../../component/icon/FavoritesIcon';
 import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
@@ -34,7 +34,7 @@ export default function Tabs(props: Props) {
       <Tab
         isSelected={FoodSection.FAVORITES === selectedPage}
         label={i18nGet('food_favorites')}
-        icon={(<FavoritesIcom width={25} height={25} />)}
+        icon={(<FavoritesIcon width={25} height={25} fill={COLOR.PRIMARY} />)}
         onSelect={() => onPageSelect(FoodSection.FAVORITES)}
       />
     </View>

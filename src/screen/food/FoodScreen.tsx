@@ -16,10 +16,12 @@ import { FavoritesContentConnected } from '../../view/food/components/FavoritesC
 import { IStorage } from '../../model/IStorage';
 import { IFood } from '../../model/IFood';
 import { appAnalytics } from '../../app/Analytics';
+import { createAppPingAction } from '../../store/service/app/AppPingSaga';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   clearSearch: () => void;
+  ping: () => void;
   food: IFood
 };
 
@@ -33,6 +35,7 @@ class FoodScreenComponent extends React.Component<Props, State> {
   };
 
   componentDidMount() {
+    this.props.ping();
     appAnalytics.sendEvent(appAnalytics.events.FOOD_SCREEN_SEEN)
   }
 
@@ -83,8 +86,9 @@ class FoodScreenComponent extends React.Component<Props, State> {
 
   navigateToBarcodeScanningScreen = () => {
     const { navigation } = this.props;
+    const isForNote = navigation.getParam('isForNote');
 
-    navigation.navigate(NavigatorEntities.BARCODE_SCANNING)
+    navigation.navigate(NavigatorEntities.BARCODE_SCANNING, { isForNote })
   }
 
   render() {
@@ -141,6 +145,7 @@ export const FoodScreen = connect(
   }),
   (dispatch) => ({
     clearSearch: () => dispatch(createReplaceFood(FoodSection.SEARCH, {})),
+    ping: () => dispatch(createAppPingAction()),
   }),
 )(FoodScreenComponent);
 

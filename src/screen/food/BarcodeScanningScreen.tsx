@@ -45,6 +45,8 @@ export function BarcodeScanningScreenComponent(props: Props) {
     appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SCREEN_SEEN);
   }, []);
 
+  const isForNote = navigation.getParam('isForNote');
+
   const handleBarCodeScanned = async ({ data: barcodeData }) => {
     if (scanned) return;
 
@@ -68,10 +70,14 @@ export function BarcodeScanningScreenComponent(props: Props) {
       autoAddToDb(foodItem);
 
       navigation.navigate(NavigatorEntities.FOOD_CARD, {
-        foodItem
+        foodItem,
+        isForNote,
       });
 
-      appAnalytics.sendEvent(appAnalytics.events.FOOD_BARCODE_SUCCESS_SCANING);
+      appAnalytics.sendEventWithProps(
+        appAnalytics.events.FOOD_BARCODE_SUCCESS_SCANING,
+        { dbId: foodItem.dbId }
+      );
     } else execAlert(barcodeData);
   };
 
@@ -86,6 +92,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
           onPress: () => navigation.navigate(NavigatorEntities.FOOD_CARD_CREATION, {
             barcode: barcodeData,
             backPage: NavigatorEntities.BARCODE_SCANNING,
+            isForNote,
           })
         },
         {
@@ -94,6 +101,7 @@ export function BarcodeScanningScreenComponent(props: Props) {
           onPress: () => navigation.navigate(NavigatorEntities.FOOD_PAGE, {
             selectedFoodPage: FoodSection.SEARCH,
             backPage: NavigatorEntities.BARCODE_SCANNING,
+            isForNote,
           })
         },
         {
