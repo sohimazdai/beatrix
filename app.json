@@ -13,7 +13,7 @@
       "backgroundColor": "#FFFFFF",
       "resizeMode": "cover"
     },
-    "version": "2.0.1",
+    "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -36,12 +36,14 @@
     },
     "android": {
       "package": "com.doq.beatrix",
-      "versionCode": 34,
+      "versionCode": 36,
       "adaptiveIcon": {
         "backgroundColor": "#FFE1DF",
         "foregroundImage": "./assets/icon.png"
       },
-      "permissions": []
+      "permissions": [
+        "CAMERA"
+      ]
     },
     "description": "Diabetes visualization app",
     "githubUrl": "https://github.com/sohimazdai/beatrix"

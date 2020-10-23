@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Alert, CheckBox, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { FoodDatabase, IFoodListItem } from '../../model/IFood';
@@ -221,7 +221,7 @@ class FoodCreationScreen extends React.Component<Props> {
             <FoodCreationInput
               label={i18nGet('food_creation_proteins')}
               onTextChange={(text: string) => this.setState({ proteins: text })}
-              value={proteins}
+              value={Number(proteins) > 100 ? 100 : proteins}
               isFormWithError={isErrored}
               type="decimal-pad"
               isRequired
@@ -230,7 +230,7 @@ class FoodCreationScreen extends React.Component<Props> {
             <FoodCreationInput
               label={i18nGet('food_creation_fats')}
               onTextChange={(text: string) => this.setState({ fats: text })}
-              value={fats}
+              value={Number(fats) > 100 ? 100 : fats}
               isFormWithError={isErrored}
               type="decimal-pad"
               isRequired
@@ -239,7 +239,7 @@ class FoodCreationScreen extends React.Component<Props> {
             <FoodCreationInput
               label={i18nGet('food_creation_carbohydrates')}
               onTextChange={(text: string) => this.setState({ carbohydrates: text })}
-              value={carbohydrates}
+              value={Number(carbohydrates) > 100 ? 100 : carbohydrates}
               isFormWithError={isErrored}
               type="decimal-pad"
               isRequired

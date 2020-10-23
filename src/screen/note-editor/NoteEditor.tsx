@@ -488,7 +488,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
             <View style={styles.foodList}>
               <FoodListComponent
                 foodList={note.foodList}
-                goToFoodCard={this.goToFoodCard}
+                goToFoodCard={this.onFoodPress}
                 forNote
               />
             </View>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { KeyboardTypeOptions, Text, View, StyleSheet, NativeSyntheticEvent, TextInputChangeEventData, TextInputFocusEventData } from 'react-native';
-import { NativeViewGestureHandlerStateChangeEvent, TextInput } from 'react-native-gesture-handler';
+import { KeyboardTypeOptions, Text, View, StyleSheet, NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
@@ -77,6 +76,13 @@ export class FoodCreationInput extends React.Component<Props, State> {
     const stringedValue = String(value);
     const stringedDefaultValue = String(value);
 
+    const onChange = (text: string) => {
+      if (type === 'decimal-pad') {
+        onTextChange(text.replace(/,/g, '.'))
+      } else {
+        onTextChange(text)
+      }
+    }
     return (
       <View style={wrapStyles} >
         <Text style={labelStyles}>
@@ -85,7 +91,7 @@ export class FoodCreationInput extends React.Component<Props, State> {
         <BaseTextInput
           style={inputStyles}
           keyboardType={type}
-          onChangeText={onTextChange}
+          onChangeText={onChange}
           placeholder={placeholderText}
           {...(stringedValue ? { value: stringedValue } : {})}
           {...(stringedDefaultValue ? { defaultValue: stringedDefaultValue } : {})}

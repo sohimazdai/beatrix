@@ -127,7 +127,7 @@ export class CarbsCalculator extends React.Component<Props, State> {
     }
 
     this.setState({
-      [selectedInput]: inputValue
+      [selectedInput]: inputValue.replace(/,/g, '.')
     } as any)
   }
 
