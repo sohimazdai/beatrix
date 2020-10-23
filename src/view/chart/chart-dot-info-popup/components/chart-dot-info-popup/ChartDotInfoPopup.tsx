@@ -176,7 +176,7 @@ export class ChartDotInfoPopup extends React.Component<Props> {
     }
 
     renderFoodList() {
-        const { selectedChartPeriod, note } = this.props;
+        const { selectedChartPeriod = ChartPeriodType.DAY, note } = this.props;
         const isDayPeriod = selectedChartPeriod === ChartPeriodType.DAY;
         const thereIsFood = note.foodList && Object.values(note.foodList).length > 0;
 
