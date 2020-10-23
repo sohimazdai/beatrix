@@ -573,8 +573,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
     });
   }
 
-  goToFoodCard = (foodId?: string) => {
-    const { navigation } = this.props;
+  onFoodPress = (foodId?: string) => {
     const { foodList } = this.state;
 
     const foodItem = foodList[foodId];
@@ -586,6 +585,15 @@ class NoteEditor extends React.PureComponent<Props, State>{
       });
       return;
     }
+
+    this.goToFoodCard(foodId);
+  }
+
+  goToFoodCard = (foodId?: string) => {
+    const { navigation } = this.props;
+    const { foodList } = this.state;
+
+    const foodItem = foodList[foodId];
 
     navigation.navigate(NavigatorEntities.FOOD_CARD, {
       backPage: NavigatorEntities.NOTE_EDITOR,
