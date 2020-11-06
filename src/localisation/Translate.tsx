@@ -64,6 +64,16 @@ export default function translate() {
 
 const translateStore = {
   // FOOD
+  find_in_the_list: {
+    'en': 'Find in the list',
+    'es': 'Encuentra en la lista',
+    'ru': 'Найти в списке',
+  },
+  or: {
+    'en': 'or',
+    'es': 'o',
+    'ru': 'или',
+  },
   scanning_hint: {
     'en': 'Aim the camera at the barcode. If nothing happens, try moving the camera closer or further away from the product packaging so that the scanner can read the information.',
     'es': 'Apunte la cámara al código de barras. Si no sucede nada, intente acercar o alejar la cámara del embalaje del producto para que el escáner pueda leer la información.',

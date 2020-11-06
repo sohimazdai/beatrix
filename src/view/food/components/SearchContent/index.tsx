@@ -57,14 +57,9 @@ function SearchContent(props: Props) {
           defaultValue={''}
           clearButtonMode={"while-editing"}
           disabled={!app.serverAvailable}
+          clearable={!!typed}
+          onClear={() => setTyped('')}
         />
-        {!!typed && <View style={styles.crossIcon}>
-          <StyledButton
-            icon={<CrossIcon width={12} height={12} />}
-            style={StyledButtonType.EMPTY}
-            onPress={() => setTyped('')}
-          />
-        </View>}
       </View>
       {
         !!typed

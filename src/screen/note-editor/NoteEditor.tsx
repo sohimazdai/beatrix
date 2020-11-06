@@ -443,23 +443,23 @@ class NoteEditor extends React.PureComponent<Props, State>{
         <StyledButton
           icon={<SoupIcon width={30} height={30} />}
           iconPosition={IconPositionType.LEFT}
-          label={i18nGet('add_food')}
+          label={i18nGet('food')}
           onPress={this.goToFood}
           style={StyledButtonType.OUTLINE}
+        />
+        <View style={styles.space} />
+        <StyledButton
+          icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
+          label={i18nGet('tags')}
+          onPress={this.onTagPickerOpen}
+          style={StyledButtonType.OUTLINE}
+          iconPosition={IconPositionType.LEFT}
         />
         <View style={styles.space} />
         <StyledButton
           icon={<CalculatorIcon width={30} height={30} fill={COLOR.PRIMARY} />}
           label={i18nGet('calculate_carbs')}
           onPress={this.onCalculatorOpen}
-          style={StyledButtonType.OUTLINE}
-          iconPosition={IconPositionType.LEFT}
-        />
-        <View style={styles.space} />
-        <StyledButton
-          icon={<TagsIcon width={30} height={30} fill={COLOR.PRIMARY} />}
-          label={i18nGet('add_tag_to_note')}
-          onPress={this.onTagPickerOpen}
           style={StyledButtonType.OUTLINE}
           iconPosition={IconPositionType.LEFT}
         />

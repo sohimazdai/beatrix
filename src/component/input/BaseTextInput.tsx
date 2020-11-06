@@ -2,15 +2,19 @@ import React, { useRef, RefObject } from 'react';
 import { View, StyleSheet, Text, TextInputProperties, KeyboardTypeOptions } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { COLOR } from '../../constant/Color';
+import { StyledButton, StyledButtonType } from '../button/StyledButton';
+import { CrossIcon } from '../icon/CrossIcon';
 
 interface Props extends TextInputProperties {
   referal?: RefObject<TextInput>
   disabled?: boolean
   type?: KeyboardTypeOptions
+  clearable?: boolean
+  onClear?: (currentValue) => void
 };
 
 export function BaseTextInput(props: Props) {
-  const { referal, disabled, type, value } = props;
+  const { referal, disabled, type, value, clearable, onClear } = props;
 
   const style = {
     ...styles.textInput,
@@ -24,18 +28,34 @@ export function BaseTextInput(props: Props) {
     : value
 
   return (
-    <TextInput
-      ref={referal}
-      allowFontScaling={false}
-      editable={!disabled}
-      {...props}
-      value={alteredValue}
-      style={style}
-    />
+    <View style={styles.textInputContainer}>
+      <TextInput
+        ref={referal}
+        allowFontScaling={false}
+        editable={!disabled}
+        {...props}
+        value={alteredValue}
+        style={style}
+      />
+      {clearable && (
+        <View style={styles.crossIcon}>
+          <StyledButton
+            icon={<CrossIcon width={12} height={12} />}
+            style={StyledButtonType.EMPTY}
+            onPress={() => onClear(value)}
+          />
+        </View>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  textInputContainer: {
+    position: 'relative',
+    flex: 1,
+    flexDirection: 'row',
+  },
   textInput: {
     flex: 1,
     borderWidth: 1,
@@ -47,5 +67,10 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
     backgroundColor: COLOR.DISABLED,
-  }
+  },
+  crossIcon: {
+    position: 'absolute',
+    alignSelf: 'center',
+    right: 12,
+  },
 })
