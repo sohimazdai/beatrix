@@ -74,7 +74,6 @@ export const NoteDatePickerConnect = connect<{}, DispatchToProps>(
 
 const styles = StyleSheet.create({
     view: {
-        width: 120,
         height: 30,
 
         borderWidth: 1,
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     },
     touchable: {
         flex: 1,
-
+        minWidth: 100,
         paddingLeft: 7,
         paddingRight: 7,
         paddingBottom: 3,
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     inputText: {
-        flex: 1,
+        minWidth: 20,
 
         marginLeft: 7,
 

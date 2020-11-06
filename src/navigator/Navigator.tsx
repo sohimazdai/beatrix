@@ -14,7 +14,7 @@ import { Fader, FaderType } from '../component/fader/Fader';
 import { ModalContentConnect } from '../component/modal-content/ModalContent';
 import { IModal } from '../model/IModal';
 import * as Localization from 'expo-localization';
-import translate, { setLocale, setRegion } from '../localisation/Translate';
+import translate, { setLocale, setOriginalLocale, setRegion } from '../localisation/Translate';
 import { CarbohydratesSettngs } from '../screen/profile/profile-settings/sub-settings/CarbohydratesSettngs';
 import { GlycemiaSettings } from '../screen/profile/profile-settings/sub-settings/GlycemiaSettngs';
 import { InsulinSettings } from '../screen/profile/profile-settings/sub-settings/InsulinSettings';
@@ -30,6 +30,7 @@ import { NavigatorEntities } from './modules/NavigatorEntities';
 import { FoodCreationScreenConnected } from '../screen/food/FoodCreationScreen';
 
 setLocale(Localization.locale.slice(0, 2));
+setOriginalLocale(Localization.locale.slice(0, 2));
 setRegion(Localization.locale.slice(3, 5));
 
 translate();

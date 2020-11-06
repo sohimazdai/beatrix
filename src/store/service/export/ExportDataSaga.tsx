@@ -4,7 +4,7 @@ import { IStorage } from "../../../model/IStorage";
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
-import { i18nGet } from '../../../localisation/Translate';
+import { getLocale, getOriginalLocale, i18nGet } from '../../../localisation/Translate';
 import { ExportApi } from '../../../api/ExportApi';
 import * as FileSystem from 'expo-file-system';
 import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';
@@ -16,18 +16,20 @@ import { selectTotalNotesCount } from './selectors/select-total-notes';
 import Variables from '../../../app/Variables';
 import * as Sharing from 'expo-sharing';
 import { Alert } from 'react-native';
+import { SortType } from '../../../model/IExport';
 
 const ACTION_TYPE = "EXPORT_DATA_ACTION";
 
 interface ExportDataAction {
   type: "EXPORT_DATA_ACTION";
   payload: {
-    from?: number;
-    to?: number;
+    from: number;
+    to: number;
+    dateSort: SortType
   };
 }
 
-export function createExportDataAction(from?: number, to?: number) {
+export function createExportDataAction(from: number, to: number, dateSort: SortType) {
   return batchActions([
     createUserChangeAction({
       exportLoading: true,
@@ -38,12 +40,13 @@ export function createExportDataAction(from?: number, to?: number) {
       payload: {
         from,
         to,
+        dateSort,
       }
     }
   ])
 }
 
-function* run({ payload: { from, to } }: ExportDataAction) {
+function* run({ payload: { from, to, dateSort } }: ExportDataAction) {
   try {
     const state: IStorage = yield select(state => state);
     const userDiabetesProperties: IUserDiabetesProperties = state.userDiabetesProperties;
@@ -124,7 +127,9 @@ function* run({ payload: { from, to } }: ExportDataAction) {
         from,
         to,
         stats,
-        timezoneOffset
+        timezoneOffset,
+        getOriginalLocale(),
+        dateSort,
       );
 
       appAnalytics.sendEventWithProps(appAnalytics.events.EXPORT_DATA, stats);
@@ -132,7 +137,7 @@ function* run({ payload: { from, to } }: ExportDataAction) {
       const result = yield call(
         FileSystem.downloadAsync,
         'http://' + Variables.apiUrl + `/export/download?userId=${state.user.id}&key=h4NIt1NS`,
-        FileSystem.documentDirectory + 'diabetes_' + new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getFullYear()) + '.xlsx',
+        FileSystem.documentDirectory + 'Diabetes profile ' + new Date().getDate() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getFullYear()) + '.xlsx',
       )
 
       yield call(

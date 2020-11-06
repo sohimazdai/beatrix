@@ -15,6 +15,7 @@ export enum RegionType {
 const _localisationParameters = {
   locale: '',
   region: '',
+  originalLocale: '',
 };
 
 export function setLocale(countryCode) {
@@ -31,6 +32,12 @@ export function setLocale(countryCode) {
   _localisationParameters.locale = i18n.locale;
 }
 
+export function setOriginalLocale(locale) {
+  logger(`OriginalLocaleCode is ${locale}`);
+
+  _localisationParameters.originalLocale = locale;
+}
+
 export function setRegion(regionCode) {
   logger(`CountryCode is ${regionCode}`);
 
@@ -41,6 +48,10 @@ export function getRegion() { return _localisationParameters.region };
 
 export function getLocale() {
   return i18n.locale;
+}
+
+export function getOriginalLocale() {
+  return _localisationParameters.originalLocale;
 }
 
 export function i18nGet(key: string) {
@@ -1470,6 +1481,21 @@ const translateStore = {
   },
 
   // EXPORT
+  export_date_descending: {
+    'en': 'From new to old',
+    'es': 'De nuevo a viejo',
+    'ru': 'От новых к старым',
+  },
+  export_date_ascending: {
+    'en': 'From old to new',
+    'es': 'De viejo a nuevo',
+    'ru': 'От старых к новым',
+  },
+  export_date_sort: {
+    'en': 'Sort by date',
+    'es': 'Ordenar por fecha',
+    'ru': 'Сортировка по дате',
+  },
   export_data: {
     en: 'Data export',
     es: 'Exportación de datos',

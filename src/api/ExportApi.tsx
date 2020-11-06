@@ -1,3 +1,4 @@
+import { SortType } from '../model/IExport';
 import { api } from './api';
 
 export class ExportApi {
@@ -7,9 +8,14 @@ export class ExportApi {
         from: number,
         to: number,
         stats: any,
-        timezoneOffset: number
+        timezoneOffset: number,
+        locale: string,
+        dateSort: SortType
     ) {
-        return api.post('export', { userId, titles, from, to, stats, timezoneOffset });
+        return api.post(
+            'export',
+            { userId, titles, from, to, stats, timezoneOffset, locale, dateSort }
+        );
     }
 
     static finishExport(userId: string) {
