@@ -29,6 +29,7 @@ import { FilterIcon } from '../../component/icon/FilterIcon';
 import { FilterPopupConnected } from '../../view/notes/components/filter-popup/FilterPopup';
 import { selectFilteredNotes } from '../../view/notes/selectors/select-filtered-notes';
 import { checkIsFilterActive } from '../../view/notes/selectors/check-is-filter-active';
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 
 interface NoteListScreenStateTProps {
   app: IApp;
@@ -40,6 +41,7 @@ interface NoteListScreenStateTProps {
 interface NoteListScreenDispatchProps {
   selectNoteToEdit: (noteId: string) => void;
   syncNotes: () => void;
+  setNeedToRequestReview: () => void
 }
 
 interface NoteListScreenProps {
@@ -62,6 +64,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   };
 
   componentDidMount() {
+    this.props.setNeedToRequestReview();
     appAnalytics.setSection(AnalyticsSections.NOTES);
     appAnalytics.sendEvent(appAnalytics.events.NOTELIST_SEEN);
   }
@@ -284,6 +287,7 @@ export const NoteListScreenConnect = connect(
   dispatch => ({
     dispatch,
     syncNotes: () => dispatch(createSyncNotesAction({ reason: SyncReasonType.SEND_PENDING })),
+    setNeedToRequestReview: () => dispatch(createUserChangeAction({ needToRequestReview: true }))
   }),
 )(NoteListScreen);
 

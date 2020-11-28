@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import { NoteValueType } from '../../../../../model/INoteList';
 import { IStorage } from '../../../../../model/IStorage';
-import { StatisticsType } from '../../entities';
+import { StatisticsType, StatisticsViewType } from '../../entities';
 import { selectMeasuresStatisticsValue } from '../../selectors/select-measures-statistics-value';
 import { GlycemiaIconConnected } from '../../../../../component/icon/tooltiped/GlycemiaIcon';
 import { BreadUnitsIconConnected } from '../../../../../component/icon/tooltiped/BreadUnitsIcon';
@@ -47,14 +47,13 @@ export const MeasuresStatisticsConnected = connect(
     { },
     ownProps: {
       measuresType: NoteValueType,
-      statisticsType: StatisticsType
     }
   ) => ({
     measuresType: ownProps.measuresType,
     value: selectMeasuresStatisticsValue(
       sP,
       ownProps.measuresType,
-      ownProps.statisticsType,
+      StatisticsType.TODAY,
     )
   })
 )(MeasuresStatistics);
@@ -62,15 +61,12 @@ export const MeasuresStatisticsConnected = connect(
 const styles = StyleSheet.create({
   row: {
     display: 'flex',
-    marginLeft: 16,
-    height: 20,
-
-    marginTop: 8,
-    flexDirection: 'row'
+    padding: 8,
+    flexDirection: 'row',
   },
   icon: {
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
   },
   text: {
     display: 'flex',

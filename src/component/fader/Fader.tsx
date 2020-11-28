@@ -28,6 +28,7 @@ export const Fader = (props: FaderProps) => {
             {
                 toValue: props.hidden ? 0 : 1,
                 duration: 200,
+                useNativeDriver: false,
             }
         ).start(() => {
             props.hidden && isDisplay && setDisplay(false);

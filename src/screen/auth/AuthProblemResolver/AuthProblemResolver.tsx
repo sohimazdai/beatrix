@@ -63,9 +63,9 @@ class Component extends React.Component<Props, State> {
   }
 
   onResolverPress = () => {
-    const { user, syncUser } = this.props;
+    const { syncUser } = this.props;
 
-    appAnalytics.sendEventWithProps(appAnalytics.events.RESOLVER_PRESSED, { userId: user.id });
+    appAnalytics.sendEvent(appAnalytics.events.RESOLVER_PRESSED);
     syncUser();
   }
 

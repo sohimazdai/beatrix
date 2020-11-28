@@ -50,6 +50,8 @@ import { BlockHat } from '../../component/hat/BlockHat';
 import CalculatorIcon from '../../component/icon/CalculatorIcon';
 import { CarbsCalculator } from '../../view/food/components/CarbsCalculator';
 import SoupIcon from '../../component/icon/SoupIcon';
+import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
+import { IUser } from '../../model/IUser';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -73,6 +75,7 @@ interface Props {
   onNoteDelete?: (noteId: string) => void;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   tagList?: ITagList
+  user: IUser
 }
 
 interface State {
@@ -209,7 +212,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
     appAnalytics.sendEventWithProps(
       appAnalytics.events.FOOD_ADD_TO_NOTE,
-      { dbId: food.dbId, weight: food.nutrients.weight },
+      { dbId: food.dbId },
     );
   }
 
@@ -289,11 +292,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
       ? currentValueType
       : 'tag-picker';
 
-    appAnalytics.sendEventWithProps(
-      appAnalytics.events.NOTE_EDITOR_INPUT_POPUP_CLOSED,
-      analyticsProp
-    );
-
     this.setState({ currentValueType: null, isTagPickerOpen: false, isCalculatorOpen: false })
   }
 
@@ -306,12 +304,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
   }
 
   onTagSelect = (tagId: string) => {
-    const { tagList } = this.props;
     const { selectedTags } = this.state;
 
-    appAnalytics.sendEventWithProps(appAnalytics.events.CREATE_TAG, {
-      name: tagList.tags[String(tagId)].name
-    });
+    appAnalytics.sendEvent(appAnalytics.events.ADD_TAG_TO_NOTE);
 
     if (selectedTags) {
       this.setState({
@@ -774,6 +769,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
         );
       }
     }
+
+    !this.props.user.reviewRequested &&
+      this.props.dispatch(createUserChangeAction({ needToRequestReview: true }));
   }
 
   renderDeleteButton() {
@@ -822,6 +820,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
 
 export const NoteEditorConnect = connect(
   (state: IStorage) => ({
+    user: state.user,
     noteList: state.noteList,
     interactive: state.interactive,
     userDiabetesProperties: state.userDiabetesProperties,

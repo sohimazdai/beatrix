@@ -13,6 +13,7 @@
       "backgroundColor": "#FFFFFF",
       "resizeMode": "cover"
     },
+    "sdkVersion": "39.0.0",
     "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,7 +36,9 @@
       "supportsTablet": true
     },
     "android": {
+      "useNextNotificationsApi": true,
       "package": "com.doq.beatrix",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.doq.beatrix&showAllReviews=true",
       "versionCode": 36,
       "adaptiveIcon": {
         "backgroundColor": "#FFE1DF",

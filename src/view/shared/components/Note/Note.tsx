@@ -3,11 +3,9 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { INoteListNote } from '../../../../model/INoteList';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { COLOR } from '../../../../constant/Color';
-import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 
 interface Props {
     note: INoteListNote
-    userDiabetesProperties: IUserDiabetesProperties
     onPress?: () => void
 }
 

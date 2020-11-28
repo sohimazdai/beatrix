@@ -57,7 +57,8 @@ function* syncUser({ payload }: SyncUserAction) {
                     properties: IUserDiabetesProperties,
                     shedule: IUserPropertiesShedule,
                     isNeedToShowOnboarding: boolean,
-                    tagList: ITagListTags
+                    tagList: ITagListTags,
+                    registeredOn: Date
                 }
             } = yield call(UserApi.syncUser, payload.user);
 
@@ -69,6 +70,7 @@ function* syncUser({ payload }: SyncUserAction) {
                 : isNeedToShowOnboarding
                     ? createTags()
                     : {};
+            const registeredOn: Date = userData.data.registeredOn;
 
             yield put(batchActions([
                 createReplaceTagList({ tags }),
@@ -108,7 +110,8 @@ function* syncUser({ payload }: SyncUserAction) {
                     createUserDiabetesPropertiesChangeAction(newProperties),
                     createChangeUserPropertiesShedule(shedule),
                     createUserChangeAction({
-                        isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding
+                        isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding,
+                        registeredOn,
                     }),
                 ])
             );

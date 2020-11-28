@@ -11,6 +11,7 @@ import { DateHelper } from '../../../utils/DateHelper';
 import { appAnalytics } from '../../../app/Analytics';
 import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
 import { i18nGet } from '../../../localisation/Translate';
+import { getDateInputText } from '../../../utils/get-date-input-text';
 
 export interface ChartSettingsDatePickerProps {
     date: Date
@@ -26,6 +27,8 @@ export interface FullProps extends DispatchToProps, ChartSettingsDatePickerProps
 
 export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
     render() {
+        const { selectedPeriod, date } = this.props;
+
         return (
             <View style={this.props.selectedPeriod === ChartPeriodType.THREE_MONTH ?
                 { ...styles.view, ...styles.viewWide } :
@@ -43,7 +46,7 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
                         { ...styles.inputText, ...styles.inputTextWide } :
                         { ...styles.inputText }
                     }>
-                        {this.getInputText()}
+                        {getDateInputText(selectedPeriod, date)}
                     </Text>
                 </TouchableOpacity>
             </View >
@@ -76,45 +79,6 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
     onDateChange = (date: Date) => {
         this.props.onChange(date);
         appAnalytics.sendEvent(appAnalytics.events.CHART_CALENDAR_DATE_SET);
-    }
-
-    private getInputText = () => {
-        const { date } = this.props;
-        switch (this.props.selectedPeriod) {
-            case ChartPeriodType.THREE_MONTH:
-                const currentYear = new Date().getFullYear();
-                let endPostfix = currentYear === date.getFullYear() &&
-                    new Date(DateHelper.getDiffMonth(date, -2)).getFullYear() === date.getFullYear() ?
-                    '' : ' ' + String(date.getFullYear()).slice(2);
-                let startPostfix = currentYear === new Date(DateHelper.getDiffMonth(date, -2)).getFullYear() &&
-                    new Date(DateHelper.getDiffMonth(date, -2)).getFullYear() === date.getFullYear() ?
-                    '' : ' ' + String(new Date(DateHelper.getDiffMonth(date, -2)).getFullYear()).slice(2);
-                return endPostfix && startPostfix && endPostfix !== startPostfix?
-                    DateHelper.getMonthStringCommonShort(this.props.date.getMonth() - 2 >= 0 ?
-                        this.props.date.getMonth() - 2 :
-                        this.props.date.getMonth() + 10
-                    ) + (startPostfix === endPostfix ? '' : startPostfix) + ' - ' + DateHelper.getMonthStringCommonShort(this.props.date.getMonth()) + endPostfix
-                    :
-                    DateHelper.getMonthStringCommon(this.props.date.getMonth() - 2 >= 0 ?
-                        this.props.date.getMonth() - 2 :
-                        this.props.date.getMonth() + 10
-                    ) + (startPostfix === endPostfix ? '' : startPostfix) + ' - ' + DateHelper.getMonthStringCommon(this.props.date.getMonth()) + endPostfix
-            case ChartPeriodType.MONTH:
-                return DateHelper.getMonthStringCommon(date.getMonth()) + ' ' + date.getFullYear();
-            default:
-                let text = '';
-                if (DateHelper.today() === date.getTime()) {
-                    text = i18nGet('today')
-                } else if (DateHelper.yesterday() === date.getTime()) {
-                    text = i18nGet('yesterday')
-                } else {
-                    const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
-                    const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
-                    const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
-                    text = displayDate + '.' + displayMonth + '.' + displayYear
-                }
-                return text;
-        }
     }
 }
 

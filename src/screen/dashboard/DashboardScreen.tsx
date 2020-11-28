@@ -38,6 +38,8 @@ import { Header } from '../../component/hat/Header';
 import { Action } from 'redux';
 import { createGetFavoritesProductsAction } from '../../store/service/food/GetFavoritesProductsSaga';
 import { createAppPingAction } from '../../store/service/app/AppPingSaga';
+import { Beggar } from '../../app/Beggar';
+import { StatisticsPeriod } from '../../model/IStatistics';
 
 interface DashboardScreenStateTProps {
   app: IApp;
@@ -93,6 +95,12 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
     navigation.navigate(NavigatorEntities.NOTE_EDITOR, { noteId });
   }
 
+  goToStatisticsScreen = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(NavigatorEntities.STATISTICS);
+  }
+
   closeSideMenu = () => {
     this.setState({ menuShown: false })
   }
@@ -103,6 +111,7 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
 
     return (
       <>
+        {/* <Beggar /> */}
         <View style={styles.screenView}>
           <Header
             title={i18nGet('compensation')}
@@ -120,26 +129,12 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
               />
               <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
             </View>
-            <ScrollView
-              style={styles.statisticsScrollView}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={{ width: 8 }} />
-              <StatisticsCardConnected statisticsType={StatisticsType.TODAY} />
-              <StatisticsCardConnected statisticsType={StatisticsType.YESTERDAY} />
-              <View style={{ width: 24 }} />
-            </ScrollView>
-            <ScrollView
-              style={styles.statisticsScrollView}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={{ width: 8 }} />
-              <StatisticsCardConnected statisticsType={StatisticsType.LAST_MONTH} />
-              <StatisticsCardConnected statisticsType={StatisticsType.LAST_THREE_MONTH} />
-              <View style={{ width: 24 }} />
-            </ScrollView>
+            <View style={styles.statisticsView}>
+              <StatisticsCardConnected
+                statisticsPeriod={StatisticsPeriod.DAY}
+                onStatisticsIconPress={this.goToStatisticsScreen}
+              />
+            </View>
             <View style={{ padding: 16, paddingTop: 0 }}>
               <HBA1CCalculatorConnected />
             </View>
@@ -197,11 +192,9 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
-  statisticsScrollView: {
+  statisticsView: {
     display: 'flex',
-    marginLeft: -8,
     paddingHorizontal: 16,
-    overflow: 'visible',
   },
   addNoteButtonView: {
     position: "absolute",

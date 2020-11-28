@@ -74,6 +74,52 @@ export default function translate() {
 }
 
 const translateStore = {
+  // STATISTICS
+  statistics_season_autumn: {
+    'en': 'Autumn',
+    'es': 'Otoño',
+    'ru': 'Осень',
+  },
+  statistics_season_summer: {
+    'en': 'Summer',
+    'es': 'Verano',
+    'ru': 'Лето',
+  },
+  statistics_season_spring: {
+    'en': 'Spring',
+    'es': 'Primavera',
+    'ru': 'Весна',
+  },
+  statistics_season_winter: {
+    'en': 'Winter',
+    'es': 'Invierno',
+    'ru': 'Зима',
+  },
+  statistics_year: {
+    'en': 'Year',
+    'es': 'Año',
+    'ru': 'Год',
+  },
+  statistics_season: {
+    'en': 'Season',
+    'es': 'Estación',
+    'ru': 'Сезон',
+  },
+  statistics_month: {
+    'en': 'Month',
+    'es': 'Mes',
+    'ru': 'Месяц',
+  },
+  statistics_day: {
+    'en': 'Day',
+    'es': 'Día',
+    'ru': 'День',
+  },
+  statistics: {
+    'en': 'Statistics',
+    'es': 'Estadísticas',
+    'ru': 'Статистика',
+  },
   // FOOD
   find_in_the_list: {
     'en': 'Find in the list',
@@ -533,7 +579,6 @@ const translateStore = {
     es: 'Notas',
     ru: 'Записи',
   },
-
   today: {
     en: 'Today',
     es: 'Hoy',
@@ -1529,7 +1574,7 @@ const translateStore = {
   },
   export_data_date_to: {
     en: 'To',
-    es: '',
+    es: 'Hasta',
     ru: 'До',
   },
   export_titles_date: {

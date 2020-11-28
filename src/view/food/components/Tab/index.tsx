@@ -19,6 +19,7 @@ export default function Tab(props: Props) {
     Animated.timing(borderColorIndex, {
       toValue: isSelected ? 1 : 0,
       duration: 200,
+      useNativeDriver: false,
     }).start();
   }, [isSelected])
 

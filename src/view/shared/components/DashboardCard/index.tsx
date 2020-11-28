@@ -5,19 +5,15 @@ import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 interface Props {
   children?: any;
-  withRightMargin?: boolean
   withTopMargin?: boolean
 };
 
 export class DashboardCard extends React.Component<Props> {
   render() {
-    const { children, withRightMargin } = this.props;
+    const { children } = this.props;
 
     return (
-      <View style={{
-        ...styles.card,
-        marginRight: withRightMargin ? 8 : 0,
-      }}>
+      <View style={styles.card}>
         {children}
       </View>
     );

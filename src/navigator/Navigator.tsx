@@ -1,5 +1,6 @@
 import React from 'react'
-import { createStackNavigator, createAppContainer, StackNavigatorConfig } from "react-navigation";
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { AuthScreenConnect } from "../screen/auth/AuthScreen";
 import { NoteListScreenConnect } from "../screen/note/NoteListScreen";
 import { ChartConnect } from "../screen/chart/ChartScreen";
@@ -28,6 +29,7 @@ import { BarcodeScanningScreen } from '../screen/food/BarcodeScanningScreen';
 import { FoodCard } from '../screen/food/FoodCard';
 import { NavigatorEntities } from './modules/NavigatorEntities';
 import { FoodCreationScreenConnected } from '../screen/food/FoodCreationScreen';
+import { StatisticsScreen } from '../screen/statistics';
 
 setLocale(Localization.locale.slice(0, 2));
 setOriginalLocale(Localization.locale.slice(0, 2));
@@ -113,10 +115,6 @@ const ProfileScreenStack = createStackNavigator(
     }
 )
 
-const authedStackNavigatorConfig: StackNavigatorConfig = {
-    headerMode: 'none',
-}
-
 const AuthedNavigator = createStackNavigator(
     {
         Dashboard: { screen: DashboardScreenConnect },
@@ -129,8 +127,11 @@ const AuthedNavigator = createStackNavigator(
         BarcodeScanning: { screen: BarcodeScanningScreen },
         FoodCard: { screen: FoodCard },
         [NavigatorEntities.FOOD_CARD_CREATION]: { screen: FoodCreationScreenConnected },
+        [NavigatorEntities.STATISTICS]: { screen: StatisticsScreen }
     },
-    authedStackNavigatorConfig
+    {
+        headerMode: 'none',
+    }
 )
 
 const UnknownMainNavigator = createStackNavigator(

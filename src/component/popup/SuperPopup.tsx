@@ -35,6 +35,7 @@ export const SuperPopup = (props: SuperPopupProps) => {
             {
                 toValue: hidden ? -Dimensions.get('screen').height : 0,
                 duration: 300,
+                useNativeDriver: false,
             }
         ).start((SuperPopupProps) => {
             SuperPopupProps.finished && hidden && setChildren(null);

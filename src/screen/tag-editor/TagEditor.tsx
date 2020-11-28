@@ -62,9 +62,7 @@ class TagEditorComp extends React.Component<Props, State> {
     const { tagName } = this.state;
 
 
-    appAnalytics.sendEventWithProps(appAnalytics.events.ADD_TAG_TO_NOTE, {
-      name: tagName
-    });
+    appAnalytics.sendEvent(appAnalytics.events.CREATE_TAG);
 
     const colors = randomizeBGandFontColor();
 
@@ -84,9 +82,7 @@ class TagEditorComp extends React.Component<Props, State> {
     const { tagList, onRemoveTag } = this.props;
     const tagName = tagList.tags[tagId].name;
 
-    const cb = () => appAnalytics.sendEventWithProps(appAnalytics.events.DELETE_TAG, {
-      name: tagName
-    });
+    const cb = () => appAnalytics.sendEvent(appAnalytics.events.DELETE_TAG);
 
     onRemoveTag(tagId, cb)
   }

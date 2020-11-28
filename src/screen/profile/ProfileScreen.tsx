@@ -13,6 +13,7 @@ import { appAnalytics, AnalyticsSections } from '../../app/Analytics'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 import { i18nGet } from '../../localisation/Translate'
 import { BlockHat } from '../../component/hat/BlockHat'
+import { Beggar } from '../../app/Beggar'
 
 interface Props {
     onLogOut?: () => void;
@@ -32,12 +33,14 @@ class ProfileScreenComponent extends React.Component<Props, State> {
 
     render() {
         const { user } = this.props;
+
         return (
             <View style={styles.profileView}>
                 <BlockHat
                     onBackPress={() => this.props.navigation.navigate('Dashboard')}
                     title={i18nGet('profile')}
                 />
+                <Beggar />
                 <View style={styles.scrollViewWrapWrap}>
                     <View style={styles.scrollViewWrap}>
                         <ScrollView style={styles.scrollView}>

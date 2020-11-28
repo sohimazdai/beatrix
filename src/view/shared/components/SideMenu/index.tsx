@@ -9,6 +9,7 @@ import { NotesIcon } from '../../../../component/icon/NotesIcon';
 import { ChartsIcon } from '../../../../component/icon/ChartsIcon';
 import { TagsIcon } from '../../../../component/icon/TagsIcon';
 import { ProfileIcon } from '../../../../component/icon/ProfileIcon';
+import StatisticsPieIcon from '../../../../component/icon/StatisticsPieIcon';
 import SoupIcon from '../../../../component/icon/SoupIcon';
 import { Header } from '../../../../component/hat/Header';
 import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
@@ -64,6 +65,12 @@ export class SideMenu extends React.Component<Props> {
                 i18nGet('tags'),
                 <TagsIcon width={25} height={25} />,
                 NavigatorEntities.TAG_EDITOR,
+              )}
+
+              {this.renderItem(
+                i18nGet('statistics'),
+                <StatisticsPieIcon width={25} height={25} />,
+                NavigatorEntities.STATISTICS,
               )}
 
               {this.renderItem(

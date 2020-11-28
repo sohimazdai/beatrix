@@ -12,10 +12,15 @@ import { NoteValueType } from '../../../../../model/INoteList';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../../model/IStorage';
 import { selectStatisticsAvailibility } from '../../selectors/select-statistics-availibility';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import StatisticsPieIcon from '../../../../../component/icon/StatisticsPieIcon';
+import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
+import { StatisticsPeriod } from '../../../../../model/IStatistics';
 
 interface Props {
-  statisticsType: StatisticsType
+  statisticsPeriod: StatisticsPeriod
   isStatisticsAvailable: boolean
+  onStatisticsIconPress: () => void
 };
 
 const TITLES = {
@@ -27,22 +32,37 @@ const TITLES = {
 
 export class StatisticsCard extends React.Component<Props> {
   render() {
-    const { statisticsType, isStatisticsAvailable } = this.props;
+    const { isStatisticsAvailable, onStatisticsIconPress } = this.props;
 
     if (!isStatisticsAvailable) return null;
 
     return (
-      <DashboardCard withRightMargin>
-        <Text style={styles.cardTitle}>
-          {i18nGet(TITLES[statisticsType])}
-        </Text>
+      <DashboardCard>
+        <View style={styles.titleRow}>
+          <Text style={styles.cardTitle}>
+            {`${i18nGet('statistics')}. ${i18nGet(TITLES[StatisticsType.TODAY])}`}
+          </Text>
+          <TouchableOpacity style={styles.touchable} onPress={onStatisticsIconPress}>
+            <StatisticsPieIcon width={26} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.cardContent}>
-          <PieChartConnected statisticsType={statisticsType} viewType={StatisticsViewType.ABS} />
-          <View>
-            <MeasuresStatisticsConnected statisticsType={statisticsType} measuresType={NoteValueType.GLUCOSE} />
-            <MeasuresStatisticsConnected statisticsType={statisticsType} measuresType={NoteValueType.BREAD_UNITS} />
-            <MeasuresStatisticsConnected statisticsType={statisticsType} measuresType={NoteValueType.SHORT_INSULIN} />
-            <MeasuresStatisticsConnected statisticsType={statisticsType} measuresType={NoteValueType.LONG_INSULIN} />
+          <View style={styles.pieWrap}>
+            <PieChartConnected
+              statisticsPeriod={StatisticsPeriod.DAY}
+              viewType={StatisticsViewType.ABS}
+              date={new Date()}
+            />
+          </View>
+          <View style={styles.measures}>
+            <View style={styles.measuresColumn}>
+              <MeasuresStatisticsConnected measuresType={NoteValueType.GLUCOSE} />
+              <MeasuresStatisticsConnected measuresType={NoteValueType.SHORT_INSULIN} />
+            </View>
+            <View style={styles.measuresColumn}>
+              <MeasuresStatisticsConnected measuresType={NoteValueType.BREAD_UNITS} />
+              <MeasuresStatisticsConnected measuresType={NoteValueType.LONG_INSULIN} />
+            </View>
           </View>
         </View>
       </DashboardCard>
@@ -53,22 +73,45 @@ export class StatisticsCard extends React.Component<Props> {
 export const StatisticsCardConnected = connect(
   (state: IStorage) => state,
   () => ({}),
-  (sP, { }, ownProps: { statisticsType: StatisticsType }) => ({
+  (sP, { }, ownProps: { statisticsPeriod: StatisticsPeriod }) => ({
     ...ownProps,
-    isStatisticsAvailable: selectStatisticsAvailibility(sP, ownProps.statisticsType),
+    isStatisticsAvailable: selectStatisticsAvailibility(sP, ownProps.statisticsPeriod, new Date()),
   })
 )(StatisticsCard);
 
 const styles = StyleSheet.create({
+  titleRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  touchable: {
+    ...SHADOW_OPTIONS,
+  },
+  iconBarWrap: {
+    marginBottom: 8,
+  },
   cardTitle: {
     fontSize: 19,
     color: COLOR.TEXT_DARK_GRAY,
     fontWeight: '500',
   },
+  pieWrap: {
+    paddingTop: 8,
+  },
   cardContent: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: 8,
     alignItems: 'center',
   },
+  measures: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  measuresColumn: {
+    marginLeft: 8,
+  }
 })

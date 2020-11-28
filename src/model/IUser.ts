@@ -16,6 +16,10 @@ export interface IUser {
     isPendingVerification?: boolean
 
     isNeedToShowOnboarding?: boolean
+
+    registeredOn?: Date
+    reviewRequested?: boolean
+    needToRequestReview?: boolean
 }
 
 export enum AuthType {

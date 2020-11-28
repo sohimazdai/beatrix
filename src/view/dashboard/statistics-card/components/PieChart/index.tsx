@@ -14,6 +14,7 @@ import { PieToolTipItem } from '../PieToolTipItem';
 import { i18nGet } from '../../../../../localisation/Translate';
 import { COLOR } from '../../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
+import { StatisticsPeriod } from '../../../../../model/IStatistics';
 
 interface Props {
   viewType: StatisticsViewType
@@ -61,37 +62,35 @@ class PieChartComponent extends React.Component<Props, State> {
       }));
 
     return (
-      <View>
-        <View style={styles.pieWithLegend}>
-          <Tooltip
-            analyticsKeyOnOpen="statisticsPie"
-            actionType='press'
-            popover={(
-              <View>
-                {parts.map((part, index) => (
-                  <PieToolTipItem
-                    isFirst={!index}
-                    key={part.title}
-                    title={part.title}
-                  />
-                ))}
-              </View>
-            )}
-          >
-            <PieChart style={styles.pieChart} data={pieData} />
-          </Tooltip>
-          <View>
-            {parts.map((part) => (
-              <PieLegendItem
-                key={part.title}
-                title={part.title}
-                value={isPercent
-                  ? totalValue ? (part.value / totalValue) * 100 : 0
-                  : part.value}
-                isPercent={isPercent}
-              />
-            ))}
-          </View>
+      <View style={styles.pieWithLegend}>
+        <Tooltip
+          analyticsKeyOnOpen="statisticsPie"
+          actionType='press'
+          popover={(
+            <View>
+              {parts.map((part, index) => (
+                <PieToolTipItem
+                  isFirst={!index}
+                  key={part.title}
+                  title={part.title}
+                />
+              ))}
+            </View>
+          )}
+        >
+          <PieChart style={styles.pieChart} data={pieData} />
+        </Tooltip>
+        <View style={styles.legend}>
+          {parts.map((part) => (
+            <PieLegendItem
+              key={part.title}
+              title={part.title}
+              value={isPercent
+                ? totalValue ? (part.value / totalValue) * 100 : 0
+                : part.value}
+              isPercent={isPercent}
+            />
+          ))}
         </View>
       </View>
     );
@@ -105,10 +104,11 @@ export const PieChartConnected = connect(
     userDiabetesProperties: state.userDiabetesProperties,
   }),
   () => ({}),
-  (stateProps, { }, ownProps: { statisticsType: StatisticsType }) => ({
+  (stateProps, { }, ownProps: { statisticsPeriod: StatisticsPeriod, date: Date }) => ({
     parts: selectStatisticsPieParts(
       stateProps.state,
-      ownProps.statisticsType,
+      ownProps.statisticsPeriod,
+      ownProps.date,
       stateProps.userDiabetesProperties
     ),
   })
@@ -118,11 +118,13 @@ const styles = StyleSheet.create({
   pieWithLegend: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: 8,
   },
   pieChart: {
     height: 90,
     width: 90,
     ...SHADOW_OPTIONS,
+  },
+  legend: {
+    width: 62,
   }
 })

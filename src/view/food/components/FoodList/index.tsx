@@ -40,7 +40,6 @@ export function FoodListComponent(props: Props) {
     foods = foods.slice(0, cutTo);
   }
 
-
   return (
     <>
       <FlatList

@@ -11,4 +11,5 @@ export enum NavigatorEntities {
   FOOD_CARD = 'FoodCard',
   FOOD_CARD_CREATION = 'FoodCardCreation',
   FOOD_NOTE_EDITOR = 'FoodNoteEditor',
+  STATISTICS = 'Statistics',
 }

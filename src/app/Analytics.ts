@@ -157,6 +157,9 @@ export const appAnalytics = {
     FOOD_ADD_TO_NOTE: 'Food added to note',
     FOOD_REMOVE_FROM_NOTE: 'Food removed from note',
     FOOD_SEARCH_UNAVAILABLE: 'Food search unavailable click',
+    // REVIEW
+    REVIEW_WILL_SHOW: 'Review will show',
+    REVIEW_SHOWN: 'Review shown',
   }
 }
 

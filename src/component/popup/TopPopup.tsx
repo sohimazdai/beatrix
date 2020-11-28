@@ -16,6 +16,7 @@ export const TopPopup = (props: TopPopupProps) => {
             {
                 toValue: props.hidden ? -Dimensions.get('screen').height : 0,
                 duration: 300,
+                useNativeDriver: true,
             }
         ).start(() => {
             props.hidden && setChildren(null)

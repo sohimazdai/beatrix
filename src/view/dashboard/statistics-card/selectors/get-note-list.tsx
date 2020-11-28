@@ -1,0 +1,105 @@
+import { INoteListByDay, INoteListNote } from '../../../../model/INoteList';
+import { StatisticsPeriod } from '../../../../model/IStatistics';
+import { DateHelper } from '../../../../utils/DateHelper';
+
+export function getNoteList(
+  noteListByDay: INoteListByDay,
+  type: StatisticsPeriod,
+  date: Date
+): INoteListNote[] {
+  let noteList: INoteListNote[] = [];
+
+  switch (type) {
+    case StatisticsPeriod.DAY:
+      noteList = Object.values(noteListByDay[DateHelper.getDiffDate(date, 0)] || {});
+      break;
+
+    case StatisticsPeriod.MONTH:
+      let startMonthDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+      );
+      let lastMonthDay = DateHelper.getMaxDateOfDifferentMonth(date, 0);
+
+      for (let i = 1; i <= lastMonthDay; i++) {
+        const notes = Object.values(noteListByDay[DateHelper.getDiffDate(startMonthDate, i - 1)] || {});
+        notes.length && noteList.push(...notes as any)
+      }
+      break;
+
+    case StatisticsPeriod.SEASON:
+      let firstSeasonDayDateNumber = getStartSeasonDate(date);
+      let lastSeasonDay = new Date(
+        new Date(firstSeasonDayDateNumber).getFullYear(),
+        new Date(firstSeasonDayDateNumber).getMonth() + 4,
+        0,
+      ).getTime();
+
+      const diff = (lastSeasonDay - firstSeasonDayDateNumber) / 1000 / 60 / 60 / 24;
+
+      for (let i = 1; i <= diff; i++) {
+        const notes = Object.values(noteListByDay[DateHelper.getDiffDate(date, i - 1)] || {});
+        notes.length && noteList.push(...notes as any)
+      }
+
+      break;
+    case StatisticsPeriod.YEAR:
+      let firstYearDay = DateHelper.getDiffDate(new Date(date.getFullYear(), 0, 1), 0);
+      let lastYearDay = DateHelper.getDiffDate(new Date(date.getFullYear(), 11, 31), 0);
+      let yearDiff = (lastYearDay - firstYearDay) / 1000 / 60 / 60 / 24;
+
+      for (let i = 0; i < yearDiff; i++) {
+        const notes = Object.values(noteListByDay[DateHelper.getDiffDate(new Date(firstYearDay), i)] || {});
+        notes.length && noteList.push(...notes as any);
+      }
+
+      break;
+  }
+
+  return noteList;
+}
+
+function getStartSeasonDate(date: Date): number {
+  const month = date.getMonth();
+
+  switch (month) {
+    case 11:
+      return new Date(
+        date.getFullYear(),
+        11,
+        1,
+      ).getTime();
+    case 0:
+    case 1:
+      return new Date(
+        date.getFullYear() - 1,
+        11,
+        1,
+      ).getTime();
+    case 2:
+    case 3:
+    case 4:
+      return new Date(
+        date.getFullYear(),
+        2,
+        1,
+      ).getTime();
+    case 5:
+    case 6:
+    case 7:
+      return new Date(
+        date.getFullYear(),
+        5,
+        1,
+      ).getTime();
+    case 8:
+    case 9:
+    case 10:
+      return new Date(
+        date.getFullYear(),
+        8,
+        1,
+      ).getTime();
+  }
+}
