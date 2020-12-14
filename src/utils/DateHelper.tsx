@@ -131,7 +131,7 @@ export class DateHelper {
             case 10:
                 return i18nGet('november_capital_infinitive');
             case 11:
-                return i18nGet('september_capital_infinitive');
+                return i18nGet('december_capital_infinitive');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }

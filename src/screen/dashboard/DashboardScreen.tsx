@@ -121,23 +121,19 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
             rightIconPress={() => this.props.navigation.navigate("Profile")}
           />
           <ScrollView style={styles.scrollView}>
-            <View style={{ padding: 16, paddingBottom: 0 }}>
-              <ActiveInsulinInfoConnected navigation={navigation} />
-              <LastNotesConnected
-                onNotesPress={() => navigation.navigate('Notes')}
-                onNotePress={(noteId) => this.goToNoteEditor(noteId)}
-              />
-              <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
-            </View>
+            <ActiveInsulinInfoConnected navigation={navigation} />
+            <LastNotesConnected
+              onNotesPress={() => navigation.navigate('Notes')}
+              onNotePress={(noteId) => this.goToNoteEditor(noteId)}
+            />
+            <ChartPreviewConnected onChartIconPress={() => navigation.navigate('Charts')} />
             <View style={styles.statisticsView}>
               <StatisticsCardConnected
                 statisticsPeriod={StatisticsPeriod.DAY}
                 onStatisticsIconPress={this.goToStatisticsScreen}
               />
             </View>
-            <View style={{ padding: 16, paddingTop: 0 }}>
-              <HBA1CCalculatorConnected />
-            </View>
+            <HBA1CCalculatorConnected />
             <View style={styles.stub} />
           </ScrollView>
           <View style={styles.addNoteButtonView}>
@@ -194,7 +190,6 @@ const styles = StyleSheet.create({
   },
   statisticsView: {
     display: 'flex',
-    paddingHorizontal: 16,
   },
   addNoteButtonView: {
     position: "absolute",

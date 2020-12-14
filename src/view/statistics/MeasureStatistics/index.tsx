@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { NoteValueType } from '../../../model/INoteList';
 import { StatisticsPeriod } from '../../../model/IStatistics';
@@ -20,7 +20,9 @@ class Component extends React.Component<Props> {
   render() {
     return (
       <View>
-        {`MeasureStatistics`}
+        <Text>
+          {`MeasureStatistics`}
+        </Text>
       </View>
     );
   }

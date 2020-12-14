@@ -884,6 +884,11 @@ const translateStore = {
   },
 
   // CHARTS
+  chart_select_date: {
+    'en': 'Select date/time',
+    'es': 'Seleccionar fecha/hora',
+    'ru': 'Выберите дату/время',
+  },
   charts: {
     en: 'Charts',
     es: 'Gráficos',

@@ -11,7 +11,8 @@ import { i18nGet } from '../../localisation/Translate';
 import { StatisticsPeriod } from '../../model/IStatistics';
 import { getDateInputText } from '../../utils/get-date-input-text';
 import { PieChartConnected } from '../../view/dashboard/statistics-card/components/PieChart';
-import { StatisticsType, StatisticsViewType } from '../../view/dashboard/statistics-card/entities';
+import { StatisticsViewType } from '../../view/dashboard/statistics-card/entities';
+import { DatePicker, DatePickerConnect } from '../../view/shared/components/DatePicker/DatePicker';
 
 const BUTTONS = [
   {
@@ -52,24 +53,34 @@ export class StatisticsScreen extends React.Component<Props, State> {
     selectedDate: new Date(),
   };
 
-  get dateValue() {
-    const { selectedPeriod, selectedDate } = this.state;
-
-    return String(getDateInputText(selectedPeriod, selectedDate));
-  }
-
-  getNextDateValue = (direction: DIRECTION) => {
+  getNextDateValue = (direction: DIRECTION): Date => {
     const { selectedPeriod, selectedDate } = this.state;
 
     switch (selectedPeriod) {
       case StatisticsPeriod.DAY:
-        return new Date(selectedDate.setDate(selectedDate.getDate() + direction));
+        return new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          selectedDate.getDate() + direction,
+        );
       case StatisticsPeriod.MONTH:
-        return new Date(selectedDate.setMonth(selectedDate.getMonth() + direction));
+        return new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth() + direction,
+          selectedDate.getDate(),
+        );
       case StatisticsPeriod.SEASON:
-        return new Date(selectedDate.setMonth(selectedDate.getMonth() + direction * 3));
+        return new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth() + direction * 3,
+          selectedDate.getDate(),
+        );
       case StatisticsPeriod.YEAR:
-        return new Date(selectedDate.setFullYear(selectedDate.getFullYear() + direction));
+        return new Date(
+          selectedDate.getFullYear() + direction,
+          selectedDate.getMonth(),
+          selectedDate.getDate(),
+        );
     }
   }
 
@@ -103,17 +114,16 @@ export class StatisticsScreen extends React.Component<Props, State> {
                 icon={<ArrowTaillessIcon direction={ArrowDirection.LEFT} width={15} />}
                 onPress={() => this.setState({ selectedDate: this.getNextDateValue(DIRECTION.LEFT) })}
               />
-              <StyledButton
-                style={StyledButtonType.OUTLINE}
-                icon={<CalendarIcon />}
-                iconPosition={IconPositionType.LEFT}
-                onPress={() => { }}
-                label={this.dateValue}
+              <DatePickerConnect
+                selectedPeriod={selectedPeriod}
+                date={selectedDate}
+                onChange={(date) => this.setState({ selectedDate: date })}
               />
               <StyledButton
                 style={StyledButtonType.OUTLINE}
                 icon={<ArrowTaillessIcon direction={ArrowDirection.RIGHT} width={15} />}
                 onPress={() => this.setState({ selectedDate: this.getNextDateValue(DIRECTION.RIGHT) })}
+                disabled={this.getNextDateValue(DIRECTION.RIGHT) > new Date()}
               />
             </View>
           </View>

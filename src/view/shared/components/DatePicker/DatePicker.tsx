@@ -2,20 +2,22 @@ import React from 'react';
 import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
-import { createModalChangeAction } from '../../../store/modules/modal/ModalActionCreator';
-import { ModalType, IModalPickerType } from '../../../model/IModal';
-import { COLOR } from '../../../constant/Color';
-import { CalendarIcon } from '../../../component/icon/CalendarIcon';
-import { ChartPeriodType } from '../../../model/IChart';
-import { DateHelper } from '../../../utils/DateHelper';
-import { appAnalytics } from '../../../app/Analytics';
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
-import { i18nGet } from '../../../localisation/Translate';
-import { getDateInputText } from '../../../utils/get-date-input-text';
+import { createModalChangeAction } from '../../../../store/modules/modal/ModalActionCreator';
+import { ModalType, IModalPickerType } from '../../../../model/IModal';
+import { COLOR } from '../../../../constant/Color';
+import { CalendarIcon } from '../../../../component/icon/CalendarIcon';
+import { ChartPeriodType } from '../../../../model/IChart';
+import { DateHelper } from '../../../../utils/DateHelper';
+import { appAnalytics } from '../../../../app/Analytics';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import { i18nGet } from '../../../../localisation/Translate';
+import { getDateInputText } from '../../../../utils/get-date-input-text';
+import { StatisticsPeriod } from '../../../../model/IStatistics';
+import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
 
 export interface ChartSettingsDatePickerProps {
     date: Date
-    selectedPeriod: ChartPeriodType
+    selectedPeriod: ChartPeriodType | StatisticsPeriod
     onChange: (value) => void
 }
 
@@ -25,31 +27,22 @@ export interface DispatchToProps {
 
 export interface FullProps extends DispatchToProps, ChartSettingsDatePickerProps { }
 
-export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
+export class DatePicker extends React.PureComponent<FullProps> {
     render() {
         const { selectedPeriod, date } = this.props;
 
         return (
-            <View style={this.props.selectedPeriod === ChartPeriodType.THREE_MONTH ?
-                { ...styles.view, ...styles.viewWide } :
-                { ...styles.view }
-            }>
-                <TouchableOpacity
-                    style={styles.touchable}
-                    onPress={() => Platform.OS === 'android' ?
-                        this.displayAndroidDatePicker() :
-                        this.displayIOsDatePicker()
-                    }
-                >
-                    <CalendarIcon />
-                    <Text style={this.props.selectedPeriod === ChartPeriodType.THREE_MONTH ?
-                        { ...styles.inputText, ...styles.inputTextWide } :
-                        { ...styles.inputText }
-                    }>
-                        {getDateInputText(selectedPeriod, date)}
-                    </Text>
-                </TouchableOpacity>
-            </View >
+            <StyledButton
+                style={StyledButtonType.OUTLINE}
+                icon={<CalendarIcon />}
+                iconPosition={IconPositionType.LEFT}
+                onPress={
+                    () => Platform.OS === 'android'
+                        ? this.displayAndroidDatePicker()
+                        : this.displayIOsDatePicker()
+                }
+                label={String(getDateInputText(selectedPeriod, date))}
+            />
         )
     }
     private displayAndroidDatePicker = async () => {
@@ -83,10 +76,10 @@ export class ChartSettingsDatePicker extends React.PureComponent<FullProps> {
 }
 
 
-export const ChartSettingsDatePickerConnect = connect<{}, DispatchToProps>(
-    () => ({}),
+export const DatePickerConnect = connect<{}, DispatchToProps>(
+    null,
     (dispatch: Dispatch<Action>) => ({ dispatch })
-)(ChartSettingsDatePicker)
+)(DatePicker)
 
 const styles = StyleSheet.create({
     view: {

@@ -56,12 +56,12 @@ export class StatisticsCard extends React.Component<Props> {
           </View>
           <View style={styles.measures}>
             <View style={styles.measuresColumn}>
-              <MeasuresStatisticsConnected measuresType={NoteValueType.GLUCOSE} />
-              <MeasuresStatisticsConnected measuresType={NoteValueType.SHORT_INSULIN} />
+              <MeasuresStatisticsConnected measuresType={NoteValueType.GLUCOSE} date={new Date()} />
+              <MeasuresStatisticsConnected measuresType={NoteValueType.SHORT_INSULIN} date={new Date()} />
             </View>
             <View style={styles.measuresColumn}>
-              <MeasuresStatisticsConnected measuresType={NoteValueType.BREAD_UNITS} />
-              <MeasuresStatisticsConnected measuresType={NoteValueType.LONG_INSULIN} />
+              <MeasuresStatisticsConnected measuresType={NoteValueType.BREAD_UNITS} date={new Date()} />
+              <MeasuresStatisticsConnected measuresType={NoteValueType.LONG_INSULIN} date={new Date()} />
             </View>
           </View>
         </View>

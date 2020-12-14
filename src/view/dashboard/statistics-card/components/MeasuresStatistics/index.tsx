@@ -47,6 +47,7 @@ export const MeasuresStatisticsConnected = connect(
     { },
     ownProps: {
       measuresType: NoteValueType,
+      date: Date,
     }
   ) => ({
     measuresType: ownProps.measuresType,
@@ -54,6 +55,7 @@ export const MeasuresStatisticsConnected = connect(
       sP,
       ownProps.measuresType,
       StatisticsType.TODAY,
+      ownProps.date
     )
   })
 )(MeasuresStatistics);

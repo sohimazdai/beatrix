@@ -24,10 +24,9 @@ const styles = StyleSheet.create({
   card: {
     position: 'relative',
     overflow: 'visible',
-    padding: 16,
     backgroundColor: COLOR.PRIMARY_WHITE,
-    borderRadius: 10,
     marginVertical: 4,
+    padding: 16,
     ...SHADOW_OPTIONS,
   },
 })
