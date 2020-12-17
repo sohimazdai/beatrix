@@ -17,8 +17,9 @@ export const convertFlatNoteListToNoteListByDay = createSelector(
                 new Date(note.date).getMonth(),
                 new Date(note.date).getDate()
             ).getTime();
-            if (note.userId === user.id) {
 
+            console.log('🤖🤖🤖🤖 dayDate', dayDate);
+            if (note.userId === user.id) {
                 notesByDay[dayDate] = {
                     ...notesByDay[dayDate],
                     [note.id]: note

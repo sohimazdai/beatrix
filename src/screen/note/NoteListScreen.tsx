@@ -254,7 +254,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
       case 10:
         return i18nGet('november');
       case 11:
-        return i18nGet('september');
+        return i18nGet('december');
       default:
         console.warn("12 month is ... ? I think it is error");
     }

@@ -100,7 +100,7 @@ export class DateHelper {
             case 10:
                 return i18nGet('november');
             case 11:
-                return i18nGet('september');
+                return i18nGet('december');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }
@@ -162,7 +162,7 @@ export class DateHelper {
             case 10:
                 return i18nGet('november_capital_short');
             case 11:
-                return i18nGet('september_capital_short');
+                return i18nGet('december_capital_short');
             default:
                 console.warn('12 month is ... ? I think it is error')
         }

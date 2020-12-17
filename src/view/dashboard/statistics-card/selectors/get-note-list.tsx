@@ -18,31 +18,33 @@ export function getNoteList(
       let startMonthDate = new Date(
         date.getFullYear(),
         date.getMonth(),
-        date.getDate(),
+        1,
       );
       let lastMonthDay = DateHelper.getMaxDateOfDifferentMonth(date, 0);
 
-      for (let i = 1; i <= lastMonthDay; i++) {
-        const notes = Object.values(noteListByDay[DateHelper.getDiffDate(startMonthDate, i - 1)] || {});
-        notes.length && noteList.push(...notes as any)
+      for (let i = 0; i < lastMonthDay; i++) {
+        const notes = Object.values(noteListByDay[DateHelper.getDiffDate(startMonthDate, i)] || {});
+        notes.length && noteList.push(...notes)
       }
       break;
 
     case StatisticsPeriod.SEASON:
       let firstSeasonDayDateNumber = getStartSeasonDate(date);
+      let firstSeasonDayDate = new Date(getStartSeasonDate(date));
       let lastSeasonDay = new Date(
         new Date(firstSeasonDayDateNumber).getFullYear(),
-        new Date(firstSeasonDayDateNumber).getMonth() + 4,
+        firstSeasonDayDate.getMonth() + 3,
         0,
       ).getTime();
 
       const diff = (lastSeasonDay - firstSeasonDayDateNumber) / 1000 / 60 / 60 / 24;
 
-      for (let i = 1; i <= diff; i++) {
-        const notes = Object.values(noteListByDay[DateHelper.getDiffDate(date, i - 1)] || {});
-        notes.length && noteList.push(...notes as any)
+      for (let i = 0; i < diff; i++) {
+        const currentDateNumber = String(DateHelper.getDiffDate(firstSeasonDayDate, i));
+        const currentDayNotes = noteListByDay[currentDateNumber] || {};
+        const notes: INoteListNote[] = Object.values(currentDayNotes);
+        notes.length && noteList.push(...notes)
       }
-
       break;
     case StatisticsPeriod.YEAR:
       let firstYearDay = DateHelper.getDiffDate(new Date(date.getFullYear(), 0, 1), 0);
@@ -51,7 +53,7 @@ export function getNoteList(
 
       for (let i = 0; i < yearDiff; i++) {
         const notes = Object.values(noteListByDay[DateHelper.getDiffDate(new Date(firstYearDay), i)] || {});
-        notes.length && noteList.push(...notes as any);
+        notes.length && noteList.push(...notes);
       }
 
       break;
