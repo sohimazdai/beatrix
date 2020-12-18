@@ -11,11 +11,11 @@ import { MeasuresStatisticsConnected } from '../MeasuresStatistics';
 import { NoteValueType } from '../../../../../model/INoteList';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../../model/IStorage';
-import { selectStatisticsAvailibility } from '../../selectors/select-statistics-availibility';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import StatisticsPieIcon from '../../../../../component/icon/StatisticsPieIcon';
 import { SHADOW_OPTIONS } from '../../../../../constant/ShadowOptions';
 import { StatisticsPeriod } from '../../../../../model/IStatistics';
+import { selectNoteListForStatisticsByPeriod } from '../../../../statistics/selectors/select-note-list-for-statistics-by-period';
 
 interface Props {
   statisticsPeriod: StatisticsPeriod
@@ -75,7 +75,9 @@ export const StatisticsCardConnected = connect(
   () => ({}),
   (sP, { }, ownProps: { statisticsPeriod: StatisticsPeriod }) => ({
     ...ownProps,
-    isStatisticsAvailable: selectStatisticsAvailibility(sP, ownProps.statisticsPeriod, new Date()),
+    isStatisticsAvailable: !!selectNoteListForStatisticsByPeriod(
+      sP, ownProps.statisticsPeriod, new Date(),
+    ).length,
   })
 )(StatisticsCard);
 

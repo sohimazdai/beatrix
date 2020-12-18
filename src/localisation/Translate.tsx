@@ -75,6 +75,31 @@ export default function translate() {
 
 const translateStore = {
   // STATISTICS
+  minimal_value_of_period: {
+    'en': 'Minimum value for the period',
+    'es': 'Valor mínimo del período',
+    'ru': 'Минимальное значение за период',
+  },
+  maximal_value_of_period: {
+    'en': 'Maximum value for the period',
+    'es': 'Valor máximo del período',
+    'ru': 'Максимальное значение за период',
+  },
+  count_of_days_with_at_least_one_measure: {
+    'en': 'Number of days with at least one measurement',
+    'es': 'Número de días con al menos una medición',
+    'ru': 'Количество дней хотя бы с одним замером',
+  },
+  count_of_measures: {
+    'en': 'Number of measurements',
+    'es': 'Numero de medidas',
+    'ru': 'Количество измерений',
+  },
+  average_value_of_period: {
+    'en': 'Period average',
+    'es': 'Promedio del período',
+    'ru': 'Среднее значение за период',
+  },
   statistics_season_autumn: {
     'en': 'Autumn',
     'es': 'Otoño',

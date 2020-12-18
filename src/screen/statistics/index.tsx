@@ -1,18 +1,19 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
-import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
+import { StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { ArrowDirection, ArrowTaillessIcon } from '../../component/icon/ArrowTaillessIcon';
-import { CalendarIcon } from '../../component/icon/CalendarIcon';
 import { SingleSelect } from '../../component/single-select';
 import { COLOR } from '../../constant/Color';
 import { i18nGet } from '../../localisation/Translate';
+import { NoteValueType } from '../../model/INoteList';
 import { StatisticsPeriod } from '../../model/IStatistics';
-import { getDateInputText } from '../../utils/get-date-input-text';
 import { PieChartConnected } from '../../view/dashboard/statistics-card/components/PieChart';
 import { StatisticsViewType } from '../../view/dashboard/statistics-card/entities';
-import { DatePicker, DatePickerConnect } from '../../view/shared/components/DatePicker/DatePicker';
+import { DatePickerConnect } from '../../view/shared/components/DatePicker/DatePicker';
+import { StatisticsBlockConnect } from '../../view/statistics/components/StatisticsBlock';
 
 const BUTTONS = [
   {
@@ -94,7 +95,7 @@ export class StatisticsScreen extends React.Component<Props, State> {
           onBackPress={() => this.props.navigation.navigate('Dashboard')}
           title={i18nGet('statistics')}
         />
-        <View style={styles.content}>
+        <ScrollView style={styles.content}>
           <SingleSelect
             buttons={BUTTONS}
             selectedValue={selectedPeriod}
@@ -127,7 +128,30 @@ export class StatisticsScreen extends React.Component<Props, State> {
               />
             </View>
           </View>
-        </View>
+          <View style={styles.statisticBlocks}>
+            <StatisticsBlockConnect
+              measureName={NoteValueType.GLUCOSE}
+              date={selectedDate}
+              period={selectedPeriod}
+            />
+            <StatisticsBlockConnect
+              measureName={NoteValueType.BREAD_UNITS}
+              date={selectedDate}
+              period={selectedPeriod}
+            />
+            <StatisticsBlockConnect
+              measureName={NoteValueType.SHORT_INSULIN}
+              date={selectedDate}
+              period={selectedPeriod}
+            />
+            <StatisticsBlockConnect
+              measureName={NoteValueType.LONG_INSULIN}
+              date={selectedDate}
+              period={selectedPeriod}
+            />
+          </View>
+          <View style={styles.space} />
+        </ScrollView>
       </View>
     );
   }
@@ -139,7 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.PRIMARY_WHITE,
   },
   content: {
-    display: 'flex',
+    height: '100%',
     padding: 16,
   },
   pieWrap: {
@@ -148,7 +172,7 @@ const styles = StyleSheet.create({
     height: 140,
   },
   space: {
-    width: 8,
+    padding: 16,
   },
   datePickerContainer: {
     display: 'flex',
@@ -166,5 +190,8 @@ const styles = StyleSheet.create({
   },
   metrics: {
     marginTop: 24,
+  },
+  statisticBlocks: {
+    marginTop: 8,
   },
 });

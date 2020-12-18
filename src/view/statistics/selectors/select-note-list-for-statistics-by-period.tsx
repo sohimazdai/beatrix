@@ -1,8 +1,20 @@
-import { INoteListByDay, INoteListNote } from '../../../../model/INoteList';
-import { StatisticsPeriod } from '../../../../model/IStatistics';
-import { DateHelper } from '../../../../utils/DateHelper';
+import { createSelector } from 'reselect';
+import { INoteListByDay, INoteListNote } from '../../../model/INoteList';
+import { StatisticsPeriod } from '../../../model/IStatistics';
+import { IStorage } from '../../../model/IStorage';
+import { convertFlatNoteListToNoteListByDay } from '../../../store/selector/NoteListSelector';
+import { DateHelper } from '../../../utils/DateHelper';
 
-export function getNoteList(
+export const selectNoteListForStatisticsByPeriod = createSelector(
+  [
+    (state: IStorage) => convertFlatNoteListToNoteListByDay(state),
+    (_, type: StatisticsPeriod) => type,
+    (_, __, date: Date) => date,
+  ],
+  getNoteList
+)
+
+function getNoteList(
   noteListByDay: INoteListByDay,
   type: StatisticsPeriod,
   date: Date
