@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, StyleProp, ViewStyle, ButtonProps } from 'react-native';
+import { Text, StyleSheet, View, ViewStyle } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
@@ -176,6 +176,8 @@ const styles = StyleSheet.create({
   },
   touchablePrimary: {
     backgroundColor: COLOR.PRIMARY,
+    borderColor: COLOR.PRIMARY,
+    borderWidth: 1,
   },
   touchableOutline: {
     backgroundColor: COLOR.WHITE,

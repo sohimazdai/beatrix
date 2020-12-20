@@ -1301,6 +1301,16 @@ const translateStore = {
     es: '¡Por favor no cierre la aplicación! No toma mucho tiempo',
     ru: 'Пожалуйста, не закрывайте приложение! Это не займет много времени',
   },
+  sync_data_with_server: {
+    'en': 'Execute',
+    'es': 'Ejecutar',
+    'ru': 'Выполнить',
+  },
+  sync_data_with_server_description: {
+    'en': 'Sync data with server',
+    'es': 'Sincronizar datos con el servidor',
+    'ru': 'Синхронизировать данные с сервером',
+  },
 
   // GENERAL
   cancel: {

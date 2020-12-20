@@ -14,11 +14,14 @@ import { createClearInstallationIdAction } from '../../store/service/auth/ClearI
 import { i18nGet } from '../../localisation/Translate'
 import { BlockHat } from '../../component/hat/BlockHat'
 import { Beggar } from '../../app/Beggar'
+import { COLOR } from '../../constant/Color'
+import { createSyncUserAction } from '../../store/service/user/SyncUserSaga'
 
 interface Props {
-    onLogOut?: () => void;
     user?: IUser;
-    navigation: NavigationScreenProp<NavigationState, NavigationParams>
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+    onLogOut: () => void;
+    syncUser: () => void;
 }
 
 interface State {
@@ -72,6 +75,19 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                                     >
                                         <Text style={styles.activeElementToSettings}>
                                             {i18nGet('go_to')}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                            <ProfileItem
+                                description={i18nGet('sync_data_with_server_description')}
+                                activeElement={(
+                                    <TouchableOpacity
+                                        onPress={this.props.syncUser}
+                                        style={styles.touchable}
+                                    >
+                                        <Text style={styles.activeElementSync}>
+                                            {i18nGet('sync_data_with_server')}
                                         </Text>
                                     </TouchableOpacity>
                                 )}
@@ -133,7 +149,8 @@ export const ProfileScreenConnect = connect(
                 );
 
                 appAnalytics.sendEvent(appAnalytics.events.LOG_OUT);
-            }
+            },
+            syncUser: () => dispatch(createSyncUserAction(stateProps.user)),
         }
     }
 )(ProfileScreenComponent)
@@ -163,6 +180,10 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
         backgroundColor: "#DDDDDD"
+    },
+    activeElementSync: {
+        fontSize: 16,
+        color: COLOR.PRIMARY,
     },
     activeElementExit: {
         fontSize: 16,

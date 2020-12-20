@@ -24,14 +24,13 @@ export class SingleSelect extends React.Component<Props> {
           const isSelected = button.value === selectedValue;
 
           return (
-            <>
+            <View style={styles.wrap}>
               <StyledButton
                 style={isSelected ? StyledButtonType.PRIMARY : StyledButtonType.OUTLINE}
                 label={i18nGet(button.title)}
                 onPress={() => onSelect(button.value)}
               />
-              <View style={styles.place} />
-            </>
+            </View>
           )
         })}
       </View>
@@ -40,6 +39,9 @@ export class SingleSelect extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
+  wrap: {
+    marginRight: 4,
+  },
   row: {
     display: 'flex',
     flexDirection: 'row',

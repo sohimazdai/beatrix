@@ -101,7 +101,7 @@ export class ChartConfig {
 
     getActiveInsulinConfig(): IChartConfiguration {
         return {
-            width: this.WIDTH - 20,
+            width: this.WIDTH,
             height: Dimensions.get("screen").width / 5,
             boxWidth: this.WIDTH,
             boxHeight: Dimensions.get("screen").width / 5,
