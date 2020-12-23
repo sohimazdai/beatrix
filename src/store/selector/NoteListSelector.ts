@@ -3,12 +3,14 @@ import { IStorage } from '../../model/IStorage';
 import { createSelector } from 'reselect';
 
 const noteListSelector = (state: IStorage) => Object.values(state.noteList);
-const userSelector = (state: IStorage) => state.user;
+const userIdSelector = (state: IStorage) => state.user.id;
 
 export const convertFlatNoteListToNoteListByDay = createSelector(
-    noteListSelector,
-    userSelector,
-    (notes, user): INoteListByDay => {
+    [
+        noteListSelector,
+        userIdSelector,
+    ],
+    (notes, userId): INoteListByDay => {
         const notesByDay: INoteListByDay = {};
 
         notes.map(note => {
@@ -18,8 +20,7 @@ export const convertFlatNoteListToNoteListByDay = createSelector(
                 new Date(note.date).getDate()
             ).getTime();
 
-            console.log('🤖🤖🤖🤖 dayDate', dayDate);
-            if (note.userId === user.id) {
+            if (note.userId === userId) {
                 notesByDay[dayDate] = {
                     ...notesByDay[dayDate],
                     [note.id]: note

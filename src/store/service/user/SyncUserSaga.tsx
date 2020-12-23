@@ -21,8 +21,13 @@ import { ITagListTags } from '../../../model/ITagList';
 import { createGetFavoritesProductsAction } from '../food/GetFavoritesProductsSaga';
 import { createTags } from '../../service-helper/create-tags';
 import { createChangePending } from '../../modules/pending/pending';
+import { Alert } from 'react-native';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
+
+export interface SyncUserOptions {
+    syncByHand: boolean
+}
 
 interface SyncUserAction {
     type: 'SYNC_USER_ACTION',
@@ -31,7 +36,7 @@ interface SyncUserAction {
     }
 }
 
-export function createSyncUserAction(user: IUser) {
+export function createSyncUserAction(user: IUser, options?: SyncUserOptions) {
     return batchActions([
         createUserChangeAction({
             syncLoading: true,
@@ -40,8 +45,9 @@ export function createSyncUserAction(user: IUser) {
         {
             type: ACTION_TYPE,
             payload: {
-                user
-            }
+                user,
+                options,
+            },
         },
     ])
 }
@@ -144,6 +150,14 @@ function* syncUser({ payload }: SyncUserAction) {
 
             // SYNC FAVORITES FOOD
             yield put(createGetFavoritesProductsAction());
+
+            Alert.alert(
+                i18nGet('synced_successfully'),
+                null,
+                [
+                    { text: i18nGet('sync_end_cool') }
+                ]
+            )
         }
 
         appAnalytics.sendEvent(appAnalytics.events.USER_SYNCED);

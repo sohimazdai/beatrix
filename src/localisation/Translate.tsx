@@ -1311,6 +1311,21 @@ const translateStore = {
     'es': 'Sincronizar datos con el servidor',
     'ru': 'Синхронизировать данные с сервером',
   },
+  synced_successfully: {
+    'en': 'Data synced successfully',
+    'es': 'Datos sincronizados correctamente',
+    'ru': 'Данные успешно синхронизированы',
+  },
+  go_to_main: {
+    'en': 'To the main',
+    'es': 'A la principal',
+    'ru': 'На главную',
+  },
+  sync_end_cool: {
+    'en': 'Great',
+    'es': 'Bueno',
+    'ru': 'Отлично',
+  },
 
   // GENERAL
   cancel: {
@@ -1344,7 +1359,6 @@ const translateStore = {
     es: 'Entendido',
     ru: 'Ок, понятно',
   },
-
 
   active_network_needed: {
     en: 'You need to connect to the internet',
