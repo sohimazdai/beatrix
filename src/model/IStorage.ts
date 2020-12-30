@@ -10,6 +10,7 @@ import { ITagList } from './ITagList';
 import { INoteFilter } from './INoteFilter';
 import { IPending } from './IPending';
 import { IFood } from './IFood';
+import { ISheduleList } from './IShedule';
 
 export interface IStorage {
     app?: IApp,
@@ -24,4 +25,5 @@ export interface IStorage {
     noteFilter?: INoteFilter
     pending?: IPending
     food?: IFood
+    shedule: ISheduleList
 }

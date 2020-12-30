@@ -14,31 +14,33 @@ export class ProfilePicker extends React.Component<Props> {
     render() {
         const { titleTooltip } = this.props;
 
-        return <View style={styles.profilePickerView}>
-            <View style={styles.itemHeader}>
-                {this.props.title && <Text style={styles.itemCardTitle}>
-                    {this.props.title}
-                </Text>}
-                {!!titleTooltip && (titleTooltip)}
+        return (
+            <View style={styles.profilePickerView}>
+                <View style={styles.itemHeader}>
+                    {this.props.title && <Text style={styles.itemCardTitle}>
+                        {this.props.title}
+                    </Text>}
+                    {!!titleTooltip && (titleTooltip)}
+                </View>
+                <View style={styles.itemCard}>
+                    {this.props.description && <Text style={styles.itemCardDescription}>
+                        {this.props.description}
+                    </Text>}
+                </View>
+                {this.props.children}
+                {!!this.props.hint && (
+                    <Text
+                        style={
+                            this.props.hintCritical
+                                ? { ...styles.hint, ...styles.hintCritical }
+                                : styles.hint
+                        }
+                    >
+                        {this.props.hint}
+                    </Text>
+                )}
             </View>
-            <View style={styles.itemCard}>
-                {this.props.description && <Text style={styles.itemCardDescription}>
-                    {this.props.description}
-                </Text>}
-            </View>
-            {this.props.children}
-            {!!this.props.hint && (
-                <Text
-                    style={
-                        this.props.hintCritical
-                            ? { ...styles.hint, ...styles.hintCritical }
-                            : styles.hint
-                    }
-                >
-                    {this.props.hint}
-                </Text>
-            )}
-        </View>
+        );
     }
 }
 

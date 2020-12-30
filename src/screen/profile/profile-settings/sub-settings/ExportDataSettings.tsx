@@ -34,13 +34,9 @@ export class ExportDataSettingsComponent extends Component<Props> {
           onBackPress={() => this.props.navigation.navigate('Profile')}
           title={i18nGet('export_data')}
         />
-        <View style={styles.scrollViewWrapWrap}>
-          <View style={styles.scrollViewWrap}>
-            <ScrollView style={styles.scrollView}>
-              <ExportDataConnect />
-            </ScrollView>
-          </View>
-        </View>
+        <ScrollView style={styles.scrollView}>
+          <ExportDataConnect />
+        </ScrollView>
         <Fader hidden={!user.exportLoading} />
       </KeyboardAvoidingView >
     )

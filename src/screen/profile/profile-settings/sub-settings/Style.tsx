@@ -11,21 +11,8 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         backgroundColor: "#DDDDDD"
     },
-    scrollViewWrapWrap: {
-        backgroundColor: "#2E3858",
-    },
-    scrollViewWrap: {
-        backgroundColor: "#DDDDDD",
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
-        overflow: 'hidden',
-        paddingBottom: 80,
-    },
     scrollView: {
         height: '100%',
-        paddingTop: 10,
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
         backgroundColor: "#DDDDDD"
     },
     targetGlycemiaView: {

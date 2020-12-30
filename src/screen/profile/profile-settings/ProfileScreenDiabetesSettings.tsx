@@ -40,55 +40,51 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                     onBackPress={() => this.props.navigation.navigate('Profile')}
                     title={i18nGet('diabetic_profile')}
                 />
-                <View style={styles.scrollViewWrapWrap}>
-                    <View style={styles.scrollViewWrap}>
-                        <ScrollView style={styles.scrollView}>
-                            <ProfileItem
-                                title={i18nGet('glycemia_settings')}
-                                description={i18nGet('glycemia_settings_description')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        style={styles.touchable}
-                                        onPress={this.onGlycemiaSettingsGoToPress}
-                                    >
-                                        <Text style={styles.activeElementToSettings}>
-                                            {i18nGet('go_to')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <ProfileItem
-                                title={i18nGet('carbohydrates_settings')}
-                                description={i18nGet('carbohydrates_settings_description')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        style={styles.touchable}
-                                        onPress={this.onCarbsSettingsGoToPress}
-                                    >
-                                        <Text style={styles.activeElementToSettings}>
-                                            {i18nGet('go_to')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <ProfileItem
-                                title={i18nGet('insulin_settings')}
-                                description={i18nGet('insulin_settings_description')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        style={styles.touchable}
-                                        onPress={this.onInsulinSettingsGoToPress}
-                                    >
-                                        <Text style={styles.activeElementToSettings}>
-                                            {i18nGet('go_to')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                        </ScrollView>
-                    </View>
-                </View>
-            </View >
+                <ScrollView style={styles.scrollView}>
+                    <ProfileItem
+                        title={i18nGet('glycemia_settings')}
+                        description={i18nGet('glycemia_settings_description')}
+                        activeElement={(
+                            <TouchableOpacity
+                                style={styles.touchable}
+                                onPress={this.onGlycemiaSettingsGoToPress}
+                            >
+                                <Text style={styles.activeElementToSettings}>
+                                    {i18nGet('go_to')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                    <ProfileItem
+                        title={i18nGet('carbohydrates_settings')}
+                        description={i18nGet('carbohydrates_settings_description')}
+                        activeElement={(
+                            <TouchableOpacity
+                                style={styles.touchable}
+                                onPress={this.onCarbsSettingsGoToPress}
+                            >
+                                <Text style={styles.activeElementToSettings}>
+                                    {i18nGet('go_to')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                    <ProfileItem
+                        title={i18nGet('insulin_settings')}
+                        description={i18nGet('insulin_settings_description')}
+                        activeElement={(
+                            <TouchableOpacity
+                                style={styles.touchable}
+                                onPress={this.onInsulinSettingsGoToPress}
+                            >
+                                <Text style={styles.activeElementToSettings}>
+                                    {i18nGet('go_to')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </ScrollView>
+            </View>
         )
     }
 }

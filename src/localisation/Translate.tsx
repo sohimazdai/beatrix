@@ -1034,6 +1034,71 @@ const translateStore = {
   },
 
   // PROFILE
+  shedule_select_value: {
+    'en': 'Pick the coefficient for the selected elements',
+    'es': 'Seleccione el coeficiente para los elementos seleccionados',
+    'ru': 'Выберите коэфициент для выбранных элементов',
+  },
+  shedule_value_popup_header: {
+    'en': 'Change coefficient for selected list items',
+    'es': 'Cambiar coeficiente para elementos de lista seleccionados',
+    'ru': 'Изменить коэффициент для выбранных элементов списка',
+  },
+  shedule_item_selected: {
+    'en': 'Select',
+    'es': 'Marca',
+    'ru': 'Выбрать',
+  },
+  shedule_coefficient: {
+    'en': 'Coefficient',
+    'es': 'Coeficiente',
+    'ru': 'Коэффициент',
+  },
+  shedule_time: {
+    'en': 'Time',
+    'es': 'Tiempo',
+    'ru': 'Время',
+  },
+  shedule_range_period: {
+    'en': 'Period',
+    'es': 'Período',
+    'ru': 'Период',
+  },
+  shedule_not_made: {
+    'en': 'Schedule not yet drawn up',
+    'es': 'Calendario aún no elaborado',
+    'ru': 'Расписание еще не составлен',
+  },
+  change_shedule_value: {
+    'en': 'Change value',
+    'es': 'Cambiar valor',
+    'ru': 'Изменить значение',
+  },
+  change_schedule: {
+    'en': 'Change schedule',
+    'es': 'Cambiar horario',
+    'ru': 'Изменить расписание',
+  },
+  make_a_schedule: {
+    'en': 'Make a schedule',
+    'es': 'Hacer un horario',
+    'ru': 'Составить расписание',
+  },
+  settings_insulin_sensitivity_factor_title: {
+    en: 'Insulin sensitivity factor (ISF)',
+    es: 'Factor de sensibilidad a la insulina (FSI)',
+    ru: 'Фактор чувствительности к инсулину (ФЧИ)',
+  },
+  settings_insulin_sensitivity_factor_description: {
+    en: 'Insulin sensitivity factor, or correction factor, refers to the number of %glycemia_type% by which blood sugar levels fall when a person takes 1 unit of insulin',
+    es: 'Muestra cuántos  %glycemia_type%  de glucosa en sangre disminuirá con la introducción de 1 unidad. insulina ultrarrápida ',
+    ru: 'Показывает, на сколько %glycemia_type% понизится глюкоза крови при введении 1 ед. ультракороткого инсулина',
+  },
+  settings_insulin_sensitivity_factor_hint: {
+    en: 'Define IFS for various time periods',
+    es: 'Especifique el FSI para varios períodos de tiempo',
+    ru: 'Укажите ФЧИ для различных промежутков времени',
+  },
   profile: {
     en: 'Profile',
     es: 'Perfil',
@@ -1160,7 +1225,7 @@ const translateStore = {
   },
   shedule_value: {
     en: 'Value',
-    es: 'Valor:',
+    es: 'Valor',
     ru: 'Значение',
   },
 

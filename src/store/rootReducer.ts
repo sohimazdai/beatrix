@@ -12,6 +12,7 @@ import { noteFilterReducer } from './modules/note-filter/noteFilter';
 import { IStorage } from '../model/IStorage';
 import { pendingReducer } from './modules/pending/pending';
 import { foodReducer } from './modules/food/food';
+import { sheduleReducer } from './modules/shedule/shedule';
 
 export const rootReducer: Reducer<IStorage> = combineReducers({
     app: appReducer,
@@ -26,4 +27,5 @@ export const rootReducer: Reducer<IStorage> = combineReducers({
     noteFilter: noteFilterReducer,
     pending: pendingReducer,
     food: foodReducer,
+    shedule: sheduleReducer,
 });

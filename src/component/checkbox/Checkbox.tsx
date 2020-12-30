@@ -19,21 +19,19 @@ export const Checkbox = (props: Props) => {
 
   const touchableStyles = withoutMargin
     ? styles.touchableContainer
-    : { ...styles.touchableContainer, marginBottom: 8, marginRight: 8, };
+    : { ...styles.touchableContainer, marginBottom: 8, marginRight: 8, paddingRight: 16 };
 
   return (
     <TouchableOpacity onPress={onCheck} style={touchableStyles}>
       <View style={checkboxStyles} />
-      <Text style={styles.checkboxText}>
+      {label && <Text style={styles.checkboxText}>
         {label}
-      </Text>
+      </Text>}
     </TouchableOpacity>
   )
 }
 const styles = StyleSheet.create({
   touchableContainer: {
-    marginBottom: 8,
-    paddingRight: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',

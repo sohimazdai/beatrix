@@ -13,7 +13,6 @@ import { appAnalytics, AnalyticsSections } from '../../app/Analytics'
 import { createClearInstallationIdAction } from '../../store/service/auth/ClearInstallationIdSaga'
 import { i18nGet } from '../../localisation/Translate'
 import { BlockHat } from '../../component/hat/BlockHat'
-import { Beggar } from '../../app/Beggar'
 import { COLOR } from '../../constant/Color'
 import { createSyncUserAction } from '../../store/service/user/SyncUserSaga'
 
@@ -24,11 +23,7 @@ interface Props {
     syncUser: () => void;
 }
 
-interface State {
-
-}
-
-class ProfileScreenComponent extends React.Component<Props, State> {
+class ProfileScreenComponent extends React.Component<Props> {
     componentDidMount() {
         appAnalytics.setSection(AnalyticsSections.PROFILE);
         appAnalytics.sendEvent(appAnalytics.events.PROFILE_SEEN);
@@ -43,72 +38,67 @@ class ProfileScreenComponent extends React.Component<Props, State> {
                     onBackPress={() => this.props.navigation.navigate('Dashboard')}
                     title={i18nGet('profile')}
                 />
-                <Beggar />
-                <View style={styles.scrollViewWrapWrap}>
-                    <View style={styles.scrollViewWrap}>
-                        <ScrollView style={styles.scrollView}>
-                            <ProfileItem
-                                title={'email'}
-                                description={user.email}
-                            />
-                            <ProfileItem
-                                title={i18nGet('diabetic_profile')}
-                                description={i18nGet('about_diabetes_profile')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        style={styles.touchable}
-                                        onPress={this.onProfileSettingsPress}
-                                    >
-                                        <Text style={styles.activeElementToSettings}>
-                                            {i18nGet('go_to')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <ProfileItem
-                                title={i18nGet('export_data')}
-                                description={i18nGet('export_data_description')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        style={styles.touchable}
-                                        onPress={this.onExportDataPress}
-                                    >
-                                        <Text style={styles.activeElementToSettings}>
-                                            {i18nGet('go_to')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <ProfileItem
-                                description={i18nGet('sync_data_with_server_description')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        onPress={this.props.syncUser}
-                                        style={styles.touchable}
-                                    >
-                                        <Text style={styles.activeElementSync}>
-                                            {i18nGet('sync_data_with_server')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <ProfileItem
-                                description={i18nGet('log_out')}
-                                hint={i18nGet('log_out_hint')}
-                                activeElement={(
-                                    <TouchableOpacity
-                                        onPress={this.props.onLogOut}
-                                        style={styles.touchable}
-                                    >
-                                        <Text style={styles.activeElementExit}>
-                                            {i18nGet('leave')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                        </ScrollView>
-                    </View>
-                </View>
+                <ScrollView style={styles.scrollView}>
+                    <ProfileItem
+                        title={'email'}
+                        description={user.email}
+                    />
+                    <ProfileItem
+                        title={i18nGet('diabetic_profile')}
+                        description={i18nGet('about_diabetes_profile')}
+                        activeElement={(
+                            <TouchableOpacity
+                                style={styles.touchable}
+                                onPress={this.onProfileSettingsPress}
+                            >
+                                <Text style={styles.activeElementToSettings}>
+                                    {i18nGet('go_to')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                    <ProfileItem
+                        title={i18nGet('export_data')}
+                        description={i18nGet('export_data_description')}
+                        activeElement={(
+                            <TouchableOpacity
+                                style={styles.touchable}
+                                onPress={this.onExportDataPress}
+                            >
+                                <Text style={styles.activeElementToSettings}>
+                                    {i18nGet('go_to')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                    <ProfileItem
+                        description={i18nGet('sync_data_with_server_description')}
+                        activeElement={(
+                            <TouchableOpacity
+                                onPress={this.props.syncUser}
+                                style={styles.touchable}
+                            >
+                                <Text style={styles.activeElementSync}>
+                                    {i18nGet('sync_data_with_server')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                    <ProfileItem
+                        description={i18nGet('log_out')}
+                        hint={i18nGet('log_out_hint')}
+                        activeElement={(
+                            <TouchableOpacity
+                                onPress={this.props.onLogOut}
+                                style={styles.touchable}
+                            >
+                                <Text style={styles.activeElementExit}>
+                                    {i18nGet('leave')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </ScrollView>
             </View>
         )
     }
@@ -176,9 +166,6 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         height: '100%',
-        paddingTop: 10,
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
         backgroundColor: "#DDDDDD"
     },
     activeElementSync: {

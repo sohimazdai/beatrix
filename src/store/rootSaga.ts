@@ -20,6 +20,7 @@ import { watchGetFoodItemById } from './service/food/GetFoodItemById';
 import { watchAddProductToFavorite } from './service/food/AddProductToFavoriteSaga';
 import { watchRemoveProdcutFromFavorite } from './service/food/RemoveProductFromFavoritesSaga';
 import { watchGetFavoritesProducts } from './service/food/GetFavoritesProductsSaga';
+import { watchChangeShedule } from './service/shedule/ChangeSheduleSaga';
 
 export function* rootSaga() {
     yield all([
@@ -53,5 +54,7 @@ export function* rootSaga() {
         fork(watchAddProductToFavorite),
         fork(watchRemoveProdcutFromFavorite),
         fork(watchGetFavoritesProducts),
+        //PROFILE,
+        fork(watchChangeShedule),
     ]);
 };

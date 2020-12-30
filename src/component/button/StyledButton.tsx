@@ -132,17 +132,23 @@ export class StyledButton extends React.Component<Props> {
           style={this.touchableStyle}
           disabled={disabled}
         >
-          {!!icon && !iconRight && <View style={this.iconStyle}>
-            {this.icon()}
-          </View>}
+          {!!icon && !iconRight && (
+            <View style={this.iconStyle}>
+              {this.icon()}
+            </View>
+          )}
 
-          {!!label && <Text style={this.textStyle}>
-            {label}
-          </Text>}
+          {!!label && (
+            <Text style={this.textStyle}>
+              {label}
+            </Text>
+          )}
 
-          {!!icon && iconRight && <View style={this.iconStyle}>
-            {this.icon()}
-          </View>}
+          {!!icon && iconRight && (
+            <View style={this.iconStyle}>
+              {this.icon()}
+            </View>
+          )}
         </TouchableOpacity>
         {disabled && <View style={styles.disabledView} />}
       </View>

@@ -2,6 +2,7 @@ import { api } from './api';
 import { IUser } from '../model/IUser';
 import { IUserPropertiesShedule } from '../model/IUserPropertiesShedule';
 import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
+import { ISheduleList } from '../model/IShedule';
 
 export class UserApi {
     static syncUser(user: IUser) {
@@ -21,11 +22,15 @@ export class UserApi {
     }
 
     static syncUserProperties(
-        userId: string, 
-        properties: IUserDiabetesProperties, 
+        userId: string,
+        properties: IUserDiabetesProperties,
         idsToConvert: string[],
         shedule: IUserPropertiesShedule,
+        shedules: ISheduleList,
     ) {
-        return api.post('/user/properties/sync', { userId, properties, idsToConvert, shedule })
+        return api.post(
+            '/user/properties/sync',
+            { userId, properties, idsToConvert, shedule, shedules },
+        );
     }
 }

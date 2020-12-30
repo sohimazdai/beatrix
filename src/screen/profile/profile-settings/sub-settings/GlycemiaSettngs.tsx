@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { styles } from './Style';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
@@ -33,14 +33,10 @@ export class GlycemiaSettingsComponent extends Component<Props> {
           onBackPress={() => this.props.navigation.navigate('ProfileDiabetesSettings')}
           title={i18nGet('glycemia_settings')}
         />
-        <View style={styles.scrollViewWrapWrap}>
-          <View style={styles.scrollViewWrap}>
-            <ScrollView style={styles.scrollView}>
-              <ProfileSettingsTargetGlycemiaPickerConnect />
-              <GlycemiaTypeSelectPickerConnect />
-            </ScrollView>
-          </View>
-        </View>
+        <ScrollView style={styles.scrollView}>
+          <ProfileSettingsTargetGlycemiaPickerConnect />
+          <GlycemiaTypeSelectPickerConnect />
+        </ScrollView>
       </KeyboardAvoidingView >
     )
   }

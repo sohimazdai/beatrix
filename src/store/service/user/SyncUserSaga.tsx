@@ -9,7 +9,7 @@ import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { IUserDiabetesProperties } from '../../../model/IUserDiabetesProperties';
-import { IUserPropertiesShedule } from '../../../model/IUserPropertiesShedule';
+import { IUserPropertiesShedule, SheduleKeyType } from '../../../model/IUserPropertiesShedule';
 import { Measures } from '../../../localisation/Measures';
 import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
@@ -22,6 +22,8 @@ import { createGetFavoritesProductsAction } from '../food/GetFavoritesProductsSa
 import { createTags } from '../../service-helper/create-tags';
 import { createChangePending } from '../../modules/pending/pending';
 import { Alert } from 'react-native';
+import { IShedule, ISheduleList } from '../../../model/IShedule';
+import { createMergeShedule, createReplaceShedule } from '../../modules/shedule/shedule';
 
 const ACTION_TYPE = 'SYNC_USER_ACTION';
 
@@ -61,7 +63,9 @@ function* syncUser({ payload }: SyncUserAction) {
             const userData: {
                 data: {
                     properties: IUserDiabetesProperties,
+                    //deprecated
                     shedule: IUserPropertiesShedule,
+                    shedules: ISheduleList,
                     isNeedToShowOnboarding: boolean,
                     tagList: ITagListTags,
                     registeredOn: Date
@@ -69,7 +73,10 @@ function* syncUser({ payload }: SyncUserAction) {
             } = yield call(UserApi.syncUser, payload.user);
 
             const properties: IUserDiabetesProperties = userData.data.properties;
+            //deprecated
             const shedule: IUserPropertiesShedule = userData.data.shedule || {};
+            const shedules: ISheduleList = userData.data.shedules || {};
+            console.log('🤖🤖🤖🤖 shedules', shedules);
             const isNeedToShowOnboarding: boolean = userData.data.isNeedToShowOnboarding || false;
             const tags: ITagListTags = Object.values(userData.data.tagList).length
                 ? userData.data.tagList
@@ -115,6 +122,7 @@ function* syncUser({ payload }: SyncUserAction) {
                 batchActions([
                     createUserDiabetesPropertiesChangeAction(newProperties),
                     createChangeUserPropertiesShedule(shedule),
+                    createMergeShedule(shedules),
                     createUserChangeAction({
                         isNeedToShowOnboarding: userData.data.isNeedToShowOnboarding,
                         registeredOn,
@@ -129,15 +137,17 @@ function* syncUser({ payload }: SyncUserAction) {
                     createNoteListOneLevelDeepMerge(syncedNotes),
                     createClearPendingNoteListByUserId(userId),
                 ])
-            )
+            );
 
-            // SYNC DIABETES PROPERTIES, SHEDULE, ONBOARDING, TAG_LIST
+            // SYNC DIABETES PROPERTIES, SHEDULE(s), ONBOARDING, TAG_LIST
             const result = yield call(
                 UserApi.syncUserProperties,
                 userId,
                 newProperties,
                 [],
+                //deprecated
                 shedule,
+                shedules,
             );
 
             yield put(

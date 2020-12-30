@@ -14,6 +14,7 @@ import { i18nGet } from '../../../localisation/Translate';
 import { INoteList } from '../../../model/INoteList';
 import { syncNotes } from '../../service-helper/sync-notes';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
+import { createMergeShedule } from '../../modules/shedule/shedule';
 
 const ACTION_TYPE = "UPDATE_USER_DIABETES_PROPERTIES";
 
@@ -74,10 +75,12 @@ function* run(action) {
         userDiabetesProperties,
         idsToConvert,
         state.userPropertiesShedule,
+        state.shedule,
       );
 
       yield put(createNoteListOneLevelDeepMerge(result.data.notes));
       yield put(createChangeUserPropertiesShedule(result.data.shedule));
+      yield put(createMergeShedule(result.data.shedules));
       yield put(createUserDiabetesPropertiesChangeAction(userDiabetesProperties));
       yield put(
         createUserChangeAction({

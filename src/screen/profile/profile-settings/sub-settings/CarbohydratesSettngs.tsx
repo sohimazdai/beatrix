@@ -33,14 +33,10 @@ export class CarbohydratesSettngsComponent extends Component<Props> {
           onBackPress={() => this.props.navigation.navigate('ProfileDiabetesSettings')}
           title={i18nGet('carbohydrates_settings')}
         />
-        <View style={styles.scrollViewWrapWrap}>
-          <View style={styles.scrollViewWrap}>
-            <ScrollView style={styles.scrollView}>
-              <CarbsTypeSelectPickerConnect />
-              <CarbsUnitWeightSelectPickerConnect />
-            </ScrollView>
-          </View>
-        </View>
+        <ScrollView style={styles.scrollView}>
+          <CarbsTypeSelectPickerConnect />
+          <CarbsUnitWeightSelectPickerConnect />
+        </ScrollView>
       </KeyboardAvoidingView >
     )
   }
