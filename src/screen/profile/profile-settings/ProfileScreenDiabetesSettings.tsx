@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { styles } from './Style';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
@@ -10,6 +10,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { i18nGet } from '../../../localisation/Translate';
 import { appAnalytics } from '../../../app/Analytics';
 import { BlockHat } from '../../../component/hat/BlockHat';
+import { BreadUnitsIconConnected } from '../../../component/icon/tooltiped/BreadUnitsIcon';
+import { GlycemiaIconConnected } from '../../../component/icon/tooltiped/GlycemiaIcon';
+import { ShortInsulinIconConnected } from '../../../component/icon/tooltiped/ShortInsulinIcon';
 
 interface Props {
     interactive: IInteractive
@@ -43,6 +46,7 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                 <ScrollView style={styles.scrollView}>
                     <ProfileItem
                         title={i18nGet('glycemia_settings')}
+                        titleIcon={<GlycemiaIconConnected style={ownStyles.titleIcon} />}
                         description={i18nGet('glycemia_settings_description')}
                         activeElement={(
                             <TouchableOpacity
@@ -57,6 +61,7 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                     />
                     <ProfileItem
                         title={i18nGet('carbohydrates_settings')}
+                        titleIcon={<BreadUnitsIconConnected style={ownStyles.titleIcon} />}
                         description={i18nGet('carbohydrates_settings_description')}
                         activeElement={(
                             <TouchableOpacity
@@ -71,6 +76,7 @@ export class ProfileScreenDiabetesSettingsComponent extends Component<Props> {
                     />
                     <ProfileItem
                         title={i18nGet('insulin_settings')}
+                        titleIcon={<ShortInsulinIconConnected style={ownStyles.titleIcon} />}
                         description={i18nGet('insulin_settings_description')}
                         activeElement={(
                             <TouchableOpacity
@@ -94,3 +100,11 @@ export const ProfileScreenDiabetesSettings = connect(
         interactive: state.interactive
     })
 )(ProfileScreenDiabetesSettingsComponent)
+
+const ownStyles = StyleSheet.create({
+    titleIcon: {
+        marginRight: 8,
+        height: 25,
+        width: 25,
+    },
+})

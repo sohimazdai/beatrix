@@ -39,6 +39,8 @@ class Comp extends React.Component<Props, State> {
     isSheduleEditing: false,
   }
 
+  sheduleRef = React.createRef<View>();
+
   setSheduleIsEditing = () => {
     const { hours } = this.state;
 
@@ -127,7 +129,9 @@ class Comp extends React.Component<Props, State> {
       selectedHours: [],
     });
 
-    scrollViewRef.current.scrollTo(500);
+    this.sheduleRef.current.measure((_, __, ___, ____, _____, y) => {
+      scrollViewRef.current.scrollTo(-y);
+    });
   }
 
   render() {
@@ -136,7 +140,7 @@ class Comp extends React.Component<Props, State> {
 
     return (
       <>
-        <View style={styles.container}>
+        <View style={styles.container} ref={this.sheduleRef}>
           <SheduleListMarshal
             onSelectItem={this.handleSelectItem}
             onSelectAll={this.handleSelectAll}

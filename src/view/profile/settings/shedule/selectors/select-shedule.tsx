@@ -28,8 +28,12 @@ function getShedule(
     Object.entries(oldShedule).forEach((hourValue) => {
       const hour = hourValue[0];
       const value = hourValue[1];
-      transformedShedule[type].hours[hour] =
-        value[type];
+      const transformedValue = type === SheduleKeyType.CARBOHYDRATE_RATIO
+        ? Number((1 / value[type]).toFixed(1))
+        : value[type];
+
+      console.log('🤖🤖🤖🤖 transformedValue', transformedValue);
+      transformedShedule[type].hours[hour] = transformedValue;
     });
 
     return transformedShedule[type].hours;

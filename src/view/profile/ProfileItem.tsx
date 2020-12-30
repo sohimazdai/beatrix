@@ -5,6 +5,7 @@ import { SHADOW_OPTIONS } from '../../constant/ShadowOptions'
 interface Props {
     header?: string
     title?: string
+    titleIcon?: JSX.Element
     description?: string
     activeElement?: JSX.Element
     hint?: string
@@ -12,15 +13,24 @@ interface Props {
 
 export class ProfileItem extends React.Component<Props> {
     render() {
+        const { titleIcon } = this.props;
+
         return <View style={styles.profileItemView}>
-            {this.props.header && <Text style={styles.itemHeader}>
-                {this.props.header}
-            </Text>}
+            {this.props.header && (
+                <Text style={styles.itemHeader}>
+                    {this.props.header}
+                </Text>
+            )}
             <View style={styles.itemCard}>
                 <View style={styles.itemCardLeft}>
-                    {this.props.title && <Text style={styles.itemCardTitle}>
-                        {this.props.title}
-                    </Text>}
+                    {this.props.title && (
+                        <View style={styles.titleRow}>
+                            {titleIcon || null}
+                            <Text style={styles.itemCardTitle}>
+                                {this.props.title}
+                            </Text>
+                        </View>
+                    )}
                     {this.props.description && <Text style={styles.itemCardDescription}>
                         {this.props.description}
                     </Text>}
@@ -76,6 +86,10 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         flexDirection: 'column',
         justifyContent: 'center',
+        alignItems: 'center',
+    },
+    titleRow: {
+        flexDirection: 'row',
         alignItems: 'center',
     },
     itemCardTitle: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { IUserDiabetesPropertiesDayTimeValue, IUserDiabetesProperties } from "../../../../model/IUserDiabetesProperties";
 import { connect } from "react-redux";
 import { IStorage } from "../../../../model/IStorage";
@@ -12,9 +12,12 @@ import { ProfileUserPropertiesShedulePickerActiveConnect } from './shedule-picke
 import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
 import { COLOR } from '../../../../constant/Color';
+import { Shedule } from '../shedule/Shedule';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
     sheduleKey: SheduleKeyType
+    scrollViewRef: RefObject<ScrollView>
     userPropertiesShedule?: IUserPropertiesShedule
     userDiabetesProperties: IUserDiabetesProperties
     activeUserPropertiesShedulePopupType?: SheduleKeyType
@@ -172,8 +175,9 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
                 return i18nGet('insulin_to_carb_rate_hint');
         }
     }
+
     render() {
-        const { activeUserPropertiesShedulePopupType, sheduleKey } = this.props;
+        const { scrollViewRef, sheduleKey } = this.props;
 
         return (
             <ProfilePicker
@@ -181,21 +185,7 @@ class ProfileSettingsSheduleTable extends React.Component<Props> {
                 description={this.description}
                 hint={this.hint}
             >
-                <View>
-                    <View style={styles.sensitivityFactorView}>
-                        {activeUserPropertiesShedulePopupType !== sheduleKey
-                            ? <>
-                                {this.renderSheduleTableTitles()}
-                                {this.renderSheduleTable()}
-                                <View style={styles.buttons}>
-                                    {this.shedule.length > 0 && this.renderClearSheduleButton()}
-                                    {this.renderChangeButton()}
-                                </View>
-                            </>
-                            : <ProfileUserPropertiesShedulePickerActiveConnect />
-                        }
-                    </View>
-                </View>
+                <Shedule sheduleType={sheduleKey} scrollViewRef={scrollViewRef} />
             </ProfilePicker>
         )
     }

@@ -11,8 +11,6 @@ import { i18nGet } from '../../../../localisation/Translate';
 import { ShortInsulinTypePickerConnect } from '../../../../view/profile/settings/select-picker/ShortInsulinTypePicker';
 import { appAnalytics } from '../../../../app/Analytics';
 import { BlockHat } from '../../../../component/hat/BlockHat';
-import { ProfilePicker } from '../../../../view/profile/ProfilePicker';
-import { Shedule } from '../../../../view/profile/settings/shedule/Shedule';
 
 interface Props {
   interactive: IInteractive
@@ -53,21 +51,13 @@ export class InsulinSettingsComponent extends Component<Props> {
         />
         <ScrollView style={styles.scrollView} ref={this.scrollViewRef}>
           <ShortInsulinTypePickerConnect />
-          <ProfilePicker
-            title={i18nGet('settings_insulin_sensitivity_factor_title')}
-            description={i18nGet('settings_insulin_sensitivity_factor_description')}
-            hint={i18nGet('settings_insulin_sensitivity_factor_hint')}
-          >
-            <Shedule
-              scrollViewRef={this.scrollViewRef}
-              sheduleType={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
-            />
-          </ProfilePicker>
           <ProfileSettingsSheduleTableConnect
             sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
+            scrollViewRef={this.scrollViewRef}
           />
           <ProfileSettingsSheduleTableConnect
             sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
+            scrollViewRef={this.scrollViewRef}
           />
         </ScrollView>
       </KeyboardAvoidingView >

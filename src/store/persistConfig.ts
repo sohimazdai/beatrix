@@ -15,6 +15,7 @@ export const persistConfig: PersistConfig = {
         // 'user',
         // 'tagList',
         // 'food',
+        // 'shedule'
     ],
     storage: AsyncStorage,
     transforms: [
