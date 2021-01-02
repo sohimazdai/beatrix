@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
-import { IUserPropertiesShedule, IUserPropertiesSheduleItem } from '../../../../model/IUserPropertiesShedule';
 import { INoteListNote } from '../../../../model/INoteList';
 import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 import { Measures } from '../../../../localisation/Measures';
@@ -11,6 +10,9 @@ import { selectActiveInsulinValue } from '../../../dashboard/active-insulin-info
 import { COLOR } from '../../../../constant/Color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
+import { ISheduleList } from '../../../../model/IShedule';
+import { selectShedule } from '../../../profile/settings/shedule/selectors/select-shedule-list';
+import { ProfileIcon } from '../../../../component/icon/ProfileIcon';
 
 interface OwnProps {
     note?: INoteListNote;
@@ -18,8 +20,8 @@ interface OwnProps {
 }
 
 interface Props extends OwnProps {
+    sheduleList: ISheduleList
     userDiabetesProperties?: IUserDiabetesProperties;
-    userPropertiesShedule?: IUserPropertiesShedule;
     activeInsulinValue?: number;
     note?: INoteListNote;
 }
@@ -27,7 +29,7 @@ interface Props extends OwnProps {
 function NoteInsulinDoseRecommendation(props: Props) {
     const {
         note,
-        userPropertiesShedule,
+        sheduleList,
         userDiabetesProperties,
         activeInsulinValue,
         goToInsulinSettings,
@@ -35,14 +37,14 @@ function NoteInsulinDoseRecommendation(props: Props) {
     const { glycemiaMeasuringType } = userDiabetesProperties;
 
     const currentHour = new Date(note.date).getHours();
-    const sheduleItem = userPropertiesShedule[currentHour] || {} as IUserPropertiesSheduleItem;
-    const insulinToCarbRatio = sheduleItem.carbohydrateRatio;
+    const isf = sheduleList.insulinSensitivityFactor.hours[currentHour];
+    const cr = sheduleList.carbohydrateRatio.hours[currentHour];
     const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
-    const insulinToCorrectGlucose = glucoseValueToCorrect / sheduleItem.insulinSensitivityFactor;
-    const insulinToCorrectBU = note.breadUnits / insulinToCarbRatio;
+    const insulinToCorrectGlucose = glucoseValueToCorrect / isf;
+    const insulinToCorrectBU = note.breadUnits * cr;
     const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
 
-    const isFormUnfilled = !sheduleItem.insulinSensitivityFactor || !sheduleItem.carbohydrateRatio;
+    const isFormUnfilled = !isf || !cr;
 
     function getRecommendation() {
         if (isFormUnfilled) return '';
@@ -82,38 +84,45 @@ function NoteInsulinDoseRecommendation(props: Props) {
     }
 
     return (
-        <View style={styles.view}>
-            {!!recommendation && (
-                <Text style={styles.recommendation}>
-                    {recommendation}
-                </Text>
-            )}
-            {!!isFormUnfilled && (
-                <TouchableOpacity onPress={goToInsulinSettings}>
-                    <Text style={styles.settingsLink}>
-                        {i18nGet('fill_out_your_diabetes_profile_for_recommendations')}
+        <View style={styles.wrap}>
+            <View style={styles.view}>
+                {!!recommendation && (
+                    <Text style={styles.recommendation}>
+                        {recommendation}
                     </Text>
-                </TouchableOpacity>
-            )}
+                )}
+                {!!isFormUnfilled && (
+                    <TouchableOpacity onPress={goToInsulinSettings}>
+                        <Text style={styles.settingsLink}>
+                            {i18nGet('fill_out_your_diabetes_profile_for_recommendations')}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+                {!!activeInsulinValue && (
+                    <View style={styles.textRow}>
+                        <Text style={styles.activeInsulinText}>
+                            {`${i18nGet('rest_active_insulin')}: ${activeInsulinValue.toFixed(1)}`}
+                        </Text>
+                    </View>
+                )}
+                {!!activeInsulinValue && Number(insulinValue) > activeInsulinValue && (
+                    <View style={styles.textRow}>
+                        <Text style={styles.text}>
+                            {`${i18nGet('need_to_inject')}: ${insulinValue} - `}
+                        </Text>
+                        <Text style={styles.activeInsulinTextBold}>
+                            {activeInsulinValue.toFixed(1)}
+                        </Text>
+                        <Text style={styles.text}>
+                            {` = ${numberizeAndFix((Number(insulinValue) - activeInsulinValue))}`}
+                        </Text>
+                    </View>
+                )}
+            </View>
             {!!activeInsulinValue && (
-                <View style={styles.textRow}>
-                    <Text style={styles.activeInsulinText}>
-                        {`${i18nGet('rest_active_insulin')}: ${activeInsulinValue.toFixed(1)}`}
-                    </Text>
-                </View>
-            )}
-            {!!activeInsulinValue && Number(insulinValue) > activeInsulinValue && (
-                <View style={styles.textRow}>
-                    <Text style={styles.text}>
-                        {`${i18nGet('need_to_inject')}: ${insulinValue} - `}
-                    </Text>
-                    <Text style={styles.activeInsulinTextBold}>
-                        {activeInsulinValue.toFixed(1)}
-                    </Text>
-                    <Text style={styles.text}>
-                        {` = ${numberizeAndFix((Number(insulinValue) - activeInsulinValue))}`}
-                    </Text>
-                </View>
+                <TouchableOpacity onPress={goToInsulinSettings}>
+                    <ProfileIcon />
+                </TouchableOpacity>
             )}
         </View>
     );
@@ -121,7 +130,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
 
 export const NoteInsulinDoseRecommendationConnect = connect(
     (state: IStorage, ownProps: OwnProps) => ({
-        userPropertiesShedule: state.userPropertiesShedule,
+        sheduleList: selectShedule(state),
         userDiabetesProperties: state.userDiabetesProperties,
         activeInsulinValue: selectActiveInsulinValue(
             state,
@@ -139,12 +148,18 @@ export const NoteInsulinDoseRecommendationConnect = connect(
 )(NoteInsulinDoseRecommendation)
 
 const styles = StyleSheet.create({
-    view: {
-        width: '100%',
+    wrap: {
+        borderRadius: 5,
         marginTop: 16,
+        width: '100%',
+        flexDirection: 'row',
         backgroundColor: 'rgba(255,255,255, 0.5)',
         padding: 8,
-        borderRadius: 5,
+        justifyContent: 'space-between',
+    },
+    view: {
+        maxWidth: '90%',
+        paddingRight: 8,
     },
     textRow: {
         display: 'flex',
@@ -169,5 +184,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textDecorationLine: 'underline',
         textDecorationColor: COLOR.BLUE,
-    }
+    },
 })

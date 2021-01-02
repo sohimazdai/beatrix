@@ -7,7 +7,7 @@ import { IShedule } from '../../../../model/IShedule';
 import { IStorage } from '../../../../model/IStorage';
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
 import { createChangeSheduleAction } from '../../../../store/service/shedule/ChangeSheduleSaga';
-import { selectShedule } from './selectors/select-shedule';
+import { selectSheduleHours } from './selectors/select-shedule-hours';
 import { SheduleButtonBlock } from './SheduleButtonBlock';
 import { SheduleListMarshal } from './SheduleListMarshal';
 import { SheduleNumberScroller } from './SheduleNumberScroller';
@@ -135,8 +135,8 @@ class Comp extends React.Component<Props, State> {
   }
 
   render() {
-    const { hours } = this.state;
-    const { isSheduleEditing, selectedHours, isValueEditing } = this.state;
+    const { hours: propHours } = this.props;
+    const { hours, isSheduleEditing, selectedHours, isValueEditing } = this.state;
 
     return (
       <>
@@ -149,6 +149,7 @@ class Comp extends React.Component<Props, State> {
             isEditing={isSheduleEditing}
           />
           {!isValueEditing && <SheduleButtonBlock
+            propHours={propHours}
             hours={hours}
             isEditing={isSheduleEditing}
             onSave={this.handleSave}
@@ -171,7 +172,7 @@ class Comp extends React.Component<Props, State> {
 
 export const Shedule = connect(
   (state: IStorage, ownProps: OwnProps) => ({
-    hours: selectShedule(state, ownProps.sheduleType),
+    hours: selectSheduleHours(state, ownProps.sheduleType),
   }),
   (dispatch: Dispatch<Action>) => ({
     replaceShedule: (shedule: IShedule) => dispatch(createChangeSheduleAction(shedule)),

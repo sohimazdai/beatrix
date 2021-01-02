@@ -813,6 +813,11 @@ const translateStore = {
     'es': 'Es necesario inyectar',
     'ru': 'Необходимо ввести',
   },
+  change_insulin_insulin_props: {
+    'en': 'Edit coefficient',
+    'es': 'Editar coeficiente',
+    'ru': 'Изменить коэффициент',
+  },
   fill_out_your_diabetes_profile_for_recommendations: {
     en: 'Complete your diabetic profile for insulin dosage recommendations',
     es: 'Complete su perfil de diabético para conocer las recomendaciones de dosis de insulina',

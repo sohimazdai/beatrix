@@ -5,6 +5,7 @@ import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
   selectedHours: number[]
+  propHours: number[]
   hours: number[]
   isEditing: boolean
   onSave: () => void
@@ -14,6 +15,12 @@ interface Props {
 };
 
 export class SheduleButtonBlock extends React.Component<Props> {
+  get propHoursAreDifferentToStateHours(): boolean {
+    const { hours, propHours = [] } = this.props;
+
+    return hours.some((h: number, index: number) => h !== propHours[index]);
+  }
+
   render() {
     const {
       selectedHours,
@@ -70,6 +77,7 @@ export class SheduleButtonBlock extends React.Component<Props> {
             style={StyledButtonType.PRIMARY}
             onPress={onSave}
             label={i18nGet('save')}
+            disabled={!this.propHoursAreDifferentToStateHours}
           />
         </View>
       </View>

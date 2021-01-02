@@ -3,7 +3,7 @@ import { ISheduleList } from '../../../../../model/IShedule';
 import { IStorage } from '../../../../../model/IStorage';
 import { IUserPropertiesShedule, SheduleKeyType } from '../../../../../model/IUserPropertiesShedule';
 
-export const selectShedule = createSelector(
+export const selectSheduleHours = createSelector(
   [
     (state: IStorage) => state.userPropertiesShedule,
     (state: IStorage) => state.shedule,
@@ -23,7 +23,7 @@ function getShedule(
     oldShedule &&
     Object.keys(oldShedule).length > 0
   ) {
-    const transformedShedule = getDefaultShedule();
+    const hours = getDefaultArray();
 
     Object.entries(oldShedule).forEach((hourValue) => {
       const hour = hourValue[0];
@@ -32,26 +32,12 @@ function getShedule(
         ? Number((1 / value[type]).toFixed(1))
         : value[type];
 
-      console.log('🤖🤖🤖🤖 transformedValue', transformedValue);
-      transformedShedule[type].hours[hour] = transformedValue;
+      hours[hour] = transformedValue;
     });
 
-    return transformedShedule[type].hours;
+    return hours;
   }
   return [];
-}
-
-function getDefaultShedule(): ISheduleList {
-  return {
-    carbohydrateRatio: {
-      type: SheduleKeyType.CARBOHYDRATE_RATIO,
-      hours: getDefaultArray()
-    },
-    insulinSensitivityFactor: {
-      type: SheduleKeyType.INSULIN_SENSITIVITY_FACTOR,
-      hours: getDefaultArray(),
-    }
-  };
 }
 
 function getDefaultArray() {
