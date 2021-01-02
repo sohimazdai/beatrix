@@ -146,20 +146,15 @@ class Chart extends React.Component<ChartProps, ChartState> {
                         title={i18nGet('charts')}
                         rightSideSlot={this.getHatTitle()}
                     />
-                    <View style={styles.scrollViewWrapWrap}>
-                        <View style={styles.scrollViewWrap}>
-                            <ScrollView style={styles.scrollView}>
-                                <View
-                                    style={styles.ChartView}
-                                >
-                                    {this.renderChart()}
-                                    <View style={styles.settingsViewWrap}>
-                                        {this.renderSettings()}
-                                    </View>
-                                </View>
-                            </ScrollView>
+                    <ScrollView style={styles.scrollView}>
+                        <View
+                            style={styles.ChartView}
+                        >
+                            {this.renderChart()}
+                            {this.renderSettings()}
+                            <View style={styles.space} />
                         </View>
-                    </View>
+                    </ScrollView>
                     {!this.state.popupShown && <View style={styles.addNoteButtonView}>
                         <NoteCreationButton onClick={this.goToNoteEditor} />
                     </View>}
@@ -176,29 +171,24 @@ class Chart extends React.Component<ChartProps, ChartState> {
             ChartValueType.BREAD_UNITS
         ];
 
-        const { userDiabetesProperties, userDiabetesProperties: { glycemiaMeasuringType } } = this.props;
+        const { userDiabetesProperties: { glycemiaMeasuringType } } = this.props;
 
         return (
             <View style={styles.chartView}>
-                <LinearGradient
-                    colors={['#003653', '#3E2626']}
-                    style={styles.chartGradient}
-                >
-                    {chartsToRender.map(type => {
-                        return <ChartWrap
-                            key={type}
-                            type={type}
-                            config={this.chartConfig[type]}
-                            currentDate={this.state.currentDate}
-                            noteList={this.props.noteList}
-                            noteListByDay={this.props.noteListByDay}
-                            onDotPress={this.onDotPress}
-                            minCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).min}
-                            maxCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).max}
-                        />
-                    })}
-                    {this.renderNetXTitles()}
-                </LinearGradient>
+                {chartsToRender.map(type => {
+                    return <ChartWrap
+                        key={type}
+                        type={type}
+                        config={this.chartConfig[type]}
+                        currentDate={this.state.currentDate}
+                        noteList={this.props.noteList}
+                        noteListByDay={this.props.noteListByDay}
+                        onDotPress={this.onDotPress}
+                        minCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).min}
+                        maxCritical={Measures.getCriticalGlycemiaForChart(glycemiaMeasuringType).max}
+                    />
+                })}
+                {this.renderNetXTitles()}
             </View>
         )
     }
@@ -534,22 +524,10 @@ const styles = StyleSheet.create({
     view: {
         flex: 1,
         justifyContent: 'flex-start',
-        backgroundColor: '#F6F8FF',
-    },
-    scrollViewWrapWrap: {
-        backgroundColor: "#2E3858",
-    },
-    scrollViewWrap: {
-        backgroundColor: "#2E3858",
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
-        overflow: 'hidden',
     },
     scrollView: {
         paddingTop: 10,
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
-        backgroundColor: "#003653",
+        backgroundColor: COLOR.PRIMARY_WHITE,
     },
     viewGradient: {
         position: 'absolute',
@@ -571,25 +549,12 @@ const styles = StyleSheet.create({
         width: '100%',
 
         flexDirection: 'column',
-        justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: COLOR.LIGHT_BLUE,
-
-        ...SHADOW_OPTIONS,
-
-        overflow: 'hidden'
-    },
-    chartGradient: {
-        width: '100%',
-
+        justifyContent: 'center',
         paddingTop: 20,
         paddingBottom: 25,
 
-        backgroundColor: COLOR.LIGHT_BLUE,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-        ...SHADOW_OPTIONS,
+        overflow: 'hidden'
     },
     highightTitlesView: {
         width: '100%',
@@ -600,7 +565,6 @@ const styles = StyleSheet.create({
     },
     highightTitle: {
         fontSize: 13,
-        color: '#CCCCCC',
         textAlign: 'center',
     },
     axisTitleView: {
@@ -610,34 +574,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    axisTitleText: {
-        paddingTop: 5,
-        paddingRight: 10,
-
-        fontSize: 11,
-        fontWeight: 'bold',
-        color: '#eee',
-    },
-    settingsViewWrap: {
-        backgroundColor: "#3E2626",
-    },
     settingsView: {
+        width: '100%',
         overflow: 'hidden',
         display: 'flex',
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
-
-        backgroundColor: COLOR.PRIMARY_BASE,
-
-        paddingTop: 20,
         paddingHorizontal: 38,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    statisticsView: {
-    },
-    statisticsViewText: {
-        textAlign: 'center',
     },
     addNoteButtonView: {
         position: 'absolute',
@@ -659,11 +602,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         ...SHADOW_OPTIONS
     },
-    addNoteButtonText: {
-        fontSize: 18,
-        color: "#333333",
-        marginRight: 5
-    },
     headerTitleRightSide: {
         marginTop: 5,
         display: 'flex',
@@ -677,5 +615,8 @@ const styles = StyleSheet.create({
         fontSize: 19,
         color: '#ffffff',
         marginRight: 5,
-    }
+    },
+    space: {
+        height: 80,
+    },
 })

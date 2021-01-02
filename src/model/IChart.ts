@@ -76,6 +76,7 @@ export interface IChartConfiguration {
     dotFillColor?: string
     dotStrokeColor?: string
     isAlone?: boolean
+    dotStrokeColorActive?: string,
 }
 
 export interface IChartTrain {

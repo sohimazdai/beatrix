@@ -128,7 +128,7 @@ export function Comp(props: ChartWrapProps) {
                         noteId={item.id}
                         fill={config.dotFillColor ? config.dotFillColor : COLOR.RED}
                         dotStrokeColor={config.dotStrokeColor}
-                        stroke={COLOR.WHITE}
+                        stroke={config.dotStrokeColorActive}
                         selectedDotId={selectedDotId}
                         type={props.type}
                         isAlone={config.isAlone}
@@ -241,6 +241,6 @@ const styles = StyleSheet.create({
         paddingRight: 3,
         fontSize: 12,
         textAlign: 'center',
-        color: '#CCCCCC',
+        color: COLOR.TEXT_DARK_GRAY,
     },
 })

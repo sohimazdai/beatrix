@@ -26,7 +26,6 @@ export class ChartConfig {
             boxWidth: this.WIDTH,
             boxHeight: Dimensions.get("screen").width / 2,
             axisWidth: 2,
-            axisColor: '#AAAAAA',
             basicPadding: this.BASIC_PADDING,
             yPadding: 1,
             dotRadius: this.DOT_RADIUS,
@@ -38,7 +37,14 @@ export class ChartConfig {
                 ChartAxisType.OY
             ],
             polylineType: PolylineType.BEZIER,
-        }
+            axisColor: COLOR.TEXT_DARK_GRAY,
+            netColor: COLOR.GRAY,
+            yNetTitlesColor: COLOR.BLACK,
+            polylineColor: COLOR.PRIMARY_LIGHT,
+            dotStrokeColor: COLOR.PRIMARY_LIGHT,
+            dotFillColor: COLOR.RED_LIGHT,
+            dotStrokeColorActive: COLOR.RED,
+        };
     }
 
     getGlucosePreviewConfig(): IChartConfiguration {
@@ -49,9 +55,9 @@ export class ChartConfig {
             boxWidth: this.WIDTH - 30,
             boxHeight: Dimensions.get("screen").width / 3,
             axisWidth: 2,
-            axisColor: '#666666',
+            axisColor: COLOR.TEXT_DARK_GRAY,
             netColor: '#999999',
-            yNetTitlesColor: '#666666',
+            yNetTitlesColor: COLOR.BLACK,
             polylineColor: COLOR.PRIMARY_LIGHT,
             dotStrokeColor: COLOR.PRIMARY_LIGHT,
             dotFillColor: COLOR.RED_LIGHT,
@@ -68,7 +74,7 @@ export class ChartConfig {
                 ChartAxisType.OY
             ],
             polylineType: PolylineType.BEZIER,
-        }
+        };
     }
 
     getInsulinConfig() {
@@ -78,7 +84,6 @@ export class ChartConfig {
             boxWidth: this.WIDTH,
             boxHeight: Dimensions.get("screen").width / 5,
             axisWidth: 2,
-            axisColor: '#AAAAAA',
             basicPadding: this.BASIC_PADDING,
             yPadding: 1,
             dotRadius: this.DOT_RADIUS,
@@ -95,7 +100,14 @@ export class ChartConfig {
                 ChartAxisType.OY_REVERSE,
             ],
             paddingTop: true,
-            polylineType: PolylineType.REGULAR
+            polylineType: PolylineType.REGULAR,
+            axisColor: COLOR.TEXT_DARK_GRAY,
+            netColor: COLOR.GRAY,
+            yNetTitlesColor: COLOR.BLACK,
+            polylineColor: COLOR.PRIMARY_LIGHT,
+            dotStrokeColor: COLOR.PRIMARY_LIGHT,
+            dotFillColor: COLOR.RED_LIGHT,
+            dotStrokeColorActive: COLOR.BLUE,
         }
     }
 
@@ -106,8 +118,6 @@ export class ChartConfig {
             boxWidth: this.WIDTH,
             boxHeight: Dimensions.get("screen").width / 5,
             axisWidth: 2,
-            axisColor: '#666666',
-            netColor: '#999999',
             dotRadius: this.DOT_RADIUS,
             reversedY: false,
             timeStepMinutes: this.TIME_STEP_MINUTES,
@@ -122,7 +132,13 @@ export class ChartConfig {
             yPadding: 1,
             paddingBottom: false,
             paddingTop: true,
-            polylineType: PolylineType.REGULAR
+            polylineType: PolylineType.REGULAR,
+            axisColor: COLOR.TEXT_DARK_GRAY,
+            netColor: COLOR.GRAY,
+            yNetTitlesColor: COLOR.BLACK,
+            polylineColor: COLOR.PRIMARY_LIGHT,
+            dotStrokeColor: COLOR.PRIMARY_LIGHT,
+            dotFillColor: COLOR.RED_LIGHT,
         }
     }
 
@@ -133,7 +149,6 @@ export class ChartConfig {
             boxWidth: this.WIDTH,
             boxHeight: Dimensions.get("screen").width / 5,
             axisWidth: 2,
-            axisColor: '#AAAAAA',
             basicPadding: this.BASIC_PADDING,
             yPadding: 1,
             dotRadius: this.DOT_RADIUS,
@@ -150,7 +165,14 @@ export class ChartConfig {
                 ChartAxisType.OY
             ],
             paddingBottom: true,
-            polylineType: PolylineType.REGULAR
+            polylineType: PolylineType.REGULAR,
+            axisColor: COLOR.TEXT_DARK_GRAY,
+            netColor: COLOR.GRAY,
+            yNetTitlesColor: COLOR.BLACK,
+            polylineColor: COLOR.PRIMARY_LIGHT,
+            dotStrokeColor: COLOR.PRIMARY_LIGHT,
+            dotFillColor: COLOR.RED_LIGHT,
+            dotStrokeColorActive: COLOR.ORANGE,
         }
     }
 }

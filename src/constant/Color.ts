@@ -41,4 +41,8 @@ export enum COLOR {
     HALF_TRANSPARENT_DARK = 'rgba(0, 0, 0, 0.5)',
 
     BLACK = '#000000',
+
+    ORANGE = 'orange',
+    //BLACK GRADATIONS
+    GRAY = '#999'
 }

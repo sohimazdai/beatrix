@@ -37,7 +37,7 @@ export function ChartHighlightNet(props: ChartHighlightNetProps) {
                         y1={props.paddingTop ? props.cfg.basicPadding : 0}
                         x2={dot.x}
                         y2={props.paddingBottom ? props.cfg.boxHeight - props.cfg.basicPadding : props.cfg.boxHeight}
-                        stroke={isSelectedDot(dot) ? '#FF6347' : 'rgba(255, 255, 255, 0.55)'}
+                        stroke={isSelectedDot(dot) ? '#FF6347' : COLOR.PRIMARY}
                         strokeWidth={isSelectedDot(dot) ? 2 : 1}
                     />
                 })
