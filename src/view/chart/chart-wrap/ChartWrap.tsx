@@ -150,7 +150,7 @@ export function Comp(props: ChartWrapProps) {
                 })}
             </ChartBox>
             {netYTitles(polylineDotsData.maxValue, polylineDotsData.minValue)}
-            {yAxisTitle(type)}
+            {!config.isAlone && yAxisTitle(type)}
         </View>
     )
 
