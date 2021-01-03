@@ -19,7 +19,7 @@ function Component(props: Props) {
         const unsubscribe = NetInfo.addEventListener(({ isConnected }) => {
             appAnalytics.sendEventWithProps(
                 appAnalytics.events.PHONE_CONNECTION_STATUS_CHANGE,
-                { isConnected: isConnected }
+                { isConnected }
             );
 
             props.changeAppConnection(isConnected);

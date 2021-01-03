@@ -57,12 +57,16 @@ function* createNote({ payload }: CreateNoteAction) {
             yield put(createAddNotePendingNoteList(noteId, state.user.id));
         }
 
-        const { foodList, ...analyticsNote } = noteWithoutId;
+        const {
+            foodList, commentary, glycemiaType, carbsMeasuringType, carbsUnitWeight, tagIds,
+            ...analyticsNote
+        } = noteWithoutId;
 
         appAnalytics.sendEventWithProps(
             appAnalytics.events.NOTE_CREATED,
             {
                 ...analyticsNote,
+                tags: tagIds.length,
                 foods,
                 id: noteId,
                 userId,

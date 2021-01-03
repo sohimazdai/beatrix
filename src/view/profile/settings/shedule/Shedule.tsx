@@ -1,5 +1,5 @@
 import React, { Dispatch, RefObject } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, LayoutChangeEvent, LayoutRectangle } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
@@ -29,6 +29,7 @@ interface State {
   selectedHours: number[]
   isValueEditing: boolean
   isSheduleEditing: boolean
+  layout: LayoutRectangle | null
 }
 
 class Comp extends React.Component<Props, State> {
@@ -37,9 +38,8 @@ class Comp extends React.Component<Props, State> {
     hours: this.props.hours,
     isValueEditing: false,
     isSheduleEditing: false,
+    layout: null,
   }
-
-  sheduleRef = React.createRef<View>();
 
   setSheduleIsEditing = () => {
     const { hours } = this.state;
@@ -119,7 +119,7 @@ class Comp extends React.Component<Props, State> {
 
   handleSave = async () => {
     const { replaceShedule, sheduleType, scrollViewRef } = this.props;
-    const { hours } = this.state;
+    const { hours, layout } = this.state;
 
     replaceShedule({ hours, type: sheduleType });
 
@@ -129,9 +129,7 @@ class Comp extends React.Component<Props, State> {
       selectedHours: [],
     });
 
-    this.sheduleRef.current.measure((_, __, ___, ____, _____, y) => {
-      scrollViewRef.current.scrollTo(-y);
-    });
+    scrollViewRef.current.scrollTo({ y: (layout as LayoutRectangle).y });
   }
 
   render() {
@@ -140,7 +138,10 @@ class Comp extends React.Component<Props, State> {
 
     return (
       <>
-        <View style={styles.container} ref={this.sheduleRef}>
+        <View
+          style={styles.container}
+          onLayout={({ nativeEvent }) => { this.setState({ layout: nativeEvent.layout }) }}
+        >
           <SheduleListMarshal
             onSelectItem={this.handleSelectItem}
             onSelectAll={this.handleSelectAll}

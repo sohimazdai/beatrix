@@ -119,7 +119,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
                     </View>
                 )}
             </View>
-            {!!activeInsulinValue && (
+            {(!!activeInsulinValue || !!recommendation) && (
                 <TouchableOpacity onPress={goToInsulinSettings}>
                     <ProfileIcon />
                 </TouchableOpacity>

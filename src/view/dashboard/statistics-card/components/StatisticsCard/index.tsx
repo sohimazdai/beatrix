@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   measures: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'row',
     height: '100%',

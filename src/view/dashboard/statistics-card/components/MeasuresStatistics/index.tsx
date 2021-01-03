@@ -63,8 +63,9 @@ export const MeasuresStatisticsConnected = connect(
 const styles = StyleSheet.create({
   row: {
     display: 'flex',
-    padding: 8,
+    padding: 4,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     height: 25,

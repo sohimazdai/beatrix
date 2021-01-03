@@ -141,9 +141,8 @@ class NoteEditor extends React.PureComponent<Props, State>{
   componentDidMount() {
     const { note } = this.props;
 
-    appAnalytics.sendEventWithProps(appAnalytics.events.NOTE_EDITOR_SEEN, {
-      isEditing: note ? true : false
-    });
+    appAnalytics.sendEventWithProps(appAnalytics.events.NOTE_EDITOR_SEEN,
+      { isEditing: note ? true : false });
   }
 
   componentDidUpdate(pP: Props) {

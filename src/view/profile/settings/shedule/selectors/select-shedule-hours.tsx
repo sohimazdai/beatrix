@@ -28,11 +28,7 @@ function getShedule(
     Object.entries(oldShedule).forEach((hourValue) => {
       const hour = hourValue[0];
       const value = hourValue[1];
-      const transformedValue = type === SheduleKeyType.CARBOHYDRATE_RATIO
-        ? Number((1 / value[type]).toFixed(1))
-        : value[type];
-
-      hours[hour] = transformedValue;
+      hours[hour] = value[type];
     });
 
     return hours;

@@ -7,6 +7,7 @@ import { IShedule } from '../../../model/IShedule';
 import { SheduleApi } from '../../../api/SheduleApi';
 import { createChangePending } from '../../modules/pending/pending';
 import { createReplaceShedule } from '../../modules/shedule/shedule';
+import { appAnalytics } from '../../../app/Analytics';
 
 const ACTION_TYPE = "CHANGE_SHEDULE_ACTION";
 
@@ -34,8 +35,9 @@ function* run({ payload }: ChangeSheduleAction) {
 
     yield put(createReplaceShedule({ shedule: payload }))
     if (state.app.serverAvailable) {
-      const { data } = yield call(SheduleApi.changeShedule, state.user.id, payload);
+      yield call(SheduleApi.changeShedule, state.user.id, payload);
 
+      appAnalytics.sendEventWithProps(appAnalytics.events.SHEDULE_CHANGE, { shedule: payload })
     } else {
       yield put(createChangePending({ shedule: true }));
     }

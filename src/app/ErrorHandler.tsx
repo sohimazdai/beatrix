@@ -17,10 +17,13 @@ export function handleError(e: Error, customMessage?: string) {
 export function handleErrorSilently(message: Error | string, type?: string) {
   let messageToSend = JSON.stringify(message);
 
-  appAnalytics.sendEventWithProps(appAnalytics.events.ERROR, {
-    message: messageToSend,
-    type: type,
-  });
+  appAnalytics.sendEventWithProps(
+    appAnalytics.events.ERROR,
+    {
+      message: messageToSend,
+      type: type,
+    },
+  );
 
   logError(messageToSend + ':::' + type)
 }

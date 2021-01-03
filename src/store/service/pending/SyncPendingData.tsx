@@ -1,4 +1,4 @@
-import { put, call, takeLatest, select } from "redux-saga/effects";
+import { put, call, takeLatest, select, all, CallEffect, PutEffect } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
 import { handleErrorSilently } from '../../../app/ErrorHandler';
@@ -8,6 +8,8 @@ import { TagApi } from '../../../api/TagApi';
 import { createReplacePending, createChangePending } from '../../modules/pending/pending';
 import { FoodApi } from '../../../api/FoodApi';
 import { IFoodListItem } from '../../../model/IFood';
+import { SheduleApi } from '../../../api/SheduleApi';
+import { createChangeSheduleAction } from '../shedule/ChangeSheduleSaga';
 
 const ACTION_TYPE = "SYNC_PENDING_DATA_ACTION";
 
@@ -38,6 +40,14 @@ function* run() {
         const ids = Object.values(state.food.favorites).map((fav: IFoodListItem) => fav.id);
 
         yield call(FoodApi.syncFavoriteFood, state.user.id, ids);
+      }
+
+      if (state.pending.shedule) {
+        const puts: PutEffect[] = Object
+          .values(state.shedule)
+          .map(sheduleItem => put(createChangeSheduleAction(sheduleItem)));
+
+        yield all(puts);
       }
 
       yield put(createReplacePending({}));

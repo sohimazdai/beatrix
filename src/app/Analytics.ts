@@ -98,6 +98,7 @@ export const appAnalytics = {
     EXPORT_DATA: "Export data",
     EXPORT_SEEN: 'Export seen',
     EXPORT_PRESS: 'Export press',
+    SHEDULE_CHANGE: 'Shedule changed',
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',
@@ -123,9 +124,9 @@ export const appAnalytics = {
     AUTH_SCREEN_SEEN: 'Auth screen seen',
     GOOGLE_SIGN_IN_PRESSED: 'Google sign in pressed',
     RESOLVER_PRESSED: 'Resolver pressed',
-    //LINK OPENED
+    // LINK OPENED
     SETTINGS_INSULIN_LINK_OPENED: 'Settings insulin link opened',
-    //NOTE_EDITOR
+    // NOTE_EDITOR
     NOTE_EDITOR_INPUT_POPUP_CLOSED: 'Note editor input popup closed',
     // GENERAL
     PHONE_CONNECTION_STATUS_CHANGE: 'Phone connection status change',

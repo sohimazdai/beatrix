@@ -59,9 +59,12 @@ class Tooltip extends React.Component<Props, State> {
   handleOpen = () => {
     const { onOpen, analyticsKeyOnOpen } = this.props;
 
-    appAnalytics.sendEventWithProps(appAnalytics.events.TOOLTIP_SHOWN, {
-      tooltipName: analyticsKeyOnOpen
-    });
+    appAnalytics.sendEventWithProps(
+      appAnalytics.events.TOOLTIP_SHOWN,
+      {
+        tooltipName: analyticsKeyOnOpen
+      },
+    );
 
     onOpen && onOpen();
   }
