@@ -36,12 +36,13 @@ function NoteInsulinDoseRecommendation(props: Props) {
     } = props;
     const { glycemiaMeasuringType } = userDiabetesProperties;
 
+    console.log('🤖🤖🤖🤖 sheduleList', sheduleList);
     const currentHour = new Date(note.date).getHours();
     const isf = sheduleList.insulinSensitivityFactor.hours[currentHour];
     const cr = sheduleList.carbohydrateRatio.hours[currentHour];
     const glucoseValueToCorrect = note.glucose - userDiabetesProperties.targetGlycemia;
     const insulinToCorrectGlucose = glucoseValueToCorrect / isf;
-    const insulinToCorrectBU = note.breadUnits * cr;
+    const insulinToCorrectBU = note.breadUnits / cr;
     const insulinValue = (Number(insulinToCorrectBU) + Number(insulinToCorrectGlucose)).toFixed(1);
 
     const isFormUnfilled = !isf || !cr;
@@ -58,7 +59,7 @@ function NoteInsulinDoseRecommendation(props: Props) {
         }
 
         if (parseFloat(insulinValue) <= 0) {
-            return i18nGet('insulin_is_not_recommended')
+            return i18nGet('insulin_is_not_recommended');
         }
 
         if (

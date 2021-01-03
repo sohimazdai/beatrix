@@ -15,8 +15,14 @@ function getShedule(
   state: IStorage,
 ): ISheduleList {
   const sheduleList = getDefaultShedule();
-  sheduleList.carbohydrateRatio.hours = selectSheduleHours(state, SheduleKeyType.CARBOHYDRATE_RATIO);
-  sheduleList.insulinSensitivityFactor.hours = selectSheduleHours(state, SheduleKeyType.CARBOHYDRATE_RATIO);
+  sheduleList.carbohydrateRatio.hours = selectSheduleHours(
+    state,
+    SheduleKeyType.CARBOHYDRATE_RATIO
+  );
+  sheduleList.insulinSensitivityFactor.hours = selectSheduleHours(
+    state,
+    SheduleKeyType.INSULIN_SENSITIVITY_FACTOR
+  );
 
   return sheduleList;
 }
