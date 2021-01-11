@@ -18,7 +18,7 @@ export const NoteCreationButton = (props: Props) => (
         <StyledButton
             icon={<AddNoteIcon />}
             iconPosition={IconPositionType.RIGHT}
-            label={i18nGet('add')}
+            label={i18nGet('add_note')}
             style={StyledButtonType.PRIMARY}
             onPress={() => {
                 appAnalytics.sendEvent(appAnalytics.events.ADD_NOTE_CLICKED);

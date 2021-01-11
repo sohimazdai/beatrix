@@ -27,6 +27,7 @@ interface Props {
   marginLeft?: boolean
   disabled?: boolean
   withoutPadding?: boolean
+  small?: boolean
 };
 
 export class StyledButton extends React.Component<Props> {
@@ -60,7 +61,7 @@ export class StyledButton extends React.Component<Props> {
   };
 
   get touchableStyle() {
-    const { style, withoutPadding } = this.props;
+    const { style, withoutPadding, small } = this.props;
     let additionalStyle = {};
 
     switch (style) {
@@ -78,16 +79,19 @@ export class StyledButton extends React.Component<Props> {
         break;
     }
 
+    if (small) {
+      additionalStyle = { ...additionalStyle, padding: 8 };
+    }
+
     const paddingStyle = withoutPadding
       ? { padding: 0 }
       : {};
-
 
     return { ...styles.touchable, ...additionalStyle, ...paddingStyle };
   }
 
   get textStyle() {
-    const { style, fluid } = this.props;
+    const { style } = this.props;
     let additionalStyle = {};
 
     switch (style) {

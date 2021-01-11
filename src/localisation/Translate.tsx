@@ -855,7 +855,11 @@ const translateStore = {
     es: 'Añadir',
     ru: 'Добавить',
   },
-
+  add_note: {
+    en: 'Add note',
+    es: 'Añadir nota',
+    ru: 'Добавить запись',
+  },
   glucose: {
     en: 'Blood sugar',
     es: 'Glucosa',

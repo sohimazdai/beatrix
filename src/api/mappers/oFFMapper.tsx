@@ -4,7 +4,7 @@ import { numberizeAndFix } from '../helper/numberize-and-fix';
 import { v1 as uuidv1 } from 'uuid';
 
 export function oFFMapper(products: any[]): IFoodList {
-  // console.log(products);
+  // console.debug(products);
 
   const searchFood: IFoodList = {};
 

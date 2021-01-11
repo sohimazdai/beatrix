@@ -3,7 +3,7 @@ import { parseUglyFatSecretString } from '../helper/parseUglyFatSecretString';
 import { v1 as uuidV1 } from 'uuid';
 
 export const fatSecretSearchMapper = (products: any[]): IFoodList => {
-  // console.log(products);
+  // console.debug(products);
 
   const foods = {};
 

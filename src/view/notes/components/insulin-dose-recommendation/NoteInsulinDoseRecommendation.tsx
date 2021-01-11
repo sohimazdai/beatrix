@@ -36,7 +36,6 @@ function NoteInsulinDoseRecommendation(props: Props) {
     } = props;
     const { glycemiaMeasuringType } = userDiabetesProperties;
 
-    console.log('🤖🤖🤖🤖 sheduleList', sheduleList);
     const currentHour = new Date(note.date).getHours();
     const isf = sheduleList.insulinSensitivityFactor.hours[currentHour];
     const cr = sheduleList.carbohydrateRatio.hours[currentHour];

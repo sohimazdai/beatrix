@@ -76,7 +76,6 @@ function* syncUser({ payload }: SyncUserAction) {
             //deprecated
             const shedule: IUserPropertiesShedule = userData.data.shedule || {};
             const shedules: ISheduleList = userData.data.shedules || {};
-            console.log('🤖🤖🤖🤖 shedules', shedules);
             const isNeedToShowOnboarding: boolean = userData.data.isNeedToShowOnboarding || false;
             const tags: ITagListTags = Object.values(userData.data.tagList).length
                 ? userData.data.tagList

@@ -42,6 +42,7 @@ function FavoritesContent(props: Props) {
           style={StyledButtonType.PRIMARY}
           label={i18nGet('create_food_card')}
           onPress={goToFoodCardCreation}
+          small
         />
       </View>
       {
@@ -52,7 +53,11 @@ function FavoritesContent(props: Props) {
               goToFoodCard={goToFoodCard}
               sortBy="foodAdded"
             />
-          ) : <Text style={styles.text}>{i18nGet('you_not_added_any_food_yet')}</Text>
+          ) : (
+            <Text style={styles.text}>
+              {i18nGet('you_not_added_any_food_yet')}
+            </Text>
+          )
       }
     </View >
   );
@@ -71,6 +76,7 @@ const styles = StyleSheet.create({
   optionsView: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
     borderColor: COLOR.BUTTON_STROKE_LIGHT_GRAY,
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   optionsDividerText: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     fontSize: 16,
     color: COLOR.TEXT_DIMGRAY,
     alignSelf: 'center',

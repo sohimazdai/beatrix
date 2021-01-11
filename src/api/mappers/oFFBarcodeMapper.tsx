@@ -4,7 +4,7 @@ import { numberizeAndFix } from '../helper/numberize-and-fix';
 import { v1 as uuidv1 } from 'uuid';
 
 export function oFFBarcodeMapper(response): IFoodListItem {
-  // console.log(response);
+  // console.debug(response);
 
   const nutrients = response.nutriments || response.nutrients || {};
 

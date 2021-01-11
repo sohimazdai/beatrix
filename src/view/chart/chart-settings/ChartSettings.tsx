@@ -12,6 +12,8 @@ import { i18nGet } from '../../../localisation/Translate';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
+import { StyledButton, StyledButtonType } from '../../../component/button/StyledButton';
+import { ArrowDirection, ArrowTaillessIcon } from '../../../component/icon/ArrowTaillessIcon';
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
@@ -35,63 +37,46 @@ export function Comp(props: ChartSettingsProps) {
     );
     return <View style={styles.chartSettingsView}>
         <View style={styles.dateInputBlock}>
-            <View style={styles.dateClicker}>
-                <TouchableOpacity
-                    style={styles.dateClickerTouchable}
-                    onPress={() => props.onDateChange(setPreviousDateValueByChartPeriodType(props))}
-                >
-                    <MinusIcon />
-                </TouchableOpacity>
-            </View>
+            <StyledButton
+                style={StyledButtonType.OUTLINE}
+                onPress={() => props.onDateChange(setPreviousDateValueByChartPeriodType(props))}
+                icon={<ArrowTaillessIcon direction={ArrowDirection.LEFT} />}
+            />
             <DatePickerConnect
                 date={props.date}
                 selectedPeriod={selectedChartPeriod}
                 onChange={props.onDateChange}
             />
-            <View
-                style={getNextDate(props.date) <= today
-                    ? styles.dateClicker
-                    : { ...styles.dateClicker, ...styles.dateClickerDisable }
-                }
-            >
-                <TouchableOpacity
-                    style={styles.dateClickerTouchable}
-                    onPress={getNextDate(props.date) <= today
-                        ? () => props.onDateChange(setNextDateValueByChartPeriodType(props))
-                        : () => { }
-                    }
-                >
-                    <PlusIcon />
-                </TouchableOpacity>
-            </View>
+            <StyledButton
+                style={StyledButtonType.OUTLINE}
+                onPress={() => props.onDateChange(setNextDateValueByChartPeriodType(props))}
+                icon={<ArrowTaillessIcon direction={ArrowDirection.RIGHT} />}
+                disabled={getNextDate(props.date) > today}
+            />
         </View>
         <View style={styles.borderedChartSettings}>
-
             <View style={styles.periodChangingBlock}>
                 <Text style={styles.periodTitle}>
                     {i18nGet('chart_period')}
                 </Text>
                 <View style={styles.periodChangingButtons}>
                     {PERIODS.map(period => {
-                        let buttonStyle = period === selectedChartPeriod
-                            ? { ...styles.periodButton, ...styles.periodButtonActive }
-                            : styles.periodButton;
-                        let buttonTextStyle = period === selectedChartPeriod
-                            ? { ...styles.periodButtonText, ...styles.periodButtonTextActive }
-                            : styles.periodButtonText;
-                        return <View
-                            style={buttonStyle}
-                            key={period}
-                        >
-                            <TouchableOpacity
-                                style={styles.periodButtonTouchable}
-                                onPress={() => selectedChartPeriod != period && props.onChangingPeriod(period)}
-                            >
-                                <Text style={buttonTextStyle}>
-                                    {getPeriodName(period)}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        let btnStyle = period === selectedChartPeriod
+                            ? StyledButtonType.PRIMARY
+                            : StyledButtonType.OUTLINE;
+
+                        return (
+                            <View style={styles.periodButtonWrap}>
+                                <StyledButton
+                                    style={btnStyle}
+                                    onPress={() => (
+                                        selectedChartPeriod != period && props.onChangingPeriod(period)
+                                    )}
+                                    label={getPeriodName(period)}
+                                    small
+                                />
+                            </View>
+                        )
                     })}
                 </View>
             </View>
@@ -170,6 +155,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     dateClicker: {
         display: 'flex',
@@ -231,44 +217,15 @@ const styles = StyleSheet.create({
         color: '#333333',
     },
     periodChangingButtons: {
-        maxWidth: 280,
         display: 'flex',
         width: '100%',
 
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    periodButton: {
-        display: 'flex',
-        width: 87,
-        height: 25,
-
-        ...SHADOW_OPTIONS,
-        borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLOR.WHITE,
     },
-    periodButtonActive: {
-        backgroundColor: COLOR.PRIMARY,
-    },
-    periodButtonTouchable: {
-        display: 'flex',
-        width: 87,
-        height: 25,
-
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    periodButtonText: {
-        fontSize: 14,
-        lineHeight: 16,
-        color: COLOR.PRIMARY,
-    },
-    periodButtonTextActive: {
-        fontWeight: 'bold',
-        color: COLOR.WHITE,
+    periodButtonWrap: {
+        paddingHorizontal: 2,
     },
     scaleAverageValueTitle: {
         width: '100%',
