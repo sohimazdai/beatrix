@@ -2,12 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLOR } from '../../../constant/Color';
 import { ChartPeriodType } from '../../../model/IChart';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
-import { DatePickerConnect } from '../../shared/components/DatePicker/DatePicker';
+import { DatePicker } from '../../shared/components/DatePicker/DatePicker';
 import { DateHelper } from '../../../utils/DateHelper';
-import { MinusIcon } from '../../../component/icon/MinusIcon';
-import { PlusIcon } from '../../../component/icon/PlusIcon';
 import { i18nGet } from '../../../localisation/Translate';
 import { connect } from 'react-redux';
 import { IStorage } from '../../../model/IStorage';
@@ -41,8 +38,9 @@ export function Comp(props: ChartSettingsProps) {
                 style={StyledButtonType.OUTLINE}
                 onPress={() => props.onDateChange(setPreviousDateValueByChartPeriodType(props))}
                 icon={<ArrowTaillessIcon direction={ArrowDirection.LEFT} />}
+                small
             />
-            <DatePickerConnect
+            <DatePicker
                 date={props.date}
                 selectedPeriod={selectedChartPeriod}
                 onChange={props.onDateChange}
@@ -52,6 +50,7 @@ export function Comp(props: ChartSettingsProps) {
                 onPress={() => props.onDateChange(setNextDateValueByChartPeriodType(props))}
                 icon={<ArrowTaillessIcon direction={ArrowDirection.RIGHT} />}
                 disabled={getNextDate(props.date) > today}
+                small
             />
         </View>
         <View style={styles.borderedChartSettings}>

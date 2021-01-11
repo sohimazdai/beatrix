@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
 import { COLOR } from '../../../../constant/Color';
@@ -16,6 +16,7 @@ import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/Ar
 import { appAnalytics } from '../../../../app/Analytics';
 import { PopupDirection, SuperPopup } from '../../../../component/popup/SuperPopup';
 import { Fader } from '../../../../component/fader/Fader';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 interface Props {
   hidden: boolean;
@@ -32,52 +33,65 @@ export class SideMenu extends React.Component<Props> {
         <Fader hidden={hidden} onPress={closeSideMenu} />
         <SuperPopup direction={PopupDirection.LEFT_TO_RIGHT} hidden={hidden}>
           <View style={styles.view}>
-            <Header
-              title={'B E A T R I X'}
-              rightIcon={<ArrowTaillessIcon
-                direction={ArrowDirection.LEFT}
-                width={15}
-                height={25}
-                iconColor={COLOR.PRIMARY_WHITE}
-              />}
-              rightIconPress={closeSideMenu}
-            />
-            <View style={styles.links}>
-              {this.renderItem(
-                i18nGet('notes'),
-                <NotesIcon width={25} height={25} />,
-                NavigatorEntities.NOTE_LIST,
-              )}
+            <View style={styles.topView}>
+              <Header
+                title={'B E A T R I X'}
+                rightIcon={<ArrowTaillessIcon
+                  direction={ArrowDirection.LEFT}
+                  width={15}
+                  height={25}
+                  iconColor={COLOR.PRIMARY_WHITE}
+                />}
+                rightIconPress={closeSideMenu}
+              />
+              <View style={styles.links}>
+                {this.renderItem(
+                  i18nGet('notes'),
+                  <NotesIcon width={25} height={25} />,
+                  NavigatorEntities.NOTE_LIST,
+                )}
 
-              {this.renderItem(
-                i18nGet('charts'),
-                <ChartsIcon width={25} height={25} />,
-                NavigatorEntities.CHARTS,
-              )}
+                {this.renderItem(
+                  i18nGet('charts'),
+                  <ChartsIcon width={25} height={25} />,
+                  NavigatorEntities.CHARTS,
+                )}
 
-              {this.renderItem(
-                i18nGet('food'),
-                <SoupIcon width={25} height={25} />,
-                NavigatorEntities.FOOD_PAGE,
-              )}
+                {this.renderItem(
+                  i18nGet('food'),
+                  <SoupIcon width={25} height={25} />,
+                  NavigatorEntities.FOOD_PAGE,
+                )}
 
-              {this.renderItem(
-                i18nGet('tags'),
-                <TagsIcon width={25} height={25} />,
-                NavigatorEntities.TAG_EDITOR,
-              )}
+                {this.renderItem(
+                  i18nGet('tags'),
+                  <TagsIcon width={25} height={25} />,
+                  NavigatorEntities.TAG_EDITOR,
+                )}
 
-              {this.renderItem(
-                i18nGet('statistics'),
-                <StatisticsPieIcon width={25} height={25} />,
-                NavigatorEntities.STATISTICS,
-              )}
+                {this.renderItem(
+                  i18nGet('statistics'),
+                  <StatisticsPieIcon width={25} height={25} />,
+                  NavigatorEntities.STATISTICS,
+                )}
 
-              {this.renderItem(
-                i18nGet('profile'),
-                <ProfileIcon width={25} height={25} />,
-                NavigatorEntities.PROFILE,
-              )}
+                {this.renderItem(
+                  i18nGet('profile'),
+                  <ProfileIcon width={25} height={25} />,
+                  NavigatorEntities.PROFILE,
+                )}
+              </View>
+            </View>
+            <View style={styles.bottomView}>
+              <Text style={styles.bottomParagraph}>
+                {i18nGet('write_to_developer')}
+              </Text>
+              <Text style={styles.bottomText} selectable>
+                Telegram: @sohimazdai
+              </Text>
+              <Text style={styles.bottomText} selectable>
+                Email: go@doq.su
+              </Text>
             </View>
           </View>
         </SuperPopup>
@@ -118,9 +132,20 @@ export class SideMenu extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   view: {
-    height: Dimensions.get('window').height,
     width: 250,
+    height: Dimensions.get('window').height,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     backgroundColor: COLOR.PRIMARY_WHITE,
+  },
+  topView: {
+    flex: 1,
+  },
+  bottomView: {
+    backgroundColor: COLOR.PRIMARY_BASE,
+    ...SHADOW_OPTIONS,
+    shadowColor: COLOR.PRIMARY,
+    padding: 16,
   },
   title: {
     padding: 16,
@@ -145,5 +170,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginLeft: 8,
     color: COLOR.PRIMARY
+  },
+  bottomParagraph: {
+    fontSize: 16,
+  },
+  bottomText: {
+    fontSize: 14,
+    marginTop: 8,
+    color: COLOR.BLUE
   },
 })

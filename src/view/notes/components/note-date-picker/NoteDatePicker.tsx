@@ -1,106 +1,76 @@
 import React from 'react';
-import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
-import { Action, Dispatch } from 'redux';
-import { createModalChangeAction } from '../../../../store/modules/modal/ModalActionCreator';
-import { ModalType, IModalPickerType } from '../../../../model/IModal';
-import { COLOR } from '../../../../constant/Color';
 import { CalendarIcon } from '../../../../component/icon/CalendarIcon';
+import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
+import DateTimePicker, { Event, AndroidEvent } from '@react-native-community/datetimepicker';
+import { Platform, View } from 'react-native';
 
-export interface NoteDatePickerProps {
+export interface Props {
     date: Date
-    onChange: (value) => void
+    onChange: (value: Date) => void
+    label?: string
 }
 
-export interface DispatchToProps {
-    dispatch: Dispatch<Action>
+interface State {
+    isOpen: boolean
 }
 
-export interface FullProps extends DispatchToProps, NoteDatePickerProps { }
+export class NoteDatePicker extends React.PureComponent<Props, State> {
+    state = { isOpen: false };
 
-export class NoteDatePicker extends React.PureComponent<FullProps> {
-    render() {
-        const { date } = this.props;
-        const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
-        const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
-        const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
-        return (
-            <View style={styles.view}>
-                <TouchableOpacity
-                    style={styles.touchable}
-                    onPress={() => Platform.OS === 'android' ?
-                        this.displayAndroidDatePicker() :
-                        this.displayIOsDatePicker()
-                    }
-                >
-                    <CalendarIcon />
-                    <Text style={styles.inputText}>
-                        {displayDate + '.' + displayMonth + '.' + displayYear}
-                    </Text>
-                </TouchableOpacity>
-            </View >
-        )
+    get isIOS() { return Platform.OS === 'ios' }
+
+    componentDidMount() {
+        this.setState({ isOpen: false })
     }
-    private displayAndroidDatePicker = async () => {
-        try {
-            const { action, year, month, day } = await (DatePickerAndroid as any).open(this.props.date);
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.props.onChange(new Date(year, month, day))
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date android picker', message);
+
+    componentWillUnmout() {
+        this.setState({ isOpen: false })
+    }
+
+    handleOK = (event: Event, date?: Date) => {
+        this.handleClose();
+
+        const { onChange } = this.props;
+
+        if (event.type !== 'dismissed') {
+            onChange(date);
         }
     }
 
-    private displayIOsDatePicker = () => {
-        this.props.dispatch(createModalChangeAction({
-            type: ModalType.IOS_DATE_PICKER,
-            needToShow: true,
-            data: {
-                date: this.props.date,
-                pickerType: IModalPickerType.DATE,
-                positiveButtonText: 'Обновить дату',
-                onPositiveClick: this.props.onChange,
-            }
-        }))
+    handleClose = () => this.setState({ isOpen: false })
+
+    render() {
+        const { isOpen } = this.state;
+        const { date, label } = this.props;
+
+        const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
+        const displayMonth = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1));
+        const displayYear = date.getFullYear().toString()[2] + date.getFullYear().toString()[3];
+
+        const displayedDate = label ? label : `${displayDate}.${displayMonth}.${displayYear}`
+        return (
+            <View>
+                {!this.isIOS && <StyledButton
+                    style={StyledButtonType.OUTLINE}
+                    label={displayedDate}
+                    onPress={() => { this.setState({ isOpen: true }) }}
+                    icon={<CalendarIcon />}
+                    iconPosition={IconPositionType.LEFT}
+                    small
+                />}
+                {(!!isOpen || !!this.isIOS) && (
+                    <DateTimePicker
+                        style={{ minWidth: 120 }}
+                        value={date}
+                        mode="date"
+                        onTouchCancel={this.handleClose}
+                        onChange={this.handleOK}
+                        maximumDate={new Date()}
+                        display={Platform.OS === 'ios' ? "compact" : 'default'}
+                        collapsable
+                    />
+                )}
+            </View>
+        )
     }
 }
-
-
-export const NoteDatePickerConnect = connect<{}, DispatchToProps>(
-    () => ({}),
-    (dispatch: Dispatch<Action>) => ({ dispatch })
-)(NoteDatePicker)
-
-const styles = StyleSheet.create({
-    view: {
-        height: 30,
-
-        borderWidth: 1,
-
-        borderRadius: 5,
-        backgroundColor: COLOR.WHITE,
-        borderColor: '#DDDDDD'
-    },
-    touchable: {
-        flex: 1,
-        minWidth: 100,
-        paddingLeft: 7,
-        paddingRight: 7,
-        paddingBottom: 3,
-        paddingTop: 3,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    inputText: {
-        minWidth: 20,
-
-        marginLeft: 7,
-
-        textAlign: 'center',
-        fontSize: 18,
-        color: COLOR.TEXT_DARK_GRAY,
-    }
-})

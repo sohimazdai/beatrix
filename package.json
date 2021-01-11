@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@react-native-community/checkbox": "^0.4.2",
+    "@react-native-community/datetimepicker": "3.0.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "5.9.6",
     "axios": "^0.19.2",

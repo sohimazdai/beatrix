@@ -1043,6 +1043,11 @@ const translateStore = {
   },
 
   // PROFILE
+  write_to_developer: {
+    'en': 'Write to developer',
+    'es': 'Escribir al desarrollador',
+    'ru': 'Написать разработчику',
+  },
   shedule_select_value: {
     'en': 'Pick the coefficient for the selected elements',
     'es': 'Seleccione el coeficiente para los elementos seleccionados',

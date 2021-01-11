@@ -1,112 +1,72 @@
 import React from 'react';
-import { Platform, View, DatePickerAndroid, TouchableOpacity, Text, StyleSheet, TimePickerAndroid } from 'react-native';
-import { connect } from 'react-redux';
-import { Action, Dispatch } from 'redux';
-import { createModalChangeAction } from '../../../../store/modules/modal/ModalActionCreator';
-import { ModalType, IModalPickerType } from '../../../../model/IModal';
-import { COLOR } from '../../../../constant/Color';
 import { ClocksIcon } from '../../../../component/icon/ClocksIcon';
+import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
+import { Platform } from 'react-native';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 
-export interface NoteTimePickerProps {
+export interface Props {
     date: Date
-    onChange: (value) => void
+    onChange: (value: Date) => void
 }
 
-export interface DispatchToProps {
-    dispatch: Dispatch<Action>
+interface State {
+    isOpen: boolean
 }
 
-export interface FullProps extends DispatchToProps, NoteTimePickerProps { }
+export class NoteTimePicker extends React.Component<Props, State> {
+    state = { isOpen: false };
 
-export class NoteTimePicker extends React.PureComponent<FullProps> {
+    get isIOS() { return Platform.OS === 'ios' }
+
+    componentDidMount() {
+        this.setState({ isOpen: false })
+    }
+
+    componentWillUnmout() {
+        this.setState({ isOpen: false })
+    }
+
+    handleOK = async (event: Event, date?: Date) => {
+        this.handleClose();
+
+        const { onChange } = this.props;
+        if (event.type !== 'dismissed') {
+            onChange(date);
+        }
+
+    }
+
+    handleClose = () => this.setState({ isOpen: false })
+
     render() {
+        const { isOpen } = this.state;
         const { date } = this.props;
+
         const displayHours = date.getHours() > 9 ? date.getHours() : ('0' + date.getHours());
         const displayMinutes = date.getMinutes() > 9 ? date.getMinutes() : ('0' + date.getMinutes());
 
         return (
-            <View style={styles.view}>
-                <TouchableOpacity
-                    style={styles.touchable}
-                    onPress={() => Platform.OS === 'android' ?
-                        this.displayAndroidTimePicker() :
-                        this.displayIOsTimePicker()
-                    }
-                >
-                    <ClocksIcon />
-                    <Text style={styles.inputText}>
-                        {displayHours + ':' + displayMinutes}
-                    </Text>
-                </TouchableOpacity>
-            </View >
+            <>
+                {!this.isIOS && <StyledButton
+                    style={StyledButtonType.OUTLINE}
+                    label={`${displayHours}:${displayMinutes}`}
+                    onPress={() => { this.setState({ isOpen: true }) }}
+                    icon={<ClocksIcon />}
+                    iconPosition={IconPositionType.LEFT}
+                    small
+                />}
+                {(!!isOpen || !!this.isIOS) && (
+                    <DateTimePicker
+                        value={date}
+                        mode="time"
+                        style={this.isIOS ? { minWidth: 120, justifyContent: 'center' } : {}}
+                        onTouchCancel={() => { this.setState({ isOpen: false }) }}
+                        onChange={this.handleOK}
+                        display={Platform.OS === 'ios' ? "compact" : 'default'}
+                        collapsable
+                    />
+                )}
+            </>
         )
     }
-    private displayAndroidTimePicker = async () => {
-        try {
-            const { date } = this.props;
-            const { action, hour, minute } = await (TimePickerAndroid as any).open({
-                hour: this.props.date.getHours(),
-                minute: this.props.date.getMinutes(),
-                is24Hour: true,
-            });
-            if (action !== TimePickerAndroid.dismissedAction) {
-                this.props.onChange(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute))
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open time picker', message);
-        }
-    }
-
-    private displayIOsTimePicker = () => {
-        this.props.dispatch(createModalChangeAction({
-            type: ModalType.IOS_DATE_PICKER,
-            needToShow: true,
-            data: {
-                date: this.props.date,
-                pickerType: IModalPickerType.TIME,
-                positiveButtonText: 'Обновить время',
-                onPositiveClick: this.props.onChange,
-            }
-        }))
-    }
 }
-
-
-export const NoteTimePickerConnect = connect<{}, DispatchToProps>(
-    () => ({}),
-    (dispatch: Dispatch<Action>) => ({ dispatch })
-)(NoteTimePicker)
-
-const styles = StyleSheet.create({
-    view: {
-        width: 100,
-        height: 31,
-
-        borderWidth: 1,
-
-        borderRadius: 5,
-        backgroundColor: COLOR.WHITE,
-        borderColor: '#DDDDDD'
-    },
-    touchable: {
-        flex: 1,
-
-        paddingLeft: 7,
-        paddingRight: 7,
-        paddingBottom: 3,
-        paddingTop: 3,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    inputText: {
-        flex: 1,
-
-        marginLeft: 7,
-
-        textAlign: 'center',
-        fontSize: 18,
-        color: COLOR.TEXT_DARK_GRAY,
-    }
-})
