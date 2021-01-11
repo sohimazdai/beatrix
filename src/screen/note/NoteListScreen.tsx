@@ -113,11 +113,9 @@ class NoteListScreen extends React.PureComponent<FullProps> {
             title={i18nGet('notes')}
             rightSideSlot={this.renderFilterIcon()}
           />
-          <View style={styles.contentWrap}>
-            <View style={styles.content}>
-              <HorizontalIconBar isBig />
-              {this.renderCards()}
-            </View>
+          <View style={styles.content}>
+            <HorizontalIconBar isBig />
+            {this.renderCards()}
           </View>
           <View style={styles.addNoteButtonView}>
             <NoteCreationButton onClick={this.goToNoteEditor} />
@@ -319,9 +317,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     flexDirection: 'column',
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-    backgroundColor: COLOR.PRIMARY_WHITE,
+    backgroundColor: COLOR.PRIMARY_BASE,
   },
   cardsScrollView: {
     height: '100%',
