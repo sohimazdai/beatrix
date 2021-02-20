@@ -7,7 +7,7 @@ import { StyledButton, StyledButtonType } from '../../../../component/button/Sty
 import { COLOR } from '../../../../constant/Color';
 import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
-import { IFoodList, IFoodListItem, IFoodNutrients } from '../../../../model/IFood';
+import { IFoodListItem, IFoodNutrients } from '../../../../model/IFood';
 import { IStorage } from '../../../../model/IStorage';
 import { CarbsMeasuringType, IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
 import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
@@ -43,7 +43,15 @@ interface Props {
   quickRemove?: () => void
 };
 
-class FoodCalculator extends React.Component<Props> {
+interface State {
+  selectedKey: FoodCalculatorKey,
+  keyValue: string,
+  isErrored: boolean,
+  trailingDot: boolean,
+  isValueEmpty: boolean,
+}
+
+class FoodCalculator extends React.Component<Props, State> {
   state = {
     selectedKey: FoodCalculatorKey.WEIGHT,
     keyValue: (
@@ -137,7 +145,7 @@ class FoodCalculator extends React.Component<Props> {
       this.setState({
         keyValue: text.slice(0, -1),
         isValueEmpty: false,
-      })
+      });
 
       return;
     }
@@ -147,7 +155,7 @@ class FoodCalculator extends React.Component<Props> {
         keyValue: text,
         trailingDot: true,
         isValueEmpty: false,
-      })
+      });
 
       return;
     }
@@ -157,7 +165,7 @@ class FoodCalculator extends React.Component<Props> {
         keyValue: text.slice(1),
         trailingDot: false,
         isValueEmpty: false,
-      })
+      });
 
       return;
     }
@@ -166,7 +174,7 @@ class FoodCalculator extends React.Component<Props> {
       keyValue: text,
       trailingDot: false,
       isValueEmpty: false,
-    })
+    });
   }
 
   onTextInputFocus = (selectedKey: FoodCalculatorKey) => {
@@ -177,7 +185,7 @@ class FoodCalculator extends React.Component<Props> {
         : this.currentRelation * this.sourceFood.nutrients[selectedKey];
 
     this.setState({
-      keyValue: numberizeAndFix(newKeyValue),
+      keyValue: String(numberizeAndFix(newKeyValue)),
       selectedKey,
       trailingDot: false,
       isValueEmpty: false,
@@ -330,7 +338,7 @@ class FoodCalculator extends React.Component<Props> {
               fluid
             />
           </View>
-        </View >
+        </View>
       );
     }
 

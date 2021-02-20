@@ -1,8 +1,9 @@
 import React from 'react';
 import { CalendarIcon } from '../../../../component/icon/CalendarIcon';
 import { IconPositionType, StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
-import DateTimePicker, { Event, AndroidEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { Platform, View } from 'react-native';
+import { isIOS } from '../../../../app/Platorm';
 
 export interface Props {
     date: Date
@@ -17,7 +18,7 @@ interface State {
 export class NoteDatePicker extends React.PureComponent<Props, State> {
     state = { isOpen: false };
 
-    get isIOS() { return Platform.OS === 'ios' }
+    get isIOS() { return isIOS() }
 
     componentDidMount() {
         this.setState({ isOpen: false })

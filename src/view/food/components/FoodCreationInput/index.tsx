@@ -1,5 +1,12 @@
 import React from 'react';
-import { KeyboardTypeOptions, Text, View, StyleSheet, NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+import {
+  KeyboardTypeOptions,
+  Text,
+  View,
+  StyleSheet,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+} from 'react-native';
 import { BaseTextInput } from '../../../../component/input/BaseTextInput';
 import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
@@ -70,7 +77,7 @@ export class FoodCreationInput extends React.Component<Props, State> {
       : styles.inputLabel;
 
     const wrapStyles = withoutMarginTop
-      ? { ...styles.wrap, ...{ marginTop: 0 } }
+      ? { ...styles.wrap, marginTop: 0 }
       : styles.wrap;
 
     const stringedValue = String(value);
@@ -109,7 +116,6 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1,
     marginTop: 16,
-    height: 74,
   },
   inputLabel: {
     fontSize: 15,

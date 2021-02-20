@@ -24,7 +24,7 @@ export class SingleSelect extends React.Component<Props> {
           const isSelected = button.value === selectedValue;
 
           return (
-            <View style={styles.wrap}>
+            <View style={styles.wrap} key={button.title + button.value}>
               <StyledButton
                 style={isSelected ? StyledButtonType.PRIMARY : StyledButtonType.OUTLINE}
                 label={i18nGet(button.title)}

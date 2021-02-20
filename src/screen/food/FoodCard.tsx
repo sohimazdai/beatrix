@@ -42,183 +42,215 @@ interface Props extends OwnProps {
   unsetfoodId: () => void
 }
 
-function FoodCardComponent(props: Props) {
-  const {
-    addToHistory,
-    addProductToFavoriteInDb,
-    addFoodItemToFavorites,
-    removeProductFromFavoriteInDb,
-    removeFoodItemFromFavorites,
-    navigation,
-    favoritesList,
-    foodItem,
-    foodId
-  } = props;
+interface State {
+  popupOpen: boolean
+}
 
-  const [popupOpen, setPopupOpen] = React.useState(true);
-  const isForNote = navigation.getParam('isForNote');
+class FoodCardComponent extends React.Component<Props, State> {
+  state = {
+    popupOpen: false,
+  }
 
-  useEffect(() => {
+  componentDidMount() {
+    const { navigation, foodItem, addToHistory } = this.props;
+
     if (!navigation.state.params.isEditing) {
       addToHistory(foodItem);
     }
 
     appAnalytics.sendEventWithProps(
       appAnalytics.events.FOOD_CARD_SEEN,
-      { dbId: foodItem.dbId, isForNote }
-    )
-  }, []);
+      { dbId: foodItem.dbId, isForNote: this.isForNote }
+    );
 
-  const onBack = () => {
-    const backPage = navigation.getParam('backPage');
-    if (backPage) {
-      navigation.navigate(backPage);
+    this.setState({ popupOpen: true });
+  }
 
-      return;
-    }
+  get isForNote() {
+    const { navigation } = this.props;
+    return navigation.getParam('isForNote');
+  }
 
-    const selectedFoodPage = navigation.getParam('selectedFoodPage') || null;
-    navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
-  };
+  get foodId() {
+    const {
+      foodItem,
+      foodId
+    } = this.props;
 
-  const getFoodId = () => {
     return foodId || foodItem.id;
   }
 
-  const isFavorite = favoritesList && !!favoritesList[getFoodId()];
+  get isFavorite() {
+    const { favoritesList } = this.props;
+    return favoritesList && !!favoritesList[this.foodId];
+  }
 
-  const handler = isFavorite
-    ? () => {
+  setPopupOpen = (open: boolean) => this.setState({ popupOpen: open });
+
+  handleFavorite = () => {
+    const {
+      foodItem,
+      removeFoodItemFromFavorites,
+      removeProductFromFavoriteInDb,
+      addFoodItemToFavorites,
+      addProductToFavoriteInDb,
+    } = this.props;
+
+    if (this.isFavorite) {
       removeFoodItemFromFavorites(foodItem);
-      removeProductFromFavoriteInDb(getFoodId());
-    } : () => {
+      removeProductFromFavoriteInDb(this.foodId);
+    } else {
       addFoodItemToFavorites(foodItem);
-      addProductToFavoriteInDb(getFoodId());
+      addProductToFavoriteInDb(this.foodId);
+    }
+  }
+
+  render() {
+    const {
+      navigation,
+      favoritesList,
+      foodItem,
+      foodId
+    } = this.props;
+
+    const { popupOpen } = this.state;
+
+    const onBack = () => {
+      const backPage = navigation.getParam('backPage');
+      if (backPage) {
+        navigation.navigate(backPage);
+
+        return;
+      }
+
+      const selectedFoodPage = navigation.getParam('selectedFoodPage') || null;
+      navigation.navigate(NavigatorEntities.FOOD_PAGE, { selectedFoodPage });
     };
 
-  const isEditing: boolean = navigation.getParam('isEditing');
-  const popupBodyStyles = isEditing
-    ? { ...styles.popup, ...styles.editingBg }
-    : styles.popup;
-  const popupStickerStyles = isEditing
-    ? { ...styles.openPopupSticker, ...styles.editingBg }
-    : styles.openPopupSticker;
+    const isEditing: boolean = navigation.getParam('isEditing');
+    const popupBodyStyles = isEditing
+      ? { ...styles.popup, ...styles.editingBg }
+      : styles.popup;
+    const popupStickerStyles = isEditing
+      ? { ...styles.openPopupSticker, ...styles.editingBg }
+      : styles.openPopupSticker;
 
-  return (
-    <View style={styles.wrap}>
-      <BlockHat
-        title={i18nGet('food_card')}
-        onBackPress={onBack}
-        rightSideSlot={<StyledButton
-          style={StyledButtonType.EMPTY}
-          onPress={handler}
-          iconPosition={IconPositionType.LEFT}
-          icon={<FavoritesIcon
-            height={25}
-            width={25}
-            fill={isFavorite ? COLOR.RED : null}
+    return (
+      <View style={styles.wrap}>
+        <BlockHat
+          title={i18nGet('food_card')}
+          onBackPress={onBack}
+          rightSideSlot={<StyledButton
+            style={StyledButtonType.EMPTY}
+            onPress={this.handleFavorite}
+            iconPosition={IconPositionType.LEFT}
+            icon={<FavoritesIcon
+              height={25}
+              width={25}
+              fill={this.isFavorite ? COLOR.RED : null}
+            />}
+            withoutPadding
           />}
-          withoutPadding
-        />}
-      />
-      <View style={styles.view}>
-        {!!foodItem.image && (
-          <View style={styles.imageWrap}>
-            <Image
-              style={styles.image}
-              source={{ uri: foodItem.image }}
+        />
+        <View style={styles.view}>
+          {!!foodItem.image && (
+            <View style={styles.imageWrap}>
+              <Image
+                style={styles.image}
+                source={{ uri: foodItem.image }}
+              />
+            </View>
+          )}
+          <Text style={styles.title}>
+            {foodItem.name}
+          </Text>
+          {!!foodItem.brandName && (
+            <Text style={styles.brandName}>
+              {`${i18nGet('food_brand_name')}: ${foodItem.brandName}`}
+            </Text>
+          )}
+          <Text style={styles.nutrientsTitle}>
+            {i18nGet('for_100g_of_product')}
+          </Text>
+          <View style={styles.nutritionTable}>
+            <View style={styles.nutrientsKeyColumn}>
+              <Text style={styles.nutrientItemTitle}>
+                {i18nGet('food_proteins')}
+              </Text>
+              <Text style={styles.nutrientItemTitle}>
+                {i18nGet('food_fat')}
+              </Text>
+              <Text style={styles.nutrientItemTitle}>
+                {i18nGet('food_carbohydrates')}
+              </Text>
+              <Text style={styles.nutrientItemTitle}>
+                {i18nGet('food_energy')}
+              </Text>
+              <Text style={styles.nutrientItemTitle}>
+                {i18nGet('food_calories')}
+              </Text>
+            </View>
+            <View style={styles.nutrientsValueColumn}>
+              <Text style={styles.nutrientItemValue}>
+                {foodItem.nutrients.proteins || 0}
+              </Text>
+              <Text style={styles.nutrientItemValue}>
+                {foodItem.nutrients.fats || 0}
+              </Text>
+              <Text style={styles.nutrientItemValue}>
+                {foodItem.nutrients.carbohydrates || 0}
+              </Text>
+              <Text style={styles.nutrientItemValue}>
+                {foodItem.nutrients.energy || 0}
+                {` ${i18nGet('kJ')}`}
+              </Text>
+              <Text style={styles.nutrientItemValue}>
+                {foodItem.nutrients.calories || 0}
+                {` ${i18nGet('kcal')}`}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.source}>
+            <Text style={styles.sourceKey}>
+              {`${i18nGet('food_source')}: `}
+            </Text>
+            <Text style={styles.sourceValue}>
+              {getDbName(foodItem.dbId)}
+            </Text>
+          </View>
+        </View>
+        {this.isForNote && !popupOpen && (
+          <View style={popupStickerStyles}>
+            <StyledButton
+              icon={<ArrowTaillessIcon width={20} height={20} fill={COLOR.PRIMARY} direction={ArrowDirection.UP} />}
+              onPress={() => this.setPopupOpen(true)}
+              style={StyledButtonType.EMPTY}
+              iconPosition={IconPositionType.LEFT}
             />
           </View>
         )}
-        <Text style={styles.title}>
-          {foodItem.name}
-        </Text>
-        {!!foodItem.brandName && (
-          <Text style={styles.brandName}>
-            {`${i18nGet('food_brand_name')}: ${foodItem.brandName}`}
-          </Text>
-        )}
-        <Text style={styles.nutrientsTitle}>
-          {i18nGet('for_100g_of_product')}
-        </Text>
-        <View style={styles.nutritionTable}>
-          <View style={styles.nutrientsKeyColumn}>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_proteins')}
-            </Text>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_fat')}
-            </Text>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_carbohydrates')}
-            </Text>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_energy')}
-            </Text>
-            <Text style={styles.nutrientItemTitle}>
-              {i18nGet('food_calories')}
-            </Text>
+        <SuperPopup direction={PopupDirection.BOTTOM_TOP} hidden={!this.isForNote || !popupOpen}>
+          <View style={popupBodyStyles}>
+            <PopupHeader
+              title={i18nGet('indicate_portion')}
+              rightSlot={
+                <StyledButton
+                  icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} fill={COLOR.PRIMARY} />}
+                  style={StyledButtonType.EMPTY}
+                  onPress={() => this.setPopupOpen(false)}
+                />
+              }
+            />
+            <FoodCalculatorConnected
+              type={FoodCalculatorType.FOOD_ADDING}
+              food={foodItem}
+              navigation={navigation}
+            />
           </View>
-          <View style={styles.nutrientsValueColumn}>
-            <Text style={styles.nutrientItemValue}>
-              {foodItem.nutrients.proteins || 0}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {foodItem.nutrients.fats || 0}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {foodItem.nutrients.carbohydrates || 0}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {foodItem.nutrients.energy || 0}
-              {` ${i18nGet('kJ')}`}
-            </Text>
-            <Text style={styles.nutrientItemValue}>
-              {foodItem.nutrients.calories || 0}
-              {` ${i18nGet('kcal')}`}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.source}>
-          <Text style={styles.sourceKey}>
-            {`${i18nGet('food_source')}: `}
-          </Text>
-          <Text style={styles.sourceValue}>
-            {getDbName(foodItem.dbId)}
-          </Text>
-        </View>
+        </SuperPopup>
       </View>
-      {isForNote && !popupOpen && (
-        <View style={popupStickerStyles}>
-          <StyledButton
-            icon={<ArrowTaillessIcon width={20} height={20} fill={COLOR.PRIMARY} direction={ArrowDirection.UP} />}
-            onPress={() => setPopupOpen(true)}
-            style={StyledButtonType.EMPTY}
-            iconPosition={IconPositionType.LEFT}
-          />
-        </View>
-      )}
-      <SuperPopup direction={PopupDirection.BOTTOM_TOP} hidden={!isForNote || !popupOpen}>
-        <View style={popupBodyStyles}>
-          <PopupHeader
-            title={i18nGet('indicate_portion')}
-            rightSlot={
-              <StyledButton
-                icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} fill={COLOR.PRIMARY} />}
-                style={StyledButtonType.EMPTY}
-                onPress={() => setPopupOpen(false)}
-              />
-            }
-          />
-          <FoodCalculatorConnected
-            type={FoodCalculatorType.FOOD_ADDING}
-            food={foodItem}
-            navigation={navigation}
-          />
-        </View>
-      </SuperPopup>
-    </View>
-  );
+    );
+  }
 }
 
 function getDbName(dbId: number | string) {

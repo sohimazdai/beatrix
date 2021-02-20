@@ -12,7 +12,7 @@ import { NoteValueType } from '../../model/INoteList';
 import { StatisticsPeriod } from '../../model/IStatistics';
 import { PieChartConnected } from '../../view/dashboard/statistics-card/components/PieChart';
 import { StatisticsViewType } from '../../view/dashboard/statistics-card/entities';
-import { DatePickerConnect } from '../../view/shared/components/DatePicker/DatePicker';
+import { DatePicker } from '../../view/shared/components/DatePicker/DatePicker';
 import { StatisticsBlockConnect } from '../../view/statistics/components/StatisticsBlock';
 
 const BUTTONS = [
@@ -115,7 +115,7 @@ export class StatisticsScreen extends React.Component<Props, State> {
                 icon={<ArrowTaillessIcon direction={ArrowDirection.LEFT} width={15} />}
                 onPress={() => this.setState({ selectedDate: this.getNextDateValue(DIRECTION.LEFT) })}
               />
-              <DatePickerConnect
+              <DatePicker
                 selectedPeriod={selectedPeriod}
                 date={selectedDate}
                 onChange={(date) => this.setState({ selectedDate: date })}
