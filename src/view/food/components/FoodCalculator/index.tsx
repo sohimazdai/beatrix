@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { KeyboardTypeOptions, StyleSheet, View } from 'react-native';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { connect } from 'react-redux';
 import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
@@ -264,6 +264,8 @@ class FoodCalculator extends React.Component<Props, State> {
 
     const breadUntis = numberizeAndFix(this.currentRelation * this.originalXeIn100Gramm);
 
+    const keyboardType: KeyboardTypeOptions = "decimal-pad";
+
     if (type === FoodCalculatorType.QUICK_FOOD) {
       return (
         <View style={this.wrapStyles}>
@@ -280,7 +282,7 @@ class FoodCalculator extends React.Component<Props, State> {
               }
               autoFocus={!this.XE}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.WEIGHT)}
-              type="decimal-pad"
+              type={keyboardType}
               withoutMarginTop
             />
             <View style={styles.space} />
@@ -298,7 +300,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   }
                   autoFocus
                   onFocus={() => this.onTextInputFocus(FoodCalculatorKey.BREAD_UNITS)}
-                  type="decimal-pad"
+                  type={keyboardType}
                   disabled={!this.sourceFood.nutrients.carbohydrates}
                   withoutMarginTop
                 />
@@ -313,7 +315,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   ? ""
                   : carbohydrates + postfix(FoodCalculatorKey.CARBOHYDRATES)
               }
-              type="decimal-pad"
+              type={keyboardType}
               isFormWithError={isErrored}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CARBOHYDRATES)}
               disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.CARBOHYDRATES])}
@@ -358,7 +360,7 @@ class FoodCalculator extends React.Component<Props, State> {
               }
               autoFocus={!this.XE}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.WEIGHT)}
-              type="decimal-pad"
+              type={keyboardType}
             />
             {this.XE && (
               <>
@@ -375,7 +377,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   }
                   autoFocus
                   onFocus={() => this.onTextInputFocus(FoodCalculatorKey.BREAD_UNITS)}
-                  type="decimal-pad"
+                  type={keyboardType}
                   disabled={!this.sourceFood.nutrients.carbohydrates}
                 />
               </>
@@ -390,7 +392,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   ? ""
                   : calories + postfix(FoodCalculatorKey.CALORIES)
               }
-              type="decimal-pad"
+              type={keyboardType}
               isFormWithError={isErrored}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CALORIES)}
               isRequired
@@ -406,7 +408,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   ? ""
                   : energy + postfix(FoodCalculatorKey.ENERGY)
               }
-              type="decimal-pad"
+              type={keyboardType}
               isFormWithError={isErrored}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.ENERGY)}
               isRequired
@@ -423,7 +425,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   ? ""
                   : proteins + postfix(FoodCalculatorKey.PROTEINS)
               }
-              type="decimal-pad"
+              type={keyboardType}
               isFormWithError={isErrored}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.PROTEINS)}
               isRequired
@@ -439,7 +441,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   ? ""
                   : fats + postfix(FoodCalculatorKey.FATS)
               }
-              type="decimal-pad"
+              type={keyboardType}
               isFormWithError={isErrored}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.FATS)}
               isRequired
@@ -455,7 +457,7 @@ class FoodCalculator extends React.Component<Props, State> {
                   ? ""
                   : carbohydrates + postfix(FoodCalculatorKey.CARBOHYDRATES)
               }
-              type="decimal-pad"
+              type={keyboardType}
               isFormWithError={isErrored}
               onFocus={() => this.onTextInputFocus(FoodCalculatorKey.CARBOHYDRATES)}
               disabled={!numberizeAndFix(this.sourceFood.nutrients[FoodCalculatorKey.CARBOHYDRATES])}

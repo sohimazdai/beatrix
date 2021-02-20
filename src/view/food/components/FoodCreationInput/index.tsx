@@ -106,6 +106,8 @@ export class FoodCreationInput extends React.Component<Props, State> {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           disabled={disabled}
+          blurOnSubmit
+          returnKeyType="done"
         />
       </View>
     );
