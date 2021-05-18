@@ -3,11 +3,13 @@ import { createUserChangeAction } from "../../modules/user/UserActionCreator";
 import { IStorage } from "../../../model/IStorage";
 import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
-import { getLocale, getRegion, i18nGet } from '../../../localisation/Translate';
+import { getLocale, getRegion } from '../../../localisation/Translate';
 import { FoodApi } from '../../../api/FoodApi';
 import { FoodSection, createReplaceFood, createSetFoodLoadingAndError } from '../../modules/food/food';
 import { getRegionGroup } from '../../../localisation/Residents';
 import { appAnalytics } from '../../../app/Analytics';
+import searchOpenFoodFacts from '../../../api/SearchOFF';
+import { IFoodList } from '../../../model/IFood';
 
 const ACTION_TYPE = "SEARCH_PRODUCTS";
 
@@ -25,7 +27,7 @@ export function createSearchProductsAction(searchString: string) {
       type: ACTION_TYPE,
       payload: searchString,
     },
-  ])
+  ]);
 }
 
 interface SearchProductsAction {
@@ -37,15 +39,19 @@ function* run({ payload: searchString }: SearchProductsAction) {
   try {
     const state: IStorage = yield select(state => state);
     const regionGroup = getRegionGroup(getLocale(), getRegion());
+
     if (state.app.serverAvailable) {
+      const oFFData: IFoodList = yield call(searchOpenFoodFacts, searchString);
       const { data, error } = yield call(FoodApi.searchProducts, searchString, regionGroup);
 
       if (error) throw new Error(error.message);
 
-      yield put(createReplaceFood(FoodSection.SEARCH, data));
+      yield put(createReplaceFood(FoodSection.SEARCH, { ...data, ...oFFData }));
       appAnalytics.sendEvent(appAnalytics.events.FOOD_SEARCH);
     } else {
-      alert(i18nGet('server_is_not_available_try_to_restart_app'));
+      const oFFData: IFoodList = yield call(searchOpenFoodFacts, searchString);
+      yield put(createReplaceFood(FoodSection.SEARCH, oFFData));
+      appAnalytics.sendEvent(appAnalytics.events.FOOD_SEARCH_WITHOUT_SERVER);
     }
 
     yield put(

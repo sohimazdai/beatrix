@@ -149,6 +149,7 @@ export const appAnalytics = {
     FOOD_FAVORITES_FETCHED: 'Food favorites fetched',
     FOOD_GOT_BY_ID: 'Food got by id',
     FOOD_SEARCH: 'Food searched',
+    FOOD_SEARCH_WITHOUT_SERVER: 'Food searched without server',
     FOOD_CARD_SEEN: 'Food card screen seen',
     FOOD_CREATION_SEEN: 'Food creation screen seen',
     FOOD_SCREEN_SEEN: 'Food screen seen',
@@ -172,4 +173,4 @@ export enum AnalyticsSections {
   PROFILE = 'profile',
   NOTES = 'notes',
   CHARTS = 'charts',
-} 
+}

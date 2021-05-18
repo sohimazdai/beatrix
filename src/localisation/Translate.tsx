@@ -39,9 +39,14 @@ export function setOriginalLocale(locale) {
 }
 
 export function setRegion(regionCode) {
+  let code = 'RU';
+
+  if (/es/i.test(regionCode)) code = 'ES';
+  else if (/en|us/i.test(regionCode)) code = 'EN';
+
   logger(`CountryCode is ${regionCode}`);
 
-  _localisationParameters.region = regionCode;
+  _localisationParameters.region = code;
 }
 
 export function getRegion() { return _localisationParameters.region };

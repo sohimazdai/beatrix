@@ -33,7 +33,7 @@ import { StatisticsScreen } from '../screen/statistics';
 
 setLocale(Localization.locale.slice(0, 2));
 setOriginalLocale(Localization.locale.slice(0, 2));
-setRegion(Localization.locale.slice(3, 5));
+setRegion(Localization.locale);
 
 translate();
 

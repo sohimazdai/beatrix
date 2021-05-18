@@ -1,14 +1,14 @@
+import uuid from 'uuid';
 import { convertCaloriesToEnergy, convertEnergyToCalories } from '../../calculation-services/food-calculation-services/calories-energy-converter';
 import { FoodDatabase, IFoodList } from '../../model/IFood';
 import { numberizeAndFix } from '../helper/numberize-and-fix';
-import { v1 as uuidv1 } from 'uuid';
 
-export function oFFMapper(products: any[]): IFoodList {
-  // console.debug(products);
+const MAX_RESPONSE_ARRAY_LENGTH = 20;
 
-  const searchFood: IFoodList = {};
+export default function oFFMapper(products): IFoodList {
+  const searchFood = {};
 
-  products.forEach((product) => {
+  products.slice(0, MAX_RESPONSE_ARRAY_LENGTH).forEach((product) => {
     const nutrients = product.nutriments || product.nutrients || {};
     const id = product.id;
     const name = product['product_name'] || product['generic_name'];
@@ -32,7 +32,7 @@ export function oFFMapper(products: any[]): IFoodList {
 
     if (!id || !name) return;
 
-    const idForDb = uuidv1();
+    const idForDb = uuid.v1();
 
     searchFood[idForDb] = {
       id: idForDb,
@@ -58,4 +58,3 @@ export function oFFMapper(products: any[]): IFoodList {
 
   return searchFood;
 }
-

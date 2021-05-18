@@ -14,15 +14,11 @@ import { IFood, IFoodList, IFoodListItem } from '../../../../model/IFood';
 import { Loader } from '../../../../component/loader/Loader';
 import { sortSearchResult } from '../../../../store/service-helper/sort-search-result';
 import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
-import { CrossIcon } from '../../../../component/icon/CrossIcon';
-import { IApp } from '../../../../model/IApp';
-import { NetworkIssue } from '../../../shared/components/NetworkIssue';
 
 interface Props {
-  app: IApp
   searchFood: IFoodList
   loading: boolean
-  food: IFood,
+  food: IFood
   onType: (text: string) => void
   goToFoodCard: (foodId: string) => void
   goToFoodCardCreation: () => void
@@ -30,7 +26,7 @@ interface Props {
 };
 
 function SearchContent(props: Props) {
-  const { onType, goToFoodCard, food, clearSearch, goToFoodCardCreation, app } = props;
+  const { onType, goToFoodCard, food, clearSearch, goToFoodCardCreation } = props;
   const [typed, setTyped] = React.useState('');
 
   const sortFunction = (foods: IFoodListItem[]) => sortSearchResult(typed, foods);
@@ -56,7 +52,6 @@ function SearchContent(props: Props) {
           value={typed}
           defaultValue={''}
           clearButtonMode={"while-editing"}
-          disabled={!app.serverAvailable}
           clearable={!!typed}
           onClear={() => setTyped('')}
         />
@@ -89,7 +84,6 @@ function SearchContent(props: Props) {
             )
           : <Text style={styles.text}>{i18nGet('food_search_tips_1')}</Text>
       }
-      <NetworkIssue />
     </View>
   );
 }
@@ -99,7 +93,6 @@ export const SearchContentConnected = connect(
     searchFood: state.food.search,
     loading: state.user.loading,
     food: state.food,
-    app: state.app,
   }),
   (dispatch) => ({
     onType: (text: string) => dispatch(createSearchProductsAction(text)),
