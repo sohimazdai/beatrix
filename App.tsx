@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import { AppNavigator } from './src/navigator/Navigator';
 import { Provider } from 'react-redux';
 import { appStore, persistor } from './src/store/appStore';
