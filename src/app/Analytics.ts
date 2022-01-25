@@ -22,15 +22,15 @@ export const appAnalytics = {
   init: (): Promise<void> => {
     logger('::amplitude initializing');
 
-    return Amplitude.initialize(Variables.amplitudeApiKey)
+    return Amplitude.initializeAsync(Variables.amplitudeApiKey)
       .then(() => logger('::amplitude inited'))
       .catch((e) => logger('::amplitude initializing error: ', e.message))
   },
   setUser: (userId: string) => {
     logger('::amplitude user is setting now', { userId });
 
-    Amplitude.setUserId(userId)
-      .then(() => Amplitude.setUserProperties({
+    Amplitude.setUserIdAsync(userId)
+      .then(() => Amplitude.setUserPropertiesAsync({
         'OS': Platform.OS,
         'DeviceYearClass': Constants.deviceYearClass,
       }))
@@ -40,7 +40,7 @@ export const appAnalytics = {
   sendEvent: (eventName: string) => {
     logger('::amplitude trying to send event: ', eventName);
 
-    Amplitude.logEventWithProperties(eventName, { section })
+    Amplitude.logEventWithPropertiesAsync(eventName, { section })
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
@@ -48,7 +48,7 @@ export const appAnalytics = {
     logger('::amplitude trying to send event: ', eventName);
     logger('::amplitude event properties: ', JSON.stringify(properties));
 
-    Amplitude.logEventWithProperties(eventName, {
+    Amplitude.logEventWithPropertiesAsync(eventName, {
       ...properties,
       ...{ section },
     })
@@ -59,7 +59,7 @@ export const appAnalytics = {
   setUserProperties: (properties: IAmplitudeUserProperties) => {
     logger('::amplitude user properties is setting now');
 
-    Amplitude.setUserProperties(properties)
+    Amplitude.setUserPropertiesAsync(properties)
       .then(() => logger('::amplitude user properties setted'))
       .catch((e) => logger('::amplitude user properties error: ', e.message))
   },
