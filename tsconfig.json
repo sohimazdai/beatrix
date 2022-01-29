@@ -8,5 +8,5 @@
     "declaration": false,
     "allowSyntheticDefaultImports": true
   },
-  "extends": "expo/tsconfig.base"
+  "extends": "./node_modules/expo/tsconfig.base"
 }
