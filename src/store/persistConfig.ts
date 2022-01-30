@@ -1,7 +1,8 @@
 import { PersistConfig, createTransform } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IStorage } from '../model/IStorage';
 
-export const persistConfig: PersistConfig = {
+export const persistConfig: PersistConfig<IStorage> = {
     key: 'root',
     blacklist: [
         'modal',
