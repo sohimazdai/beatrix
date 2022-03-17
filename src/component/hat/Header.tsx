@@ -1,9 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native'
-import { connect } from 'react-redux';
 import { COLOR } from '../../constant/Color';
-import { IStorage } from '../../model/IStorage';
-import { IconPositionType, StyledButton, StyledButtonType } from '../button/StyledButton';
+import { StyledButton, StyledButtonType } from '../button/StyledButton';
 import { Loader } from '../loader/Loader';
 
 interface Props {

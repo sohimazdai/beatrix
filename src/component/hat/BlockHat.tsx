@@ -5,7 +5,7 @@ import { Loader } from '../loader/Loader'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { BackArrowIcon } from '../icon/BackArrowIcon'
 import { COLOR } from '../../constant/Color'
-import { IconPositionType, StyledButton, StyledButtonType } from '../button/StyledButton'
+import { StyledButton, StyledButtonType } from '../button/StyledButton'
 
 interface Props {
     title?: string
@@ -34,16 +34,16 @@ export function BlockHat(props: Props) {
                         onPress={leftIconPress}
                     />
                 )}
-                {onBackPress && <View
-                    style={styles.backArrow}
-                >
-                    <TouchableOpacity
-                        style={styles.backArrowTouchable}
-                        onPress={onBackPress}
-                    >
-                        <BackArrowIcon />
-                    </TouchableOpacity>
-                </View>}
+                {onBackPress && (
+                    <View style={styles.backArrow}>
+                        <TouchableOpacity
+                            style={styles.backArrowTouchable}
+                            onPress={onBackPress}
+                        >
+                            <BackArrowIcon />
+                        </TouchableOpacity>
+                    </View>
+                )}
                 <Text style={styles.title}>
                     {title}
                 </Text>

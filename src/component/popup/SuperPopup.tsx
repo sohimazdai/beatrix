@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Animated, Dimensions, View } from 'react-native'
-import { Directions } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { COLOR } from '../../constant/Color';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
 
 export enum PopupDirection {
@@ -15,26 +16,29 @@ export interface SuperPopupProps {
     children: any
     onPopupClosed?: Function
     direction?: PopupDirection
+    fadeShown?: boolean;
+    handleClose?: () => void,
 }
 
 export const SuperPopup = (props: SuperPopupProps) => {
-    const { onPopupClosed, hidden } = props;
+    const { onPopupClosed, hidden, fadeShown, handleClose } = props;
 
     const startValue =
         props.direction && props.direction === PopupDirection.LEFT_TO_RIGHT
             ? -Dimensions.get('screen').width
             : -Dimensions.get('screen').height;
 
-    const [current] = React.useState(new Animated.Value(startValue))
+    const [currentTop] = React.useState(new Animated.Value(startValue));
+    const currentOpacity = React.useRef(new Animated.Value(0)).current;
     const [children, setChildren] = React.useState(null)
     const [direction, setDirection] = React.useState(props.direction);
 
     React.useEffect(() => {
         Animated.timing(
-            current,
+            currentTop,
             {
                 toValue: hidden ? -Dimensions.get('screen').height : 0,
-                duration: 300,
+                duration: 200,
                 useNativeDriver: false,
             }
         ).start((SuperPopupProps) => {
@@ -47,19 +51,30 @@ export const SuperPopup = (props: SuperPopupProps) => {
         !hidden && setDirection(props.direction || PopupDirection.BOTTOM_TOP);
     }, [hidden, props.children, props.direction])
 
+    React.useEffect(() => {
+        Animated.timing(
+            currentOpacity,
+            {
+                toValue: hidden ? 0 : 1,
+                duration: 400,
+                useNativeDriver: false,
+            }
+        ).start();
+    }, [hidden]);
+
     const style = direction && direction === PopupDirection.TOP_BOTTOM
         ? {
             ...styles.SuperPopupView,
             width: '100%',
-            top: current,
+            top: currentTop,
         } : direction === PopupDirection.LEFT_TO_RIGHT
             ? {
                 ...styles.SuperPopupView,
-                left: current,
+                left: currentTop,
             } : {
                 ...styles.SuperPopupView,
                 width: '100%',
-                bottom: current,
+                bottom: currentTop,
             };
 
     const viewStyle = direction && direction === PopupDirection.TOP_BOTTOM
@@ -68,8 +83,16 @@ export const SuperPopup = (props: SuperPopupProps) => {
             ? styles.LeftPopup
             : styles.BottomPopup;
 
+    const fadeStyle = { ...styles.fade, opacity: currentOpacity as any };
+
     return (
         <Animated.View style={style}>
+            {fadeShown && (
+                <TouchableWithoutFeedback
+                    style={fadeStyle}
+                    onPress={handleClose}
+                />
+            )}
             <View style={viewStyle}>
                 {children}
             </View>
@@ -82,6 +105,13 @@ const styles = StyleSheet.create({
         display: "flex",
         position: 'absolute',
         opacity: 1,
+    },
+    fade: {
+        position: 'relative',
+        bottom: -25,
+        height: Dimensions.get('screen').height * 2,
+        width: Dimensions.get('screen').width,
+        backgroundColor: COLOR.HALF_TRANSPARENT_DARK,
     },
     TopPopup: {
         overflow: 'hidden',

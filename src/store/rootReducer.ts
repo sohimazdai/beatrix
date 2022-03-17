@@ -13,6 +13,7 @@ import { IStorage } from '../model/IStorage';
 import { pendingReducer } from './modules/pending/pending';
 import { foodReducer } from './modules/food/food';
 import { sheduleReducer } from './modules/shedule/shedule';
+import { popupListReducer } from './modules/popup-list/popup-list';
 
 export const rootReducer: Reducer<IStorage> = combineReducers({
     app: appReducer,
@@ -28,4 +29,5 @@ export const rootReducer: Reducer<IStorage> = combineReducers({
     pending: pendingReducer,
     food: foodReducer,
     shedule: sheduleReducer,
+    popupList: popupListReducer,
 });

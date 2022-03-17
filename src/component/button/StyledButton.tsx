@@ -19,7 +19,6 @@ export enum IconPositionType {
 
 interface Props {
   fluid?: boolean
-  onPress: () => void;
   label?: string;
   style: StyledButtonType;
   icon?: JSX.Element;
@@ -28,6 +27,7 @@ interface Props {
   disabled?: boolean
   withoutPadding?: boolean
   small?: boolean
+  onPress: () => void;
 };
 
 export class StyledButton extends React.Component<Props> {

@@ -9,7 +9,7 @@ import { InsulinTextRotated } from '../../../component/icon/InsulinTextRotated';
 import { BreadUnitsTextRotated } from '../../../component/icon/BreadUnitsTextRotated';
 import { GlucoseTextRotated } from '../../../component/icon/GlucoseTextRotated';
 import { INoteList, INoteListByDay } from '../../../model/INoteList';
-import { ChartDot } from '../chart-svg/ChartDot';
+import { ChartDot } from '../chart-dot/ChartDot';
 import { COLOR } from '../../../constant/Color';
 import { calculateDayChartDots, calculateMonthChartDots, calculateThreeMonthChartDots } from '../../../calculation-services/chart-calculation-services/ChartCalculationService';
 import { initialPadding } from '../../../calculation-services/chart-calculation-services/ChartCalculationHelper';
@@ -23,7 +23,7 @@ export interface ChartWrapProps {
     config: IChartConfiguration
     type: ChartValueType
     selectedPeriod: ChartPeriodType
-    selectedDotId?: number
+    selectedDotId: number
     currentDate?: Date
     noteList?: INoteList
     noteListByDay?: INoteListByDay
@@ -39,9 +39,7 @@ export function Comp(props: ChartWrapProps) {
         selectedPeriod,
         currentDate,
         noteList,
-        selectedDotId,
         config,
-        noteListByDay
     } = props;
 
     let basicDotsData: ChartDotsData = React.useMemo(
@@ -71,21 +69,22 @@ export function Comp(props: ChartWrapProps) {
                     case ChartValueType.GLUCOSE:
                         return basicDotsData;
                     case ChartValueType.INSULIN:
-                        return calculateDayChartDots(props)
+                        return calculateDayChartDots(props);
                     case ChartValueType.BREAD_UNITS:
-                        return calculateDayChartDots(props)
+                        return calculateDayChartDots(props);
                 }
             case ChartPeriodType.MONTH:
-                return basicDotsData
+                return basicDotsData;
             case ChartPeriodType.THREE_MONTH:
-                return basicDotsData
+                return basicDotsData;
         }
     }
 
     const highlights: IChartDot[] = [
         ...basicDotsData.events,
         ...basicDotsData.dots
-    ]
+    ];
+
     return (
         <View style={styles.chartWrap}>
             <ChartBox config={config}>
@@ -120,32 +119,18 @@ export function Comp(props: ChartWrapProps) {
                 <ChartAxisPair config={config} />
                 {clickableDotsAvailable() && basicDotsData.dots.map(item => {
                     return <ChartDot
-                        key={item.id}
-                        id={item.id}
-                        r={config.dotRadius}
-                        x={item.x}
-                        y={item.y}
-                        noteId={item.id}
-                        fill={config.dotFillColor ? config.dotFillColor : COLOR.RED}
-                        dotStrokeColor={config.dotStrokeColor}
-                        stroke={config.dotStrokeColorActive}
-                        selectedDotId={selectedDotId}
+                        config={config}
+                        dotData={item}
+                        key={`${item.noteId}-dots`}
                         type={props.type}
-                        isAlone={config.isAlone}
                     />
                 })}
                 {!config.isAlone && clickableDotsAvailable() && basicDotsData.events.map(item => {
                     return <ChartDot
-                        key={item.id}
-                        id={item.id}
-                        r={config.dotRadius}
-                        x={item.x}
-                        y={item.y}
-                        noteId={item.id}
-                        fill={config.dotFillColor ? config.dotFillColor : COLOR.WHITE}
-                        stroke={COLOR.INDIAN_RED}
-                        selectedDotId={selectedDotId}
-                        isAlone={config.isAlone}
+                        config={config}
+                        dotData={item}
+                        key={`${item.noteId}-events`}
+                        type={props.type}
                     />
                 })}
             </ChartBox>

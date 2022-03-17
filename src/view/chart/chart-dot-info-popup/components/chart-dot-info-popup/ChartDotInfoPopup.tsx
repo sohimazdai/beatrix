@@ -47,7 +47,8 @@ export class ChartDotInfoPopup extends React.Component<Props> {
         const { closePopup } = this.props;
 
         BackHandler.addEventListener('hardwareBackPress', function close() {
-            closePopup();
+            closePopup()
+            return true;
         });
     }
 
@@ -61,6 +62,7 @@ export class ChartDotInfoPopup extends React.Component<Props> {
         const { closePopup } = this.props;
         BackHandler.removeEventListener('hardwareBackPress', function close() {
             closePopup();
+            return true;
         });
     }
 

@@ -1,7 +1,7 @@
 import * as Amplitude from 'expo-analytics-amplitude';
 import { Platform } from 'react-native';
+import Device from 'expo-device';
 
-import Constants from 'expo-constants';
 import { IUserPropertiesShedule } from '../model/IUserPropertiesShedule';
 import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
 
@@ -32,7 +32,7 @@ export const appAnalytics = {
     Amplitude.setUserIdAsync(userId)
       .then(() => Amplitude.setUserPropertiesAsync({
         'OS': Platform.OS,
-        'DeviceYearClass': Constants.deviceYearClass,
+        'DeviceYearClass': Device.deviceYearClass,
       }))
       .then(() => logger('::amplitude user setted'))
       .catch((e) => logger('::amplitude user error: ', e.message))

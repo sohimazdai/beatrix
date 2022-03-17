@@ -119,7 +119,6 @@ function getCards(type: ChartPeriodType): ModalContentInfoCardProps[] {
 
 const styles = StyleSheet.create({
   view: {
-    marginTop: 20,
     width: '100%',
 
     borderTopLeftRadius: 25,

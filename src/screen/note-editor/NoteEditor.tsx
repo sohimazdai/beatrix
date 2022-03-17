@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+  Platform,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -15,8 +16,8 @@ import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-n
 import { NumberScroller } from '../../view/notes/components/number-scroller/NumberScroller';
 import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/components/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 import { ValueTypePicker } from '../../view/note-editor/components/value-type-picker/ValueTypePicker';
-import { NoteTimePicker } from '../../view/notes/components/note-date-picker/NoteTimePicker';
-import { NoteDatePicker } from '../../view/notes/components/note-date-picker/NoteDatePicker';
+import { NoteTimePickerConnect } from '../../view/notes/components/note-date-picker/NoteTimePicker';
+import { NoteDatePickerConnect } from '../../view/notes/components/note-date-picker/NoteDatePicker';
 import { ArrowTaillessIcon, ArrowDirection } from '../../component/icon/ArrowTaillessIcon';
 
 import { IInteractive } from '../../model/IInteractive';
@@ -252,10 +253,10 @@ class NoteEditor extends React.PureComponent<Props, State>{
           {this.props.note && this.renderDeleteButton()}
           {this.renderSaveButton()}
         </View>
-        { this.renderInputPopup()}
-        { this.renderCommentInputPopup()}
-        { this.renderTagsPopup()}
-        { this.renderQuickCalculatorPopup()}
+        {this.renderInputPopup()}
+        {this.renderCommentInputPopup()}
+        {this.renderTagsPopup()}
+        {this.renderQuickCalculatorPopup()}
       </View>
     )
   }
@@ -397,11 +398,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
     return (
       <View style={styles.inputBlock}>
         <View style={styles.timePickers}>
-          <NoteDatePicker
+          <NoteDatePickerConnect
             date={this.state.date}
             onChange={this.onDateChange}
           />
-          <NoteTimePicker
+          <NoteTimePickerConnect
             date={this.state.date}
             onChange={this.onTimeChange}
           />
@@ -883,7 +884,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   timePickers: {
-    height: 50,
     width: 240,
     marginTop: 20,
 

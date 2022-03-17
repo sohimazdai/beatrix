@@ -43,9 +43,11 @@ export function calculateDayChartDots(props: ChartWrapProps): ChartDotsData {
     const currentGroundDots = getGroundDots(props, currentDayNotes)
     let dots = getDotsAndEvents(currentGroundDots);
     let groundAdaptedData = adaptDayDots(props, dots.dots, dots.events, currentDate);
+
     if (type === ChartValueType.GLUCOSE) {
         return groundAdaptedData;
     }
+
     const previousGroundDots = getGroundDots(props, previousDayNotes);
     const train: IChartTrain = {};
     previousGroundDots.map(dot => {

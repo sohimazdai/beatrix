@@ -8,6 +8,7 @@ export const persistConfig: PersistConfig<IStorage> = {
         'modal',
         'interactive',
         'noteFilter',
+        'popupList',
         //________o b l i v i o n________l i n e________//
         // 'noteList',
         // 'pendingNoteList',

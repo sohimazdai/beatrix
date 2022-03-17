@@ -1,3 +1,4 @@
+import { ChartPeriodType } from './IChart';
 import { SheduleKeyType } from "./IUserPropertiesShedule";
 
 export enum ThemeType {
@@ -10,7 +11,7 @@ export interface IInteractive {
     editingNoteId?: string // TODO: and it
 
     selectedDotId?: number
-    selectedChartPeriod?: string
+    selectedChartPeriod?: ChartPeriodType
 
     confirmPopupShown?: boolean
     confirmPopupSuccessCallback?: Function

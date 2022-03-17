@@ -30,6 +30,7 @@ import { FoodCard } from '../screen/food/FoodCard';
 import { NavigatorEntities } from './modules/NavigatorEntities';
 import { FoodCreationScreenConnected } from '../screen/food/FoodCreationScreen';
 import { StatisticsScreen } from '../screen/statistics';
+import { PopupListConnected } from '../component/PopupList/PopupList';
 
 setLocale(Localization.locale.slice(0, 2));
 setOriginalLocale(Localization.locale.slice(0, 2));
@@ -77,6 +78,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
                 <Fader hidden={!faded} type={faderType} />
                 <ConfirmPopupConnect />
                 <ModalContentConnect />
+                <PopupListConnected />
             </>
         )
 }

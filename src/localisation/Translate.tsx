@@ -928,6 +928,16 @@ const translateStore = {
     'es': 'Seleccionar fecha/hora',
     'ru': 'Выберите дату/время',
   },
+  chart_select_time_only: {
+    'en': 'Select time',
+    'es': 'Seleccionar hora',
+    'ru': 'Выберите время',
+  },
+  chart_select_date_only: {
+    'en': 'Select date',
+    'es': 'Seleccionar fecha',
+    'ru': 'Выберите дату',
+  },
   charts: {
     en: 'Charts',
     es: 'Gráficos',
