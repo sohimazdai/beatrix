@@ -3,7 +3,7 @@ import { ChartPeriodType } from '../../../../model/IChart';
 import { appAnalytics } from '../../../../app/Analytics';
 import { getDateInputText } from '../../../../utils/get-date-input-text';
 import { StatisticsPeriod } from '../../../../model/IStatistics';
-import { NoteDatePickerConnect } from '../../../notes/components/note-date-picker/NoteDatePicker';
+import { NoteDatePicker } from '../../../notes/components/note-date-picker/NoteDatePicker';
 
 interface Props {
     date: Date
@@ -25,7 +25,7 @@ export class DatePicker extends React.PureComponent<Props> {
         const { selectedPeriod, date } = this.props;
 
         return (
-            <NoteDatePickerConnect
+            <NoteDatePicker
                 date={date}
                 label={String(getDateInputText(selectedPeriod, date))}
                 onChange={this.handleOK}

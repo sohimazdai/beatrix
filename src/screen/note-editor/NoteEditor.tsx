@@ -16,8 +16,8 @@ import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-n
 import { NumberScroller } from '../../view/notes/components/number-scroller/NumberScroller';
 import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/components/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 import { ValueTypePicker } from '../../view/note-editor/components/value-type-picker/ValueTypePicker';
-import { NoteTimePickerConnect } from '../../view/notes/components/note-date-picker/NoteTimePicker';
-import { NoteDatePickerConnect } from '../../view/notes/components/note-date-picker/NoteDatePicker';
+import { NoteTimePicker } from '../../view/notes/components/note-date-picker/NoteTimePicker';
+import { NoteDatePicker } from '../../view/notes/components/note-date-picker/NoteDatePicker';
 import { ArrowTaillessIcon, ArrowDirection } from '../../component/icon/ArrowTaillessIcon';
 
 import { IInteractive } from '../../model/IInteractive';
@@ -398,11 +398,11 @@ class NoteEditor extends React.PureComponent<Props, State>{
     return (
       <View style={styles.inputBlock}>
         <View style={styles.timePickers}>
-          <NoteDatePickerConnect
+          <NoteDatePicker
             date={this.state.date}
             onChange={this.onDateChange}
           />
-          <NoteTimePickerConnect
+          <NoteTimePicker
             date={this.state.date}
             onChange={this.onTimeChange}
           />

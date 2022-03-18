@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { StyleSheet, Animated, Dimensions, View } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { COLOR } from '../../constant/Color';
 import { SHADOW_OPTIONS } from '../../constant/ShadowOptions';
+import { createHidePopupToPopupList } from '../../store/modules/popup-list/popup-list';
 
 export enum PopupDirection {
     TOP_BOTTOM = 'top-bottom',
@@ -11,17 +14,30 @@ export enum PopupDirection {
     LEFT_TO_RIGHT = 'left-to-right',
 }
 
+const mapDispatch = (dispatch: Dispatch) => ({
+    closePopup: (popupId: string) => dispatch(createHidePopupToPopupList(popupId)),
+});
+
 export interface SuperPopupProps {
+    popupId?: string;
     hidden?: boolean;
     children: any
     onPopupClosed?: Function
     direction?: PopupDirection
     fadeShown?: boolean;
     handleClose?: () => void,
+    closePopup?: (popupId: string) => void,
 }
 
 export const SuperPopup = (props: SuperPopupProps) => {
-    const { onPopupClosed, hidden, fadeShown, handleClose } = props;
+    const {
+        popupId,
+        onPopupClosed,
+        hidden,
+        fadeShown,
+        handleClose,
+        closePopup,
+    } = props;
 
     const startValue =
         props.direction && props.direction === PopupDirection.LEFT_TO_RIGHT
@@ -62,6 +78,11 @@ export const SuperPopup = (props: SuperPopupProps) => {
         ).start();
     }, [hidden]);
 
+    const handleClosePopup = useCallback(() => {
+        handleClose && handleClose();
+        closePopup && closePopup(popupId);
+    }, [handleClose]);
+
     const style = direction && direction === PopupDirection.TOP_BOTTOM
         ? {
             ...styles.SuperPopupView,
@@ -90,7 +111,7 @@ export const SuperPopup = (props: SuperPopupProps) => {
             {fadeShown && (
                 <TouchableWithoutFeedback
                     style={fadeStyle}
-                    onPress={handleClose}
+                    onPress={handleClosePopup}
                 />
             )}
             <View style={viewStyle}>
@@ -99,6 +120,8 @@ export const SuperPopup = (props: SuperPopupProps) => {
         </Animated.View>
     )
 }
+
+export default connect(null, mapDispatch)(SuperPopup);
 
 const styles = StyleSheet.create({
     SuperPopupView: {

@@ -15,6 +15,7 @@ import { i18nGet } from '../../localisation/Translate'
 import { BlockHat } from '../../component/hat/BlockHat'
 import { COLOR } from '../../constant/Color'
 import { createSyncUserAction } from '../../store/service/user/SyncUserSaga'
+import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities'
 
 interface Props {
     user?: IUser;
@@ -27,6 +28,22 @@ class ProfileScreenComponent extends React.Component<Props> {
     componentDidMount() {
         appAnalytics.setSection(AnalyticsSections.PROFILE);
         appAnalytics.sendEvent(appAnalytics.events.PROFILE_SEEN);
+    }
+
+    onBackArrowPress = () => {
+        this.props.navigation.navigate(NavigatorEntities.DASHBOARD);
+    }
+
+    onLanguageSettingsPress = () => {
+        this.props.navigation.navigate(NavigatorEntities.LANGUAGE_SETTINGS);
+    };
+
+    onProfileSettingsPress = () => {
+        this.props.navigation.navigate('ProfileDiabetesSettings');
+    }
+
+    onExportDataPress = () => {
+        this.props.navigation.navigate('ExportDataSettings');
     }
 
     render() {
@@ -42,6 +59,19 @@ class ProfileScreenComponent extends React.Component<Props> {
                     <ProfileItem
                         title={'email'}
                         description={user.email}
+                    />
+                    <ProfileItem
+                        title={i18nGet('language_profile')}
+                        activeElement={(
+                            <TouchableOpacity
+                                style={styles.touchable}
+                                onPress={this.onLanguageSettingsPress}
+                            >
+                                <Text style={styles.activeElementToSettings}>
+                                    {i18nGet('language_change')}
+                                </Text>
+                            </TouchableOpacity>
+                        )}
                     />
                     <ProfileItem
                         title={i18nGet('diabetic_profile')}
@@ -101,14 +131,6 @@ class ProfileScreenComponent extends React.Component<Props> {
                 </ScrollView>
             </View>
         )
-    }
-
-    onProfileSettingsPress = () => {
-        this.props.navigation.navigate('ProfileDiabetesSettings')
-    }
-
-    onExportDataPress = () => {
-        this.props.navigation.navigate('ExportDataSettings')
     }
 }
 

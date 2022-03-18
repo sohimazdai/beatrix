@@ -8,21 +8,15 @@ import { connect } from 'react-redux';
 import { PopupIntegratorConnected } from '../../../../component/PopupList/PopupIntegrator';
 import uuid from 'uuid';
 import { PopupHeader } from '../../../../component/popup/PopupHeader';
-import { createHidePopupToPopupList } from '../../../../store/modules/popup-list/popup-list';
 import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
 import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { i18nGet } from '../../../../localisation/Translate';
 
-const mapDispatch = (dispatch) => ({
-    hidePopup: (id: string) => dispatch(createHidePopupToPopupList(id))
-});
-
 interface Props {
     date: Date;
     label?: string;
     onChange: (value: Date) => void;
-    hidePopup: (id: string) => void;
 }
 
 interface State {
@@ -30,7 +24,7 @@ interface State {
     popupId: string
 }
 
-class NoteDatePicker extends React.PureComponent<Props, State> {
+export class NoteDatePicker extends React.PureComponent<Props, State> {
     state = {
         isOpen: false,
         popupId: uuid.v1(),
@@ -56,7 +50,6 @@ class NoteDatePicker extends React.PureComponent<Props, State> {
 
     handleClose = () => {
         this.setState({ isOpen: false });
-        this.props.hidePopup(this.state.popupId);
     }
 
     render() {
@@ -123,8 +116,6 @@ class NoteDatePicker extends React.PureComponent<Props, State> {
         );
     }
 }
-
-export const NoteDatePickerConnect = connect(null, mapDispatch)(NoteDatePicker);
 
 const styles = StyleSheet.create({
     popupContent: {

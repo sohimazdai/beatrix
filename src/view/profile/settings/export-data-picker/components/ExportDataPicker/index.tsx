@@ -6,7 +6,7 @@ import { IUserDiabetesProperties } from '../../../../../../model/IUserDiabetesPr
 import { ProfilePicker } from '../../../../ProfilePicker';
 import { IStorage } from '../../../../../../model/IStorage';
 import { createExportDataAction } from '../../../../../../store/service/export/ExportDataSaga';
-import { NoteDatePickerConnect } from '../../../../../notes/components/note-date-picker/NoteDatePicker';
+import { NoteDatePicker } from '../../../../../notes/components/note-date-picker/NoteDatePicker';
 import { selectFirstNoteDate } from '../../selectors/selectFirstNoteDate';
 import { COLOR } from '../../../../../../constant/Color';
 import { appAnalytics } from '../../../../../../app/Analytics';
@@ -60,7 +60,7 @@ class ExportData extends React.Component<Props, State> {
               <Text style={styles.optionsCellText}>
                 {i18nGet('export_data_date_from')}
               </Text>
-              <NoteDatePickerConnect
+              <NoteDatePicker
                 date={from}
                 onChange={(value) => {
                   this.setState({ from: value })
@@ -71,7 +71,7 @@ class ExportData extends React.Component<Props, State> {
               <Text style={styles.optionsCellText}>
                 {i18nGet('export_data_date_to')}
               </Text>
-              <NoteDatePickerConnect
+              <NoteDatePicker
                 date={to}
                 onChange={(value) => {
                   this.setState({ to: value })

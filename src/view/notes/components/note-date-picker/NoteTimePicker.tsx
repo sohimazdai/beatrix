@@ -14,14 +14,9 @@ import { COLOR } from '../../../../constant/Color';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import { i18nGet } from '../../../../localisation/Translate';
 
-const mapDispatch = (dispatch) => ({
-    hidePopup: (id: string) => dispatch(createHidePopupToPopupList(id))
-});
-
 export interface Props {
     date: Date;
     onChange: (value: Date) => void;
-    hidePopup: (popupId: string) => void;
 }
 
 interface State {
@@ -55,10 +50,6 @@ export class NoteTimePicker extends React.Component<Props, State> {
 
     handleClose = () => {
         this.setState({ isOpen: false });
-
-        if (isIOS()) {
-            this.props.hidePopup(this.state.popupId);
-        }
     }
 
     render() {
@@ -118,8 +109,6 @@ export class NoteTimePicker extends React.Component<Props, State> {
         )
     }
 }
-
-export const NoteTimePickerConnect = connect(null, mapDispatch)(NoteTimePicker);
 
 const styles = StyleSheet.create({
     popupContent: {

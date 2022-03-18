@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { SuperPopup } from '../popup/SuperPopup';
+import SuperPopup from '../popup/SuperPopup';
 
 import { IPopupList } from '../../model/IPopupList';
 import { IStorage } from '../../model/IStorage';
@@ -27,6 +27,7 @@ function PopupList(props: Props): JSX.Element {
     <>
       {popupList.map((popup, index) => (
         <SuperPopup
+          popupId={popup.id}
           key={popup.id}
           hidden={!popup.isOpen}
           handleClose={popup.handleClose}

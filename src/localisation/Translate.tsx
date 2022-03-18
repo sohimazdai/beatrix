@@ -22,11 +22,11 @@ export function setLocale(countryCode) {
   logger(`LocaleCode is ${countryCode}`);
 
   switch (countryCode) {
-    case 'es': i18n.locale = 'es';
+    case 'es': i18n.locale = LocaleType.es;
       break;
-    case 'ru': i18n.locale = 'ru';
+    case 'ru': i18n.locale = LocaleType.ru;
       break;
-    default: i18n.locale = 'en';
+    default: i18n.locale = LocaleType.en;
   }
 
   _localisationParameters.locale = i18n.locale;
@@ -76,6 +76,10 @@ export default function translate() {
   });
 
   i18n.translations = translations;
+}
+
+export function translateByKeyAndLanguage(key: string, language: LocaleType) {
+  return translateStore[key][language];
 }
 
 const translateStore = {
@@ -1058,6 +1062,56 @@ const translateStore = {
   },
 
   // PROFILE
+  language_profile: {
+    'en': 'Language',
+    'es': 'Idioma',
+    'ru': 'Язык',
+  },
+  language_change: {
+    'en': 'Change',
+    'es': 'Cambiar',
+    'ru': 'Сменить',
+  },
+  language_change_language: {
+    'en': 'Change language',
+    'es': 'Cambiar idioma',
+    'ru': 'Сменить язык',
+  },
+  language_russian: {
+    'en': 'Russian',
+    'es': 'Ruso',
+    'ru': 'Русский',
+  },
+  language_spanish: {
+    'en': 'Spanish',
+    'es': 'Espanol',
+    'ru': 'Испанский',
+  },
+  language_english: {
+    'en': 'English',
+    'es': 'Ingles',
+    'ru': 'Английский',
+  },
+  language_pick_language: {
+    'en': 'Pick',
+    'es': 'Elige',
+    'ru': 'Выберите',
+  },
+  language_approve_changing: {
+    'en': 'Confirm action',
+    'es': 'Confirmar acción',
+    'ru': 'Подтвердите действие',
+  },
+  language_popup_restarting: {
+    'en': 'App will be restarted',
+    'es': 'La aplicación se reiniciará',
+    'ru': 'Приложение будет перезапущено',
+  },
+  language_restarting_causes_description: {
+    'en': 'After changing the language, the application will automatically restart',
+    'es': 'Después de cambiar el idioma, la aplicación se reiniciará automáticamente',
+    'ru': 'После смены языка приложение будет самостоятельно перезапустится',
+  },
   write_to_developer: {
     'en': 'Write to developer',
     'es': 'Escribir al desarrollador',

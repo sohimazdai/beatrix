@@ -14,7 +14,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-native-async-storage/async-storage": "^1.17.0",
     "@react-native-community/checkbox": "^0.4.2",
     "@react-native-community/datetimepicker": "4.0.0",
     "@react-native-community/masked-view": "0.1.10",
@@ -34,6 +34,7 @@
     "expo-localization": "~12.0.0",
     "expo-sharing": "~10.1.0",
     "expo-store-review": "~5.1.0",
+    "fiction-expo-restart": "^1.1.2",
     "i18n-js": "^3.7.0",
     "qs": "^6.10.1",
     "react": "17.0.1",

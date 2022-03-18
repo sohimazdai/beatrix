@@ -31,12 +31,20 @@ import { NavigatorEntities } from './modules/NavigatorEntities';
 import { FoodCreationScreenConnected } from '../screen/food/FoodCreationScreen';
 import { StatisticsScreen } from '../screen/statistics';
 import { PopupListConnected } from '../component/PopupList/PopupList';
+import { LanguageSettings } from '../screen/profile/profile-settings/sub-settings/LanguageSettings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-setLocale(Localization.locale.slice(0, 2));
-setOriginalLocale(Localization.locale.slice(0, 2));
-setRegion(Localization.locale);
+AsyncStorage.getItem('language').then((language) => {
+    if (language) {
+        setLocale(language);
+    } else {
+        setLocale(Localization.locale.slice(0, 2));
+    }
+    setOriginalLocale(Localization.locale.slice(0, 2));
+    setRegion(Localization.locale);
 
-translate();
+    translate();
+});
 
 interface AppNavigatorComponentProps {
     user?: IUser,
@@ -110,7 +118,10 @@ const ProfileScreenStack = createStackNavigator(
         },
         ExportDataSettings: {
             screen: ExportDataSettings,
-        }
+        },
+        [NavigatorEntities.LANGUAGE_SETTINGS]: {
+            screen: LanguageSettings,
+        },
     },
     {
         headerMode: 'none'

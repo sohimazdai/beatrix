@@ -99,6 +99,8 @@ export const appAnalytics = {
     EXPORT_SEEN: 'Export seen',
     EXPORT_PRESS: 'Export press',
     SHEDULE_CHANGE: 'Shedule changed',
+    LANGUAGE_SEEN: 'Language Settings seen',
+    LANGUAGE_CHANGE: 'Language Settings changed',
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',
