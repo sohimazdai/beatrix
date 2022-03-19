@@ -44,14 +44,13 @@ const styles = StyleSheet.create({
     borderColor: COLOR.TEXT_DARK_GRAY,
     backgroundColor: COLOR.PRIMARY_WHITE,
     padding: 8,
-    marginRight: 8,
   },
   checkboxActive: {
     backgroundColor: COLOR.GREEN,
     borderColor: COLOR.GREEN_DARK,
   },
   checkboxText: {
-    marginLeft: 4,
+    marginLeft: 12,
     fontSize: 16,
     flexGrow: 1,
   },

@@ -1309,7 +1309,7 @@ const translateStore = {
   shedule_value: {
     en: 'Value',
     es: 'Valor',
-    ru: 'Значение',
+    ru: 'Знач.',
   },
 
   shedule_change: {

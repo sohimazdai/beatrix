@@ -1,5 +1,5 @@
 import React, { Dispatch, RefObject } from 'react';
-import { View, StyleSheet, LayoutChangeEvent, LayoutRectangle } from 'react-native';
+import { View, StyleSheet, LayoutRectangle } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
@@ -44,7 +44,7 @@ class Comp extends React.Component<Props, State> {
   setSheduleIsEditing = () => {
     const { hours } = this.state;
 
-    if (!hours) {
+    if (!hours || hours.length === 0) {
       this.setState({
         hours: new Array(24).fill(0),
         isSheduleEditing: true,
@@ -80,7 +80,7 @@ class Comp extends React.Component<Props, State> {
       newSelectedHours.push(i);
     }
 
-    this.setState({ selectedHours: newSelectedHours })
+    this.setState({ selectedHours: newSelectedHours });
   }
 
   setSheduleIsNotEditing = () => { this.setState({ isSheduleEditing: false }) };
@@ -182,9 +182,11 @@ export const Shedule = connect(
 
 const styles = StyleSheet.create({
   container: {
-    width: 260,
+    width: '100%',
+    padding: 12,
     alignSelf: 'center',
     paddingVertical: 8,
+    alignItems: 'center',
   },
   emptyShedule: {
     width: '100%',

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   picker: {
     borderRadius: 10,
@@ -77,9 +77,17 @@ const styles = StyleSheet.create({
     width: 220,
   },
   text: {
-    fontSize: 19,
-    color: COLOR.BLUE,
+    minWidth: 60,
+    marginLeft: 24,
+    padding: 16,
+    borderWidth: 2,
+    borderRadius: 5,
+    fontSize: 22,
     fontWeight: '500',
+    textAlign:'center',
+    color: COLOR.BLUE,
+    borderColor: COLOR.PRIMARY,
+    backgroundColor: COLOR.WHITE,
   },
   buttonsRow: {
     flexDirection: 'row',

@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Checkbox } from '../../../../component/checkbox/Checkbox';
 import { COLOR } from '../../../../constant/Color';
 
@@ -15,35 +16,30 @@ export class SheduleSelectableItem extends React.Component<Props> {
     const { hourValue, hourIndex, isSelected, onCheck } = this.props;
 
     return (
-      <View style={styles.row}>
-        <View style={styles.timeValue}>
-          <Text style={styles.time}>{hourIndex < 10 ? '0' + hourIndex : hourIndex}:00</Text>
-          <Text style={styles.text}>{hourValue}</Text>
-        </View>
+      <TouchableOpacity style={styles.row} onPress={() => onCheck(hourIndex)}>
+        <Text style={styles.time}>{hourIndex < 10 ? '0' + hourIndex : hourIndex}:00</Text>
+        <Text style={styles.text}>{hourValue}</Text>
         <Checkbox onCheck={() => onCheck(hourIndex)} isChecked={isSelected} withoutMargin />
-      </View>
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
   row: {
+    width: 150,
     marginTop: 4,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 8,
     backgroundColor: COLOR.BLUE_BASE,
     alignItems: 'center',
+    justifyContent: 'space-between',
     borderRadius: 5,
   },
-  timeValue: {
-    flexDirection: 'row',
-  },
   time: {
-    width: 85,
-    fontSize: 17,
+    fontSize: 16,
   },
   text: {
-    fontSize: 17,
+    fontSize: 16,
   },
 })

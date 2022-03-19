@@ -1,14 +1,13 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { IUserDiabetesPropertiesDayTimeValue, IUserDiabetesProperties } from "../../../../model/IUserDiabetesProperties";
 import { connect } from "react-redux";
 import { IStorage } from "../../../../model/IStorage";
 import { IUserPropertiesShedule, SheduleKeyType } from "../../../../model/IUserPropertiesShedule";
 import { createChangeInteractive } from "../../../../store/modules/interactive/interactive";
 import { ProfilePicker } from "../../ProfilePicker";
-import { View, Text, TouchableOpacity, Button, Alert } from "react-native";
+import { View, Text, Button, Alert } from "react-native";
 import { styles } from './Style';
 import { createClearSheduleByKeyType } from '../../../../store/modules/user-properties-shedule/UserPropertiesShedule';
-import { ProfileUserPropertiesShedulePickerActiveConnect } from './shedule-picker-active/ProfileUserPropertiesShedulePickerActive';
 import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
 import { COLOR } from '../../../../constant/Color';
@@ -17,7 +16,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
     sheduleKey: SheduleKeyType
-    scrollViewRef: RefObject<ScrollView>
+    scrollViewRef: React.RefObject<ScrollView>
     userPropertiesShedule?: IUserPropertiesShedule
     userDiabetesProperties: IUserDiabetesProperties
     activeUserPropertiesShedulePopupType?: SheduleKeyType

@@ -4,7 +4,7 @@ import { IStorage } from "../../../model/IStorage";
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import { batchActions } from 'redux-batched-actions';
-import { getLocale, getOriginalLocale, i18nGet } from '../../../localisation/Translate';
+import { getOriginalLocale, i18nGet } from '../../../localisation/Translate';
 import { ExportApi } from '../../../api/ExportApi';
 import * as FileSystem from 'expo-file-system';
 import { IUserDiabetesProperties, CarbsMeasuringType } from '../../../model/IUserDiabetesProperties';

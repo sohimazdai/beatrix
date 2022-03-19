@@ -147,7 +147,7 @@ export class Component extends React.Component<Props, State> {
 
 
   render() {
-    const { onNumberClick, measuresOption } = this.props;
+    const { measuresOption } = this.props;
     const { withDecimal } = measuresOption;
 
     return (
@@ -167,7 +167,7 @@ export class Component extends React.Component<Props, State> {
               onClick={() => this.onNaturalNumberClick(item)}
             />
           )}
-          keyExtractor={item => item && item.toString() || (Math.random() * 1000000000).toString()}
+          keyExtractor={(item, index) => `${item}-${index}-natural`}
 
           getItemLayout={(data, index) => (
             { length: LENGTH, offset: LENGTH_WITH_SEPARATOR * index, index }
@@ -193,7 +193,7 @@ export class Component extends React.Component<Props, State> {
                 onClick={() => this.onDecimalNumberClick(item)}
               />
             )}
-            keyExtractor={item => item && item.toString() || (Math.random() * 1000000000).toString()}
+            keyExtractor={(item, index) => `${item}-${index}-decimal`}
 
             getItemLayout={(data, index) => (
               { length: DECIMAL_LENGTH, offset: DECIMAL_LENGTH_WITH_SEPARATOR * index, index }

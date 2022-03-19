@@ -15,6 +15,7 @@ export class SheduleHeader extends React.Component {
 
 const styles = StyleSheet.create({
   titleRow: {
+    width: 250,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

@@ -47,7 +47,7 @@ export class ProfilePicker extends React.Component<Props> {
 const styles = StyleSheet.create({
     profilePickerView: {
         display: 'flex',
-
+        alignItems: 'center',
         marginBottom: 20,
         marginTop: 10,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',

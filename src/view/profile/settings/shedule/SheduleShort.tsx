@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { COLOR } from '../../../../constant/Color';
 import { SheduleHeader } from './SheduleHeader';
+import uuid from 'uuid';
 
 type Range = {
   from: number,
@@ -14,6 +14,8 @@ interface Props {
 };
 
 export class SheduleShort extends React.Component<Props> {
+  get id() { return uuid.v1() }
+
   render() {
     const { hours } = this.props;
 
@@ -25,7 +27,7 @@ export class SheduleShort extends React.Component<Props> {
           {ranges.map((range: Range) => {
             if (range.value) {
               return (
-                <View style={styles.sheduleRow}>
+                <View key={`${range.value}${this.id}`} style={styles.sheduleRow}>
                   <Text style={styles.text}>{`${range.from < 10 ? '0' + range.from : range.from
                     }:00 - ${range.to}:00`}</Text>
                   <Text style={styles.text}>{range.value}</Text>
@@ -56,6 +58,7 @@ function getRanges(hours: number[]): Range[] {
 
 const styles = StyleSheet.create({
   shedule: {
+    width: 250,
     marginTop: 8,
   },
   sheduleRow: {
