@@ -13,6 +13,8 @@ interface Props {
 export default function FoodItem(props: Props) {
   const { item, goToFoodCard } = props;
 
+  if (!item.id && !item.dbId) return null;
+
   return (
     <View style={styles.foodItem}>
       <TouchableOpacity style={styles.touchable} onPress={() => goToFoodCard(item.id)}>

@@ -54,7 +54,7 @@ class FoodCardComponent extends React.Component<Props, State> {
   componentDidMount() {
     const { navigation, foodItem, addToHistory } = this.props;
 
-    if (!navigation.state.params.isEditing) {
+    if (!navigation.state.params.isEditing && foodItem.id && foodItem.dbId) {
       addToHistory(foodItem);
     }
 

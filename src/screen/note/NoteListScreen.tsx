@@ -9,8 +9,9 @@ import {
 import { StyleSheet } from "react-native";
 
 import { Note } from "../../view/shared/components/Note/Note";
-import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { IconPositionType, StyledButton, StyledButtonType } from "../../component/button/StyledButton";
+import { AddNoteIcon } from "../../component/icon/AddNoteIcon";
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay, INoteListNote } from "../../model/INoteList";
@@ -118,7 +119,14 @@ class NoteListScreen extends React.PureComponent<FullProps> {
             {this.renderCards()}
           </View>
           <View style={styles.addNoteButtonView}>
-            <NoteCreationButton onClick={this.goToNoteEditor} />
+            <StyledButton
+              fluid
+              style={StyledButtonType.PRIMARY}
+              onPress={this.goToNoteEditor}
+              label={i18nGet('add_note')}
+              icon={<AddNoteIcon />}
+              iconPosition={IconPositionType.RIGHT}
+            />
           </View>
         </View>
         <FilterPopupConnected
@@ -164,8 +172,8 @@ class NoteListScreen extends React.PureComponent<FullProps> {
         <View style={styles.noteListBottom}></View>
       </ScrollView>
     ) : (
-        <Text style={styles.noNotesStub}>{i18nGet('notes_not_found')}</Text>
-      )
+      <Text style={styles.noNotesStub}>{i18nGet('notes_not_found')}</Text>
+    )
   }
 
   renderDate(day: number) {
@@ -372,8 +380,8 @@ const styles = StyleSheet.create({
   },
   addNoteButtonView: {
     position: "absolute",
-    bottom: 5,
-    right: 5,
+    bottom: 16,
+    right: 16,
 
     ...SHADOW_OPTIONS
   },

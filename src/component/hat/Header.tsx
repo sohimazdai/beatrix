@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   wrap: {
     display: 'flex',
     paddingHorizontal: 12,
-    paddingTop: 24,
+    paddingTop: 40,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLOR.PRIMARY,

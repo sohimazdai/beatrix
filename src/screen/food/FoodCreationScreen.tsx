@@ -21,6 +21,7 @@ import { appAnalytics } from '../../app/Analytics';
 import { Checkbox } from '../../component/checkbox/Checkbox';
 import { IStorage } from '../../model/IStorage';
 import { IUser } from '../../model/IUser';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const foodToCreateId = uuidv4();
 
@@ -167,7 +168,11 @@ class FoodCreationScreen extends React.Component<Props> {
     } = this.state;
 
     return (
-      <View style={styles.view}>
+      <KeyboardAwareScrollView
+        style={styles.view}
+        contentContainerStyle={{ flex: 1 }}
+        bounces={false}
+      >
         <BlockHat
           onBackPress={this.onBack}
           title={i18nGet('food_card_creation')}
@@ -265,7 +270,7 @@ class FoodCreationScreen extends React.Component<Props> {
             />
           </View>
         </ScrollView>
-      </View >
+      </KeyboardAwareScrollView >
     );
   }
 }

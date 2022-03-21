@@ -1,15 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { StyleSheet } from "react-native";
 
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { BlockHat } from '../../component/hat/BlockHat';
-import { NoteCreationButton } from '../../view/shared/components/CreateNoteButton/NoteCreationButton';
 import { InfoIcon } from '../../component/icon/InfoIcon';
+import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
+import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
 
 import { IStorage } from '../../model/IStorage';
 import { INoteList, INoteListByDay } from '../../model/INoteList';
@@ -156,7 +156,14 @@ class Chart extends React.Component<ChartProps, ChartState> {
                         </View>
                     </ScrollView>
                     {!this.state.popupShown && <View style={styles.addNoteButtonView}>
-                        <NoteCreationButton onClick={this.goToNoteEditor} />
+                        <StyledButton
+                            fluid
+                            style={StyledButtonType.PRIMARY}
+                            onPress={this.goToNoteEditor}
+                            label={i18nGet('add_note')}
+                            icon={<AddNoteIcon />}
+                            iconPosition={IconPositionType.RIGHT}
+                        />
                     </View>}
                 </View>
                 <ChartDotInfoPopupConnect navigation={navigation} />
@@ -584,9 +591,8 @@ const styles = StyleSheet.create({
     },
     addNoteButtonView: {
         position: 'absolute',
-        bottom: 5,
-        right: 5,
-
+        bottom: 16,
+        right: 16,
         ...SHADOW_OPTIONS,
     },
     addNoteButton: {

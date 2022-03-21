@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Dimensions,
   Text,
-  Platform,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -19,6 +18,7 @@ import { ValueTypePicker } from '../../view/note-editor/components/value-type-pi
 import { NoteTimePicker } from '../../view/notes/components/note-date-picker/NoteTimePicker';
 import { NoteDatePicker } from '../../view/notes/components/note-date-picker/NoteDatePicker';
 import { ArrowTaillessIcon, ArrowDirection } from '../../component/icon/ArrowTaillessIcon';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { IInteractive } from '../../model/IInteractive';
 import { INoteListNote, NoteValueType } from '../../model/INoteList';
@@ -41,7 +41,6 @@ import { StyledButton, IconPositionType, StyledButtonType } from '../../componen
 import { ITagList } from '../../model/ITagList';
 import { TagsIcon } from '../../component/icon/TagsIcon';
 import { PopupHeader } from '../../component/popup/PopupHeader';
-import { VegetablesIcon } from '../../component/icon/value-icons/VegetablesIcon';
 import { FoodListComponent } from '../../view/food/components/FoodList';
 import { FoodDatabase, IFoodList, IFoodListItem } from '../../model/IFood';
 import { sumMealTotal } from '../../view/food/modules/sumMealTotal';
@@ -231,36 +230,6 @@ class NoteEditor extends React.PureComponent<Props, State>{
     this.setState({ foodList: newList, foodSelected: null, });
   }
 
-  render() {
-    const { note } = this.props;
-    const title = note
-      ? i18nGet('note_editing')
-      : i18nGet('note_creation');
-
-    return (
-      <View style={{ ...styles.wrap, ...(!!note ? styles.wrapEditiing : {}) }}>
-        <BlockHat
-          onBackPress={this.closeEditor}
-          title={title}
-        />
-        <ScrollView style={styles.scrollView}>
-          {this.renderPickerBlock()}
-          {this.renderButtons()}
-          {this.renderNoteDashboard()}
-          <View style={styles.bottomSpace} />
-        </ScrollView>
-        <View style={styles.buttonsBlock}>
-          {this.props.note && this.renderDeleteButton()}
-          {this.renderSaveButton()}
-        </View>
-        {this.renderInputPopup()}
-        {this.renderCommentInputPopup()}
-        {this.renderTagsPopup()}
-        {this.renderQuickCalculatorPopup()}
-      </View>
-    )
-  }
-
   onDateChange = (value) => {
     this.setState({
       date: new Date(
@@ -366,12 +335,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { isCalculatorOpen, foodSelected } = this.state;
     return (
       <SuperPopup hidden={!isCalculatorOpen}>
-        <CarbsCalculator
-          onClose={this.closePopup}
-          onAdd={this.addFood}
-          onRemove={this.removeFood}
-          food={foodSelected}
-        />
+        <KeyboardAwareScrollView style={{flex: 1}}>
+          <CarbsCalculator
+            onClose={this.closePopup}
+            onAdd={this.addFood}
+            onRemove={this.removeFood}
+            food={foodSelected}
+          />
+        </KeyboardAwareScrollView>
       </SuperPopup>
     )
   }
@@ -818,6 +789,40 @@ class NoteEditor extends React.PureComponent<Props, State>{
       date: note.date.getTime(),
       tagIds: selectedTags,
     };
+  }
+
+  render() {
+    const { note } = this.props;
+    const title = note
+      ? i18nGet('note_editing')
+      : i18nGet('note_creation');
+
+    return (
+      <KeyboardAwareScrollView
+        style={{ ...styles.wrap, ...(!!note ? styles.wrapEditiing : {}) }}
+        contentContainerStyle={{ flex: 1 }}
+        bounces={false}
+      >
+        <BlockHat
+          onBackPress={this.closeEditor}
+          title={title}
+        />
+        <ScrollView style={styles.scrollView}>
+          {this.renderPickerBlock()}
+          {this.renderButtons()}
+          {this.renderNoteDashboard()}
+          <View style={styles.bottomSpace} />
+        </ScrollView>
+        <View style={styles.buttonsBlock}>
+          {this.props.note && this.renderDeleteButton()}
+          {this.renderSaveButton()}
+        </View>
+        {this.renderInputPopup()}
+        {this.renderCommentInputPopup()}
+        {this.renderTagsPopup()}
+        {this.renderQuickCalculatorPopup()}
+      </KeyboardAwareScrollView>
+    )
   }
 }
 

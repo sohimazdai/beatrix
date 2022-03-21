@@ -9,7 +9,6 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { StyleSheet } from "react-native";
 
-import { NoteCreationButton } from "../../view/shared/components/CreateNoteButton/NoteCreationButton";
 import { ProfileIcon } from "../../component/icon/ProfileIcon";
 import { LastNotesConnected } from '../../view/dashboard/last-notes/components/LastNotes';
 import { ChartPreviewConnected } from '../../view/dashboard/chart-preview/ChartPreview';
@@ -20,12 +19,12 @@ import { Fader } from '../../component/fader/Fader';
 import { SideMenu } from '../../view/shared/components/SideMenu';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { MenuIcon } from '../../component/icon/MenuIcon';
+import { AddNoteIcon } from "../../component/icon/AddNoteIcon";
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay } from "../../model/INoteList";
 import { IUser } from '../../model/IUser';
 import { IApp } from '../../model/IApp';
-import { StatisticsType } from '../../view/dashboard/statistics-card/entities';
 import { NavigatorEntities } from '../../navigator/modules/NavigatorEntities';
 import { COLOR } from "../../constant/Color";
 
@@ -36,9 +35,7 @@ import { SHADOW_OPTIONS } from "../../constant/ShadowOptions";
 import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
 import { Header } from '../../component/hat/Header';
 import { Action } from 'redux';
-import { createGetFavoritesProductsAction } from '../../store/service/food/GetFavoritesProductsSaga';
 import { createAppPingAction } from '../../store/service/app/AppPingSaga';
-import { Beggar } from '../../app/Beggar';
 import { StatisticsPeriod } from '../../model/IStatistics';
 
 interface DashboardScreenStateTProps {
@@ -137,7 +134,14 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
             <View style={styles.stub} />
           </ScrollView>
           <View style={styles.addNoteButtonView}>
-            <NoteCreationButton onClick={this.goToNoteEditor} />
+            <StyledButton
+              fluid
+              style={StyledButtonType.PRIMARY}
+              onPress={this.goToNoteEditor}
+              label={i18nGet('add_note')}
+              icon={<AddNoteIcon />}
+              iconPosition={IconPositionType.RIGHT}
+            />
           </View>
           <Fader hidden={!this.props.selectedDotId} />
         </View >
@@ -193,7 +197,8 @@ const styles = StyleSheet.create({
   },
   addNoteButtonView: {
     position: "absolute",
-    bottom: 5,
+    bottom: 16,
+    paddingHorizontal: 16,
     width: '100%',
     ...SHADOW_OPTIONS
   },

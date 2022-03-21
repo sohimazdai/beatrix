@@ -1,11 +1,11 @@
-import React, { useRef, RefObject } from 'react';
-import { View, StyleSheet, Text, TextInputProperties, KeyboardTypeOptions } from 'react-native';
+import React, { RefObject } from 'react';
+import { View, StyleSheet, KeyboardTypeOptions, TextInputProps } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { COLOR } from '../../constant/Color';
 import { StyledButton, StyledButtonType } from '../button/StyledButton';
 import { CrossIcon } from '../icon/CrossIcon';
 
-interface Props extends TextInputProperties {
+interface Props extends TextInputProps {
   referal?: RefObject<TextInput>
   disabled?: boolean
   type?: KeyboardTypeOptions
