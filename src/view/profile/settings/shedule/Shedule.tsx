@@ -3,6 +3,7 @@ import { View, StyleSheet, LayoutRectangle } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
+import NumberPad from '../../../../component/numbers-pad/NumberPad';
 import { IShedule } from '../../../../model/IShedule';
 import { IStorage } from '../../../../model/IStorage';
 import { SheduleKeyType } from '../../../../model/IUserPropertiesShedule';
@@ -10,7 +11,6 @@ import { createChangeSheduleAction } from '../../../../store/service/shedule/Cha
 import { selectSheduleHours } from './selectors/select-shedule-hours';
 import { SheduleButtonBlock } from './SheduleButtonBlock';
 import { SheduleListMarshal } from './SheduleListMarshal';
-import { SheduleNumberScroller } from './SheduleNumberScroller';
 
 interface OwnProps {
   scrollViewRef: RefObject<ScrollView>
@@ -160,9 +160,10 @@ class Comp extends React.Component<Props, State> {
             selectedHours={selectedHours}
           />}
           {isValueEditing && (
-            <SheduleNumberScroller
-              onAccept={this.handleAcceptValue}
-              onBack={this.handleBackToInitValue}
+            <NumberPad
+              value={0}
+              onClose={this.handleBackToInitValue}
+              onSubmit={this.handleAcceptValue}
             />
           )}
         </View>

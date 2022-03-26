@@ -12,6 +12,7 @@ import { FoodCreationInput } from '../FoodCreationInput';
 import { v1 as uuidv1 } from 'uuid';
 import { ScrollView } from 'react-native-gesture-handler';
 import { FoodCalculatorConnected, FoodCalculatorType } from '../FoodCalculator';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface Props {
   food?: IFoodListItem
@@ -178,92 +179,94 @@ export class CarbsCalculator extends React.Component<Props, State> {
     const propsNutrients = getNutrientsFor100GFromProp(food);
 
     return (
-      <ScrollView style={styles.popupContent}>
-        <PopupHeader
-          title={i18nGet('carbs_calculator_popup_header')}
-          rightSlot={<StyledButton
-            style={StyledButtonType.EMPTY}
-            icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} />}
-            onPress={onClose}
-          />}
-        />
-        <View style={styles.per100GrammCont}>
-          <Text style={styles.blockTitleText}>
-            {i18nGet('specify_nutrients_for_100g_of_product')}
-          </Text>
-          <View style={styles.inputRow}>
-            <FoodCreationInput
-              label={`${i18nGet('food_creation_carbohydrates')}(${i18nGet('gram')})`}
-              onTextChange={this.changeText}
-              value={carbohydrates || ""}
-              autoFocus={!propsNutrients.carbohydrates}
-              onFocus={() => this.setState({ selectedInput: 'carbohydrates' })}
-              type="decimal-pad"
-              withoutMarginTop
-            />
-            {isAdditionalFilling && (
-              <>
-                <View style={styles.space} />
-                <FoodCreationInput
-                  label={`${i18nGet('food_creation_proteins')}(${i18nGet('gram')})`}
-                  onTextChange={this.changeText}
-                  value={proteins || ""}
-                  onFocus={() => this.setState({ selectedInput: 'proteins' })}
-                  type="decimal-pad"
-                  withoutMarginTop
-                />
-                <View style={styles.space} />
-                <FoodCreationInput
-                  label={`${i18nGet('food_creation_fats')}(${i18nGet('gram')})`}
-                  onTextChange={this.changeText}
-                  value={fats || ""}
-                  onFocus={() => this.setState({ selectedInput: 'fats' })}
-                  type="decimal-pad"
-                  withoutMarginTop
-                />
-              </>
-            )}
-          </View>
-          {isAdditionalFilling && (
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
+        <ScrollView style={styles.popupContent}>
+          <PopupHeader
+            title={i18nGet('carbs_calculator_popup_header')}
+            rightSlot={<StyledButton
+              style={StyledButtonType.EMPTY}
+              icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} />}
+              onPress={onClose}
+            />}
+          />
+          <View style={styles.per100GrammCont}>
+            <Text style={styles.blockTitleText}>
+              {i18nGet('specify_nutrients_for_100g_of_product')}
+            </Text>
             <View style={styles.inputRow}>
               <FoodCreationInput
-                label={`${i18nGet('food_creation_calories')}(${i18nGet('kcal')})`}
+                label={`${i18nGet('food_creation_carbohydrates')}(${i18nGet('gram')})`}
                 onTextChange={this.changeText}
-                value={calories || ""}
-                onFocus={() => this.setState({ selectedInput: 'calories' })}
+                value={carbohydrates || ""}
+                autoFocus={!propsNutrients.carbohydrates}
+                onFocus={() => this.setState({ selectedInput: 'carbohydrates' })}
                 type="decimal-pad"
+                withoutMarginTop
               />
-              <View style={styles.space} />
-              <FoodCreationInput
-                label={`${i18nGet('food_creation_energy')}(${i18nGet('kJ')})`}
-                onTextChange={this.changeText}
-                value={energy || ""}
-                onFocus={() => this.setState({ selectedInput: 'energy' })}
-                type="decimal-pad"
+              {isAdditionalFilling && (
+                <>
+                  <View style={styles.space} />
+                  <FoodCreationInput
+                    label={`${i18nGet('food_creation_proteins')}(${i18nGet('gram')})`}
+                    onTextChange={this.changeText}
+                    value={proteins || ""}
+                    onFocus={() => this.setState({ selectedInput: 'proteins' })}
+                    type="decimal-pad"
+                    withoutMarginTop
+                  />
+                  <View style={styles.space} />
+                  <FoodCreationInput
+                    label={`${i18nGet('food_creation_fats')}(${i18nGet('gram')})`}
+                    onTextChange={this.changeText}
+                    value={fats || ""}
+                    onFocus={() => this.setState({ selectedInput: 'fats' })}
+                    type="decimal-pad"
+                    withoutMarginTop
+                  />
+                </>
+              )}
+            </View>
+            {isAdditionalFilling && (
+              <View style={styles.inputRow}>
+                <FoodCreationInput
+                  label={`${i18nGet('food_creation_calories')}(${i18nGet('kcal')})`}
+                  onTextChange={this.changeText}
+                  value={calories || ""}
+                  onFocus={() => this.setState({ selectedInput: 'calories' })}
+                  type="decimal-pad"
+                />
+                <View style={styles.space} />
+                <FoodCreationInput
+                  label={`${i18nGet('food_creation_energy')}(${i18nGet('kJ')})`}
+                  onTextChange={this.changeText}
+                  value={energy || ""}
+                  onFocus={() => this.setState({ selectedInput: 'energy' })}
+                  type="decimal-pad"
+                />
+              </View>
+            )}
+            <View style={styles.checkBoxView}>
+              <Checkbox
+                isChecked={isAdditionalFilling}
+                onCheck={() => this.setState({ isAdditionalFilling: !isAdditionalFilling })}
+                label={i18nGet('indicate_fats_prots_and_other')}
               />
             </View>
-          )}
-          <View style={styles.checkBoxView}>
-            <Checkbox
-              isChecked={isAdditionalFilling}
-              onCheck={() => this.setState({ isAdditionalFilling: !isAdditionalFilling })}
-              label={i18nGet('indicate_fats_prots_and_other')}
+          </View>
+          <View style={styles.indicationPortionBlock}>
+            <Text style={styles.blockTitleText}>
+              {i18nGet('indicate_portion')}
+            </Text>
+            <FoodCalculatorConnected
+              type={FoodCalculatorType.QUICK_FOOD}
+              food={this.sourceFood}
+              quickRemove={this.removeProduct}
+              quickAdd={this.addProduct}
+              isEditing={!!this.props.food}
             />
           </View>
-        </View>
-        <View style={styles.indicationPortionBlock}>
-          <Text style={styles.blockTitleText}>
-            {i18nGet('indicate_portion')}
-          </Text>
-          <FoodCalculatorConnected
-            type={FoodCalculatorType.QUICK_FOOD}
-            food={this.sourceFood}
-            quickRemove={this.removeProduct}
-            quickAdd={this.addProduct}
-            isEditing={!!this.props.food}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }

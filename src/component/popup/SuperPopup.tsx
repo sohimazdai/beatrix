@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { StyleSheet, Animated, Dimensions, View } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { COLOR } from '../../constant/Color';

@@ -10,31 +10,42 @@ interface Props {
 }
 
 export function Note(props: Props) {
+    const { commentary } = props.note;
+
+    const displayingComment = commentary?.length > 100
+        ? `${commentary.slice(0, 100)}...`.trim()
+        : commentary.trim();
+
     return (
-        <View
-            style={styles.noteView}
+        <TouchableOpacity
+            style={styles.touchableContainer}
+            onPress={props.onPress}
         >
-            <TouchableOpacity
-                style={styles.touchableContainer}
-                onPress={props.onPress}
+            <View
+                style={styles.generals}
             >
                 <Text style={styles.text}>
                     {getTime(new Date(props.note.date))}
                 </Text>
-            </TouchableOpacity>
-            <Text style={styles.text}>
-                {props.note.glucose || '-'}
-            </Text>
-            <Text style={styles.text}>
-                {(props.note.breadUnits) || '-'}
-            </Text>
-            <Text style={styles.text}>
-                {props.note.insulin || '-'}
-            </Text>
-            <Text style={styles.text}>
-                {props.note.longInsulin || '-'}
-            </Text>
-        </View>
+                <Text style={styles.text}>
+                    {props.note.glucose || '-'}
+                </Text>
+                <Text style={styles.text}>
+                    {(props.note.breadUnits) || '-'}
+                </Text>
+                <Text style={styles.text}>
+                    {props.note.insulin || '-'}
+                </Text>
+                <Text style={styles.text}>
+                    {props.note.longInsulin || '-'}
+                </Text>
+            </View>
+            {!!commentary && (
+                <Text style={styles.comment}>
+                    {displayingComment}
+                </Text>
+            )}
+        </TouchableOpacity>
     );
 }
 
@@ -45,7 +56,16 @@ const getTime = (date: Date) => {
 }
 
 const styles = StyleSheet.create({
-    noteView: {
+    touchableContainer: {
+        flex: 1,
+        marginTop: 8,
+        height: '100%',
+        flexDirection: 'column',
+        backgroundColor: COLOR.WHITE,
+        borderRadius: 10,
+        ...SHADOW_OPTIONS,
+    },
+    generals: {
         width: '100%',
         height: 30,
 
@@ -56,15 +76,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-    },
-    touchableContainer: {
-        flex: 1,
-        height: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: COLOR.WHITE,
-        borderRadius: 10,
-        ...SHADOW_OPTIONS,
     },
     text: {
         flex: 1,
@@ -78,5 +89,10 @@ const styles = StyleSheet.create({
         lineHeight: 21,
 
         color: '#333',
-    }
+    },
+    comment: {
+        paddingHorizontal: 20,
+        paddingBottom: 12,
+        fontSize: 15,
+    },
 })

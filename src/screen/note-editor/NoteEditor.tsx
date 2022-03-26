@@ -12,7 +12,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { NavigationParams, NavigationState, NavigationScreenProp } from 'react-navigation';
 
-import { NumberScroller } from '../../view/notes/components/number-scroller/NumberScroller';
 import { NoteInsulinDoseRecommendationConnect } from '../../view/notes/components/insulin-dose-recommendation/NoteInsulinDoseRecommendation';
 import { ValueTypePicker } from '../../view/note-editor/components/value-type-picker/ValueTypePicker';
 import { NoteTimePicker } from '../../view/notes/components/note-date-picker/NoteTimePicker';
@@ -52,6 +51,7 @@ import { CarbsCalculator } from '../../view/food/components/CarbsCalculator';
 import SoupIcon from '../../component/icon/SoupIcon';
 import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 import { IUser } from '../../model/IUser';
+import NumberPad from '../../component/numbers-pad/NumberPad';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -335,14 +335,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { isCalculatorOpen, foodSelected } = this.state;
     return (
       <SuperPopup hidden={!isCalculatorOpen}>
-        <KeyboardAwareScrollView style={{flex: 1}}>
           <CarbsCalculator
             onClose={this.closePopup}
             onAdd={this.addFood}
             onRemove={this.removeFood}
             food={foodSelected}
           />
-        </KeyboardAwareScrollView>
       </SuperPopup>
     )
   }
@@ -613,8 +611,9 @@ class NoteEditor extends React.PureComponent<Props, State>{
               <TextInput
                 autoFocus
                 multiline
+                numberOfLines={3}
                 blurOnSubmit
-                style={{ maxHeight: 80 }}
+                style={{ height: 80 }}
                 onChangeText={(text) => this.setState({ commentary: text })}
                 defaultValue={commentary}
                 keyboardType="default"
@@ -675,21 +674,14 @@ class NoteEditor extends React.PureComponent<Props, State>{
             />
           }
         />
-        <View style={styles.numberScrollWrapper}>
-          <NumberScroller
-            key={name}
-            selectedNumber={value}
-            measuresOption={Measures.getNoteMeasuresOption(
-              name,
-              glycemiaMeasuringType,
-              carbsMeasuringType,
-            )}
-            onNumberClick={(number) => {
-              obj[`${name}`] = number;
-              this.setState(obj as any)
-            }}
-          />
-        </View>
+        <NumberPad
+          value={value}
+          onClose={this.onDowArrowIconPress}
+          onSubmit={(number) => {
+            obj[`${name}`] = number;
+            this.setState(obj as any)
+          }}
+        />
       </>
     )
   }
@@ -999,6 +991,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.PRIMARY_WHITE,
     alignItems: 'center',
     paddingTop: 16,
+    paddingBottom: 24,
+    paddingHorizontal: 16,
   },
   arrowDownIcon: {
     padding: 8,

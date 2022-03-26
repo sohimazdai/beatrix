@@ -5,7 +5,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-n
 import { createChangeFood, FoodSection, createRemoveFoodItem } from '../../store/modules/food/food';
 import { IFoodListItem, IFoodList, FoodDatabase } from '../../model/IFood';
 import { batchActions } from 'redux-batched-actions';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { StyledButton, StyledButtonType, IconPositionType } from '../../component/button/StyledButton';
 import { FavoritesIcon } from '../../component/icon/FavoritesIcon';
@@ -23,6 +23,7 @@ import { Loader } from '../../component/loader/Loader';
 import { createAddProductToFavoriteAction } from '../../store/service/food/AddProductToFavoriteSaga';
 import { createRemoveProdcutFromFavoriteAction } from '../../store/service/food/RemoveProductFromFavoritesSaga';
 import { appAnalytics } from '../../app/Analytics';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface OwnProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -106,12 +107,7 @@ class FoodCardComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      navigation,
-      favoritesList,
-      foodItem,
-      foodId
-    } = this.props;
+    const { navigation, foodItem } = this.props;
 
     const { popupOpen } = this.state;
 
@@ -136,7 +132,10 @@ class FoodCardComponent extends React.Component<Props, State> {
       : styles.openPopupSticker;
 
     return (
-      <View style={styles.wrap}>
+      <KeyboardAwareScrollView
+        style={styles.wrap}
+        contentContainerStyle={{ flex: 1 }}
+      >
         <BlockHat
           title={i18nGet('food_card')}
           onBackPress={onBack}
@@ -248,7 +247,7 @@ class FoodCardComponent extends React.Component<Props, State> {
             />
           </View>
         </SuperPopup>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -372,6 +371,8 @@ export const FoodCard = connect(
 const styles = StyleSheet.create({
   wrap: {
     height: '100%',
+    position: 'relative',
+    flex: 1,
   },
   view: {
     padding: 16,
@@ -453,6 +454,7 @@ const styles = StyleSheet.create({
   popup: {
     backgroundColor: COLOR.BLUE_BASE,
     padding: 16,
+    flex: 1,
   },
   openPopupSticker: {
     position: 'absolute',

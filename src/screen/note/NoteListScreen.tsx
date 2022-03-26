@@ -338,11 +338,11 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   dateView: {
-    marginBottom: 10,
-
-    justifyContent: "space-evenly",
+    width: '100%',
+    paddingLeft: 16,
+    justifyContent: "flex-start",
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "flex-start"
   },
   dateText: {
     textAlign: "center",
@@ -350,13 +350,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 19,
     lineHeight: 22,
-
+    marginTop: 8,
     color: "#555"
   },
   dayNotes: {
     width: "100%",
-    padding: 10,
-    borderRadius: 25,
     flexDirection: "column"
   },
   cardHat: {
