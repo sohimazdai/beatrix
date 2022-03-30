@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { RefObject, Component } from 'react';
 import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { connect } from 'react-redux';
 import { styles } from './Style';
@@ -53,11 +53,11 @@ export class InsulinSettingsComponent extends Component<Props> {
           <ShortInsulinTypePickerConnect />
           <ProfileSettingsSheduleTableConnect
             sheduleKey={SheduleKeyType.INSULIN_SENSITIVITY_FACTOR}
-            scrollViewRef={this.scrollViewRef}
+            scrollViewRef={this.scrollViewRef as any}
           />
           <ProfileSettingsSheduleTableConnect
             sheduleKey={SheduleKeyType.CARBOHYDRATE_RATIO}
-            scrollViewRef={this.scrollViewRef}
+            scrollViewRef={this.scrollViewRef as any}
           />
         </ScrollView>
       </KeyboardAvoidingView >

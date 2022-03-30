@@ -52,6 +52,7 @@ import SoupIcon from '../../component/icon/SoupIcon';
 import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 import { IUser } from '../../model/IUser';
 import NumberPad from '../../component/numbers-pad/NumberPad';
+import { DateHelper } from '../../utils/DateHelper';
 
 const POPUP_PADDING_HORIZONTAL = 16;
 
@@ -335,12 +336,12 @@ class NoteEditor extends React.PureComponent<Props, State>{
     const { isCalculatorOpen, foodSelected } = this.state;
     return (
       <SuperPopup hidden={!isCalculatorOpen}>
-          <CarbsCalculator
-            onClose={this.closePopup}
-            onAdd={this.addFood}
-            onRemove={this.removeFood}
-            food={foodSelected}
-          />
+        <CarbsCalculator
+          onClose={this.closePopup}
+          onAdd={this.addFood}
+          onRemove={this.removeFood}
+          food={foodSelected}
+        />
       </SuperPopup>
     )
   }
@@ -364,10 +365,17 @@ class NoteEditor extends React.PureComponent<Props, State>{
           ? `${note.breadUnits}+0`
           : `${note.breadUnits}+${this.additionalCarbs}`;
 
+    const label = DateHelper.isToday(this.state.date)
+      ? i18nGet('today')
+      : DateHelper.isYesterday(this.state.date)
+        ? i18nGet('yesterday')
+        : '';
+
     return (
       <View style={styles.inputBlock}>
         <View style={styles.timePickers}>
           <NoteDatePicker
+            label={label}
             date={this.state.date}
             onChange={this.onDateChange}
           />
@@ -783,6 +791,18 @@ class NoteEditor extends React.PureComponent<Props, State>{
     };
   }
 
+  renderComment = () => {
+    const { commentary } = this.state;
+
+    return !!commentary && (
+      <View style={styles.comment}>
+        <Text style={styles.commentText}>
+          {i18nGet('comment')}: {commentary}
+        </Text>
+      </View>
+    );
+  }
+
   render() {
     const { note } = this.props;
     const title = note
@@ -801,6 +821,7 @@ class NoteEditor extends React.PureComponent<Props, State>{
         />
         <ScrollView style={styles.scrollView}>
           {this.renderPickerBlock()}
+          {this.renderComment()}
           {this.renderButtons()}
           {this.renderNoteDashboard()}
           <View style={styles.bottomSpace} />
@@ -999,6 +1020,11 @@ const styles = StyleSheet.create({
   },
   toTabsIcon: {
     padding: 8,
-  }
+  },
+  comment: {
+    padding: 16,
+  },
+  commentText: {
+    fontSize: 15,
+  },
 })
-

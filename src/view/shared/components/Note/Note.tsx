@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     comment: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 12,
         paddingBottom: 12,
         fontSize: 15,
     },

@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import Tooltip from '../../../../component/tooltip/Tooltip';
-import { MagnifierIcon } from '../../../../component/icon/MagnifierIcon';
 import { COLOR } from '../../../../constant/Color';
 
 interface Props {
@@ -11,12 +9,12 @@ interface Props {
 };
 
 export class ValueTypeInfo extends React.Component<Props> {
-  render() {
+  renderTooltip() {
     return (
-      <View style={styles.content}>
-        {this.renderContent()}
-      </View>
-    )
+      <Text style={styles.plus}>
+        +
+      </Text>
+    );
   }
 
   renderContent() {
@@ -38,21 +36,11 @@ export class ValueTypeInfo extends React.Component<Props> {
       );
   }
 
-  renderTooltip() {
-    const { value } = this.props;
-
+  render() {
     return (
-      <Tooltip
-        popover={(
-          <Text style={styles.tooltipText}>
-            {value}
-          </Text>
-        )}
-        actionType="press"
-        analyticsKeyOnOpen={'magnifier'}
-      >
-        <MagnifierIcon />
-      </Tooltip>
+      <View style={styles.content}>
+        {this.renderContent()}
+      </View>
     )
   }
 }
@@ -70,8 +58,8 @@ const styles = StyleSheet.create({
     color: COLOR.TEXT_BLACK,
     fontSize: 17,
   },
-  tooltipText: {
-    color: COLOR.PRIMARY_WHITE,
+  plus: {
+    color: COLOR.PRIMARY,
     fontSize: 15,
     lineHeight: 20,
   }

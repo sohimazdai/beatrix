@@ -1,11 +1,12 @@
 import React, { ReactElement } from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, StatusBar } from 'react-native'
 
 import { Loader } from '../loader/Loader'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { BackArrowIcon } from '../icon/BackArrowIcon'
 import { COLOR } from '../../constant/Color'
 import { StyledButton, StyledButtonType } from '../button/StyledButton'
+import { isIOS } from '../../app/Platorm'
 
 interface Props {
     title?: string
@@ -24,8 +25,13 @@ export function BlockHat(props: Props) {
         leftIconPress,
     } = props;
 
+    const statusBarHeight = StatusBar.currentHeight;
+    const blockPaddingTop = isIOS()
+        ? styles.view.paddingTop
+        : statusBarHeight;
+
     return (
-        <View style={styles.view}>
+        <View style={{ ...styles.view, paddingTop: blockPaddingTop }}>
             <View style={styles.leftSide}>
                 {!onBackPress && leftIcon && (
                     <StyledButton

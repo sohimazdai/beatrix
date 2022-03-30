@@ -5,7 +5,6 @@ import { IModal, ModalType } from "../../model/IModal";
 import { Action, Dispatch } from "redux";
 import { createModalChangeAction } from "../../store/modules/modal/ModalActionCreator";
 import { ModalContentConfirm } from "./modal-content-confirm/ModalContentConfirm";
-import { ModalContentIOsDatePicker } from "./modal-content-ios-date-picker/ModalContentIOsDatePicker";
 import { SuperPopup, PopupDirection } from '../popup/SuperPopup';
 import { ModalContentInfo } from './modal-content-info/ModalContentInfo';
 import { ModalContentHint } from './modal-content-hint/ModalContentHint';
@@ -41,11 +40,6 @@ class ModalContent extends React.PureComponent<ModalContentProps> {
                 />
             case ModalType.CONFIRM:
                 return <ModalContentConfirm
-                    modal={this.props.modal}
-                    onResult={() => this.onClose()}
-                />
-            case ModalType.IOS_DATE_PICKER:
-                return <ModalContentIOsDatePicker
                     modal={this.props.modal}
                     onResult={() => this.onClose()}
                 />

@@ -32,6 +32,7 @@ interface Props {
 
 interface State {
     isSelected: boolean;
+    initialLanguage: string,
     selectedLanguage: string,
     popupId: string,
 }
@@ -39,6 +40,7 @@ interface State {
 export class LanguageSettingsComponent extends Component<Props, State> {
     state = {
         isSelected: false,
+        initialLanguage: getLocale(),
         selectedLanguage: getLocale(),
         popupId: uuid.v1(),
     };
@@ -54,13 +56,16 @@ export class LanguageSettingsComponent extends Component<Props, State> {
         });
     }
 
-    restartApp = () => {
-        const { selectedLanguage } = this.state;
+    restartApp = async () => {
+        const {
+            initialLanguage,
+            selectedLanguage,
+        } = this.state;
 
         AsyncStorage.setItem('language', selectedLanguage)
             .then(() => appAnalytics.sendEventWithProps(
                 appAnalytics.events.LANGUAGE_CHANGE,
-                { language: selectedLanguage },
+                { initial: initialLanguage, selected: selectedLanguage },
             ))
             .then(() => Restart());
     }

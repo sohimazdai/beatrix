@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StatusBar } from 'react-native'
+import { isIOS } from '../../app/Platorm';
 import { COLOR } from '../../constant/Color';
 import { StyledButton, StyledButtonType } from '../button/StyledButton';
 import { Loader } from '../loader/Loader';
@@ -16,8 +17,13 @@ interface Props {
 export function Header(props: Props) {
   const { leftIcon, rightIcon, leftIconPress, rightIconPress, title } = props;
 
+  const statusBarHeight = StatusBar.currentHeight;
+  const blockPaddingTop = isIOS()
+    ? styles.wrap.paddingTop
+    : statusBarHeight;
+
   return (
-    <View style={styles.wrap}>
+    <View style={{ ...styles.wrap, paddingTop: blockPaddingTop }}>
       {!!leftIcon && (
         <View style={styles.left}>
           <StyledButton

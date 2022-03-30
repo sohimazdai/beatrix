@@ -121,7 +121,7 @@ export function Comp(props: ChartWrapProps) {
                     return <ChartDot
                         config={config}
                         dotData={item}
-                        key={`${item.noteId}-dots`}
+                        key={`${item.id}-${item.noteId}-dots-${selectedPeriod}-${type}`}
                         type={props.type}
                     />
                 })}

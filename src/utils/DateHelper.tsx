@@ -1,6 +1,23 @@
 import { i18nGet } from '../localisation/Translate';
 
 export class DateHelper {
+    static isToday(someDate: Date) {
+        const today = new Date();
+
+        return someDate.getDate() == today.getDate() &&
+            someDate.getMonth() == today.getMonth() &&
+            someDate.getFullYear() == today.getFullYear();
+    }
+
+    static isYesterday(someDate: Date) {
+        const today = new Date();
+        const yesterday = new Date(today.setDate(today.getDate() - 1));
+
+        return someDate.getDate() == yesterday.getDate() &&
+            someDate.getMonth() == yesterday.getMonth() &&
+            someDate.getFullYear() == yesterday.getFullYear();
+    }
+
     static today() {
         return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime();
     }

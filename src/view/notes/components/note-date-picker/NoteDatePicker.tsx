@@ -4,14 +4,8 @@ import { IconPositionType, StyledButton, StyledButtonType } from '../../../../co
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { View, StyleSheet } from 'react-native';
 import { isIOS } from '../../../../app/Platorm';
-import { connect } from 'react-redux';
-import { PopupIntegratorConnected } from '../../../../component/PopupList/PopupIntegrator';
-import uuid from 'uuid';
-import { PopupHeader } from '../../../../component/popup/PopupHeader';
-import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
+import { getLocale } from '../../../../localisation/Translate';
 import { COLOR } from '../../../../constant/Color';
-import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
-import { i18nGet } from '../../../../localisation/Translate';
 
 interface Props {
     date: Date;
@@ -21,14 +15,10 @@ interface Props {
 
 interface State {
     isOpen: boolean
-    popupId: string
 }
 
 export class NoteDatePicker extends React.PureComponent<Props, State> {
-    state = {
-        isOpen: false,
-        popupId: uuid.v1(),
-    };
+    state = { isOpen: false };
 
     componentDidMount() {
         this.setState({ isOpen: false })
@@ -53,7 +43,7 @@ export class NoteDatePicker extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { isOpen, popupId } = this.state;
+        const { isOpen } = this.state;
         const { date, label } = this.props;
 
         const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());
@@ -63,54 +53,28 @@ export class NoteDatePicker extends React.PureComponent<Props, State> {
         const displayedDate = label ? label : `${displayDate}.${displayMonth}.${displayYear}`;
 
         return (
-            <View>
-                <StyledButton
-                    style={StyledButtonType.OUTLINE}
-                    label={displayedDate}
-                    onPress={() => this.setState({ isOpen: true })}
-                    icon={<CalendarIcon />}
-                    iconPosition={IconPositionType.LEFT}
-                    small
-                />
-                {(isOpen && !isIOS()) && (
-                    <DateTimePicker
-                        style={{ minWidth: 260, height: 50 }}
-                        value={date}
-                        mode="date"
-                        onTouchCancel={this.handleClose}
-                        onChange={this.handleOK}
-                        maximumDate={new Date()}
-                        collapsable
+            <View style={styles.pickerElement}>
+                {!isIOS() && (
+                    <StyledButton
+                        style={StyledButtonType.OUTLINE}
+                        label={displayedDate}
+                        onPress={() => this.setState({ isOpen: true })}
+                        icon={<CalendarIcon />}
+                        iconPosition={IconPositionType.LEFT}
+                        small
                     />
                 )}
-                {isIOS() && (
-                    <PopupIntegratorConnected
-                        id={popupId}
-                        isOpen={isOpen}
-                        handleClose={this.handleClose}
-                    >
-                        <View style={styles.popupContent}>
-                            <PopupHeader
-                                title={i18nGet('chart_select_date_only')}
-                                rightSlot={(
-                                    <StyledButton
-                                        icon={<ArrowTaillessIcon direction={ArrowDirection.DOWN} width={20} height={20} fill={COLOR.PRIMARY} />}
-                                        style={StyledButtonType.EMPTY}
-                                        onPress={this.handleClose}
-                                    />
-                                )}
-                            />
-                            <DateTimePicker
-                                value={date}
-                                date={date}
-                                mode="date"
-                                onTouchCancel={this.handleClose}
-                                onChange={this.handleOK}
-                                maximumDate={new Date()}
-                                collapsable
-                            />
-                        </View>
-                    </PopupIntegratorConnected>
+                {(isOpen || isIOS()) && (
+                    <DateTimePicker
+                        value={date}
+                        mode="date"
+                        display='compact'
+                        locale={getLocale()}
+                        maximumDate={new Date()}
+                        style={{ flex: 1 }}
+                        onTouchCancel={this.handleClose}
+                        onChange={this.handleOK}
+                    />
                 )}
             </View>
         );
@@ -118,11 +82,9 @@ export class NoteDatePicker extends React.PureComponent<Props, State> {
 }
 
 const styles = StyleSheet.create({
-    popupContent: {
-        padding: 24,
-        backgroundColor: COLOR.WHITE,
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        ...SHADOW_OPTIONS,
+    pickerElement: {
+        width: 140,
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
 });

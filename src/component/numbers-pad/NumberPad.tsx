@@ -153,7 +153,7 @@ export default function NumberPad(props: Props): JSX.Element {
                 <View style={styles.buttonsRow}>
                     <View style={styles.cancelButton}>
                         <StyledButton
-                            style={StyledButtonType.OUTLINE}
+                            style={StyledButtonType.DELETE}
                             onPress={() => onClose(number)}
                             label={i18nGet('cancel')}
                             fluid
