@@ -94,6 +94,7 @@ export class LanguageSettingsComponent extends Component<Props, State> {
                                 { title: i18nGet('language_english'), value: LocaleType.en },
                                 { title: i18nGet('language_spanish'), value: LocaleType.es },
                                 { title: i18nGet('language_russian'), value: LocaleType.ru },
+                                { title: i18nGet('language_ukrainian'), value: LocaleType.ua },
                             ]}
                             onSelect={this.handleSelectLanguage}
                         />
