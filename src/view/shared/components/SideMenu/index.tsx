@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
-import { View, StyleSheet, Text, Dimensions, Alert } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, Alert, Linking } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
 import { COLOR } from '../../../../constant/Color';
@@ -17,6 +17,10 @@ import { appAnalytics } from '../../../../app/Analytics';
 import { PopupDirection, SuperPopup } from '../../../../component/popup/SuperPopup';
 import { Fader } from '../../../../component/fader/Fader';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
+import Clipboard from 'expo-clipboard';
+
+const MAIL = 'mailto://go@doq.su';
+const TG = 'https://t.me/sohimazdai';
 
 interface Props {
   hidden: boolean;
@@ -25,6 +29,40 @@ interface Props {
 }
 
 export class SideMenu extends React.Component<Props> {
+  handleOpenTelegram = () => {
+    const itCan = Linking.canOpenURL(TG);
+
+    if (itCan) {
+      appAnalytics.sendEvent(appAnalytics.events.DEV_TELEGRAM_LINK_CLICK);
+      Linking.openURL(TG)
+        .then(() => appAnalytics.sendEvent(appAnalytics.events.DEV_TELEGRAM_LINK_CLICK_DONE))
+        .catch(() => {
+          appAnalytics.sendEvent(appAnalytics.events.DEV_TELEGRAM_LINK_CLICK_FAIL);
+          Alert.alert(i18nGet('cannot_open_tg_webpage'));
+        });
+    } else {
+      Alert.alert(i18nGet('cannot_open_tg_webpage'));
+      appAnalytics.sendEvent(appAnalytics.events.DEV_TELEGRAM_LINK_CLICK_FAIL);
+    }
+  };
+
+  handleOpenEmail = () => {
+    const itCan = Linking.canOpenURL(MAIL);
+
+    if (itCan) {
+      appAnalytics.sendEvent(appAnalytics.events.DEV_EMAIL_LINK_CLICK);
+      Linking.openURL(MAIL)
+        .then(() => appAnalytics.sendEvent(appAnalytics.events.DEV_EMAIL_LINK_CLICK_DONE))
+        .catch(() => {
+          Alert.alert(i18nGet('cannot_open_mail_app'));
+          appAnalytics.sendEvent(appAnalytics.events.DEV_EMAIL_LINK_CLICK_FAIL);
+        });
+    } else {
+      Alert.alert(i18nGet('cannot_open_mail_app'));
+      appAnalytics.sendEvent(appAnalytics.events.DEV_EMAIL_LINK_CLICK_FAIL);
+    }
+  };
+
   render() {
     const { closeSideMenu, hidden } = this.props;
 
@@ -86,12 +124,16 @@ export class SideMenu extends React.Component<Props> {
               <Text style={styles.bottomParagraph}>
                 {i18nGet('write_to_developer')}
               </Text>
-              <Text style={styles.bottomText} selectable>
-                Telegram: @sohimazdai
-              </Text>
-              <Text style={styles.bottomText} selectable>
-                Email: go@doq.su
-              </Text>
+              <TouchableOpacity onPress={this.handleOpenTelegram}>
+                <Text style={styles.bottomText}>
+                  Telegram: @sohimazdai
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.handleOpenEmail}>
+                <Text style={styles.bottomText}>
+                  Email: go@doq.su
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </SuperPopup>
@@ -146,6 +188,7 @@ const styles = StyleSheet.create({
     ...SHADOW_OPTIONS,
     shadowColor: COLOR.PRIMARY,
     padding: 16,
+    paddingBottom: 48,
   },
   title: {
     padding: 16,

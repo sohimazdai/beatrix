@@ -12,6 +12,7 @@ import { IPending } from './IPending';
 import { IFood } from './IFood';
 import { ISheduleList } from './IShedule';
 import { IPopupList } from './IPopupList';
+import { INotificationsList } from "./INotification";
 
 export interface IStorage {
     app?: IApp,
@@ -28,4 +29,5 @@ export interface IStorage {
     food?: IFood
     shedule: ISheduleList
     popupList: IPopupList
+    notifications: INotificationsList
 }

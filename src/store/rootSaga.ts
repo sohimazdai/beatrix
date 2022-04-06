@@ -21,6 +21,8 @@ import { watchAddProductToFavorite } from './service/food/AddProductToFavoriteSa
 import { watchRemoveProdcutFromFavorite } from './service/food/RemoveProductFromFavoritesSaga';
 import { watchGetFavoritesProducts } from './service/food/GetFavoritesProductsSaga';
 import { watchChangeShedule } from './service/shedule/ChangeSheduleSaga';
+import { watchGetNotifications } from './service/notifications/GetNotificationsSaga';
+import { watchSetNotificationSeen } from './service/notifications/SetNotificationSeenSaga';
 
 export function* rootSaga() {
     yield all([
@@ -56,5 +58,8 @@ export function* rootSaga() {
         fork(watchGetFavoritesProducts),
         //PROFILE,
         fork(watchChangeShedule),
+        // NOTIFICATIONS
+        fork(watchGetNotifications),
+        fork(watchSetNotificationSeen),
     ]);
 };

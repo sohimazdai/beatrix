@@ -2441,4 +2441,16 @@ const translateStore = {
     'ru': 'Перед сном',
     'ua': 'Перед сном',
   },
+  cannot_open_tg_webpage: {
+    'en': 'Failed to open internet browser. Please find the account in the telegram app yourself.',
+    'es': 'No se pudo abrir el navegador de Internet. Encuentre la cuenta en la aplicación de Telegram usted mismo.',
+    'ru': 'Не получилось открыть интернет-браузер. Пожалуйста, найдите аккаунт в приложении телеграм самостоятельно.',
+    'ua': 'Не вдалося вiдкрити iнтернет-браузер. Будь ласка, знайдiть облiковий запис у програмi телеграм самостiйно.',
+  },
+  cannot_open_mail_app: {
+    'en': 'Failed to open mail app. Please go to the mail yourself and send a message.',
+    'es': 'Error al abrir la aplicación de correo. Por favor, vaya al correo usted mismo y envíe un mensaje.',
+    'ru': 'Не получилось открыть почтовое приложение. Пожалуйста, перейдите на почту самостоятельно и отправьте сообщение.',
+    'ua': 'Не вдалося вiдкрити поштову програму. Будь ласка, перейдiть на пошту самостiйно та надiшлiть повiдомлення.',
+  },
 }

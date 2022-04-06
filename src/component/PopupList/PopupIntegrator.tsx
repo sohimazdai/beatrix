@@ -5,7 +5,7 @@ import { IPopup, IPopupList } from '../../model/IPopupList';
 import { IStorage } from '../../model/IStorage';
 
 import {
-  createAddPopupToPopupList, createEmergePopupToPopupList,
+  createAddPopupToPopupList, createEmergePopupToPopupList, createHidePopupToPopupList,
 } from '../../store/modules/popup-list/popup-list';
 
 const mapState = (state: IStorage) => ({
@@ -15,6 +15,7 @@ const mapState = (state: IStorage) => ({
 const mapDispatch = (dispatch) => ({
   addPopupToList: (popup: IPopup) => dispatch(createAddPopupToPopupList(popup)),
   emergePopupToList: (popup: IPopup) => dispatch(createEmergePopupToPopupList(popup)),
+  hidePopupById: (popupId: string) => dispatch(createHidePopupToPopupList(popupId)),
 });
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
   handleClose: () => void,
   addPopupToList: (popup: IPopup) => void,
   emergePopupToList: (popup: IPopup) => void,
+  hidePopupById: (popupId: string) => void,
 };
 
 class PopupIntegrator extends React.Component<Props> {
@@ -37,10 +39,14 @@ class PopupIntegrator extends React.Component<Props> {
   };
 
   componentDidUpdate(prevProps: Readonly<Props>): void {
-    const { isOpen } = this.props;
+    const { isOpen, id, hidePopupById } = this.props;
 
     if (!prevProps.isOpen && isOpen) {
       this.handleOpenPopup();
+    }
+
+    if (!isOpen && prevProps.isOpen) {
+      hidePopupById(id);
     }
   }
 

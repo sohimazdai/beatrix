@@ -79,6 +79,8 @@ export const appAnalytics = {
     USER_BY_INSTALLATION_ID: 'User by installation id',
     //USER
     USER_SYNCED: 'User synced',
+    // NOTIFICATIONS
+    NOTIFICATION_SEEN: 'Notifications seen',
     //ONBOARDING
     ONBOARDING_SEEN: 'Onboarding seen',
     ONBOARDING_COMPLETED: 'Onboarding completed',
@@ -101,6 +103,12 @@ export const appAnalytics = {
     SHEDULE_CHANGE: 'Shedule changed',
     LANGUAGE_SEEN: 'Language Settings seen',
     LANGUAGE_CHANGE: 'Language Settings changed',
+    DEV_TELEGRAM_LINK_CLICK: 'Telegram of developer link click',
+    DEV_TELEGRAM_LINK_CLICK_DONE: 'Telegram of developer link click done',
+    DEV_TELEGRAM_LINK_CLICK_FAIL: 'Telegram of developer link click fail',
+    DEV_EMAIL_LINK_CLICK: 'Email of developer link click',
+    DEV_EMAIL_LINK_CLICK_DONE: 'Email of developer link click done',
+    DEV_EMAIL_LINK_CLICK_FAIL: 'Email of developer link click fail',
     //CHART
     CHARTS_SEEN: 'Charts seen',
     CHART_DOT_SELECTED: 'Chart dot selected',

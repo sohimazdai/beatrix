@@ -20,6 +20,7 @@ import { SideMenu } from '../../view/shared/components/SideMenu';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { MenuIcon } from '../../component/icon/MenuIcon';
 import { AddNoteIcon } from "../../component/icon/AddNoteIcon";
+import { Notifications } from "../../view/notifications";
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay } from "../../model/INoteList";
@@ -146,6 +147,7 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
           <Fader hidden={!this.props.selectedDotId} />
         </View >
         <ChartDotInfoPopupConnect navigation={navigation} />
+        <Notifications />
         <SideMenu
           hidden={!menuShown}
           navigation={navigation}
