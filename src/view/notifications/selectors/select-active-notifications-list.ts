@@ -4,6 +4,7 @@ import { IStorage } from "../../../model/IStorage";
 import { isIOS } from "../../../app/Platorm";
 import { INotification, INotificationsList } from "../../../model/INotification";
 import { IUser } from "../../../model/IUser";
+import { getRegion } from "../../../localisation/Translate";
 
 export default createSelector(
     [
@@ -20,10 +21,13 @@ function getActiveNotificationsList(
     version: string,
 ): INotification[] {
     const seenList = notifications.seenList.map(String);
+    const region = getRegion();
+
     const notificationsToShow =
         Object.values(notifications.list)
             .filter((n) => n.isForAllUsers || (new Date(n.createdAt) > new Date(user.registeredOn)))
             .filter((n) => !seenList.includes(n.id))
+            .filter((n) => n.regionsToShow.includes(region))
             .filter((n) => checkVersion(n, version))
             .sort((a, b) => (
                 new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()

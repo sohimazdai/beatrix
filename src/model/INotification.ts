@@ -5,6 +5,7 @@ export type INotification = {
     versionIOsFrom: string,
     versionIOsTo: string,
     isForAllUsers: boolean,
+    regionsToShow: string[],
     title: string,
     text: string,
     createdAt: Date,
