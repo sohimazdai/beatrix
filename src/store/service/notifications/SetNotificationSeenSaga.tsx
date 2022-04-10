@@ -1,8 +1,7 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 
 import { IStorage } from "../../../model/IStorage";
-import { handleError } from '../../../app/ErrorHandler';
-import { i18nGet } from '../../../localisation/Translate';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { NotificationsApi } from "../../../api/NotificationsApi";
 import { createSetNotificationSeen } from "../../modules/notifications";
 import { appAnalytics } from '../../../app/Analytics';
@@ -24,8 +23,9 @@ export function createSetNotificationSeenAction(notificationIds: string[]): SetN
 function* run({ payload: { notificationIds } }: SetNotificationSeenAction) {
     try {
         const state: IStorage = yield select(state => state);
+        const seens = notificationIds.filter((nId) => !state.notifications.seenList.includes(nId));
 
-        if (state.app.serverAvailable) {
+        if (state.app.serverAvailable && seens.length) {
             yield call(
                 NotificationsApi.setSeenNotifications,
                 state.user.id,
@@ -42,7 +42,7 @@ function* run({ payload: { notificationIds } }: SetNotificationSeenAction) {
             );
         });
     } catch (e) {
-        handleError(e, i18nGet('set_notification_seen_error'));
+        handleErrorSilently('Ошибка установки статуса прочитано для notifications');
     }
 }
 

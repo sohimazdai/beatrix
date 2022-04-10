@@ -33,6 +33,7 @@ import { StatisticsScreen } from '../screen/statistics';
 import { PopupListConnected } from '../component/PopupList/PopupList';
 import { LanguageSettings } from '../screen/profile/profile-settings/sub-settings/LanguageSettings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NotificationsScreen from '../screen/notifications';
 
 AsyncStorage.getItem('language').then((language) => {
     if (language) {
@@ -140,7 +141,8 @@ const AuthedNavigator = createStackNavigator(
         BarcodeScanning: { screen: BarcodeScanningScreen },
         FoodCard: { screen: FoodCard },
         [NavigatorEntities.FOOD_CARD_CREATION]: { screen: FoodCreationScreenConnected },
-        [NavigatorEntities.STATISTICS]: { screen: StatisticsScreen }
+        [NavigatorEntities.STATISTICS]: { screen: StatisticsScreen },
+        [NavigatorEntities.NOTIFICATIONS]: { screen: NotificationsScreen },
     },
     {
         headerMode: 'none',

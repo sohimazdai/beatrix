@@ -12,7 +12,7 @@
       "backgroundColor": "#FFFFFF",
       "resizeMode": "cover"
     },
-    "version": "2.1.3",
+    "version": "2.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -37,7 +37,7 @@
       "useNextNotificationsApi": true,
       "package": "com.doq.beatrix",
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.doq.beatrix&showAllReviews=true",
-      "versionCode": 41,
+      "versionCode": 42,
       "adaptiveIcon": {
         "backgroundColor": "#FFE1DF",
         "foregroundImage": "./assets/icon.png"

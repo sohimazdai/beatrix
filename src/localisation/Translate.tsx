@@ -1784,6 +1784,13 @@ const translateStore = {
     ua: 'Оk, зрозумiло',
   },
 
+  links_in_text: {
+    'en': 'Links in the text',
+    'es': 'Enlaces en el texto',
+    'ru': 'Ссылки в тексте',
+    'ua': 'Посилання у текстi',
+  },
+
   active_network_needed: {
     en: 'You need to connect to the internet',
     es: 'Se necesita red activa',
@@ -2452,5 +2459,17 @@ const translateStore = {
     'es': 'Error al abrir la aplicación de correo. Por favor, vaya al correo usted mismo y envíe un mensaje.',
     'ru': 'Не получилось открыть почтовое приложение. Пожалуйста, перейдите на почту самостоятельно и отправьте сообщение.',
     'ua': 'Не вдалося вiдкрити поштову програму. Будь ласка, перейдiть на пошту самостiйно та надiшлiть повiдомлення.',
+  },
+  notifications: {
+    'en': 'Notifications',
+    'es': 'Notificaciones',
+    'ru': 'Уведомления',
+    'ua': 'Сповіщення',
+  },
+  mark_as_red: {
+    'en': 'Mark all as read',
+    'es': 'Marcar todo como leido',
+    'ru': 'Пометить всё как прочитанное',
+    'ua': 'Позначити все як прочитане',
   },
 }

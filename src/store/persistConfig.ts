@@ -9,7 +9,8 @@ export const persistConfig: PersistConfig<IStorage> = {
         'interactive',
         'noteFilter',
         'popupList',
-        //________o b l i v i o n________l i n e________//
+        'notifications',
+        // reducers above are clearable //
         // 'noteList',
         // 'pendingNoteList',
         // 'userDiabetesProperties',

@@ -121,7 +121,7 @@ export function Comp(props: ChartWrapProps) {
                     return <ChartDot
                         config={config}
                         dotData={item}
-                        key={`${item.id}-${item.noteId}-dots-${selectedPeriod}-${type}`}
+                        key={`${item.id}-${item.noteId}-dots-${selectedPeriod}-${type}-x${item.x}-y${item.y}`}
                         type={props.type}
                     />
                 })}
@@ -129,7 +129,7 @@ export function Comp(props: ChartWrapProps) {
                     return <ChartDot
                         config={config}
                         dotData={item}
-                        key={`${item.noteId}-events`}
+                        key={`${item.id}-${item.noteId}-events-${selectedPeriod}-${type}-x${item.x}-y${item.y}`}
                         type={props.type}
                     />
                 })}

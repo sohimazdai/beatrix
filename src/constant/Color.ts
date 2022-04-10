@@ -40,6 +40,7 @@ export enum COLOR {
     HALF_TRANSPARENT = 'rgba(255, 255, 255, 0.5)',
     HALF_TRANSPARENT_DARK = 'rgba(0, 0, 0, 0.5)',
 
+    SERVICE_BACKGROUND = '#DDDDDD',
     BLACK = '#000000',
 
     ORANGE = 'orange',

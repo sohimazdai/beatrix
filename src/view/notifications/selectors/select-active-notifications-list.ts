@@ -1,16 +1,15 @@
 import { createSelector } from "reselect";
+import * as Application from 'expo-application';
 
 import { IStorage } from "../../../model/IStorage";
-import { isIOS } from "../../../app/Platorm";
 import { INotification, INotificationsList } from "../../../model/INotification";
 import { IUser } from "../../../model/IUser";
-import { getRegion } from "../../../localisation/Translate";
+import { getLocale } from "../../../localisation/Translate";
 
 export default createSelector(
     [
         (state: IStorage) => state.notifications,
         (state: IStorage) => state.user,
-        (_, version: string) => version,
     ],
     getActiveNotificationsList,
 );
@@ -18,16 +17,16 @@ export default createSelector(
 function getActiveNotificationsList(
     notifications: INotificationsList,
     user: IUser,
-    version: string,
 ): INotification[] {
-    const seenList = notifications.seenList.map(String);
-    const region = getRegion();
+    const version = Application.nativeApplicationVersion;
+    const locale = getLocale();
 
     const notificationsToShow =
         Object.values(notifications.list)
             .filter((n) => n.isForAllUsers || (new Date(n.createdAt) > new Date(user.registeredOn)))
-            .filter((n) => !seenList.includes(n.id))
-            .filter((n) => n.regionsToShow.includes(region))
+            .filter((n) => (n.regionsToShow && n.regionsToShow.length
+                ? n.regionsToShow.includes(locale)
+                : true))
             .filter((n) => checkVersion(n, version))
             .sort((a, b) => (
                 new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -47,20 +46,15 @@ function checkVersion(
     notification: INotification,
     version: string,
 ): boolean {
-    if (isIOS()) {
-        const fromArr = notification.versionIOsFrom.split('.').map(Number);
-        const toArr = notification.versionIOsTo.split('.').map(Number);
-        const versionArr = version.split('.').map(Number);
+    const fromArr = notification.versionFrom.split('.').map(Number);
+    const toArr = notification.versionTo.split('.').map(Number);
+    const versionArr = version.split('.').map(Number);
 
-        return versionArr.some((vers, i) => {
-            if (vers >= fromArr[i] && vers <= toArr[i]) {
-                return false;
-            } else {
-                return true;
-            }
-        })
-    } else {
-        return Number(version) >= Number(notification.versionAndroidFrom) &&
-            Number(version) <= Number(notification.versionAndroidTo);
-    }
+    return versionArr.some((vers, i) => {
+        if (vers >= fromArr[i] && vers <= toArr[i]) {
+            return false;
+        } else {
+            return true;
+        }
+    });
 }

@@ -1,7 +1,8 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
+
 import { IStorage } from "../../../model/IStorage";
-import { handleError } from '../../../app/ErrorHandler';
-import { getLocale, i18nGet, LocaleType } from '../../../localisation/Translate';
+import { handleErrorSilently } from '../../../app/ErrorHandler';
+import { getLocale, LocaleType } from '../../../localisation/Translate';
 import { NotificationsApi } from "../../../api/NotificationsApi";
 import { createSetNotificationsList } from "../../modules/notifications";
 import { INotification } from "../../../model/INotification";
@@ -36,14 +37,13 @@ function* run() {
             );
         }
     } catch (e) {
-        handleError(e, i18nGet('get_notifications_error'));
+        handleErrorSilently('Ошибка получения notifications');
     }
 }
 
 export function* watchGetNotifications() {
     yield takeLatest(ACTION_TYPE, run);
 }
-
 
 function mapNotifications(nfs: INotification[]) {
     switch (getLocale()) {

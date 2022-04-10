@@ -80,7 +80,9 @@ export const appAnalytics = {
     //USER
     USER_SYNCED: 'User synced',
     // NOTIFICATIONS
-    NOTIFICATION_SEEN: 'Notifications seen',
+    NOTIFICATIONS_SCREEN_SEEN: 'Notifications screen seen',
+    NOTIFICATIONS_ALL_SEEN: 'Notifications all seen',
+    NOTIFICATION_SEEN: 'Notification seen',
     //ONBOARDING
     ONBOARDING_SEEN: 'Onboarding seen',
     ONBOARDING_COMPLETED: 'Onboarding completed',

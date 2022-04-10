@@ -13,4 +13,6 @@ export enum NavigatorEntities {
   FOOD_NOTE_EDITOR = 'FoodNoteEditor',
   STATISTICS = 'Statistics',
   LANGUAGE_SETTINGS = 'LanguageSettings',
+  NOTIFICATIONS = 'Notifications',
+  NOTIFICATION = 'Notification',
 }

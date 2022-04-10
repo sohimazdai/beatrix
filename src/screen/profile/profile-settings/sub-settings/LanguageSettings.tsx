@@ -20,6 +20,7 @@ import { styles } from './Style';
 import { COLOR } from '../../../../constant/Color';
 
 import { createHidePopupToPopupList } from '../../../../store/modules/popup-list/popup-list';
+import { SuperPopup } from '../../../../component/popup/SuperPopup';
 
 const mapDispatch = (dispatch: Dispatch) => ({
     hidePopup: (id: string) => dispatch(createHidePopupToPopupList(id))
@@ -62,12 +63,13 @@ export class LanguageSettingsComponent extends Component<Props, State> {
             selectedLanguage,
         } = this.state;
 
-        AsyncStorage.setItem('language', selectedLanguage)
+        AsyncStorage
+            .setItem('language', selectedLanguage)
             .then(() => appAnalytics.sendEventWithProps(
                 appAnalytics.events.LANGUAGE_CHANGE,
                 { initial: initialLanguage, selected: selectedLanguage },
             ))
-            .then(() => Restart());
+            .then(Restart);
     }
 
     handleClose = () => {
@@ -100,9 +102,8 @@ export class LanguageSettingsComponent extends Component<Props, State> {
                         />
                     </ProfilePicker>
                 </ScrollView>
-                <PopupIntegratorConnected
-                    id={popupId}
-                    isOpen={isSelected}
+                <SuperPopup
+                    hidden={!isSelected}
                     handleClose={this.handleClose}
                 >
                     <View style={innerStyles.popupContent}>
@@ -123,7 +124,7 @@ export class LanguageSettingsComponent extends Component<Props, State> {
                             />
                         </View>
                     </View>
-                </PopupIntegratorConnected>
+                </SuperPopup>
             </View>
         )
     }

@@ -109,12 +109,12 @@ export const SuperPopup = (props: SuperPopupProps) => {
 
     return (
         <Animated.View style={style}>
-            {fadeShown && (
+            {/* {fadeShown && (
                 <TouchableWithoutFeedback
                     style={fadeStyle}
                     onPress={handleClosePopup}
                 />
-            )}
+            )} */}
             <View style={viewStyle}>
                 {children}
             </View>

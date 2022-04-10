@@ -1,9 +1,7 @@
 export type INotification = {
     id: string,
-    versionAndroidFrom: string,
-    versionAndroidTo: string,
-    versionIOsFrom: string,
-    versionIOsTo: string,
+    versionFrom: string,
+    versionTo: string,
     isForAllUsers: boolean,
     regionsToShow: string[],
     title: string,

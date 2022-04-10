@@ -20,7 +20,6 @@ import { SideMenu } from '../../view/shared/components/SideMenu';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { MenuIcon } from '../../component/icon/MenuIcon';
 import { AddNoteIcon } from "../../component/icon/AddNoteIcon";
-import { Notifications } from "../../view/notifications";
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay } from "../../model/INoteList";
@@ -38,18 +37,24 @@ import { Header } from '../../component/hat/Header';
 import { Action } from 'redux';
 import { createAppPingAction } from '../../store/service/app/AppPingSaga';
 import { StatisticsPeriod } from '../../model/IStatistics';
+import { createGetNotificationsAction } from "../../store/service/notifications/GetNotificationsSaga";
+import { INotification } from "../../model/INotification";
+import selectUnreadNotifications from "../../view/notifications/selectors/select-unread-notifications";
+import Bell from "../../component/icon/Bell";
 
 interface DashboardScreenStateTProps {
   app: IApp;
   noteListByDay: INoteListByDay;
   user: IUser;
   selectedDotId: number;
+  unreadNotifications: INotification[];
   ping: () => void;
 }
 
 interface DashboardScreenDispatchProps {
   selectNoteToEdit: (noteId: string) => void;
   syncNotes: () => void;
+  loadNotifications: () => void;
   dispatch: Dispatch<Action>;
 }
 
@@ -70,20 +75,23 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
   state = { menuShown: false };
 
   componentDidMount() {
-    const { ping } = this.props;
+    const { ping, loadNotifications } = this.props;
     ping();
 
     appAnalytics.setSection(AnalyticsSections.DASHBOARD);
     appAnalytics.sendEvent(appAnalytics.events.DASHBOARD_SEEN);
 
+    loadNotifications();
+
     StatusBar.setBarStyle('light-content');
   }
 
   componentDidUpdate(pP: FullProps) {
-    const { app, syncNotes } = this.props;
+    const { app, syncNotes, loadNotifications } = this.props;
 
     if (!pP.app.serverAvailable && app.serverAvailable) {
       syncNotes();
+      loadNotifications();
     }
   }
 
@@ -103,20 +111,38 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
     this.setState({ menuShown: false })
   }
 
+  renderRightIcon = () => {
+    const { unreadNotifications } = this.props;
+
+    if (unreadNotifications.length) {
+      return <Bell isActive isBGLight={false} />;
+    } else {
+      return <ProfileIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />;
+    }
+  }
+
+  handleRightClick = () => {
+    const { unreadNotifications } = this.props;
+    if (unreadNotifications.length) {
+      this.props.navigation.navigate(NavigatorEntities.NOTIFICATIONS);
+    } else {
+      this.props.navigation.navigate("Profile");
+    }
+  }
+
   render() {
-    const { navigation } = this.props;
+    const { navigation, unreadNotifications } = this.props;
     const { menuShown } = this.state;
 
     return (
       <>
-        {/* <Beggar /> */}
         <View style={styles.screenView}>
           <Header
             title={i18nGet('compensation')}
             leftIcon={<MenuIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
             leftIconPress={() => this.setState({ menuShown: true })}
-            rightIcon={<ProfileIcon width={25} height={25} fill={COLOR.PRIMARY_WHITE} />}
-            rightIconPress={() => this.props.navigation.navigate("Profile")}
+            rightIcon={this.renderRightIcon()}
+            rightIconPress={this.handleRightClick}
           />
           <ScrollView style={styles.scrollView}>
             <ActiveInsulinInfoConnected navigation={navigation} />
@@ -147,11 +173,11 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
           <Fader hidden={!this.props.selectedDotId} />
         </View >
         <ChartDotInfoPopupConnect navigation={navigation} />
-        <Notifications />
         <SideMenu
           hidden={!menuShown}
           navigation={navigation}
           closeSideMenu={this.closeSideMenu}
+          areThereUnreadNotifications={!!unreadNotifications.length}
         />
       </>
     );
@@ -175,10 +201,12 @@ export const DashboardScreenConnect = connect(
     app: state.app,
     user: state.user,
     selectedDotId: state.interactive.selectedDotId,
+    unreadNotifications: selectUnreadNotifications(state),
   }),
   dispatch => ({
     dispatch,
     syncNotes: () => dispatch(createSyncNotesAction({ reason: SyncReasonType.SEND_PENDING })),
+    loadNotifications: () => dispatch(createGetNotificationsAction()),
     ping: () => dispatch(createAppPingAction()),
   }),
 )(DashboardScreen);

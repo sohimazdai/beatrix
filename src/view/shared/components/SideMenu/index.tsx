@@ -17,7 +17,7 @@ import { appAnalytics } from '../../../../app/Analytics';
 import { PopupDirection, SuperPopup } from '../../../../component/popup/SuperPopup';
 import { Fader } from '../../../../component/fader/Fader';
 import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
-import Clipboard from 'expo-clipboard';
+import Bell from '../../../../component/icon/Bell';
 
 const MAIL = 'mailto://go@doq.su';
 const TG = 'https://t.me/sohimazdai';
@@ -25,6 +25,7 @@ const TG = 'https://t.me/sohimazdai';
 interface Props {
   hidden: boolean;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  areThereUnreadNotifications: boolean;
   closeSideMenu: () => void;
 }
 
@@ -64,7 +65,7 @@ export class SideMenu extends React.Component<Props> {
   };
 
   render() {
-    const { closeSideMenu, hidden } = this.props;
+    const { closeSideMenu, hidden, areThereUnreadNotifications } = this.props;
 
     return (
       <>
@@ -111,6 +112,12 @@ export class SideMenu extends React.Component<Props> {
                   i18nGet('statistics'),
                   <StatisticsPieIcon width={25} height={25} />,
                   NavigatorEntities.STATISTICS,
+                )}
+
+                {this.renderItem(
+                  i18nGet('notifications'),
+                  <Bell isActive={areThereUnreadNotifications} isBGLight />,
+                  NavigatorEntities.NOTIFICATIONS,
                 )}
 
                 {this.renderItem(
