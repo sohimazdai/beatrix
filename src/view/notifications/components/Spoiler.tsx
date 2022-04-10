@@ -11,12 +11,12 @@ import { INotification } from "../../../model/INotification";
 
 interface Props {
     notification: INotification;
-    isSeen: boolean;
+    isNew: boolean;
     handleOpen: () => void;
 }
 
 export default function NotificationSpoiler(props: Props) {
-    const { notification, isSeen, handleOpen } = props;
+    const { notification, isNew, handleOpen } = props;
     const [isOpen, setIsOpen] = useState(false);
     const nDate = new Date(notification.createdAt).getDate();
     const nMonth = new Date(notification.createdAt).getMonth() + 1;
@@ -25,7 +25,7 @@ export default function NotificationSpoiler(props: Props) {
     const handleOpenSpoiler = useCallback(() => {
         handleOpen();
         setIsOpen(!isOpen);
-    }, [isOpen, isSeen, notification]);
+    }, [isOpen, isNew, notification]);
 
     const handleLinkClick = useCallback((link: string) => {
         Linking.openURL(link);
@@ -33,20 +33,22 @@ export default function NotificationSpoiler(props: Props) {
 
     const kLINK_DETECTION_REGEX = /(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?)(\s+|$)/gi;
     const links = notification.text?.match(kLINK_DETECTION_REGEX) || [];
+    const headStyles = {
+        ...styles.head,
+        ...(isOpen ? styles.headSelected : {}),
+        ...(isNew ? styles.headActive : {}),
+    };
 
     return (
         <View style={styles.wrap}>
             <TouchableOpacity
-                style={isOpen ? styles.headSelected : styles.head}
+                style={headStyles}
                 onPress={handleOpenSpoiler}
             >
                 <View style={styles.textBlock}>
-                    <View style={styles.titleBlock}>
-                        {isSeen && <View style={styles.activeDot} />}
                         <Text style={styles.title}>
                             {notification.title}
                         </Text>
-                    </View>
                     <Text style={styles.date}>
                         {
                             (nDate > 9 ? nDate : `0${nDate}`) + "." +
@@ -93,24 +95,25 @@ const styles = StyleSheet.create({
     wrap: {
         flexDirection: 'column',
         marginTop: 16,
-        paddingBottom: 8,
         backgroundColor: COLOR.PRIMARY_WHITE,
     },
     head: {
         paddingHorizontal: 16,
         paddingTop: 8,
+        paddingBottom: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     headSelected: {
-        paddingHorizontal: 16,
         paddingBottom: 8,
-        paddingTop: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         backgroundColor: COLOR.PRIMARY_BASE,
+    },
+    headActive: {
+        paddingLeft: 8,
+        paddingRight: 16,
+        borderLeftWidth: 8,
+        borderColor: COLOR.BLUE,
     },
     textBlock: {
         width: '70%',
@@ -121,13 +124,6 @@ const styles = StyleSheet.create({
     titleBlock: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    activeDot: {
-        marginRight: 8,
-        width: 6,
-        height: 6,
-        borderRadius: 3,
-        backgroundColor: COLOR.RED,
     },
     title: {
         fontSize: 19,
@@ -141,6 +137,7 @@ const styles = StyleSheet.create({
     spoiler: {
         marginTop: 16,
         paddingHorizontal: 16,
+        paddingBottom: 16,
     },
     text: {
         fontSize: 16,

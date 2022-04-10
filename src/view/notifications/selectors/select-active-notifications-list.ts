@@ -28,6 +28,7 @@ function getActiveNotificationsList(
                 ? n.regionsToShow.includes(locale)
                 : true))
             .filter((n) => checkVersion(n, version))
+            .filter((n) => n.text && n.title)
             .sort((a, b) => (
                 new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
             ));

@@ -65,11 +65,10 @@ function* createNote({ payload }: CreateNoteAction) {
         appAnalytics.sendEventWithProps(
             appAnalytics.events.NOTE_CREATED,
             {
-                ...analyticsNote,
                 tags: tagIds.length,
+                glucose: payload.note.glucose,
                 foods,
                 id: noteId,
-                userId,
             }
         );
 

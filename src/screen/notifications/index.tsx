@@ -84,7 +84,7 @@ class NotificationsScreen extends React.Component<Props> {
             <NotificationSpoiler
               key={n.id}
               notification={n}
-              isSeen={!seenList.includes(n.id)}
+              isNew={!seenList.includes(n.id)}
               handleOpen={() => this.handleOpenSpoiler(n.id)}
             />
           ))}
