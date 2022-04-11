@@ -52,9 +52,9 @@ export const getDateInputText = (
       return date.getFullYear();
     default:
       let text = '';
-      if (DateHelper.today() === date.getTime()) {
+      if (DateHelper.isToday(date)) {
         text = i18nGet('today')
-      } else if (DateHelper.yesterday() === date.getTime()) {
+      } else if (DateHelper.isYesterday(date)) {
         text = i18nGet('yesterday')
       } else {
         const displayDate = date.getDate() > 9 ? date.getDate() : ('0' + date.getDate());

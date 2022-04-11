@@ -1,6 +1,10 @@
 import { i18nGet } from '../localisation/Translate';
 
 export class DateHelper {
+    static oneDayInMs() {
+        return 1000 * 60 * 60 * 24;
+    }
+
     static isToday(someDate: Date) {
         const today = new Date();
 

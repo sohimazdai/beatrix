@@ -5,7 +5,6 @@ import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { View, StyleSheet } from 'react-native';
 import { isIOS } from '../../../../app/Platorm';
 import { getLocale } from '../../../../localisation/Translate';
-import { COLOR } from '../../../../constant/Color';
 
 interface Props {
     date: Date;
@@ -68,7 +67,7 @@ export class NoteDatePicker extends React.PureComponent<Props, State> {
                     <DateTimePicker
                         value={date}
                         mode="date"
-                        display='compact'
+                        display={isIOS() ? 'compact' : 'default'}
                         locale={getLocale()}
                         maximumDate={new Date()}
                         style={{ flex: 1 }}

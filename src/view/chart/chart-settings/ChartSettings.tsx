@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+
 import { View, Text, StyleSheet } from 'react-native';
-import { COLOR } from '../../../constant/Color';
-import { ChartPeriodType } from '../../../model/IChart';
-import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
+import { ArrowDirection, ArrowTaillessIcon } from '../../../component/icon/ArrowTaillessIcon';
+import DoubleArrowRight from '../../../component/icon/DoubleArrowRight';
+import { StyledButton, StyledButtonType } from '../../../component/button/StyledButton';
 import { DatePicker } from '../../shared/components/DatePicker/DatePicker';
+
 import { DateHelper } from '../../../utils/DateHelper';
 import { i18nGet } from '../../../localisation/Translate';
-import { connect } from 'react-redux';
-import { IStorage } from '../../../model/IStorage';
+import { SHADOW_OPTIONS } from '../../../constant/ShadowOptions';
+import { ChartPeriodType } from '../../../model/IChart';
+import { COLOR } from '../../../constant/Color';
 import { createChangeInteractive } from '../../../store/modules/interactive/interactive';
-import { StyledButton, StyledButtonType } from '../../../component/button/StyledButton';
-import { ArrowDirection, ArrowTaillessIcon } from '../../../component/icon/ArrowTaillessIcon';
+import { IStorage } from '../../../model/IStorage';
 
 export interface ChartSettingsProps {
     onChangingPeriod: (period: ChartPeriodType) => void;
@@ -26,12 +29,28 @@ const PERIODS = [
 ]
 
 export function Comp(props: ChartSettingsProps) {
-    const { selectedChartPeriod = ChartPeriodType.DAY } = props;
+    const {
+        selectedChartPeriod = ChartPeriodType.DAY,
+        date,
+        onDateChange,
+    } = props;
     const today = new Date(
         new Date().getFullYear(),
         new Date().getMonth(),
         new Date().getDate()
     );
+
+    const handleChangePeriod = useCallback((period: ChartPeriodType) => {
+        const today = DateHelper.today();
+        if (today < date.getTime()) {
+            onDateChange(new Date());
+        }
+
+        if (selectedChartPeriod != period) {
+            props.onChangingPeriod(period);
+        }
+    }, [selectedChartPeriod, onDateChange, date]);
+
     return <View style={styles.chartSettingsView}>
         <View style={styles.dateInputBlock}>
             <StyledButton
@@ -45,13 +64,28 @@ export function Comp(props: ChartSettingsProps) {
                 selectedPeriod={selectedChartPeriod}
                 onChange={props.onDateChange}
             />
-            <StyledButton
-                style={StyledButtonType.OUTLINE}
-                onPress={() => props.onDateChange(setNextDateValueByChartPeriodType(props))}
-                icon={<ArrowTaillessIcon direction={ArrowDirection.RIGHT} />}
-                disabled={getNextDate(props.date) > today}
-                small
-            />
+            <View style={styles.rightControlBlock}>
+                <StyledButton
+                    style={StyledButtonType.OUTLINE}
+                    onPress={() => props.onDateChange(setNextDateValueByChartPeriodType(props))}
+                    icon={<ArrowTaillessIcon direction={ArrowDirection.RIGHT} />}
+                    disabled={getNextDate(props.date) > today}
+                    small
+                />
+                {
+                    (selectedChartPeriod === ChartPeriodType.DAY) && (
+                        DateHelper.today() > date.getTime() + DateHelper.oneDayInMs() * 3
+                    ) && (
+                        <View style={styles.rightControlBlockDoubleArrow}>
+                            <StyledButton
+                                style={StyledButtonType.OUTLINE}
+                                onPress={() => props.onDateChange(new Date())}
+                                icon={<DoubleArrowRight color={COLOR.PRIMARY} />}
+                                small
+                            />
+                        </View>
+                    )}
+            </View>
         </View>
         <View style={styles.borderedChartSettings}>
             <View style={styles.periodChangingBlock}>
@@ -65,12 +99,10 @@ export function Comp(props: ChartSettingsProps) {
                             : StyledButtonType.OUTLINE;
 
                         return (
-                            <View style={styles.periodButtonWrap}>
+                            <View key={period} style={styles.periodButtonWrap}>
                                 <StyledButton
                                     style={btnStyle}
-                                    onPress={() => (
-                                        selectedChartPeriod != period && props.onChangingPeriod(period)
-                                    )}
+                                    onPress={() => handleChangePeriod(period)}
                                     label={getPeriodName(period)}
                                     small
                                 />
@@ -156,30 +188,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-    dateClicker: {
-        display: 'flex',
-        width: 45,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        ...SHADOW_OPTIONS,
-        borderRadius: 5,
-        backgroundColor: COLOR.WHITE,
+    rightControlBlock: {
+        flexDirection: 'row',
     },
-    dateClickerDisable: {
-        opacity: 0.5,
-    },
-    dateClickerTouchable: {
-        display: 'flex',
-        width: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    dateClickerText: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        padding: 10,
-        color: '#333'
+    rightControlBlockDoubleArrow: {
+        marginLeft: 8,
     },
     borderedChartSettings: {
         display: 'flex',

@@ -5,7 +5,6 @@ import { View, StyleSheet } from 'react-native';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { isIOS } from '../../../../app/Platorm';
 import uuid from 'uuid';
-import { COLOR } from '../../../../constant/Color';
 import { getLocale } from '../../../../localisation/Translate';
 
 export interface Props {
@@ -69,7 +68,7 @@ export class NoteTimePicker extends React.Component<Props, State> {
                     <DateTimePicker
                         value={date}
                         mode="time"
-                        display='compact'
+                        display={isIOS() ? 'compact' : 'default'}
                         locale={getLocale()}
                         style={{
                             flex: 1,
