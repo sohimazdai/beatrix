@@ -1471,7 +1471,18 @@ const translateStore = {
     ru: 'Перейти',
     ua: 'Перейти',
   },
-
+  carbohydrates_parent_case: {
+    en: 'carbohydrates',
+    es: 'carbohidratos',
+    ru: 'углеводов',
+    ua: 'вуглеводiв'
+  },
+  breadUnits_parent_case: {
+    en: 'carbs units',
+    es: 'Racion de HC',
+    ru: 'ХЕ',
+    ua: 'XO',
+  },
   target_glycemia: {
     en: 'Target glycemia',
     es: 'Glucemia objetivo',
