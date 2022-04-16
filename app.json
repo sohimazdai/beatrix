@@ -37,7 +37,7 @@
       "useNextNotificationsApi": true,
       "package": "com.doq.beatrix",
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.doq.beatrix&showAllReviews=true",
-      "versionCode": 43,
+      "versionCode": 44,
       "adaptiveIcon": {
         "backgroundColor": "#FFE1DF",
         "foregroundImage": "./assets/icon.png"
