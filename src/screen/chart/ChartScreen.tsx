@@ -8,8 +8,7 @@ import { StyleSheet } from "react-native";
 import { ChartWrap } from '../../view/chart/chart-wrap/ChartWrap';
 import { BlockHat } from '../../component/hat/BlockHat';
 import { InfoIcon } from '../../component/icon/InfoIcon';
-import { IconPositionType, StyledButton, StyledButtonType } from '../../component/button/StyledButton';
-import { AddNoteIcon } from '../../component/icon/AddNoteIcon';
+import AddNoteButton from '../../view/notes/components/add-note-button/AddNoteButton';
 
 import { IStorage } from '../../model/IStorage';
 import { INoteList, INoteListByDay } from '../../model/INoteList';
@@ -155,16 +154,11 @@ class Chart extends React.Component<ChartProps, ChartState> {
                             <View style={styles.space} />
                         </View>
                     </ScrollView>
-                    {!this.state.popupShown && <View style={styles.addNoteButtonView}>
-                        <StyledButton
-                            fluid
-                            style={StyledButtonType.PRIMARY}
-                            onPress={this.goToNoteEditor}
-                            label={i18nGet('add_note')}
-                            icon={<AddNoteIcon />}
-                            iconPosition={IconPositionType.RIGHT}
-                        />
-                    </View>}
+                    {!this.state.popupShown && (
+                        <View style={styles.addNoteButtonView}>
+                            <AddNoteButton onPress={this.goToNoteEditor} from="chartScreen" />
+                        </View>
+                    )}
                 </View>
                 <ChartDotInfoPopupConnect navigation={navigation} />
             </>

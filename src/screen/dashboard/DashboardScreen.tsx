@@ -19,7 +19,7 @@ import { Fader } from '../../component/fader/Fader';
 import { SideMenu } from '../../view/shared/components/SideMenu';
 import { ChartDotInfoPopupConnect } from '../../view/chart/chart-dot-info-popup/components/chart-dot-info-popup/ChartDotInfoPopup';
 import { MenuIcon } from '../../component/icon/MenuIcon';
-import { AddNoteIcon } from "../../component/icon/AddNoteIcon";
+import AddNoteButton from '../../view/notes/components/add-note-button/AddNoteButton';
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay } from "../../model/INoteList";
@@ -161,14 +161,7 @@ class DashboardScreen extends React.PureComponent<FullProps, State> {
             <View style={styles.stub} />
           </ScrollView>
           <View style={styles.addNoteButtonView}>
-            <StyledButton
-              fluid
-              style={StyledButtonType.PRIMARY}
-              onPress={this.goToNoteEditor}
-              label={i18nGet('add_note')}
-              icon={<AddNoteIcon />}
-              iconPosition={IconPositionType.RIGHT}
-            />
+            <AddNoteButton onPress={this.goToNoteEditor} from="dashboard" />
           </View>
           <Fader hidden={!this.props.selectedDotId} />
         </View >

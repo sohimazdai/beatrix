@@ -10,8 +10,7 @@ import { StyleSheet } from "react-native";
 
 import { Note } from "../../view/shared/components/Note/Note";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { IconPositionType, StyledButton, StyledButtonType } from "../../component/button/StyledButton";
-import { AddNoteIcon } from "../../component/icon/AddNoteIcon";
+import AddNoteButton from "../../view/notes/components/add-note-button/AddNoteButton";
 
 import { IStorage } from "../../model/IStorage";
 import { INoteListByDay, INoteListNote } from "../../model/INoteList";
@@ -119,14 +118,7 @@ class NoteListScreen extends React.PureComponent<FullProps> {
             {this.renderCards()}
           </View>
           <View style={styles.addNoteButtonView}>
-            <StyledButton
-              fluid
-              style={StyledButtonType.PRIMARY}
-              onPress={this.goToNoteEditor}
-              label={i18nGet('add_note')}
-              icon={<AddNoteIcon />}
-              iconPosition={IconPositionType.RIGHT}
-            />
+            <AddNoteButton onPress={this.goToNoteEditor} from="noteList" />
           </View>
         </View>
         <FilterPopupConnected
