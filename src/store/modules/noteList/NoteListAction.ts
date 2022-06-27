@@ -23,3 +23,10 @@ export interface NoteListOneLevelDeepMerge {
         noteList: INoteList
     }
 }
+
+export interface NoteListReplace {
+    type: NoteListActionType.REPLACE
+    payload: {
+        noteList: INoteList
+    }
+}

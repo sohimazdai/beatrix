@@ -138,7 +138,7 @@ class Onboarding extends React.Component<Props, State> {
       : { ...styles.typePickerItem };
 
     return (
-      <View style={styles.insulinPickerView}>
+      <View style={styles.pickerView}>
         <View style={styles.insulinPickerHeader}>
           <Text style={styles.label}>
             {i18nGet('select_insulin_type_you_use')}
@@ -200,7 +200,7 @@ class Onboarding extends React.Component<Props, State> {
       : { ...styles.typePickerItem };
 
     return (
-      <View style={styles.insulinPickerView}>
+      <View style={styles.pickerView}>
         <Text style={styles.labelWithoutMargin}>
           {i18nGet('glycemia_unit_description')}
         </Text>
@@ -249,7 +249,7 @@ class Onboarding extends React.Component<Props, State> {
       : { ...styles.typePickerItem };
 
     return (
-      <View style={styles.insulinPickerView}>
+      <View style={styles.pickerView}>
         <Text style={styles.labelWithoutMargin}>
           {i18nGet('carb_unit_description')}
         </Text>
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: COLOR.WHITE,
   },
-  insulinPickerView: {
+  pickerView: {
     borderRadius: 10,
     margin: 16,
     marginBottom: 0,

@@ -13,3 +13,6 @@ web-report/
 yarn-error.log
 yarn.lock
 .DS_store
+node_modules
+.expo
+release-channel

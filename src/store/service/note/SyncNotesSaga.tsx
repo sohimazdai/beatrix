@@ -1,14 +1,17 @@
 
-import { put, call, takeLatest, select, actionChannel } from 'redux-saga/effects';
+import { put, call, takeLatest, select } from 'redux-saga/effects';
 import { IStorage } from '../../../model/IStorage';
 import { NoteApi } from '../../../api/NoteApi';
-import { createNoteListOneLevelDeepMerge } from '../../modules/noteList/NoteListActionCreator';
+import { createNoteListOneLevelDeepMerge, createNoteListReplace } from '../../modules/noteList/NoteListActionCreator';
 import { handleErrorSilently } from '../../../app/ErrorHandler';
 import { createClearPendingNoteListByUserId } from '../../modules/pending-note-list/PendingNoteList';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { batchActions } from 'redux-batched-actions';
 import { i18nGet } from '../../../localisation/Translate';
 import { appAnalytics } from '../../../app/Analytics';
+import { createChangeInteractive } from '../../modules/interactive/interactive';
+import createMap from '../../../utils/create-map';
+import { INoteListNote } from '../../../model/INoteList';
 
 const ACTION_TYPE = 'SYNC_NOTES_ACTION';
 
@@ -27,8 +30,8 @@ interface Action {
     payload: Payload
 }
 
-export function createSyncNotesAction(payload?: Payload) {
-    if (!payload) payload = {};
+export function createSyncNotesAction(payload: Payload = {}) {
+
     const { reason, noLoading } = payload;
 
     const actions: any[] = [
@@ -39,6 +42,7 @@ export function createSyncNotesAction(payload?: Payload) {
                 reason: reason || SyncReasonType.JUST
             }
         },
+        createChangeInteractive({ isNotesLoading: true }),
     ];
 
     if (!noLoading) {
@@ -88,12 +92,18 @@ function* run(action: Action) {
             : state.app.serverAvailable && state.app.networkConnected
 
         if (cond) {
-            const response = yield call(NoteApi.syncNotes, notesToSync, userId);
+            const {
+                data: { notes, noteListSize, offset },
+                status,
+            } = yield call(NoteApi.syncNotesV2, notesToSync, userId);
 
-            if (response.status === 200) {
+            const notesList = createMap<INoteListNote>(notes);
+
+            if (status === 200) {
                 yield put(
                     batchActions([
-                        createNoteListOneLevelDeepMerge(response.data),
+                        createNoteListReplace(notesList),
+                        createUserChangeAction({ noteListSize, noteListCurrentOffset: offset }),
                         createClearPendingNoteListByUserId(userId),
                     ])
                 )
@@ -101,6 +111,8 @@ function* run(action: Action) {
 
             appAnalytics.sendEvent(appAnalytics.events.NOTES_SYNCED);
         }
+
+        yield put(createChangeInteractive({ isNotesLoading: false }));
 
         if (!noLoading) {
             yield put(createUserChangeAction({
@@ -111,6 +123,7 @@ function* run(action: Action) {
     } catch (e) {
         handleErrorSilently(e, i18nGet('notes_sync_error'));
 
+        yield put(createChangeInteractive({ isNotesLoading: false }));
         yield put(createUserChangeAction({
             loading: false,
             error: e.message

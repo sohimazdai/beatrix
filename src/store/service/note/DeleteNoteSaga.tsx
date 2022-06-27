@@ -42,11 +42,15 @@ function* run({ payload }: DeleteNoteAction) {
     try {
         yield put(createDeleteNoteInNoteListById(payload.id));
 
+        let noteListSize = state.user.noteListSize;
+
         if (state.app.serverAvailable && state.app.networkConnected) {
-            yield call(NoteApi.deleteNote, payload.id, state.user.id);
+            const { data: { result } } = yield call(NoteApi.deleteNote, payload.id, state.user.id);
             if (noteFromPendingList) {
                 yield put(createDeleteNoteFromPendingNoteList(payload.id, state.user.id));
             }
+
+            noteListSize = result.noteListSize;
         } else {
             if (noteToDelete) {
                 yield put(createAddNotePendingNoteList(payload.id, state.user.id));
@@ -59,7 +63,8 @@ function* run({ payload }: DeleteNoteAction) {
 
         yield put(createUserChangeAction({
             loading: false,
-            error: null
+            error: null,
+            noteListSize,
         }));
     } catch (e) {
         handleErrorSilently(e, i18nGet('notes_deleting_error'));

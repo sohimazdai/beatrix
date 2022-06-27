@@ -4,7 +4,7 @@ import { UserActionType } from "./UserActionType";
 export interface UserChangeAction {
     type: UserActionType.CHANGE,
     payload: {
-        user: IUser
+        user: Partial<IUser>
     }
 }
 

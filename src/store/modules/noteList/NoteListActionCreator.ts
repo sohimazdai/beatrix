@@ -1,5 +1,5 @@
 import { INoteListNote, INoteList } from "../../../model/INoteList";
-import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, NoteListOneLevelDeepMerge } from "./NoteListAction";
+import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, NoteListOneLevelDeepMerge, NoteListReplace } from "./NoteListAction";
 import { NoteListActionType } from "./NoteListActionType";
 
 export function createNoteListChangeNoteByIdAction(note: INoteListNote, userId: string, generatedNoteId?: string): NoteListChangeNoteByIdAction {
@@ -25,6 +25,15 @@ export function createDeleteNoteInNoteListById(noteId: string): NoteListDeleteNo
 export function createNoteListOneLevelDeepMerge(noteList: INoteList): NoteListOneLevelDeepMerge {
     return {
         type: NoteListActionType.ONE_LEVEL_DEEP_MERGE,
+        payload: {
+            noteList
+        }
+    }
+}
+
+export function createNoteListReplace(noteList: INoteList): NoteListReplace {
+    return {
+        type: NoteListActionType.REPLACE,
         payload: {
             noteList
         }

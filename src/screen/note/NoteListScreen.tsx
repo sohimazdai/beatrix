@@ -31,6 +31,8 @@ import { selectFilteredNotes } from '../../view/notes/selectors/select-filtered-
 import { checkIsFilterActive } from '../../view/notes/selectors/check-is-filter-active';
 import { createUserChangeAction } from '../../store/modules/user/UserActionCreator';
 
+const PORTIONS_SIZE = 20;
+
 interface NoteListScreenStateTProps {
   app: IApp;
   noteListByDay: INoteListByDay;
@@ -41,7 +43,7 @@ interface NoteListScreenStateTProps {
 interface NoteListScreenDispatchProps {
   selectNoteToEdit: (noteId: string) => void;
   syncNotes: () => void;
-  setNeedToRequestReview: () => void
+  setNeedToRequestReview: () => void;
 }
 
 interface NoteListScreenProps {
@@ -118,7 +120,10 @@ class NoteListScreen extends React.PureComponent<FullProps> {
             {this.renderCards()}
           </View>
           <View style={styles.addNoteButtonView}>
-            <AddNoteButton onPress={this.goToNoteEditor} from="noteList" />
+            <AddNoteButton
+              onPress={this.goToNoteEditor}
+              from="noteList"
+            />
           </View>
         </View>
         <FilterPopupConnected
@@ -135,36 +140,59 @@ class NoteListScreen extends React.PureComponent<FullProps> {
   }
 
   showMorePosts = () => {
-    this.setState({ portionsToRender: this.state.portionsToRender + 1 });
+    appAnalytics.sendEventWithProps(
+      appAnalytics.events.SHOW_MORE_CLICK,
+      {
+        portions: this.state.portionsToRender + 1,
+      },
+    );
+
+    this.setState({ portionsToRender: this.state.portionsToRender + 1 })
   }
 
   renderCards() {
-    var portionSize = 10;
-    const sortedDays = Object.keys(this.props.noteListByDay).sort(
-      (a, b) => parseInt(b) - parseInt(a)
-    );
-    var daysToRender = sortedDays.slice(
-      0,
-      this.state.portionsToRender * portionSize
-    );
-    var isButtonShowing = sortedDays.length !== daysToRender.length;
+    const { noteListByDay } = this.props;
+    const { portionsToRender } = this.state;
+
+    const sortedDays = Object
+      .keys(noteListByDay)
+      .sort((a, b) => parseInt(b) - parseInt(a));
+
+    const daysToRender = sortedDays
+      .slice(0, portionsToRender * PORTIONS_SIZE);
+
+    const isButtonShown = sortedDays.length >= daysToRender.length;
+
     return daysToRender.length !== 0 ? (
       <ScrollView style={styles.cardsScrollView}>
         {
-          daysToRender.map(day => {
-            return (
-              <View key={day} style={styles.cardWrap}>
-                {this.renderDate(parseInt(day))}
-                {this.renderCard(this.props.noteListByDay[day])}
-              </View>
-            )
-          })
+          daysToRender.map(day => (
+            <View key={day} style={styles.cardWrap}>
+              {this.renderDate(parseInt(day))}
+              {this.renderCard(noteListByDay[day])}
+            </View>
+          ))
         }
-        {isButtonShowing && this.renderShowMoreButton()}
+        {this.renderShowMoreButton(isButtonShown)}
         <View style={styles.noteListBottom}></View>
       </ScrollView>
     ) : (
       <Text style={styles.noNotesStub}>{i18nGet('notes_not_found')}</Text>
+    );
+  }
+
+  renderShowMoreButton = (isShown: boolean) => {
+    if (!isShown) return null;
+
+    return (
+      <View style={styles.showMoreButtonWrapper}>
+        <TouchableOpacity
+          style={styles.showMoreButton}
+          onPress={this.showMorePosts}
+        >
+          <Text style={styles.addNoteButtonText}>{i18nGet('show_more')}</Text>
+        </TouchableOpacity>
+      </View>
     )
   }
 
@@ -215,18 +243,6 @@ class NoteListScreen extends React.PureComponent<FullProps> {
     );
   }
 
-  renderShowMoreButton() {
-    return (
-      <View style={styles.showMoreButtonWrapper}>
-        <TouchableOpacity
-          style={styles.showMoreButton}
-          onPress={this.showMorePosts}
-        >
-          <Text style={styles.addNoteButtonText}>{i18nGet('show_more')}</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
   getMonthString(m: number) {
     switch (m) {
       case 0:
@@ -376,8 +392,7 @@ const styles = StyleSheet.create({
     ...SHADOW_OPTIONS
   },
   noNotesStub: {
-    flex: 1,
-    padding: 40,
+    padding: 16,
     fontSize: 20,
 
     color: "#333333"
@@ -401,7 +416,6 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   showMoreButtonWrapper: {
-    flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
@@ -409,6 +423,7 @@ const styles = StyleSheet.create({
   showMoreButton: {
     padding: 10,
     paddingHorizontal: 20,
+    marginBottom: 50,
     margin: 5,
     paddingLeft: 10,
     paddingRight: 10,

@@ -1,8 +1,16 @@
 import { IStorage } from '../../model/IStorage';
 import { NoteApi } from '../../api/NoteApi';
-import { INoteList } from '../../model/INoteList';
+import { INoteList, INoteListNote } from '../../model/INoteList';
 
-export async function syncNotes(state: IStorage): Promise<INoteList> {
+import createMap from '../../utils/create-map';
+
+type SyncNotesResponse = {
+  notes: INoteList,
+  noteListSize: number,
+  offset: number,
+}
+
+export async function syncNotes(state: IStorage): Promise<SyncNotesResponse> {
   const userId = state.user.id;
   const noteList = state.noteList;
 
@@ -26,12 +34,15 @@ export async function syncNotes(state: IStorage): Promise<INoteList> {
     return notes;
   }, [])
 
-  const cond = state.app.serverAvailable && state.app.networkConnected;
-  if (cond) {
-    const response = await NoteApi.syncNotes(notesToSync, userId);
-    const syncedNotes = response.data;
-    return syncedNotes;
+  const isFetchingAvailable = state.app.serverAvailable && state.app.networkConnected;
+
+  if (isFetchingAvailable) {
+    const { data: { notes, noteListSize, offset } } = await NoteApi.syncNotesV2(notesToSync, userId);
+
+    const notesList = createMap<INoteListNote>(notes);
+
+    return { notes: notesList, noteListSize, offset };
   }
 
-  return {};
+  return { notes: {}, noteListSize: undefined, offset: 0 };
 }

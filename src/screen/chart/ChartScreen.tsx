@@ -269,7 +269,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
     }
 
     renderNetXTitles() {
-        let highlightsNumber;
+        let highlightsNumber: number;
         let highlightsTitles = [];
         let newWidth = this.chartConfig.breadUnits.boxWidth - 3 * this.chartConfig.breadUnits.basicPadding;
         let titleWidth;
@@ -393,9 +393,7 @@ class Chart extends React.Component<ChartProps, ChartState> {
         }
     }
 
-    onCurrentDateChange = (date: Date) => {
-        this.setState({ currentDate: date })
-    }
+    onCurrentDateChange = (date: Date) => this.setState({ currentDate: date });
 
     onDotPress = (dotId: string) => {
         this.setState({

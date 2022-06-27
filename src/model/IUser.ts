@@ -20,6 +20,10 @@ export interface IUser {
     registeredOn?: Date
     reviewRequested?: boolean
     needToRequestReview?: boolean
+    
+    noteListSize?: number;
+    earliestNoteDate?: number;
+    noteListCurrentOffset?: number;
 }
 
 export enum AuthType {

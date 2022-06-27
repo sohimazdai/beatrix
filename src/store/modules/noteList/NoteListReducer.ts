@@ -1,10 +1,10 @@
 import { INoteList } from "../../../model/INoteList";
 import { NoteListActionType } from "./NoteListActionType";
-import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, NoteListOneLevelDeepMerge } from "./NoteListAction";
+import { NoteListChangeNoteByIdAction, NoteListDeleteNoteByIdAction, NoteListOneLevelDeepMerge, NoteListReplace } from "./NoteListAction";
 
 export function noteListReducer(
   noteList: INoteList = {},
-  action: NoteListChangeNoteByIdAction | NoteListDeleteNoteByIdAction | NoteListOneLevelDeepMerge,
+  action: NoteListChangeNoteByIdAction | NoteListDeleteNoteByIdAction | NoteListOneLevelDeepMerge | NoteListReplace,
 ): INoteList {
   switch (action.type) {
     case NoteListActionType.CHANGE_NOTE_BY_ID:
@@ -33,6 +33,10 @@ export function noteListReducer(
         ...noteList,
         ...action.payload.noteList
       };
+      
+    case NoteListActionType.REPLACE:
+      return action.payload.noteList;
+
     default:
       return noteList;
   }

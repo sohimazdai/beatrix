@@ -13,7 +13,6 @@ import { BlockHat } from '../../../../component/hat/BlockHat';
 import RadioGroup from '../../../../component/radio-group/RadioGroup';
 import { PopupHeader } from '../../../../component/popup/PopupHeader';
 import { ProfilePicker } from '../../../../view/profile/ProfilePicker';
-import { PopupIntegratorConnected } from '../../../../component/PopupList/PopupIntegrator';
 import { StyledButton, StyledButtonType } from '../../../../component/button/StyledButton';
 
 import { styles } from './Style';
@@ -47,7 +46,12 @@ export class LanguageSettingsComponent extends Component<Props, State> {
     };
 
     componentDidMount() {
-        appAnalytics.sendEvent(appAnalytics.events.LANGUAGE_SEEN);
+        appAnalytics.sendEventWithProps(
+            appAnalytics.events.LANGUAGE_SEEN,
+            {
+                language: this.state.initialLanguage,
+            },
+        );
     }
 
     handleSelectLanguage = (language: LocaleType) => {

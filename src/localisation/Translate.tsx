@@ -1858,6 +1858,12 @@ const translateStore = {
     ru: 'Ошибка удаления записи с сервера',
     ua: 'Помилка видалення запису iз сервера',
   },
+  notes_get_error: {
+    en: 'Error getting notes from server',
+    es: 'Error al obtener registros del servidor',
+    ru: 'Ошибка получения записей с сервера',
+    ua: 'Помилка отримання записiв iз сервера',
+  },
   notes_creating_error: {
     en: 'Error creating server record',
     es: 'Error al crear el registro del servidor',

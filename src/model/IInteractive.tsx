@@ -23,6 +23,8 @@ export interface IInteractive {
     isPasswordRestored?: boolean
 
     cardFoodId?: string
+
+    isNotesLoading?: boolean;
 }
 
 export enum InteractiveUserPropertiesShedulePopupType {

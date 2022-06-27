@@ -23,6 +23,7 @@ import { watchGetFavoritesProducts } from './service/food/GetFavoritesProductsSa
 import { watchChangeShedule } from './service/shedule/ChangeSheduleSaga';
 import { watchGetNotifications } from './service/notifications/GetNotificationsSaga';
 import { watchSetNotificationSeen } from './service/notifications/SetNotificationSeenSaga';
+import { watchGetNotes } from './service/note/GetNotesSaga';
 
 export function* rootSaga() {
     yield all([
@@ -41,6 +42,7 @@ export function* rootSaga() {
         fork(watchDeleteNote),
         fork(watchSyncNotes),
         fork(watchUpdateUserShedule),
+        fork(watchGetNotes),
         //APP
         fork(watchAppPing),
         //EXPORT

@@ -44,15 +44,20 @@ function* createNote({ payload }: CreateNoteAction) {
     try {
         yield put(createNoteListChangeNoteByIdAction(noteWithoutId, userId, noteId));
 
+        let noteListSize = state.user.noteListSize;
+
         if (state.app.serverAvailable && state.app.networkConnected) {
-            yield call(
+            const { data: { result } } = yield call(
                 NoteApi.createNote,
                 {
                     ...noteWithoutId,
                     id: noteId,
                     userId,
                 },
-                userId);
+                userId,
+            );
+
+            noteListSize = result.noteListSize;
         } else {
             yield put(createAddNotePendingNoteList(noteId, state.user.id));
         }
@@ -75,6 +80,7 @@ function* createNote({ payload }: CreateNoteAction) {
         yield put(createUserChangeAction({
             loading: false,
             error: null,
+            noteListSize,
         }));
     } catch (e) {
         handleErrorSilently(e, i18nGet('notes_creating_error'));

@@ -71,14 +71,13 @@ export const appAnalytics = {
   events: {
     ERROR: 'Error',
 
-    EMAIL_LOGIN: 'Email login',
-    EMAIL_SIGN_UP: 'Email sign up',
     GOOGLE_SIGN_IN: 'Google sign in',
-    REMEMBER_PASSWORD: 'Remember password',
-    LOG_OUT: 'Log out',
+    //APP
     USER_BY_INSTALLATION_ID: 'User by installation id',
+    REQUEST_AXIOS_RETRY: 'Request axios retry',
     //USER
     USER_SYNCED: 'User synced',
+    LOG_OUT: 'Log out',
     // NOTIFICATIONS
     NOTIFICATIONS_SCREEN_SEEN: 'Notifications screen seen',
     NOTIFICATIONS_ALL_SEEN: 'Notifications all seen',
@@ -93,6 +92,8 @@ export const appAnalytics = {
     //NOTELIST
     NOTELIST_SEEN: 'NoteList seen',
     NOTE_EDITOR_SEEN: 'NoteEditor seen',
+    SHOW_MORE_CLICK: 'NoteList show more clicked',
+    NOTES_GOT: 'Notes got from server',
     //PROFILE
     PROFILE_SEEN: 'Profile seen',
     DIABETES_PROFILE_SEEN: 'Profile diabetes seen',

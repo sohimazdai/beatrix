@@ -82,3 +82,12 @@ export interface IChartConfiguration {
 export interface IChartTrain {
     [id: number]: IChartDot
 }
+
+export interface IFetchedDataDateRange {
+    from: number,
+    to: number,
+}
+
+export interface IChart {
+    fetchedData: IFetchedDataDateRange[],
+}

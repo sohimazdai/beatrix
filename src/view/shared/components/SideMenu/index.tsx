@@ -2,22 +2,24 @@ import React from 'react';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { View, StyleSheet, Text, Dimensions, Alert, Linking } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
-import { COLOR } from '../../../../constant/Color';
-import { i18nGet } from '../../../../localisation/Translate';
+
+import { Header } from '../../../../component/hat/Header';
+import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
+import { PopupDirection, SuperPopup } from '../../../../component/popup/SuperPopup';
+import { Fader } from '../../../../component/fader/Fader';
 import { NotesIcon } from '../../../../component/icon/NotesIcon';
 import { ChartsIcon } from '../../../../component/icon/ChartsIcon';
 import { TagsIcon } from '../../../../component/icon/TagsIcon';
 import { ProfileIcon } from '../../../../component/icon/ProfileIcon';
 import StatisticsPieIcon from '../../../../component/icon/StatisticsPieIcon';
 import SoupIcon from '../../../../component/icon/SoupIcon';
-import { Header } from '../../../../component/hat/Header';
-import { ArrowDirection, ArrowTaillessIcon } from '../../../../component/icon/ArrowTaillessIcon';
-import { appAnalytics } from '../../../../app/Analytics';
-import { PopupDirection, SuperPopup } from '../../../../component/popup/SuperPopup';
-import { Fader } from '../../../../component/fader/Fader';
-import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 import Bell from '../../../../component/icon/Bell';
+
+import { NavigatorEntities } from '../../../../navigator/modules/NavigatorEntities';
+import { COLOR } from '../../../../constant/Color';
+import { i18nGet } from '../../../../localisation/Translate';
+import { appAnalytics } from '../../../../app/Analytics';
+import { SHADOW_OPTIONS } from '../../../../constant/ShadowOptions';
 
 const MAIL = 'mailto://go@doq.su';
 const TG = 'https://t.me/sohimazdai';

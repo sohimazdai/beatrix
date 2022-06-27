@@ -34,6 +34,7 @@ import { PopupListConnected } from '../component/PopupList/PopupList';
 import { LanguageSettings } from '../screen/profile/profile-settings/sub-settings/LanguageSettings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationsScreen from '../screen/notifications';
+import NoteListFetcher from '../component/note-list-fetcher';
 
 AsyncStorage.getItem('language').then((language) => {
     if (language) {
@@ -88,6 +89,7 @@ const AuthedContainer = (props: AuthedContainerProps) => {
                 <ConfirmPopupConnect />
                 <ModalContentConnect />
                 <PopupListConnected />
+                <NoteListFetcher />
             </>
         )
 }
