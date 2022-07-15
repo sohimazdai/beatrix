@@ -1,13 +1,21 @@
-# beatrix
+## beatrix
 
-### Diabetes control app
+#### Diabetes control app
 
-#### Client stack: react-native, redux, redux-saga, axios, react-navigation
+##### Параметры окружения
+`node -v 14.19.0`
+`expo --version 5.5.1`
+`yarn --version 1.22.17`
 
-#### clone? git clone {with ssh}
+##### Установка проекта и запуск
+`npm install -g expo-cli`
+or
+`yarn install expo-cli`
 
-#### install dependencies? yarn
+`expo install`
+`expo start`
+Pick `ios` or `android`.
+Or `expo start platform`.
 
-#### install expo? yarn install expo-cli
-
-#### run? expo start "" | android | ios
+##### Установка новых зависимостей
+`expo install package_name`
