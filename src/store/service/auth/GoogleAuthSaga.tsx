@@ -1,57 +1,51 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { IUser, AuthType } from '../../../model/IUser';
-import * as Google from 'expo-google-app-auth';
-import { googleAuthConfig } from '../../../config/googleAuthConfig';
 import { createSyncUserAction } from '../user/SyncUserSaga';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';
 import Constants from 'expo-constants';
 import { i18nGet } from '../../../localisation/Translate';
+import fetchGoogleUserInfo from './fetch-google-user-info';
 
 const ACTION_TYPE = 'GOOGLE_AUTH_ACTION';
 
 interface GoogleAuthAction {
     type: 'GOOGLE_AUTH_ACTION',
+    accessToken: string,
 }
 
-export function createGoogleAuthAction(): GoogleAuthAction {
+export function createGoogleAuthAction(accessToken): GoogleAuthAction {
     return {
-        type: ACTION_TYPE
+        type: ACTION_TYPE,
+        accessToken,
     }
 }
 
-function* run() {
+function* run(action) {
+    const { accessToken } = action;
+
     try {
         yield put(createUserChangeAction({
             loading: true,
-            error: null
+            error: null,
         }));
 
-        const googleUser: Google.LogInResult = yield Google.logInAsync(googleAuthConfig);
+        const userInfo = yield call(fetchGoogleUserInfo, accessToken);
+
         let userData: IUser = {};
 
-        if (googleUser.type === 'cancel') {
-            yield put(createUserChangeAction({
-                loading: false,
-                error: null
-            }));
-            return;
-        }
-
-        if (googleUser.type === 'success') {
-            userData = {
-                id: googleUser.user.id,
-                email: googleUser.user.email,
-                name: googleUser.user.name,
-                authType: AuthType.GOOGLE,
-                installationId: Constants.installationId,
-                isAuthed: true
-            };
-        }
+        userData = {
+            id: userInfo.id,
+            email: userInfo.email,
+            name: userInfo.name,
+            authType: AuthType.GOOGLE,
+            installationId: Constants.sessionId,
+            isAuthed: true,
+        };
 
         appAnalytics.sendEvent(appAnalytics.events.GOOGLE_SIGN_IN);
-        appAnalytics.setUser(googleUser.user.id);
+        appAnalytics.setUser(userInfo.id);
 
         yield put(createUserChangeAction({
             ...userData,
