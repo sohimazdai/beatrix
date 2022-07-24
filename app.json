@@ -28,7 +28,7 @@
     "ios": {
       "bundleIdentifier": "com.doq.beatrix",
       "supportsTablet": true,
-      "buildNumber": 1
+      "buildNumber": "1"
     },
     "android": {
       "useNextNotificationsApi": true,
