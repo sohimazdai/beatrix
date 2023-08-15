@@ -3,7 +3,7 @@ import { createUserChangeAction } from '../../modules/user/UserActionCreator';
 import { IUser } from '../../../model/IUser';
 import { appAnalytics } from '../../../app/Analytics';
 import { handleErrorSilently } from '../../../app/ErrorHandler';
-import { UserApi } from '../../../api/UserApi';
+import { UserApi } from '../../../api/userApi';
 import Constants from 'expo-constants';
 
 const ACTION_TYPE = 'GET_USER_BY_INSTALLATION_ID';

@@ -1,14 +1,16 @@
 import React from 'react';
-import { AppNavigator } from './src/navigator/Navigator';
+import { registerRootComponent } from 'expo';
 import { Provider } from 'react-redux';
-import { appStore, persistor } from './src/store/appStore';
 import { PersistGate } from 'redux-persist/integration/react';
+import * as SplashScreen from 'expo-splash-screen';
+
+import { AppNavigator } from './src/navigator/Navigator';
+import { appStore, persistor } from './src/store/appStore';
 import { appStarter } from './src/app/AppStarter';
 import { AppConnection } from './src/app/AppConnection';
 import { handleError } from './src/app/ErrorHandler';
 import { DevStub } from './src/component/dev-stub/DevStub';
 import { PendingWatcherConnected } from './src/app/PendingWatcher';
-import * as SplashScreen from 'expo-splash-screen';
 import { logger } from './src/app/Logger';
 
 SplashScreen.preventAutoHideAsync();
@@ -60,3 +62,4 @@ export default class App extends React.Component<never, State> {
     }
 }
 
+registerRootComponent(App);

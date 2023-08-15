@@ -22,16 +22,12 @@
       "**/*"
     ],
     "scheme": "com.doq.beatrix",
-    "facebookScheme": "fb871414539985872",
-    "facebookAppId": "871414539985872",
-    "facebookDisplayName": "beatrix",
     "ios": {
       "bundleIdentifier": "com.doq.beatrix",
       "supportsTablet": true,
       "buildNumber": "1"
     },
     "android": {
-      "useNextNotificationsApi": true,
       "package": "com.doq.beatrix",
       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.doq.beatrix&showAllReviews=true",
       "versionCode": 45,

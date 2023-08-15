@@ -1,6 +1,6 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
-import { UserApi } from "../../../api/UserApi";
+import { UserApi } from "../../../api/userApi";
 import { IStorage } from "../../../model/IStorage";
 import { appAnalytics } from '../../../app/Analytics';
 import { handleError } from '../../../app/ErrorHandler';

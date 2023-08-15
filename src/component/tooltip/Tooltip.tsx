@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   Modal,
   View,
-  ViewPropTypes as RNViewPropTypes,
 } from 'react-native';
 
 import Triangle from './Triangle';

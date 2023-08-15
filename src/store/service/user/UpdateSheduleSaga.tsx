@@ -1,6 +1,6 @@
 import { put, call, takeLatest, select } from "redux-saga/effects";
 import { createUserChangeAction } from "../../modules/user/UserActionCreator";
-import { UserApi } from "../../../api/UserApi";
+import { UserApi } from "../../../api/userApi";
 import { IStorage } from "../../../model/IStorage";
 import { createOneLevelMergeUserPropertiesShedule } from "../../modules/user-properties-shedule/UserPropertiesShedule";
 import { IUserPropertiesShedule } from "../../../model/IUserPropertiesShedule";
