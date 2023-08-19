@@ -7,7 +7,6 @@
   "version": "2.3.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "install": "npx expo install",
     "start": "npx expo start",
     "postinstall": "npx patch-package"
   },
