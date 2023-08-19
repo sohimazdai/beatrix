@@ -30,7 +30,5 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:361031893824:ios:a9a094e9c6a4fddf0ef0a5</string>
-	<key>DATABASE_URL</key>
-	<string>https://beatrix-f19b8.firebaseio.com</string>
 </dict>
 </plist>
