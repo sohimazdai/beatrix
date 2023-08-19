@@ -19,11 +19,11 @@ function* ping() {
         if (state.app.networkConnected) {
             const isOk = yield call(AppApi.ping);
             if (isOk.data == 'ОК') {
-                logger('🖥️ Server is available ✅');
+                logger('💽 Server is available ✅');
 
                 yield put(createChangeAppAction({ serverAvailable: true }));
             } else {
-                logger('🖥️ Server is is n/a ⛔');
+                logger('💽 Server is is n/a ⛔');
 
                 yield put(createChangeAppAction({ serverAvailable: false }));
             }
@@ -34,7 +34,7 @@ function* ping() {
         }
     } catch (e) {
         logger('ErrorCatched: ' + e.message)
-        logger('🖥️ Server is n/a ⛔')
+        logger('💽 Server is n/a ⛔')
 
         yield put(createChangeAppAction({ serverAvailable: false }));
 
