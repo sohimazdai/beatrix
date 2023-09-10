@@ -16,3 +16,4 @@ package-lock
 node_modules
 .expo
 release-channel
+yarn-error.log
