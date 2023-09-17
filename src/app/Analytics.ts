@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
-import Device from 'expo-device';
-import AmplitudeSDK from '@amplitude/analytics-react-native';
+import * as Device from 'expo-device';
+import * as AmplitudeSDK from '@amplitude/analytics-react-native';
 
 import { IUserPropertiesShedule } from '../model/IUserPropertiesShedule';
 import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
@@ -14,14 +14,14 @@ export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
   locale?: string
 
   favorites?: number
+
+  email?: string
 };
 
 const amplitudeInitOptions = {
   flushQueueSize: 50,
   flushIntervalMillis: 20000,
-  logLevel: __DEV__
-    ? AmplitudeSDK.Types.LogLevel.Debug
-    : AmplitudeSDK.Types.LogLevel.None,
+  logLevel: /*__DEV__ ? AmplitudeSDK.Types.LogLevel.Debug : */AmplitudeSDK.Types.LogLevel.None,
 };
 
 export let section = '';
@@ -40,6 +40,10 @@ export const appAnalytics = {
 
     const identifyObj = new AmplitudeSDK.Identify();
     identifyObj.set('OS', Platform.OS);
+    identifyObj.set('DeviceBrand', Device.brand);
+    identifyObj.set('DeviceType', Device.deviceType);
+    identifyObj.set('IsRealDevice', Device.isDevice);
+    identifyObj.set('DeviceModelName', Device.modelName);
     identifyObj.set('DeviceYearClass', Device.deviceYearClass);
 
     AmplitudeSDK
@@ -66,20 +70,24 @@ export const appAnalytics = {
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
 
-  setUserProperties: (properties: IAmplitudeUserProperties) => {
-    // NOTHING TO DO TODO: remove or change
+  setUserProperties: (properties: IAmplitudeUserProperties = {}) => {
+    logger('::amplitude user properties is setting now');
 
-    // logger('::amplitude user properties is setting now');
+    const identifyObj = new AmplitudeSDK.Identify();
 
-    // const identifyObj = new AmplitudeSDK.Identify();
-    // identifyObj.set('DeviceYearClass', Device.deviceYearClass);
+    identifyObj.set('OS', Platform.OS);
+    identifyObj.set('DeviceBrand', Device.brand);
+    identifyObj.set('DeviceType', Device.deviceType);
+    identifyObj.set('IsRealDevice', Device.isDevice);
+    identifyObj.set('DeviceModelName', Device.modelName);
+    identifyObj.set('DeviceYearClass', Device.deviceYearClass);
 
-    // Object.entries(properties).map(([key, value]) => identifyObj.set(key, value));
+    Object.entries(properties).map(([key, value]) => identifyObj.set(key, value));
 
-    // AmplitudeSDK.identify(identifyObj)
-    //   .promise
-    //   .then(() => logger('::amplitude user properties setted'))
-    //   .catch((e) => logger('::amplitude user properties error: ', e.message))
+    AmplitudeSDK.identify(identifyObj)
+      .promise
+      .then(() => logger('::amplitude user properties setted'))
+      .catch((e) => logger('::amplitude user properties error: ', e.message))
   },
 
   setSection: (sectionName: AnalyticsSections) => {
