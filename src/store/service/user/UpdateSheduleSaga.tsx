@@ -53,8 +53,6 @@ function* run({ payload }: UpdateUserSheduleAction) {
             state.userPropertiesShedule
         );
 
-        appAnalytics.setUserProperties({ shedule: state.userPropertiesShedule })
-
         yield put(
             createUserChangeAction({
                 loading: false,

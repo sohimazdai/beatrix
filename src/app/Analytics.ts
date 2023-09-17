@@ -1,6 +1,6 @@
-import * as Amplitude from 'expo-analytics-amplitude';
 import { Platform } from 'react-native';
 import Device from 'expo-device';
+import AmplitudeSDK from '@amplitude/analytics-react-native';
 
 import { IUserPropertiesShedule } from '../model/IUserPropertiesShedule';
 import { IUserDiabetesProperties } from '../model/IUserDiabetesProperties';
@@ -16,31 +16,43 @@ export interface IAmplitudeUserProperties extends IUserDiabetesProperties {
   favorites?: number
 };
 
+const amplitudeInitOptions = {
+  flushQueueSize: 50,
+  flushIntervalMillis: 20000,
+  logLevel: __DEV__
+    ? AmplitudeSDK.Types.LogLevel.Debug
+    : AmplitudeSDK.Types.LogLevel.None,
+};
+
 export let section = '';
 
 export const appAnalytics = {
-  init: (): Promise<void> => {
+  init: (): void => {
     logger('::amplitude initializing');
 
-    return Amplitude.initializeAsync(Variables.amplitudeApiKey)
+    AmplitudeSDK.init(Variables.amplitudeApiKey, undefined, amplitudeInitOptions)
+      .promise
       .then(() => logger('::amplitude inited'))
       .catch((e) => logger('::amplitude initializing error: ', e.message))
   },
   setUser: (userId: string) => {
     logger('::amplitude user is setting now', { userId });
 
-    Amplitude.setUserIdAsync(userId)
-      .then(() => Amplitude.setUserPropertiesAsync({
-        'OS': Platform.OS,
-        'DeviceYearClass': Device.deviceYearClass,
-      }))
+    const identifyObj = new AmplitudeSDK.Identify();
+    identifyObj.set('OS', Platform.OS);
+    identifyObj.set('DeviceYearClass', Device.deviceYearClass);
+
+    AmplitudeSDK
+      .identify(identifyObj)
+      .promise
       .then(() => logger('::amplitude user setted'))
       .catch((e) => logger('::amplitude user error: ', e.message))
   },
   sendEvent: (eventName: string) => {
     logger('::amplitude trying to send event: ', eventName);
 
-    Amplitude.logEventWithPropertiesAsync(eventName, { section })
+    AmplitudeSDK.track(eventName, { section })
+      .promise
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
@@ -48,20 +60,26 @@ export const appAnalytics = {
     logger('::amplitude trying to send event: ', eventName);
     logger('::amplitude event properties: ', JSON.stringify(properties));
 
-    Amplitude.logEventWithPropertiesAsync(eventName, {
-      ...properties,
-      ...{ section },
-    })
+    AmplitudeSDK.track(eventName, { ...properties, section })
+      .promise
       .then(() => logger('::amplitude send event: ', eventName))
       .catch((e) => logger('::amplitude sending error: ', e.message))
   },
 
   setUserProperties: (properties: IAmplitudeUserProperties) => {
-    logger('::amplitude user properties is setting now');
+    // NOTHING TO DO TODO: remove or change
 
-    Amplitude.setUserPropertiesAsync(properties)
-      .then(() => logger('::amplitude user properties setted'))
-      .catch((e) => logger('::amplitude user properties error: ', e.message))
+    // logger('::amplitude user properties is setting now');
+
+    // const identifyObj = new AmplitudeSDK.Identify();
+    // identifyObj.set('DeviceYearClass', Device.deviceYearClass);
+
+    // Object.entries(properties).map(([key, value]) => identifyObj.set(key, value));
+
+    // AmplitudeSDK.identify(identifyObj)
+    //   .promise
+    //   .then(() => logger('::amplitude user properties setted'))
+    //   .catch((e) => logger('::amplitude user properties error: ', e.message))
   },
 
   setSection: (sectionName: AnalyticsSections) => {

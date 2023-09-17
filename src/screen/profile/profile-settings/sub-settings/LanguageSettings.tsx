@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Restart } from 'fiction-expo-restart';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'uuid';
 import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -62,18 +60,19 @@ export class LanguageSettingsComponent extends Component<Props, State> {
     }
 
     restartApp = async () => {
-        const {
-            initialLanguage,
-            selectedLanguage,
-        } = this.state;
+        // TODO: разобратсья с переключением языка в приложении
+        // const {
+        //     initialLanguage,
+        //     selectedLanguage,
+        // } = this.state;
 
-        AsyncStorage
-            .setItem('language', selectedLanguage)
-            .then(() => appAnalytics.sendEventWithProps(
-                appAnalytics.events.LANGUAGE_CHANGE,
-                { initial: initialLanguage, selected: selectedLanguage },
-            ))
-            .then(Restart);
+        // AsyncStorage
+        //     .setItem('language', selectedLanguage)
+        //     .then(() => appAnalytics.sendEventWithProps(
+        //         appAnalytics.events.LANGUAGE_CHANGE,
+        //         { initial: initialLanguage, selected: selectedLanguage },
+        //     ))
+        //     .then(Restart);
     }
 
     handleClose = () => {

@@ -16,7 +16,8 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/fc00937d-1549-4b91-8360-e6aff46c5093"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -40,6 +41,12 @@
       ]
     },
     "description": "Diabetes visualization app",
-    "githubUrl": "https://github.com/sohimazdai/beatrix"
+    "githubUrl": "https://github.com/sohimazdai/beatrix",
+    "extra": {
+      "eas": {
+        "projectId": "fc00937d-1549-4b91-8360-e6aff46c5093"
+      }
+    },
+    "runtimeVersion": "1.0.0"
   }
 }
