@@ -1,6 +1,7 @@
 import React from 'react';
-import { Platform, StyleSheet, View, Slider, Text } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { StyleSheet, View, Text } from 'react-native';
+import Slider from '@react-native-community/slider';
+
 import { COLOR } from '../../../../constant/Color';
 import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
 

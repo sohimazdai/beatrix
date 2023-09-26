@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { IStorage } from '../../../../model/IStorage';
 import { INoteListNote } from '../../../../model/INoteList';
 import { IUserDiabetesProperties } from '../../../../model/IUserDiabetesProperties';
-import { Measures } from '../../../../localisation/Measures';
 import { i18nGet } from '../../../../localisation/Translate';
 import { selectActiveInsulinValue } from '../../../dashboard/active-insulin-info/selectors/select-active-insulin-value';
 import { COLOR } from '../../../../constant/Color';
@@ -13,6 +12,7 @@ import { numberizeAndFix } from '../../../../api/helper/numberize-and-fix';
 import { ISheduleList } from '../../../../model/IShedule';
 import { selectShedule } from '../../../profile/settings/shedule/selectors/select-shedule-list';
 import { ProfileIcon } from '../../../../component/icon/ProfileIcon';
+import { getInsulinDoseRecommendation } from './get-insulin-dose-recomendation';
 
 interface OwnProps {
     note?: INoteListNote;
@@ -46,36 +46,9 @@ function NoteInsulinDoseRecommendation(props: Props) {
 
     const isFormUnfilled = !isf || !cr;
 
-    function getRecommendation() {
-        if (isFormUnfilled) return '';
-
-        if (note.glucose == 0 && note.breadUnits == 0) {
-            return '';
-        }
-
-        if (note.glucose === 0) {
-            return i18nGet('enter_blood_glucose_value_to_get_recommendation');
-        }
-
-        if (parseFloat(insulinValue) <= 0) {
-            return i18nGet('insulin_is_not_recommended');
-        }
-
-        if (
-            note.glucose < Measures.getCriticalGlycemia(glycemiaMeasuringType).min &&
-            note.glucose > Measures.getCriticalGlycemia(glycemiaMeasuringType).min / 2
-        ) {
-            return i18nGet('inject_insulin_after_meal') + ': ' + insulinValue;
-        }
-
-        if (note.glucose < Measures.getCriticalGlycemia(glycemiaMeasuringType).min / 2) {
-            return i18nGet('restore_your_glucose_level_first');
-        }
-
-        return i18nGet('recommended_insulin_value') + ': ' + insulinValue;
-    }
-
-    const recommendation = getRecommendation();
+    const recommendation = getInsulinDoseRecommendation({
+        isFormUnfilled, note, insulinValue, glycemiaMeasuringType,
+    });
 
     if (!recommendation && !isFormUnfilled && !activeInsulinValue && !(
         activeInsulinValue && Number(insulinValue) > activeInsulinValue

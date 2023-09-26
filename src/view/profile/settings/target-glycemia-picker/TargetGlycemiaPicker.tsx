@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from "react-redux";
 
 import { ProfilePicker } from "../../ProfilePicker";
-import { View, Text, Slider, Button } from "react-native";
+import { View, Text, Button } from "react-native";
+import Slider from '@react-native-community/slider';
+
 import { BaseDecimalInput } from '../../../../component/input/BaseDecimalInput';
 import { IStorage } from "../../../../model/IStorage";
 import { IUserDiabetesProperties, GlycemiaMeasuringType } from "../../../../model/IUserDiabetesProperties";
